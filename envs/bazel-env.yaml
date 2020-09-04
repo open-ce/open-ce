@@ -1,0 +1,3 @@
+packages:
+  - feedstock : cdts
+  - feedstock : bazel

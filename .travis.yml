@@ -1,0 +1,16 @@
+language: generic
+
+services:
+  - docker
+
+env:
+    global:
+      - DOCKER_RUN_SCRIPT="./open-ce/ci_common_scripts/run_open-ce_tests.sh"
+
+jobs:
+    include:
+      - name: Open-CE Tests
+        script:
+          - echo "Running open-ce tests:"
+          - cd ..
+          - ./open-ce/ci_common_scripts/docker_common_run_build_pkg.sh

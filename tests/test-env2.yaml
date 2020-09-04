@@ -1,0 +1,18 @@
+# *****************************************************************
+#
+# Licensed Materials - Property of IBM
+#
+# (C) Copyright IBM Corp. 2020. All Rights Reserved.
+#
+# US Government Users Restricted Rights - Use, duplication or
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+#
+# *****************************************************************
+
+imported_envs:
+    - test-env1.yaml
+channels:
+    - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+packages:
+    - feedstock : package21 #['2.1' in python]
+    - feedstock : package22

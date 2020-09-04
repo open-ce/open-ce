@@ -1,0 +1,17 @@
+{% if 'cuda' in build_type %}
+channels:
+  - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+{% endif %}
+
+packages:
+  - feedstock : pytorch
+  - feedstock : numactl
+{% if 'cuda' in build_type %}
+  - feedstock : nccl
+  - feedstock : magma
+  - feedstock : tensorrt
+  - feedstock : cudnn
+{% endif %}
+  - feedstock : torchtext
+  - feedstock : onnx
+  - feedstock : torchvision
