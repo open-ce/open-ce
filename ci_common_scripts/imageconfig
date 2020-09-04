@@ -1,0 +1,12 @@
+
+DOCKER_BIN="docker"
+OPENCE_RELEASE="next"
+
+BASE_LAYER="base"
+NO_CACHE="--no-cache"
+
+REPO_NAME="open-ce"
+ROOT_FOLDER="open-ce/ci_common_scripts/base"
+
+DOCKER_DIR=${CUR_DIR}
+DISTRO_VERSION="7.7"
