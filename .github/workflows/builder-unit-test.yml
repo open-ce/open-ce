@@ -12,12 +12,15 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu18.04
 
     steps:
     - uses: actions/checkout@v2
     - uses: goanpeca/setup-miniconda@v1
+    - uses: uraimo/run-on-arch-action@v2.0.1
       with:
+        arch: ppc64le
+        distro: ubuntu18.04
         auto-update-conda: true
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
