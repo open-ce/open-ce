@@ -17,10 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: goanpeca/setup-miniconda@v1
-    - uses: uraimo/run-on-arch-action@v2.0.1
       with:
-        arch: ppc64le
-        distro: ubuntu18.04
         auto-update-conda: true
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -37,3 +34,19 @@ jobs:
       shell: bash -l {0}
       run: |
         pytest tests/
+    - uses: uraimo/run-on-arch-action@v2.0.1
+      name: Run commands
+      id: runcmd
+      with:
+        arch: ppc64le
+        distro: ubuntu18.04
+
+        # Set an output parameter `uname` for use in subsequent steps
+        run: |
+          uname -a
+          echo ::set-output name=uname::$(uname -a)
+
+    - name: Get the output
+      # Echo the `uname` output parameter from the `runcmd` step
+      run: |
+        echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
