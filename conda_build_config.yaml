@@ -164,7 +164,7 @@ requests:
 regex:
   - 2020.6.*
 rust_nightly:
-  - 1.48.0
+  - 1.43.0
 scikit_image:
   - 0.16
 scikit_learn:
