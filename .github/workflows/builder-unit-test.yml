@@ -35,12 +35,12 @@ jobs:
       run: |
         pytest tests/
     - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-            file: ./coverage.xml
-            directory: ./
-            flags: unittests
-            env_vars: OS,PYTHON
-            name: codecov-umbrella
-            fail_ci_if_error: true
-            path_to_write_report: ./codecov_report.gz
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        directory: ./
+        flags: unittests
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        path_to_write_report: ./codecov_report.gz
