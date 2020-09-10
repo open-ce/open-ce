@@ -1,13 +1,10 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: Open-CE Builder Unit Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
@@ -15,32 +12,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: goanpeca/setup-miniconda@v1
-      with:
-        auto-update-conda: true
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      shell: bash -l {0}
-      run: conda install -y flake8 conda-build pytest pytest-cov pytest-mock
-    - name: Lint with flake8
-      shell: bash -l {0}
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 ./builder --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest and Generate coverage report
-      shell: bash -l {0}
-      run: |
-        pytest tests/
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
-        directory: ./
-        flags: unittests
-        env_vars: OS,PYTHON
-        name: codecov-umbrella
-        fail_ci_if_error: true
-        path_to_write_report: ./codecov_report.gz
+      - uses: actions/checkout@v2
+      - uses: goanpeca/setup-miniconda@v1
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          conda install -y flake8 conda-build pytest pytest-cov pytest-mock
+          pip install yamllint
+      - name: Lint with flake8
+        shell: bash -l {0}
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 ./builder --count --select=E9,F63,F7,F82 \
+              --show-source --statistics
+          # Once we have a defined format we can add this back.
+          # flake8 . --count --exit-zero --max-complexity=10 \
+          #    --max-line-length=127 --statistics
+      - name: Lint config files
+        shell: bash -l {0}
+        run: |
+          # Use yamllint to check the actual yaml files.
+          yamllint .github/workflows/*.yml ./conda_build_config.yaml
+          # Use the conda_build api to lint the env files since they use jinja.
+          python ./tests/envlint.py envs/*.yaml
+      - name: Test with pytest and Generate coverage report
+        shell: bash -l {0}
+        run: |
+          pytest tests/
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          directory: ./
+          flags: unittests
+          env_vars: OS,PYTHON
+          name: codecov-umbrella
+          fail_ci_if_error: true
+          path_to_write_report: ./codecov_report.gz
