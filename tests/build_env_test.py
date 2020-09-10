@@ -197,9 +197,9 @@ def test_build_env(mocker):
     assert build_env.build_env([env_file, "--python_versions", "2.1"]) == 0
 
      #---The third test verifies that the repository_folder argument is working properly.
-     mocker.patch(
-         'build_feedstock.build_feedstock',
-         side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--working_directory repo_folder/"]))
-     )
-     env_file = os.path.join(test_dir, 'test-env2.yaml')
-     assert build_env.build_env([env_file, "--repository_folder", "repo_folder"]) == 0
+    mocker.patch(
+        'build_feedstock.build_feedstock',
+        side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--working_directory repo_folder/"]))
+    )
+    env_file = os.path.join(test_dir, 'test-env2.yaml')
+    assert build_env.build_env([env_file, "--repository_folder", "repo_folder"]) == 0
