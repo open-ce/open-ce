@@ -1,5 +1,7 @@
 # open-ce
 
+[![codecov](https://codecov.io/gh/open-ce/open-ce/branch/master/graph/badge.svg)](https://codecov.io/gh/open-ce/open-ce)
+
 This is the Open-CE repo for feedstock collection, environment data, and build scripts
 
 Welcome to the **open-ce** repository for Open-CE. This repository
