@@ -40,7 +40,7 @@ def mock_renderer(path, package_deps):
     Used to mock the `conda_build.api.render` function by extracting the package name from `path`
     and using that to get the dependencies from `package_deps`.
     '''
-    package = path[:-10]
+    package = os.path.basename(path)[:-10]
     return make_render_result(package, package_deps[package])
 
 built_packages = set()
@@ -195,3 +195,11 @@ def test_build_env(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     assert build_env.build_env([env_file, "--python_versions", "2.1"]) == 0
+
+     #---The third test verifies that the repository_folder argument is working properly.
+     mocker.patch(
+         'build_feedstock.build_feedstock',
+         side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--working_directory repo_folder/"]))
+     )
+     env_file = os.path.join(test_dir, 'test-env2.yaml')
+     assert build_env.build_env([env_file, "--repository_folder", "repo_folder"]) == 0
