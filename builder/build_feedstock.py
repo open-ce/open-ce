@@ -23,9 +23,9 @@ recipe(s) found within that package's build tree, or with an alternative
 recipe specified on the command line.
 
 Usage:
-   $ build_package.py [ arguments ]
+   $ build_feedstock.py [ arguments ]
 For usage description of arguments, this script supports use of --help:
-   $ build_package.py --help
+   $ build_feedstock.py --help
 
 *******************************************************************************
 """

@@ -7,8 +7,6 @@ autoconf:
 automake:
   - 1.16
 bazel:
-  - 2.0.*
-bazel3:
   - 3.*
 boost:
   - 1.67.0
