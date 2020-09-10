@@ -178,7 +178,7 @@ setuptools:
 setuptools_rust:
   - 0.10.6
 six:
-  - 1.13.0
+  - 1.15.0
 srsly:
   - 0.2.0
 tabulate:
