@@ -1,6 +1,6 @@
 # open-ce
 
-![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/builder-unit-test/badge.svg)
+![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/Open-CE%20Builder%20Unit%20Tests/badge.svg)
 [![Builder Unit Test Coverage](https://codecov.io/gh/open-ce/open-ce/branch/master/graph/badge.svg)](https://codecov.io/gh/open-ce/open-ce)
 
 This is the Open-CE repo for feedstock collection, environment data, and build scripts
