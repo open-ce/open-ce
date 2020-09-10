@@ -38,7 +38,44 @@ test/
 
 ## GETTING STARTED
 
-To get started with the basic commands to build the Open-CE environment (e.g.
-to build all of `tensorflow` or `pytorch` or another package), see the
-`README.build_env.md` file in the doc directory.  The `build_env.py` command
-is the fundamental script to perform the build(s).
+### Requirements
+* `conda` >= 3.8.3 - The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
+* `conda-build` >= 3.20 - Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
+
+### CUDA Requirements
+If building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`.
+
+### Building a Collection of Packages
+The `build_env.py` script can be used to build a collection of Open-CE packages. An environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`). For more details on `build_env.py`, please see `README.build_env.md`.
+
+The following commands will build all of the Open-CE packages for Python 3.6, including CUDA builds and cpu-only builds. The commands should be run from within the same directory that contains `local_files`.
+
+```bash
+# Clone Open-CE from GitHub
+git clone https://github.com/open-ce/open-ce.git
+# Build packages
+./open-ce/builder/build_env.py open-ce/envs/opence-env.yaml
+```
+
+### Building a Single Feedstock
+The `build_feedstock.py` script can be used to build a single feedstock (which could produce one or more conda packages). The output from running `build_feedstock.py` will be a local conda channel (by default called `condabuild`). For more details on `build_feedstock.py`, please see `README.build_feedstock.md`.
+
+The following commands will build all of the packages within a feedstock named `MY_FEEDSTOCK`.
+
+```bash
+# Clone Open-CE from GitHub
+git clone https://github.com/open-ce/open-ce.git
+# Clone MY_FEEDSTOCK from GitHub
+git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
+# Build packages
+./open-ce/builder/build_feedstock.py --working_directory MY_FEEDSTOCK-feedstock
+```
+
+### Installing Packages
+After performing a build, a local conda channel will be created. By default, this will be within a folder called `conda_build` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/index.html) for more information on conda environments.
+
+The following command will install a package named `PACKAGE` from the local conda channel `condabuild` into the currently active conda environment.
+
+```bash
+conda install -c ./condabuild PACKAGE
+```
