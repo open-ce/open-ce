@@ -122,15 +122,36 @@ repositories will be downloaded to the current working directory.""")
 def make_hash(d):
     return hash(str(d))
 
+def validate_config_file(env_file, variants):
+    '''Perform some validation on the environment file after loading it.'''
+    possible_keys = {'imported_envs', 'channels', 'packages'}
+    try:
+        meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
+        if not ("packages" in meta_obj.meta.keys() or "imported_envs" in meta_obj.meta.keys()):
+            raise Exception("Content Error!", "An environment file needs to specify packages or import another environment file.")
+        for key in meta_obj.meta.keys():
+            if not key in possible_keys:
+                raise Exception("Key Error!", key + " is not a valid key in the environment file.")
+        return meta_obj
+    except (Exception, SystemExit) as e:
+        print('***** Error in %s:\n  %s' % (env_file, e), file=sys.stderr)
+        return None
+
 def load_env_config_files(config_files, variants):
     # Load all of the environment config files, plus any that come from "imported_envs" within an environment config file.
     env_config_files = [os.path.abspath(e) for e in config_files]
     env_config_data_list = []
     loaded_files = []
+    retval = 0
     while env_config_files:
         # Load the environment config files using conda-build's API. This will allow for the
         # filtering of text using selectors and jinja2 functions
-        meta_obj = conda_build.metadata.MetaData(env_config_files[0], variant=variants)
+        meta_obj = validate_config_file(env_config_files[0], variants)
+        if meta_obj is None:
+            retval = 1
+            loaded_files += [env_config_files[0]]
+            env_config_files.pop(0)
+            continue
         env = meta_obj.get_rendered_recipe_text()
 
         # Examine all of the imported_envs items and determine if they still need to be loaded.
@@ -151,7 +172,7 @@ def load_env_config_files(config_files, variants):
             loaded_files += [env_config_files[0]]
             env_config_files.pop(0)
 
-    return env_config_data_list
+    return retval, env_config_data_list
 
 def _clone_repo(git_location, repo_dir, env_config_data, git_tag_from_config, git_tag_for_env):
     """
@@ -312,8 +333,9 @@ def build_env(arg_strings=None):
         print("Builds for python version: " + py_vers)
         python_build_args = ["--python_versions", py_vers]
         variants = { 'python' : py_vers, 'build_type' : parse_arg_list(args.build_types) }
-        env_config_data_list = load_env_config_files(args.env_config_file, variants)
-
+        result, env_config_data_list = load_env_config_files(args.env_config_file, variants)
+        if result != 0:
+            return result
         packages_seen = set()
         recipes = []
         # Create recipe dictionaries for each repository in the environment file
