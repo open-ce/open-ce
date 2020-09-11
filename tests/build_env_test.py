@@ -203,3 +203,36 @@ def test_build_env(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     assert build_env.build_env([env_file, "--repository_folder", "repo_folder"]) == 0
+
+def test_env_validate(mocker, capsys):
+    '''
+    This is a negative test of `build_env`, which passes an invalid env file.
+    '''
+    mocker.patch(
+        'os.mkdir',
+        return_value=0 #Don't worry about making directories.
+    )
+    mocker.patch(
+        'os.system',
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone"], retval=0)) #At this point all system calls are git clones. If that changes this should be updated.
+    )
+    mocker.patch(
+        'os.getcwd',
+        side_effect=helpers.mocked_getcwd
+    )
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
+    )
+    mocker.patch(
+        'os.chdir',
+        side_effect=helpers.validate_chdir
+    )
+    mocker.patch(
+        'build_feedstock.build_feedstock',
+        side_effect=(lambda x: validate_build_feedstock(x))
+    )
+    env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
+    assert build_env.build_env([env_file]) == 1
+    captured = capsys.readouterr()
+    assert "chnnels is not a valid key in the environment file." in captured.err
