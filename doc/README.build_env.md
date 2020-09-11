@@ -6,7 +6,7 @@ a build is achieved by executing the script `build_env.py`. This will extract
 and build all of the individual required components within the various Open-CE
 feedstock repository trees required for the requested package environment.
 In other words, if you simply want to build a package such as tensorflow or
-pytorch (or any other; see the open-ce/envs subdirectory), with dependencies
+pytorch (or any other; see the `open-ce/envs` subdirectory), with dependencies
 automatically handled, you can do so using a single `build_env.py` command.
 
 For example:
