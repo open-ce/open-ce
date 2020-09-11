@@ -339,7 +339,7 @@ def build_env(arg_strings=None):
                     if result != 0:
                         return result
 
-                recipes += _create_recipes(repository, package.get('recipes'), [os.path.abspath(args.conda_build_config)], variants, env_config_data.get('channels', None))
+                recipes += _create_recipes(repo_dir, package.get('recipes'), [os.path.abspath(args.conda_build_config)], variants, env_config_data.get('channels', None))
                 packages_seen.add(make_hash(package))
 
         # Add dependency tree information to the packages list
