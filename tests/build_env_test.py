@@ -65,7 +65,7 @@ def test_clone_repo(mocker):
     '''
     Simple positive test for `_clone_repo`.
     '''
-    git_location = build_env.default_git_location
+    git_location = build_env.DEFAULT_GIT_LOCATION
 
     mocker.patch(
         'os.system',
@@ -87,7 +87,7 @@ def test_clone_repo_failure(mocker, capsys):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone"], retval=1))
     )
 
-    assert build_env._clone_repo(build_env.default_git_location, "/test/my_repo", None, "master", None) == 1
+    assert build_env._clone_repo(build_env.DEFAULT_GIT_LOCATION, "/test/my_repo", None, "master", None) == 1
     captured = capsys.readouterr()
     assert "Unable to clone repository" in captured.out
 

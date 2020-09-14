@@ -34,7 +34,7 @@ def test_build_feedstock_default(mocker):
         'os.system',
         side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
                                                                "--output-folder condabuild",
-                                                               "-m ../open-ce/conda_build_config.yaml",
+                                                               "conda_build_config.yaml",
                                                                "recipe"]))
     )
 
