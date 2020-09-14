@@ -22,7 +22,7 @@ jobs:
         run: |
           conda install -y pylint conda-build pytest pytest-cov pytest-mock
           pip install yamllint
-      - name: Lint with flake8
+      - name: Lint with pylint
         shell: bash -l {0}
         run: |
           PYTHONPATH=./builder/:${PYTHONPATH} pylint ./builder
