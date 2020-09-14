@@ -6,8 +6,7 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-"""
-"""
+
 *******************************************************************************
 Script: build_feedstock.py
 
@@ -30,19 +29,18 @@ For usage description of arguments, this script supports use of --help:
 *******************************************************************************
 """
 
+import argparse
 import sys
 import os
 import yaml
-import argparse
 
-from util import parse_arg_list
+import utils
 
-default_recipe_config_file = "config/build-config.yaml"
-default_conda_build_config = "../open-ce/conda_build_config.yaml"
+DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 
 def make_parser():
     ''' Parser input arguments '''
-    parser = argparse.ArgumentParser(
+    parser = utils.make_common_parser(
         description = 'Build conda packages as part of Open-CE',
         formatter_class=argparse.RawTextHelpFormatter)
 
@@ -69,23 +67,11 @@ it will be assumed there is a single recipe with the
 path of \"recipe\".""")
 
     parser.add_argument(
-        '--output_folder',
-        type=str,
-        default='condabuild',
-        help='Path where built conda packages will be saved.')
-
-    parser.add_argument(
         '--recipes',
         dest='recipe_list',
         action='store',
         default=None,
         help='Comma separated list of recipe names to build.')
-
-    parser.add_argument(
-        '--conda_build_config',
-        type=str,
-        default=default_conda_build_config,
-        help='Location of conda_build_config.yaml file.')
 
     parser.add_argument(
         '--python_versions',
@@ -109,14 +95,6 @@ path of \"recipe\".""")
         help='Directory to run the script in.')
 
     parser.add_argument(
-        '--channels',
-        dest='channels_list',
-        action='append',
-        type=str,
-        default=list(),
-        help='Conda channel to be used.')
-
-    parser.add_argument(
         '--local_src_dir',
         type=str,
         required=False,
@@ -125,15 +103,17 @@ path of \"recipe\".""")
     return parser
 
 def load_package_config(config_file=None):
-    # Check for a config file. If the user does not provide a recipe config
-    # file as an argument, it will be assumed that there is only one
-    # recipe to build, and it is in the directory called 'recipe'.
-    if not config_file and not os.path.exists(default_recipe_config_file):
+    '''
+    Check for a config file. If the user does not provide a recipe config
+    file as an argument, it will be assumed that there is only one
+    recipe to build, and it is in the directory called 'recipe'.
+    '''
+    if not config_file and not os.path.exists(DEFAULT_RECIPE_CONFIG_FILE):
         recipe_name = os.path.basename(os.getcwd())
         build_config_data = {'recipes':[{'name':recipe_name, 'path':'recipe'}]}
     else:
         if not config_file:
-            config_file = default_recipe_config_file
+            config_file = DEFAULT_RECIPE_CONFIG_FILE
         if not os.path.exists(config_file):
             print("Unable to open provided config file: " + config_file)
             return None, config_file
@@ -147,7 +127,7 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
     """
     Set the LOCAL_SRC_DIR environment variable if local_src_dir is specified.
     """
-    # Local source directory provided as command line arguement has higher priority
+    # Local source directory provided as command line argument has higher priority
     # than what is specified in build-config.yaml
     if local_src_dir_arg:
         local_src_dir = os.path.expanduser(local_src_dir_arg)
@@ -155,16 +135,16 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
         local_src_dir = os.path.expanduser(recipe.get('local_src_dir'))
         # If a relative path is specified, it should be in relation to the config file
         if not os.path.isabs(local_src_dir):
-            local_src_dir = os.path.join(os.path.dirname(os.path.abspath(recipe_config_file)), local_src_dir)
+            local_src_dir = os.path.join(os.path.dirname(os.path.abspath(recipe_config_file)),
+                                         local_src_dir)
     else:
         local_src_dir = None
 
     if local_src_dir:
-       if not os.path.exists(local_src_dir):
-           print("ERROR: local_src_dir path \"" + local_src_dir + "\" specified doesn't exist")
-           return 1
-       else:
-           os.environ["LOCAL_SRC_DIR"] = local_src_dir
+        if not os.path.exists(local_src_dir):
+            print("ERROR: local_src_dir path \"" + local_src_dir + "\" specified doesn't exist")
+            return 1
+        os.environ["LOCAL_SRC_DIR"] = local_src_dir
     else:
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
@@ -172,6 +152,9 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
     return 0
 
 def build_feedstock(args_string=None):
+    '''
+    Entry function.
+    '''
     parser = make_parser()
     args = parser.parse_args(args_string)
 
@@ -184,7 +167,7 @@ def build_feedstock(args_string=None):
     if build_config_data is None:
         return 1
 
-    args.recipes = parse_arg_list(args.recipe_list)
+    args.recipes = utils.parse_arg_list(args.recipe_list)
     result = 0
 
     # Build each recipe
@@ -199,17 +182,14 @@ def build_feedstock(args_string=None):
         if os.path.exists(recipe_conda_build_config):
             conda_build_args += " -m " + recipe_conda_build_config + " "
 
-        for channel in args.channels_list:
-            conda_build_args += "-c " + channel + " "
-
-        for channel in build_config_data.get('channels', []):
-            conda_build_args += "-c " + channel + " "
+        conda_build_args += " ".join(["-c " + c + " " for c in args.channels_list])
+        conda_build_args += " ".join(["-c " + c + " " for c in build_config_data.get('channels', [])])
 
         variants = dict()
         if args.python_versions_list:
-            variants['python'] = parse_arg_list(args.python_versions_list)
+            variants['python'] = utils.parse_arg_list(args.python_versions_list)
         if args.build_types_list:
-            variants['build_type'] = parse_arg_list(args.build_types_list)
+            variants['build_type'] = utils.parse_arg_list(args.build_types_list)
         if variants:
             conda_build_args += "--variants \"" + str(variants) + "\" "
 
@@ -233,4 +213,3 @@ def build_feedstock(args_string=None):
 
 if __name__ == '__main__':
     sys.exit(build_feedstock())
-

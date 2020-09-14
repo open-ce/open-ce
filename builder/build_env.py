@@ -6,8 +6,7 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-"""
-"""
+
 *******************************************************************************
 Script: build_env.py
 
@@ -36,23 +35,21 @@ For usage description of arguments, this script supports use of --help:
 import argparse
 import os
 import sys
-import yaml
 
 import conda_build.metadata
 import conda_build.api
 from conda_build.config import get_or_merge_config
 
 import build_feedstock
-from util import parse_arg_list
+import utils
 
-default_conda_build_config = os.path.join(os.path.dirname(__file__), "..", "conda_build_config.yaml")
-default_build_types = "cpu,cuda"
-default_python_vers = "3.6"
-default_git_location = "https://github.com/open-ce"
+DEFAULT_BUILD_TYPES = "cpu,cuda"
+DEFAULT_PYTHON_VERS = "3.6"
+DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 
 def make_parser():
     ''' Parser input arguments '''
-    parser = argparse.ArgumentParser(
+    parser = utils.make_common_parser(
         description = 'Build conda environment as part of Open-CE',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
@@ -74,33 +71,21 @@ downloaded from OpenCE's git repository. If no value is provided,
 repositories will be downloaded to the current working directory.""")
 
     parser.add_argument(
-        '--output_folder',
-        type=str,
-        default='condabuild',
-        help='Path where built conda packages will be saved.')
-
-    parser.add_argument(
-        '--conda_build_config',
-        type=str,
-        default=default_conda_build_config,
-        help='Location of conda_build_config.yaml file.')
-
-    parser.add_argument(
         '--python_versions',
         type=str,
-        default=default_python_vers,
+        default=DEFAULT_PYTHON_VERS,
         help='Comma delimited list of python versions to build for, such as "3.6" or "3.7".')
 
     parser.add_argument(
         '--build_types',
         type=str,
-        default=default_build_types,
+        default=DEFAULT_BUILD_TYPES,
         help='Comma delimited list of build types, such as "cpu" or "cuda".')
 
     parser.add_argument(
         '--git_location',
         type=str,
-        default=default_git_location,
+        default=DEFAULT_GIT_LOCATION,
         help='The default location to clone git repositories from.')
 
     parser.add_argument(
@@ -109,18 +94,11 @@ repositories will be downloaded to the current working directory.""")
         default=None,
         help='Git tag to be checked out for all of the packages in an environment.')
 
-    parser.add_argument(
-        '--channels',
-        dest='channels_list',
-        action='append',
-        type=str,
-        default=list(),
-        help='Extra conda channel to be used.')
-
     return parser
 
-def make_hash(d):
-    return hash(str(d))
+def make_hash(to_hash):
+    '''Generic hash function.'''
+    return hash(str(to_hash))
 
 def validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
@@ -128,17 +106,22 @@ def validate_config_file(env_file, variants):
     try:
         meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
         if not ("packages" in meta_obj.meta.keys() or "imported_envs" in meta_obj.meta.keys()):
-            raise Exception("Content Error!", "An environment file needs to specify packages or import another environment file.")
+            raise Exception("Content Error!",
+                            "An environment file needs to specify packages or "
+                            "import another environment file.")
         for key in meta_obj.meta.keys():
             if not key in possible_keys:
                 raise Exception("Key Error!", key + " is not a valid key in the environment file.")
         return meta_obj
-    except (Exception, SystemExit) as e:
-        print('***** Error in %s:\n  %s' % (env_file, e), file=sys.stderr)
+    except (Exception, SystemExit) as exc: #pylint: disable=broad-except
+        print('***** Error in %s:\n  %s' % (env_file, exc), file=sys.stderr)
         return None
 
 def load_env_config_files(config_files, variants):
-    # Load all of the environment config files, plus any that come from "imported_envs" within an environment config file.
+    '''
+    Load all of the environment config files, plus any that come from "imported_envs"
+    within an environment config file.
+    '''
     env_config_files = [os.path.abspath(e) for e in config_files]
     env_config_data_list = []
     loaded_files = []
@@ -164,7 +147,8 @@ def load_env_config_files(config_files, variants):
                 new_config_files += [imported_env]
 
         # If there are new files to load, add them to the env_conf_files list.
-        # Otherwise, remove the current file from the env_conf_files list and add its data to the env_config_data_list.
+        # Otherwise, remove the current file from the env_conf_files list and
+        # add its data to the env_config_data_list.
         if new_config_files:
             env_config_files = new_config_files + env_config_files
         else:
@@ -217,7 +201,11 @@ def _get_package_dependencies(path, variant_config_files, variants):
     config = get_or_merge_config(None)
     config.variant_config_files = variant_config_files
     config.verbose = False
-    metas = conda_build.api.render(path, config=config, variants=variants, bypass_env_check=True, finalize=False)
+    metas = conda_build.api.render(path,
+                                   config=config,
+                                   variants=variants,
+                                   bypass_env_check=True,
+                                   finalize=False)
 
     # Parse out the package names and dependencies from each variant
     packages = set()
@@ -246,7 +234,9 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, deps = _get_package_dependencies(recipe.get('path'), variant_config_files, variants)
+        packages, deps = _get_package_dependencies(recipe.get('path'),
+                                                   variant_config_files,
+                                                   variants)
         output = { 'recipe' : recipe.get('name', None),
                    'repository' : repository,
                    'packages' : packages,
@@ -308,7 +298,10 @@ def _traverse_recipes(recipes, deps_tree):
     """
     yield from _traverse_deps_tree(recipes, deps_tree, range(len(recipes)))
 
-def build_env(arg_strings=None):
+def build_env(arg_strings=None): #pylint: disable=too-many-locals,too-many-branches
+    '''
+    Entry function.
+    '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
     result = 0
@@ -329,10 +322,10 @@ def build_env(arg_strings=None):
     if args.repository_folder and not os.path.exists(args.repository_folder):
         os.mkdir(args.repository_folder)
 
-    for py_vers in parse_arg_list(args.python_versions):
+    for py_vers in utils.parse_arg_list(args.python_versions):
         print("Builds for python version: " + py_vers)
         python_build_args = ["--python_versions", py_vers]
-        variants = { 'python' : py_vers, 'build_type' : parse_arg_list(args.build_types) }
+        variants = { 'python' : py_vers, 'build_type' : utils.parse_arg_list(args.build_types) }
         result, env_config_data_list = load_env_config_files(args.env_config_file, variants)
         if result != 0:
             return result
@@ -357,11 +350,19 @@ def build_env(arg_strings=None):
                     repo_dir = repository
 
                 if not os.path.exists(repo_dir):
-                    result = _clone_repo(args.git_location, repo_dir, env_config_data, package.get('git_tag'), args.git_tag_for_env)
+                    result = _clone_repo(args.git_location,
+                                         repo_dir,
+                                         env_config_data,
+                                         package.get('git_tag'),
+                                         args.git_tag_for_env)
                     if result != 0:
                         return result
 
-                recipes += _create_recipes(repo_dir, package.get('recipes'), [os.path.abspath(args.conda_build_config)], variants, env_config_data.get('channels', None))
+                recipes += _create_recipes(repo_dir,
+                                           package.get('recipes'),
+                                           [os.path.abspath(args.conda_build_config)],
+                                           variants,
+                                           env_config_data.get('channels', None))
                 packages_seen.add(make_hash(package))
 
         # Add dependency tree information to the packages list
@@ -377,7 +378,8 @@ def build_env(arg_strings=None):
             if 'recipe' in recipe:
                 package_build_args += ["--recipes", recipe['recipe']]
 
-            result = build_feedstock.build_feedstock(common_package_build_args + python_build_args + package_build_args)
+            build_args = common_package_build_args + python_build_args + package_build_args
+            result = build_feedstock.build_feedstock(build_args)
             if result != 0:
                 print("Unable to build recipe: " +  recipe['repository'])
                 return result

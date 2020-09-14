@@ -20,17 +20,12 @@ jobs:
       - name: Install dependencies
         shell: bash -l {0}
         run: |
-          conda install -y flake8 conda-build pytest pytest-cov pytest-mock
+          conda install -y pylint conda-build pytest pytest-cov pytest-mock
           pip install yamllint
       - name: Lint with flake8
         shell: bash -l {0}
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 ./builder --count --select=E9,F63,F7,F82 \
-              --show-source --statistics
-          # Once we have a defined format we can add this back.
-          # flake8 . --count --exit-zero --max-complexity=10 \
-          #    --max-line-length=127 --statistics
+          PYTHONPATH=./builder/:${PYTHONPATH} pylint ./builder
       - name: Lint config files
         shell: bash -l {0}
         run: |
