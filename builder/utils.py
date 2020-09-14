@@ -17,7 +17,7 @@ def make_common_parser(*args, **kwargs):
     '''
     Make the parser arguments that are common between other files.
     '''
-    parser = argparse.ArgumentParser(args, kwargs)
+    parser = argparse.ArgumentParser(*args, **kwargs)
 
     parser.add_argument(
         '--conda_build_config',
