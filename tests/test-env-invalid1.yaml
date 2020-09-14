@@ -1,0 +1,20 @@
+# *****************************************************************
+#
+# Licensed Materials - Property of IBM
+#
+# (C) Copyright IBM Corp. 2020. All Rights Reserved.
+#
+# US Government Users Restricted Rights - Use, duplication or
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+#
+# *****************************************************************
+
+chnnels: #<--- This key is misspelled, should cause an error.
+    - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+packages:
+    - feedstock : package11
+    - feedstock : package12
+    - feedstock : package13
+    - feedstock : package14
+    - feedstock : package15
+    - feedstock : package16
