@@ -124,7 +124,7 @@ def make_hash(d):
 
 def validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
-    possible_keys = {'imported_envs', 'channels', 'packages'}
+    possible_keys = {'imported_envs', 'channels', 'packages', 'git_tag_for_env', 'git_tag'}
     try:
         meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
         if not ("packages" in meta_obj.meta.keys() or "imported_envs" in meta_obj.meta.keys()):
