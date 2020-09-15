@@ -48,6 +48,8 @@ test/
 ### CUDA Requirements
 If building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`.
 
+Currently CUDA 10.2 is supported by the recipes in Open-CE. The `cudatoolkit` and `cudatoolkit-dev` packages can be sourced from [IBM WML CE](https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/#/).
+
 ### Building a Collection of Packages
 The `build_env.py` script can be used to build a collection of Open-CE packages. An environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`). For more details on `build_env.py`, please see `doc/README.build_env.md`.
 
@@ -82,3 +84,6 @@ The following command will install a package named `PACKAGE` from the local cond
 ```bash
 conda install -c ./condabuild PACKAGE
 ```
+
+### Contributions
+We are working on the contribution guidelines, please check back soon. In the meantime feel free to open an issue for a bug report or feature request.
