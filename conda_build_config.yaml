@@ -202,7 +202,7 @@ torchtext:
 torchvision:
   - 0.7.*
 tqdm:
-  - 4.36.*
+  - 4.41.*
 typing:
   - 3.7.4.1
 uff:
