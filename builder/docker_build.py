@@ -7,6 +7,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
 """
 import os
+from datetime import datetime
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images/builder")
@@ -14,13 +15,14 @@ LOCAL_FILES_PATH = os.path.join(os.path.dirname(OPEN_CE_PATH), "local_files")
 HOME_PATH = "/home/builder"
 
 REPO_NAME = "open-ce"
+IMAGE_NAME = "open-ce-builder"
 
 def build_image():
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
-    image_name = REPO_NAME + ":open-ce-builder-" + str(os.getuid())
+    image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + str(os.getuid())
     build_cmd = "docker build "
     build_cmd += "-f " + os.path.join(BUILD_IMAGE_PATH, "Dockerfile") + " "
     build_cmd += "-t " + image_name + " "
@@ -36,7 +38,11 @@ def build_in_container(image_name, output_folder, arg_strings):
     """
     Run a build inside of a container using the provided image_name.
     """
-    docker_cmd = "docker run --rm "
+    time_stamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    container_name = IMAGE_NAME + "-" + time_stamp
+
+    # Create the container
+    docker_cmd = "docker create -i --rm --name " + container_name + " "
 
     # Add output folder
     local_output_folder = os.path.join(os.getcwd(), output_folder)
@@ -44,25 +50,58 @@ def build_in_container(image_name, output_folder, arg_strings):
         os.mkdir(local_output_folder)
     docker_cmd += "-v " + local_output_folder + ":" + os.path.join(HOME_PATH, output_folder) + ":rw "
 
-    # Add open-ce directory
-    docker_cmd += "-v " + OPEN_CE_PATH + ":" + HOME_PATH + "/open-ce:ro "
+    docker_cmd += image_name + " bash"
+    result = os.system(docker_cmd)
+    if result:
+        print("Error creating docker container: " + container_name)
+        return 1
+
+    # Add the open-ce directory
+    result = os.system("docker cp " + OPEN_CE_PATH + " " + container_name + ":" + HOME_PATH)
+    if result:
+        print("Error copying open-ce directory into container")
+        return 1
 
     # Add local_files directory (if it exists)
     if os.path.isdir(os.path.join(os.getcwd(), "local_files")):
-        docker_cmd += "-v " + os.getcwd() + "/local_files:" + HOME_PATH + "/local_files:ro "
+        result = os.system("docker cp " + os.path.join(os.getcwd(), "local_files") + " " + container_name + ":" + HOME_PATH)
+        if result:
+            print("Error copying local_files into container")
+            return 1
 
-    docker_cmd += image_name + " "
-    docker_cmd += "bash -c 'cd " + HOME_PATH + "; " + ' '.join(arg_strings)  + "'"
+    result = os.system("docker start " + container_name)
+    if result:
+        print("Error starting container " + container_name)
+        return 1
 
+    docker_cmd = "docker exec " + container_name + " "
+    # Change to home directory"
+    docker_cmd += "bash -c 'cd " + HOME_PATH + "; "
+
+    # Execute build command
+    docker_cmd += "python " + os.path.join(HOME_PATH, "open-ce", "builder", os.path.basename(arg_strings[0])) + " "
+    docker_cmd += ' '.join(arg_strings[1:])  + "'"
     result = os.system(docker_cmd)
+    if result:
+        print("Error executing build in container")
+        return 1
 
-    return result
+    result = os.system("docker stop " + container_name)
+    if result:
+        print("Error stopping container " + container_name)
+        return result
+
+    return 0
 
 def build_with_docker(output_folder, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
     result, image_name = build_image()
+    if result:
+        print("Failure building image: " + image_name)
+        return result
+
     arg_strings.remove("--docker_build")
     result = build_in_container(image_name, output_folder, arg_strings)
 
