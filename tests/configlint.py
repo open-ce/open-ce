@@ -83,7 +83,7 @@ def main(arg_strings=None):
                                                         conda_build_config=args.conda_build_config)
 
             packages = [package for recipe in recipes for package in recipe["packages"]]
-            channels = [channel for recipe in recipes for channel in recipe["channels"]]
+            channels = {channel for recipe in recipes for channel in recipe["channels"]}
             deps = {utils.remove_version(dep) for recipe in recipes for dep in recipe.get("run_dependencies")}
 
             cli = "conda create --dry-run -n test_conda_dependencies"
