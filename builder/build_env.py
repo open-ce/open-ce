@@ -237,15 +237,14 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
         packages, run_deps, host_deps, build_deps, test_deps = _get_package_dependencies(recipe.get('path'),
                                                                                          variant_config_files,
                                                                                          variants)
-        output = { 'recipe' : recipe.get('name', None),
-                   'repository' : repository,
-                   'packages' : packages,
-                   'run_dependencies' : run_deps,
-                   'host_dependencies' : host_deps,
-                   'build_dependencies' : build_deps,
-                   'test_dependencies' : test_deps,
-                   'channels' : channels if channels else []}
-        outputs.append(output)
+        outputs.append({ 'recipe' : recipe.get('name', None),
+                         'repository' : repository,
+                         'packages' : packages,
+                         'run_dependencies' : run_deps,
+                         'host_dependencies' : host_deps,
+                         'build_dependencies' : build_deps,
+                         'test_dependencies' : test_deps,
+                         'channels' : channels if channels else []})
 
     os.chdir(saved_working_directory)
     return outputs
@@ -255,6 +254,9 @@ def create_all_recipes(env_config_files, variants, #pylint: disable=too-many-arg
                         git_location=DEFAULT_GIT_LOCATION,
                         git_tag_for_env="master",
                         conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
+    '''
+    Create a recipe dictionary for each recipe needed for a given environment file.
+    '''
 
     result, env_config_data_list = load_env_config_files(env_config_files, variants)
     if result != 0:
