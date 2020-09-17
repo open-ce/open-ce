@@ -193,9 +193,6 @@ def _get_package_dependencies(path, variant_config_files, variants):
     Return a list of output packages and a list of dependency packages
     for the recipe at a given path. Uses conda-render to determine this information.
     """
-    def remove_versions(lst):
-        return [x.split()[0] for x in lst]
-
     # Call conda-build's render tool to get a list of dictionaries representing
     # the recipe for each variant that will be built.
     config = get_or_merge_config(None)
@@ -209,18 +206,19 @@ def _get_package_dependencies(path, variant_config_files, variants):
 
     # Parse out the package names and dependencies from each variant
     packages = set()
-    deps = set()
-    versioned_deps = set()
+    run_deps = set()
+    host_deps = set()
+    build_deps = set()
+    test_deps = set()
     for meta,_,_ in metas:
         packages.add(meta.meta['package']['name'])
-        deps.update(remove_versions(meta.meta['requirements'].get('run', [])))
-        versioned_deps.update(meta.meta['requirements'].get('run', []))
-        deps.update(remove_versions(meta.meta['requirements'].get('host', [])))
-        deps.update(remove_versions(meta.meta['requirements'].get('build', [])))
+        run_deps.update(meta.meta['requirements'].get('run', []))
+        host_deps.update(meta.meta['requirements'].get('host', []))
+        build_deps.update(meta.meta['requirements'].get('build', []))
         if 'test' in meta.meta:
-            deps.update(remove_versions(meta.meta['test'].get('requires', [])))
+            test_deps.update(meta.meta['test'].get('requires', []))
 
-    return packages, deps, versioned_deps
+    return packages, run_deps, host_deps, build_deps, test_deps
 
 def _create_recipes(repository, recipes, variant_config_files, variants, channels):
     """
@@ -236,21 +234,23 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, deps, versioned_deps = _get_package_dependencies(recipe.get('path'),
-                                                                   variant_config_files,
-                                                                   variants)
+        packages, run_deps, host_deps, build_deps, test_deps = _get_package_dependencies(recipe.get('path'),
+                                                                                         variant_config_files,
+                                                                                         variants)
         output = { 'recipe' : recipe.get('name', None),
                    'repository' : repository,
                    'packages' : packages,
-                   'dependencies' : deps,
-                   'versioned_dependencies' : versioned_deps,
+                   'run_dependencies' : run_deps,
+                   'host_dependencies' : host_deps,
+                   'build_dependencies' : build_deps,
+                   'test_dependencies' : test_deps,
                    'channels' : channels if channels else []}
         outputs.append(output)
 
     os.chdir(saved_working_directory)
     return outputs
 
-def _create_all_recipes(env_config_files, variants, #pylint: disable=too-many-arguments
+def create_all_recipes(env_config_files, variants, #pylint: disable=too-many-arguments
                         repository_folder="./",
                         git_location=DEFAULT_GIT_LOCATION,
                         git_tag_for_env="master",
@@ -319,7 +319,12 @@ def _create_dep_tree(recipes):
     outputs = []
     for index, recipe in enumerate(recipes):
         deps = []
-        for dep in recipe.get('dependencies', []):
+        dependencies = set()
+        dependencies.update({utils.remove_version(dep) for dep in recipe.get("run_dependencies")})
+        dependencies.update({utils.remove_version(dep) for dep in recipe.get("build_dependencies")})
+        dependencies.update({utils.remove_version(dep) for dep in recipe.get("host_dependencies")})
+        dependencies.update({utils.remove_version(dep) for dep in recipe.get("test_dependencies")})
+        for dep in dependencies:
             if dep in packages:
                 deps += filter(lambda x: x != index, packages[dep])
         output = { 'dep_indices' : deps,
@@ -376,7 +381,7 @@ def build_env(arg_strings=None):
         python_build_args = ["--python_versions", py_vers]
         variants = { 'python' : py_vers, 'build_type' : utils.parse_arg_list(args.build_types) }
 
-        result, recipes = _create_all_recipes(args.env_config_file, variants,
+        result, recipes = create_all_recipes(args.env_config_file, variants,
                                               repository_folder=args.repository_folder,
                                               git_location=args.git_location,
                                               git_tag_for_env=args.git_tag_for_env,

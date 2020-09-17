@@ -48,14 +48,28 @@ def make_parser():
         default=[],
         help="""Environment files.""")
 
-    return parser
+    parser.add_argument(
+        '--repository_folder',
+        type=str,
+        default="./",
+        help="""Directory that contains the repositories. If the
+repositories don't exist locally, they will be
+downloaded from OpenCE's git repository. If no value is provided,
+repositories will be downloaded to the current working directory.""")
 
-def remove_version(package):
-    return package.split()[0].split("=")[0]
+    return parser
 
 def run_and_log(command):
     print("--->" + command)
     return os.system(command)
+
+def generalize_dependency_version(package):
+    dep = package
+    if ("=" in dep or (dep[-1].isdigit() and "." in dep)) and not dep[-2:] == ".*":
+        dep += ".*"
+    if " " in dep and not "." in dep.split()[1]:
+        dep += ".*"
+    return dep
 
 def main(arg_strings=None):
     parser = make_parser()
@@ -63,28 +77,24 @@ def main(arg_strings=None):
     for variant in VARIANTS:
         for env_file in args.env_files:
             print(str(env_file) + " : " + str(variant))
-            retval,recipes = build_env._create_all_recipes([env_file],
+            retval,recipes = build_env.create_all_recipes([env_file],
                                                         variant,
-                                                        repository_folder="./repos/",
+                                                        repository_folder=args.repository_folder,
                                                         conda_build_config=args.conda_build_config)
 
             packages = [package for recipe in recipes for package in recipe["packages"]]
-            deps = [dep for recipe in recipes for dep in recipe["versioned_dependencies"]]
+            deps = {utils.remove_version(dep) for recipe in recipes for dep in recipe.get("run_dependencies")}
 
             cli = " -c https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/ "
-            deps = [dep for dep in deps if not remove_version(dep) in packages]
-            for dep in deps:
-                if ("=" in dep or (dep[-1].isdigit() and "." in dep)) and not dep[-2:] == ".*":
-                    dep += ".*"
-                if " " in dep and not "." in dep.split()[1]:
-                    dep += ".*"
-                cli += "\"" + dep + "\" "
+            cli += " ".join(["\"" + generalize_dependency_version(dep) + "\"" for dep in deps
+                                                                              if not utils.remove_version(dep) in packages])
 
             retval = run_and_log("conda create --dry-run -n test_conda_dependencies " + cli)
 
             if retval != 0:
                 print("An error was encountered!")
                 return 1
+    print(args.conda_build_config + " Successfully validated!")
     return 0
 
 if __name__ == '__main__':

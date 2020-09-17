@@ -46,3 +46,6 @@ def parse_arg_list(arg_list):
     if isinstance(arg_list, list):
         return arg_list
     return arg_list.split(",") if not arg_list is None else list()
+
+def remove_version(package):
+    return package.split()[0].split("=")[0]

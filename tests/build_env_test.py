@@ -116,8 +116,14 @@ def test_create_recipes(mocker, capsys):
 
     create_recipes_result = build_env._create_recipes("/test/my_repo", None, "master", "master", [])
     assert create_recipes_result[0].get('packages') == {'horovod'}
-    for dep in {'build_req1', 'build_req2', 'host_req1', 'host_req2', 'run_req1', 'test_req1'}:
-        assert dep in create_recipes_result[0].get('dependencies')
+    for dep in {'build_req1', 'build_req2            1.2'}:
+        assert dep in create_recipes_result[0].get('build_dependencies')
+    for dep in {'run_req1            1.3'}:
+        assert dep in create_recipes_result[0].get('run_dependencies')
+    for dep in {'host_req1            1.0', 'host_req2'}:
+        assert dep in create_recipes_result[0].get('host_dependencies')
+    for dep in {'test_req1'}:
+        assert dep in create_recipes_result[0].get('test_dependencies')
 
 def test_build_env(mocker):
     '''
