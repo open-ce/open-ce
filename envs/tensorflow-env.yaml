@@ -18,4 +18,5 @@ packages:
   - feedstock : tensorflow-estimator
   - feedstock : tensorboard
   - feedstock : tensorboard-plugin-wit
+  - feedstock : tensorflow-hub
   - feedstock : protobuf          #['3.8' in python]
