@@ -210,15 +210,17 @@ def _get_package_dependencies(path, variant_config_files, variants):
     # Parse out the package names and dependencies from each variant
     packages = set()
     deps = set()
+    versioned_deps = set()
     for meta,_,_ in metas:
         packages.add(meta.meta['package']['name'])
         deps.update(remove_versions(meta.meta['requirements'].get('run', [])))
+        versioned_deps.update(meta.meta['requirements'].get('run', []))
         deps.update(remove_versions(meta.meta['requirements'].get('host', [])))
         deps.update(remove_versions(meta.meta['requirements'].get('build', [])))
         if 'test' in meta.meta:
             deps.update(remove_versions(meta.meta['test'].get('requires', [])))
 
-    return packages, deps
+    return packages, deps, versioned_deps
 
 def _create_recipes(repository, recipes, variant_config_files, variants, channels):
     """
@@ -234,18 +236,65 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, deps = _get_package_dependencies(recipe.get('path'),
-                                                   variant_config_files,
-                                                   variants)
+        packages, deps, versioned_deps = _get_package_dependencies(recipe.get('path'),
+                                                                   variant_config_files,
+                                                                   variants)
         output = { 'recipe' : recipe.get('name', None),
                    'repository' : repository,
                    'packages' : packages,
                    'dependencies' : deps,
+                   'versioned_dependencies' : versioned_deps,
                    'channels' : channels if channels else []}
         outputs.append(output)
 
     os.chdir(saved_working_directory)
     return outputs
+
+def _create_all_recipes(env_config_files, variants,
+                        repository_folder="./",
+                        git_location=DEFAULT_GIT_LOCATION,
+                        git_tag_for_env="master",
+                        conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
+
+    result, env_config_data_list = load_env_config_files(env_config_files, variants)
+    if result != 0:
+        return result, []
+    packages_seen = set()
+    recipes = []
+    # Create recipe dictionaries for each repository in the environment file
+    for env_config_data in env_config_data_list:
+
+        packages = env_config_data.get('packages', [])
+        if not packages:
+            packages = []
+        for package in packages:
+            if make_hash(package) in packages_seen:
+                continue
+
+            # Check if the directory for the feedstock already exists.
+            # If it doesn't attempt to clone the repository.
+            repository = package['feedstock'] + "-feedstock"
+            if repository_folder:
+                repo_dir = os.path.join(repository_folder, repository)
+            else:
+                repo_dir = repository
+
+            if not os.path.exists(repo_dir):
+                result = _clone_repo(git_location,
+                                     repo_dir,
+                                     env_config_data,
+                                     package.get('git_tag'),
+                                     git_tag_for_env)
+                if result != 0:
+                    return result, []
+
+            recipes += _create_recipes(repo_dir,
+                                       package.get('recipes'),
+                                       [os.path.abspath(conda_build_config)],
+                                       variants,
+                                       env_config_data.get('channels', None))
+            packages_seen.add(make_hash(package))
+    return result, recipes
 
 def _create_dep_tree(recipes):
     """
@@ -298,7 +347,7 @@ def _traverse_recipes(recipes, deps_tree):
     """
     yield from _traverse_deps_tree(recipes, deps_tree, range(len(recipes)))
 
-def build_env(arg_strings=None): #pylint: disable=too-many-locals,too-many-branches
+def build_env(arg_strings=None): #pylint: disable=too-many-locals
     '''
     Entry function.
     '''
@@ -326,44 +375,14 @@ def build_env(arg_strings=None): #pylint: disable=too-many-locals,too-many-branc
         print("Builds for python version: " + py_vers)
         python_build_args = ["--python_versions", py_vers]
         variants = { 'python' : py_vers, 'build_type' : utils.parse_arg_list(args.build_types) }
-        result, env_config_data_list = load_env_config_files(args.env_config_file, variants)
+
+        result, recipes = _create_all_recipes(args.env_config_file, variants,
+                                              repository_folder=args.repository_folder,
+                                              git_location=args.git_location,
+                                              git_tag_for_env=args.git_tag_for_env,
+                                              conda_build_config=args.conda_build_config)
         if result != 0:
             return result
-        packages_seen = set()
-        recipes = []
-        # Create recipe dictionaries for each repository in the environment file
-        for env_config_data in env_config_data_list:
-
-            packages = env_config_data.get('packages', [])
-            if not packages:
-                packages = []
-            for package in packages:
-                if make_hash(package) in packages_seen:
-                    continue
-
-                # Check if the directory for the feedstock already exists.
-                # If it doesn't attempt to clone the repository.
-                repository = package['feedstock'] + "-feedstock"
-                if args.repository_folder:
-                    repo_dir = os.path.join(args.repository_folder, repository)
-                else:
-                    repo_dir = repository
-
-                if not os.path.exists(repo_dir):
-                    result = _clone_repo(args.git_location,
-                                         repo_dir,
-                                         env_config_data,
-                                         package.get('git_tag'),
-                                         args.git_tag_for_env)
-                    if result != 0:
-                        return result
-
-                recipes += _create_recipes(repo_dir,
-                                           package.get('recipes'),
-                                           [os.path.abspath(args.conda_build_config)],
-                                           variants,
-                                           env_config_data.get('channels', None))
-                packages_seen.add(make_hash(package))
 
         # Add dependency tree information to the packages list
         dep_tree = _create_dep_tree(recipes)

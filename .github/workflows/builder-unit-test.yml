@@ -37,6 +37,8 @@ jobs:
           yamllint .github/workflows/*.yml ./conda_build_config.yaml
           # Use the conda_build api to lint the env files since they use jinja.
           python ./tests/envlint.py envs/*.yaml
+          # Validate conda_build_config for the main open-ce env file.
+          python configlint.py ./conda_build_config.yaml --env_files ./envs/opence-env.yaml
       - name: Test with pytest and Generate coverage report
         shell: bash -l {0}
         run: |
