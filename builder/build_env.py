@@ -250,7 +250,7 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
     os.chdir(saved_working_directory)
     return outputs
 
-def _create_all_recipes(env_config_files, variants,
+def _create_all_recipes(env_config_files, variants, #pylint: disable=too-many-arguments
                         repository_folder="./",
                         git_location=DEFAULT_GIT_LOCATION,
                         git_tag_for_env="master",
@@ -347,7 +347,7 @@ def _traverse_recipes(recipes, deps_tree):
     """
     yield from _traverse_deps_tree(recipes, deps_tree, range(len(recipes)))
 
-def build_env(arg_strings=None): #pylint: disable=too-many-locals
+def build_env(arg_strings=None):
     '''
     Entry function.
     '''
