@@ -124,7 +124,7 @@ numpy:
 onnx:
   - 1.6.*
 openblas:
-  - 0.3.6.*
+  - 0.2.20
 opencv:
   - 3.4.10.*
 openjdk:
