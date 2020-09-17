@@ -1,7 +1,7 @@
 absl_py:
   - 0.8.1.*
 astunparse:
-  - 1.6.*
+  - 1.6
 autoconf:
   - 2.69
 automake:
@@ -147,12 +147,12 @@ preshed:
 protobuf:
   - 3.9.*
 psutil:
-  - 5.*
+  - 5
 pytest:
   - 5.*
 python:
-  - 3.6.*
-  - 3.7.*
+  - 3.6
+  - 3.7
 python_lmdb:
   - 0.98.*
 pytorch:
@@ -166,7 +166,7 @@ regex:
 rust_nightly:
   - 1.43.0
 scikit_image:
-  - 0.16.*
+  - 0.16
 scikit_learn:
   - 0.22
 scipy:

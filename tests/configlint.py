@@ -74,7 +74,9 @@ def main(arg_strings=None):
             cli = " -c https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/ "
             deps = [dep for dep in deps if not remove_version(dep) in packages]
             for dep in deps:
-                if dep[-1].isdigit() and not dep[-2:] == ".*" and "." in dep:
+                if ("=" in dep or (dep[-1].isdigit() and "." in dep)) and not dep[-2:] == ".*":
+                    dep += ".*"
+                if " " in dep and not "." in dep.split()[1]:
                     dep += ".*"
                 cli += "\"" + dep + "\" "
 
