@@ -33,7 +33,7 @@ VARIANTS = [{ 'python' : [py_vers], 'build_type' : [build_type] } for py_vers in
 def make_parser():
     ''' Parser input arguments '''
     parser = argparse.ArgumentParser(
-        description = 'Lint Environment Files',
+        description = 'Lint a cond_build_config.yaml File',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
@@ -83,13 +83,17 @@ def main(arg_strings=None):
                                                         conda_build_config=args.conda_build_config)
 
             packages = [package for recipe in recipes for package in recipe["packages"]]
+            channels = [channel for recipe in recipes for channel in recipe["channels"]]
             deps = {utils.remove_version(dep) for recipe in recipes for dep in recipe.get("run_dependencies")}
 
-            cli = " -c https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/ "
+            cli = "conda create --dry-run -n test_conda_dependencies"
+            cli += " "
+            cli += " ".join({"-c \"" + channel + "\"" for channel in channels})
+            cli += " "
             cli += " ".join(["\"" + generalize_dependency_version(dep) + "\"" for dep in deps
                                                                               if not utils.remove_version(dep) in packages])
 
-            retval = run_and_log("conda create --dry-run -n test_conda_dependencies " + cli)
+            retval = run_and_log(cli)
 
             if retval != 0:
                 print("An error was encountered!")
