@@ -236,3 +236,13 @@ def test_env_validate(mocker, capsys):
     assert build_env.build_env([env_file]) == 1
     captured = capsys.readouterr()
     assert "chnnels is not a valid key in the environment file." in captured.err
+
+def test_build_env_docker_build(mocker):
+    '''
+    Test that passing the --docker_build argument calls docker_build.build_with_docker
+    '''
+    arg_strings = ["--docker_build", "my-env.yaml"]
+
+    mocker.patch('docker_build.build_with_docker', return_value=0)
+
+    assert build_env.build_env(arg_strings) == 0
