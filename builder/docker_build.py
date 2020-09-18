@@ -64,7 +64,7 @@ def _start_container(container_name):
 
 def _execute_in_container(container_name, command):
     docker_cmd = DOCKER_TOOL + " exec " + container_name + " "
-    # Change to home directory"
+    # Change to home directory
     docker_cmd += "bash -c 'cd " + HOME_PATH + "; " + command + "'"
 
     result = os.system(docker_cmd)
