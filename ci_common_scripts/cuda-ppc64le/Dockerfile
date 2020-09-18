@@ -1,13 +1,13 @@
-FROM nvidia/cuda-ppc64le:${CUDA_VER}-devel-ubi7
+FROM nvidia/cuda-ppc64le:10.2-devel-ubi7
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
 
 
 ENV CICD_GROUP=cicd
-ENV CICD_ID=1500
+ARG GROUP_ID=1500
 ENV BUILD_USER=builder
-ENV BUILD_ID=1084
+ARG BUILD_ID=1084
 ENV IBM_POWERAI_LICENSE_ACCEPT=yes
 
 # Remove preinclude system compilers
@@ -21,9 +21,9 @@ RUN export ARCH="$(uname -m)" && \
     git \
     patch && \
     # Create CICD Group
-    groupadd --gid ${CICD_ID} ${CICD_GROUP} && \
+    groupadd --gid ${GROUP_ID} ${CICD_GROUP} && \
     # Adduser Builder
-    useradd -b /home --create-home --gid ${CICD_GROUP} --groups wheel \
+    useradd -b /home --create-home --gid ${GROUP_ID} --groups wheel \
     --uid ${BUILD_ID} --comment "User for Building" ${BUILD_USER} && \
     echo "${BUILD_USER}    ALL=NOPASSWD: ALL" > /etc/sudoers.d/user-${BUILD_USER} && \
     curl -o /tmp/anaconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${ARCH}.sh && \
