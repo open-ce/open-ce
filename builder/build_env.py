@@ -41,6 +41,7 @@ import conda_build.api
 from conda_build.config import get_or_merge_config
 
 import build_feedstock
+import docker_build
 import utils
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
@@ -93,6 +94,14 @@ repositories will be downloaded to the current working directory.""")
         type=str,
         default=None,
         help='Git tag to be checked out for all of the packages in an environment.')
+
+    parser.add_argument(
+        '--docker_build',
+        action='store_true',
+        help="""Perform a build within a docker container.
+NOTE: When the --docker_build flag is used, all arguments with paths should be relative to the
+directory containing open-ce. Only files within the open-ce directory and local_files will
+be visible at build time.""")
 
     return parser
 
@@ -360,6 +369,10 @@ def build_env(arg_strings=None):
     '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
+
+    if args.docker_build:
+        return docker_build.build_with_docker(args.output_folder, sys.argv)
+
     result = 0
 
     python_build_args = []
