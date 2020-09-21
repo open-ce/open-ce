@@ -62,6 +62,9 @@ git clone https://github.com/open-ce/open-ce.git
 ./open-ce/builder/build_env.py open-ce/envs/opence-env.yaml
 ```
 
+#### Building within a docker container
+Passing the `--docker_build` argument to the `build_env.py` script will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--docker_build` option, please see `doc/README.build_env.md`.
+
 ### Building a Single Feedstock
 The `build_feedstock.py` script can be used to build a single feedstock (which could produce one or more conda packages). The output from running `build_feedstock.py` will be a local conda channel (by default called `condabuild`). For more details on `build_feedstock.py`, please see `doc/README.build_feedstock.md`.
 
