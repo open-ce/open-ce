@@ -36,9 +36,14 @@ import argparse
 import os
 import sys
 
-import conda_build.metadata
-import conda_build.api
-from conda_build.config import get_or_merge_config
+try:
+    import conda_build.metadata
+    import conda_build.api
+    from conda_build.config import get_or_merge_config
+except ImportError as error:
+    print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
+          " for a list of requirements.")
+    sys.exit(1)
 
 import build_feedstock
 import docker_build
