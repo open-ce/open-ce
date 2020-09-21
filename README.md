@@ -42,8 +42,11 @@ test/
 ## GETTING STARTED
 
 ### Requirements
-* `conda` >= 3.8.3 - The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
-* `conda-build` >= 3.20 - Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
+* `conda` >= 3.8.3
+  * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
+* `conda-build` >= 3.20
+  * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
+* `python` >= 3.6
 
 ### CUDA Requirements
 If building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`.
