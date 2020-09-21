@@ -1,14 +1,14 @@
 imported_envs:
   - tensorflow-env.yaml
 
-{% if 'cuda' in build_type %}
+{% if build_type == 'cuda' %}
 channels:
   - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
 {% endif %}
 
 packages:
   - feedstock : opencv
-  - feedstock : DALI #['cuda' in build_type]
+  - feedstock : DALI #[build_type == 'cuda']
   - feedstock : jpeg-turbo
   - feedstock : libflac
   - feedstock : libsndfile
