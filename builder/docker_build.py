@@ -11,7 +11,7 @@ import datetime
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images/builder")
-LOCAL_FILES_PATH = os.path.join(os.path.dirname(OPEN_CE_PATH), "local_files")
+LOCAL_FILES_PATH = os.path.join(os.path.join(os.getcwd(), "local_files")
 HOME_PATH = "/home/builder"
 
 REPO_NAME = "open-ce"
@@ -93,8 +93,8 @@ def build_in_container(image_name, output_folder, arg_strings):
         return 1
 
     # Add local_files directory (if it exists)
-    if os.path.isdir(os.path.join(os.getcwd(), "local_files")):
-        result = _copy_to_container(os.path.join(os.getcwd(), "local_files"), HOME_PATH, container_name)
+    if os.path.isdir(LOCAL_FILES_PATH):
+        result = _copy_to_container(LOCAL_FILES_PATH, HOME_PATH, container_name)
         if result:
             print("Error copying local_files into container")
             return 1
