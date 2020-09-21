@@ -420,11 +420,11 @@ def build_env(arg_strings=None):
         for channel in recipe.get('channels', []):
             package_build_args += ["--channels", channel]
 
+        package_build_args += ["--python_versions", recipe['python']]
+        package_build_args += ["--build_types", recipe['build_type']]
+
         if 'recipe' in recipe:
             package_build_args += ["--recipes", recipe['recipe']]
-
-        package_build_args += ["--python_verions", recipe['python']]
-        package_build_args += ["--build_types", recipe['build_type']]
 
         build_args = common_package_build_args + package_build_args
         result = build_feedstock.build_feedstock(build_args)
