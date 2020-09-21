@@ -11,7 +11,7 @@ import datetime
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images/builder")
-LOCAL_FILES_PATH = os.path.join(os.path.join(os.getcwd(), "local_files")
+LOCAL_FILES_PATH = os.path.join(os.path.join(os.getcwd(), "local_files"))
 HOME_PATH = "/home/builder"
 
 REPO_NAME = "open-ce"
