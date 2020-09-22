@@ -12,12 +12,8 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import argparse
 import os
 import sys
-import pathlib
-
-test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'builder'))
-import build_env #pylint: disable=wrong-import-position
-import utils #pylint: disable=wrong-import-position
+import builder.build_env as build_env
+import builder.utils as utils
 
 DEFAULT_PYTHON_VERSIONS = ['3.6','3.7']
 DEFAULT_BUILD_TYPES = ['cpu', 'cuda']

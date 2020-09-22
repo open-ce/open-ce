@@ -7,9 +7,7 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-"""
 
-"""
 *******************************************************************************
 Script: envlint.py
 
@@ -30,13 +28,8 @@ For usage description of arguments, this script supports use of --help:
 """
 
 import argparse
-import os
 import sys
-import pathlib
-
-test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'builder'))
-import build_env
+import builder.build_env as build_env
 
 variants = { 'python' : ['3.6','3.7'], 'build_type' : ['cpu', 'cuda'] }
 
