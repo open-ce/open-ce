@@ -1,4 +1,4 @@
-{% if 'cuda' in build_type %}
+{% if build_type == 'cuda' %}
 channels:
   - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
 {% endif %}
@@ -6,7 +6,7 @@ channels:
 packages:
   - feedstock : pytorch
   - feedstock : numactl
-{% if 'cuda' in build_type %}
+{% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : magma
   - feedstock : tensorrt

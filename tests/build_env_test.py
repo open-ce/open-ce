@@ -114,7 +114,7 @@ def test_create_recipes(mocker, capsys):
                                                                         "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    create_recipes_result = build_env._create_recipes("/test/my_repo", None, "master", "master", [])
+    create_recipes_result = build_env._create_recipes("/test/my_repo", None, "master", {'python' : ['3.6'], 'build_type' : ['cuda']}, [])
     assert create_recipes_result[0].get('packages') == {'horovod'}
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in create_recipes_result[0].get('build_dependencies')

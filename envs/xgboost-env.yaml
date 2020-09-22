@@ -1,8 +1,8 @@
-{% if 'cuda' in build_type %}
+{% if build_type == 'cuda' %}
 channels:
   - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
 {% endif %}
 
 packages:
-  - feedstock : nccl              #['cuda' in build_type]
+  - feedstock : nccl              #[build_type == 'cuda']
   - feedstock : xgboost

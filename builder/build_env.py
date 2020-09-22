@@ -35,6 +35,7 @@ For usage description of arguments, this script supports use of --help:
 import argparse
 import os
 import sys
+from itertools import product
 
 try:
     import conda_build.metadata
@@ -254,6 +255,8 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
         outputs.append({ 'recipe' : recipe.get('name', None),
                          'repository' : repository,
                          'packages' : packages,
+                         'python' : variants['python'],
+                         'build_type' : variants['build_type'],
                          'run_dependencies' : run_deps,
                          'host_dependencies' : host_deps,
                          'build_dependencies' : build_deps,
@@ -312,13 +315,16 @@ def create_all_recipes(env_config_files, variants, #pylint: disable=too-many-arg
             packages_seen.add(make_hash(package))
     return result, recipes
 
-def _create_dep_tree(recipes):
+def _create_dep_tree(recipes, start_index=0):
     """
     Create a dependency tree for a list of recipes.
 
     Each recipe will contain a 'dependencies` key which contains a list of integers.
     Each integer in the list represents the index of the dependencies recipe within the
     recipe list.
+
+    The start_index indicates the value that the dependency indices should start
+    counting from.
     """
 
     # Create a packages dictionary that uses all of a recipe's packages as key, with
@@ -326,7 +332,7 @@ def _create_dep_tree(recipes):
     packages = dict()
     for index, recipe in enumerate(recipes):
         for package in recipe.get('packages', []):
-            packages.update({ package : [index] + packages.get(package, []) })
+            packages.update({ package : [start_index + index] + packages.get(package, []) })
 
     # Create a new list of dictionary items that each contain:
     #     A list of indices for each dependency.
@@ -342,7 +348,7 @@ def _create_dep_tree(recipes):
         dependencies.update({utils.remove_version(dep) for dep in recipe.get("test_dependencies")})
         for dep in dependencies:
             if dep in packages:
-                deps += filter(lambda x: x != index, packages[dep])
+                deps += filter(lambda x: x != start_index + index, packages[dep])
         output = { 'dep_indices' : deps,
                    'seen' : False }
         outputs.append(output)
@@ -380,14 +386,10 @@ def build_env(arg_strings=None):
 
     result = 0
 
-    python_build_args = []
     common_package_build_args = []
     common_package_build_args += ["--output_folder", os.path.abspath(args.output_folder)]
     common_package_build_args += ["--channel", os.path.abspath(args.output_folder)]
     common_package_build_args += ["--conda_build_config", os.path.abspath(args.conda_build_config)]
-
-    if args.build_types:
-        common_package_build_args += ["--build_types", args.build_types]
 
     for channel in args.channels_list:
         common_package_build_args += ["--channels", channel]
@@ -396,12 +398,15 @@ def build_env(arg_strings=None):
     if args.repository_folder and not os.path.exists(args.repository_folder):
         os.mkdir(args.repository_folder)
 
-    for py_vers in utils.parse_arg_list(args.python_versions):
-        print("Builds for python version: " + py_vers)
-        python_build_args = ["--python_versions", py_vers]
-        variants = { 'python' : py_vers, 'build_type' : utils.parse_arg_list(args.build_types) }
-
-        result, recipes = create_all_recipes(args.env_config_file, variants,
+    # Create a dependency tree that includes recipes for every combination
+    # of variants.
+    variants = { 'python' : utils.parse_arg_list(args.python_versions),
+                 'build_type' : utils.parse_arg_list(args.build_types) }
+    variant_cart_product = [dict(zip(variants,y)) for y in product(*variants.values())]
+    recipes = []
+    dep_tree = []
+    for variant in variant_cart_product:
+        result, variant_recipes = create_all_recipes(args.env_config_file, variant,
                                               repository_folder=args.repository_folder,
                                               git_location=args.git_location,
                                               git_tag_for_env=args.git_tag_for_env,
@@ -410,23 +415,27 @@ def build_env(arg_strings=None):
             return result
 
         # Add dependency tree information to the packages list
-        dep_tree = _create_dep_tree(recipes)
+        dep_tree += _create_dep_tree(variant_recipes, len(recipes))
+        recipes += variant_recipes
 
-        # Build each package in the packages list
-        for recipe in _traverse_recipes(recipes, dep_tree):
-            package_build_args = ["--working_directory", recipe['repository']]
+    # Build each package in the packages list
+    for recipe in _traverse_recipes(recipes, dep_tree):
+        package_build_args = ["--working_directory", recipe['repository']]
 
-            for channel in recipe.get('channels', []):
-                package_build_args += ["--channels", channel]
+        for channel in recipe.get('channels', []):
+            package_build_args += ["--channels", channel]
 
-            if 'recipe' in recipe:
-                package_build_args += ["--recipes", recipe['recipe']]
+        package_build_args += ["--python_versions", recipe['python']]
+        package_build_args += ["--build_types", recipe['build_type']]
 
-            build_args = common_package_build_args + python_build_args + package_build_args
-            result = build_feedstock.build_feedstock(build_args)
-            if result != 0:
-                print("Unable to build recipe: " +  recipe['repository'])
-                return result
+        if 'recipe' in recipe:
+            package_build_args += ["--recipes", recipe['recipe']]
+
+        build_args = common_package_build_args + package_build_args
+        result = build_feedstock.build_feedstock(build_args)
+        if result != 0:
+            print("Unable to build recipe: " +  recipe['repository'])
+            return result
 
     return result
 

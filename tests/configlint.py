@@ -28,7 +28,7 @@ import utils
 PYTHON_VERIONS = ['3.6','3.7']
 BUILD_TYPES = ['cpu', 'cuda']
 
-VARIANTS = [{ 'python' : [py_vers], 'build_type' : [build_type] } for py_vers in PYTHON_VERIONS for build_type in BUILD_TYPES]
+VARIANTS = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in PYTHON_VERIONS for build_type in BUILD_TYPES]
 
 def make_parser():
     ''' Parser input arguments '''

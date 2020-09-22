@@ -1,15 +1,17 @@
 imported_envs:
   - bazel-env.yaml
 
-{% if 'cuda' in build_type %}
+{% if build_type == 'cuda' %}
 channels:
   - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
 {% endif %}
 
 packages:
-  - feedstock : nccl              #['cuda' in build_type]
-  - feedstock : tensorrt          #['cuda' in build_type]
-  - feedstock : cudnn             #['cuda' in build_type]
+{% if build_type == 'cuda' %}
+  - feedstock : nccl
+  - feedstock : tensorrt
+  - feedstock : cudnn
+{% endif %}
   - feedstock : tensorflow
   - feedstock : libevent
   - feedstock : tensorflow-serving
@@ -19,4 +21,4 @@ packages:
   - feedstock : tensorboard
   - feedstock : tensorboard-plugin-wit
   - feedstock : tensorflow-hub
-  - feedstock : protobuf          #['3.8' in python]
+  - feedstock : protobuf          #[python == '3.8']
