@@ -1,7 +1,9 @@
 absl_py:
-  - 0.8.1.*
+  - 0.9.*
 astunparse:
   - 1.6
+attrs:
+  - 18.1.*
 autoconf:
   - 2.69
 automake:
@@ -55,6 +57,8 @@ gast:
   - 0.3.3
 google_pasta:
   - 0.1.8
+googleapis_common_protos:
+  - 1.52.*
 graphsurgeon:
   - 0.4.1
 grpcio:
