@@ -114,7 +114,7 @@ def test_create_recipes(mocker, capsys):
                                                                         "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    create_recipes_result = build_env._create_recipes("/test/my_repo", None, "master", "master", [])
+    create_recipes_result = build_env._create_recipes("/test/my_repo", None, "master", {'python' : ['3.6'], 'build_type' : ['cuda']}, [])
     assert create_recipes_result[0].get('packages') == {'horovod'}
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in create_recipes_result[0].get('build_dependencies')
@@ -242,3 +242,13 @@ def test_env_validate(mocker, capsys):
     assert build_env.build_env([env_file]) == 1
     captured = capsys.readouterr()
     assert "chnnels is not a valid key in the environment file." in captured.err
+
+def test_build_env_docker_build(mocker):
+    '''
+    Test that passing the --docker_build argument calls docker_build.build_with_docker
+    '''
+    arg_strings = ["--docker_build", "my-env.yaml"]
+
+    mocker.patch('docker_build.build_with_docker', return_value=0)
+
+    assert build_env.build_env(arg_strings) == 0

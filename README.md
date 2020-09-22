@@ -42,16 +42,22 @@ test/
 ## GETTING STARTED
 
 ### Requirements
-* `conda` >= 3.8.3 - The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
-* `conda-build` >= 3.20 - Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
+
+* `conda` >= 3.8.3
+  * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
+* `conda-build` >= 3.20
+  * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
+* `python` >= 3.6
 
 ### CUDA Requirements
+
 If building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`.
 
 Currently CUDA 10.2 is supported by the recipes in Open-CE. The `cudatoolkit` and `cudatoolkit-dev` packages can be sourced from [IBM WML CE](https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/#/).
 
 ### Building a Collection of Packages
-The `build_env.py` script can be used to build a collection of Open-CE packages. An environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`). For more details on `build_env.py`, please see `doc/README.build_env.md`.
+
+The `build_env.py` script can be used to build a collection of Open-CE packages. An environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`). For more details on `build_env.py`, please see [`doc/README.build_env.md`](doc/README.build_env.md).
 
 The following commands will build all of the Open-CE packages for Python 3.6, including CUDA builds and cpu-only builds. The commands should be run from within the same directory that contains `local_files`.
 
@@ -62,8 +68,13 @@ git clone https://github.com/open-ce/open-ce.git
 ./open-ce/builder/build_env.py open-ce/envs/opence-env.yaml
 ```
 
+#### Building within a docker container
+
+Passing the `--docker_build` argument to the `build_env.py` script will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--docker_build` option, please see [`doc/README.build_env.md`](doc/README.build_env.md).
+
 ### Building a Single Feedstock
-The `build_feedstock.py` script can be used to build a single feedstock (which could produce one or more conda packages). The output from running `build_feedstock.py` will be a local conda channel (by default called `condabuild`). For more details on `build_feedstock.py`, please see `doc/README.build_feedstock.md`.
+
+The `build_feedstock.py` script can be used to build a single feedstock (which could produce one or more conda packages). The output from running `build_feedstock.py` will be a local conda channel (by default called `condabuild`). For more details on `build_feedstock.py`, please see [`doc/README.build_feedstock.md`](doc/README.build_feedstock.md).
 
 The following commands will build all of the packages within a feedstock named `MY_FEEDSTOCK`.
 
@@ -77,6 +88,7 @@ git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
 ```
 
 ### Installing Packages
+
 After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/index.html) for more information on conda environments.
 
 The following command will install a package named `PACKAGE` from the local conda channel `condabuild` into the currently active conda environment.
@@ -86,4 +98,5 @@ conda install -c ./condabuild PACKAGE
 ```
 
 ### Contributions
+
 We are working on the contribution guidelines, please check back soon. In the meantime feel free to open an issue for a bug report or feature request.

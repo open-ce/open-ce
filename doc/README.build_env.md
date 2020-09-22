@@ -32,7 +32,18 @@ You do not need to execute `build_feedstock.py` directly yourself, although
 you may do so if you wish to perform an individual build of your own
 for any given Open-CE feedstock repository.
 
-Command usage for `build_env.py`:
+## Docker build
+The `--docker_build` option will build an image and run the build command
+inside of a container based on the new image.
+
+As part of this process, it will copy a local_files directory that is in the
+current working directory into the container, if the directory exists.
+
+The paths to the `env_config_file`s and `--conda_build_config` must point to
+files within the `open-ce` directory and be relative to the directory
+containing the `open-ce` directory.
+
+##Command usage for `build_env.py`
 
 ```shell
 ==============================================================================
@@ -43,6 +54,7 @@ usage: build_env.py [-h] [--repository_folder REPOSITORY_FOLDER]
                     [--build_types BUILD_TYPES] [--git_location GIT_LOCATION]
                     [--git_tag_for_env GIT_TAG_FOR_ENV]
                     [--channels CHANNELS_LIST]
+                    [--docker_build]
                     env_config_file [env_config_file ...]
 
 Build conda environment as part of Open-CE
@@ -78,6 +90,12 @@ optional arguments:
   --git_tag_for_env GIT_TAG_FOR_ENV
                         Git tag to be checked out for all of the packages in
                         an environment. (default: None)
+  --docker_build        Perform a build within a docker container. NOTE: When
+                        the --docker_build flag is used, all arguments with
+                        paths should be relative to the directory containing
+                        open-ce. Only files within the open-ce directory and
+                        local_files will be visible at build time.
+                        (default: False)
   --channels CHANNELS_LIST
                         Extra conda channel to be used. (default: [])
 ==============================================================================
