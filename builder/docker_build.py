@@ -8,9 +8,11 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 import os
 import datetime
+import platform
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images/builder")
+BUILD_IMAGE_NAME = "builder-cuda-" + platform.machine()
+BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", BUILD_IMAGE_NAME)
 LOCAL_FILES_PATH = os.path.join(os.path.join(os.getcwd(), "local_files"))
 HOME_PATH = "/home/builder"
 
