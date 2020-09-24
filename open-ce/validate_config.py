@@ -15,8 +15,8 @@ import sys
 import build_env
 import utils
 
-DEFAULT_PYTHON_VERSIONS = ['3.6','3.7']
-DEFAULT_BUILD_TYPES = ['cpu', 'cuda']
+DEFAULT_BUILD_TYPES = "cpu,cuda"
+DEFAULT_PYTHON_VERS = "3.6"
 
 def make_parser():
     ''' Parser input arguments '''
@@ -27,7 +27,6 @@ def make_parser():
     parser.add_argument(
         'conda_build_config',
         type=str,
-        required=True,
         help="""File to validate.""")
 
     parser.add_argument(
@@ -40,17 +39,15 @@ def make_parser():
 
     parser.add_argument(
         '--python_versions',
-        nargs='+',
         type=str,
-        default=DEFAULT_PYTHON_VERSIONS,
-        help="""Python versions to use in variants.""")
+        default=DEFAULT_PYTHON_VERS,
+        help='Comma delimited list of python versions to build for, such as "3.6" or "3.7".')
 
     parser.add_argument(
         '--build_types',
-        nargs='+',
         type=str,
         default=DEFAULT_BUILD_TYPES,
-        help="""Build types to use in variants.""")
+        help='Comma delimited list of build types, such as "cpu" or "cuda".')
 
     parser.add_argument(
         '--repository_folder',
@@ -82,8 +79,8 @@ def main(arg_strings=None):
     Entry function.
     '''
     args = make_parser().parse_args(arg_strings)
-    variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in args.python_versions
-                                                                  for build_type in args.build_types]
+    variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in utils.parse_arg_list(args.python_versions)
+                                                                  for build_type in utils.parse_arg_list(args.build_types)]
     for variant in variants:
         print('Validating {} for {}'.format(args.conda_build_config, variant))
         for env_file in args.env_files:

@@ -48,6 +48,9 @@ def make_parser():
     return parser
 
 def main(arg_strings=None):
+    '''
+    Entry function.
+    '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
 
