@@ -1,3 +1,6 @@
+imported_envs:
+  - tensorboard-env.yaml
+
 {% if build_type == 'cuda' %}
 channels:
   - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
