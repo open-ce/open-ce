@@ -47,7 +47,7 @@ def make_parser():
 
     return parser
 
-def main(arg_strings=None):
+def validate_env(arg_strings=None):
     '''
     Entry function.
     '''
@@ -59,4 +59,4 @@ def main(arg_strings=None):
     return retval
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(validate_env())
