@@ -12,8 +12,8 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import argparse
 import os
 import sys
-import builder.build_env as build_env
-import builder.utils as utils
+import build_env
+import utils
 
 DEFAULT_PYTHON_VERSIONS = ['3.6','3.7']
 DEFAULT_BUILD_TYPES = ['cpu', 'cuda']

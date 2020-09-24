@@ -29,19 +29,19 @@ jobs:
       - name: Lint with pylint
         shell: bash -l {0}
         run: |
-          PYTHONPATH=./builder/:${PYTHONPATH} pylint ./builder ./validation
+          PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./open-ce
       - name: Lint config files
         shell: bash -l {0}
         run: |
           # Use yamllint to check the actual yaml files.
           yamllint .github/workflows/*.yml ./conda_build_config.yaml
           # Use the conda_build api to lint the env files since they use jinja.
-          python ./tests/envlint.py envs/*.yaml
+          python ./open-ce/validate_env.py envs/*.yaml
           # Validate conda_build_config for the main open-ce env file.
-          python ./validation/validate_config.py ./conda_build_config.yaml \
+          python ./open-ce/validate_config.py ./conda_build_config.yaml \
                                                  --env_files ./envs/opence-env.yaml \
-                                                 --python_versions 3.6 3.7 \
-                                                 --build_types cuda cpu
+                                                 --python_versions 3.6,3.7 \
+                                                 --build_types cuda,cpu
       - name: Test with pytest and Generate coverage report
         shell: bash -l {0}
         run: |

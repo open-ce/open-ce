@@ -13,7 +13,7 @@ import sys
 import os
 import pathlib
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'builder'))
+sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
 import pytest
 import helpers

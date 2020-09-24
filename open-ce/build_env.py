@@ -21,7 +21,7 @@ the  dependencies. It will execute the build_feedstock.py script as needed in
 order to produce conda packages for the requested project.
 
 In the simplest case, a build for (e.g.) tensorflow may look like this:
-   $ ./builder/build_env.py envs/tensorflow-env.yaml
+   $ ./open-ce/build_env.py envs/tensorflow-env.yaml
 (or similar, adjusting for your path or to choose a different project).
 
 Usage:

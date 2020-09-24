@@ -29,7 +29,7 @@ For usage description of arguments, this script supports use of --help:
 
 import argparse
 import sys
-import builder.build_env as build_env
+import build_env
 
 variants = { 'python' : ['3.6','3.7'], 'build_type' : ['cpu', 'cuda'] }
 

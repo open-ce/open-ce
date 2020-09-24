@@ -33,10 +33,10 @@ tests/util_test.py ...                                                          
 ----------- coverage: platform linux, python 3.7.7-final-0 -----------
 Name                         Stmts   Miss  Cover   Missing
 ----------------------------------------------------------
-builder/__init__.py              0      0   100%
-builder/build_env.py           163    163     0%   2-332
-builder/build_feedstock.py      83      6    93%   173-178, 193
-builder/utils.py                  4      0   100%
+open-ce/__init__.py              0      0   100%
+open-ce/build_env.py           163    163     0%   2-332
+open-ce/build_feedstock.py      83      6    93%   173-178, 193
+open-ce/utils.py                  4      0   100%
 ----------------------------------------------------------
 TOTAL                          250    169    32%
 
