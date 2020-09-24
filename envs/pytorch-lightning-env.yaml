@@ -1,6 +1,0 @@
-imported_envs:
-  - pytorch-env.yaml
-  - tensorflow-env.yaml
-
-packages:
-  - feedstock : pytorch-lightning 
