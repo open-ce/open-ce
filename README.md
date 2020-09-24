@@ -4,7 +4,7 @@
 
 ![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/Open-CE%20Builder%20Unit%20Tests/badge.svg)
 [![Builder Unit Test Coverage](https://codecov.io/gh/open-ce/open-ce/branch/master/graph/badge.svg)](https://codecov.io/gh/open-ce/open-ce)
-![Python version](https://img.shields.io/badge/python-3.6%20%7C%203.7-blue.svg)
+![Python version](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)
 ![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)
 
 ---
