@@ -144,10 +144,6 @@ def test_build_env(mocker):
         side_effect=helpers.mocked_getcwd
     )
     mocker.patch(
-        'conda_build.api.render',
-        side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
-    )
-    mocker.patch(
         'os.chdir',
         side_effect=helpers.validate_chdir
     )
@@ -179,6 +175,10 @@ def test_build_env(mocker):
                     "package21": ["package13"],
                     "package22": ["package15"]}
     #---The first test specifies a python version that isn't supported in the env file by package21.
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
+    )
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
         'build_feedstock.build_feedstock',
         side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions 2.0"], reject=["package21-feedstock"]))
@@ -195,6 +195,10 @@ def test_build_env(mocker):
                     "package16": ["package15"],
                     "package21": ["package13"],
                     "package22": ["package21"]}
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
+    )
     mocker.patch(
         'build_feedstock.build_feedstock',
         side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions 2.1"]))

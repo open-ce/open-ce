@@ -74,7 +74,7 @@ def generalize_version(package):
         dep += ".*"
     return dep
 
-def main(arg_strings=None):
+def validate_config(arg_strings=None):
     '''
     Entry function.
     '''
@@ -115,4 +115,4 @@ def main(arg_strings=None):
     return 0
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(validate_config())

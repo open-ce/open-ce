@@ -15,7 +15,7 @@ class Namespace:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-def validate_cli(cli_string, expect=[], reject=[], retval=0, *args, **kwargs):
+def validate_cli(cli_string, expect=[], reject=[], ignore=[], retval=0, *args, **kwargs):
     """
     Used to mock os.system with the assumption that it is making a call to 'conda-build'.
 
@@ -23,15 +23,18 @@ def validate_cli(cli_string, expect=[], reject=[], retval=0, *args, **kwargs):
         cli_string: The placeholder argument for the system command.
         expect: A list of strings that must occur in the 'cli_string' arg.
         reject: A list of strings that cannot occur in the 'cli_string' arg.
+        ignore: Don't validate the CLI_STRING if one of these strings is contained in it.
         retval: The mocked value to return from 'os.system'.
     Returns:
         retval
     """
-    for term in expect:
-        assert term in cli_string
-    for term in reject:
-        assert term not in cli_string
-    return retval
+    if not any ({term in cli_string for term in ignore}):
+        for term in expect:
+            assert term in cli_string
+        for term in reject:
+            assert term not in cli_string
+        return retval
+    return 0
 
 current_dir = os.getcwd()
 chdir_count = 0
