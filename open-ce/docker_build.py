@@ -15,7 +15,7 @@ LOCAL_FILES_PATH = os.path.join(os.path.join(os.getcwd(), "local_files"))
 HOME_PATH = "/home/builder"
 
 REPO_NAME = "open-ce"
-IMAGE_NAME = "open-ce-open-ce"
+IMAGE_NAME = "open-ce-builder"
 
 DOCKER_TOOL = "docker"
 
