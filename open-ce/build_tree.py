@@ -78,43 +78,16 @@ class BuildCommand():
         """
         Returns a name representing the Build Command
         """
-        return self.recipe + "-py" + self.python + "-" + self.build_type
+        result = self.recipe
+        if self.python:
+            result +=  "-py" + self.python
+        if self.build_type:
+            result +=  "-" + self.build_type
+        return result
 
 def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
-
-def _get_package_dependencies(path, variant_config_files, variants):
-    """
-    Return a list of output packages and a list of dependency packages
-    for the recipe at a given path. Uses conda-render to determine this information.
-    """
-    # Call conda-build's render tool to get a list of dictionaries representing
-    # the recipe for each variant that will be built.
-    config = get_or_merge_config(None)
-    config.variant_config_files = variant_config_files
-    config.verbose = False
-    metas = conda_build.api.render(path,
-                                   config=config,
-                                   variants=variants,
-                                   bypass_env_check=True,
-                                   finalize=False)
-
-    # Parse out the package names and dependencies from each variant
-    packages = set()
-    run_deps = set()
-    host_deps = set()
-    build_deps = set()
-    test_deps = set()
-    for meta,_,_ in metas:
-        packages.add(meta.meta['package']['name'])
-        run_deps.update(meta.meta['requirements'].get('run', []))
-        host_deps.update(meta.meta['requirements'].get('host', []))
-        build_deps.update(meta.meta['requirements'].get('build', []))
-        if 'test' in meta.meta:
-            test_deps.update(meta.meta['test'].get('requires', []))
-
-    return packages, run_deps, host_deps, build_deps, test_deps
 
 def _create_recipes(repository, recipes, variant_config_files, variants, channels):
     """

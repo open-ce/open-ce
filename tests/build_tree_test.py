@@ -107,3 +107,36 @@ def test_clone_repo_failure(mocker, capsys):
     assert mock_build_tree._clone_repo("/test/my_repo", None, "master") == 1
     captured = capsys.readouterr()
     assert "Unable to clone repository" in captured.out
+
+sample_build_commands = [build_tree.BuildCommand("recipe1",
+                                    "repo1",
+                                    ["package1a", "package1b"],
+                                    python="2.6",
+                                    build_type="cuda",
+                                    build_command_dependencies=[1,2]),
+                         build_tree.BuildCommand("recipe2",
+                                    "repo2",
+                                    ["package2a"],
+                                    python="2.6",
+                                    build_type="cpu",
+                                    build_command_dependencies=[]),
+                         build_tree.BuildCommand("recipe3",
+                                    "repo3",
+                                    ["package3a", "package3b"],
+                                    build_command_dependencies=[1])]
+
+def test_get_dependency_names(mocker):
+    '''
+    Tests that the dependency names can be retrieved for each item in a BuildTree
+    '''
+    mock_build_tree = TestBuildTree([], "3.6", "cpu")
+    mock_build_tree.build_commands = sample_build_commands
+
+    output = ""
+    for build_command in mock_build_tree:
+        output += ' '.join([mock_build_tree[dep].name() for dep in build_command.build_command_dependencies]) + "\n"
+
+    expected_output = "\nrecipe2-py2.6-cpu\nrecipe2-py2.6-cpu recipe3\n"
+
+    assert output == expected_output
+
