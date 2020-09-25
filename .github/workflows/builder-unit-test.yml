@@ -5,6 +5,8 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  issue_comment:
+    types: [created]
 
 jobs:
   build:
@@ -17,6 +19,13 @@ jobs:
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
+      - uses: khan/pull-request-comment-trigger@master
+        id: check
+        with:
+          trigger: '@deploy'
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       - name: Install dependencies
         shell: bash -l {0}
         run: |
