@@ -30,21 +30,16 @@ For usage description of arguments, this script supports use of --help:
 import argparse
 import sys
 import build_env
+import utils
 
 variants = { 'python' : ['3.6','3.7'], 'build_type' : ['cpu', 'cuda'] }
 
 def make_parser():
     ''' Parser input arguments '''
-    parser = argparse.ArgumentParser(
-        description = 'Lint Environment Files',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument(
-        'env_files',
-        nargs='+',
-        type=str,
-        help="""Files to Lint.""")
-
+    arguments = [utils.Argument.ENV_FILE]
+    parser = utils.make_parser(arguments,
+                               description = 'Lint Environment Files',
+                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
 
 def validate_env(arg_strings=None):
@@ -54,7 +49,7 @@ def validate_env(arg_strings=None):
     parser = make_parser()
     args = parser.parse_args(arg_strings)
 
-    retval,_ = build_env.load_env_config_files(args.env_files, variants)
+    retval,_ = build_env.load_env_config_files(args.env_config_file, variants)
 
     return retval
 

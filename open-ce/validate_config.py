@@ -15,49 +15,16 @@ import sys
 import build_env
 import utils
 
-DEFAULT_BUILD_TYPES = "cpu,cuda"
-DEFAULT_PYTHON_VERS = "3.6"
-
 def make_parser():
     ''' Parser input arguments '''
-    parser = argparse.ArgumentParser(
-        description = 'Perform validation on a cond_build_config.yaml file.',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument(
-        'conda_build_config',
-        type=str,
-        help="""File to validate.""")
-
-    parser.add_argument(
-        '--env_files',
-        nargs='+',
-        required=True,
-        type=str,
-        default=[],
-        help="""Environment files.""")
-
-    parser.add_argument(
-        '--python_versions',
-        type=str,
-        default=DEFAULT_PYTHON_VERS,
-        help='Comma delimited list of python versions to build for, such as "3.6" or "3.7".')
-
-    parser.add_argument(
-        '--build_types',
-        type=str,
-        default=DEFAULT_BUILD_TYPES,
-        help='Comma delimited list of build types, such as "cpu" or "cuda".')
-
-    parser.add_argument(
-        '--repository_folder',
-        type=str,
-        default="./",
-        help="Directory that contains the repositories. If the"
-             "repositories don't exist locally, they will be"
-             "downloaded from OpenCE's git repository. If no value is provided,"
-             "repositories will be downloaded to the current working directory.")
-
+    arguments = [utils.Argument.CONDA_BUILD_CONFIG,
+                 utils.Argument.ENV_FILE,
+                 utils.Argument.REPOSITORY_FOLDER,
+                 utils.Argument.PYTHON_VERSIONS,
+                 utils.Argument.BUILD_TYPES]
+    parser = utils.make_parser(arguments,
+                               description = 'Perform validation on a cond_build_config.yaml file.',
+                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
 
 def run_and_log(command):
@@ -83,7 +50,7 @@ def validate_config(arg_strings=None):
                                                                   for build_type in utils.parse_arg_list(args.build_types)]
     for variant in variants:
         print('Validating {} for {}'.format(args.conda_build_config, variant))
-        for env_file in args.env_files:
+        for env_file in args.env_config_file:
             print('Validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
             retval,recipes = build_env.create_all_recipes([env_file],
                                                         variant,

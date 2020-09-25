@@ -100,7 +100,7 @@ def test_build_env(mocker):
         side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert validate_config.validate_config(["./conda_build_config.yaml", "--env_files", env_file, "--python_versions", "3.6", "--build_types", "cuda"]) == 0
+    assert validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"]) == 0
 
 def test_build_negative(mocker, capsys):
     '''
@@ -141,6 +141,6 @@ def test_build_negative(mocker, capsys):
         side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert validate_config.validate_config(["./conda_build_config.yaml", "--env_files", env_file, "--python_versions", "3.6", "--build_types", "cuda"]) == 1
+    assert validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"]) == 1
     captured = capsys.readouterr()
     assert "Error while validating ./conda_build_config.yaml for " in captured.out
