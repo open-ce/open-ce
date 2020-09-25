@@ -13,29 +13,13 @@ import sys
 import os
 import pathlib
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'builder'))
+sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
 import pytest
 
 import build_tree
 import utils
 import helpers
-
-def make_render_result(package_name, build_reqs=[], run_reqs=[], host_reqs=[], test_reqs=[]):
-    '''
-    Creates a YAML string that is a mocked result of `conda_build.api.render`.
-    '''
-    retval = [(helpers.Namespace(meta={
-                            'package': {'name': package_name, 'version': '1.2.3'},
-                            'source': {'git_url': 'https://github.com/'+package_name+'.git', 'git_rev': 'v0.19.5', 'patches': []},
-                            'build': {'number': '1', 'string': 'py37_1'},
-                            'requirements': {'build': build_reqs, 'host': host_reqs, 'run': run_reqs + ["upstreamdep1"], 'run_constrained': []},
-                            'test': {'requires': test_reqs},
-                            'about': {'home': 'https://github.com/'+package_name+'.git', 'license_file': 'LICENSE', 'summary': package_name},
-                            'extra': {'final': True}}),
-                      True,
-                      None)]
-    return retval
 
 class TestBuildTree(build_tree.BuildTree):
     __test__ = False
@@ -62,10 +46,10 @@ def test_create_recipes(mocker, capsys):
         'os.getcwd',
         return_value="/test/starting_dir"
     )
-    render_result=make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
-                                                ['run_req1            1.3'],
-                                                ['host_req1            1.0', 'host_req2'],
-                                                ['test_req1'])
+    render_result=helpers.make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
+                                                        ['run_req1            1.3'],
+                                                        ['host_req1            1.0', 'host_req2'],
+                                                        ['test_req1'])
     mocker.patch(
         'conda_build.api.render',
         return_value=render_result

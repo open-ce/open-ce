@@ -15,6 +15,14 @@ DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
                                           "..", "conda_build_config.yaml")
 
+class OpenCEError(Exception):
+    """
+    Exception class for errors that occur in an Open-CE tool.
+    """
+    def __init__(self, msg):
+        super().__init__(msg)
+        self.msg = msg
+
 class Argument: #pylint: disable=no-init,too-few-public-methods
     '''Enum for Arguments'''
     CONDA_BUILD_CONFIG = 0

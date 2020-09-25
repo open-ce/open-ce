@@ -110,7 +110,7 @@ def build_env(arg_strings=None):
                                git_tag_for_env=args.git_tag_for_env,
                                conda_build_config=args.conda_build_config)
     except OpenCEError as err:
-        print(err)
+        print(err.msg)
         return 1
 
     # Build each package in the packages list
