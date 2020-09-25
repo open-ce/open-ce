@@ -17,10 +17,8 @@ import utils
 
 def make_parser():
     ''' Parser input arguments '''
-    arguments = [utils.Argument.CONDA_BUILD_CONFIG,
-                 utils.Argument.ENV_FILE,
-                 utils.Argument.REPOSITORY_FOLDER,
-                 utils.Argument.PYTHON_VERSIONS,
+    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.ENV_FILE,
+                 utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES]
     parser = utils.make_parser(arguments,
                                description = 'Perform validation on a cond_build_config.yaml file.',

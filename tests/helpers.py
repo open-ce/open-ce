@@ -61,3 +61,27 @@ def validate_chdir(arg1, expected_dirs=[]):
 def mocked_getcwd():
     global current_dir
     return current_dir
+
+def make_render_result(package_name, build_reqs=[], run_reqs=[], host_reqs=[], test_reqs=[]):
+    '''
+    Creates a YAML string that is a mocked result of `conda_build.api.render`.
+    '''
+    retval = [(Namespace(meta={
+                            'package': {'name': package_name, 'version': '1.2.3'},
+                            'source': {'git_url': 'https://github.com/'+package_name+'.git', 'git_rev': 'v0.19.5', 'patches': []},
+                            'build': {'number': '1', 'string': 'py37_1'},
+                            'requirements': {'build': build_reqs, 'host': host_reqs, 'run': run_reqs + ["upstreamdep1   2.3","upstreamdep2   2"], 'run_constrained': []},
+                            'test': {'requires': test_reqs},
+                            'about': {'home': 'https://github.com/'+package_name+'.git', 'license_file': 'LICENSE', 'summary': package_name},
+                            'extra': {'final': True}}),
+                      True,
+                      None)]
+    return retval
+
+def mock_renderer(path, package_deps):
+    '''
+    Used to mock the `conda_build.api.render` function by extracting the package name from `path`
+    and using that to get the dependencies from `package_deps`.
+    '''
+    package = os.path.basename(path)[:-10]
+    return make_render_result(package, package_deps[package])

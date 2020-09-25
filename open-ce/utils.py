@@ -15,7 +15,7 @@ DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
                                           "..", "conda_build_config.yaml")
 
-class Argument:
+class Argument: #pylint: disable=no-init,too-few-public-methods
     '''Enum for Arguments'''
     CONDA_BUILD_CONFIG = 0
     OUTPUT_FOLDER=1
@@ -79,7 +79,7 @@ OPENCE_ARGS = {
 
 def make_parser(arguments, *args, **kwargs):
     '''
-    Make the parser arguments that are common between other files.
+    Make a parser from a list of OPEN-CE Arguments.
     '''
     parser = argparse.ArgumentParser(*args, **kwargs)
     for argument in arguments:

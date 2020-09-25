@@ -40,10 +40,8 @@ DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 
 def make_parser():
     ''' Parser input arguments '''
-    arguments = [utils.Argument.CONDA_BUILD_CONFIG,
-                 utils.Argument.OUTPUT_FOLDER,
-                 utils.Argument.CHANNELS,
-                 utils.Argument.PYTHON_VERSIONS,
+    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
+                 utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES]
     parser = utils.make_parser(arguments,
                                description = 'Build conda packages as part of Open-CE',
