@@ -1,6 +1,14 @@
-
+"""
+*****************************************************************
+Licensed Materials - Property of IBM
+(C) Copyright IBM Corp. 2020. All Rights Reserved.
+US Government Users Restricted Rights - Use, duplication or
+disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+*****************************************************************
+"""
 
 import os
+import sys
 from itertools import product
 
 try:
@@ -14,22 +22,28 @@ except ImportError as error:
 import utils
 import env_config
 import build_feedstock
+from utils import OpenCEError
 
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 
 class BuildCommand():
+    """
+    The BuildCommand class holds all of the information needed to call the build_feedstock
+    function a single time.
+    """
+    #pylint: disable=too-many-instance-attributes,too-many-arguments
     def __init__(self,
                  recipe,
                  repository,
                  packages,
                  python=None,
                  build_type=None,
-                 run_dependencies=[],
-                 host_dependencies=[],
-                 build_dependencies=[],
-                 test_dependencies=[],
-                 channels=[],
-                 build_command_dependencies=[]):
+                 run_dependencies=None,
+                 host_dependencies=None,
+                 build_dependencies=None,
+                 test_dependencies=None,
+                 channels=None,
+                 build_command_dependencies=None):
         self.recipe = recipe
         self.repository = repository
         self.packages = packages
@@ -42,11 +56,179 @@ class BuildCommand():
         self.channels = channels
         self.build_command_dependencies = build_command_dependencies
 
+    def feedstock_args(self):
+        """
+        Returns a list of strings that can be provided to the build_feedstock function to
+        perform a build.
+        """
+        build_args = ["--working_directory", self.repository]
+
+        for channel in self.channels:
+            build_args += ["--channels", channel]
+
+        build_args += ["--python_versions", self.python]
+        build_args += ["--build_types", self.build_type]
+
+        if self.recipe:
+            build_args += ["--recipes", self.recipe]
+
+        return build_args
+
+    def name(self):
+        """
+        Returns a name representing the Build Command
+        """
+        return self.recipe + "-py" + self.python + "-" + self.build_type
+
 def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
+def _get_package_dependencies(path, variant_config_files, variants):
+    """
+    Return a list of output packages and a list of dependency packages
+    for the recipe at a given path. Uses conda-render to determine this information.
+    """
+    # Call conda-build's render tool to get a list of dictionaries representing
+    # the recipe for each variant that will be built.
+    config = get_or_merge_config(None)
+    config.variant_config_files = variant_config_files
+    config.verbose = False
+    metas = conda_build.api.render(path,
+                                   config=config,
+                                   variants=variants,
+                                   bypass_env_check=True,
+                                   finalize=False)
+
+    # Parse out the package names and dependencies from each variant
+    packages = set()
+    run_deps = set()
+    host_deps = set()
+    build_deps = set()
+    test_deps = set()
+    for meta,_,_ in metas:
+        packages.add(meta.meta['package']['name'])
+        run_deps.update(meta.meta['requirements'].get('run', []))
+        host_deps.update(meta.meta['requirements'].get('host', []))
+        build_deps.update(meta.meta['requirements'].get('build', []))
+        if 'test' in meta.meta:
+            test_deps.update(meta.meta['test'].get('requires', []))
+
+    return packages, run_deps, host_deps, build_deps, test_deps
+
+def _create_recipes(repository, recipes, variant_config_files, variants, channels):
+    """
+    Create a recipe dictionary for each recipe within a repository. The dictionary
+    will have all of the information needed to build the recipe, as well as to
+    create the dependency tree.
+    """
+    saved_working_directory = os.getcwd()
+    os.chdir(repository)
+
+    config_data, _ = build_feedstock.load_package_config()
+    outputs = []
+    for recipe in config_data.get('recipes', []):
+        if recipes and not recipe.get('name') in recipes:
+            continue
+        packages, run_deps, host_deps, build_deps, test_deps = _get_package_dependencies(recipe.get('path'),
+                                                                                         variant_config_files,
+                                                                                         variants)
+        outputs.append(BuildCommand(recipe=recipe.get('name', None),
+                                    repository=repository,
+                                    packages=packages,
+                                    python=variants['python'],
+                                    build_type=variants['build_type'],
+                                    run_dependencies=run_deps,
+                                    host_dependencies=host_deps,
+                                    build_dependencies=build_deps,
+                                    test_dependencies=test_deps,
+                                    channels=channels if channels else []))
+
+    os.chdir(saved_working_directory)
+    return outputs
+
+def _get_package_dependencies(path, variant_config_files, variants):
+    """
+    Return a list of output packages and a list of dependency packages
+    for the recipe at a given path. Uses conda-render to determine this information.
+    """
+    # Call conda-build's render tool to get a list of dictionaries representing
+    # the recipe for each variant that will be built.
+    config = get_or_merge_config(None)
+    config.variant_config_files = variant_config_files
+    config.verbose = False
+    metas = conda_build.api.render(path,
+                                   config=config,
+                                   variants=variants,
+                                   bypass_env_check=True,
+                                   finalize=False)
+
+    # Parse out the package names and dependencies from each variant
+    packages = set()
+    run_deps = set()
+    host_deps = set()
+    build_deps = set()
+    test_deps = set()
+    for meta,_,_ in metas:
+        packages.add(meta.meta['package']['name'])
+        run_deps.update(meta.meta['requirements'].get('run', []))
+        host_deps.update(meta.meta['requirements'].get('host', []))
+        build_deps.update(meta.meta['requirements'].get('build', []))
+        if 'test' in meta.meta:
+            test_deps.update(meta.meta['test'].get('requires', []))
+
+    return packages, run_deps, host_deps, build_deps, test_deps
+
+def _add_build_command_dependencies(build_commands, start_index=0):
+    """
+    Create a dependency tree for a list of build commands.
+
+    Each build_command will contain a `build_command_dependencies` key which contains a list of integers.
+    Each integer in the list represents the index of the dependencies build_commands within the
+    list.
+
+    The start_index indicates the value that the dependency indices should start
+    counting from.
+    """
+
+    # Create a packages dictionary that uses all of a recipe's packages as key, with
+    # the recipes index as values.
+    packages = dict()
+    for index, build_command in enumerate(build_commands):
+        for package in build_command.packages:
+            packages.update({ package : [start_index + index] + packages.get(package, []) })
+
+    # Add a list of indices for dependency to a BuildCommand's `build_command_dependencies` value
+    # Note: This will filter out all dependencies that aren't in the recipes list.
+    for index, build_command in enumerate(build_commands):
+        deps = []
+        dependencies = set()
+        dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
+        dependencies.update({utils.remove_version(dep) for dep in build_command.build_dependencies})
+        dependencies.update({utils.remove_version(dep) for dep in build_command.host_dependencies})
+        dependencies.update({utils.remove_version(dep) for dep in build_command.test_dependencies})
+        for dep in dependencies:
+            if dep in packages:
+                deps += filter(lambda x: x != start_index + index, packages[dep])
+        build_command.build_command_dependencies = deps
+
 class BuildTree():
+    """
+    An interable container of BuildCommands.
+
+    Creating a BuildTree will:
+    1. Clone all of the repositories listed in the provided `env_config_files`
+       into the directory `repository_folder`.
+    2. Build commands will be generated for each recipe listed in the provided
+       `env_config_files` for each combination of python_versions and build_types.
+    3. Dependency information will be added to each BuildCommand.
+
+    Iterating over a BuildTree will always return BuildCommands before a BuildCommand
+    that depends on it. Note: If there is a circular dependency within the provided
+    recipes, infinite recursion can occur.
+    """
+
+    #pylint: disable=too-many-arguments 
     def __init__(self,
                  env_config_files,
                  python_versions,
@@ -71,10 +253,10 @@ class BuildTree():
         for variant in variant_cart_product:
             result, variant_recipes = self._create_all_recipes(variant)
             if result != 0:
-                return result
+                raise OpenCEError("Error creating Build Tree")
 
             # Add dependency tree information to the packages list
-            self._add_build_command_dependencies(variant_recipes, len(self.build_commands))
+            _add_build_command_dependencies(variant_recipes, len(self.build_commands))
             self.build_commands += variant_recipes
 
     def _create_all_recipes(self, variants):
@@ -110,7 +292,7 @@ class BuildTree():
                     if result != 0:
                         return result, []
 
-                recipes += self._create_recipes(repo_dir,
+                recipes += _create_recipes(repo_dir,
                                            package.get('recipes'),
                                            [os.path.abspath(self._conda_build_config)],
                                            variants,
@@ -148,105 +330,6 @@ class BuildTree():
 
         return 0
 
-    def _create_recipes(self, repository, recipes, variant_config_files, variants, channels):
-        """
-        Create a recipe dictionary for each recipe within a repository. The dictionary
-        will have all of the information needed to build the recipe, as well as to
-        create the dependency tree.
-        """
-        saved_working_directory = os.getcwd()
-        os.chdir(repository)
-
-        config_data, _ = build_feedstock.load_package_config()
-        outputs = []
-        for recipe in config_data.get('recipes', []):
-            if recipes and not recipe.get('name') in recipes:
-                continue
-            packages, run_deps, host_deps, build_deps, test_deps = self._get_package_dependencies(recipe.get('path'),
-                                                                                             variant_config_files,
-                                                                                             variants)
-            outputs.append(BuildCommand(recipe=recipe.get('name', None),
-                                        repository=repository,
-                                        packages=packages,
-                                        python=variants['python'],
-                                        build_type=variants['build_type'],
-                                        run_dependencies=run_deps,
-                                        host_dependencies=host_deps,
-                                        build_dependencies=build_deps,
-                                        test_dependencies=test_deps,
-                                        channels=channels if channels else []))
-
-        os.chdir(saved_working_directory)
-        return outputs
-
-    def _get_package_dependencies(self, path, variant_config_files, variants):
-        """
-        Return a list of output packages and a list of dependency packages
-        for the recipe at a given path. Uses conda-render to determine this information.
-        """
-        # Call conda-build's render tool to get a list of dictionaries representing
-        # the recipe for each variant that will be built.
-        config = get_or_merge_config(None)
-        config.variant_config_files = variant_config_files
-        config.verbose = False
-        metas = conda_build.api.render(path,
-                                       config=config,
-                                       variants=variants,
-                                       bypass_env_check=True,
-                                       finalize=False)
-
-        # Parse out the package names and dependencies from each variant
-        packages = set()
-        run_deps = set()
-        host_deps = set()
-        build_deps = set()
-        test_deps = set()
-        for meta,_,_ in metas:
-            packages.add(meta.meta['package']['name'])
-            run_deps.update(meta.meta['requirements'].get('run', []))
-            host_deps.update(meta.meta['requirements'].get('host', []))
-            build_deps.update(meta.meta['requirements'].get('build', []))
-            if 'test' in meta.meta:
-                test_deps.update(meta.meta['test'].get('requires', []))
-
-        return packages, run_deps, host_deps, build_deps, test_deps
-
-    def _add_build_command_dependencies(self, build_commands, start_index=0):
-        """
-        Create a dependency tree for a list of build commands.
-
-        Each build_command will contain a `build_command_dependencies` key which contains a list of integers.
-        Each integer in the list represents the index of the dependencies build_commands within the
-        list.
-
-        The start_index indicates the value that the dependency indices should start
-        counting from.
-        """
-
-        # Create a packages dictionary that uses all of a recipe's packages as key, with
-        # the recipes index as values.
-        packages = dict()
-        for index, build_command in enumerate(build_commands):
-            for package in build_command.packages:
-                packages.update({ package : [start_index + index] + packages.get(package, []) })
-
-        # Create a new list of dictionary items that each contain:
-        #     A list of indices for each dependency.
-        #     A boolean indicating whether the recipe has been seen during a traversal
-        # Note: This will filter out all dependencies that aren't in the recipes list.
-        outputs = []
-        for index, build_command in enumerate(build_commands):
-            deps = []
-            dependencies = set()
-            dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
-            dependencies.update({utils.remove_version(dep) for dep in build_command.build_dependencies})
-            dependencies.update({utils.remove_version(dep) for dep in build_command.host_dependencies})
-            dependencies.update({utils.remove_version(dep) for dep in build_command.test_dependencies})
-            for dep in dependencies:
-                if dep in packages:
-                    deps += filter(lambda x: x != start_index + index, packages[dep])
-            build_command.build_command_dependencies = deps
-
     def __iter__(self):
         """
         Generator function that goes through every recipe in a list.
@@ -267,3 +350,5 @@ class BuildTree():
             yield self.build_commands[dep]
             is_seen[dep] = True
 
+    def __getitem__(self, key):
+        return self.build_commands[key]

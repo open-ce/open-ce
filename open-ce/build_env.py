@@ -40,6 +40,7 @@ import build_feedstock
 from build_tree import BuildTree, DEFAULT_GIT_LOCATION
 import docker_build
 import utils
+from utils import OpenCEError
 
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 
@@ -100,33 +101,24 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
-    build_tree = BuildTree(env_config_files=args.env_config_file,
-                           python_versions=utils.parse_arg_list(args.python_versions),
-                           build_types=utils.parse_arg_list(args.build_types),
-                           repository_folder=args.repository_folder,
-                           git_location=args.git_location,
-                           git_tag_for_env=args.git_tag_for_env,
-                           conda_build_config=args.conda_build_config)
+    try:
+        build_tree = BuildTree(env_config_files=args.env_config_file,
+                               python_versions=utils.parse_arg_list(args.python_versions),
+                               build_types=utils.parse_arg_list(args.build_types),
+                               repository_folder=args.repository_folder,
+                               git_location=args.git_location,
+                               git_tag_for_env=args.git_tag_for_env,
+                               conda_build_config=args.conda_build_config)
+    except OpenCEError as err:
+        print(err)
+        return 1
 
     # Build each package in the packages list
     for build_command in build_tree:
-        package_build_args = ["--working_directory", build_command.repository]
-
-        for channel in build_command.channels:
-            package_build_args += ["--channels", channel]
-
-        package_build_args += ["--python_versions", build_command.python]
-        package_build_args += ["--build_types", build_command.build_type]
-
-        if build_command.recipe:
-            package_build_args += ["--recipes", build_command.recipe]
-
-        build_args = common_package_build_args + package_build_args
-#        result = build_feedstock.build_feedstock(build_args)
-        print(build_args)
-        result = 0
+        build_args = common_package_build_args + build_command.feedstock_args()
+        result = build_feedstock.build_feedstock(build_args)
         if result != 0:
-            print("Unable to build recipe: " +  recipe['repository'])
+            print("Unable to build recipe: " +  build_command.repository)
             return result
 
     return result
