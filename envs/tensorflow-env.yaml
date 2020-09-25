@@ -22,3 +22,5 @@ packages:
   - feedstock : tensorboard-plugin-wit
   - feedstock : tensorflow-hub
   - feedstock : protobuf          #[python == '3.8']
+  - feedstock : tensorflow-datasets
+  - feedstock : tensorflow-metadata
