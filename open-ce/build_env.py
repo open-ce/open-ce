@@ -21,7 +21,7 @@ the  dependencies. It will execute the build_feedstock.py script as needed in
 order to produce conda packages for the requested project.
 
 In the simplest case, a build for (e.g.) tensorflow may look like this:
-   $ ./builder/build_env.py envs/tensorflow-env.yaml
+   $ ./open-ce/build_env.py envs/tensorflow-env.yaml
 (or similar, adjusting for your path or to choose a different project).
 
 Usage:
@@ -50,44 +50,17 @@ import build_feedstock
 import docker_build
 import utils
 
-DEFAULT_BUILD_TYPES = "cpu,cuda"
-DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 
 def make_parser():
-    ''' Parser input arguments '''
-    parser = utils.make_common_parser(
-        description = 'Build conda environment as part of Open-CE',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument(
-        'env_config_file',
-        nargs='+',
-        type=str,
-        help="""Environment config file. This should be a YAML file
-describing the package environment you wish to build. A collection
-of files exist under the envs directory.""")
-
-    parser.add_argument(
-        '--repository_folder',
-        type=str,
-        default="",
-        help="""Directory that contains the repositories. If the
-repositories don't exist locally, they will be
-downloaded from OpenCE's git repository. If no value is provided,
-repositories will be downloaded to the current working directory.""")
-
-    parser.add_argument(
-        '--python_versions',
-        type=str,
-        default=DEFAULT_PYTHON_VERS,
-        help='Comma delimited list of python versions to build for, such as "3.6" or "3.7".')
-
-    parser.add_argument(
-        '--build_types',
-        type=str,
-        default=DEFAULT_BUILD_TYPES,
-        help='Comma delimited list of build types, such as "cpu" or "cuda".')
+    ''' Parser for input arguments '''
+    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
+                 utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
+                 utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
+                 utils.Argument.BUILD_TYPES]
+    parser = utils.make_parser(arguments,
+                               description = 'Build conda environment as part of Open-CE',
+                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
         '--git_location',

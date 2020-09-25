@@ -13,35 +13,11 @@ import sys
 import os
 import pathlib
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'builder'))
+sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
 import pytest
 import helpers
 import build_env
-
-def make_render_result(package_name, build_reqs=[], run_reqs=[], host_reqs=[], test_reqs=[]):
-    '''
-    Creates a YAML string that is a mocked result of `conda_build.api.render`.
-    '''
-    retval = [(helpers.Namespace(meta={
-                            'package': {'name': package_name, 'version': '1.2.3'},
-                            'source': {'git_url': 'https://github.com/'+package_name+'.git', 'git_rev': 'v0.19.5', 'patches': []},
-                            'build': {'number': '1', 'string': 'py37_1'},
-                            'requirements': {'build': build_reqs, 'host': host_reqs, 'run': run_reqs + ["upstreamdep1"], 'run_constrained': []},
-                            'test': {'requires': test_reqs},
-                            'about': {'home': 'https://github.com/'+package_name+'.git', 'license_file': 'LICENSE', 'summary': package_name},
-                            'extra': {'final': True}}),
-                      True,
-                      None)]
-    return retval
-
-def mock_renderer(path, package_deps):
-    '''
-    Used to mock the `conda_build.api.render` function by extracting the package name from `path`
-    and using that to get the dependencies from `package_deps`.
-    '''
-    package = os.path.basename(path)[:-10]
-    return make_render_result(package, package_deps[package])
 
 built_packages = set()
 def validate_build_feedstock(args, package_deps = None, expect=[], reject=[], retval = 0):
@@ -100,10 +76,10 @@ def test_create_recipes(mocker, capsys):
         'os.getcwd',
         return_value="/test/starting_dir"
     )
-    render_result=make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
-                                                ['run_req1            1.3'],
-                                                ['host_req1            1.0', 'host_req2'],
-                                                ['test_req1'])
+    render_result=helpers.make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
+                                                        ['run_req1            1.3'],
+                                                        ['host_req1            1.0', 'host_req2'],
+                                                        ['test_req1'])
     mocker.patch(
         'conda_build.api.render',
         return_value=render_result
@@ -144,10 +120,6 @@ def test_build_env(mocker):
         side_effect=helpers.mocked_getcwd
     )
     mocker.patch(
-        'conda_build.api.render',
-        side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
-    )
-    mocker.patch(
         'os.chdir',
         side_effect=helpers.validate_chdir
     )
@@ -179,6 +151,10 @@ def test_build_env(mocker):
                     "package21": ["package13"],
                     "package22": ["package15"]}
     #---The first test specifies a python version that isn't supported in the env file by package21.
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
+    )
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
         'build_feedstock.build_feedstock',
         side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions 2.0"], reject=["package21-feedstock"]))
@@ -195,6 +171,10 @@ def test_build_env(mocker):
                     "package16": ["package15"],
                     "package21": ["package13"],
                     "package22": ["package21"]}
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
+    )
     mocker.patch(
         'build_feedstock.build_feedstock',
         side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions 2.1"]))
@@ -228,7 +208,7 @@ def test_env_validate(mocker, capsys):
     )
     mocker.patch(
         'conda_build.api.render',
-        side_effect=(lambda path, *args, **kwargs: mock_renderer(os.getcwd(), package_deps))
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
     mocker.patch(
         'os.chdir',

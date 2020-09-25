@@ -15,7 +15,7 @@ class Namespace:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-def validate_cli(cli_string, expect=[], reject=[], retval=0, *args, **kwargs):
+def validate_cli(cli_string, expect=[], reject=[], ignore=[], retval=0, *args, **kwargs):
     """
     Used to mock os.system with the assumption that it is making a call to 'conda-build'.
 
@@ -23,15 +23,18 @@ def validate_cli(cli_string, expect=[], reject=[], retval=0, *args, **kwargs):
         cli_string: The placeholder argument for the system command.
         expect: A list of strings that must occur in the 'cli_string' arg.
         reject: A list of strings that cannot occur in the 'cli_string' arg.
+        ignore: Don't validate the CLI_STRING if one of these strings is contained in it.
         retval: The mocked value to return from 'os.system'.
     Returns:
         retval
     """
-    for term in expect:
-        assert term in cli_string
-    for term in reject:
-        assert term not in cli_string
-    return retval
+    if not any ({term in cli_string for term in ignore}):
+        for term in expect:
+            assert term in cli_string
+        for term in reject:
+            assert term not in cli_string
+        return retval
+    return 0
 
 current_dir = os.getcwd()
 chdir_count = 0
@@ -58,3 +61,27 @@ def validate_chdir(arg1, expected_dirs=[]):
 def mocked_getcwd():
     global current_dir
     return current_dir
+
+def make_render_result(package_name, build_reqs=[], run_reqs=[], host_reqs=[], test_reqs=[]):
+    '''
+    Creates a YAML string that is a mocked result of `conda_build.api.render`.
+    '''
+    retval = [(Namespace(meta={
+                            'package': {'name': package_name, 'version': '1.2.3'},
+                            'source': {'git_url': 'https://github.com/'+package_name+'.git', 'git_rev': 'v0.19.5', 'patches': []},
+                            'build': {'number': '1', 'string': 'py37_1'},
+                            'requirements': {'build': build_reqs, 'host': host_reqs, 'run': run_reqs + ["upstreamdep1   2.3","upstreamdep2   2"], 'run_constrained': []},
+                            'test': {'requires': test_reqs},
+                            'about': {'home': 'https://github.com/'+package_name+'.git', 'license_file': 'LICENSE', 'summary': package_name},
+                            'extra': {'final': True}}),
+                      True,
+                      None)]
+    return retval
+
+def mock_renderer(path, package_deps):
+    '''
+    Used to mock the `conda_build.api.render` function by extracting the package name from `path`
+    and using that to get the dependencies from `package_deps`.
+    '''
+    package = os.path.basename(path)[:-10]
+    return make_render_result(package, package_deps[package])
