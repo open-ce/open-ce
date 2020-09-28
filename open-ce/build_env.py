@@ -42,8 +42,6 @@ import docker_build
 import utils
 from utils import OpenCEError
 
-DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
-
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
