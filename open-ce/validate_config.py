@@ -12,8 +12,9 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import argparse
 import os
 import sys
-import build_env
+import build_tree
 import utils
+from utils import OpenCEError
 
 def make_parser():
     ''' Parser input arguments '''
@@ -50,23 +51,29 @@ def validate_config(arg_strings=None):
         print('Validating {} for {}'.format(args.conda_build_config, variant))
         for env_file in args.env_config_file:
             print('Validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
-            retval,recipes = build_env.create_all_recipes([env_file],
-                                                        variant,
-                                                        repository_folder=args.repository_folder,
-                                                        conda_build_config=args.conda_build_config)
-            if retval == 0:
-                packages = [package for recipe in recipes for package in recipe["packages"]]
-                channels = {channel for recipe in recipes for channel in recipe["channels"]}
-                deps = {dep for recipe in recipes for dep in recipe.get("run_dependencies")}
+            try:
+                recipes = build_tree.BuildTree([env_file],
+                                               variant['python'],
+                                               variant['build_type'],
+                                               repository_folder=args.repository_folder,
+                                               conda_build_config=args.conda_build_config)
+            except OpenCEError as err:
+                print(err.msg)
+                print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
+                return 1
 
-                pkg_args = " ".join(["\"{}\"".format(generalize_version(dep)) for dep in deps
-                                                                              if not utils.remove_version(dep) in packages])
+            packages = [package for recipe in recipes for package in recipe.packages]
+            channels = {channel for recipe in recipes for channel in recipe.channels}
+            deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
 
-                channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
+            pkg_args = " ".join(["\"{}\"".format(generalize_version(dep)) for dep in deps
+                                                                          if not utils.remove_version(dep) in packages])
 
-                cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
+            channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
 
-                retval = run_and_log(cli)
+            cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
+
+            retval = run_and_log(cli)
 
             if retval != 0:
                 print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
