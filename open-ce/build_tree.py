@@ -252,16 +252,26 @@ class BuildTree():
                 if _make_hash(package) in packages_seen:
                     continue
 
+                # If the feedstock value starts with https: or git@, treat it as a url. Otheriwse
+                # combine with git_location and append "-feedstock.git"
+                if package['feedstock'].startswith("https:") or package['feedstock'].startswith("git@"):
+                    git_url = package['feedstock']
+                    if not git_url.endswith(".git"):
+                        git_url += ".git"
+                    repository = os.path.splitext(os.path.basename(git_url))[0]
+                else:
+                    git_url = self._git_location + "/" + package['feedstock'] + "-feedstock.git"
+                    repository = package['feedstock'] + "-feedstock"
+
                 # Check if the directory for the feedstock already exists.
                 # If it doesn't attempt to clone the repository.
-                repository = package['feedstock'] + "-feedstock"
                 if self._repository_folder:
                     repo_dir = os.path.join(self._repository_folder, repository)
                 else:
                     repo_dir = repository
 
                 if not os.path.exists(repo_dir):
-                    result = self._clone_repo(repo_dir, env_config_data, package.get('git_tag'))
+                    result = self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
                     if result != 0:
                         return result, []
 
@@ -273,11 +283,10 @@ class BuildTree():
                 packages_seen.add(_make_hash(package))
         return result, recipes
 
-    def _clone_repo(self, repo_dir, env_config_data, git_tag_from_config):
+    def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
         """
         Clone the git repo at repository.
         """
-        git_url = self._git_location + "/" + os.path.basename(repo_dir) + ".git"
         # Priority is given to command line specified tag, if it is not
         # specified then package specific tag, and when even that is not specified
         # then top level git tag specified for env in the env file. And if nothing is
