@@ -8,7 +8,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 import os
 import datetime
-import shutil
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images/builder")
