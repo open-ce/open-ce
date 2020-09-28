@@ -25,6 +25,7 @@ import build_feedstock
 from utils import OpenCEError
 
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
+SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 
 class BuildCommand():
     """
@@ -252,9 +253,9 @@ class BuildTree():
                 if _make_hash(package) in packages_seen:
                     continue
 
-                # If the feedstock value starts with https: or git@, treat it as a url. Otheriwse
+                # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
                 # combine with git_location and append "-feedstock.git"
-                if package['feedstock'].startswith("https:") or package['feedstock'].startswith("git@"):
+                if any(package['feedstock'].startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
                     git_url = package['feedstock']
                     if not git_url.endswith(".git"):
                         git_url += ".git"
