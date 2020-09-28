@@ -8,6 +8,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 import os
 import datetime
+import shutil
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images/builder")
@@ -28,8 +29,8 @@ def build_image():
     build_cmd = DOCKER_TOOL + " build "
     build_cmd += "-f " + os.path.join(BUILD_IMAGE_PATH, "Dockerfile") + " "
     build_cmd += "-t " + image_name + " "
-    build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
-    build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
+#    build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
+#    build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
     build_cmd += "."
 
     result = os.system(build_cmd)
@@ -45,9 +46,8 @@ def _create_container(container_name, image_name, output_folder):
 
     # Add output folder
     local_output_folder = os.path.join(os.getcwd(), output_folder)
-    if not os.path.isdir(local_output_folder):
-        os.mkdir(local_output_folder)
-    docker_cmd += "-v " + local_output_folder + ":" + os.path.join(HOME_PATH, output_folder) + ":rw "
+    if os.path.isdir(local_output_folder):
+        docker_cmd += "-v " + local_output_folder + ":" + os.path.join(HOME_PATH, output_folder) + ":rw "
 
     docker_cmd += image_name + " bash"
     result = os.system(docker_cmd)
@@ -56,6 +56,10 @@ def _create_container(container_name, image_name, output_folder):
 
 def _copy_to_container(src, dest, container_name):
     result = os.system(DOCKER_TOOL + " cp " + src + " " + container_name + ":" + dest)
+    return result
+
+def _copy_from_container(src, dest, container_name):
+    result = os.system(DOCKER_TOOL + " cp " + container_name + ":" + src + " " + dest)
     return result
 
 def _start_container(container_name):
@@ -108,6 +112,14 @@ def build_in_container(image_name, output_folder, arg_strings):
     cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "open-ce", os.path.basename(arg_strings[0])) + " " +
               ' '.join(arg_strings[1:]))
     result = _execute_in_container(container_name, cmd)
+    if result:
+        _stop_container(container_name)
+        return 1
+
+    if not os.path.isdir(output_folder):
+        result = _copy_from_container(os.path.join(HOME_PATH, output_folder), output_folder, container_name)
+        if result:
+            print("Unable to copy " + output_folder + "from the container")
 
     _stop_container(container_name)
 
