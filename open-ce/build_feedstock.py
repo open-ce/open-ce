@@ -40,7 +40,7 @@ def make_parser():
     ''' Parser input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
                  utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
     parser = utils.make_parser(arguments,
                                description = 'Build conda packages as part of Open-CE',
                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -159,37 +159,32 @@ def build_feedstock(args_string=None):
     for recipe in build_config_data['recipes']:
         if args.recipes and recipe['name'] not in args.recipes:
             continue
-        conda_build_args = "conda-build "
-        conda_build_args += "--skip-existing "
-        conda_build_args += "--output-folder " + args.output_folder + " "
-        conda_build_args += "-m " + args.conda_build_config + " "
-        recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
-        if os.path.exists(recipe_conda_build_config):
-            conda_build_args += " -m " + recipe_conda_build_config + " "
+        for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types):
+            conda_build_args = "conda-build "
+            conda_build_args += "--skip-existing "
+            conda_build_args += "--output-folder " + args.output_folder + " "
+            conda_build_args += "-m " + args.conda_build_config + " "
+            recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
+            if os.path.exists(recipe_conda_build_config):
+                conda_build_args += " -m " + recipe_conda_build_config + " "
 
-        conda_build_args += " ".join(["-c " + c + " " for c in args.channels_list])
-        conda_build_args += " ".join(["-c " + c + " " for c in build_config_data.get('channels', [])])
+            conda_build_args += " ".join(["-c " + c + " " for c in args.channels_list])
+            conda_build_args += " ".join(["-c " + c + " " for c in build_config_data.get('channels', [])])
 
-        variants = dict()
-        if args.python_versions:
-            variants['python'] = utils.parse_arg_list(args.python_versions)
-        if args.build_types:
-            variants['build_type'] = utils.parse_arg_list(args.build_types)
-        if variants:
-            conda_build_args += "--variants \"" + str(variants) + "\" "
+            conda_build_args += "--variants \"" + str(variant) + "\" "
 
-        conda_build_args += recipe['path']
+            conda_build_args += recipe['path']
 
-        result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
-        if result != 0:
-            break
+            result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
+            if result != 0:
+                break
 
-        print(conda_build_args)
-        result = os.system(conda_build_args)
-        if result != 0:
-            print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
-            result = 1
-            break
+            print(conda_build_args)
+            result = os.system(conda_build_args)
+            if result != 0:
+                print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
+                result = 1
+                break
 
     if saved_working_directory:
         os.chdir(saved_working_directory)

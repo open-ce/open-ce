@@ -8,7 +8,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import os
-from itertools import product
 import utils
 import env_config
 import build_feedstock
@@ -29,6 +28,7 @@ class BuildCommand():
                  packages,
                  python=None,
                  build_type=None,
+                 mpi_type=None,
                  run_dependencies=None,
                  host_dependencies=None,
                  build_dependencies=None,
@@ -40,6 +40,7 @@ class BuildCommand():
         self.packages = packages
         self.python = python
         self.build_type = build_type
+        self.mpi_type = mpi_type
         self.run_dependencies = run_dependencies
         self.host_dependencies = host_dependencies
         self.build_dependencies = build_dependencies
@@ -59,6 +60,7 @@ class BuildCommand():
 
         build_args += ["--python_versions", self.python]
         build_args += ["--build_types", self.build_type]
+        build_args += ["--mpi_types", self.mpi_type]
 
         if self.recipe:
             build_args += ["--recipes", self.recipe]
@@ -74,6 +76,8 @@ class BuildCommand():
             result +=  "-py" + self.python
         if self.build_type:
             result +=  "-" + self.build_type
+        if self.mpi_type:
+            result +=  "-" + self.mpi_type
 
         result = result.replace(".", "-")
         result = result.replace("_", "-")
@@ -105,6 +109,7 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
                                     packages=packages,
                                     python=variants['python'],
                                     build_type=variants['build_type'],
+                                    mpi_type=variants['mpi_type'],
                                     run_dependencies=run_deps,
                                     host_dependencies=host_deps,
                                     build_dependencies=build_deps,
@@ -200,6 +205,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  env_config_files,
                  python_versions,
                  build_types,
+                 mpi_types,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
@@ -214,9 +220,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
-        variants = { 'python' : utils.parse_arg_list(python_versions),
-                     'build_type' : utils.parse_arg_list(build_types) }
-        self._possible_variants = [dict(zip(variants,y)) for y in product(*variants.values())]
+        self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types)
         self.build_commands = []
         for variant in self._possible_variants:
             result, variant_recipes, external_deps = self._create_all_recipes(variant)

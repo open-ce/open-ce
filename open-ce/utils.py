@@ -12,10 +12,12 @@ import argparse
 import sys
 import subprocess
 from enum import Enum, unique
+from itertools import product
 import pkg_resources
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
+DEFAULT_MPI_TYPES = "openmpi"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
                                           "..", "conda_build_config.yaml")
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
@@ -83,6 +85,12 @@ class Argument(Enum):
                                         default=DEFAULT_BUILD_TYPES,
                                         help='Comma delimited list of build types, such as "cpu" or "cuda".'))
 
+    MPI_TYPES = (lambda parser: parser.add_argument(
+                                        '--mpi_types',
+                                        type=str,
+                                        default=DEFAULT_MPI_TYPES,
+                                        help='Comma delimited list of mpi types, such as "openmpi" or "system".'))
+
 def make_parser(arguments, *args, **kwargs):
     '''
     Make a parser from a list of OPEN-CE Arguments.
@@ -97,6 +105,13 @@ def parse_arg_list(arg_list):
     if isinstance(arg_list, list):
         return arg_list
     return arg_list.split(",") if not arg_list is None else list()
+
+def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES):
+    '''Create a cross product of possible variant combinations.'''
+    variants = { 'python' : parse_arg_list(python_versions),
+                 'build_type' : parse_arg_list(build_types),
+                 'mpi_type' :  parse_arg_list(mpi_types)}
+    return [dict(zip(variants,y)) for y in product(*variants.values())]
 
 def remove_version(package):
     '''Remove conda version from dependency.'''

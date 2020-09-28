@@ -8,5 +8,5 @@ channels:
 
 packages:
   - feedstock : horovod
-  - feedstock : openmpi
+  - feedstock : openmpi #[mpi_type == 'openmpi']
 {% endif %}
