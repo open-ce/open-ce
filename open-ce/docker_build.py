@@ -29,8 +29,8 @@ def build_image():
     build_cmd = DOCKER_TOOL + " build "
     build_cmd += "-f " + os.path.join(BUILD_IMAGE_PATH, "Dockerfile") + " "
     build_cmd += "-t " + image_name + " "
-#    build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
-#    build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
+    build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
+    build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
     build_cmd += "."
 
     result = os.system(build_cmd)
