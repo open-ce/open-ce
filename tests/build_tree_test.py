@@ -89,7 +89,7 @@ def test_clone_repo(mocker):
                                                                "/test/my_repo"]))
     )
 
-    assert mock_build_tree._clone_repo("/test/my_repo", None, "master") == 0
+    assert mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, "master") == 0
 
 def test_clone_repo_failure(mocker, capsys):
     '''
@@ -104,7 +104,7 @@ def test_clone_repo_failure(mocker, capsys):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone"], retval=1))
     )
 
-    assert mock_build_tree._clone_repo("/test/my_repo", None, "master") == 1
+    assert mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, "master") == 1
     captured = capsys.readouterr()
     assert "Unable to clone repository" in captured.out
 
