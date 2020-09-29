@@ -105,4 +105,4 @@ conda install -c ./condabuild PACKAGE
 
 ### Contributions
 
-We are working on the contribution guidelines, please check back soon. In the meantime feel free to open an issue for a bug report or feature request.
+For contribution information, please see the [CONTRIBUTING.md](CONTRIBUTING.md) page.
