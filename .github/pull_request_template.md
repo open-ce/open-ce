@@ -12,4 +12,4 @@ Fixes # (issue).
 
 1. All tests and other checks must succeed.
 2. At least one [maintainer](https://github.com/open-ce/open-ce/blob/master/MAINTAINERS.md) must review and approve.
-3. If any member of the [@open-ce/open-ce-dev-team](https://github.com/orgs/open-ce/teams/open-ce-dev-team/members) requests changes, they must be addressed.
+3. If any  [maintainer](https://github.com/open-ce/open-ce/blob/master/MAINTAINERS.md) requests changes, they must be addressed.
