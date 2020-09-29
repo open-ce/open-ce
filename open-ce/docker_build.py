@@ -107,7 +107,7 @@ def build_in_container(image_name, output_folder, arg_strings):
         return 1
 
     # Execute build command
-    cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "builder", os.path.basename(arg_strings[0])) + " " +
+    cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "open-ce", os.path.basename(arg_strings[0])) + " " +
               ' '.join(arg_strings[1:]))
     result = _execute_in_container(container_name, cmd)
 

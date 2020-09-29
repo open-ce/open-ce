@@ -13,8 +13,8 @@ channels:
     - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
 packages:
     - feedstock : package11
-    - feedstock : package12
-    - feedstock : package13
-    - feedstock : package14
+    - feedstock : https://myhost.com/myorg/package12-feedstock
+    - feedstock : http://myhost.com/myorg/package13-feedstock.git
+    - feedstock : git@myhost/myorg/package14-feedstock.git
     - feedstock : package15
     - feedstock : package16

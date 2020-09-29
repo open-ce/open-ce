@@ -40,9 +40,12 @@ DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 
 def make_parser():
     ''' Parser input arguments '''
-    parser = utils.make_common_parser(
-        description = 'Build conda packages as part of Open-CE',
-        formatter_class=argparse.RawTextHelpFormatter)
+    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
+                 utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
+                 utils.Argument.BUILD_TYPES]
+    parser = utils.make_parser(arguments,
+                               description = 'Build conda packages as part of Open-CE',
+                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
         '--recipe-config-file',
@@ -72,22 +75,6 @@ path of \"recipe\".""")
         action='store',
         default=None,
         help='Comma separated list of recipe names to build.')
-
-    parser.add_argument(
-        '--python_versions',
-        dest='python_versions_list',
-        action='store',
-        type=str,
-        default=None,
-        help='Comma delimited list of python versions to build for, such as "3.6" or 3.7".')
-
-    parser.add_argument(
-        '--build_types',
-        dest='build_types_list',
-        action='store',
-        type=str,
-        default=None,
-        help='Comma delimited list of build types, such as "cpu" or "cuda".')
 
     parser.add_argument(
         '--working_directory',
@@ -186,10 +173,10 @@ def build_feedstock(args_string=None):
         conda_build_args += " ".join(["-c " + c + " " for c in build_config_data.get('channels', [])])
 
         variants = dict()
-        if args.python_versions_list:
-            variants['python'] = utils.parse_arg_list(args.python_versions_list)
-        if args.build_types_list:
-            variants['build_type'] = utils.parse_arg_list(args.build_types_list)
+        if args.python_versions:
+            variants['python'] = utils.parse_arg_list(args.python_versions)
+        if args.build_types:
+            variants['build_type'] = utils.parse_arg_list(args.build_types)
         if variants:
             conda_build_args += "--variants \"" + str(variants) + "\" "
 

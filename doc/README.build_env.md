@@ -13,13 +13,13 @@ For example:
 In the simplest case, a build for tensorflow may look like this:
 
 ```shell
-    ./builder/build_env.py envs/tensorflow-env.yaml
+    ./open-ce/build_env.py envs/tensorflow-env.yaml
 ```
 
 while a similar build for pytorch may look like this:
 
 ```shell
-    ./builder/build_env.py envs/pytorch-env.yaml
+    ./open-ce/build_env.py envs/pytorch-env.yaml
 ```
 
 Other environment files for other packages can also be found in the `envs`
@@ -77,7 +77,7 @@ optional arguments:
                         (default: condabuild)
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        ./builder/../conda_build_config.yaml)
+                        ./open-ce/../conda_build_config.yaml)
   --python_versions PYTHON_VERSIONS
                         Comma delimited list of python versions to build for,
                         such as "3.6" or "3.7". (default: None)

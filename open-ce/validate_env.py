@@ -7,11 +7,9 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-"""
 
-"""
 *******************************************************************************
-Script: envlint.py
+Script: validate_env.py
 
 Summary:
   Performs syntactic validation on environment files used by build_env.py from
@@ -21,46 +19,34 @@ Description:
   This script will take a YAML build env file and will check that file and all
   dependencies for syntactic errors.
 
-Usage:
-   $ envlint.py env_files [env_files ...]
-For usage description of arguments, this script supports use of --help:
-   $ envlint.py --help
-
 *******************************************************************************
 """
 
 import argparse
-import os
 import sys
-import pathlib
-
-test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'builder'))
-import build_env
-
-variants = { 'python' : ['3.6','3.7'], 'build_type' : ['cpu', 'cuda'] }
+import env_config
+import utils
 
 def make_parser():
-    ''' Parser input arguments '''
-    parser = argparse.ArgumentParser(
-        description = 'Lint Environment Files',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument(
-        'env_files',
-        nargs='+',
-        type=str,
-        help="""Files to Lint.""")
-
+    ''' Parser for input arguments '''
+    arguments = [utils.Argument.ENV_FILE, utils.Argument.PYTHON_VERSIONS,
+                 utils.Argument.BUILD_TYPES]
+    parser = utils.make_parser(arguments,
+                               description = 'Lint Environment Files',
+                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
 
-def main(arg_strings=None):
+def validate_env(arg_strings=None):
+    '''
+    Entry function.
+    '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
-
-    retval,_ = build_env.load_env_config_files(args.env_files, variants)
+    variants = { 'python' : utils.parse_arg_list(args.python_versions),
+                 'build_type' : utils.parse_arg_list(args.build_types) }
+    retval,_ = env_config.load_env_config_files(args.env_config_file, variants)
 
     return retval
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(validate_env())

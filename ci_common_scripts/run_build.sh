@@ -14,7 +14,7 @@ set -ex
 pwd
 ls -lrt
 cd ${EXTERNAL_GIT_ROOT}/${PACKAGE_NAME}
-python ${EXTERNAL_GIT_ROOT}/open-ce/builder/build_feedstock.py --output_folder=${OUTPUT_FOLDER}
+python ${EXTERNAL_GIT_ROOT}/open-ce/open-ce/build_feedstock.py --output_folder=${OUTPUT_FOLDER}
 
 echo "Verifying built packages"
 ls -ltrR ${OUTPUT_FOLDER}

@@ -1,7 +1,13 @@
-# open-ce
+<p align="center">
+  <img src="https://avatars0.githubusercontent.com/u/68873540?s=400&u=a02dc4156e50cdffb23172aba7133e44381885d4&v=4" alt="Open-CE Logo" width="30%">
+</p>
 
 ![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/Open-CE%20Builder%20Unit%20Tests/badge.svg)
 [![Builder Unit Test Coverage](https://codecov.io/gh/open-ce/open-ce/branch/master/graph/badge.svg)](https://codecov.io/gh/open-ce/open-ce)
+![Python version](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)
+![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)
+
+---
 
 This is the Open-CE repo for feedstock collection, environment data, and build scripts
 
@@ -22,7 +28,7 @@ Within this **open-ce** repository, you will find:
 ```text
 conda_build_config.yaml:  This is a YAML config file which contains all package
     prerequisite information accumulated from across the Open-CE components
-builder/
+open-ce/
     This directory contains the parent build scripts, most notably
     `build_env.py` and `build_feedstock.py`.
     `build_env.py` is the script you will use to build Open-CE packages.
@@ -65,7 +71,7 @@ The following commands will build all of the Open-CE packages for Python 3.6, in
 # Clone Open-CE from GitHub
 git clone https://github.com/open-ce/open-ce.git
 # Build packages
-./open-ce/builder/build_env.py open-ce/envs/opence-env.yaml
+./open-ce/open-ce/build_env.py open-ce/envs/opence-env.yaml
 ```
 
 #### Building within a docker container
@@ -84,7 +90,7 @@ git clone https://github.com/open-ce/open-ce.git
 # Clone MY_FEEDSTOCK from GitHub
 git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
 # Build packages
-./open-ce/builder/build_feedstock.py --working_directory MY_FEEDSTOCK-feedstock
+./open-ce/open-ce/build_feedstock.py --working_directory MY_FEEDSTOCK-feedstock
 ```
 
 ### Installing Packages

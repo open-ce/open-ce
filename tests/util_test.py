@@ -12,7 +12,7 @@
 import sys
 import os
 import pathlib
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'builder'))
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 
 import pytest
 import utils
