@@ -63,5 +63,5 @@ git commit -s
 ## Communication
 Please feel free to connect with us by [raising issues](https://github.com/open-ce/open-ce/issues) as described above or by contacting one of the project maintainers as found in the [MAINTAINERS.md](MAINTAINERS.md) page.
 
-In addition, this project has an online gitter community forum which you may join in order to communitcate with us, ask questions, and discuss project-related topics. You can find the forum here:
+In addition, this project has an online gitter community forum which you may join in order to communicate with us, ask questions, and discuss project-related topics. You can find the forum here:
   https://gitter.im/open-ce/community
