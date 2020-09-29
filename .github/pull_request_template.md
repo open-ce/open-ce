@@ -1,8 +1,8 @@
 ## Checklist before submitting
 
-- [ ] Did you read the [contributor guide](CONTRIBUTING.md)?
-- [ ] Did you update any affected [documentation](doc/)?
-- [ ] Did you write any [tests](tests/) to validate this change?  
+- [ ] Did you read the [contributor guide](https://github.com/open-ce/open-ce/blob/master/CONTRIBUTING.md)?
+- [ ] Did you update any affected [documentation](https://github.com/open-ce/open-ce/blob/master/doc/)?
+- [ ] Did you write any [tests](https://github.com/open-ce/open-ce/blob/master/tests/) to validate this change?  
 
 ## Description
 
