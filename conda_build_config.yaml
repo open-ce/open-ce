@@ -25,6 +25,8 @@ cmake:
   - 3.14.*
 coverage:
   - 4.*
+cuda_compiler:
+  - nvcc
 cudatoolkit:
   - 10.2.*
 cudnn:
