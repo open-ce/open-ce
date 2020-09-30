@@ -99,7 +99,7 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
-    from build_tree import BuildTree
+    from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
     try:
         build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),

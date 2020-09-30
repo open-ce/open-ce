@@ -22,7 +22,7 @@ def make_parser():
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES]
     parser = utils.make_parser(arguments,
-                               description = 'Perform validation on a cond_build_config.yaml file.',
+                               description = 'Perform validation on a conda_build_config.yaml file.',
                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
 
@@ -87,4 +87,5 @@ def validate_config(arg_strings=None):
     return 0
 
 if __name__ == '__main__':
+    utils.check_if_conda_build_exists() 
     sys.exit(validate_config())
