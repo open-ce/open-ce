@@ -243,7 +243,6 @@ class BuildTree():
             return result, []
         packages_seen = set()
         recipes = []
-        external_deps = []
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
 
