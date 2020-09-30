@@ -108,10 +108,11 @@ def remove_version(package):
     return package.split()[0].split("=")[0]
 
 def check_if_conda_build_exists():
+    '''Checks if conda-build is installed and exits if it is not'''
     try:
-        import conda_build
-    except ImportError as error:
+        import pkg_resources
+        pkg_resources.get_distribution('conda-build')
+    except pkg_resources.DistributionNotFound:
         print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
               " for a list of requirements.")
         sys.exit(1)
-
