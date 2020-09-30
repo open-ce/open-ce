@@ -8,7 +8,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import os
-import sys
 from itertools import product
 import utils
 import env_config
