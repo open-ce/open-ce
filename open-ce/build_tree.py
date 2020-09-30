@@ -10,22 +10,13 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import sys
 from itertools import product
-
-try:
-    import conda_build.api
-    from conda_build.config import get_or_merge_config
-except ImportError as error:
-    print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
-          " for a list of requirements.")
-    sys.exit(1)
-
 import utils
 import env_config
 import build_feedstock
 from utils import OpenCEError
 
-DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
-SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
+import conda_build.api
+from conda_build.config import get_or_merge_config
 
 class BuildCommand():
     """
@@ -208,7 +199,7 @@ class BuildTree():
                  python_versions,
                  build_types,
                  repository_folder="./",
-                 git_location=DEFAULT_GIT_LOCATION,
+                 git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
 
@@ -255,7 +246,7 @@ class BuildTree():
 
                 # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
                 # combine with git_location and append "-feedstock.git"
-                if any(package['feedstock'].startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
+                if any(package['feedstock'].startswith(protocol) for protocol in utils.SUPPORTED_GIT_PROTOCOLS):
                     git_url = package['feedstock']
                     if not git_url.endswith(".git"):
                         git_url += ".git"

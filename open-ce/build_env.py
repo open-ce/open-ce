@@ -37,7 +37,6 @@ import os
 import sys
 
 import build_feedstock
-from build_tree import BuildTree, DEFAULT_GIT_LOCATION
 import docker_build
 import utils
 from utils import OpenCEError
@@ -55,7 +54,7 @@ def make_parser():
     parser.add_argument(
         '--git_location',
         type=str,
-        default=DEFAULT_GIT_LOCATION,
+        default=utils.DEFAULT_GIT_LOCATION,
         help='The default location to clone git repositories from.')
 
     parser.add_argument(
@@ -84,6 +83,7 @@ def build_env(arg_strings=None):
     if args.docker_build:
         return docker_build.build_with_docker(args.output_folder, sys.argv)
 
+    utils.check_if_conda_build_exists()
     result = 0
 
     common_package_build_args = []
@@ -99,6 +99,7 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
+    from build_tree import BuildTree
     try:
         build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),
