@@ -10,6 +10,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import argparse
 import sys
+import pkg_resources
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
@@ -110,7 +111,6 @@ def remove_version(package):
 def check_if_conda_build_exists():
     '''Checks if conda-build is installed and exits if it is not'''
     try:
-        import pkg_resources
         pkg_resources.get_distribution('conda-build')
     except pkg_resources.DistributionNotFound:
         print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
