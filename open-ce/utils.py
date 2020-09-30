@@ -105,9 +105,11 @@ def remove_version(package):
     return package.split()[0].split("=")[0]
 
 def make_schema_type(data_type,required=False):
+    '''Make a schema type tuple.'''
     return (data_type, required)
 
 def validate_type(value, schema_type):
+    '''Validate a single type instance against a schema type.'''
     if isinstance(schema_type, dict):
         validate_dict_schema(value, schema_type)
     else:
@@ -115,19 +117,19 @@ def validate_type(value, schema_type):
             raise OpenCEError("{} is not of expected type {}".format(value, schema_type))
 
 def validate_dict_schema(dictionary, schema):
-    for k, v in schema.items():
-        required = v[1]
-        schema_type = v[0]
+    '''Recursively validate a dictionary's schema.'''
+    for k, schema_item in schema.items():
+        required = schema_item[1]
+        schema_type = schema_item[0]
         if k not in dictionary:
             if required:
                 raise OpenCEError("Required key {} was not found in {}".format(k, dictionary))
-            else:
-                continue
+            continue
         if isinstance(schema_type, list):
             for value in dictionary[k]:
                 validate_type(value, schema_type[0])
         else:
             validate_type(dictionary[k], schema_type)
-    for k, v in dictionary.items():
+    for k in dictionary:
         if not k in schema:
             raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))
