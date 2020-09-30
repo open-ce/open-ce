@@ -243,12 +243,11 @@ class BuildTree():
             return result, []
         packages_seen = set()
         recipes = []
+        external_deps = []
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
 
-            packages = env_config_data.get('packages', [])
-            if not packages:
-                packages = []
+            packages = env_config_data.get(env_config.ENV_CONFIG_KEYS[env_config.Key.PACKAGES], [])
             for package in packages:
                 if _make_hash(package) in packages_seen:
                     continue
@@ -280,8 +279,10 @@ class BuildTree():
                                            package.get('recipes'),
                                            [os.path.abspath(self._conda_build_config)],
                                            variants,
-                                           env_config_data.get('channels', None))
+                                           env_config_data.get(env_config.ENV_CONFIG_KEYS[env_config.Key.CHANNELS], None))
                 packages_seen.add(_make_hash(package))
+
+
         return result, recipes
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
@@ -298,7 +299,7 @@ class BuildTree():
             if git_tag_from_config:
                 git_tag = git_tag_from_config
             else:
-                git_tag = env_config_data.get('git_tag_for_env', None)
+                git_tag = env_config_data.get(env_config.ENV_CONFIG_KEYS[env_config.Key.GIT_TAG_FOR_ENV], None)
 
         if git_tag is None:
             clone_cmd = "git clone " + git_url + " " + repo_dir

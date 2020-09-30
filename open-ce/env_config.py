@@ -9,6 +9,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import sys
+import utils
 
 try:
     import conda_build.metadata
@@ -17,18 +18,45 @@ except ImportError as error:
           " for a list of requirements.")
     sys.exit(1)
 
+class Key: #pylint: disable=no-init,too-few-public-methods
+    '''Enum for Env Config Keys'''
+    IMPORTED_ENVS = 0
+    CHANNELS=1
+    PACKAGES=2
+    GIT_TAG_FOR_ENV=3
+    GIT_TAG=4
+    FEEDSTOCK=5
+
+ENV_CONFIG_KEYS = {
+    Key.IMPORTED_ENVS: "imported_envs",
+    Key.CHANNELS: "channels",
+    Key.PACKAGES: "packages",
+    Key.GIT_TAG_FOR_ENV: "git_tag_for_env",
+    Key.GIT_TAG: "git_tag",
+    Key.FEEDSTOCK: "feedstock"
+}
+
+_PACKAGE_SCHEMA ={
+    ENV_CONFIG_KEYS[Key.FEEDSTOCK]: utils.make_schema_type(str, True)
+}
+
+_ENV_CONFIG_SCHEMA = {
+    ENV_CONFIG_KEYS[Key.IMPORTED_ENVS]: utils.make_schema_type([str]),
+    ENV_CONFIG_KEYS[Key.CHANNELS]: utils.make_schema_type([str]),
+    ENV_CONFIG_KEYS[Key.GIT_TAG_FOR_ENV]: utils.make_schema_type(str),
+    ENV_CONFIG_KEYS[Key.GIT_TAG]: utils.make_schema_type(str),
+    ENV_CONFIG_KEYS[Key.PACKAGES]: utils.make_schema_type([_PACKAGE_SCHEMA])
+}
+
 def _validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
-    possible_keys = {'imported_envs', 'channels', 'packages', 'git_tag_for_env', 'git_tag'}
     try:
         meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
         if not ("packages" in meta_obj.meta.keys() or "imported_envs" in meta_obj.meta.keys()):
             raise Exception("Content Error!",
                             "An environment file needs to specify packages or "
                             "import another environment file.")
-        for key in meta_obj.meta.keys():
-            if not key in possible_keys:
-                raise Exception("Key Error!", key + " is not a valid key in the environment file.")
+        utils.validate_dict_schema(meta_obj.meta, _ENV_CONFIG_SCHEMA)
         return meta_obj
     except (Exception, SystemExit) as exc: #pylint: disable=broad-except
         print('***** Error in %s:\n  %s' % (env_file, exc), file=sys.stderr)

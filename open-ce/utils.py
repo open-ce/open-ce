@@ -103,3 +103,31 @@ def parse_arg_list(arg_list):
 def remove_version(package):
     '''Remove conda version from dependency.'''
     return package.split()[0].split("=")[0]
+
+def make_schema_type(data_type,required=False):
+    return (data_type, required)
+
+def validate_type(value, schema_type):
+    if isinstance(schema_type, dict):
+        validate_dict_schema(value, schema_type)
+    else:
+        if not isinstance(value, schema_type):
+            raise OpenCEError("{} is not of expected type {}".format(value, schema_type))
+
+def validate_dict_schema(dictionary, schema):
+    for k, v in schema.items():
+        required = v[1]
+        schema_type = v[0]
+        if k not in dictionary:
+            if required:
+                raise OpenCEError("Required key {} was not found in {}".format(k, dictionary))
+            else:
+                continue
+        if isinstance(schema_type, list):
+            for value in dictionary[k]:
+                validate_type(value, schema_type[0])
+        else:
+            validate_type(dictionary[k], schema_type)
+    for k, v in dictionary.items():
+        if not k in schema:
+            raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))
