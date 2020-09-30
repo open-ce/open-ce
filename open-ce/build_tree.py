@@ -335,3 +335,6 @@ class BuildTree():
 
     def __getitem__(self, key):
         return self.build_commands[key]
+
+    def __len__(self):
+        return len(self.build_commands)
