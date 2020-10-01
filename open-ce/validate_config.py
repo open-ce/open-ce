@@ -13,11 +13,11 @@ import argparse
 import os
 import sys
 import utils
+from utils import OpenCEError
 
 utils.check_if_conda_build_exists()
 
-import build_tree
-from utils import OpenCEError
+import build_tree # pylint: disable=wrong-import-position
 
 def make_parser():
     ''' Parser input arguments '''

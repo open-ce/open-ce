@@ -13,7 +13,7 @@ import utils
 
 utils.check_if_conda_build_exists()
 
-import conda_build.metadata
+import conda_build.metadata # pylint: disable=wrong-import-position, wrong-import-order
 
 def _validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
