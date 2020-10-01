@@ -9,6 +9,9 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import sys
+from enum import Enum, unique, auto
+
+import utils
 
 try:
     import conda_build.metadata
@@ -17,18 +20,40 @@ except ImportError as error:
           " for a list of requirements.")
     sys.exit(1)
 
+@unique
+class Key(Enum):
+    '''Enum for Env Config Keys'''
+    imported_envs = auto()
+    channels = auto()
+    packages = auto()
+    git_tag_for_env = auto()
+    git_tag = auto()
+    feedstock = auto()
+    recipes = auto()
+
+_PACKAGE_SCHEMA ={
+    Key.feedstock.name: utils.make_schema_type(str, True),
+    Key.git_tag.name: utils.make_schema_type(str),
+    Key.recipes.name: utils.make_schema_type([str]),
+    Key.channels.name: utils.make_schema_type([str])
+}
+
+_ENV_CONFIG_SCHEMA = {
+    Key.imported_envs.name: utils.make_schema_type([str]),
+    Key.channels.name: utils.make_schema_type([str]),
+    Key.git_tag_for_env.name: utils.make_schema_type(str),
+    Key.packages.name: utils.make_schema_type([_PACKAGE_SCHEMA])
+}
+
 def _validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
-    possible_keys = {'imported_envs', 'channels', 'packages', 'git_tag_for_env', 'git_tag'}
     try:
         meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
-        if not ("packages" in meta_obj.meta.keys() or "imported_envs" in meta_obj.meta.keys()):
+        if not (Key.packages.name in meta_obj.meta.keys() or Key.imported_envs.name in meta_obj.meta.keys()):
             raise Exception("Content Error!",
                             "An environment file needs to specify packages or "
                             "import another environment file.")
-        for key in meta_obj.meta.keys():
-            if not key in possible_keys:
-                raise Exception("Key Error!", key + " is not a valid key in the environment file.")
+        utils.validate_dict_schema(meta_obj.meta, _ENV_CONFIG_SCHEMA)
         return meta_obj
     except (Exception, SystemExit) as exc: #pylint: disable=broad-except
         print('***** Error in %s:\n  %s' % (env_file, exc), file=sys.stderr)
@@ -56,7 +81,7 @@ def load_env_config_files(config_files, variants):
 
         # Examine all of the imported_envs items and determine if they still need to be loaded.
         new_config_files = []
-        for imported_env in env.get('imported_envs', []):
+        for imported_env in env.get(Key.imported_envs.name, []):
             imported_env = os.path.expanduser(imported_env)
             if not os.path.isabs(imported_env):
                 imported_env = os.path.join(os.path.dirname(env_config_files[0]), imported_env)

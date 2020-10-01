@@ -246,7 +246,7 @@ class BuildTree():
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
 
-            packages = env_config_data.get('packages', [])
+            packages = env_config_data.get(env_config.Key.packages.name, [])
             if not packages:
                 packages = []
             for package in packages:
@@ -255,14 +255,16 @@ class BuildTree():
 
                 # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
                 # combine with git_location and append "-feedstock.git"
-                if any(package['feedstock'].startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
-                    git_url = package['feedstock']
+                feedstock_value = package[env_config.Key.feedstock.name]
+                if any(feedstock_value.startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
+                    git_url = feedstock_value
                     if not git_url.endswith(".git"):
                         git_url += ".git"
                     repository = os.path.splitext(os.path.basename(git_url))[0]
                 else:
-                    git_url = self._git_location + "/" + package['feedstock'] + "-feedstock.git"
-                    repository = package['feedstock'] + "-feedstock"
+                    git_url = "{}/{}-feedstock.git".format(self._git_location, feedstock_value)
+
+                    repository = feedstock_value + "-feedstock"
 
                 # Check if the directory for the feedstock already exists.
                 # If it doesn't attempt to clone the repository.
@@ -280,8 +282,10 @@ class BuildTree():
                                            package.get('recipes'),
                                            [os.path.abspath(self._conda_build_config)],
                                            variants,
-                                           env_config_data.get('channels', None))
+                                           env_config_data.get(env_config.Key.channels.name, None))
                 packages_seen.add(_make_hash(package))
+
+
         return result, recipes
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
@@ -298,7 +302,7 @@ class BuildTree():
             if git_tag_from_config:
                 git_tag = git_tag_from_config
             else:
-                git_tag = env_config_data.get('git_tag_for_env', None)
+                git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
 
         if git_tag is None:
             clone_cmd = "git clone " + git_url + " " + repo_dir

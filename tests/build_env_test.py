@@ -157,7 +157,7 @@ def test_env_validate(mocker, capsys):
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     assert build_env.build_env([env_file]) == 1
     captured = capsys.readouterr()
-    assert "chnnels is not a valid key in the environment file." in captured.err
+    assert "Unexpected key chnnels was found in " in captured.err
 
 def test_build_env_docker_build(mocker):
     '''

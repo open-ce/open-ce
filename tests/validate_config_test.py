@@ -135,4 +135,4 @@ def test_build_bad_env(mocker, capsys):
     assert validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"]) == 1
     captured = capsys.readouterr()
     assert "Error while validating ./conda_build_config.yaml for " in captured.out
-    assert "chnnels is not a valid key in the environment file." in captured.err
+    assert "Unexpected key chnnels was found in " in captured.err
