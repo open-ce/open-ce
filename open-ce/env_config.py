@@ -30,6 +30,7 @@ class Key(Enum):
     git_tag = auto()
     feedstock = auto()
     recipes = auto()
+    external_dependencies = auto()
 
 _PACKAGE_SCHEMA ={
     Key.feedstock.name: utils.make_schema_type(str, True),
@@ -42,6 +43,7 @@ _ENV_CONFIG_SCHEMA = {
     Key.imported_envs.name: utils.make_schema_type([str]),
     Key.channels.name: utils.make_schema_type([str]),
     Key.git_tag_for_env.name: utils.make_schema_type(str),
+    Key.external_dependencies.name: utils.make_schema_type([str]),
     Key.packages.name: utils.make_schema_type([_PACKAGE_SCHEMA])
 }
 

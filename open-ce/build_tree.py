@@ -217,18 +217,19 @@ class BuildTree():
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
+        self._external_dependencies = dict()
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
         variants = { 'python' : utils.parse_arg_list(python_versions),
                      'build_type' : utils.parse_arg_list(build_types) }
-        variant_cart_product = [dict(zip(variants,y)) for y in product(*variants.values())]
+        self._possible_variants = [dict(zip(variants,y)) for y in product(*variants.values())]
         self.build_commands = []
-        for variant in variant_cart_product:
-            result, variant_recipes = self._create_all_recipes(variant)
+        for variant in self._possible_variants:
+            result, variant_recipes, external_deps = self._create_all_recipes(variant)
             if result != 0:
                 raise OpenCEError("Error creating Build Tree")
-
+            self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
             self.build_commands += variant_recipes
@@ -240,9 +241,10 @@ class BuildTree():
 
         result, env_config_data_list = env_config.load_env_config_files(self._env_config_files, variants)
         if result != 0:
-            return result, []
+            return result, [], []
         packages_seen = set()
         recipes = []
+        external_deps = []
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
 
@@ -285,8 +287,11 @@ class BuildTree():
                                            env_config_data.get(env_config.Key.channels.name, None))
                 packages_seen.add(_make_hash(package))
 
+            current_deps = env_config_data.get(env_config.Key.external_dependencies.name, [])
+            if current_deps:
+                external_deps += current_deps
 
-        return result, recipes
+        return result, recipes, external_deps
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
         """
@@ -342,3 +347,6 @@ class BuildTree():
 
     def __len__(self):
         return len(self.build_commands)
+
+    def get_external_dependencies(self, variant):
+        return self._external_dependencies.get(str(variant), [])
