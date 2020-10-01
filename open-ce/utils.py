@@ -9,6 +9,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import argparse
+from enum import Enum, unique
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
@@ -23,67 +24,58 @@ class OpenCEError(Exception):
         super().__init__(msg)
         self.msg = msg
 
-class Argument: #pylint: disable=no-init,too-few-public-methods
+@unique
+class Argument(Enum):
     '''Enum for Arguments'''
-    CONDA_BUILD_CONFIG = 0
-    OUTPUT_FOLDER=1
-    CHANNELS=2
-    ENV_FILE=3
-    REPOSITORY_FOLDER=4
-    PYTHON_VERSIONS=5
-    BUILD_TYPES=6
+    CONDA_BUILD_CONFIG = (lambda parser: parser.add_argument(
+                                        '--conda_build_config',
+                                        type=str,
+                                        default=DEFAULT_CONDA_BUILD_CONFIG,
+                                        help='Location of conda_build_config.yaml file.' ))
 
-OPENCE_ARGS = {
-    Argument.CONDA_BUILD_CONFIG:
-    (lambda parser: parser.add_argument(
-                            '--conda_build_config',
-                            type=str,
-                            default=DEFAULT_CONDA_BUILD_CONFIG,
-                            help='Location of conda_build_config.yaml file.' )),
-    Argument.OUTPUT_FOLDER:
-    (lambda parser: parser.add_argument(
-                            '--output_folder',
-                            type=str,
-                            default='condabuild',
-                            help='Path where built conda packages will be saved.')),
-    Argument.CHANNELS:
-    (lambda parser: parser.add_argument(
-                            '--channels',
-                            dest='channels_list',
-                            action='append',
-                            type=str,
-                            default=list(),
-                            help='Conda channels to be used.')),
-    Argument.ENV_FILE:
-    (lambda parser: parser.add_argument(
-                            'env_config_file',
-                            nargs='+',
-                            type=str,
-                            help="Environment config file. This should be a YAML file"
-                                 "describing the package environment you wish to build. A collection"
-                                 "of files exist under the envs directory.")),
-    Argument.REPOSITORY_FOLDER:
-    (lambda parser: parser.add_argument(
-                            '--repository_folder',
-                            type=str,
-                            default="",
-                            help="Directory that contains the repositories. If the"
-                                 "repositories don't exist locally, they will be"
-                                 "downloaded from OpenCE's git repository. If no value is provided,"
-                                 "repositories will be downloaded to the current working directory.")),
-    Argument.PYTHON_VERSIONS:
-    (lambda parser: parser.add_argument(
-                            '--python_versions',
-                            type=str,
-                            default=DEFAULT_PYTHON_VERS,
-                            help='Comma delimited list of python versions to build for, such as "3.6" or "3.7".')),
-    Argument.BUILD_TYPES:
-    (lambda parser: parser.add_argument(
-                            '--build_types',
-                            type=str,
-                            default=DEFAULT_BUILD_TYPES,
-                            help='Comma delimited list of build types, such as "cpu" or "cuda".'))
-}
+    OUTPUT_FOLDER = (lambda parser: parser.add_argument(
+                                        '--output_folder',
+                                        type=str,
+                                        default='condabuild',
+                                        help='Path where built conda packages will be saved.'))
+
+    CHANNELS = (lambda parser: parser.add_argument(
+                                        '--channels',
+                                        dest='channels_list',
+                                        action='append',
+                                        type=str,
+                                        default=list(),
+                                        help='Conda channels to be used.'))
+
+    ENV_FILE = (lambda parser: parser.add_argument(
+                                        'env_config_file',
+                                        nargs='+',
+                                        type=str,
+                                        help="Environment config file. This should be a YAML file"
+                                            "describing the package environment you wish to build. A collection"
+                                            "of files exist under the envs directory."))
+
+    REPOSITORY_FOLDER = (lambda parser: parser.add_argument(
+                                        '--repository_folder',
+                                        type=str,
+                                        default="",
+                                        help="Directory that contains the repositories. If the"
+                                            "repositories don't exist locally, they will be"
+                                            "downloaded from OpenCE's git repository. If no value is provided,"
+                                            "repositories will be downloaded to the current working directory."))
+
+    PYTHON_VERSIONS = (lambda parser: parser.add_argument(
+                                        '--python_versions',
+                                        type=str,
+                                        default=DEFAULT_PYTHON_VERS,
+                                        help='Comma delimited list of python versions to build for'
+                                              ', such as "3.6" or "3.7".'))
+
+    BUILD_TYPES = (lambda parser: parser.add_argument(
+                                        '--build_types',
+                                        type=str,
+                                        default=DEFAULT_BUILD_TYPES,
+                                        help='Comma delimited list of build types, such as "cpu" or "cuda".'))
 
 def make_parser(arguments, *args, **kwargs):
     '''
@@ -91,7 +83,7 @@ def make_parser(arguments, *args, **kwargs):
     '''
     parser = argparse.ArgumentParser(*args, **kwargs)
     for argument in arguments:
-        OPENCE_ARGS[argument](parser)
+        argument.value(parser)
     return parser
 
 def parse_arg_list(arg_list):
