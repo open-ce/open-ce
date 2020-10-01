@@ -253,14 +253,16 @@ class BuildTree():
 
                 # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
                 # combine with git_location and append "-feedstock.git"
-                if any(package[env_config.ENV_CONFIG_KEYS[env_config.Key.FEEDSTOCK]].startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
-                    git_url = package[env_config.ENV_CONFIG_KEYS[env_config.Key.FEEDSTOCK]]
+                feedstock_value = package[env_config.ENV_CONFIG_KEYS[env_config.Key.FEEDSTOCK]]
+                if any(feedstock_value.startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
+                    git_url = feedstock_value
                     if not git_url.endswith(".git"):
                         git_url += ".git"
                     repository = os.path.splitext(os.path.basename(git_url))[0]
                 else:
-                    git_url = self._git_location + "/" + package[env_config.ENV_CONFIG_KEYS[env_config.Key.FEEDSTOCK]] + "-feedstock.git"
-                    repository = package[env_config.ENV_CONFIG_KEYS[env_config.Key.FEEDSTOCK]] + "-feedstock"
+                    git_url = "{}/{}-feedstock.git".format(self._git_location, feedstock_value)
+
+                    repository = feedstock_value + "-feedstock"
 
                 # Check if the directory for the feedstock already exists.
                 # If it doesn't attempt to clone the repository.
