@@ -52,7 +52,7 @@ def _validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
     try:
         meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
-        if not ("packages" in meta_obj.meta.keys() or "imported_envs" in meta_obj.meta.keys()):
+        if not (ENV_CONFIG_KEYS[Key.PACKAGES] in meta_obj.meta.keys() or ENV_CONFIG_KEYS[Key.IMPORTED_ENVS] in meta_obj.meta.keys()):
             raise Exception("Content Error!",
                             "An environment file needs to specify packages or "
                             "import another environment file.")
@@ -84,7 +84,7 @@ def load_env_config_files(config_files, variants):
 
         # Examine all of the imported_envs items and determine if they still need to be loaded.
         new_config_files = []
-        for imported_env in env.get('imported_envs', []):
+        for imported_env in env.get(ENV_CONFIG_KEYS[Key.IMPORTED_ENVS], []):
             imported_env = os.path.expanduser(imported_env)
             if not os.path.isabs(imported_env):
                 imported_env = os.path.join(os.path.dirname(env_config_files[0]), imported_env)
