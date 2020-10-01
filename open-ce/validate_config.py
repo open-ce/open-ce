@@ -12,8 +12,11 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import argparse
 import os
 import sys
-import build_tree
 import utils
+
+utils.check_if_conda_build_exists()
+
+import build_tree
 from utils import OpenCEError
 
 def make_parser():
@@ -87,5 +90,4 @@ def validate_config(arg_strings=None):
     return 0
 
 if __name__ == '__main__':
-    utils.check_if_conda_build_exists() 
     sys.exit(validate_config())

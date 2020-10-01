@@ -9,6 +9,10 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import sys
+import utils
+
+utils.check_if_conda_build_exists()
+
 import conda_build.metadata
 
 def _validate_config_file(env_file, variants):

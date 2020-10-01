@@ -49,5 +49,4 @@ def validate_env(arg_strings=None):
     return retval
 
 if __name__ == '__main__':
-    utils.check_if_conda_build_exists()
     sys.exit(validate_env())

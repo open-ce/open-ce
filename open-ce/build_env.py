@@ -83,7 +83,13 @@ def build_env(arg_strings=None):
     if args.docker_build:
         return docker_build.build_with_docker(args.output_folder, sys.argv)
 
+    # Checking conda-build existence if --docker_build is not specified
     utils.check_if_conda_build_exists()
+       
+    # Here, importing BuildTree is intentionally done after checking
+    # existence of conda-build as BuildTree uses conda_build APIs.
+    from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
+
     result = 0
 
     common_package_build_args = []
@@ -99,7 +105,6 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
-    from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
     try:
         build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),
