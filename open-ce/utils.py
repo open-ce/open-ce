@@ -118,16 +118,16 @@ def validate_type(value, schema_type):
 
 def validate_dict_schema(dictionary, schema):
     '''Recursively validate a dictionary's schema.'''
-    for k, schema_item in schema.items():
-        required = schema_item[1]
-        schema_type = schema_item[0]
+    for k, (schema_type, required) in schema.items():
         if k not in dictionary:
             if required:
                 raise OpenCEError("Required key {} was not found in {}".format(k, dictionary))
             continue
         if isinstance(schema_type, list):
-            for value in dictionary[k]:
-                validate_type(value, schema_type[0])
+            if dictionary[k] is not None: #Handle if the yaml file has an empty list for this key.
+                validate_type(dictionary[k], list)
+                for value in dictionary[k]:
+                    validate_type(value, schema_type[0])
         else:
             validate_type(dictionary[k], schema_type)
     for k in dictionary:

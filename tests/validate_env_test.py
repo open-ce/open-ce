@@ -30,6 +30,6 @@ def test_validate_env_negative(capsys):
     Negative test for validate_env.
     '''
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
-    assert validate_env.validate_env([env_file]) == 1
+    assert validate_env.validate_env([env_file]) != 0
     captured = capsys.readouterr()
     assert "Unexpected key chnnels was found in " in captured.err

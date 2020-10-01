@@ -246,14 +246,16 @@ class BuildTree():
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
 
-            packages = env_config_data.get(env_config.ENV_CONFIG_KEYS[env_config.Key.PACKAGES], [])
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            if not packages:
+                packages = []
             for package in packages:
                 if _make_hash(package) in packages_seen:
                     continue
 
                 # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
                 # combine with git_location and append "-feedstock.git"
-                feedstock_value = package[env_config.ENV_CONFIG_KEYS[env_config.Key.FEEDSTOCK]]
+                feedstock_value = package[env_config.Key.feedstock.name]
                 if any(feedstock_value.startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
                     git_url = feedstock_value
                     if not git_url.endswith(".git"):
@@ -280,7 +282,7 @@ class BuildTree():
                                            package.get('recipes'),
                                            [os.path.abspath(self._conda_build_config)],
                                            variants,
-                                           env_config_data.get(env_config.ENV_CONFIG_KEYS[env_config.Key.CHANNELS], None))
+                                           env_config_data.get(env_config.Key.channels.name, None))
                 packages_seen.add(_make_hash(package))
 
 
@@ -300,7 +302,7 @@ class BuildTree():
             if git_tag_from_config:
                 git_tag = git_tag_from_config
             else:
-                git_tag = env_config_data.get(env_config.ENV_CONFIG_KEYS[env_config.Key.GIT_TAG_FOR_ENV], None)
+                git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
 
         if git_tag is None:
             clone_cmd = "git clone " + git_url + " " + repo_dir
