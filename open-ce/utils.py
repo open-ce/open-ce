@@ -83,7 +83,7 @@ def make_parser(arguments, *args, **kwargs):
     '''
     parser = argparse.ArgumentParser(*args, **kwargs)
     for argument in arguments:
-        argument.value(parser)
+        argument(parser)
     return parser
 
 def parse_arg_list(arg_list):
