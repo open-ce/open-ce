@@ -186,7 +186,7 @@ def _add_build_command_dependencies(build_commands, start_index=0):
                 deps += filter(lambda x: x != start_index + index, packages[dep])
         build_command.build_command_dependencies = deps
 
-class BuildTree():
+class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
     An interable container of BuildCommands.
 
@@ -202,7 +202,7 @@ class BuildTree():
     recipes, infinite recursion can occur.
     """
 
-    #pylint: disable=too-many-arguments 
+    #pylint: disable=too-many-arguments
     def __init__(self,
                  env_config_files,
                  python_versions,
@@ -234,7 +234,7 @@ class BuildTree():
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
             self.build_commands += variant_recipes
 
-    def _create_all_recipes(self, variants):
+    def _create_all_recipes(self, variants): #pylint: disable=too-many-branches
         '''
         Create a recipe dictionary for each recipe needed for a given environment file.
         '''
@@ -349,4 +349,5 @@ class BuildTree():
         return len(self.build_commands)
 
     def get_external_dependencies(self, variant):
+        '''Return the list of external dependencies for the given variant.'''
         return self._external_dependencies.get(str(variant), [])
