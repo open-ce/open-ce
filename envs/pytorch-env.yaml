@@ -14,5 +14,6 @@ packages:
 {% endif %}
   - feedstock : torchtext
   - feedstock : onnx
+  - feedstock : av
   - feedstock : torchvision
   - feedstock : pytorch-lightning 
