@@ -1,6 +1,8 @@
 name: Open-CE XGBoost Build
 
 on:
+  push:
+    branches: [master]
   pull_request:
     branches: [master]
 
