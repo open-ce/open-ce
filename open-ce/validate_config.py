@@ -65,6 +65,7 @@ def validate_config(arg_strings=None):
             packages = [package for recipe in recipes for package in recipe.packages]
             channels = {channel for recipe in recipes for channel in recipe.channels}
             deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
+            deps.update(recipes.get_external_dependencies(variant))
 
             pkg_args = " ".join(["\"{}\"".format(generalize_version(dep)) for dep in deps
                                                                           if not utils.remove_version(dep) in packages])
