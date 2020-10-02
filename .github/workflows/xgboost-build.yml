@@ -24,4 +24,4 @@ jobs:
         run: |
           python ./open-ce/build_env.py envs/xgboost-env.yaml \
                                         --python_versions 3.7 \
-                                        --build_types cuda
+                                        --build_types cpu
