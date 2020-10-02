@@ -16,3 +16,6 @@ channels:
 packages:
     - feedstock : package21 #[python == '2.1']
     - feedstock : package22
+
+external_dependencies:
+    - external_dep3=5.6.*

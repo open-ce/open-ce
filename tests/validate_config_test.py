@@ -69,7 +69,10 @@ def test_build_negative(mocker, capsys):
     mocker.patch(
         'os.system',
         side_effect=(lambda x: helpers.validate_cli(x, expect=["conda create --dry-run",
-                                                               "upstreamdep1   2.3.*"], #Checks that the value from the default config file is used.
+                                                               "upstreamdep1   2.3.*", #Checks that the value from the default config file is used.
+                                                               "external_dep1", # Checks that the external dependencies were used.
+                                                               "external_dep2   5.2.*", # Checks that the external dependencies were used.
+                                                               "external_dep3=5.6.*"], # Checks that the external dependencies were used.
                                                        reject=["package"],
                                                        retval=1,
                                                        ignore=["git clone"]))
