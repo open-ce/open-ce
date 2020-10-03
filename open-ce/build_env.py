@@ -35,11 +35,13 @@ For usage description of arguments, this script supports use of --help:
 import argparse
 import os
 import sys
+import re
 
 import build_feedstock
 import docker_build
 import utils
 from utils import OpenCEError
+import yaml
 
 def make_parser():
     ''' Parser for input arguments '''
@@ -73,6 +75,35 @@ be visible at build time.""")
 
     return parser
 
+def write_conda_env_files(local_built_folder, dep_list):
+    conda_env_files = []
+    local_channel = "file:/" + os.path.abspath(local_built_folder)
+    for key in dep_list.keys():
+       conda_env_name = "opence-" + key
+       conda_env_file = conda_env_name + ".yaml" 
+              
+       data = dict(
+           name = conda_env_name,
+           channels = [local_channel, "defaults"],
+           dependencies = dep_list[key],
+       )
+       with open(conda_env_file, 'w') as outfile:
+           yaml.dump(data, outfile, default_flow_style=False)
+           conda_env_files.append(conda_env_file)
+
+    return conda_env_files
+
+def cleanup_depstring(dep_string):
+    return re.sub(' +', ' ', dep_string)  
+   
+def update_deps_lists(build_command, dep_list):
+   key = "py" + build_command.python + "-" + build_command.build_type
+    
+   for dep in build_command.run_dependencies:
+       dep_list[key].add(cleanup_depstring(dep))
+   for pack in build_command.packages:
+       dep_list[key].add(cleanup_depstring(pack))
+
 def build_env(arg_strings=None):
     '''
     Entry function.
@@ -99,7 +130,9 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
-    from build_tree import BuildTree
+    
+    from build_tree import BuildTree   # pylint: disable=import-outside-toplevel
+ 
     try:
         build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),
@@ -112,14 +145,30 @@ def build_env(arg_strings=None):
         print(err.msg)
         return 1
 
+    dep_list = dict()
+    for py_version in utils.parse_arg_list(args.python_versions):
+        for build_type in utils.parse_arg_list(args.build_types):
+            key = "py" + py_version + "-" + build_type
+            dep_list[key] = set()
+
+    print("Dep list: ", dep_list.keys())
     # Build each package in the packages list
     for build_command in build_tree:
         build_args = common_package_build_args + build_command.feedstock_args()
         result = build_feedstock.build_feedstock(build_args)
+        update_deps_lists(build_command, dep_list)
+        
         if result != 0:
             print("Unable to build recipe: " +  build_command.repository)
             return result
 
+    for dep in dep_list.keys():
+        print("Deps for env: ", dep)
+        print(dep_list[dep])
+
+    conda_env_files = write_conda_env_files(os.path.abspath(args.output_folder), dep_list)
+    print("Following conda environment files are generated", conda_env_files)
+    
     return result
 
 if __name__ == '__main__':

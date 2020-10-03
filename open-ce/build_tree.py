@@ -90,6 +90,10 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
     os.chdir(repository)
 
     config_data, _ = build_feedstock.load_package_config()
+    feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
+    if feedstock_conda_build_config_file:
+        variant_config_files.append(feedstock_conda_build_config_file)
+    print("Config files in buildtree: ", variant_config_files)
     outputs = []
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
