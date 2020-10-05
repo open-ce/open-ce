@@ -1,11 +1,6 @@
 imported_envs:
   - bazel-env.yaml
 
-{% if build_type == 'cuda' %}
-channels:
-  - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
-{% endif %}
-
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
