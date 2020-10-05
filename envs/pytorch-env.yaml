@@ -1,5 +1,3 @@
-{% if build_type == 'cuda' %}
-
 packages:
   - feedstock : pytorch
   - feedstock : numactl
