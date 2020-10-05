@@ -176,7 +176,7 @@ def _add_build_command_dependencies(build_commands, start_index=0):
                 deps += filter(lambda x: x != start_index + index, packages[dep])
         build_command.build_command_dependencies = deps
 
-class BuildTree():
+class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
     An interable container of BuildCommands.
 
@@ -192,7 +192,7 @@ class BuildTree():
     recipes, infinite recursion can occur.
     """
 
-    #pylint: disable=too-many-arguments 
+    #pylint: disable=too-many-arguments
     def __init__(self,
                  env_config_files,
                  python_versions,
@@ -207,36 +207,38 @@ class BuildTree():
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
+        self._external_dependencies = dict()
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
         variants = { 'python' : utils.parse_arg_list(python_versions),
                      'build_type' : utils.parse_arg_list(build_types) }
-        variant_cart_product = [dict(zip(variants,y)) for y in product(*variants.values())]
+        self._possible_variants = [dict(zip(variants,y)) for y in product(*variants.values())]
         self.build_commands = []
-        for variant in variant_cart_product:
-            result, variant_recipes = self._create_all_recipes(variant)
+        for variant in self._possible_variants:
+            result, variant_recipes, external_deps = self._create_all_recipes(variant)
             if result != 0:
                 raise OpenCEError("Error creating Build Tree")
-
+            self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
             self.build_commands += variant_recipes
 
-    def _create_all_recipes(self, variants):
+    def _create_all_recipes(self, variants): #pylint: disable=too-many-branches
         '''
         Create a recipe dictionary for each recipe needed for a given environment file.
         '''
 
         result, env_config_data_list = env_config.load_env_config_files(self._env_config_files, variants)
         if result != 0:
-            return result, []
+            return result, [], []
         packages_seen = set()
         recipes = []
+        external_deps = []
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
 
-            packages = env_config_data.get('packages', [])
+            packages = env_config_data.get(env_config.Key.packages.name, [])
             if not packages:
                 packages = []
             for package in packages:
@@ -245,14 +247,16 @@ class BuildTree():
 
                 # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
                 # combine with git_location and append "-feedstock.git"
-                if any(package['feedstock'].startswith(protocol) for protocol in utils.SUPPORTED_GIT_PROTOCOLS):
-                    git_url = package['feedstock']
+                feedstock_value = package[env_config.Key.feedstock.name]
+                if any(feedstock_value.startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
+                    git_url = feedstock_value
                     if not git_url.endswith(".git"):
                         git_url += ".git"
                     repository = os.path.splitext(os.path.basename(git_url))[0]
                 else:
-                    git_url = self._git_location + "/" + package['feedstock'] + "-feedstock.git"
-                    repository = package['feedstock'] + "-feedstock"
+                    git_url = "{}/{}-feedstock.git".format(self._git_location, feedstock_value)
+
+                    repository = feedstock_value + "-feedstock"
 
                 # Check if the directory for the feedstock already exists.
                 # If it doesn't attempt to clone the repository.
@@ -270,9 +274,14 @@ class BuildTree():
                                            package.get('recipes'),
                                            [os.path.abspath(self._conda_build_config)],
                                            variants,
-                                           env_config_data.get('channels', None))
+                                           env_config_data.get(env_config.Key.channels.name, None))
                 packages_seen.add(_make_hash(package))
-        return result, recipes
+
+            current_deps = env_config_data.get(env_config.Key.external_dependencies.name, [])
+            if current_deps:
+                external_deps += current_deps
+
+        return result, recipes, external_deps
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
         """
@@ -288,7 +297,7 @@ class BuildTree():
             if git_tag_from_config:
                 git_tag = git_tag_from_config
             else:
-                git_tag = env_config_data.get('git_tag_for_env', None)
+                git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
 
         if git_tag is None:
             clone_cmd = "git clone " + git_url + " " + repo_dir
@@ -325,3 +334,10 @@ class BuildTree():
 
     def __getitem__(self, key):
         return self.build_commands[key]
+
+    def __len__(self):
+        return len(self.build_commands)
+
+    def get_external_dependencies(self, variant):
+        '''Return the list of external dependencies for the given variant.'''
+        return self._external_dependencies.get(str(variant), [])

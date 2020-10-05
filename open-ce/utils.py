@@ -11,6 +11,8 @@ import os
 import argparse
 import sys
 import pkg_resources
+from enum import Enum, unique
+
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
@@ -27,67 +29,58 @@ class OpenCEError(Exception):
         super().__init__(msg)
         self.msg = msg
 
-class Argument: #pylint: disable=no-init,too-few-public-methods
+@unique
+class Argument(Enum):
     '''Enum for Arguments'''
-    CONDA_BUILD_CONFIG = 0
-    OUTPUT_FOLDER=1
-    CHANNELS=2
-    ENV_FILE=3
-    REPOSITORY_FOLDER=4
-    PYTHON_VERSIONS=5
-    BUILD_TYPES=6
+    CONDA_BUILD_CONFIG = (lambda parser: parser.add_argument(
+                                        '--conda_build_config',
+                                        type=str,
+                                        default=DEFAULT_CONDA_BUILD_CONFIG,
+                                        help='Location of conda_build_config.yaml file.' ))
 
-OPENCE_ARGS = {
-    Argument.CONDA_BUILD_CONFIG:
-    (lambda parser: parser.add_argument(
-                            '--conda_build_config',
-                            type=str,
-                            default=DEFAULT_CONDA_BUILD_CONFIG,
-                            help='Location of conda_build_config.yaml file.' )),
-    Argument.OUTPUT_FOLDER:
-    (lambda parser: parser.add_argument(
-                            '--output_folder',
-                            type=str,
-                            default='condabuild',
-                            help='Path where built conda packages will be saved.')),
-    Argument.CHANNELS:
-    (lambda parser: parser.add_argument(
-                            '--channels',
-                            dest='channels_list',
-                            action='append',
-                            type=str,
-                            default=list(),
-                            help='Conda channels to be used.')),
-    Argument.ENV_FILE:
-    (lambda parser: parser.add_argument(
-                            'env_config_file',
-                            nargs='+',
-                            type=str,
-                            help="Environment config file. This should be a YAML file"
-                                 "describing the package environment you wish to build. A collection"
-                                 "of files exist under the envs directory.")),
-    Argument.REPOSITORY_FOLDER:
-    (lambda parser: parser.add_argument(
-                            '--repository_folder',
-                            type=str,
-                            default="",
-                            help="Directory that contains the repositories. If the"
-                                 "repositories don't exist locally, they will be"
-                                 "downloaded from OpenCE's git repository. If no value is provided,"
-                                 "repositories will be downloaded to the current working directory.")),
-    Argument.PYTHON_VERSIONS:
-    (lambda parser: parser.add_argument(
-                            '--python_versions',
-                            type=str,
-                            default=DEFAULT_PYTHON_VERS,
-                            help='Comma delimited list of python versions to build for, such as "3.6" or "3.7".')),
-    Argument.BUILD_TYPES:
-    (lambda parser: parser.add_argument(
-                            '--build_types',
-                            type=str,
-                            default=DEFAULT_BUILD_TYPES,
-                            help='Comma delimited list of build types, such as "cpu" or "cuda".'))
-}
+    OUTPUT_FOLDER = (lambda parser: parser.add_argument(
+                                        '--output_folder',
+                                        type=str,
+                                        default='condabuild',
+                                        help='Path where built conda packages will be saved.'))
+
+    CHANNELS = (lambda parser: parser.add_argument(
+                                        '--channels',
+                                        dest='channels_list',
+                                        action='append',
+                                        type=str,
+                                        default=list(),
+                                        help='Conda channels to be used.'))
+
+    ENV_FILE = (lambda parser: parser.add_argument(
+                                        'env_config_file',
+                                        nargs='+',
+                                        type=str,
+                                        help="Environment config file. This should be a YAML file"
+                                            "describing the package environment you wish to build. A collection"
+                                            "of files exist under the envs directory."))
+
+    REPOSITORY_FOLDER = (lambda parser: parser.add_argument(
+                                        '--repository_folder',
+                                        type=str,
+                                        default="",
+                                        help="Directory that contains the repositories. If the"
+                                            "repositories don't exist locally, they will be"
+                                            "downloaded from OpenCE's git repository. If no value is provided,"
+                                            "repositories will be downloaded to the current working directory."))
+
+    PYTHON_VERSIONS = (lambda parser: parser.add_argument(
+                                        '--python_versions',
+                                        type=str,
+                                        default=DEFAULT_PYTHON_VERS,
+                                        help='Comma delimited list of python versions to build for'
+                                              ', such as "3.6" or "3.7".'))
+
+    BUILD_TYPES = (lambda parser: parser.add_argument(
+                                        '--build_types',
+                                        type=str,
+                                        default=DEFAULT_BUILD_TYPES,
+                                        help='Comma delimited list of build types, such as "cpu" or "cuda".'))
 
 def make_parser(arguments, *args, **kwargs):
     '''
@@ -95,7 +88,7 @@ def make_parser(arguments, *args, **kwargs):
     '''
     parser = argparse.ArgumentParser(*args, **kwargs)
     for argument in arguments:
-        OPENCE_ARGS[argument](parser)
+        argument(parser)
     return parser
 
 def parse_arg_list(arg_list):
@@ -116,3 +109,33 @@ def check_if_conda_build_exists():
         print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
               " for a list of requirements.")
         sys.exit(1)
+
+def make_schema_type(data_type,required=False):
+    '''Make a schema type tuple.'''
+    return (data_type, required)
+
+def validate_type(value, schema_type):
+    '''Validate a single type instance against a schema type.'''
+    if isinstance(schema_type, dict):
+        validate_dict_schema(value, schema_type)
+    else:
+        if not isinstance(value, schema_type):
+            raise OpenCEError("{} is not of expected type {}".format(value, schema_type))
+
+def validate_dict_schema(dictionary, schema):
+    '''Recursively validate a dictionary's schema.'''
+    for k, (schema_type, required) in schema.items():
+        if k not in dictionary:
+            if required:
+                raise OpenCEError("Required key {} was not found in {}".format(k, dictionary))
+            continue
+        if isinstance(schema_type, list):
+            if dictionary[k] is not None: #Handle if the yaml file has an empty list for this key.
+                validate_type(dictionary[k], list)
+                for value in dictionary[k]:
+                    validate_type(value, schema_type[0])
+        else:
+            validate_type(dictionary[k], schema_type)
+    for k in dictionary:
+        if not k in schema:
+            raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))

@@ -42,9 +42,12 @@ def validate_env(arg_strings=None):
     '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
-    variants = { 'python' : utils.parse_arg_list(args.python_versions),
-                 'build_type' : utils.parse_arg_list(args.build_types) }
-    retval,_ = env_config.load_env_config_files(args.env_config_file, variants)
+    variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in utils.parse_arg_list(args.python_versions)
+                                                                  for build_type in utils.parse_arg_list(args.build_types)]
+    retval = 0
+    for variant in variants:
+        result,_ = env_config.load_env_config_files(args.env_config_file, variant)
+        retval += result
 
     return retval
 
