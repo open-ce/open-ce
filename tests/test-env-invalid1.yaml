@@ -10,7 +10,7 @@
 # *****************************************************************
 
 chnnels: #<--- This key is misspelled, should cause an error.
-    - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+    - https://anaconda.org/anaconda 
 packages:
     - feedstock : package11
     - feedstock : package12

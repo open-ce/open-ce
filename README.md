@@ -59,7 +59,7 @@ test/
 
 If building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`.
 
-Currently CUDA 10.2 is supported by the recipes in Open-CE. The `cudatoolkit` and `cudatoolkit-dev` packages can be sourced from [IBM WML CE](https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/#/).
+Currently CUDA 10.2 is supported by the recipes in Open-CE. 
 
 ### Building a Collection of Packages
 

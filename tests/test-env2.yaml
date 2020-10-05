@@ -12,7 +12,7 @@
 imported_envs:
     - test-env1.yaml
 channels:
-    - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+    - https://anaconda.org/anaconda 
 packages:
     - feedstock : package21 #[python == '2.1']
     - feedstock : package22
