@@ -248,7 +248,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
                 # combine with git_location and append "-feedstock.git"
                 feedstock_value = package[env_config.Key.feedstock.name]
-                if any(feedstock_value.startswith(protocol) for protocol in SUPPORTED_GIT_PROTOCOLS):
+                if any(feedstock_value.startswith(protocol) for protocol in utils.SUPPORTED_GIT_PROTOCOLS):
                     git_url = feedstock_value
                     if not git_url.endswith(".git"):
                         git_url += ".git"
