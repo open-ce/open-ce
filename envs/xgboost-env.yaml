@@ -5,4 +5,5 @@ channels:
 
 packages:
   - feedstock : nccl              #[build_type == 'cuda']
+  - feedstock : nvcc              #[build_type == 'cuda']
   - feedstock : xgboost

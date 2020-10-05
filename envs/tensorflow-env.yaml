@@ -11,6 +11,7 @@ packages:
   - feedstock : nccl
   - feedstock : tensorrt
   - feedstock : cudnn
+  - feedstock : nvcc
 {% endif %}
   - feedstock : tensorflow
   - feedstock : libevent

@@ -11,6 +11,7 @@ packages:
   - feedstock : magma
   - feedstock : tensorrt
   - feedstock : cudnn
+  - feedstock : nvcc
 {% endif %}
   - feedstock : torchtext
   - feedstock : onnx
