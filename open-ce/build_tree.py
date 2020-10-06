@@ -81,7 +81,7 @@ class BuildCommand():
         """
         result = self.recipe
         if self.python:
-            result +=  "-py" + self.python
+            result +=  "-py" + self.python.replace(".","")
         if self.build_type:
             result +=  "-" + self.build_type
         return result
