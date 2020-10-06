@@ -1,11 +1,12 @@
-{% if build_type == 'cuda' %}
 imported_envs:
+{% if build_type == 'cuda' %}
   - pytorch-env.yaml
   - tensorflow-env.yaml
+{% endif %}
 
 packages:
+{% if build_type == 'cuda' %}
   - feedstock : nvcc
   - feedstock : horovod
   - feedstock : openmpi
-
 {% endif %}
