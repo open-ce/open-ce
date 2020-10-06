@@ -10,7 +10,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import argparse
-import os
 import sys
 import utils
 from utils import OpenCEError
