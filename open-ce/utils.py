@@ -139,3 +139,8 @@ def validate_dict_schema(dictionary, schema):
     for k in dictionary:
         if not k in schema:
             raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))
+
+def run_and_log(command):
+    '''Print a shell command and then execute it.'''
+    print("--->{}".format(command))
+    return os.system(command)

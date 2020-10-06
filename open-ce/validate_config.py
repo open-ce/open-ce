@@ -29,11 +29,6 @@ def make_parser():
                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
 
-def run_and_log(command):
-    '''Print a shell command and then execute it.'''
-    print("--->{}".format(command))
-    return os.system(command)
-
 def generalize_version(package):
     """Add `.*` to package versions when it is needed."""
     dep = package
@@ -77,7 +72,7 @@ def validate_config(arg_strings=None):
 
             cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
 
-            retval = run_and_log(cli)
+            retval = utils.run_and_log(cli)
 
             if retval != 0:
                 print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
