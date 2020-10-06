@@ -36,8 +36,6 @@ import yaml
 
 import utils
 
-DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
-
 def make_parser():
     ''' Parser input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
@@ -95,12 +93,12 @@ def load_package_config(config_file=None):
     file as an argument, it will be assumed that there is only one
     recipe to build, and it is in the directory called 'recipe'.
     '''
-    if not config_file and not os.path.exists(DEFAULT_RECIPE_CONFIG_FILE):
+    if not config_file and not os.path.exists(utils.DEFAULT_RECIPE_CONFIG_FILE):
         recipe_name = os.path.basename(os.getcwd())
         build_config_data = {'recipes':[{'name':recipe_name, 'path':'recipe'}]}
     else:
         if not config_file:
-            config_file = DEFAULT_RECIPE_CONFIG_FILE
+            config_file = utils.DEFAULT_RECIPE_CONFIG_FILE
         if not os.path.exists(config_file):
             print("Unable to open provided config file: " + config_file)
             return None, config_file
@@ -199,4 +197,5 @@ def build_feedstock(args_string=None):
     return result
 
 if __name__ == '__main__':
+    utils.check_if_conda_build_exists()
     sys.exit(build_feedstock())

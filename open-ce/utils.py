@@ -9,12 +9,17 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import argparse
+import sys
 from enum import Enum, unique
+import pkg_resources
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
                                           "..", "conda_build_config.yaml")
+DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
+SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
+DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 
 class OpenCEError(Exception):
     """
@@ -95,6 +100,15 @@ def parse_arg_list(arg_list):
 def remove_version(package):
     '''Remove conda version from dependency.'''
     return package.split()[0].split("=")[0]
+
+def check_if_conda_build_exists():
+    '''Checks if conda-build is installed and exits if it is not'''
+    try:
+        pkg_resources.get_distribution('conda-build')
+    except pkg_resources.DistributionNotFound:
+        print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
+              " for a list of requirements.")
+        sys.exit(1)
 
 def make_schema_type(data_type,required=False):
     '''Make a schema type tuple.'''
