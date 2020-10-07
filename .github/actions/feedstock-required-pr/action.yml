@@ -10,8 +10,8 @@ runs:
     - name: Install dependencies
       shell: bash -l {0}
       run: |
-      conda install -y conda-build
-      pip install yamllint==1.24.2
+        conda install -y conda-build
+        pip install yamllint==1.24.2
     - name: Lint yaml files
       shell: bash -l {0}
       run: yamllint ./*/*.yaml
