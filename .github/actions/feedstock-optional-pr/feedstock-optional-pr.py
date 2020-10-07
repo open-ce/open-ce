@@ -44,7 +44,8 @@ def feedstock_pr(arg_strings=None):
     print(build_config_data)
 
     pr_branch = get_result("git log -1 --format='%H'")
-    default_branch = "master" #get_result("git log -2 --format='%H' | tail -n 1")
+    utils.run_and_log("git remote set-head origin -a")
+    default_branch = get_result("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
 
     config = get_or_merge_config(None)
     config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG, recipe_config_file]
