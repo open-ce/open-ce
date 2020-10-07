@@ -58,7 +58,7 @@ def feedstock_pr(arg_strings=None):
                                     variants=variants[0],
                                     bypass_env_check=True,
                                     finalize=False)
-        master_build_numbers.update([(meta.meta['package']['name'], meta.meta['build']['number']) for meta,_,_ in metas])
+        master_build_numbers.update([(meta.meta['package']['name'], meta.meta['package']['version'], meta.meta['build']['number']) for meta,_,_ in metas])
 
     utils.run_and_log("git checkout {}".format(pr_branch))
     current_pr_build_numbers = set()
@@ -68,10 +68,10 @@ def feedstock_pr(arg_strings=None):
                                     variants=variants[0],
                                     bypass_env_check=True,
                                     finalize=False)
-        current_pr_build_numbers.update([(meta.meta['package']['name'], meta.meta['build']['number']) for meta,_,_ in metas])
+        current_pr_build_numbers.update([(meta.meta['package']['name'], meta.meta['package']['version'], meta.meta['build']['number']) for meta,_,_ in metas])
 
     if current_pr_build_numbers == master_build_numbers:
-        print("There is no change in build numbers.")
+        print("There is no change in version or build numbers.")
         return 1
 
     return 0

@@ -11,10 +11,6 @@ runs:
       shell: bash -l {0}
       run: |
         conda install -y conda-build
-        pip install yamllint==1.24.2
-    - name: Lint yaml files
-      shell: bash -l {0}
-      run: yamllint ./*/*.yaml
     - name: Run PR Tests
       shell: bash -l {0}
       run: python $GITHUB_ACTION_PATH/feedstock-required-pr.py
