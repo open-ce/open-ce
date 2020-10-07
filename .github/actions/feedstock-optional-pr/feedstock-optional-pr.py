@@ -72,6 +72,8 @@ def feedstock_pr(arg_strings=None):
 
     if current_pr_build_numbers == master_build_numbers:
         print("There is no change in version or build numbers.")
+        print(current_pr_build_numbers)
+        print(master_build_numbers)
         return 1
 
     return 0
