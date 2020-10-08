@@ -15,4 +15,3 @@ packages:
   - feedstock : torchtext
   - feedstock : onnx
   - feedstock : torchvision
-  - feedstock : pytorch-lightning 
