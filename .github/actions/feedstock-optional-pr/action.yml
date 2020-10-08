@@ -15,4 +15,4 @@ runs:
       shell: bash -l {0}
       run: |
         test_path="$GITHUB_ACTION_PATH/../../../tests"
-        python $test_path/feedstock_tests/feedstock-optional-pr.py
+        python $test_path/feedstock_tests/check_build_numbers.py
