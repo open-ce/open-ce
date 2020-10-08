@@ -40,7 +40,7 @@ jobs:
           # Validate conda_build_config for the main open-ce env file.
           python ./open-ce/validate_config.py --conda_build_config \
                                                  ./conda_build_config.yaml \
-                                                 ./envs/opence-env.yaml \
+                                                 ./envs/*-env.yaml \
                                                  --python_versions 3.6,3.7 \
                                                  --build_types cuda,cpu
       - name: Test with pytest and Generate coverage report
