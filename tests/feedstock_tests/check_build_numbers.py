@@ -13,15 +13,14 @@ import argparse
 import sys
 import os
 import pathlib
-import subprocess
-test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', '..', '..', 'open-ce'))
 
 import conda_build.api
 from conda_build.config import get_or_merge_config
 
-import build_feedstock
-import utils
+test_dir = pathlib.Path(__file__).parent.absolute()
+sys.path.append(os.path.join(test_dir, '..', '..', 'open-ce'))
+import build_feedstock # pylint: disable=wrong-import-position
+import utils # pylint: disable=wrong-import-position
 
 def make_parser():
     ''' Parser for input arguments '''
@@ -41,11 +40,10 @@ def feedstock_pr(arg_strings=None):
                                                                   for build_type in utils.parse_arg_list(args.build_types)]
 
     build_config_data, recipe_config_file = build_feedstock.load_package_config()
-    print(build_config_data)
 
-    pr_branch = get_result("git log -1 --format='%H'")
+    pr_branch = utils.get_output("git log -1 --format='%H'")
     utils.run_and_log("git remote set-head origin -a")
-    default_branch = get_result("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
+    default_branch = utils.get_output("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
 
     config = get_or_merge_config(None)
     config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG, recipe_config_file]
@@ -59,7 +57,9 @@ def feedstock_pr(arg_strings=None):
                                     variants=variants[0],
                                     bypass_env_check=True,
                                     finalize=False)
-        master_build_numbers.update([(meta.meta['package']['name'], meta.meta['package']['version'], meta.meta['build']['number']) for meta,_,_ in metas])
+        master_build_numbers.update([(meta.meta['package']['name'],
+                                      meta.meta['package']['version'],
+                                      meta.meta['build']['number']) for meta,_,_ in metas])
 
     utils.run_and_log("git checkout {}".format(pr_branch))
     current_pr_build_numbers = set()
@@ -69,7 +69,9 @@ def feedstock_pr(arg_strings=None):
                                     variants=variants[0],
                                     bypass_env_check=True,
                                     finalize=False)
-        current_pr_build_numbers.update([(meta.meta['package']['name'], meta.meta['package']['version'], meta.meta['build']['number']) for meta,_,_ in metas])
+        current_pr_build_numbers.update([(meta.meta['package']['name'],
+                                          meta.meta['package']['version'],
+                                          meta.meta['build']['number']) for meta,_,_ in metas])
 
     if current_pr_build_numbers == master_build_numbers:
         print("There is no change in version or build numbers.")
@@ -78,9 +80,6 @@ def feedstock_pr(arg_strings=None):
         return 1
 
     return 0
-
-def get_result(command):
-    return subprocess.check_output(command, shell=True).decode("utf-8").strip()
 
 if __name__ == '__main__':
     sys.exit(feedstock_pr())

@@ -12,6 +12,7 @@ import argparse
 import sys
 from enum import Enum, unique
 import pkg_resources
+import subprocess
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
@@ -144,3 +145,8 @@ def run_and_log(command):
     '''Print a shell command and then execute it.'''
     print("--->{}".format(command))
     return os.system(command)
+
+def get_output(command):
+    '''Print and execute a shell command and then return the output.'''
+    print("--->{}".format(command))
+    return subprocess.check_output(command, shell=True).decode("utf-8").strip()

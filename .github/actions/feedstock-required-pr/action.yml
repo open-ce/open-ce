@@ -7,6 +7,6 @@ description: "Required global PR tests for Open-CE feedstocks."
 runs:
   using: "composite"
   steps:
-    - name: Run PR Tests
+    - name: PR Test Placeholder
       shell: bash -l {0}
       run: echo "No required tests added yet."
