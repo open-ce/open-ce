@@ -69,12 +69,14 @@ class BuildCommand():
         """
         Returns a name representing the Build Command
         """
-        result = self.recipe.replace(".","-")
-        result = result.replace("_","-")
+        result = self.recipe
         if self.python:
-            result +=  "-py" + self.python.replace(".","")
+            result +=  "-py" + self.python
         if self.build_type:
             result +=  "-" + self.build_type
+
+        result = result.replace(".", "-")
+        result = result.replace("_", "-")
         return result
 
 def _make_hash(to_hash):
