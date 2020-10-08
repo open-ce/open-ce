@@ -13,4 +13,6 @@ runs:
         conda install -y conda-build
     - name: Run PR Tests
       shell: bash -l {0}
-      run: python $GITHUB_ACTION_PATH/../../../tests/feedstock_tests/feedstock-optional-pr.py
+      run: |
+        tess_path="$GITHUB_ACTION_PATH/../../../tests"
+        python $tess_path/feedstock_tests/feedstock-optional-pr.py
