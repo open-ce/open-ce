@@ -10,9 +10,9 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import argparse
 import sys
+import subprocess
 from enum import Enum, unique
 import pkg_resources
-import subprocess
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
