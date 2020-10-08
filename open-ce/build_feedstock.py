@@ -169,7 +169,7 @@ def build_feedstock(args_string=None):
             config.variant_config_files.append(recipe_conda_build_config)
 
         config.channel_urls = args.channels_list + build_config_data.get('channels', [])
-        
+
         result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
         if result != 0:
             break
