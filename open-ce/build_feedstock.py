@@ -166,7 +166,7 @@ def build_feedstock(args_string=None):
         recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
 
         if os.path.exists(recipe_conda_build_config):
-          config.variant_config_files.append(recipe_conda_build_config)
+            config.variant_config_files.append(recipe_conda_build_config)
 
         config.channel_urls = args.channels_list + build_config_data.get('channels', [])
         
