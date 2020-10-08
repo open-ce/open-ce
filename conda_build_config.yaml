@@ -9,7 +9,7 @@ autoconf:
 automake:
   - 1.16
 av:
-  - 8.0.2
+  - 8.*
 bazel:
   - 3.*
 boost:
