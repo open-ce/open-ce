@@ -14,5 +14,5 @@ runs:
     - name: Run PR Tests
       shell: bash -l {0}
       run: |
-        tess_path="$GITHUB_ACTION_PATH/../../../tests"
-        python $tess_path/feedstock_tests/feedstock-optional-pr.py
+        test_path="$GITHUB_ACTION_PATH/../../../tests"
+        python $test_path/feedstock_tests/feedstock-optional-pr.py
