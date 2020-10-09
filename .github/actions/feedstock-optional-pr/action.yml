@@ -1,0 +1,18 @@
+name: Open-CE Feedstock PR Optional Tests
+
+author: "Open-CE"
+
+description: "Optional global PR tests for Open-CE feedstocks."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      shell: bash -l {0}
+      run: |
+        conda install -y conda-build
+    - name: Run PR Tests
+      shell: bash -l {0}
+      run: |
+        test_path="$GITHUB_ACTION_PATH/../../../tests"
+        python $test_path/feedstock_tests/check_build_numbers.py
