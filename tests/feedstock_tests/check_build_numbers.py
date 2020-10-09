@@ -47,6 +47,8 @@ def feedstock_pr(arg_strings=None):
 
     config = get_or_merge_config(None)
     config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG]
+    if recipe_config_file:
+        config.variant_config_files += [config.variant_config_files]
     config.verbose = False
 
     utils.run_and_log("git checkout {}".format(default_branch))
