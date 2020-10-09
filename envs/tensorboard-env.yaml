@@ -1,0 +1,7 @@
+imported_envs:
+  - bazel-env.yaml
+
+packages:
+  - feedstock : tensorboard
+  - feedstock : tensorboard-plugin-wit
+  - feedstock : protobuf          #[python == '3.8']

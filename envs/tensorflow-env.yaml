@@ -1,5 +1,8 @@
 imported_envs:
   - bazel-env.yaml
+{% if build_type == 'cuda' %}
+  - tensorrt-env.yaml
+{% endif %}
 
 {% if build_type == 'cuda' %}
 channels:
@@ -9,7 +12,6 @@ channels:
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
-  - feedstock : tensorrt
   - feedstock : cudnn
 {% endif %}
   - feedstock : tensorflow

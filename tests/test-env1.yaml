@@ -18,3 +18,7 @@ packages:
     - feedstock : git@myhost/myorg/package14-feedstock.git
     - feedstock : package15
     - feedstock : package16
+
+external_dependencies:
+    - external_dep1
+    - external_dep2   5.2

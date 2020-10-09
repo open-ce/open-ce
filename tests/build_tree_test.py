@@ -136,7 +136,15 @@ def test_get_dependency_names(mocker):
     for build_command in mock_build_tree:
         output += ' '.join([mock_build_tree[dep].name() for dep in build_command.build_command_dependencies]) + "\n"
 
-    expected_output = "\nrecipe2-py2.6-cpu\nrecipe2-py2.6-cpu recipe3\n"
+    expected_output = "\nrecipe2-py26-cpu\nrecipe2-py26-cpu recipe3\n"
 
     assert output == expected_output
 
+def test_build_tree_len(mocker):
+    '''
+    Tests that the __len__ function works for BuildTree
+    '''
+    mock_build_tree = TestBuildTree([], "3.6", "cpu")
+    mock_build_tree.build_commands = sample_build_commands
+
+    assert len(mock_build_tree) == 3

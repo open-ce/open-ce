@@ -18,6 +18,7 @@ sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import pytest
 import helpers
 import build_env
+import pkg_resources
 
 built_packages = set()
 def validate_build_feedstock(args, package_deps = None, expect=[], reject=[], retval = 0):
@@ -157,7 +158,7 @@ def test_env_validate(mocker, capsys):
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     assert build_env.build_env([env_file]) == 1
     captured = capsys.readouterr()
-    assert "chnnels is not a valid key in the environment file." in captured.err
+    assert "Unexpected key chnnels was found in " in captured.err
 
 def test_build_env_docker_build(mocker):
     '''
@@ -167,4 +168,17 @@ def test_build_env_docker_build(mocker):
 
     mocker.patch('docker_build.build_with_docker', return_value=0)
 
+    mocker.patch('pkg_resources.get_distribution', return_value=None)
+
     assert build_env.build_env(arg_strings) == 0
+
+def test_build_env_if_no_conda_build(mocker):
+    '''
+    Test that build_env should fail if conda_build isn't present and no --docker_build
+    '''
+    arg_strings = ["my-env.yaml"]
+
+    mocker.patch('pkg_resources.get_distribution', return_value=None)
+
+    assert build_env.build_env(arg_strings) == 1
+

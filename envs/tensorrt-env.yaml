@@ -1,12 +1,10 @@
-imported_envs:
 {% if build_type == 'cuda' %}
-  - pytorch-env.yaml
-  - tensorflow-env.yaml
-
 channels:
   - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+{% endif %}
 
 packages:
-  - feedstock : horovod
-  - feedstock : openmpi
+{% if build_type == 'cuda' %}
+  - feedstock : tensorrt
+  - feedstock : onnx
 {% endif %}

@@ -94,15 +94,19 @@ def write_conda_env_files(local_built_folder, dep_list):
     return conda_env_files
 
 def cleanup_depstring(dep_string):
-    return re.sub(' +', ' ', dep_string)  
+    dep_string = re.sub(' +', ' ', dep_string)
+
+    # Handling case when dep_string is like "python 3.6". 
+    # Conda package with name "python 3.6" doesn't exist as 
+    # python conda package name has minor version too specified in it like 3.6.12.
+    m = re.match(r'(python )([=,>,<]*)(\d.*)', dep_string)
+    if m:
+       dep_string = m.group(1) + m.group(2) + m.group(3) + ".*"
+    return dep_string
    
-def update_deps_lists(build_command, dep_list):
-   key = "py" + build_command.python + "-" + build_command.build_type
-    
-   for dep in build_command.run_dependencies:
+def update_deps_lists(dependencies, dep_list, key):
+   for dep in dependencies:
        dep_list[key].add(cleanup_depstring(dep))
-   for pack in build_command.packages:
-       dep_list[key].add(cleanup_depstring(pack))
 
 def build_env(arg_strings=None):
     '''
@@ -114,7 +118,12 @@ def build_env(arg_strings=None):
     if args.docker_build:
         return docker_build.build_with_docker(args.output_folder, sys.argv)
 
+    # Checking conda-build existence if --docker_build is not specified
     utils.check_if_conda_build_exists()
+
+    # Here, importing BuildTree is intentionally done after checking
+    # existence of conda-build as BuildTree uses conda_build APIs.
+    from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
     result = 0
 
     common_package_build_args = []
@@ -156,8 +165,11 @@ def build_env(arg_strings=None):
     for build_command in build_tree:
         build_args = common_package_build_args + build_command.feedstock_args()
         result = build_feedstock.build_feedstock(build_args)
-        update_deps_lists(build_command, dep_list)
-        
+        key = "py" + build_command.python + "-" + build_command.build_type
+        update_deps_lists(build_command.run_dependencies, dep_list, key)
+        update_deps_lists(build_command.packages, dep_list, key)
+        variant = { 'python' : build_command.python, 'build_type' : build_command.build_type }
+        update_deps_lists(build_tree.get_external_dependencies(variant), dep_list, key)
         if result != 0:
             print("Unable to build recipe: " +  build_command.repository)
             return result
