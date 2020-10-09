@@ -42,6 +42,7 @@ import docker_build
 import utils
 from utils import OpenCEError
 import yaml
+from conda_env_file_generator import CondaEnvFileGenerator
 
 def make_parser():
     ''' Parser for input arguments '''
@@ -74,39 +75,6 @@ directory containing open-ce. Only files within the open-ce directory and local_
 be visible at build time.""")
 
     return parser
-
-def write_conda_env_files(local_built_folder, dep_list):
-    conda_env_files = []
-    local_channel = "file:/" + os.path.abspath(local_built_folder)
-    for key in dep_list.keys():
-       conda_env_name = "opence-" + key
-       conda_env_file = conda_env_name + ".yaml" 
-              
-       data = dict(
-           name = conda_env_name,
-           channels = [local_channel, "defaults"],
-           dependencies = dep_list[key],
-       )
-       with open(conda_env_file, 'w') as outfile:
-           yaml.dump(data, outfile, default_flow_style=False)
-           conda_env_files.append(conda_env_file)
-
-    return conda_env_files
-
-def cleanup_depstring(dep_string):
-    dep_string = re.sub(' +', ' ', dep_string)
-
-    # Handling case when dep_string is like "python 3.6". 
-    # Conda package with name "python 3.6" doesn't exist as 
-    # python conda package name has minor version too specified in it like 3.6.12.
-    m = re.match(r'(python )([=,>,<]*)(\d.*)', dep_string)
-    if m:
-       dep_string = m.group(1) + m.group(2) + m.group(3) + ".*"
-    return dep_string
-   
-def update_deps_lists(dependencies, dep_list, key):
-   for dep in dependencies:
-       dep_list[key].add(cleanup_depstring(dep))
 
 def build_env(arg_strings=None):
     '''
@@ -154,31 +122,25 @@ def build_env(arg_strings=None):
         print(err.msg)
         return 1
 
-    dep_list = dict()
-    for py_version in utils.parse_arg_list(args.python_versions):
-        for build_type in utils.parse_arg_list(args.build_types):
-            key = "py" + py_version + "-" + build_type
-            dep_list[key] = set()
+    conda_env_data = CondaEnvFileGenerator(
+                               python_versions=utils.parse_arg_list(args.python_versions),
+                               build_types=utils.parse_arg_list(args.build_types),
+                               channels=args.channels_list,
+                               output_folder=os.path.abspath(args.output_folder),
+                               )
 
-    print("Dep list: ", dep_list.keys())
     # Build each package in the packages list
     for build_command in build_tree:
         build_args = common_package_build_args + build_command.feedstock_args()
         result = build_feedstock.build_feedstock(build_args)
-        key = "py" + build_command.python + "-" + build_command.build_type
-        update_deps_lists(build_command.run_dependencies, dep_list, key)
-        update_deps_lists(build_command.packages, dep_list, key)
-        variant = { 'python' : build_command.python, 'build_type' : build_command.build_type }
-        update_deps_lists(build_tree.get_external_dependencies(variant), dep_list, key)
+        
         if result != 0:
             print("Unable to build recipe: " +  build_command.repository)
             return result
 
-    for dep in dep_list.keys():
-        print("Deps for env: ", dep)
-        print(dep_list[dep])
+        conda_env_data.update_conda_env_file_content(build_command, build_tree)
 
-    conda_env_files = write_conda_env_files(os.path.abspath(args.output_folder), dep_list)
+    conda_env_files = conda_env_data.write_conda_env_files()
     print("Following conda environment files are generated", conda_env_files)
     
     return result
