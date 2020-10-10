@@ -9,12 +9,18 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import argparse
+import sys
+import subprocess
 from enum import Enum, unique
+import pkg_resources
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
                                           "..", "conda_build_config.yaml")
+DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
+SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
+DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 
 class OpenCEError(Exception):
     """
@@ -96,6 +102,15 @@ def remove_version(package):
     '''Remove conda version from dependency.'''
     return package.split()[0].split("=")[0]
 
+def check_if_conda_build_exists():
+    '''Checks if conda-build is installed and exits if it is not'''
+    try:
+        pkg_resources.get_distribution('conda-build')
+    except pkg_resources.DistributionNotFound:
+        print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
+              " for a list of requirements.")
+        sys.exit(1)
+
 def make_schema_type(data_type,required=False):
     '''Make a schema type tuple.'''
     return (data_type, required)
@@ -125,3 +140,13 @@ def validate_dict_schema(dictionary, schema):
     for k in dictionary:
         if not k in schema:
             raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))
+
+def run_and_log(command):
+    '''Print a shell command and then execute it.'''
+    print("--->{}".format(command))
+    return os.system(command)
+
+def get_output(command):
+    '''Print and execute a shell command and then return the output.'''
+    print("--->{}".format(command))
+    return subprocess.check_output(command, shell=True).decode("utf-8").strip()

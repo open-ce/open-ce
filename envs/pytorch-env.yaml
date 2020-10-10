@@ -1,14 +1,16 @@
+{% if build_type == 'cuda' %}
+imported_envs:
+  - tensorrt-env.yaml
+{% endif %}
+
 packages:
   - feedstock : pytorch
   - feedstock : numactl
 {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : magma
-  - feedstock : tensorrt
   - feedstock : cudnn
-  - feedstock : nvcc
 {% endif %}
   - feedstock : torchtext
   - feedstock : onnx
   - feedstock : torchvision
-  - feedstock : pytorch-lightning 

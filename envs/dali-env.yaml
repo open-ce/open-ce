@@ -6,8 +6,7 @@ imported_envs:
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : opencv
-  - feedstock : nvcc
-  - feedstock : DALI 
+  - feedstock : DALI
   - feedstock : jpeg-turbo
   - feedstock : libflac
   - feedstock : libsndfile

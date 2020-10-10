@@ -28,7 +28,7 @@ class TestBuildTree(build_tree.BuildTree):
                  python_versions,
                  build_types,
                  repository_folder="./",
-                 git_location=build_tree.DEFAULT_GIT_LOCATION,
+                 git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
         self._env_config_files = env_config_files
@@ -75,7 +75,7 @@ def test_clone_repo(mocker):
     '''
     Simple positive test for `_clone_repo`.
     '''
-    git_location = build_tree.DEFAULT_GIT_LOCATION
+    git_location = utils.DEFAULT_GIT_LOCATION
 
     mock_build_tree = TestBuildTree([], "3.6", "cpu")
 
@@ -95,7 +95,7 @@ def test_clone_repo_failure(mocker, capsys):
     '''
     Simple negative test for `_clone_repo`.
     '''
-    git_location = build_tree.DEFAULT_GIT_LOCATION
+    git_location = utils.DEFAULT_GIT_LOCATION
 
     mock_build_tree = TestBuildTree([], "3.6", "cpu")
 
@@ -136,7 +136,7 @@ def test_get_dependency_names(mocker):
     for build_command in mock_build_tree:
         output += ' '.join([mock_build_tree[dep].name() for dep in build_command.build_command_dependencies]) + "\n"
 
-    expected_output = "\nrecipe2-py2.6-cpu\nrecipe2-py2.6-cpu recipe3\n"
+    expected_output = "\nrecipe2-py2-6-cpu\nrecipe2-py2-6-cpu recipe3\n"
 
     assert output == expected_output
 

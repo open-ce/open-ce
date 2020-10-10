@@ -10,11 +10,13 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import argparse
-import os
 import sys
-import build_tree
 import utils
 from utils import OpenCEError
+
+utils.check_if_conda_build_exists()
+
+import build_tree # pylint: disable=wrong-import-position
 
 def make_parser():
     ''' Parser input arguments '''
@@ -22,14 +24,9 @@ def make_parser():
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES]
     parser = utils.make_parser(arguments,
-                               description = 'Perform validation on a cond_build_config.yaml file.',
+                               description = 'Perform validation on a conda_build_config.yaml file.',
                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
-
-def run_and_log(command):
-    '''Print a shell command and then execute it.'''
-    print("--->{}".format(command))
-    return os.system(command)
 
 def generalize_version(package):
     """Add `.*` to package versions when it is needed."""
@@ -74,7 +71,7 @@ def validate_config(arg_strings=None):
 
             cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
 
-            retval = run_and_log(cli)
+            retval = utils.run_and_log(cli)
 
             if retval != 0:
                 print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))

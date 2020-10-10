@@ -1,10 +1,12 @@
 imported_envs:
   - bazel-env.yaml
+{% if build_type == 'cuda' %}
+  - tensorrt-env.yaml
+{% endif %}
 
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
-  - feedstock : tensorrt
   - feedstock : cudnn
   - feedstock : nvcc
 {% endif %}

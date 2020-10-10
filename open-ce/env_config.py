@@ -13,12 +13,9 @@ from enum import Enum, unique, auto
 
 import utils
 
-try:
-    import conda_build.metadata
-except ImportError as error:
-    print("Cannot find `conda_build`, please see https://github.com/open-ce/open-ce#requirements"
-          " for a list of requirements.")
-    sys.exit(1)
+utils.check_if_conda_build_exists()
+
+import conda_build.metadata # pylint: disable=wrong-import-position, wrong-import-order
 
 @unique
 class Key(Enum):
