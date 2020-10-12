@@ -15,15 +15,13 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
-import pytest
-
 import build_tree
 import utils
 import helpers
 
 class TestBuildTree(build_tree.BuildTree):
     __test__ = False
-    def __init__(self,
+    def __init__(self, #pylint: disable=super-init-not-called
                  env_config_files,
                  python_versions,
                  build_types,
@@ -37,11 +35,12 @@ class TestBuildTree(build_tree.BuildTree):
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
 
-def test_create_recipes(mocker, capsys):
+def test_create_recipes(mocker):
     '''
     Tests that `_create_recipes` correctly builds the recipe and extracts all
     of the dependencies from the conda_build render result.
     '''
+    dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.getcwd',
         return_value="/test/starting_dir"
@@ -56,8 +55,8 @@ def test_create_recipes(mocker, capsys):
     )
     mocker.patch(
         'os.chdir',
-        side_effect=(lambda x: helpers.validate_chdir(x, expected_dirs=["/test/my_repo", # First the working directory should be changed to the arg.
-                                                                        "/test/starting_dir"])) # And then changed back to the starting directory.
+        side_effect=(lambda x: dirTracker.validate_chdir(x, expected_dirs=["/test/my_repo", # First the working directory should be changed to the arg.
+                                                                           "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
     create_recipes_result = build_tree._create_recipes("/test/my_repo", None, "master", {'python' : ['3.6'], 'build_type' : ['cuda']}, [])
@@ -95,8 +94,6 @@ def test_clone_repo_failure(mocker, capsys):
     '''
     Simple negative test for `_clone_repo`.
     '''
-    git_location = utils.DEFAULT_GIT_LOCATION
-
     mock_build_tree = TestBuildTree([], "3.6", "cpu")
 
     mocker.patch(
@@ -125,7 +122,7 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     ["package3a", "package3b"],
                                     build_command_dependencies=[1])]
 
-def test_get_dependency_names(mocker):
+def test_get_dependency_names():
     '''
     Tests that the dependency names can be retrieved for each item in a BuildTree
     '''
@@ -140,7 +137,7 @@ def test_get_dependency_names(mocker):
 
     assert output == expected_output
 
-def test_build_tree_len(mocker):
+def test_build_tree_len():
     '''
     Tests that the __len__ function works for BuildTree
     '''
