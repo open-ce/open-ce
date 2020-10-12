@@ -23,3 +23,5 @@ packages:
   - feedstock : protobuf          #[python == '3.8']
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-metadata
+  - feedstock : tensorflow-text
+
