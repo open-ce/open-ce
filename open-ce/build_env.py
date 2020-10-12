@@ -35,13 +35,11 @@ For usage description of arguments, this script supports use of --help:
 import argparse
 import os
 import sys
-import re
 
 import build_feedstock
 import docker_build
 import utils
 from utils import OpenCEError
-import yaml
 from conda_env_file_generator import CondaEnvFileGenerator
 
 def make_parser():
@@ -92,6 +90,7 @@ def build_env(arg_strings=None):
     # Here, importing BuildTree is intentionally done after checking
     # existence of conda-build as BuildTree uses conda_build APIs.
     from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
+
     result = 0
 
     common_package_build_args = []
@@ -106,10 +105,6 @@ def build_env(arg_strings=None):
     if args.repository_folder and not os.path.exists(args.repository_folder):
         os.mkdir(args.repository_folder)
 
-    # Create the build tree
-    
-    from build_tree import BuildTree   # pylint: disable=import-outside-toplevel
- 
     try:
         build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),
@@ -133,7 +128,7 @@ def build_env(arg_strings=None):
     for build_command in build_tree:
         build_args = common_package_build_args + build_command.feedstock_args()
         result = build_feedstock.build_feedstock(build_args)
-        
+
         if result != 0:
             print("Unable to build recipe: " +  build_command.repository)
             return result
@@ -142,7 +137,7 @@ def build_env(arg_strings=None):
 
     conda_env_files = conda_env_data.write_conda_env_files()
     print("Following conda environment files are generated", conda_env_files)
-    
+
     return result
 
 if __name__ == '__main__':
