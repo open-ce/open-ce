@@ -35,6 +35,7 @@ import yaml
 
 import utils
 import conda_build.api
+from conda_build.config import get_or_merge_config
 
 def make_parser():
     ''' Parser input arguments '''
@@ -159,12 +160,12 @@ def build_feedstock(args_string=None):
         if args.recipes and recipe['name'] not in args.recipes:
             continue
 
-        config = conda_build.api.Config(
-            skip_existing=True)
+        config = get_or_merge_config(None)
+        config.skip_existing = True
         config.output_folder = args.output_folder
         config.variant_config_files = [args.conda_build_config]
-        recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
 
+        recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
         if os.path.exists(recipe_conda_build_config):
             config.variant_config_files.append(recipe_conda_build_config)
 
