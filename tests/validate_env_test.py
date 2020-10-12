@@ -15,7 +15,6 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
-import pytest
 import validate_env
 
 def test_validate_env():

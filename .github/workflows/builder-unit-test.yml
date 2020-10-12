@@ -30,13 +30,14 @@ jobs:
         shell: bash -l {0}
         run: |
           PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./open-ce
-      - name: Lint feedstock test files for warnings and errors only
+      - name: Lint all test files for warnings and errors only
         shell: bash -l {0}
         run: |
           PYTHONPATH=./open-ce/:./tests/:${PYTHONPATH} \
                   pylint \
                     --disable=R,C,protected-access \
-                    ./tests/feedstock_tests/
+                    ./tests/*.py \
+                    ./tests/**/*.py
       - name: Lint config files
         shell: bash -l {0}
         run: |

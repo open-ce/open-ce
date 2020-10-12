@@ -15,7 +15,7 @@ class Namespace:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-def validate_cli(cli_string, expect=[], reject=[], ignore=[], retval=0, *args, **kwargs):
+def validate_cli(cli_string, expect=None, reject=None, ignore=None, retval=0):
     """
     Used to mock os.system with the assumption that it is making a call to 'conda-build'.
 
@@ -28,6 +28,10 @@ def validate_cli(cli_string, expect=[], reject=[], ignore=[], retval=0, *args, *
     Returns:
         retval
     """
+    if not expect: expect = []
+    if not reject: reject = []
+    if not ignore: ignore = []
+
     if not any ({term in cli_string for term in ignore}):
         for term in expect:
             assert term in cli_string
@@ -36,36 +40,41 @@ def validate_cli(cli_string, expect=[], reject=[], ignore=[], retval=0, *args, *
         return retval
     return 0
 
-current_dir = os.getcwd()
-chdir_count = 0
-def validate_chdir(arg1, expected_dirs=[]):
-    """
-    Used to mock os.chdir. Each time a directory is changed, the global counter ch_dir is incremented,
-    and each change is validated against the expected_dirs list.
-    The current directory is tracked in `current_dir` and used by `mocked_getcwd`.
+class DirTracker(object):
+    def __init__(self, starting_dir=os.getcwd()):
+        self.current_dir = starting_dir
+        self.chdir_count = 0
 
-    Args:
-        arg1: The placeholder argumentfor the chdir command.
-        expected_dirs: The list of directories that are expected to be chdired during execution..
-    Returns:
-        0
-    """
-    global current_dir
-    global chdir_count
-    if expected_dirs and chdir_count < len(expected_dirs):
-        assert arg1 == expected_dirs[chdir_count]
-    current_dir = arg1
-    chdir_count+=1
-    return 0
+    def validate_chdir(self, arg1, expected_dirs=None):
+        """
+        Used to mock os.chdir. Each time a directory is changed, the global counter ch_dir is incremented,
+        and each change is validated against the expected_dirs list.
+        The current directory is tracked in `current_dir` and used by `mocked_getcwd`.
 
-def mocked_getcwd():
-    global current_dir
-    return current_dir
+        Args:
+            arg1: The placeholder argumentfor the chdir command.
+            expected_dirs: The list of directories that are expected to be chdired during execution..
+        Returns:
+            0
+        """
+        if expected_dirs and self.chdir_count < len(expected_dirs):
+            assert arg1 == expected_dirs[self.chdir_count]
+        self.current_dir = arg1
+        self.chdir_count+=1
+        return 0
 
-def make_render_result(package_name, build_reqs=[], run_reqs=[], host_reqs=[], test_reqs=[]):
+    def mocked_getcwd(self):
+        return self.current_dir
+
+def make_render_result(package_name, build_reqs=None, run_reqs=None, host_reqs=None, test_reqs=None):
     '''
     Creates a YAML string that is a mocked result of `conda_build.api.render`.
     '''
+    if not build_reqs: build_reqs = []
+    if not run_reqs: run_reqs = []
+    if not host_reqs: host_reqs = []
+    if not test_reqs: test_reqs = []
+
     retval = [(Namespace(meta={
                             'package': {'name': package_name, 'version': '1.2.3'},
                             'source': {'git_url': 'https://github.com/'+package_name+'.git', 'git_rev': 'v0.19.5', 'patches': []},
