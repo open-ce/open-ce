@@ -9,6 +9,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import datetime
 import platform
+import tempfile
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_NAME = "builder-cuda-" + platform.machine()
@@ -38,7 +39,14 @@ def build_image():
 
     return result, image_name
 
-def _create_container(container_name, image_name, output_folder):
+def _add_volume(local_path, container_path):
+    if not os.path.isdir(local_path):
+        os.mkdir(local_path)
+    volume_arg = "-v " + local_path + ":" + container_path + ":Z "
+
+    return volume_arg
+
+def _create_container(container_name, image_name, output_folder, scratch_dir):
     """
     Create a docker container
     """
@@ -46,10 +54,13 @@ def _create_container(container_name, image_name, output_folder):
     docker_cmd = DOCKER_TOOL + " create -i --rm --name " + container_name + " "
 
     # Add output folder
-    local_output_folder = os.path.join(os.getcwd(), output_folder)
-    if not os.path.isdir(local_output_folder):
-        os.mkdir(local_output_folder)
-    docker_cmd += "-v " + local_output_folder + ":" + os.path.join(HOME_PATH, output_folder) + ":Z "
+    docker_cmd += _add_volume(os.path.join(os.getcwd(), output_folder), os.path.join(HOME_PATH, output_folder))
+
+    # Add cache directory
+    docker_cmd += _add_volume(os.path.join(scratch_dir, ".cache"), os.path.join(HOME_PATH, ".cache"))
+
+    # Add conda-bld directory
+    docker_cmd += _add_volume(os.path.join(scratch_dir, "conda-bld"), "/opt/conda/conda-bld")
 
     docker_cmd += image_name + " bash"
     result = os.system(docker_cmd)
@@ -83,7 +94,9 @@ def build_in_container(image_name, output_folder, arg_strings):
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     container_name = IMAGE_NAME + "-" + time_stamp
 
-    result = _create_container(container_name, image_name, output_folder)
+    scratch_dir = tempfile.mkdtemp()
+
+    result = _create_container(container_name, image_name, output_folder, scratch_dir)
     if result:
         print("Error creating docker container: " + container_name)
         return result
@@ -112,6 +125,7 @@ def build_in_container(image_name, output_folder, arg_strings):
     result = _execute_in_container(container_name, cmd)
 
     _stop_container(container_name)
+    shutil.rmtree(scratch_dir)
 
     if result:
         print("Error executing build in container")
