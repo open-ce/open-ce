@@ -23,6 +23,7 @@ DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
+DEFAULT_OUTPUT_FOLDER = "condabuild"
 
 class OpenCEError(Exception):
     """
@@ -55,7 +56,7 @@ class Argument(Enum):
     OUTPUT_FOLDER = (lambda parser: parser.add_argument(
                                         '--output_folder',
                                         type=str,
-                                        default='condabuild',
+                                        default=DEFAULT_OUTPUT_FOLDER,
                                         help='Path where built conda packages will be saved.'))
 
     CHANNELS = (lambda parser: parser.add_argument(
