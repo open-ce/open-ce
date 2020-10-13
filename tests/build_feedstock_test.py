@@ -35,7 +35,7 @@ def test_build_feedstock_default(mocker):
                 'output_folder' : utils.DEFAULT_OUTPUT_FOLDER}
     mocker.patch(
         'conda_build.api.build',
-        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe, expect_config, *args, **kwargs))
+        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, expect_config=expect_recipe, *args, **kwargs))
     )
 
     arg_input = []
