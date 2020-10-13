@@ -35,13 +35,13 @@ def test_build_feedstock_default(mocker):
                 'output_folder' : utils.DEFAULT_OUTPUT_FOLDER}
     mocker.patch(
         'conda_build.api.build',
-        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, expect_config=expect_recipe, *args, **kwargs))
+        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, expect_config=expect_config, *args, **kwargs))
     )
 
     arg_input = []
     assert build_feedstock.build_feedstock(arg_input) == 0
 
-def test_build_feedstock_failure(mocker, capsys):
+def test_build_feedstock_failure(mocker):
     """
     Tests that a 'build_feedstock' failure is handled correctly.
     """
