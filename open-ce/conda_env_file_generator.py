@@ -9,6 +9,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import re
 import yaml
+import os
 import utils
 
 class CondaEnvFileGenerator():
@@ -36,7 +37,6 @@ class CondaEnvFileGenerator():
             for build_type in utils.parse_arg_list(self.build_types):
                 key = "py" + py_version + "-" + build_type
                 self.dependency_dict[key] = set()
-        print("Dep list: ", self.dependency_dict.keys())
 
     def _initialize_channels(self, channels, output_folder):
         self.channels.append("file:/" + output_folder)
@@ -44,7 +44,7 @@ class CondaEnvFileGenerator():
             self.channels.append(channel)
         self.channels.append("defaults")
 
-    def write_conda_env_files(self):
+    def write_conda_env_files(self, path=os.getcwd()):
         """
         This function writes conda environment files using the dependency dictionary
         created from all the buildcommands.
@@ -54,8 +54,10 @@ class CondaEnvFileGenerator():
         for key in self.dependency_dict:
             if len(self.dependency_dict[key]) == 0:
                 continue
-            conda_env_name = "opence-" + key
-            conda_env_file = conda_env_name + ".yaml"
+            if not os.path.exists(path):
+                os.mkdir(path)
+            conda_env_name = "opence-" + key + ".yaml"
+            conda_env_file = os.path.join(path, conda_env_name)
             data = dict(
                 name = conda_env_name,
                 channels = self.channels,

@@ -50,7 +50,6 @@ def validate_config(arg_strings=None):
     args = make_parser().parse_args(arg_strings)
     variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in utils.parse_arg_list(args.python_versions)
                                                                   for build_type in utils.parse_arg_list(args.build_types)]
-    print("Variants: ", variants)
     for variant in variants:
         print('Validating {} for {}'.format(args.conda_build_config, variant))
         for env_file in args.env_config_file:

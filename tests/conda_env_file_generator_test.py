@@ -83,14 +83,12 @@ variants = { 'python' : ['3.6', '3.7'], 'build_type' : ['cpu', 'cuda'] }
 possible_variants = [dict(zip(variants,y)) for y in product(*variants.values())]
 for variant in possible_variants:
     external_deps[str(variant)] = ["external_pac1    1.2", "external_pack2", "external_pack3=1.2.3"]
+TMP_OPENCE_DIR="/tmp/opence-test"
 
-def test_update_conda_env_file_content(mocker):
+def test_conda_env_file_content(mocker):
     '''
     Tests that the conda env file content are being populated correctly
     '''
-    for variant in possible_variants:
-        print("Variant:" , variant)
-
     python_versions = "3.6,3.7"
     build_types = "cpu,cuda"
     mock_build_tree = TestBuildTree([], python_versions, build_types, external_deps)
@@ -111,13 +109,16 @@ def test_update_conda_env_file_content(mocker):
         mock_conda_env_file_generator.update_conda_env_file_content(build_command, mock_build_tree)
 
     validate_dependencies(mock_conda_env_file_generator)
-    mock_conda_env_file_generator.write_conda_env_files()
+    mock_conda_env_file_generator.write_conda_env_files(TMP_OPENCE_DIR)
 
     # Check if conda env files are created for both built types as no build type was specified above
     for py_version in utils.parse_arg_list(python_versions):
         for build_type in utils.parse_arg_list(build_types):
-            cuda_env_file = os.path.join(os.getcwd(), "opence-py{}-{}.yaml".format(py_version, build_type))
+            cuda_env_file = os.path.join(TMP_OPENCE_DIR, "opence-py{}-{}.yaml".format(py_version, build_type))
             assert os.path.exists(cuda_env_file) == True
+
+    cleanup()
+    assert os.path.exists(TMP_OPENCE_DIR) == False
 
 def validate_dependencies(env_file_generator):
     print("Dependency list: ", env_file_generator.dependency_dict)
@@ -141,3 +142,42 @@ def validate_dependencies(env_file_generator):
     actual_deps = env_file_generator.dependency_dict["py3.7-cuda"]
     assert Counter(py37_cuda_deps) == Counter(actual_deps)
 
+def test_conda_env_file_for_only_selected_py(mocker):
+    '''
+    Tests that the conda env file is generated only for selected configurations.
+    '''
+    python_versions = "3.7"
+    build_types = "cpu,cuda"
+    mock_build_tree = TestBuildTree([], python_versions, build_types, external_deps)
+    mock_build_tree.build_commands = sample_build_commands[2:4]
+    print("Lenght: ", len(mock_build_tree.build_commands))
+    output_dir = os.path.join(test_dir, '../condabuild' )
+    mock_conda_env_file_generator = TestCondaEnvFileGenerator(python_versions, build_types, [], output_dir)
+
+    expected_channels = ["file:/{}".format(output_dir), "defaults"]
+    actual_channels = mock_conda_env_file_generator.channels
+    assert actual_channels == expected_channels
+
+    expected_keys = ["py3.7-cpu", "py3.7-cuda"]
+    actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
+    assert actual_keys == expected_keys
+
+    for build_command in mock_build_tree:
+        mock_conda_env_file_generator.update_conda_env_file_content(build_command, mock_build_tree)
+    
+    mock_conda_env_file_generator.write_conda_env_files(TMP_OPENCE_DIR)
+
+    # Check if conda env files are created for both built types as no build type was specified above
+    for py_version in utils.parse_arg_list(python_versions):
+        for build_type in utils.parse_arg_list(build_types):
+            cuda_env_file = os.path.join(TMP_OPENCE_DIR, "opence-py{}-{}.yaml".format(py_version, build_type))
+            assert os.path.exists(cuda_env_file) == True
+            # Check that env file doesn't exist for py3.6
+            py36_env_file =  os.path.join(TMP_OPENCE_DIR, "opence-py{}-{}.yaml".format("3.6", build_type))
+            assert os.path.exists(py36_env_file) == False
+
+    cleanup()
+
+def cleanup():
+    ret = os.system("rm -rf TMP_OPENCE_DIR")
+    print("Removed dir: ", ret)

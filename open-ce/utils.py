@@ -139,4 +139,3 @@ def validate_dict_schema(dictionary, schema):
     for k in dictionary:
         if not k in schema:
             raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))
-

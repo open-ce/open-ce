@@ -105,6 +105,7 @@ def build_env(arg_strings=None):
     if args.repository_folder and not os.path.exists(args.repository_folder):
         os.mkdir(args.repository_folder)
 
+    # Create the build tree
     try:
         build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),
@@ -136,7 +137,8 @@ def build_env(arg_strings=None):
         conda_env_data.update_conda_env_file_content(build_command, build_tree)
 
     conda_env_files = conda_env_data.write_conda_env_files()
-    print("Following conda environment files are generated", conda_env_files)
+    print("Generated conda environment files from the selected build arguments:", conda_env_files)
+    print("INFO: One can use these environment files to create a conda environment using \"conda env create -f <conda_env_file_name>.\"")
 
     return result
 
