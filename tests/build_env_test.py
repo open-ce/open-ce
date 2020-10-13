@@ -19,6 +19,7 @@ import pytest
 import helpers
 import build_env
 import pkg_resources
+import utils
 
 built_packages = set()
 def validate_build_feedstock(args, package_deps = None, expect=[], reject=[], retval = 0):
@@ -118,6 +119,11 @@ def test_build_env(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     assert build_env.build_env([env_file, "--python_versions", "2.1"]) == 0
+
+    # Check if conda env files are created for both built types as no build type was specified above
+    for build_type in utils.parse_arg_list(utils.DEFAULT_BUILD_TYPES):
+        cuda_env_file = os.path.join(os.getcwd(), "opence-py2.1-{}.yaml".format(build_type))
+        assert os.path.exists(cuda_env_file) == True
 
      #---The third test verifies that the repository_folder argument is working properly.
     mocker.patch(

@@ -21,7 +21,7 @@ class CondaEnvFileGenerator():
     def __init__(self,
                  python_versions=utils.DEFAULT_PYTHON_VERS,
                  build_types=utils.DEFAULT_BUILD_TYPES,
-                 channels=None,
+                 channels=[],
                  output_folder=None,
                  ):
         self.python_versions = python_versions
@@ -32,16 +32,16 @@ class CondaEnvFileGenerator():
         self._initialize_channels(channels, output_folder)
 
     def _initialize_dependency_dict(self):
-        for py_version in self.python_versions:
-            for build_type in self.build_types:
+        for py_version in utils.parse_arg_list(self.python_versions):
+            for build_type in utils.parse_arg_list(self.build_types):
                 key = "py" + py_version + "-" + build_type
                 self.dependency_dict[key] = set()
         print("Dep list: ", self.dependency_dict.keys())
 
     def _initialize_channels(self, channels, output_folder):
         self.channels.append("file:/" + output_folder)
-        if channels:
-            self.channels.append(channels)
+        for channel in channels:
+            self.channels.append(channel)
         self.channels.append("defaults")
 
     def write_conda_env_files(self):
@@ -68,8 +68,9 @@ class CondaEnvFileGenerator():
         return conda_env_files
 
     def _update_deps_lists(self, dependencies, key):
-        for dep in dependencies:
-            self.dependency_dict[key].add(_cleanup_depstring(dep))
+        if not dependencies is None:
+            for dep in dependencies:
+                self.dependency_dict[key].add(_cleanup_depstring(dep))
 
     def update_conda_env_file_content(self, build_command, build_tree):
         """
@@ -82,7 +83,7 @@ class CondaEnvFileGenerator():
         self._update_deps_lists(build_command.packages, key)
 
         variant = { 'python' : build_command.python, 'build_type' : build_command.build_type }
-        self._update_deps_lists(build_tree.get_external_dependencies(variant), key)
+        self._update_deps_lists(build_tree.get_external_dependencies(str(variant)), key)
 
 def _cleanup_depstring(dep_string):
     """
