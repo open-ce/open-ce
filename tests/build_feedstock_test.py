@@ -15,11 +15,12 @@ import pathlib
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 
 import helpers
+import utils
 import build_feedstock
 
 def test_build_feedstock_default(mocker):
     """
-    Tests that the default arguments for 'build_feedstock' generate the correct 'conda-build' command.
+    Tests that the default arguments for 'build_feedstock' generate the correct 'conda_build.api.build' input args.
     """
     mocker.patch(
         'os.getcwd',
@@ -29,12 +30,12 @@ def test_build_feedstock_default(mocker):
         'os.path.exists',
         return_value=False
     )
+    expect_recipe = os.path.join(os.getcwd(),'recipe')
+    expect_config = {'variant_config_files' : [utils.DEFAULT_CONDA_BUILD_CONFIG],
+                'output_folder' : utils.DEFAULT_OUTPUT_FOLDER}
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "--output-folder condabuild",
-                                                               "conda_build_config.yaml",
-                                                               "recipe"]))
+        'conda_build.api.build',
+        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe, expect_config, *args, **kwargs))
     )
 
     arg_input = []
@@ -42,7 +43,7 @@ def test_build_feedstock_default(mocker):
 
 def test_build_feedstock_failure(mocker, capsys):
     """
-    Tests that a 'conda-build' failure is handled correctly.
+    Tests that a 'build_feedstock' failure is handled correctly.
     """
     mocker.patch(
         'os.getcwd',
@@ -53,14 +54,12 @@ def test_build_feedstock_failure(mocker, capsys):
         return_value=False
     )
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build"], retval=1)) # Retval is 1 to simulate a failure.
+        'build_feedstock.build_feedstock',
+        return_value=1
     )
 
     arg_input = ""
     assert build_feedstock.build_feedstock(arg_input) == 1
-    captured = capsys.readouterr()
-    assert "Failure building recipe: test_recipe" in captured.out
 
 def test_build_feedstock_working_dir(mocker):
     """
@@ -74,10 +73,6 @@ def test_build_feedstock_working_dir(mocker):
     mocker.patch(
         'os.path.exists',
         return_value=False
-    )
-    mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build"]))
     )
     mocker.patch(
         'os.chdir',
@@ -100,12 +95,11 @@ def test_build_feedstock_config_file(mocker):
         'os.path.exists',
         return_value=True # 'path.exists' is mocked as true so that the input file is found to exist.
     )
+    expect_recipe = os.path.join(os.getcwd(),'variants_from_config')
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "variants_from_config"])) #Checks that the value from the input config file is used.
+        'conda_build.api.build',
+        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, *args, **kwargs))
     )
-
     #This is the data that is read in when 'open()' is called.
     test_recipe_config =b"""recipes:
     - name : my_variant
@@ -131,10 +125,10 @@ def test_build_feedstock_default_config_file(mocker):
         'os.path.exists',
         return_value=True #True for default config file.
     )
+    expect_recipe = os.path.join(os.getcwd(),'variants_from_default_config')
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "variants_from_default_config"]))#Checks that the value from the default config file is used.
+        'conda_build.api.build',
+        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, *args, **kwargs))
     )
 
     test_recipe_config =b"""recipes:
@@ -206,7 +200,7 @@ def test_build_feedstock_local_src_dir_recipe(mocker):
 
 def test_build_feedstock_extra_args(mocker):
     """
-    Tests that additional arguments add the expected values to the conda-build command.
+    Tests that additional arguments add the expected values to the 'conda_build.api.build' arguments.
     """
     mocker.patch(
         'os.getcwd',
@@ -216,14 +210,12 @@ def test_build_feedstock_extra_args(mocker):
         'os.path.exists',
         return_value=True
     )
+    expect_config = { 'channel_urls' : ['test_channel', 'test_channel_2', 'test_channel_from_config']}
+    expect_variants = {'python': ['3.6'], 'build_type': ['cpu'], 'mpi_type': ['openmpi']}
+    reject_recipe = os.path.join(os.getcwd,'test_recipe_extra')
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "-c test_channel",
-                                                               "-c test_channel_2",
-                                                               "-c test_channel_from_config",
-                                                               "--variants \"{'python': '3.6', 'build_type': 'cpu', 'mpi_type': 'openmpi'}\""],
-                                                       reject=["test_recipe_extra"]))
+        'conda_build.api.build',
+        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_config=expect_config, expect_variants=expect_variants, reject_recipe=reject_recipe, *args, **kwargs))
     )
 
     test_recipe_config =b"""recipes:
