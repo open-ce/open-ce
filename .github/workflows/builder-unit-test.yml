@@ -52,6 +52,7 @@ jobs:
                                                  ./envs/*-env.yaml \
                                                  --python_versions 3.6,3.7 \
                                                  --build_types cuda,cpu
+                                                 --mpi_types openmpi,system
       - name: Test with pytest and Generate coverage report
         shell: bash -l {0}
         run: |

@@ -25,14 +25,15 @@ while a similar build for pytorch may look like this:
 Other environment files for other packages can also be found in the `envs`
 directory; simply specify the file for whichever package environment you want.
 
-Note that the `build_env.py` command executes the `build_feedstock.py` command
-as needed, behind the scenes.  This script builds each individual feedstock
-component dependency using the build recipe within its own repository.
-You do not need to execute `build_feedstock.py` directly yourself, although
-you may do so if you wish to perform an individual build of your own
-for any given Open-CE feedstock repository.
+> Note: that the `build_env.py` command executes the `build_feedstock.py` command
+> as needed, behind the scenes.  This script builds each individual feedstock
+> component dependency using the build recipe within its own repository.
+> You do not need to execute `build_feedstock.py` directly yourself, although
+> you may do so if you wish to perform an individual build of your own
+> for any given Open-CE feedstock repository.
 
 ## Docker build
+
 The `--docker_build` option will build an image and run the build command
 inside of a container based on the new image.
 
@@ -43,47 +44,63 @@ The paths to the `env_config_file`s and `--conda_build_config` must point to
 files within the `open-ce` directory and be relative to the directory
 containing the `open-ce` directory.
 
-##Command usage for `build_env.py`
+## Use System MPI
+
+By default, building the entire
+[Open-CE environment file](https://github.com/open-ce/open-ce/blob/master/envs/opence-env.yaml)
+will include a build of [OpenMPI](https://github.com/open-ce/openmpi-feedstock)
+which will be used for packages that need MPI, like
+[Horovod](https://github.com/open-ce/horovod-feedstock). To use a system install of
+MPI instead, `--mpi_types system` can be passed as an ergument to `build_env.py`. Build success
+will require that the MPI environment is correctly set up.
+
+## Command usage for `build_env.py`
 
 ```shell
 ==============================================================================
-usage: build_env.py [-h] [--repository_folder REPOSITORY_FOLDER]
-                    [--output_folder OUTPUT_FOLDER]
-                    [--conda_build_config CONDA_BUILD_CONFIG]
+usage: build_env.py [-h] [--conda_build_config CONDA_BUILD_CONFIG]
+                    [--output_folder OUTPUT_FOLDER] [--channels CHANNELS_LIST]
+                    [--repository_folder REPOSITORY_FOLDER]
                     [--python_versions PYTHON_VERSIONS]
-                    [--build_types BUILD_TYPES] [--git_location GIT_LOCATION]
-                    [--git_tag_for_env GIT_TAG_FOR_ENV]
-                    [--channels CHANNELS_LIST]
-                    [--docker_build]
+                    [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
+                    [--git_location GIT_LOCATION]
+                    [--git_tag_for_env GIT_TAG_FOR_ENV] [--docker_build]
                     env_config_file [env_config_file ...]
 
 Build conda environment as part of Open-CE
 
 positional arguments:
-  env_config_file       Environment config file. This should be a YAML file
-                        describing the package environment you wish to build.
-                        A collection of files exist under the envs directory.
+  env_config_file       Environment config file. This should be a YAML
+                        filedescribing the package environment you wish to
+                        build. A collectionof files exist under the envs
+                        directory.
 
 optional arguments:
   -h, --help            show this help message and exit
-  --repository_folder REPOSITORY_FOLDER
-                        Directory that contains the repositories. If the
-                        repositories don't exist locally, they will be
-                        downloaded from OpenCE's git repository. If no value
-                        is provided, repositories will be downloaded to the
-                        current working directory. (default: )
+  --conda_build_config CONDA_BUILD_CONFIG
+                        Location of conda_build_config.yaml file. (default:
+                        /mnt/pai/home/bnelson/git/open-ce/open-
+                        ce/../conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)
-  --conda_build_config CONDA_BUILD_CONFIG
-                        Location of conda_build_config.yaml file. (default:
-                        ./open-ce/../conda_build_config.yaml)
+  --channels CHANNELS_LIST
+                        Conda channels to be used. (default: [])
+  --repository_folder REPOSITORY_FOLDER
+                        Directory that contains the repositories. If
+                        therepositories don't exist locally, they will
+                        bedownloaded from OpenCE's git repository. If no value
+                        is provided,repositories will be downloaded to the
+                        current working directory. (default: )
   --python_versions PYTHON_VERSIONS
                         Comma delimited list of python versions to build for,
-                        such as "3.6" or "3.7". (default: None)
+                        such as "3.6" or "3.7". (default: 3.6)
   --build_types BUILD_TYPES
                         Comma delimited list of build types, such as "cpu" or
                         "cuda". (default: cpu,cuda)
+  --mpi_types MPI_TYPES
+                        Comma delimited list of mpi types, such as "openmpi"
+                        or "system". (default: openmpi)
   --git_location GIT_LOCATION
                         The default location to clone git repositories from.
                         (default: https://github.com/open-ce)
@@ -94,9 +111,7 @@ optional arguments:
                         the --docker_build flag is used, all arguments with
                         paths should be relative to the directory containing
                         open-ce. Only files within the open-ce directory and
-                        local_files will be visible at build time.
-                        (default: False)
-  --channels CHANNELS_LIST
-                        Extra conda channel to be used. (default: [])
+                        local_files will be visible at build time. (default:
+                        False)
 ==============================================================================
 ```
