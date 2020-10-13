@@ -8,6 +8,8 @@ autoconf:
   - 2.69
 automake:
   - 1.16
+av:
+  - 8.*
 bazel:
   - 3.*
 boost:
