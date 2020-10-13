@@ -35,7 +35,7 @@ def test_build_feedstock_default(mocker):
                 'output_folder' : utils.DEFAULT_OUTPUT_FOLDER}
     mocker.patch(
         'conda_build.api.build',
-        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, expect_config=expect_config, *args, **kwargs))
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, expect_config=expect_config, **kwargs))
     )
 
     arg_input = []
@@ -98,7 +98,7 @@ def test_build_feedstock_config_file(mocker):
     expect_recipe = os.path.join(os.getcwd(),'variants_from_config')
     mocker.patch(
         'conda_build.api.build',
-        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, *args, **kwargs))
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, **kwargs))
     )
     #This is the data that is read in when 'open()' is called.
     test_recipe_config =b"""recipes:
@@ -128,7 +128,7 @@ def test_build_feedstock_default_config_file(mocker):
     expect_recipe = os.path.join(os.getcwd(),'variants_from_default_config')
     mocker.patch(
         'conda_build.api.build',
-        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, *args, **kwargs))
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_params(x, expect_recipe=expect_recipe, **kwargs))
     )
 
     test_recipe_config =b"""recipes:
@@ -215,7 +215,7 @@ def test_build_feedstock_extra_args(mocker):
     reject_recipe = os.path.join(os.getcwd,'test_recipe_extra')
     mocker.patch(
         'conda_build.api.build',
-        side_effect=(lambda x, *args, **kwargs: helpers.validate_conda_build_params(x, expect_config=expect_config, expect_variants=expect_variants, reject_recipe=reject_recipe, *args, **kwargs))
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_params(x, expect_config=expect_config, expect_variants=expect_variants, reject_recipe=reject_recipe, **kwargs))
     )
 
     test_recipe_config =b"""recipes:
