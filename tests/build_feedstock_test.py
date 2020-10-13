@@ -75,6 +75,10 @@ def test_build_feedstock_working_dir(mocker):
         return_value=False
     )
     mocker.patch(
+        'conda_build.api.build',
+        return_value=[]
+    )
+    mocker.patch(
         'os.chdir',
         side_effect=(lambda x: dirTracker.validate_chdir(x, expected_dirs=["/test/my_work_dir", # First the working directory should be changed to the arg.
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
