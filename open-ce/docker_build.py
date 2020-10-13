@@ -10,6 +10,10 @@ import os
 import datetime
 import platform
 import tempfile
+import argparse
+import shutil
+
+import utils
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_NAME = "builder-cuda-" + platform.machine()
@@ -21,6 +25,15 @@ REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-builder"
 
 DOCKER_TOOL = "docker"
+
+def make_parser():
+    ''' Parser for input arguments '''
+    arguments = [utils.Argument.DOCKER_BUILD, utils.Argument.USE_LOCAL_SCRATCH, utils.Argument.LOCAL_SCRATCH_FOLDER]
+    parser = utils.make_parser(arguments,
+                               description='Run Open-CE tools within a container',
+                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    return parser
 
 def build_image():
     """
@@ -56,11 +69,12 @@ def _create_container(container_name, image_name, output_folder, scratch_dir):
     # Add output folder
     docker_cmd += _add_volume(os.path.join(os.getcwd(), output_folder), os.path.join(HOME_PATH, output_folder))
 
-    # Add cache directory
-    docker_cmd += _add_volume(os.path.join(scratch_dir, ".cache"), os.path.join(HOME_PATH, ".cache"))
+    if scratch_dir:
+        # Add cache directory
+        docker_cmd += _add_volume(os.path.join(scratch_dir, ".cache"), os.path.join(HOME_PATH, ".cache"))
 
-    # Add conda-bld directory
-    docker_cmd += _add_volume(os.path.join(scratch_dir, "conda-bld"), "/opt/conda/conda-bld")
+        # Add conda-bld directory
+        docker_cmd += _add_volume(os.path.join(scratch_dir, "conda-bld"), "/opt/conda/conda-bld")
 
     docker_cmd += image_name + " bash"
     result = os.system(docker_cmd)
@@ -87,14 +101,17 @@ def _stop_container(container_name):
     result = os.system(DOCKER_TOOL + " stop " + container_name)
     return result
 
-def build_in_container(image_name, output_folder, arg_strings):
+def build_in_container(image_name, output_folder, use_scratch, scratch_folder, arg_strings):
     """
     Run a build inside of a container using the provided image_name.
     """
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     container_name = IMAGE_NAME + "-" + time_stamp
 
-    scratch_dir = tempfile.mkdtemp()
+    if use_scratch or scratch_folder:
+        scratch_dir = tempfile.mkdtemp(dir=scratch_folder)
+    else:
+        scratch_dir = None
 
     result = _create_container(container_name, image_name, output_folder, scratch_dir)
     if result:
@@ -124,8 +141,10 @@ def build_in_container(image_name, output_folder, arg_strings):
               ' '.join(arg_strings[1:]))
     result = _execute_in_container(container_name, cmd)
 
+    # Cleanup
     _stop_container(container_name)
-    shutil.rmtree(scratch_dir)
+    if scratch_dir:
+        shutil.rmtree(scratch_dir)
 
     if result:
         print("Error executing build in container")
@@ -136,14 +155,15 @@ def build_with_docker(output_folder, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
+    parser = make_parser()
+    args, unused_args = parser.parse_known_args(arg_strings)
+
     result, image_name = build_image()
     if result:
         print("Failure building image: " + image_name)
         return result
 
-    if "--docker_build" in arg_strings:
-        arg_strings.remove("--docker_build")
-
-    result = build_in_container(image_name, output_folder, arg_strings)
+    result = build_in_container(image_name, output_folder, args.use_local_scratch,
+                                args.local_scratch_folder, unused_args)
 
     return result

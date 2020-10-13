@@ -45,7 +45,9 @@ def make_parser():
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
                  utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
+                 utils.Argument.DOCKER_BUILD,
+                 utils.Argument.USE_LOCAL_SCRATCH, utils.Argument.LOCAL_SCRATCH_FOLDER]
     parser = utils.make_parser(arguments,
                                description = 'Build conda environment as part of Open-CE')
 
@@ -61,6 +63,7 @@ def make_parser():
         default=None,
         help='Git tag to be checked out for all of the packages in an environment.')
 
+<<<<<<< HEAD
     parser.add_argument(
         '--docker_build',
         action='store_true',
@@ -70,6 +73,8 @@ def make_parser():
              "directory containing open-ce. Only files within the open-ce directory and "
              "local_files will be visible at build time.")
 
+=======
+>>>>>>> Add local scratch arguments to docker_build option
     return parser
 
 def build_env(arg_strings=None):
