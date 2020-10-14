@@ -12,11 +12,9 @@
 import os
 import sys
 import pathlib
-from datetime import date
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
-import pytest
 import helpers
 
 import docker_build

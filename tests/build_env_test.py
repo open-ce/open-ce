@@ -15,29 +15,31 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
-import pytest
 import helpers
 import build_env
-import pkg_resources
 import utils
 
-built_packages = set()
-def validate_build_feedstock(args, package_deps = None, expect=[], reject=[], retval = 0):
-    '''
-    Used to mock the `build_feedstock` function and ensure that packages are built in a valid order.
-    '''
-    global built_packages
-    if package_deps:
-        package = args[-1][:-10]
-        built_packages.add(package)
-        for dependency in package_deps[package]:
-            assert dependency in built_packages
-    cli_string = " ".join(args)
-    for term in expect:
-        assert term in cli_string
-    for term in reject:
-        assert term not in cli_string
-    return retval
+class PackageBuildTracker(object):
+    def __init__(self):
+        self.built_packages = set()
+
+    def validate_build_feedstock(self, args, package_deps = None, expect=None, reject=None, retval = 0):
+        '''
+        Used to mock the `build_feedstock` function and ensure that packages are built in a valid order.
+        '''
+        if package_deps:
+            package = args[-1][:-10]
+            self.built_packages.add(package)
+            for dependency in package_deps[package]:
+                assert dependency in self.built_packages
+        cli_string = " ".join(args)
+        if expect:
+            for term in expect:
+                assert term in cli_string
+        if reject:
+            for term in reject:
+                assert term not in cli_string
+        return retval
 
 def test_build_env(mocker):
     '''
@@ -45,6 +47,7 @@ def test_build_env(mocker):
     It uses `test-env2.yaml` which has a dependency on `test-env1.yaml`, and specifies a chain of package dependencies.
     That chain of package dependencies is used by the mocked build_feedstock to ensure that the order of builds is correct.
     '''
+    dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.mkdir',
         return_value=0 #Don't worry about making directories.
@@ -55,11 +58,11 @@ def test_build_env(mocker):
     )
     mocker.patch(
         'os.getcwd',
-        side_effect=helpers.mocked_getcwd
+        side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch(
         'os.chdir',
-        side_effect=helpers.validate_chdir
+        side_effect=dirTracker.validate_chdir
     )
     #            +-------+
     #     +------+   15  +-----+
@@ -94,10 +97,11 @@ def test_build_env(mocker):
         side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
     py_version = "2.0"
+    buildTracker = PackageBuildTracker()
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
         'build_feedstock.build_feedstock',
-        side_effect=(lambda x: validate_build_feedstock(x, package_deps,
-                    expect=["--python_versions {}".format(py_version)], reject=["package21-feedstock"]))
+        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps,
+                     expect=["--python_versions {}".format(py_version)], reject=["package21-feedstock"]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
@@ -118,9 +122,11 @@ def test_build_env(mocker):
         'conda_build.api.render',
         side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
+    buildTracker = PackageBuildTracker()
     mocker.patch(
         'build_feedstock.build_feedstock',
-        side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions {}".format(py_version)]))
+        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps,
+                     expect=["--python_versions {}".format(py_version)]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
@@ -128,13 +134,15 @@ def test_build_env(mocker):
     validate_conda_env_files(py_version)
 
      #---The third test verifies that the repository_folder argument is working properly.
+    buildTracker = PackageBuildTracker()
     mocker.patch(
         'build_feedstock.build_feedstock',
-        side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--working_directory repo_folder/"]))
+        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps, expect=["--working_directory repo_folder/"]))
     )
+    py_version = "2.1"
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert build_env.build_env([env_file, "--repository_folder", "repo_folder"]) == 0
-    validate_conda_env_files()
+    assert build_env.build_env([env_file, "--repository_folder", "repo_folder", "--python_versions", py_version]) == 0
+    validate_conda_env_files(py_version)
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
                              build_types=utils.DEFAULT_BUILD_TYPES):
@@ -152,6 +160,7 @@ def test_env_validate(mocker, capsys):
     '''
     This is a negative test of `build_env`, which passes an invalid env file.
     '''
+    dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.mkdir',
         return_value=0 #Don't worry about making directories.
@@ -162,19 +171,20 @@ def test_env_validate(mocker, capsys):
     )
     mocker.patch(
         'os.getcwd',
-        side_effect=helpers.mocked_getcwd
+        side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch(
         'conda_build.api.render',
-        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), []))
     )
     mocker.patch(
         'os.chdir',
-        side_effect=helpers.validate_chdir
+        side_effect=dirTracker.validate_chdir
     )
+    buildTracker = PackageBuildTracker()
     mocker.patch(
         'build_feedstock.build_feedstock',
-        side_effect=(lambda x: validate_build_feedstock(x))
+        side_effect=buildTracker.validate_build_feedstock
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     assert build_env.build_env([env_file]) == 1

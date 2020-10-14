@@ -10,6 +10,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import argparse
 import sys
+import subprocess
 from enum import Enum, unique
 import pkg_resources
 
@@ -140,3 +141,13 @@ def validate_dict_schema(dictionary, schema):
     for k in dictionary:
         if not k in schema:
             raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))
+
+def run_and_log(command):
+    '''Print a shell command and then execute it.'''
+    print("--->{}".format(command))
+    return os.system(command)
+
+def get_output(command):
+    '''Print and execute a shell command and then return the output.'''
+    print("--->{}".format(command))
+    return subprocess.check_output(command, shell=True).decode("utf-8").strip()

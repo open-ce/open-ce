@@ -14,7 +14,6 @@ import os
 import pathlib
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 
-import pytest
 import helpers
 import build_feedstock
 
@@ -63,13 +62,14 @@ def test_build_feedstock_failure(mocker, capsys):
     captured = capsys.readouterr()
     assert "Failure building recipe: test_recipe" in captured.out
 
-def test_build_feedstock_working_dir(mocker, capsys):
+def test_build_feedstock_working_dir(mocker):
     """
     Tests that the 'working_dir' argument is correctly handled and the original working directory is restored after execution.
     """
+    dirTracker = helpers.DirTracker("/test/starting_dir")
     mocker.patch(
         'os.getcwd',
-        side_effect=helpers.mocked_getcwd
+        side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch(
         'os.path.exists',
@@ -81,14 +81,14 @@ def test_build_feedstock_working_dir(mocker, capsys):
     )
     mocker.patch(
         'os.chdir',
-        side_effect=(lambda x: helpers.validate_chdir(x, expected_dirs=["/test/my_work_dir", # First the working directory should be changed to the arg.
-                                                                        "/test/test_recipe"])) # And then changed back to the starting directory.
+        side_effect=(lambda x: dirTracker.validate_chdir(x, expected_dirs=["/test/my_work_dir", # First the working directory should be changed to the arg.
+                                                                           "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
     arg_input = ["--working_directory", "/test/my_work_dir"]
     assert build_feedstock.build_feedstock(arg_input) == 0
 
-def test_build_feedstock_config_file(mocker, capsys):
+def test_build_feedstock_config_file(mocker):
     """
     Tests that the 'recipe_config_file' argument is correctly handled..
     """
@@ -119,7 +119,7 @@ def test_build_feedstock_config_file(mocker, capsys):
     arg_input = ["--recipe-config-file", "my_config.yml"]
     assert build_feedstock.build_feedstock(arg_input) == 0
 
-def test_build_feedstock_default_config_file(mocker, capsys):
+def test_build_feedstock_default_config_file(mocker):
     """
     Tests that the default config file is loaded when no argument is specified.
     """
@@ -167,7 +167,7 @@ def test_build_feedstock_nonexist_config_file(mocker, capsys):
     captured = capsys.readouterr()
     assert "Unable to open provided config file: my_config.yml" in captured.out
 
-def test_build_feedstock_local_src_dir_args(mocker, capsys):
+def test_build_feedstock_local_src_dir_args(mocker):
     """
     Tests that providing the local_src_dir argument sets the LOCAL_SRC_DIR environment variable correctly.
     """
@@ -192,7 +192,7 @@ def test_build_feedstock_local_src_dir_args_fail(mocker, capsys):
     captured = capsys.readouterr()
     assert "ERROR: local_src_dir path \"my_src_dir\" specified doesn't exist" in captured.out
 
-def test_build_feedstock_local_src_dir_recipe(mocker, capsys):
+def test_build_feedstock_local_src_dir_recipe(mocker):
     """
     Tests that providing the local_src_dir in a recipe sets the LOCAL_SRC_DIR environment variable correctly.
     """
@@ -204,7 +204,7 @@ def test_build_feedstock_local_src_dir_recipe(mocker, capsys):
     assert build_feedstock._set_local_src_dir(None, { 'local_src_dir' : "my_other_src_dir" } , "/test/location/recipe.yaml") == 0
     assert os.environ["LOCAL_SRC_DIR"] == "/test/location/my_other_src_dir"
 
-def test_build_feedstock_extra_args(mocker, capsys):
+def test_build_feedstock_extra_args(mocker):
     """
     Tests that additional arguments add the expected values to the conda-build command.
     """

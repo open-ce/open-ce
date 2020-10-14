@@ -15,7 +15,6 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
-import pytest
 import helpers
 import validate_config
 
@@ -23,6 +22,7 @@ def test_validate_config(mocker):
     '''
     This is a complete test of `validate_config`.
     '''
+    dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.mkdir',
         return_value=0 #Don't worry about making directories.
@@ -37,11 +37,11 @@ def test_validate_config(mocker):
     )
     mocker.patch(
         'os.getcwd',
-        side_effect=helpers.mocked_getcwd
+        side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch(
         'os.chdir',
-        side_effect=helpers.validate_chdir
+        side_effect=dirTracker.validate_chdir
     )
     package_deps = {"package11": ["package15"],
                     "package12": ["package11"],
@@ -62,6 +62,7 @@ def test_build_negative(mocker, capsys):
     '''
     This is a negative test of `validate_config` where the dry-run fails.
     '''
+    dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.mkdir',
         return_value=0 #Don't worry about making directories.
@@ -79,11 +80,11 @@ def test_build_negative(mocker, capsys):
     )
     mocker.patch(
         'os.getcwd',
-        side_effect=helpers.mocked_getcwd
+        side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch(
         'os.chdir',
-        side_effect=helpers.validate_chdir
+        side_effect=dirTracker.validate_chdir
     )
     package_deps = {"package11": ["package15"],
                     "package12": ["package11"],
@@ -106,6 +107,7 @@ def test_build_bad_env(mocker, capsys):
     '''
     This is a negative test of `validate_config` where the env file is bad.
     '''
+    dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.mkdir',
         return_value=0 #Don't worry about making directories.
@@ -116,11 +118,11 @@ def test_build_bad_env(mocker, capsys):
     )
     mocker.patch(
         'os.getcwd',
-        side_effect=helpers.mocked_getcwd
+        side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch(
         'os.chdir',
-        side_effect=helpers.validate_chdir
+        side_effect=dirTracker.validate_chdir
     )
     package_deps = {"package11": ["package15"],
                     "package12": ["package11"],

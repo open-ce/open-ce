@@ -2,7 +2,7 @@ FROM nvidia/cuda-ppc64le:10.2-devel-ubi7
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
-ENV OPEN_CE_CUDA_HOME=/usr/local/cuda
+ENV CUDA_HOME=/usr/local/cuda
 
 
 ENV CICD_GROUP=cicd
