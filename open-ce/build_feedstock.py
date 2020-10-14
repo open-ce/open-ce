@@ -182,6 +182,7 @@ def build_feedstock(args_string=None):
         if args.build_types:
             variants['build_type'] = utils.parse_arg_list(args.build_types)
 
+        # noinspection PyBroadException
         try:
             conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
                                config=config, variants=variants)
