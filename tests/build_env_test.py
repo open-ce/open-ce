@@ -93,14 +93,19 @@ def test_build_env(mocker):
         'conda_build.api.render',
         side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
+    py_version = "2.0"
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
         'build_feedstock.build_feedstock',
-        side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions 2.0"], reject=["package21-feedstock"]))
+        side_effect=(lambda x: validate_build_feedstock(x, package_deps,
+                    expect=["--python_versions {}".format(py_version)], reject=["package21-feedstock"]))
     )
-    env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert build_env.build_env([env_file, "--python_versions", "2.0"]) == 0
 
+    env_file = os.path.join(test_dir, 'test-env2.yaml')
+    assert build_env.build_env([env_file, "--python_versions", py_version]) == 0
+    validate_conda_env_files(py_version)
+ 
     #---The second test specifies a python version that is supported in the env file by package21.
+    py_version = "2.1"
     package_deps = {"package11": ["package15"],
                     "package12": ["package11"],
                     "package13": ["package12", "package14"],
@@ -115,15 +120,12 @@ def test_build_env(mocker):
     )
     mocker.patch(
         'build_feedstock.build_feedstock',
-        side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions 2.1"]))
+        side_effect=(lambda x: validate_build_feedstock(x, package_deps, expect=["--python_versions {}".format(py_version)]))
     )
-    env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert build_env.build_env([env_file, "--python_versions", "2.1"]) == 0
 
-    # Check if conda env files are created for both built types as no build type was specified above
-    for build_type in utils.parse_arg_list(utils.DEFAULT_BUILD_TYPES):
-        cuda_env_file = os.path.join(os.getcwd(), "opence-py2.1-{}.yaml".format(build_type))
-        assert os.path.exists(cuda_env_file) == True
+    env_file = os.path.join(test_dir, 'test-env2.yaml')
+    assert build_env.build_env([env_file, "--python_versions", py_version]) == 0
+    validate_conda_env_files(py_version)
 
      #---The third test verifies that the repository_folder argument is working properly.
     mocker.patch(
@@ -132,6 +134,19 @@ def test_build_env(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     assert build_env.build_env([env_file, "--repository_folder", "repo_folder"]) == 0
+    validate_conda_env_files()
+
+def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
+                             build_types=utils.DEFAULT_BUILD_TYPES):
+
+    # Check if conda env files are created for given python versions and build variants
+    for build_type in utils.parse_arg_list(build_types):
+        for py_version in utils.parse_arg_list(py_versions):
+            cuda_env_file = os.path.join(os.getcwd(),
+                            "{}py{}-{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX, py_version, build_type))
+            assert os.path.exists(cuda_env_file)
+            # Remove the file once it's existence is verified
+            os.remove(cuda_env_file)
 
 def test_env_validate(mocker, capsys):
     '''

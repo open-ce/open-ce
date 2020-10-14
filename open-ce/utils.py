@@ -20,6 +20,7 @@ DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
+CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
 
 class OpenCEError(Exception):
     """

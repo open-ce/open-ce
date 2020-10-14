@@ -8,8 +8,8 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import re
-import yaml
 import os
+import yaml
 import utils
 
 class CondaEnvFileGenerator():
@@ -22,11 +22,13 @@ class CondaEnvFileGenerator():
     def __init__(self,
                  python_versions=utils.DEFAULT_PYTHON_VERS,
                  build_types=utils.DEFAULT_BUILD_TYPES,
-                 channels=[],
+                 channels=None,
                  output_folder=None,
+                 env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
                  ):
         self.python_versions = python_versions
         self.build_types = build_types
+        self.env_file_prefix = env_file_prefix
         self.dependency_dict = {}
         self.channels = []
         self._initialize_dependency_dict()
@@ -40,6 +42,8 @@ class CondaEnvFileGenerator():
 
     def _initialize_channels(self, channels, output_folder):
         self.channels.append("file:/" + output_folder)
+        if channels is None:
+            channels = []
         for channel in channels:
             self.channels.append(channel)
         self.channels.append("defaults")
@@ -56,7 +60,7 @@ class CondaEnvFileGenerator():
                 continue
             if not os.path.exists(path):
                 os.mkdir(path)
-            conda_env_name = "opence-" + key + ".yaml"
+            conda_env_name = self.env_file_prefix + key + ".yaml"
             conda_env_file = os.path.join(path, conda_env_name)
             data = dict(
                 name = conda_env_name,

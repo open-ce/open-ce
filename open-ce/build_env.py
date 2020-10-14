@@ -138,7 +138,8 @@ def build_env(arg_strings=None):
 
     conda_env_files = conda_env_data.write_conda_env_files()
     print("Generated conda environment files from the selected build arguments:", conda_env_files)
-    print("INFO: One can use these environment files to create a conda environment using \"conda env create -f <conda_env_file_name>.\"")
+    print("INFO: One can use these environment files to create a conda" \
+          " environment using \"conda env create -f <conda_env_file_name>.\"")
 
     return result
 
