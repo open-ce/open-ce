@@ -97,6 +97,6 @@ if __name__ == '__main__':
     try:
         main()
         print("BUILD NUMBER SUCCESS")
-    except Exception as exc:
+    except Exception as exc: # pylint: disable=broad-except
         print("BUILD NUMBER ERROR: ", exc)
         sys.exit(1)
