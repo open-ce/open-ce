@@ -189,6 +189,7 @@ def build_feedstock(args_string=None):
             traceback.print_exc()
             print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
             result = 1
+            break
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
