@@ -40,7 +40,7 @@ def validate_cli(cli_string, expect=None, reject=None, ignore=None, retval=0):
         return retval
     return 0
 
-def validate_conda_build_params(recipe, expect_recipe=None, expect_config=None, expect_variants=None, reject_recipe=None, **kwargs):
+def validate_conda_build_args(recipe, expect_recipe=None, expect_config=None, expect_variants=None, reject_recipe=None, **kwargs):
     """
     Used to mock `conda_build.api.build`
 
