@@ -173,8 +173,6 @@ rust_nightly:
   - 1.43.0
 scikit_image:
   - 0.16
-scikit_learn:
-  - 0.22
 scipy:
   - 1.4.*
 sentencepiece:
