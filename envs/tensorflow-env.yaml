@@ -4,11 +4,6 @@ imported_envs:
   - tensorrt-env.yaml
 {% endif %}
 
-{% if build_type == 'cuda' %}
-channels:
-  - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
-{% endif %}
-
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
@@ -28,3 +23,5 @@ packages:
   - feedstock : protobuf          #[python == '3.8']
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-metadata
+  - feedstock : tensorflow-text
+
