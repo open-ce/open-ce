@@ -29,7 +29,6 @@ For usage description of arguments, this script supports use of --help:
 *******************************************************************************
 """
 
-import argparse
 import sys
 import os
 import yaml
@@ -42,14 +41,13 @@ def make_parser():
                  utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
     parser = utils.make_parser(arguments,
-                               description = 'Build conda packages as part of Open-CE',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+                               description = 'Build conda packages as part of Open-CE')
 
     parser.add_argument(
         '--recipe-config-file',
         type=str,
         default=None,
-        help="""Path to the recipe configuration YAML file. The configuration
+        help="""R|Path to the recipe configuration YAML file. The configuration
 file lists paths to recipes to be built within a feedstock.
 
 Below is an example stating that there are two recipes to build,

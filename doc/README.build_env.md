@@ -70,10 +70,9 @@ usage: build_env.py [-h] [--conda_build_config CONDA_BUILD_CONFIG]
 Build conda environment as part of Open-CE
 
 positional arguments:
-  env_config_file       Environment config file. This should be a YAML
-                        filedescribing the package environment you wish to
-                        build. A collectionof files exist under the envs
-                        directory.
+  env_config_file       Environment config file. This should be a YAML file
+                        describing the package environment you wish to build.
+                        A collection of files exist under the envs directory.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -87,13 +86,13 @@ optional arguments:
   --channels CHANNELS_LIST
                         Conda channels to be used. (default: [])
   --repository_folder REPOSITORY_FOLDER
-                        Directory that contains the repositories. If
-                        therepositories don't exist locally, they will
-                        bedownloaded from OpenCE's git repository. If no value
-                        is provided,repositories will be downloaded to the
+                        Directory that contains the repositories. If the
+                        repositories don't exist locally, they will be
+                        downloaded from OpenCE's git repository. If no value
+                        is provided, repositories will be downloaded to the
                         current working directory. (default: )
   --python_versions PYTHON_VERSIONS
-                        Comma delimited list of python versions to build for,
+                        Comma delimited list of python versions to build for ,
                         such as "3.6" or "3.7". (default: 3.6)
   --build_types BUILD_TYPES
                         Comma delimited list of build types, such as "cpu" or

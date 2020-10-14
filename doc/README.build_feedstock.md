@@ -43,7 +43,7 @@ optional arguments:
   --channels CHANNELS_LIST
                         Conda channels to be used. (default: [])
   --python_versions PYTHON_VERSIONS
-                        Comma delimited list of python versions to build for,
+                        Comma delimited list of python versions to build for ,
                         such as "3.6" or "3.7". (default: 3.6)
   --build_types BUILD_TYPES
                         Comma delimited list of build types, such as "cpu" or
@@ -52,16 +52,23 @@ optional arguments:
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
   --recipe-config-file RECIPE_CONFIG_FILE
-                        Path to the recipe configuration YAML file. The
-                        configuration file lists paths to recipes to be built
-                        within a feedstock. Below is an example stating that
-                        there are two recipes to build, one named my_project
-                        and one named my_variant. recipes: - name : my_project
-                        path : recipe - name : my_variant path: variants If no
-                        path is given, the default value is build-config.yaml.
-                        If build-config.yaml does not exist, and no value is
-                        provided, it will be assumed there is a single recipe
-                        with the path of "recipe". (default: None)
+                        Path to the recipe configuration YAML file. The configuration
+                        file lists paths to recipes to be built within a feedstock.
+
+                        Below is an example stating that there are two recipes to build,
+                        one named my_project and one named my_variant.
+
+                        recipes:
+                          - name : my_project
+                            path : recipe
+
+                          - name : my_variant
+                            path: variants
+
+                        If no path is given, the default value is build-config.yaml.
+                        If build-config.yaml does not exist, and no value is provided,
+                        it will be assumed there is a single recipe with the
+                        path of "recipe". (default: None)
   --recipes RECIPE_LIST
                         Comma separated list of recipe names to build.
                         (default: None)

@@ -9,7 +9,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
 """
 
-import argparse
 import sys
 import utils
 from utils import OpenCEError
@@ -24,8 +23,7 @@ def make_parser():
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
     parser = utils.make_parser(arguments,
-                               description = 'Perform validation on a conda_build_config.yaml file.',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+                               description = 'Perform validation on a conda_build_config.yaml file.')
     return parser
 
 def generalize_version(package):

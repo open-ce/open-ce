@@ -32,6 +32,17 @@ class OpenCEError(Exception):
         super().__init__(msg)
         self.msg = msg
 
+class OpenCEFormatter(argparse.ArgumentDefaultsHelpFormatter):
+    """
+    Default help text formatter class used within Open-CE.
+    Allows the use of raw text argument descriptions by
+    prepending 'R|' to the description text.
+    """
+    def _split_lines(self, text, width):
+        if text.startswith('R|'):
+            return text[2:].splitlines()
+        return super()._split_lines(text, width)
+
 @unique
 class Argument(Enum):
     '''Enum for Arguments'''
@@ -59,25 +70,25 @@ class Argument(Enum):
                                         'env_config_file',
                                         nargs='+',
                                         type=str,
-                                        help="Environment config file. This should be a YAML file"
-                                            "describing the package environment you wish to build. A collection"
-                                            "of files exist under the envs directory."))
+                                        help="Environment config file. This should be a YAML file "
+                                             "describing the package environment you wish to build. A collection "
+                                             "of files exist under the envs directory."))
 
     REPOSITORY_FOLDER = (lambda parser: parser.add_argument(
                                         '--repository_folder',
                                         type=str,
                                         default="",
-                                        help="Directory that contains the repositories. If the"
-                                            "repositories don't exist locally, they will be"
-                                            "downloaded from OpenCE's git repository. If no value is provided,"
+                                        help="Directory that contains the repositories. If the "
+                                            "repositories don't exist locally, they will be "
+                                            "downloaded from OpenCE's git repository. If no value is provided, "
                                             "repositories will be downloaded to the current working directory."))
 
     PYTHON_VERSIONS = (lambda parser: parser.add_argument(
                                         '--python_versions',
                                         type=str,
                                         default=DEFAULT_PYTHON_VERS,
-                                        help='Comma delimited list of python versions to build for'
-                                              ', such as "3.6" or "3.7".'))
+                                        help='Comma delimited list of python versions to build for '
+                                             ', such as "3.6" or "3.7".'))
 
     BUILD_TYPES = (lambda parser: parser.add_argument(
                                         '--build_types',
@@ -91,11 +102,11 @@ class Argument(Enum):
                                         default=DEFAULT_MPI_TYPES,
                                         help='Comma delimited list of mpi types, such as "openmpi" or "system".'))
 
-def make_parser(arguments, *args, **kwargs):
+def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
     Make a parser from a list of OPEN-CE Arguments.
     '''
-    parser = argparse.ArgumentParser(*args, **kwargs)
+    parser = argparse.ArgumentParser(*args, formatter_class=formatter_class, **kwargs)
     for argument in arguments:
         argument(parser)
     return parser
