@@ -47,7 +47,7 @@ def validate_conda_build_args(recipe, expect_recipe=None, expect_config=None, ex
     Args:
         recipe: The placeholder argument for the conda_build.api.build 'recipe' arg.
         expect_recipe: A string that must occur in the 'recipe' arg.
-                expect_config: A dict for the keys and values that must occur in the 'config' arg.
+        expect_config: A dict for the keys and values that must occur in the 'config' arg.
         expect_variants: A dict for the keys and values that must occur in the 'variants' arg.
         reject_recipe: A string that cannot occur in the 'recipe` arg.
     """

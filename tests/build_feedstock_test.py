@@ -43,7 +43,7 @@ def test_build_feedstock_default(mocker):
 
 def test_build_feedstock_failure(mocker, capsys):
     """
-    Tests that a 'build_feedstock' failure is handled correctly.
+    Tests that a 'conda_build.api.build' failure is handled correctly.
     """
     mocker.patch(
         'os.getcwd',
@@ -55,7 +55,7 @@ def test_build_feedstock_failure(mocker, capsys):
     )
     mocker.patch(
         'conda_build.api.build',
-        side_effect=ValueError("invalid literal for int() with base 10: 'xy'")
+        side_effect=ValueError("invalid literal for int() with base 10: 'xy'") #using ValueError to simulate failure.
     )
 
     arg_input = ""
@@ -101,7 +101,7 @@ def test_build_feedstock_config_file(mocker):
         'os.path.exists',
         return_value=True # 'path.exists' is mocked as true so that the input file is found to exist.
     )
-    expect_recipe = os.path.join(os.getcwd(),'variants_from_config')
+    expect_recipe = os.path.join(os.getcwd(),'variants_from_config') #Checks that the value from the input config file is used.
     mocker.patch(
         'conda_build.api.build',
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
@@ -131,7 +131,7 @@ def test_build_feedstock_default_config_file(mocker):
         'os.path.exists',
         return_value=True #True for default config file.
     )
-    expect_recipe = os.path.join(os.getcwd(),'variants_from_default_config')
+    expect_recipe = os.path.join(os.getcwd(),'variants_from_default_config')#Checks that the value from the default config file is used.
     mocker.patch(
         'conda_build.api.build',
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
