@@ -5,7 +5,7 @@
 This README documents the YAML files used by the build scripts
 [build_env.py](https://github.com/open-ce/open-ce/blob/master/doc/README.build_env.md)
 and [build_feedstock.py](https://github.com/open-ce/open-ce/blob/master/doc/README.build_feedstock.md).
-Please refer to the respective README files for each of these two scripts. 
+Please refer to the respective README files for each of these two scripts.
 
 Most likely you will want to simply use the YAML files provided within the
 open-ce repository as they are. These files have already been customized and
@@ -17,7 +17,7 @@ making local edits as desired.
 NOTE: This file only documents information about the YAML files as used within
 the open-ce project. This file is nowhere near being a full reference of the
 YAML configuration markup language. Only fields of interest to open-ce are noted
-here. For more detail or education about YAML files in general, refer to the 
+here. For more detail or education about YAML files in general, refer to the
 public YAML specifications at https://yaml.org/ or in any number of independent
 guides available elsewhere online.
 
@@ -50,21 +50,9 @@ tree for [nccl-feedstock](https://github.com/open-ce/nccl-feedstock) and
 Here, notice the `cuda` designation on the nccl feedstock line. This will only
 be built if the `build_type` is set to `cuda` when executing the `build_env.py`
 script, so it is considered an optional dependency that you may want to include
-if your runtime environment has CUDA available. This also introduces the top
-portion of the [xgboost-env.yaml](https://github.com/open-ce/open-ce/blob/master/envs/xgboost-env.yaml) file:
-```
-{% if 'cuda' in build_type %}
-channels:
-  - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
-{% endif %}
-```
-This says that if a `cuda` build is in effect, the build should use the
-specified URL as a channel when searching for dependency packages. For the
-purposes of open-ce, this particular optional setting is present for
-installation of cuda-related packages such as `cudnn`, `cudf`, and others. (If
-you are not building for cuda, you can ignore all of this).
+if your runtime environment has CUDA available.
 
-A third stanza type that you might see in some environment YAML files is
+Another stanza type that you might see in some environment YAML files is
 `imported_envs`. An example found in
 [horovod-env.yaml](https://github.com/open-ce/open-ce/blob/master/envs/horovod-env.yaml)
 looks like:
@@ -78,7 +66,7 @@ files. So if you are building the horovod environment, you will get a build of
 both pytorch and tensorflow as well because of the specified imported
 environments listed in this section.
 
-These three stanza types (packages, channels, imported_envs) are really the only
+These two stanza types (packages, imported_envs) are really the only
 YAML elements that are used for the open-ce `build_env.py` builds. However, as
 each feedstock in the list is built, other YAML file information is used from
 the yaml files of each respective feedstock repository.
@@ -89,7 +77,7 @@ the yaml files of each respective feedstock repository.
 In most cases you will just use the `build_env.py` command to build an open-ce
 environment. As an alternative, with the `build_feedstock.py` command, you could
 selectively build any individual feedstock if you wished to do so.
-In general, each feedstock repository within the open-ce project has its own 
+In general, each feedstock repository within the open-ce project has its own
 recipe `meta.yaml` file, which can be used exactly as found in the respective
 feedstock repository tree. Optionally, you can edit your own local copy of the
 `meta.yaml` file to make customizations, once you understand the most common
