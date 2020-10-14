@@ -1,5 +1,6 @@
 packages:
 {% if build_type == 'cuda' %}
+  - feedstock : cudnn
   - feedstock : tensorrt
   - feedstock : onnx
 {% endif %}
