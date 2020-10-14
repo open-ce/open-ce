@@ -41,7 +41,7 @@ def test_build_feedstock_default(mocker):
     arg_input = []
     assert build_feedstock.build_feedstock(arg_input) == 0
 
-def test_build_feedstock_failure(mocker):
+def test_build_feedstock_failure(mocker, capsys):
     """
     Tests that a 'build_feedstock' failure is handled correctly.
     """
@@ -54,12 +54,14 @@ def test_build_feedstock_failure(mocker):
         return_value=False
     )
     mocker.patch(
-        'build_feedstock.build_feedstock',
-        return_value=1
+        'conda_build.api.build',
+        side_effect=ValueError("invalid literal for int() with base 10: 'xy'")
     )
 
     arg_input = ""
     assert build_feedstock.build_feedstock(arg_input) == 1
+    captured = capsys.readouterr()
+    assert "Failure building recipe: test_recipe" in captured.out
 
 def test_build_feedstock_working_dir(mocker):
     """
