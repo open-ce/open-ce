@@ -185,7 +185,7 @@ def build_feedstock(args_string=None):
         try:
             conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
                                config=config, variants=variants)
-        except (ValueError, Exception): # pylint: disable=broad-except
+        except Exception: # pylint: disable=broad-except
             traceback.print_exc()
             print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
             result = 1
