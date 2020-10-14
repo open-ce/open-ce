@@ -55,7 +55,7 @@ def test_build_feedstock_failure(mocker, capsys):
     )
     mocker.patch(
         'conda_build.api.build',
-        side_effect=ValueError("invalid literal for int() with base 10: 'xy'") #using ValueError to simulate failure.
+        side_effect=ValueError("invalid literal for int() with base 10: 'xy'") #using ValueError to simulate a failure.
     )
 
     arg_input = ""
