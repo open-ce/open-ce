@@ -22,7 +22,6 @@ Description:
 *******************************************************************************
 """
 
-import argparse
 import sys
 import env_config
 import utils
@@ -32,8 +31,7 @@ def make_parser():
     arguments = [utils.Argument.ENV_FILE, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES]
     parser = utils.make_parser(arguments,
-                               description = 'Lint Environment Files',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+                               description = 'Lint Environment Files')
     return parser
 
 def validate_env(arg_strings=None):

@@ -7,5 +7,5 @@ imported_envs:
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : horovod
-  - feedstock : openmpi
+  - feedstock : openmpi #[mpi_type == 'openmpi']
 {% endif %}

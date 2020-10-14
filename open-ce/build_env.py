@@ -32,7 +32,6 @@ For usage description of arguments, this script supports use of --help:
 *******************************************************************************
 """
 
-import argparse
 import os
 import sys
 
@@ -46,10 +45,9 @@ def make_parser():
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
                  utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
     parser = utils.make_parser(arguments,
-                               description = 'Build conda environment as part of Open-CE',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+                               description = 'Build conda environment as part of Open-CE')
 
     parser.add_argument(
         '--git_location',
@@ -66,10 +64,11 @@ def make_parser():
     parser.add_argument(
         '--docker_build',
         action='store_true',
-        help="""Perform a build within a docker container.
-NOTE: When the --docker_build flag is used, all arguments with paths should be relative to the
-directory containing open-ce. Only files within the open-ce directory and local_files will
-be visible at build time.""")
+        help="Perform a build within a docker container. "
+             "NOTE: When the --docker_build flag is used, "
+             "all arguments with paths should be relative to the "
+             "directory containing open-ce. Only files within the open-ce directory and "
+             "local_files will be visible at build time.")
 
     return parser
 
@@ -109,6 +108,7 @@ def build_env(arg_strings=None):
         build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),
                                build_types=utils.parse_arg_list(args.build_types),
+                               mpi_types=utils.parse_arg_list(args.mpi_types),
                                repository_folder=args.repository_folder,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,

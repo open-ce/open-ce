@@ -222,7 +222,7 @@ def test_build_feedstock_extra_args(mocker):
                                                                "-c test_channel",
                                                                "-c test_channel_2",
                                                                "-c test_channel_from_config",
-                                                               "--variants \"{'python': ['3.6', '3.7'], 'build_type': ['cpu', 'gpu']}\""],
+                                                               "--variants \"{'python': '3.6', 'build_type': 'cpu', 'mpi_type': 'openmpi'}\""],
                                                        reject=["test_recipe_extra"]))
     )
 
@@ -246,6 +246,7 @@ channels:
     arg_input = ["--channels", "test_channel",
                  "--channels", "test_channel_2",
                  "--recipes", "my_project,my_variant",
-                 "--python_versions", "3.6,3.7",
-                 "--build_types", "cpu,gpu"]
+                 "--python_versions", "3.6",
+                 "--build_types", "cpu",
+                 "--mpi_type", "openmpi"]
     assert build_feedstock.build_feedstock(arg_input) == 0
