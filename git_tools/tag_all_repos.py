@@ -119,9 +119,8 @@ def _push_branch(repo_path, branch_name, remote="origin"):
     saved_working_directory = os.getcwd()
     os.chdir(repo_path)
     push_cmd = "git push {} {}".format(remote, branch_name)
-    print(push_cmd)
-    #if utils.run_and_log(push_cmd) != 0:
-    #    raise Exception("Unable to push repository {}".format(repo_path))
+    if utils.run_and_log(push_cmd) != 0:
+        raise Exception("Unable to push repository {}".format(repo_path))
     os.chdir(saved_working_directory)
 
 if __name__ == '__main__':
