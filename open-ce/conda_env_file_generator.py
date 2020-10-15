@@ -15,7 +15,7 @@ import utils
 class CondaEnvFileGenerator():
     """
     The CondaEnvData class holds all of the information needed to generate a conda
-    environment file while can be used to create a conda environment from the built packages.
+    environment file that can be used to create a conda environment from the built packages.
     """
 
     #pylint: disable=too-many-instance-attributes,too-many-arguments
@@ -26,8 +26,8 @@ class CondaEnvFileGenerator():
                  output_folder=None,
                  env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
                  ):
-        self.python_versions = python_versions
-        self.build_types = build_types
+        self.python_versions = utils.parse_arg_list(python_versions)
+        self.build_types = utils.parse_arg_list(build_types)
         self.env_file_prefix = env_file_prefix
         self.dependency_dict = {}
         self.channels = []
@@ -35,9 +35,9 @@ class CondaEnvFileGenerator():
         self._initialize_channels(channels, output_folder)
 
     def _initialize_dependency_dict(self):
-        for py_version in utils.parse_arg_list(self.python_versions):
-            for build_type in utils.parse_arg_list(self.build_types):
-                key = "py" + py_version + "-" + build_type
+        for py_version in self.python_versions:
+            for build_type in self.build_types:
+                key = utils.variant_key(py_version, build_type)
                 self.dependency_dict[key] = set()
 
     def _initialize_channels(self, channels, output_folder):
@@ -84,7 +84,7 @@ class CondaEnvFileGenerator():
         its dependencies both internal and external.
         """
 
-        key = "py" + build_command.python + "-" + build_command.build_type
+        key = utils.variant_key(build_command.python, build_command.build_type)
         self._update_deps_lists(build_command.run_dependencies, key)
         self._update_deps_lists(build_command.packages, key)
 

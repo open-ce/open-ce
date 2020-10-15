@@ -151,7 +151,9 @@ def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
     for build_type in utils.parse_arg_list(build_types):
         for py_version in utils.parse_arg_list(py_versions):
             cuda_env_file = os.path.join(os.getcwd(),
-                            "{}py{}-{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX, py_version, build_type))
+                                         "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
+                                         utils.variant_key(py_version, build_type)))
+
             assert os.path.exists(cuda_env_file)
             # Remove the file once it's existence is verified
             os.remove(cuda_env_file)

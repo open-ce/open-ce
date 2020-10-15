@@ -46,6 +46,8 @@ class BuildCommand():
         self.test_dependencies = test_dependencies
         self.channels = channels
         self.build_command_dependencies = build_command_dependencies
+        if self.build_command_dependencies is None:
+            self.build_command_dependencies = []
 
     def feedstock_args(self):
         """
@@ -334,8 +336,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         for dep in deps:
             if is_seen[dep]:
                 continue
-            if self.build_commands[dep].build_command_dependencies is None:
-                self.build_commands[dep].build_command_dependencies = []
             yield from self._traverse_deps_tree(is_seen, self.build_commands[dep].build_command_dependencies)
             yield self.build_commands[dep]
             is_seen[dep] = True

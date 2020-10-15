@@ -151,3 +151,14 @@ def get_output(command):
     '''Print and execute a shell command and then return the output.'''
     print("--->{}".format(command))
     return subprocess.check_output(command, shell=True).decode("utf-8").strip()
+
+def variant_key(py_ver, build_type):
+    '''
+    Returns a variant key using python version and build type
+    '''
+    result = ""
+    if py_ver:
+        result +=  "py" + py_ver
+    if build_type:
+        result +=  "-" + build_type
+    return result

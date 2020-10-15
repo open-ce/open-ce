@@ -106,48 +106,50 @@ def test_conda_env_file_content():
     actual_channels = mock_conda_env_file_generator.channels
     assert actual_channels == expected_channels
 
-    expected_keys = ["py3.6-cpu", "py3.6-cuda", "py3.7-cpu", "py3.7-cuda"]
+    expected_keys = [utils.variant_key(py_vers, build_type) for py_vers in utils.parse_arg_list(python_versions)
+                                                            for build_type in utils.parse_arg_list(build_types)]
     actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
-    assert actual_keys == expected_keys
+    assert Counter(actual_keys) == Counter(expected_keys)
 
     for build_command in mock_build_tree:
         mock_conda_env_file_generator.update_conda_env_file_content(build_command, mock_build_tree)
 
-    validate_dependencies(mock_conda_env_file_generator)
+    validate_dependencies(mock_conda_env_file_generator, expected_keys)
     mock_conda_env_file_generator.write_conda_env_files(TMP_OPENCE_DIR)
 
     # Check if conda env files are created for both built types as no build type was specified above
     for py_version in utils.parse_arg_list(python_versions):
         for build_type in utils.parse_arg_list(build_types):
             cuda_env_file = os.path.join(TMP_OPENCE_DIR,
-                            "{}py{}-{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX, py_version, build_type))
+                            "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
+                                               utils.variant_key(py_version, build_type)))
             assert os.path.exists(cuda_env_file)
 
     cleanup()
     assert not os.path.exists(TMP_OPENCE_DIR)
 
-def validate_dependencies(env_file_generator):
+def validate_dependencies(env_file_generator, variant_keys):
     '''
     Validates the exact dependencies for each environment
     '''
     py36_cpu_deps = ["python ==3.6.*", "pack1 >=1.0", "pack2 ==2.0", "package2a",
                      "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
-    actual_deps = env_file_generator.dependency_dict["py3.6-cpu"]
+    actual_deps = env_file_generator.dependency_dict[variant_keys[0]]
     assert Counter(py36_cpu_deps) == Counter(actual_deps)
 
     py36_cuda_deps = ["python >=3.6.*", "pack1 1.0", "pack2 >=2.0", "package1a", "package1b",
                       "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
-    actual_deps = env_file_generator.dependency_dict["py3.6-cuda"]
+    actual_deps = env_file_generator.dependency_dict[variant_keys[1]]
     assert Counter(py36_cuda_deps) == Counter(actual_deps)
 
     py37_cpu_deps = ["python 3.7.*", "pack1==1.0", "pack2 <=2.0", "package3a", "package3b",
                      "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
-    actual_deps = env_file_generator.dependency_dict["py3.7-cpu"]
+    actual_deps = env_file_generator.dependency_dict[variant_keys[2]]
     assert Counter(py37_cpu_deps) == Counter(actual_deps)
 
     py37_cuda_deps = ["pack1==1.0", "pack2 <=2.0", "package4a", "package4b",
                       "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
-    actual_deps = env_file_generator.dependency_dict["py3.7-cuda"]
+    actual_deps = env_file_generator.dependency_dict[variant_keys[3]]
     assert Counter(py37_cuda_deps) == Counter(actual_deps)
 
 def test_conda_env_file_for_only_selected_py():
@@ -166,9 +168,11 @@ def test_conda_env_file_for_only_selected_py():
     actual_channels = mock_conda_env_file_generator.channels
     assert actual_channels == expected_channels
 
-    expected_keys = ["py3.7-cpu", "py3.7-cuda"]
+    expected_keys = [utils.variant_key(py_vers, build_type) for py_vers in utils.parse_arg_list(python_versions)
+                                                            for build_type in utils.parse_arg_list(build_types)]
+
     actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
-    assert actual_keys == expected_keys
+    assert Counter(actual_keys) == Counter(expected_keys)
 
     for build_command in mock_build_tree:
         mock_conda_env_file_generator.update_conda_env_file_content(build_command, mock_build_tree)
@@ -179,7 +183,8 @@ def test_conda_env_file_for_only_selected_py():
     for py_version in utils.parse_arg_list(python_versions):
         for build_type in utils.parse_arg_list(build_types):
             cuda_env_file = os.path.join(TMP_OPENCE_DIR,
-                                         "{}py{}-{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX, py_version, build_type))
+                                         "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
+                                         utils.variant_key(py_version, build_type)))
             assert os.path.exists(cuda_env_file)
 
     # Check that no other env file exists other than the two expected ones
