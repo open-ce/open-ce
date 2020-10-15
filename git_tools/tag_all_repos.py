@@ -103,7 +103,6 @@ def _clone_repo(git_url, repo_dir, git_tag=None):
         clone_cmd = "git clone " + git_url + " " + repo_dir
     else:
         clone_cmd = "git clone -b " + git_tag + " --single-branch " + git_url + " " + repo_dir
-
     if utils.run_and_log(clone_cmd) != 0:
         raise Exception("Unable to clone repository: {}".format(git_url))
 
@@ -111,17 +110,19 @@ def _create_tag(repo_path, tag_name, tag_msg):
     saved_working_directory = os.getcwd()
     os.chdir(repo_path)
     tag_cmd = "git tag -a {} -m \"{}\"".format(tag_name, tag_msg)
-    if utils.run_and_log(tag_cmd) != 0:
-        raise Exception("Unable to tag repository {}".format(repo_path))
+    result = utils.run_and_log(tag_cmd)
     os.chdir(saved_working_directory)
+    if result != 0:
+        raise Exception("Unable to tag repository {}".format(repo_path))
 
 def _push_branch(repo_path, branch_name, remote="origin"):
     saved_working_directory = os.getcwd()
     os.chdir(repo_path)
     push_cmd = "git push {} {}".format(remote, branch_name)
-    if utils.run_and_log(push_cmd) != 0:
-        raise Exception("Unable to push repository {}".format(repo_path))
+    result = utils.run_and_log(push_cmd)
     os.chdir(saved_working_directory)
+    if result != 0:
+        raise Exception("Unable to push repository {}".format(repo_path))
 
 if __name__ == '__main__':
     try:
