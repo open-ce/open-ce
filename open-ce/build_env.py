@@ -62,18 +62,6 @@ def make_parser():
         default=None,
         help='Git tag to be checked out for all of the packages in an environment.')
 
-<<<<<<< HEAD
-    parser.add_argument(
-        '--docker_build',
-        action='store_true',
-        help="Perform a build within a docker container. "
-             "NOTE: When the --docker_build flag is used, "
-             "all arguments with paths should be relative to the "
-             "directory containing open-ce. Only files within the open-ce directory and "
-             "local_files will be visible at build time.")
-
-=======
->>>>>>> Add local scratch arguments to docker_build option
     return parser
 
 def build_env(arg_strings=None):
