@@ -60,8 +60,9 @@ class CondaEnvFileGenerator():
                 continue
             if not os.path.exists(path):
                 os.mkdir(path)
-            conda_env_name = self.env_file_prefix + key + ".yaml"
-            conda_env_file = os.path.join(path, conda_env_name)
+            conda_env_name = self.env_file_prefix + key
+            conda_env_file = conda_env_name + ".yaml"
+            conda_env_file = os.path.join(path, conda_env_file)
             data = dict(
                 name = conda_env_name,
                 channels = self.channels,
