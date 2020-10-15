@@ -46,8 +46,7 @@ def make_parser():
                  utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-                 utils.Argument.DOCKER_BUILD,
-                 utils.Argument.USE_LOCAL_SCRATCH, utils.Argument.LOCAL_SCRATCH_FOLDER]
+                 utils.Argument.DOCKER_BUILD]
     parser = utils.make_parser(arguments,
                                description = 'Build conda environment as part of Open-CE')
 

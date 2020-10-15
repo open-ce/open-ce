@@ -111,21 +111,6 @@ class Argument(Enum):
                                              "within the open-ce directory and local_files will be visible at "
                                              "build time."))
 
-    USE_LOCAL_SCRATCH = (lambda parser: parser.add_argument(
-                                        '--use_local_scratch',
-                                        action='store_true',
-                                        help="When performing a build within a container, use local scratch space "
-                                             "instead of disk space within the container. This can be useful if the "
-                                             "container has limited disk space. If `local_scratch_folder` is not "
-                                             "set, scratch space will be taken from a temporary folder, which will "
-                                             "be deleted after the job has completed."))
-
-    LOCAL_SCRATCH_FOLDER = (lambda parser: parser.add_argument(
-                                        '--local_scratch_folder',
-                                        type=str,
-                                        default=None,
-                                        help='Local folder to use for scratch space when building within a container.'))
-
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
     Make a parser from a list of OPEN-CE Arguments.
