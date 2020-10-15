@@ -172,19 +172,14 @@ def build_feedstock(args_string=None):
 
         config.channel_urls = args.channels_list + build_config_data.get('channels', [])
 
-        variants = dict()
-        if args.python_versions:
-            variants['python'] = utils.parse_arg_list(args.python_versions)
-        if args.build_types:
-            variants['build_type'] = utils.parse_arg_list(args.build_types)
-
         result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
         if result != 0:
             break
 
         try:
-            conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
-                               config=config, variants=variants)
+            for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types):
+                conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
+                               config=config, variants=variant)
         except Exception: # pylint: disable=broad-except
             traceback.print_exc()
             print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
