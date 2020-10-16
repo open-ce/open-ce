@@ -27,9 +27,7 @@ DOCKER_TOOL = "docker"
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [utils.Argument.DOCKER_BUILD]
-    parser = utils.make_parser(arguments,
-                               description='Run Open-CE tools within a container',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = utils.make_parser(arguments, description='Run Open-CE tools within a container')
 
     return parser
 
