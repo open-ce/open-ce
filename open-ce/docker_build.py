@@ -9,7 +9,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import datetime
 import platform
-import argparse
 
 import utils
 
