@@ -24,7 +24,7 @@ import utils # pylint: disable=wrong-import-position
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [utils.Argument.PYTHON_VERSIONS, utils.Argument.BUILD_TYPES]
+    arguments = [utils.Argument.PYTHON_VERSIONS, utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
     parser = utils.make_parser(arguments,
                                description = 'PR Test for Feedstocks',
                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -36,10 +36,9 @@ def main(arg_strings=None):
     '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
-    variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in utils.parse_arg_list(args.python_versions)
-                                                                  for build_type in utils.parse_arg_list(args.build_types)]
+    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
 
-    build_config_data, recipe_config_file = build_feedstock.load_package_config()
+    build_config_data, _ = build_feedstock.load_package_config()
 
     pr_branch = utils.get_output("git log -1 --format='%H'")
     utils.run_and_log("git remote set-head origin -a")
@@ -47,8 +46,9 @@ def main(arg_strings=None):
 
     config = get_or_merge_config(None)
     config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG]
-    if recipe_config_file:
-        config.variant_config_files += [recipe_config_file]
+    recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
+    if os.path.exists(recipe_conda_build_config):
+        config.variant_config_files += [recipe_conda_build_config]
     config.verbose = False
 
     utils.run_and_log("git checkout {}".format(default_branch))
