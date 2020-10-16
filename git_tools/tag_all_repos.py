@@ -11,6 +11,16 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 Script: tag_all_repos.py
 A script that can be used to create the same annotated git tag in all
 repos within an organization.
+
+To tag all of the feedstocks in the open-ce org with the tag `open-ce-v1.0.0`,
+the following command can be used:
+./git_tools/tag_all_repos.py open-ce
+                             --tag open-ce-v1.0.0 \\
+                             --tag-msg "Open-CE Release Version 1.0.0" \\
+                             --pat ${YOUR_PUBLIC_ACCESS_TOKEN} \\
+                             --repo-dir ./repos \\
+                             --branch master \\
+                             --skipped_repos open-ce
 *******************************************************************************
 """
 
@@ -65,12 +75,20 @@ def _make_parser():
         required=True,
         help="""Github public access token.""")
 
+    parser.add_argument(
+        '--skipped_repos',
+        type=str,
+        default="",
+        help="""Comma delimitted list of repos to skip tagging.""")
+
     return parser
 
 def _main(arg_strings=None):
     parser = _make_parser()
     args = parser.parse_args(arg_strings)
+    skipped_repos = utils.parse_arg_list(args.skipped_repos)
     repos = _get_all_repos(args.github_org, args.pat)
+    repos = [repo for repo in repos if repo["name"] not in skipped_repos ]
     print("---------------------------Cloning all Repos")
     for repo in repos:
         repo_path = os.path.abspath(os.path.join(args.repo_dir, repo["name"]))
