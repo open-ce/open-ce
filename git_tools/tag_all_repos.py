@@ -28,8 +28,7 @@ import argparse
 import os
 import sys
 import pathlib
-import yaml
-import requests
+import git_utils
 
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 import utils # pylint: disable=wrong-import-position
@@ -86,61 +85,31 @@ def _make_parser():
 def _main(arg_strings=None):
     parser = _make_parser()
     args = parser.parse_args(arg_strings)
-    skipped_repos = utils.parse_arg_list(args.skipped_repos)
-    repos = _get_all_repos(args.github_org, args.pat)
+    tag_all_repos(args.github_org, args.tag, args.tag_msg, args.branch, args.repo_dir, args.pat, args.skipped_repos)
+
+def tag_all_repos(github_org, tag, tag_msg, branch, repo_dir, pat, skipped_repos):
+    skipped_repos = utils.parse_arg_list(skipped_repos)
+    repos = git_utils.get_all_repos(github_org, pat)
     repos = [repo for repo in repos if repo["name"] not in skipped_repos ]
     print("---------------------------Cloning all Repos")
     for repo in repos:
-        repo_path = os.path.abspath(os.path.join(args.repo_dir, repo["name"]))
+        repo_path = os.path.abspath(os.path.join(repo_dir, repo["name"]))
         print("--->Making clone location: " + repo_path)
         os.makedirs(repo_path, exist_ok=True)
         print("--->Cloning {}".format(repo["name"]))
-        _clone_repo(repo["ssh_url"], repo_path, args.branch)
+        git_utils.clone_repo(repo["ssh_url"], repo_path, branch)
 
     print("---------------------------Tagging all Repos")
     for repo in repos:
-        repo_path = os.path.abspath(os.path.join(args.repo_dir, repo["name"]))
+        repo_path = os.path.abspath(os.path.join(repo_dir, repo["name"]))
         print("--->Tagging {}".format(repo["name"]))
-        _create_tag(repo_path, args.tag, args.tag_msg)
+        git_utils.create_tag(repo_path, tag, tag_msg)
 
     print("---------------------------Pushing all Repos")
     for repo in repos:
-        repo_path = os.path.abspath(os.path.join(args.repo_dir, repo["name"]))
+        repo_path = os.path.abspath(os.path.join(repo_dir, repo["name"]))
         print("--->Pushing {}".format(repo["name"]))
-        _push_branch(repo_path, args.tag)
-
-def _get_all_repos(github_org, token):
-    result = requests.get("https://api.github.com/orgs/{}/repos".format(github_org),
-                     headers={'Authorization' : 'token {}'.format(token)})
-    if result.status_code != 200:
-        raise Exception("Error loading repos.")
-    return yaml.safe_load(result.content)
-
-def _clone_repo(git_url, repo_dir, git_tag=None):
-    if git_tag is None:
-        clone_cmd = "git clone " + git_url + " " + repo_dir
-    else:
-        clone_cmd = "git clone -b " + git_tag + " --single-branch " + git_url + " " + repo_dir
-    if utils.run_and_log(clone_cmd) != 0:
-        raise Exception("Unable to clone repository: {}".format(git_url))
-
-def _create_tag(repo_path, tag_name, tag_msg):
-    saved_working_directory = os.getcwd()
-    os.chdir(repo_path)
-    tag_cmd = "git tag -a {} -m \"{}\"".format(tag_name, tag_msg)
-    result = utils.run_and_log(tag_cmd)
-    os.chdir(saved_working_directory)
-    if result != 0:
-        raise Exception("Unable to tag repository {}".format(repo_path))
-
-def _push_branch(repo_path, branch_name, remote="origin"):
-    saved_working_directory = os.getcwd()
-    os.chdir(repo_path)
-    push_cmd = "git push {} {}".format(remote, branch_name)
-    result = utils.run_and_log(push_cmd)
-    os.chdir(saved_working_directory)
-    if result != 0:
-        raise Exception("Unable to push repository {}".format(repo_path))
+        git_utils.push_branch(repo_path, tag)
 
 if __name__ == '__main__':
     try:
