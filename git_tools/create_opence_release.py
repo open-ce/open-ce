@@ -82,6 +82,8 @@ def _main(arg_strings=None):
     print("--->Updating env files.")
     update_env_files(primary_repo_path, version_name)
 
+    git_utils.commit_changes(primary_repo_path, "Updates for {}".format(version_name))
+
     return
 
     tag_all_repos.tag_all_repos(github_org=args.github_org,
@@ -94,7 +96,17 @@ def _main(arg_strings=None):
 
 def update_env_files(open_ce_path, new_git_tag):
     for env_file in glob.glob(os.path.join(open_ce_path, "envs", "*.yaml")):
-        print(env_file)
+        print("--->Updating {}".format(env_file))
+        with open(env_file, 'r') as content_file:
+            env_file_contents = content_file.read()
+        if not "git_tag_for_env" in env_file_contents:
+            env_file_contents = """{}
+git_tag_for_env:
+  - {}
+""".format(env_file_contents, new_git_tag)
+
+        with open(env_file, 'w') as content_file:
+            content_file.write(env_file_contents)
 
 if __name__ == '__main__':
     try:

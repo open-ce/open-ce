@@ -50,6 +50,15 @@ def create_branch(repo_path, branch_name):
     if result != 0:
         raise Exception("Unable to tag repository {}".format(repo_path))
 
+def commit_changes(repo_path, commit_msg):
+    saved_working_directory = os.getcwd()
+    os.chdir(repo_path)
+    commit_cmd = "git commit -avm \"{}\"".format(commit_msg)
+    result = utils.run_and_log(commit_cmd)
+    os.chdir(saved_working_directory)
+    if result != 0:
+        raise Exception("Unable to commit repository {}".format(repo_path))
+
 def push_branch(repo_path, branch_name, remote="origin"):
     saved_working_directory = os.getcwd()
     os.chdir(repo_path)
