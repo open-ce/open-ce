@@ -91,7 +91,7 @@ def main(arg_strings=None):
     checks = [current_pr_build_numbers[package]["version"] != master_build_numbers[package]["version"] or
               int(current_pr_build_numbers[package]["number"]) > int(master_build_numbers[package]["number"])
                   for package in master_build_numbers]
-    assert all(checks), "At least one package needs to increase the build number or change the version."
+    assert any(checks), "At least one package needs to increase the build number or change the version."
 
 if __name__ == '__main__':
     try:
