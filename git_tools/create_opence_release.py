@@ -18,6 +18,7 @@ import sys
 import os
 import glob
 import git_utils
+import tag_all_repos
 
 def _make_parser():
     ''' Parser input arguments '''
@@ -67,7 +68,9 @@ def _main(arg_strings=None):
     parser = _make_parser()
     args = parser.parse_args(arg_strings)
     version_name = "open-ce-v{}".format(args.version)
-    version_msg = "Open-CE Release {}".format(args.version)
+    release_number = ".".join(args.version.split(".")[:-1])
+    branch_name = "open-ce-r{}".format(release_number)
+    version_msg = "Open-CE Version {}".format(args.version)
     primary_repo_url = "git@github.com:{}/{}.git".format(args.github_org, args.primary_repo)
 
     primary_repo_path = os.path.abspath(os.path.join(args.repo_dir, args.primary_repo))
@@ -77,14 +80,22 @@ def _main(arg_strings=None):
     git_utils.clone_repo(primary_repo_url, primary_repo_path, args.branch)
 
     print("--->Creating {} branch in {}".format(version_name, args.primary_repo))
-    git_utils.create_branch(primary_repo_path, version_name)
+    git_utils.create_branch(primary_repo_path, branch_name)
 
     print("--->Updating env files.")
     update_env_files(primary_repo_path, version_name)
 
-    git_utils.commit_changes(primary_repo_path, "Updates for {}".format(version_name))
+    print("--->Committing env files.")
+    git_utils.commit_changes(primary_repo_path, "Updates for {}".format(release_number))
 
-    return
+    print("--->Pushing branch.")
+    git_utils.push_branch(primary_repo_path, branch_name)
+
+    print("--->Tag Primary Branch")
+    git_utils.create_tag(primary_repo_path, version_name, version_msg)
+
+    print("--->Pushing branch.")
+    git_utils.push_branch(primary_repo_path, version_name)
 
     tag_all_repos.tag_all_repos(github_org=args.github_org,
                                 tag=version_name,

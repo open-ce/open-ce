@@ -32,38 +32,22 @@ def clone_repo(git_url, repo_dir, git_tag=None):
     if utils.run_and_log(clone_cmd) != 0:
         raise Exception("Unable to clone repository: {}".format(git_url))
 
-def create_tag(repo_path, tag_name, tag_msg):
+def _execute_git_command(repo_path, git_cmd):
     saved_working_directory = os.getcwd()
     os.chdir(repo_path)
-    tag_cmd = "git tag -a {} -m \"{}\"".format(tag_name, tag_msg)
-    result = utils.run_and_log(tag_cmd)
+    result = utils.run_and_log(git_cmd)
     os.chdir(saved_working_directory)
     if result != 0:
-        raise Exception("Unable to tag repository {}".format(repo_path))
+        raise Exception("Git command failed: {}".format(git_cmd))
+
+def create_tag(repo_path, tag_name, tag_msg):
+    _execute_git_command(repo_path, "git tag -a {} -m \"{}\"".format(tag_name, tag_msg))
 
 def create_branch(repo_path, branch_name):
-    saved_working_directory = os.getcwd()
-    os.chdir(repo_path)
-    branch_cmd = "git checkout -b {}".format(branch_name)
-    result = utils.run_and_log(branch_cmd)
-    os.chdir(saved_working_directory)
-    if result != 0:
-        raise Exception("Unable to tag repository {}".format(repo_path))
+    _execute_git_command(repo_path, "git checkout -b {}".format(branch_name))
 
 def commit_changes(repo_path, commit_msg):
-    saved_working_directory = os.getcwd()
-    os.chdir(repo_path)
-    commit_cmd = "git commit -avm \"{}\"".format(commit_msg)
-    result = utils.run_and_log(commit_cmd)
-    os.chdir(saved_working_directory)
-    if result != 0:
-        raise Exception("Unable to commit repository {}".format(repo_path))
+    _execute_git_command(repo_path, "git commit -avm \"{}\"".format(commit_msg))
 
 def push_branch(repo_path, branch_name, remote="origin"):
-    saved_working_directory = os.getcwd()
-    os.chdir(repo_path)
-    push_cmd = "git push {} {}".format(remote, branch_name)
-    result = 0#utils.run_and_log(push_cmd)
-    os.chdir(saved_working_directory)
-    if result != 0:
-        raise Exception("Unable to push repository {}".format(repo_path))
+    _execute_git_command(repo_path, "git push {} {}".format(remote, branch_name))
