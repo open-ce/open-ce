@@ -72,13 +72,13 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     ["package3a", "package3b"],
                                     python="3.7",
                                     build_type="cpu",
-                                    run_dependencies=["python 3.7", "pack1==1.0", "pack2 <=2.0"]),
+                                    run_dependencies=["python 3.7", "pack1==1.0", "pack2 <=2.0", "pack3   3.0.*"]),
                          build_tree.BuildCommand("recipe4",
                                     "repo4",
                                     ["package4a", "package4b"],
                                     python="3.7",
                                     build_type="cuda",
-                                    run_dependencies=["pack1==1.0", "pack2 <=2.0"])]
+                                    run_dependencies=["pack1==1.0", "pack2 <=2.0", "pack3-suffix 3.0"])]
 
 
 external_deps = {}
@@ -108,6 +108,7 @@ def test_conda_env_file_content():
 
     expected_keys = [utils.variant_key(py_vers, build_type) for py_vers in utils.parse_arg_list(python_versions)
                                                             for build_type in utils.parse_arg_list(build_types)]
+    print("Expected keys: ", expected_keys)
     actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
     assert Counter(actual_keys) == Counter(expected_keys)
 
@@ -132,23 +133,23 @@ def validate_dependencies(env_file_generator, variant_keys):
     '''
     Validates the exact dependencies for each environment
     '''
-    py36_cpu_deps = ["python ==3.6.*", "pack1 >=1.0", "pack2 ==2.0", "package2a",
-                     "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
+    py36_cpu_deps = ["python ==3.6.*", "pack1 >=1.0", "pack2 ==2.0.*", "package2a",
+                     "external_pac1 1.2.*", "external_pack2", "external_pack3=1.2.3.*"]
     actual_deps = env_file_generator.dependency_dict[variant_keys[0]]
     assert Counter(py36_cpu_deps) == Counter(actual_deps)
 
-    py36_cuda_deps = ["python >=3.6.*", "pack1 1.0", "pack2 >=2.0", "package1a", "package1b",
-                      "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
+    py36_cuda_deps = ["python >=3.6", "pack1 1.0.*", "pack2 >=2.0", "package1a", "package1b",
+                      "external_pac1 1.2.*", "external_pack2", "external_pack3=1.2.3.*"]
     actual_deps = env_file_generator.dependency_dict[variant_keys[1]]
     assert Counter(py36_cuda_deps) == Counter(actual_deps)
 
-    py37_cpu_deps = ["python 3.7.*", "pack1==1.0", "pack2 <=2.0", "package3a", "package3b",
-                     "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
+    py37_cpu_deps = ["python 3.7.*", "pack1==1.0.*", "pack2 <=2.0", "pack3 3.0.*", "package3a", "package3b",
+                     "external_pac1 1.2.*", "external_pack2", "external_pack3=1.2.3.*"]
     actual_deps = env_file_generator.dependency_dict[variant_keys[2]]
     assert Counter(py37_cpu_deps) == Counter(actual_deps)
 
-    py37_cuda_deps = ["pack1==1.0", "pack2 <=2.0", "package4a", "package4b",
-                      "external_pac1 1.2", "external_pack2", "external_pack3=1.2.3"]
+    py37_cuda_deps = ["pack1==1.0.*", "pack2 <=2.0", "pack3-suffix 3.0.*", "package4a", "package4b",
+                      "external_pac1 1.2.*", "external_pack2", "external_pack3=1.2.3.*"]
     actual_deps = env_file_generator.dependency_dict[variant_keys[3]]
     assert Counter(py37_cuda_deps) == Counter(actual_deps)
 

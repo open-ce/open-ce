@@ -13,6 +13,7 @@ import sys
 import subprocess
 from enum import Enum, unique
 import pkg_resources
+import re
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
@@ -162,3 +163,28 @@ def variant_key(py_ver, build_type):
     if build_type:
         result +=  "-" + build_type
     return result
+
+def generalize_version(package):
+    """Add `.*` to package versions when it is needed."""
+
+    # Remove multiple spaces or tabs
+    package = re.sub(' +', ' ', package)
+
+    # Check if we want to add .* to the end of versions
+    py_matched = re.match(r'(\w+[-]*\w+)([\s,=,<,>]*)(.*)', package)
+
+    if py_matched:
+        name = py_matched.group(1)
+        operator = py_matched.group(2)
+        version = py_matched.group(3)
+        append_asterik = False
+
+        if len(version) > 0 and len(operator) > 0:
+
+            #Append .* at the end if it is not there and if operator is space or == or = or empty
+            if not version.endswith(".*") and operator.strip() in ["=", "==", " ", ""]:
+                package = name + operator + version + ".*"
+
+    print(package)
+    return package
+
