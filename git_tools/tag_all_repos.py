@@ -14,7 +14,7 @@ repos within an organization.
 
 To tag all of the feedstocks in the open-ce org with the tag `open-ce-v1.0.0`,
 the following command can be used:
-./git_tools/tag_all_repos.py open-ce
+./git_tools/tag_all_repos.py open-ce \\
                              --tag open-ce-v1.0.0 \\
                              --tag-msg "Open-CE Release Version 1.0.0" \\
                              --pat ${YOUR_PUBLIC_ACCESS_TOKEN} \\
