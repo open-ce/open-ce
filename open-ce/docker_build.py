@@ -41,7 +41,7 @@ def build_image():
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
-    build_cmd += "."
+    build_cmd += BUILD_IMAGE_PATH
 
     result = os.system(build_cmd)
 
@@ -57,9 +57,9 @@ def _add_volume(local_path, container_path):
     if local_path:
         if not os.path.isdir(local_path):
             os.mkdir(local_path)
-        local_volume = local_path + ":"
-
-    volume_arg = "-v " + local_volume + container_path + ":Z "
+        volume_arg = "-v " + local_path + ":" + container_path + ":Z "
+    else:
+        volume_arg = "-v " + container_path + " "
 
     return volume_arg
 
