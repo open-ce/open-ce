@@ -45,7 +45,8 @@ def make_parser():
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
                  utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
+                 utils.Argument.DOCKER_BUILD]
     parser = utils.make_parser(arguments,
                                description = 'Build conda environment as part of Open-CE')
 
@@ -60,15 +61,6 @@ def make_parser():
         type=str,
         default=None,
         help='Git tag to be checked out for all of the packages in an environment.')
-
-    parser.add_argument(
-        '--docker_build',
-        action='store_true',
-        help="Perform a build within a docker container. "
-             "NOTE: When the --docker_build flag is used, "
-             "all arguments with paths should be relative to the "
-             "directory containing open-ce. Only files within the open-ce directory and "
-             "local_files will be visible at build time.")
 
     return parser
 

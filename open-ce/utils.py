@@ -102,6 +102,15 @@ class Argument(Enum):
                                         default=DEFAULT_MPI_TYPES,
                                         help='Comma delimited list of mpi types, such as "openmpi" or "system".'))
 
+    DOCKER_BUILD = (lambda parser: parser.add_argument(
+                                        '--docker_build',
+                                        action='store_true',
+                                        help="Perform a build within a docker container. "
+                                             "NOTE: When the --docker_build flag is used, all arguments with paths "
+                                             "should be relative to the directory containing open-ce. Only files "
+                                             "within the open-ce directory and local_files will be visible at "
+                                             "build time."))
+
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
     Make a parser from a list of OPEN-CE Arguments.

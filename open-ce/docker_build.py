@@ -10,6 +10,8 @@ import os
 import datetime
 import platform
 
+import utils
+
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_NAME = "builder-cuda-" + platform.machine()
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", BUILD_IMAGE_NAME)
@@ -20,6 +22,13 @@ REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-builder"
 
 DOCKER_TOOL = "docker"
+
+def make_parser():
+    ''' Parser for input arguments '''
+    arguments = [utils.Argument.DOCKER_BUILD]
+    parser = utils.make_parser(arguments, description='Run Open-CE tools within a container')
+
+    return parser
 
 def build_image():
     """
@@ -38,6 +47,21 @@ def build_image():
 
     return result, image_name
 
+def _add_volume(local_path, container_path):
+    """
+    Add a volume to the container.
+
+    If local_path is None, an anonymous volume will be used.
+    """
+    if local_path:
+        if not os.path.isdir(local_path):
+            os.mkdir(local_path)
+        volume_arg = "-v " + local_path + ":" + container_path + ":Z "
+    else:
+        volume_arg = "-v " + container_path + " "
+
+    return volume_arg
+
 def _create_container(container_name, image_name, output_folder):
     """
     Create a docker container
@@ -46,10 +70,13 @@ def _create_container(container_name, image_name, output_folder):
     docker_cmd = DOCKER_TOOL + " create -i --rm --name " + container_name + " "
 
     # Add output folder
-    local_output_folder = os.path.join(os.getcwd(), output_folder)
-    if not os.path.isdir(local_output_folder):
-        os.mkdir(local_output_folder)
-    docker_cmd += "-v " + local_output_folder + ":" + os.path.join(HOME_PATH, output_folder) + ":Z "
+    docker_cmd += _add_volume(os.path.join(os.getcwd(), output_folder), os.path.join(HOME_PATH, output_folder))
+
+    # Add cache directory
+    docker_cmd += _add_volume(None, os.path.join(HOME_PATH, ".cache"))
+
+    # Add conda-bld directory
+    docker_cmd += _add_volume(None, "/opt/conda/conda-bld")
 
     docker_cmd += image_name + " bash"
     result = os.system(docker_cmd)
@@ -111,6 +138,7 @@ def build_in_container(image_name, output_folder, arg_strings):
               ' '.join(arg_strings[1:]))
     result = _execute_in_container(container_name, cmd)
 
+    # Cleanup
     _stop_container(container_name)
 
     if result:
@@ -122,14 +150,14 @@ def build_with_docker(output_folder, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
+    parser = make_parser()
+    _, unused_args = parser.parse_known_args(arg_strings)
+
     result, image_name = build_image()
     if result:
         print("Failure building image: " + image_name)
         return result
 
-    if "--docker_build" in arg_strings:
-        arg_strings.remove("--docker_build")
-
-    result = build_in_container(image_name, output_folder, arg_strings)
+    result = build_in_container(image_name, output_folder, unused_args)
 
     return result
