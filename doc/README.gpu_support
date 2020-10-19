@@ -2,7 +2,10 @@
 
 The Open-CE build scripts and feedstocks support CUDA from NVIDIA. In order
 for the build scripts to work, CUDA must be installed on the system on which
-the builds are taking place. This can be accomplished in two ways.
+the builds are taking place. This can be accomplished in two ways (see below).
+
+**In all cases, the `CUDA_HOME` environment variable must be set to the base
+directory where CUDA has been installed.**
 
 
 ## Bare metal builds
@@ -34,6 +37,9 @@ These can be manually build using the command
 ```shell
 docker build open-ce/images/build-cuda-x86_64
 ```
+
+The Open-CE build image presets the `CUDA_HOME` environment variablet to the appropriate location.
+
 
 ## Automatic docker builds
 
