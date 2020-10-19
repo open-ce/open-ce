@@ -42,6 +42,8 @@ RUN export PATH="${PATH}" && \
     $CONDA_HOME/bin/conda config --system --set always_yes true && \
     $CONDA_HOME/bin/conda config --system --set auto_update_conda false && \
     $CONDA_HOME/bin/conda config --system --set notify_outdated_conda false && \
+    mkdir -p $CONDA_HOME/conda-bld && \
+    mkdir -p $HOME/.cache && \
     $CONDA_HOME/bin/conda --version && \
     sudo rm -f /run/nologin && \
     yes | ssh-keygen -f $HOME/.ssh/id_rsa -q -t rsa -N '' && cp $HOME/.ssh/id_rsa.pub $HOME/.ssh/authorized_keys && \

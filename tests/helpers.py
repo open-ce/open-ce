@@ -40,6 +40,38 @@ def validate_cli(cli_string, expect=None, reject=None, ignore=None, retval=0):
         return retval
     return 0
 
+def validate_conda_build_args(recipe, expect_recipe=None, expect_config=None, expect_variants=None, reject_recipe=None, **kwargs):
+    """
+    Used to mock `conda_build.api.build`
+
+    Args:
+        recipe: The placeholder argument for the conda_build.api.build 'recipe' arg.
+        expect_recipe: A string that must occur in the 'recipe' arg.
+        expect_config: A dict for the keys and values that must occur in the 'config' arg.
+        expect_variants: A dict for the keys and values that must occur in the 'variants' arg.
+        reject_recipe: A string that cannot occur in the 'recipe` arg.
+    """
+    if not expect_recipe: expect_recipe = []
+    if not expect_config: expect_config = []
+    if not expect_variants: expect_variants = []
+    if not reject_recipe: reject_recipe = []
+
+    if expect_recipe:
+        assert recipe in expect_recipe
+    if reject_recipe:
+        assert recipe not in reject_recipe
+
+    if expect_config:
+        config = kwargs['config']
+        for term, value in expect_config.items():
+            assert hasattr(config, term)
+            assert getattr(config, term) == value
+    if expect_variants:
+        variants = kwargs['variants']
+        for term, value in expect_variants.items():
+            assert term in variants
+            assert variants.get(term) == value
+
 class DirTracker(object):
     def __init__(self, starting_dir=os.getcwd()):
         self.current_dir = starting_dir

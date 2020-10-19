@@ -25,6 +25,8 @@ DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
+DEFAULT_OUTPUT_FOLDER = "condabuild"
+
 
 class OpenCEError(Exception):
     """
@@ -57,7 +59,7 @@ class Argument(Enum):
     OUTPUT_FOLDER = (lambda parser: parser.add_argument(
                                         '--output_folder',
                                         type=str,
-                                        default='condabuild',
+                                        default=DEFAULT_OUTPUT_FOLDER,
                                         help='Path where built conda packages will be saved.'))
 
     CHANNELS = (lambda parser: parser.add_argument(
@@ -103,6 +105,15 @@ class Argument(Enum):
                                         type=str,
                                         default=DEFAULT_MPI_TYPES,
                                         help='Comma delimited list of mpi types, such as "openmpi" or "system".'))
+
+    DOCKER_BUILD = (lambda parser: parser.add_argument(
+                                        '--docker_build',
+                                        action='store_true',
+                                        help="Perform a build within a docker container. "
+                                             "NOTE: When the --docker_build flag is used, all arguments with paths "
+                                             "should be relative to the directory containing open-ce. Only files "
+                                             "within the open-ce directory and local_files will be visible at "
+                                             "build time."))
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
@@ -212,6 +223,5 @@ def generalize_version(package):
             if not version.endswith(".*") and operator.strip() in ["==", " ", ""]:
                 package = name + operator + version + ".*"
 
-    print(package)
     return package
 
