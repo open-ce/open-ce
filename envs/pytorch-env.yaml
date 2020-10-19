@@ -1,9 +1,6 @@
 {% if build_type == 'cuda' %}
 imported_envs:
   - tensorrt-env.yaml
-
-channels:
-  - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
 {% endif %}
 
 packages:

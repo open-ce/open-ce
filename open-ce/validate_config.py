@@ -9,7 +9,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
 """
 
-import argparse
 import sys
 import utils
 from utils import OpenCEError
@@ -22,10 +21,9 @@ def make_parser():
     ''' Parser input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
     parser = utils.make_parser(arguments,
-                               description = 'Perform validation on a conda_build_config.yaml file.',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+                               description = 'Perform validation on a conda_build_config.yaml file.')
     return parser
 
 def validate_config(arg_strings=None):
@@ -33,8 +31,7 @@ def validate_config(arg_strings=None):
     Entry function.
     '''
     args = make_parser().parse_args(arg_strings)
-    variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in utils.parse_arg_list(args.python_versions)
-                                                                  for build_type in utils.parse_arg_list(args.build_types)]
+    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
     for variant in variants:
         print('Validating {} for {}'.format(args.conda_build_config, variant))
         for env_file in args.env_config_file:
@@ -43,6 +40,7 @@ def validate_config(arg_strings=None):
                 recipes = build_tree.BuildTree([env_file],
                                                variant['python'],
                                                variant['build_type'],
+                                               variant['mpi_type'],
                                                repository_folder=args.repository_folder,
                                                conda_build_config=args.conda_build_config)
             except OpenCEError as err:

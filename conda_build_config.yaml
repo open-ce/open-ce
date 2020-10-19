@@ -27,8 +27,6 @@ cmake:
   - 3.14.*
 coverage:
   - 4.*
-cuda_compiler:
-  - nvcc
 cudatoolkit:
   - 10.2.*
 cudnn:
@@ -175,8 +173,6 @@ rust_nightly:
   - 1.43.0
 scikit_image:
   - 0.16
-scikit_learn:
-  - 0.22
 scipy:
   - 1.4.*
 sentencepiece:

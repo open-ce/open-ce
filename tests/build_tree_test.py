@@ -25,6 +25,7 @@ class TestBuildTree(build_tree.BuildTree):
                  env_config_files,
                  python_versions,
                  build_types,
+                 mpi_types,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
@@ -59,7 +60,7 @@ def test_create_recipes(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    create_recipes_result = build_tree._create_recipes("/test/my_repo", None, "master", {'python' : ['3.6'], 'build_type' : ['cuda']}, [])
+    create_recipes_result = build_tree._create_recipes("/test/my_repo", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi'}, [])
     assert create_recipes_result[0].packages == {'horovod'}
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in create_recipes_result[0].build_dependencies
@@ -76,7 +77,7 @@ def test_clone_repo(mocker):
     '''
     git_location = utils.DEFAULT_GIT_LOCATION
 
-    mock_build_tree = TestBuildTree([], "3.6", "cpu")
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi")
 
     mocker.patch(
         'os.system',
@@ -94,7 +95,7 @@ def test_clone_repo_failure(mocker, capsys):
     '''
     Simple negative test for `_clone_repo`.
     '''
-    mock_build_tree = TestBuildTree([], "3.6", "cpu")
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi")
 
     mocker.patch(
         'os.system',
@@ -110,12 +111,14 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     ["package1a", "package1b"],
                                     python="2.6",
                                     build_type="cuda",
+                                    mpi_type="openmpi",
                                     build_command_dependencies=[1,2]),
                          build_tree.BuildCommand("recipe2",
                                     "repo2",
                                     ["package2a"],
                                     python="2.6",
                                     build_type="cpu",
+                                    mpi_type="openmpi",
                                     build_command_dependencies=[]),
                          build_tree.BuildCommand("recipe3",
                                     "repo3",
@@ -126,14 +129,14 @@ def test_get_dependency_names():
     '''
     Tests that the dependency names can be retrieved for each item in a BuildTree
     '''
-    mock_build_tree = TestBuildTree([], "3.6", "cpu")
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi")
     mock_build_tree.build_commands = sample_build_commands
 
     output = ""
     for build_command in mock_build_tree:
         output += ' '.join([mock_build_tree[dep].name() for dep in build_command.build_command_dependencies]) + "\n"
 
-    expected_output = "\nrecipe2-py2-6-cpu\nrecipe2-py2-6-cpu recipe3\n"
+    expected_output = "\nrecipe2-py2-6-cpu-openmpi\nrecipe2-py2-6-cpu-openmpi recipe3\n"
 
     assert output == expected_output
 
@@ -141,7 +144,7 @@ def test_build_tree_len():
     '''
     Tests that the __len__ function works for BuildTree
     '''
-    mock_build_tree = TestBuildTree([], "3.6", "cpu")
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi")
     mock_build_tree.build_commands = sample_build_commands
 
     assert len(mock_build_tree) == 3

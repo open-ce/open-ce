@@ -10,7 +10,7 @@
 # *****************************************************************
 
 channels:
-    - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+    - https://anaconda.org/anaconda 
 packages:
     - feedstock : package11
     - feedstock : https://myhost.com/myorg/package12-feedstock

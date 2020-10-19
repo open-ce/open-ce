@@ -30,7 +30,7 @@ def make_parser():
                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
 
-def feedstock_pr(arg_strings=None):
+def main(arg_strings=None):
     '''
     Entry function.
     '''
@@ -52,36 +52,51 @@ def feedstock_pr(arg_strings=None):
     config.verbose = False
 
     utils.run_and_log("git checkout {}".format(default_branch))
-    master_build_numbers = set()
+    master_build_numbers = dict()
     for recipe in build_config_data["recipes"]:
         metas = conda_build.api.render(recipe['path'],
                                     config=config,
                                     variants=variants[0],
                                     bypass_env_check=True,
                                     finalize=False)
-        master_build_numbers.update([(meta.meta['package']['name'],
-                                      meta.meta['package']['version'],
-                                      meta.meta['build']['number']) for meta,_,_ in metas])
+        for meta,_,_ in metas:
+            master_build_numbers[meta.meta['package']['name']] = {"version" : meta.meta['package']['version'],
+                                                                  "number" : meta.meta['build']['number']}
 
     utils.run_and_log("git checkout {}".format(pr_branch))
-    current_pr_build_numbers = set()
+    current_pr_build_numbers = dict()
     for recipe in build_config_data["recipes"]:
         metas = conda_build.api.render(recipe['path'],
                                     config=config,
                                     variants=variants[0],
                                     bypass_env_check=True,
                                     finalize=False)
-        current_pr_build_numbers.update([(meta.meta['package']['name'],
-                                          meta.meta['package']['version'],
-                                          meta.meta['build']['number']) for meta,_,_ in metas])
+        for meta,_,_ in metas:
+            current_pr_build_numbers[meta.meta['package']['name']] = {"version" : meta.meta['package']['version'],
+                                                                      "number" : meta.meta['build']['number']}
 
-    if current_pr_build_numbers == master_build_numbers:
-        print("There is no change in version or build numbers.")
-        print(current_pr_build_numbers)
-        print(master_build_numbers)
-        return 1
+    print("Current PR Build Info:    ", current_pr_build_numbers)
+    print("Master Branch Build Info: ", master_build_numbers)
 
-    return 0
+    #No build numbers can go backwards without a version change.
+    for package in master_build_numbers:
+        if package in current_pr_build_numbers and current_pr_build_numbers[package]["version"] == master_build_numbers[package]["version"]:
+            assert int(current_pr_build_numbers[package]["number"]) >= int(master_build_numbers[package]["number"]), "If the version doesn't change, the build number can't be reduced."
+
+    #If packages are added or removed, don't require a version change
+    if set(master_build_numbers.keys()) != set(current_pr_build_numbers.keys()):
+        return
+
+    #At least one package needs to increase the build number or change the version.
+    checks = [current_pr_build_numbers[package]["version"] != master_build_numbers[package]["version"] or
+              int(current_pr_build_numbers[package]["number"]) > int(master_build_numbers[package]["number"])
+                  for package in master_build_numbers]
+    assert any(checks), "At least one package needs to increase the build number or change the version."
 
 if __name__ == '__main__':
-    sys.exit(feedstock_pr())
+    try:
+        main()
+        print("BUILD NUMBER SUCCESS")
+    except Exception as exc: # pylint: disable=broad-except
+        print("BUILD NUMBER ERROR: ", exc)
+        sys.exit(1)

@@ -49,7 +49,7 @@ def _create_container(container_name, image_name, output_folder):
     local_output_folder = os.path.join(os.getcwd(), output_folder)
     if not os.path.isdir(local_output_folder):
         os.mkdir(local_output_folder)
-    docker_cmd += "-v " + local_output_folder + ":" + os.path.join(HOME_PATH, output_folder) + ":rw "
+    docker_cmd += "-v " + local_output_folder + ":" + os.path.join(HOME_PATH, output_folder) + ":Z "
 
     docker_cmd += image_name + " bash"
     result = os.system(docker_cmd)
