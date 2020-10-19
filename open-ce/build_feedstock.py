@@ -31,9 +31,12 @@ For usage description of arguments, this script supports use of --help:
 
 import sys
 import os
+import traceback
 import yaml
 
 import utils
+import conda_build.api
+from conda_build.config import get_or_merge_config
 
 def make_parser():
     ''' Parser input arguments '''
@@ -157,32 +160,31 @@ def build_feedstock(args_string=None):
     for recipe in build_config_data['recipes']:
         if args.recipes and recipe['name'] not in args.recipes:
             continue
-        for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types):
-            conda_build_args = "conda-build "
-            conda_build_args += "--skip-existing "
-            conda_build_args += "--output-folder " + args.output_folder + " "
-            conda_build_args += "-m " + args.conda_build_config + " "
-            recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
-            if os.path.exists(recipe_conda_build_config):
-                conda_build_args += " -m " + recipe_conda_build_config + " "
 
-            conda_build_args += " ".join(["-c " + c + " " for c in args.channels_list])
-            conda_build_args += " ".join(["-c " + c + " " for c in build_config_data.get('channels', [])])
+        config = get_or_merge_config(None)
+        config.skip_existing = True
+        config.output_folder = args.output_folder
+        config.variant_config_files = [args.conda_build_config]
 
-            conda_build_args += "--variants \"" + str(variant) + "\" "
+        recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
+        if os.path.exists(recipe_conda_build_config):
+            config.variant_config_files.append(recipe_conda_build_config)
 
-            conda_build_args += recipe['path']
+        config.channel_urls = args.channels_list + build_config_data.get('channels', [])
 
-            result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
-            if result != 0:
-                break
+        result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
+        if result != 0:
+            break
 
-            print(conda_build_args)
-            result = os.system(conda_build_args)
-            if result != 0:
-                print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
-                result = 1
-                break
+        try:
+            for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types):
+                conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
+                               config=config, variants=variant)
+        except Exception: # pylint: disable=broad-except
+            traceback.print_exc()
+            print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
+            result = 1
+            break
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
