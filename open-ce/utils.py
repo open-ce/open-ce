@@ -168,10 +168,10 @@ def generalize_version(package):
     """Add `.*` to package versions when it is needed."""
 
     # Remove multiple spaces or tabs
-    package = re.sub(' +', ' ', package)
+    package = re.sub('\s+', ' ', package)
 
     # Check if we want to add .* to the end of versions
-    py_matched = re.match(r'(\w+[-]*\w+)([\s,=,<,>]*)(.*)', package)
+    py_matched = re.match(r'([\w-]+)([\s=<>]*)(.*)', package)
 
     if py_matched:
         name = py_matched.group(1)
