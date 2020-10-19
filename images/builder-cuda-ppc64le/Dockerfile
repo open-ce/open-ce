@@ -22,9 +22,9 @@ RUN export ARCH="$(uname -m)" && \
     git \
     patch && \
     # Create CICD Group
-    groupadd --gid ${GROUP_ID} ${CICD_GROUP} && \
+    groupadd --non-unique --gid ${GROUP_ID} ${CICD_GROUP} && \
     # Adduser Builder
-    useradd -b /home --create-home --gid ${GROUP_ID} --groups wheel \
+    useradd -b /home --non-unique --create-home --gid ${GROUP_ID} --groups wheel \
     --uid ${BUILD_ID} --comment "User for Building" ${BUILD_USER} && \
     echo "${BUILD_USER}    ALL=NOPASSWD: ALL" > /etc/sudoers.d/user-${BUILD_USER} && \
     curl -o /tmp/anaconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${ARCH}.sh && \
