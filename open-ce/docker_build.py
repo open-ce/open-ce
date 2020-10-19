@@ -53,7 +53,6 @@ def _add_volume(local_path, container_path):
 
     If local_path is None, an anonymous volume will be used.
     """
-    local_volume = ""
     if local_path:
         if not os.path.isdir(local_path):
             os.mkdir(local_path)
