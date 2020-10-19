@@ -32,7 +32,7 @@ def build_image():
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
-    build_cmd += BUILD_IMAGE_PATH 
+    build_cmd += BUILD_IMAGE_PATH
 
     result = os.system(build_cmd)
 
