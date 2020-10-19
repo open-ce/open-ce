@@ -13,18 +13,21 @@ A script that can be used to cut an open-ce release.
 *******************************************************************************
 """
 
-import argparse
 import sys
 import os
 import glob
+import pathlib
 import git_utils
 import tag_all_repos
 
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
+import utils # pylint: disable=wrong-import-position
+
 def _make_parser():
     ''' Parser input arguments '''
-    parser = argparse.ArgumentParser(
-        description = 'A script that can be used to cut an open-ce release.',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = utils.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
+                                git_utils.Argument.BRANCH],
+                               description = 'A script that can be used to cut an open-ce release.')
 
     parser.add_argument(
         '--github-org',
@@ -43,24 +46,6 @@ def _make_parser():
         type=str,
         required=True,
         help="""Release version to cut.""")
-
-    parser.add_argument(
-        '--branch',
-        type=str,
-        default=None,
-        help="""Branch to cut a release from. Default is default branch in each repo.""")
-
-    parser.add_argument(
-        '--repo-dir',
-        type=str,
-        default="./",
-        help="""Directory to store repos.""")
-
-    parser.add_argument(
-        '--pat',
-        type=str,
-        required=True,
-        help="""Github public access token.""")
 
     return parser
 
@@ -83,19 +68,20 @@ def _main(arg_strings=None):
     git_utils.create_branch(primary_repo_path, branch_name)
 
     print("--->Updating env files.")
-    update_env_files(primary_repo_path, version_name)
+    _update_env_files(primary_repo_path, version_name)
 
     print("--->Committing env files.")
     git_utils.commit_changes(primary_repo_path, "Updates for {}".format(release_number))
 
-    print("--->Pushing branch.")
-    git_utils.push_branch(primary_repo_path, branch_name)
-
     print("--->Tag Primary Branch")
     git_utils.create_tag(primary_repo_path, version_name, version_msg)
 
-    print("--->Pushing branch.")
-    git_utils.push_branch(primary_repo_path, version_name)
+    push = git_utils.ask_for_input("Would you like to push changes to primary repo?")
+    if push.startswith("y"):
+        print("--->Pushing branch.")
+        git_utils.push_branch(primary_repo_path, branch_name)
+        print("--->Pushing tag.")
+        git_utils.push_branch(primary_repo_path, version_name)
 
     tag_all_repos.tag_all_repos(github_org=args.github_org,
                                 tag=version_name,
@@ -105,7 +91,7 @@ def _main(arg_strings=None):
                                 pat=args.pat,
                                 skipped_repos=args.primary_repo)
 
-def update_env_files(open_ce_path, new_git_tag):
+def _update_env_files(open_ce_path, new_git_tag):
     for env_file in glob.glob(os.path.join(open_ce_path, "envs", "*.yaml")):
         print("--->Updating {}".format(env_file))
         with open(env_file, 'r') as content_file:
