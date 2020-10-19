@@ -121,6 +121,7 @@ def build_env(arg_strings=None):
     conda_env_data = CondaEnvFileGenerator(
                                python_versions=args.python_versions,
                                build_types=args.build_types,
+                               mpi_types=args.mpi_types,
                                channels=args.channels_list,
                                output_folder=os.path.abspath(args.output_folder),
                                )

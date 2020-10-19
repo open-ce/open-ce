@@ -13,8 +13,8 @@ import sys
 import subprocess
 from enum import Enum, unique
 from itertools import product
-import pkg_resources
 import re
+import pkg_resources
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
@@ -179,7 +179,7 @@ def get_output(command):
     print("--->{}".format(command))
     return subprocess.check_output(command, shell=True).decode("utf-8").strip()
 
-def variant_key(py_ver, build_type):
+def variant_string(py_ver, build_type, mpi_type):
     '''
     Returns a variant key using python version and build type
     '''
@@ -188,13 +188,15 @@ def variant_key(py_ver, build_type):
         result +=  "py" + py_ver
     if build_type:
         result +=  "-" + build_type
+    if mpi_type:
+        result +=  "-" + mpi_type
     return result
 
 def generalize_version(package):
     """Add `.*` to package versions when it is needed."""
 
     # Remove multiple spaces or tabs
-    package = re.sub('\s+', ' ', package)
+    package = re.sub(r'\s+', ' ', package)
 
     # Check if we want to add .* to the end of versions
     py_matched = re.match(r'([\w-]+)([\s=<>]*)(.*)', package)
@@ -203,12 +205,11 @@ def generalize_version(package):
         name = py_matched.group(1)
         operator = py_matched.group(2)
         version = py_matched.group(3)
-        append_asterik = False
 
         if len(version) > 0 and len(operator) > 0:
 
             #Append .* at the end if it is not there and if operator is space or == or = or empty
-            if not version.endswith(".*") and operator.strip() in ["=", "==", " ", ""]:
+            if not version.endswith(".*") and operator.strip() in ["==", " ", ""]:
                 package = name + operator + version + ".*"
 
     print(package)

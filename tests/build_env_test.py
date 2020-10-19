@@ -145,18 +145,19 @@ def test_build_env(mocker):
     validate_conda_env_files(py_version)
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
-                             build_types=utils.DEFAULT_BUILD_TYPES):
+                             build_types=utils.DEFAULT_BUILD_TYPES,
+                             mpi_types=utils.DEFAULT_MPI_TYPES):
 
     # Check if conda env files are created for given python versions and build variants
-    for build_type in utils.parse_arg_list(build_types):
-        for py_version in utils.parse_arg_list(py_versions):
-            cuda_env_file = os.path.join(os.getcwd(),
-                                         "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
-                                         utils.variant_key(py_version, build_type)))
+    variants = utils.make_variants(py_versions, build_types, mpi_types)
+    for variant in variants:
+        cuda_env_file = os.path.join(os.getcwd(),
+                                     "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
+                                     utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'])))
 
-            assert os.path.exists(cuda_env_file)
-            # Remove the file once it's existence is verified
-            os.remove(cuda_env_file)
+        assert os.path.exists(cuda_env_file)
+        # Remove the file once it's existence is verified
+        os.remove(cuda_env_file)
 
 def test_env_validate(mocker, capsys):
     '''

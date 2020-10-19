@@ -21,12 +21,14 @@ class CondaEnvFileGenerator():
     def __init__(self,
                  python_versions=utils.DEFAULT_PYTHON_VERS,
                  build_types=utils.DEFAULT_BUILD_TYPES,
+                 mpi_types=utils.DEFAULT_MPI_TYPES,
                  channels=None,
                  output_folder=None,
                  env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
                  ):
         self.python_versions = utils.parse_arg_list(python_versions)
         self.build_types = utils.parse_arg_list(build_types)
+        self.mpi_types= utils.parse_arg_list(mpi_types)
         self.env_file_prefix = env_file_prefix
         self.dependency_dict = {}
         self.channels = []
@@ -34,10 +36,10 @@ class CondaEnvFileGenerator():
         self._initialize_channels(channels, output_folder)
 
     def _initialize_dependency_dict(self):
-        for py_version in self.python_versions:
-            for build_type in self.build_types:
-                key = utils.variant_key(py_version, build_type)
-                self.dependency_dict[key] = set()
+        variants = utils.make_variants(self.python_versions, self.build_types, self.mpi_types)
+        for variant in variants:
+            key = utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'])
+            self.dependency_dict[key] = set()
 
     def _initialize_channels(self, channels, output_folder):
         self.channels.append("file:/" + output_folder)
@@ -83,11 +85,10 @@ class CondaEnvFileGenerator():
         This function updates dependency dictionary for each build command with
         its dependencies both internal and external.
         """
-
-        key = utils.variant_key(build_command.python, build_command.build_type)
+        key = utils.variant_string(build_command.python, build_command.build_type, build_command.mpi_type)
         self._update_deps_lists(build_command.run_dependencies, key)
         self._update_deps_lists(build_command.packages, key)
 
-        variant = { 'python' : build_command.python, 'build_type' : build_command.build_type }
+        variant = { 'python' : build_command.python, 'build_type' : build_command.build_type,
+                    'mpi_type' : build_command.mpi_type }
         self._update_deps_lists(build_tree.get_external_dependencies(str(variant)), key)
-
