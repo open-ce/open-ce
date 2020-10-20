@@ -1,4 +1,4 @@
-# Open-CE GPU Support
+# Open-CE CUDA Support
 
 The Open-CE build scripts and feedstocks support CUDA from NVIDIA. In order
 for the build scripts to work, CUDA must be installed on the system on which
@@ -89,7 +89,7 @@ The tag can also be used per line shown in this example for the xgboost [meta.ya
 
 A system-level CUDA installation is not required at runtime. Once packages are built, CUDA is pulled
 at the appropriate level from Anaconda's [Defaults channel](https://repo.anaconda.com/pkgs/).  Systems
-with GPUs installed do still need the NVIDIA device driver installed. Drivers can be found on
+with NVIDIA GPUs installed do still need the NVIDIA device driver installed. Drivers can be found on
 NVIDIA's [Driver Downloads](https://www.nvidia.com/Download/index.aspx) website.
 
 
@@ -119,7 +119,7 @@ These are fetched automatically to match the version of TensorRT included in the
 
 ## NCCL
 
-NCCL (pronounced "Nickel") is a stand-alone library of standard collective communication routines for GPUs,
+NCCL (pronounced "Nickel") is a stand-alone library of standard collective communication routines for NVIDIA GPUs,
 implementing all-reduce, all-gather, reduce, broadcast, and reduce-scatter. Pytorch and TensorFlow
 utilize NCCL when CUDA support is enabled. NCCL is now open source and fetched for build automatically.
 
