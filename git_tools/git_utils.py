@@ -55,8 +55,9 @@ def create_release(github_org, repo, token, tag_name, name, body, draft):# pylin
                             "body": body,
                             "draft": draft
                             })
-    if result.status_code != 200:
-        raise Exception("Error loading repos.")
+    print(result)
+    if result.status_code != 201:
+        raise Exception("Error creating github release.")
     return yaml.safe_load(result.content)
 
 def clone_repo(git_url, repo_dir, git_tag=None):
