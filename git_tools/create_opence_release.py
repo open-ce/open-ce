@@ -114,8 +114,7 @@ def _update_env_files(open_ce_path, new_git_tag):
             env_file_contents = content_file.read()
         if not "git_tag_for_env" in env_file_contents:
             env_file_contents = """{}
-git_tag_for_env:
-  - {}
+git_tag_for_env: {}
 """.format(env_file_contents, new_git_tag)
 
         with open(env_file, 'w') as content_file:
