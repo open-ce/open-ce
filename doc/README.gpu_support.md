@@ -85,7 +85,7 @@ The tag can also be used per line shown in this example for the xgboost [meta.ya
 ```
 
 
-# CUDA Runtime support
+## CUDA Runtime support
 
 A system-level CUDA installation is not required at runtime. Once packages are built, CUDA is pulled
 at the appropriate level from Anaconda's [Defaults channel](https://repo.anaconda.com/pkgs/).  Systems
@@ -93,7 +93,7 @@ with GPUs installed do still need the NVIDIA device driver installed. Drivers ca
 NVIDIA's [Driver Downloads](https://www.nvidia.com/Download/index.aspx) website.
 
 
-# NVIDIA cuDNN
+## NVIDIA cuDNN
 
 The NVIDIA CUDA Deep Neural Network library (cuDNN) is a GPU-accelerated library of primitives for deep neural
 networks. Both PyTorch and TensorFlow make use of cuDNN and it is require for those frameworks CUDA support.
@@ -101,7 +101,7 @@ Open-CE includes a build recipe for a cuDNN package and will automatically fetch
 for which the package being built.
 
 
-# NVIDIA TensorRT
+## NVIDIA TensorRT
 
 NVIDIA TensorRT is an SDK for high-performance deep learning inference. It includes a deep learning inference 
 optimizer and runtime that delivers low latency and high-throughput for deep learning inference applications.
@@ -118,7 +118,7 @@ must match the version of Open-CE.
 Note that the Open-CE recipe for TensorRT also includes some [open source samples and parsers](https://github.com/nvidia/tensorrt).
 These are fetched automatically to match the version of TensorRT included in the version of Open-CE being used.
 
-# NCCL
+## NCCL
 
 NCCL (pronounced "Nickel") is a stand-alone library of standard collective communication routines for GPUs,
 implementing all-reduce, all-gather, reduce, broadcast, and reduce-scatter. Pytorch and TensorFlow
