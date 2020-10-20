@@ -35,8 +35,12 @@ import traceback
 import yaml
 
 import utils
+utils.check_if_conda_build_exists()
+
+# pylint: disable=wrong-import-position
 import conda_build.api
 from conda_build.config import get_or_merge_config
+# pylint: enable=wrong-import-position
 
 def make_parser():
     ''' Parser input arguments '''
@@ -192,5 +196,4 @@ def build_feedstock(args_string=None):
     return result
 
 if __name__ == '__main__':
-    utils.check_if_conda_build_exists()
     sys.exit(build_feedstock())
