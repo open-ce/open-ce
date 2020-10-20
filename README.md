@@ -57,9 +57,12 @@ test/
 
 ### CUDA Requirements
 
-If building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`.
+Currently CUDA 10.2 is supported by the recipes in Open-CE. Please see [`doc/README.cuda_support.md`](doc/README.cuda_support.md) for details on setting
+up a proper build enviornment for CUDA support.
 
-Currently CUDA 10.2 is supported by the recipes in Open-CE. 
+Open-CE expects the `CUDA_HOME` environment variable to be set to the location of the CUDA installation.
+
+When building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`. The [cuda README](doc/README.cuda_support.md) has more information.
 
 ### Building a Collection of Packages
 
