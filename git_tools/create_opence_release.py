@@ -91,8 +91,8 @@ def _main(arg_strings=None):
                                 pat=args.pat,
                                 skipped_repos=args.primary_repo)
 
-    push = git_utils.ask_for_input("Would you like to create a github release?")
-    if push.startswith("y"):
+    release = git_utils.ask_for_input("Would you like to create a github release?")
+    if release.startswith("y"):
         print("--->Creating Draft Release.")
         git_utils.create_release(args.github_org, args.primary_repo, args.pat, version_name, args.version, version_msg, True)
 
