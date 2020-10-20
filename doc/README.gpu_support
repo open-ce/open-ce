@@ -38,7 +38,7 @@ These can be manually build using the command
 docker build open-ce/images/build-cuda-x86_64
 ```
 
-The Open-CE build image presets the `CUDA_HOME` environment variablet to the appropriate location.
+The Open-CE build image presets the `CUDA_HOME` environment variable to the appropriate location.
 
 
 ## Automatic docker builds
@@ -51,9 +51,9 @@ recipes included in the Open-CE environment file that are enabled to do so.
 
 ## CUDA Build Type
 
-Both the [build_env.py](https://github.com/open-ce/open-ce/blob/master/open-ce/build_env.py) [build_feedstock.py](https://github.com/open-ce/open-ce/blob/master/open-ce/build_feedstock.py) scripts
+Both the [build_env.py](https://github.com/open-ce/open-ce/blob/master/open-ce/build_env.py) and [build_feedstock.py](https://github.com/open-ce/open-ce/blob/master/open-ce/build_feedstock.py) scripts
 support the `--build_types=cuda` command line argument. This is required when CUDA support is desired in the build.
-This argument sets a parameter in the build environment can then be referenced in the
+This argument sets a parameter in the build environment which can then be referenced in the
 collected feedstocks and Open-CE environment files using a tag. For example, 
 a PyTorch Open-CE envionment file could use the tag as:
 
@@ -104,7 +104,7 @@ for which the package being built.
 # NVIDIA TensorRT
 
 NVIDIA TensorRT is an SDK for high-performance deep learning inference. It includes a deep learning inference 
-optimizer and runtime that delivers low latency and high-throughput for deep learning inference applications. i
+optimizer and runtime that delivers low latency and high-throughput for deep learning inference applications.
 PyTorch, TensorFlow, and TensorFlow Serving include optional TensorRT support. Open-CE is unable to automatically
 fetch TensorRT at build time. The appropriate version of TensorRT must be downloaded from NVIDIA's [TensorRT website](https://developer.nvidia.com/nvidia-tensorrt-download)
 and saved in a directory called `local_files` adjacent to the `open-ce` repository. The version of TensorRT
