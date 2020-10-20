@@ -31,8 +31,9 @@ official CUDA base containers [on](https://hub.docker.com/r/nvidia/cuda) [docker
 which are ideal for ensuring a properly installed CUDA environment. 
 
 Open-CE provides a working set of images that will work for running CUDA enabled builds.
-The dockerfiles are located in the [images directory](https://github.com/open-ce/open-ce/tree/master/images)
-These can be manually build using the command
+These images use the official CUDA images referenced above as a base image. Dockerfiles for 
+these images are located in the [images directory](images)
+To build these images manually, use the command below.
 
 ```shell
 docker build open-ce/images/build-cuda-x86_64
@@ -43,7 +44,7 @@ The Open-CE build image presets the `CUDA_HOME` environment variable to the appr
 
 ## Automatic docker builds
 
-The [build_env.py](https://github.com/open-ce/open-ce/blob/master/open-ce/build_env.py) script supports the `--docker_build` command line argument.
+The [build_env.py](README.build_env.md) script supports the `--docker_build` command line argument.
 This argument will automatically build the Open-CE CUDA-enabled build image and when combined 
 with the `--build_types=cuda` command line argument, it will build CUDA support into all of the 
 recipes included in the Open-CE environment file that are enabled to do so.
@@ -51,7 +52,7 @@ recipes included in the Open-CE environment file that are enabled to do so.
 
 ## CUDA Build Type
 
-Both the [build_env.py](https://github.com/open-ce/open-ce/blob/master/open-ce/build_env.py) and [build_feedstock.py](https://github.com/open-ce/open-ce/blob/master/open-ce/build_feedstock.py) scripts
+Both the [build_env.py](README.build_env.md) and [build_feedstock.py](README.build_feedstock.md) scripts
 support the `--build_types=cuda` command line argument. This is required when CUDA support is desired in the build.
 This argument sets a parameter in the build environment which can then be referenced in the
 collected feedstocks and Open-CE environment files using a tag. For example, 
