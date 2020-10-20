@@ -45,6 +45,20 @@ def get_all_repos(github_org, token):
         raise Exception("Error loading repos.")
     return yaml.safe_load(result.content)
 
+def create_release(github_org, repo, token, tag_name, name, body, draft):# pylint: disable=too-many-arguments
+    '''Use the github API to create an actual release on github.'''
+    result = requests.post("https://api.github.com/repos/{}/{}/releases".format(github_org, repo),
+                            headers={'Authorization' : 'token {}'.format(token)},
+                            json={
+                            "tag_name": tag_name,
+                            "name": name,
+                            "body": body,
+                            "draft": draft
+                            })
+    if result.status_code != 200:
+        raise Exception("Error loading repos.")
+    return yaml.safe_load(result.content)
+
 def clone_repo(git_url, repo_dir, git_tag=None):
     '''Clone a repo to the given location.'''
     if git_tag is None:

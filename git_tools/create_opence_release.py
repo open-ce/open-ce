@@ -91,6 +91,11 @@ def _main(arg_strings=None):
                                 pat=args.pat,
                                 skipped_repos=args.primary_repo)
 
+    push = git_utils.ask_for_input("Would you like to create a github release?")
+    if push.startswith("y"):
+        print("--->Creating Release.")
+        git_utils.create_release(args.github_org, args.primary_repo, args.pat, version_name, version_name, version_msg, True)
+
 def _update_env_files(open_ce_path, new_git_tag):
     for env_file in glob.glob(os.path.join(open_ce_path, "envs", "*.yaml")):
         print("--->Updating {}".format(env_file))
