@@ -69,7 +69,7 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     python="3.6",
                                     build_type="cpu",
                                     mpi_type="system",
-                                    run_dependencies=["python ==3.6", "pack1 >=1.0", "pack2   ==2.0"]),
+                                    run_dependencies=["python ==3.6", "pack1 >=1.0", "pack2   ==2.0", "pack3 3.3 build"]),
                          build_tree.BuildCommand("recipe3",
                                     "repo3",
                                     ["package3a", "package3b"],
@@ -143,7 +143,7 @@ def validate_dependencies(env_file_generator, variant_keys, files_generated_for)
     actual_deps = env_file_generator.dependency_dict[variant_keys[0]]
     assert Counter(py36_cpu_openmpi_deps) == Counter(actual_deps)
 
-    py36_cpu_system_deps = ["python ==3.6.*", "pack1 >=1.0", "pack2 ==2.0.*", "package2a"]
+    py36_cpu_system_deps = ["python ==3.6.*", "pack1 >=1.0", "pack2 ==2.0.*", "package2a", "pack3 3.3.* build"]
     actual_deps = env_file_generator.dependency_dict[variant_keys[1]]
     assert Counter(py36_cpu_system_deps) == Counter(actual_deps)
     files_generated_for.append(variant_keys[1])
