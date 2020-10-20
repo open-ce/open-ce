@@ -66,10 +66,20 @@ files. So if you are building the horovod environment, you will get a build of
 both pytorch and tensorflow as well because of the specified imported
 environments listed in this section.
 
-These two stanza types (packages, imported_envs) are really the only
-YAML elements that are used for the open-ce `build_env.py` builds. However, as
-each feedstock in the list is built, other YAML file information is used from
-the yaml files of each respective feedstock repository.
+Another optional feature that you might use in some customization scenarios is the
+`channels` specifier.  If you are creating an environment file and you have a need
+to add a package dependency that is not found within open-ce but which is available
+at some other external delivery channel, you can specify the URL to the desired
+channel as seen below, placing this at the top of the file (and replacing this
+sample URL with the one you want to use):
+```
+channels:
+  - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
+```
+
+These stanza types are normally the only YAML elements that are used for the open-ce
+`build_env.py` builds. However, as each feedstock in the list is built, other YAML
+file information is used from the yaml files of each respective feedstock repository.
 
 
 # build_feedstock YAML file (meta.yaml)
