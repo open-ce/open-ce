@@ -17,7 +17,6 @@ is a reference table below.
 | Open-CE version | CUDA version |
 |-----------------|--------------|
 | 1.0 (marmotini) | 10.2         |
-|                 |              |
 
 It's important to install CUDA correctly. This procedure is dependent on the system
 type and CUDA version. It's advised to follow NVIDIA's [official installation documentation](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
@@ -111,10 +110,9 @@ fetch TensorRT at build time. The appropriate version of TensorRT must be downlo
 and saved in a directory called `local_files` adjacent to the `open-ce` repository. The version of TensorRT
 must match the version of Open-CE.
 
-| Open-CE version | TensorRT version |
-|-----------------|------------------|
-| 1.0 (marmotini) | 7.0.0.1          |
-|                 |                  |
+| Open-CE version | TensorRT version | file type |
+|-----------------|------------------|-----------|
+| 1.0 (marmotini) | 7.0.0.1          |  tar.gz   |
 
 Note that the Open-CE recipe for TensorRT also includes some [open source samples and parsers](https://github.com/nvidia/tensorrt).
 These are fetched automatically to match the version of TensorRT included in the version of Open-CE being used.
