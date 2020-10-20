@@ -31,7 +31,7 @@ which are ideal for ensuring a properly installed CUDA environment.
 
 Open-CE provides a working set of images that will work for running CUDA enabled builds.
 These images use the official CUDA images referenced above as a base image. Dockerfiles for 
-these images are located in the [images directory](images)
+these images are located in the [images directory](../images)
 To build these images manually, use the command below.
 
 ```shell
