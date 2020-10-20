@@ -41,7 +41,7 @@ dependency is listed on a separate line in the stanza. For example, in
 [xgboost-env.yaml](https://github.com/open-ce/open-ce/blob/master/envs/xgboost-env.yaml):
 ```
 packages:
-  - feedstock : nccl              #['cuda' in build_type]
+  - feedstock : nccl              #[build_type == 'cuda']
   - feedstock : xgboost
 ```
 Here you see two feedstocks listed; these correspond to the open-ce repository
