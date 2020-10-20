@@ -224,4 +224,3 @@ def generalize_version(package):
                 package = name + operator + version + ".*"
 
     return package
-

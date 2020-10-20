@@ -89,7 +89,7 @@ def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
-def _create_recipes(repository, recipes, variant_config_files, variants, channels):
+def _create_recipes(repository, recipes, variant_config_files, variants, channels):#pylint: disable=too-many-locals
     """
     Create a recipe dictionary for each recipe within a repository. The dictionary
     will have all of the information needed to build the recipe, as well as to
@@ -99,15 +99,17 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
     os.chdir(repository)
 
     config_data, _ = build_feedstock.load_package_config()
+    combined_config_files = variant_config_files
+
     feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
     if feedstock_conda_build_config_file:
-        variant_config_files.append(feedstock_conda_build_config_file)
+        combined_config_files.append(feedstock_conda_build_config_file)
     outputs = []
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
         packages, run_deps, host_deps, build_deps, test_deps = _get_package_dependencies(recipe.get('path'),
-                                                                                         variant_config_files,
+                                                                                         combined_config_files,
                                                                                          variants)
         outputs.append(BuildCommand(recipe=recipe.get('name', None),
                                     repository=repository,

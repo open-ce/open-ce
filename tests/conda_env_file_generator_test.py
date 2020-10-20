@@ -11,7 +11,6 @@
 
 import sys
 import os
-from itertools import product
 import pathlib
 from collections import Counter
 
@@ -88,7 +87,7 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
 
 
 external_deps = {}
-possible_variants = utils.make_variants(['3.6', '3.7'], ['cpu', 'cuda'], 'openmpi') 
+possible_variants = utils.make_variants(['3.6', '3.7'], ['cpu', 'cuda'], 'openmpi')
 for variant in possible_variants:
     external_deps[str(variant)] = ["external_pac1    1.2", "external_pack2", "external_pack3=1.2.3"]
 TMP_OPENCE_DIR="/tmp/opence-test/"
@@ -108,7 +107,7 @@ def test_conda_env_file_content():
                                                               build_types,
                                                               mpi_types,
                                                               ["some channel"],
-                                                              output_dir) 
+                                                              output_dir)
     expected_channels = ["file:/{}".format(output_dir), "some channel", "defaults"]
     actual_channels = mock_conda_env_file_generator.channels
     assert actual_channels == expected_channels
@@ -141,7 +140,7 @@ def validate_dependencies(env_file_generator, variant_keys, files_generated_for)
     Validates the exact dependencies for each environment
     '''
     py36_cpu_openmpi_deps = set()
-    actual_deps = env_file_generator.dependency_dict[variant_keys[0]] 
+    actual_deps = env_file_generator.dependency_dict[variant_keys[0]]
     assert Counter(py36_cpu_openmpi_deps) == Counter(actual_deps)
 
     py36_cpu_system_deps = ["python ==3.6.*", "pack1 >=1.0", "pack2 ==2.0.*", "package2a"]
@@ -204,7 +203,7 @@ def test_conda_env_file_for_only_selected_py():
 
     for build_command in mock_build_tree:
         mock_conda_env_file_generator.update_conda_env_file_content(build_command, mock_build_tree)
- 
+
     mock_conda_env_file_generator.write_conda_env_files(TMP_OPENCE_DIR)
 
     # Conda env files should be generated only for py3.7-cpu-openmpi and py3.7-cuda-system variants
@@ -220,7 +219,7 @@ def test_conda_env_file_for_only_selected_py():
     # Check that no other env file exists other than the two expected ones
     for (_, _, files) in os.walk(TMP_OPENCE_DIR, topdown=True):
         assert len(files) == 2
- 
+
     cleanup()
     assert not os.path.exists(TMP_OPENCE_DIR)
 
