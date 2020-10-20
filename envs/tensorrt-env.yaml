@@ -4,3 +4,5 @@ packages:
   - feedstock : tensorrt
   - feedstock : onnx
 {% endif %}
+
+git_tag_for_env: open-ce-v1.0.0

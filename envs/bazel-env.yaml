@@ -1,3 +1,5 @@
 packages:
   - feedstock : cdts
   - feedstock : bazel
+
+git_tag_for_env: open-ce-v1.0.0

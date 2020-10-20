@@ -6,3 +6,5 @@ imported_envs:
   - spacy-env.yaml
   - transformers-env.yaml
   - horovod-env.yaml
+
+git_tag_for_env: open-ce-v1.0.0

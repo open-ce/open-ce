@@ -25,3 +25,5 @@ packages:
   - feedstock : tensorflow-metadata
   - feedstock : tensorflow-text
 
+
+git_tag_for_env: open-ce-v1.0.0

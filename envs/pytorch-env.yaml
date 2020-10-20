@@ -15,3 +15,5 @@ packages:
   - feedstock : onnx
   - feedstock : av
   - feedstock : torchvision
+
+git_tag_for_env: open-ce-v1.0.0
