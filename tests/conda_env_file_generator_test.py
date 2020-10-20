@@ -31,17 +31,17 @@ class TestBuildTree(build_tree.BuildTree):
                  python_versions,
                  build_types,
                  mpi_types,
-                 external_depends=dict(),
+                 external_depends=None,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
-        self._env_config_files = env_config_files
-        self._repository_folder = repository_folder
-        self._git_location = git_location
-        self._git_tag_for_env = git_tag_for_env
-        self._conda_build_config = conda_build_config
-        self._external_dependencies = external_depends
+        super().__init__(env_config_files, python_versions, build_types, mpi_types,
+                         repository_folder, git_location, conda_build_config)
+        if external_depends:
+            self._external_dependencies = external_depends
+        else:
+            dict()
 
 class TestCondaEnvFileGenerator(conda_env_file_generator.CondaEnvFileGenerator):
     '''
@@ -210,10 +210,10 @@ def test_conda_env_file_for_only_selected_py():
     expected_files_keys = [utils.variant_string("3.7", "cpu", "openmpi"), utils.variant_string("3.7", "cuda", "system")]
 
     # Check if conda env files are created for expected_files_keys
-    for variant in expected_files_keys:
+    for file_keys in expected_files_keys:
         cuda_env_file = os.path.join(TMP_OPENCE_DIR,
                                          "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
-                                         variant))
+                                         file_keys))
         assert os.path.exists(cuda_env_file)
 
     # Check that no other env file exists other than the two expected ones
