@@ -47,6 +47,12 @@ def _make_parser():
         required=True,
         help="""Release version to cut.""")
 
+    parser.add_argument(
+        '--code-name',
+        type=str,
+        default=None,
+        help="""Code name for release.""")
+
     return parser
 
 def _main(arg_strings=None):
@@ -55,8 +61,13 @@ def _main(arg_strings=None):
     version_name = "open-ce-v{}".format(args.version)
     release_number = ".".join(args.version.split(".")[:-1])
     branch_name = "open-ce-r{}".format(release_number)
-    version_msg = "Open-CE Version {}".format(args.version)
     primary_repo_url = "git@github.com:{}/{}.git".format(args.github_org, args.primary_repo)
+
+    version_msg = "Open-CE Version {}".format(args.version)
+    release_name = "v{}".format(args.version)
+    if args.code_name:
+        version_msg = "{} Code-named {}".format(version_msg, args.code_name)
+        release_name = "{}({})".format(release_name, args.code_name)
 
     primary_repo_path = os.path.abspath(os.path.join(args.repo_dir, args.primary_repo))
     print("--->Making clone location: " + primary_repo_path)
@@ -90,6 +101,11 @@ def _main(arg_strings=None):
                                 repo_dir=args.repo_dir,
                                 pat=args.pat,
                                 skipped_repos=args.primary_repo)
+
+    release = git_utils.ask_for_input("Would you like to create a github release?")
+    if release.startswith("y"):
+        print("--->Creating Draft Release.")
+        git_utils.create_release(args.github_org, args.primary_repo, args.pat, version_name, release_name, version_msg, True)
 
 def _update_env_files(open_ce_path, new_git_tag):
     for env_file in glob.glob(os.path.join(open_ce_path, "envs", "*.yaml")):
