@@ -42,11 +42,18 @@ def get_all_repos(github_org, token):
     Use the github API to get all repos for an org.
     https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#list-organization-repositories
     '''
-    result = requests.get("https://api.github.com/orgs/{}/repos".format(github_org),
-                     headers={'Authorization' : 'token {}'.format(token)})
-    if result.status_code != 200:
-        raise Exception("Error loading repos.")
-    return yaml.safe_load(result.content)
+    retval = []
+    page_index = 1
+    while True:
+        result = requests.get("https://api.github.com/orgs/{}/repos?page={}".format(github_org, page_index),
+                        headers={'Authorization' : 'token {}'.format(token)})
+        if result.status_code != 200:
+            raise Exception("Error loading repos.")
+        yaml_result = yaml.safe_load(result.content)
+        if not yaml_result:
+            return retval
+        retval += yaml_result
+        page_index += 1
 
 def create_release(github_org, repo, token, tag_name, name, body, draft):# pylint: disable=too-many-arguments
     '''

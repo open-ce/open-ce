@@ -67,7 +67,7 @@ def _main(arg_strings=None):
     release_name = "v{}".format(args.version)
     if args.code_name:
         version_msg = "{} Code-named {}".format(version_msg, args.code_name)
-        release_name = "{}({})".format(release_name, args.code_name)
+        release_name = "{} ({})".format(release_name, args.code_name)
 
     primary_repo_path = os.path.abspath(os.path.join(args.repo_dir, args.primary_repo))
     print("--->Making clone location: " + primary_repo_path)
