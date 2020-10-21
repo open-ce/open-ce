@@ -74,13 +74,13 @@ The `build_env.py` script can then be used to build a collection of Open-CE pack
 The following commands will use the opence-env.yaml Open-CE environment file to build all of the Open-CE packages for Python 3.6 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
 
 ```bash
-# Clone a specific Open-CE release from GitHub
-git clone https://github.com/open-ce/open-ce.git --branch open-ce-v1.0.0
+# Clone Open-CE from GitHub
+git clone https://github.com/open-ce/open-ce.git
 # Build packages
 ./open-ce/open-ce/build_env.py open-ce/envs/opence-env.yaml
 ```
 
-The following commands will use opence-env.yaml Open-CE environment file to build all of the Open-CE packages for Python 3.6, 3.7 and 3.8, including only CUDA builds. The commands should be run from within the same directory that contains `local_files`.
+The following commands will use opence-env.yaml Open-CE environment file from a specific Open-CE release to build all of the Open-CE packages for Python 3.6, 3.7 and 3.8, including only CUDA builds. The commands should be run from within the same directory that contains `local_files`.
 
 ```bash
 # Clone a specific Open-CE release from GitHub
