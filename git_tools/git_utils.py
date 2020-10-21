@@ -18,6 +18,8 @@ import requests
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 import utils # pylint: disable=wrong-import-position
 
+GITHUB_API = "https://api.github.com"
+
 @unique
 class Argument(Enum):
     '''Enum for Arguments'''
@@ -45,8 +47,13 @@ def get_all_repos(github_org, token):
     retval = []
     page_index = 1
     while True:
-        result = requests.get("https://api.github.com/orgs/{}/repos?page={}".format(github_org, page_index),
-                        headers={'Authorization' : 'token {}'.format(token)})
+        result = requests.get("{}/orgs/{}/repos?sort={}&order={}&page={}&per_page={}".format(GITHUB_API,
+                                                                                              github_org,
+                                                                                              "full_name",
+                                                                                              "asc",
+                                                                                              page_index,
+                                                                                              "100"),
+                              headers={'Authorization' : 'token {}'.format(token)})
         if result.status_code != 200:
             raise Exception("Error loading repos.")
         yaml_result = yaml.safe_load(result.content)
@@ -60,7 +67,7 @@ def create_release(github_org, repo, token, tag_name, name, body, draft):# pylin
     Use the github API to create an actual release on github.
     https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#create-a-release
     '''
-    result = requests.post("https://api.github.com/repos/{}/{}/releases".format(github_org, repo),
+    result = requests.post("{}/repos/{}/{}/releases".format(GITHUB_API, github_org, repo),
                             headers={'Authorization' : 'token {}'.format(token)},
                             json={
                             "tag_name": tag_name,
