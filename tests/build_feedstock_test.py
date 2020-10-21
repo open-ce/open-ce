@@ -248,3 +248,13 @@ channels:
                  "--build_types", "cpu",
                  "--mpi_types", "openmpi"]
     assert build_feedstock.build_feedstock(arg_input) == 0
+
+def test_build_feedstock_if_no_conda_build(mocker):
+    '''
+    Test that build_feedstock should fail if conda_build isn't present
+    '''
+    mocker.patch('pkg_resources.get_distribution', return_value=None)
+
+    arg_input = []
+    assert build_feedstock.build_feedstock(arg_input) == 1
+
