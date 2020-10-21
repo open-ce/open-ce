@@ -47,12 +47,8 @@ def get_all_repos(github_org, token):
     retval = []
     page_index = 1
     while True:
-        result = requests.get("{}/orgs/{}/repos?sort={}&order={}&page={}&per_page={}".format(GITHUB_API,
-                                                                                              github_org,
-                                                                                              "full_name",
-                                                                                              "asc",
-                                                                                              page_index,
-                                                                                              "100"),
+        options = "sort=full_name&order=asc&page={}&per_page=100".format(page_index)
+        result = requests.get("{}/orgs/{}/repos?{}".format(GITHUB_API, github_org, options),
                               headers={'Authorization' : 'token {}'.format(token)})
         if result.status_code != 200:
             raise Exception("Error loading repos.")
