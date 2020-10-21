@@ -39,6 +39,7 @@ import build_feedstock
 import docker_build
 import utils
 from utils import OpenCEError
+from conda_env_file_generator import CondaEnvFileGenerator
 
 def make_parser():
     ''' Parser for input arguments '''
@@ -109,13 +110,29 @@ def build_env(arg_strings=None):
         print(err.msg)
         return 1
 
+    conda_env_data = CondaEnvFileGenerator(
+                               python_versions=args.python_versions,
+                               build_types=args.build_types,
+                               mpi_types=args.mpi_types,
+                               channels=args.channels_list,
+                               output_folder=os.path.abspath(args.output_folder),
+                               )
+
     # Build each package in the packages list
     for build_command in build_tree:
         build_args = common_package_build_args + build_command.feedstock_args()
         result = build_feedstock.build_feedstock(build_args)
+
         if result != 0:
             print("Unable to build recipe: " +  build_command.repository)
             return result
+
+        conda_env_data.update_conda_env_file_content(build_command, build_tree)
+
+    conda_env_files = conda_env_data.write_conda_env_files()
+    print("Generated conda environment files from the selected build arguments:", conda_env_files)
+    print("INFO: One can use these environment files to create a conda" \
+          " environment using \"conda env create -f <conda_env_file_name>.\"")
 
     return result
 

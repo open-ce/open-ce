@@ -26,15 +26,6 @@ def make_parser():
                                description = 'Perform validation on a conda_build_config.yaml file.')
     return parser
 
-def generalize_version(package):
-    """Add `.*` to package versions when it is needed."""
-    dep = package
-    if ("=" in dep or (dep[-1].isdigit() and "." in dep)) and not dep[-2:] == ".*":
-        dep += ".*"
-    if " " in dep and not "." in dep.split()[1]:
-        dep += ".*"
-    return dep
-
 def validate_config(arg_strings=None):
     '''
     Entry function.
@@ -62,7 +53,7 @@ def validate_config(arg_strings=None):
             deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
             deps.update(recipes.get_external_dependencies(variant))
 
-            pkg_args = " ".join(["\"{}\"".format(generalize_version(dep)) for dep in deps
+            pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
                                                                           if not utils.remove_version(dep) in packages])
 
             channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})

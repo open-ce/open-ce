@@ -13,6 +13,7 @@ import sys
 import subprocess
 from enum import Enum, unique
 from itertools import product
+import re
 import pkg_resources
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
@@ -23,7 +24,9 @@ DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
+CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
 DEFAULT_OUTPUT_FOLDER = "condabuild"
+
 
 class OpenCEError(Exception):
     """
@@ -186,3 +189,38 @@ def get_output(command):
     '''Print and execute a shell command and then return the output.'''
     print("--->{}".format(command))
     return subprocess.check_output(command, shell=True).decode("utf-8").strip()
+
+def variant_string(py_ver, build_type, mpi_type):
+    '''
+    Returns a variant key using python version and build type
+    '''
+    result = ""
+    if py_ver:
+        result +=  "py" + py_ver
+    if build_type:
+        result +=  "-" + build_type
+    if mpi_type:
+        result +=  "-" + mpi_type
+    return result
+
+def generalize_version(package):
+    """Add `.*` to package versions when it is needed."""
+
+    # Remove multiple spaces or tabs
+    package = re.sub(r'\s+', ' ', package)
+
+    # Check if we want to add .* to the end of versions
+    py_matched = re.match(r'([\w-]+)([\s=<>]*)(\d[.\d*]*)(.*)', package)
+
+    if py_matched:
+        name = py_matched.group(1)
+        operator = py_matched.group(2)
+        version = py_matched.group(3)
+        build = py_matched.group(4)
+        if len(version) > 0 and len(operator) > 0:
+
+            #Append .* at the end if it is not there and if operator is space or == or = or empty
+            if not version.endswith(".*") and operator.strip() in ["==", " ", ""]:
+                package = name + operator + version + ".*" + build
+
+    return package

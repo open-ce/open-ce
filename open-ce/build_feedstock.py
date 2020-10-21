@@ -92,6 +92,14 @@ path of \"recipe\".""")
 
     return parser
 
+def get_conda_build_config():
+    '''
+    Checks for a conda_build_config file inside config dir of the feedstock.
+    And returns the same if it exists.
+    '''
+    recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
+    return recipe_conda_build_config if os.path.exists(recipe_conda_build_config) else None
+
 def load_package_config(config_file=None):
     '''
     Check for a config file. If the user does not provide a recipe config
