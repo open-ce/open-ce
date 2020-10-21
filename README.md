@@ -68,7 +68,7 @@ When building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.
 
 ### Building a Collection of Packages
 
-To build an entire integrated and function conda channel using Open-CE, start by installing the needed tools in the [Requirements](#requirements) section above.
+To build an entire integrated and functional conda channel using Open-CE, start by installing the needed tools in the [Requirements](#requirements) section above.
 The `build_env.py` script can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`). For more details on `build_env.py`, please see [`doc/README.build_env.md`](doc/README.build_env.md).
 
 The following commands will use the opence-env.yaml Open-CE environment file to build all of the Open-CE packages for Python 3.6 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
