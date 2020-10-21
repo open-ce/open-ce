@@ -55,7 +55,7 @@ test/
   * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
 * `python` >= 3.6
 * `docker` >= 1.13
-  * Docker is only required when using the `--docker_build`` option (see below).
+  * Docker is only required when using the `--docker_build` option (see below).
 
 ### CUDA Requirements
 
