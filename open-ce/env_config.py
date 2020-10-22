@@ -8,10 +8,10 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import os
-import sys
 from enum import Enum, unique, auto
 
 import utils
+from utils import OpenCEError
 
 utils.check_if_conda_build_exists()
 
@@ -49,14 +49,13 @@ def _validate_config_file(env_file, variants):
     try:
         meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
         if not (Key.packages.name in meta_obj.meta.keys() or Key.imported_envs.name in meta_obj.meta.keys()):
-            raise Exception("Content Error!",
-                            "An environment file needs to specify packages or "
-                            "import another environment file.")
+            raise OpenCEError("Content Error!:\n"
+                              "An environment file needs to specify packages or "
+                              "import another environment file.")
         utils.validate_dict_schema(meta_obj.meta, _ENV_CONFIG_SCHEMA)
         return meta_obj
     except (Exception, SystemExit) as exc: #pylint: disable=broad-except
-        print('***** Error in %s:\n  %s' % (env_file, exc), file=sys.stderr)
-        return None
+        raise OpenCEError('***** Error in {}:\n  {}'.format(env_file, str(exc))) from exc
 
 def load_env_config_files(config_files, variants):
     '''
@@ -66,16 +65,10 @@ def load_env_config_files(config_files, variants):
     env_config_files = [os.path.abspath(e) for e in config_files]
     env_config_data_list = []
     loaded_files = []
-    retval = 0
     while env_config_files:
         # Load the environment config files using conda-build's API. This will allow for the
         # filtering of text using selectors and jinja2 functions
         meta_obj = _validate_config_file(env_config_files[0], variants)
-        if meta_obj is None:
-            retval = 1
-            loaded_files += [env_config_files[0]]
-            env_config_files.pop(0)
-            continue
         env = meta_obj.get_rendered_recipe_text()
 
         # Examine all of the imported_envs items and determine if they still need to be loaded.
@@ -100,4 +93,4 @@ def load_env_config_files(config_files, variants):
             loaded_files += [env_config_files[0]]
             env_config_files.pop(0)
 
-    return retval, env_config_data_list
+    return env_config_data_list

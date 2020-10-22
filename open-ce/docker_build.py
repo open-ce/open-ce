@@ -11,6 +11,7 @@ import datetime
 import platform
 
 import utils
+from utils import OpenCEError
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_NAME = "builder-cuda-" + platform.machine()
@@ -30,7 +31,7 @@ def make_parser():
 
     return parser
 
-def build_image():
+def _build_image():
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -112,26 +113,22 @@ def build_in_container(image_name, output_folder, arg_strings):
 
     result = _create_container(container_name, image_name, output_folder)
     if result:
-        print("Error creating docker container: " + container_name)
-        return result
+        raise OpenCEError("Error creating docker container: \"{}\"".format(container_name))
 
     # Add the open-ce directory
     result = _copy_to_container(OPEN_CE_PATH, HOME_PATH, container_name)
     if result:
-        print("Error copying open-ce directory into container")
-        return 1
+        raise OpenCEError("Error copying open-ce directory into container")
 
     # Add local_files directory (if it exists)
     if os.path.isdir(LOCAL_FILES_PATH):
         result = _copy_to_container(LOCAL_FILES_PATH, HOME_PATH, container_name)
         if result:
-            print("Error copying local_files into container")
-            return 1
+            raise OpenCEError("Error copying local_files into container")
 
     result = _start_container(container_name)
     if result:
-        print("Error starting container " + container_name)
-        return 1
+        raise OpenCEError("Error starting container: \"{}\"".format(container_name))
 
     # Execute build command
     cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "open-ce", os.path.basename(arg_strings[0])) + " " +
@@ -142,9 +139,7 @@ def build_in_container(image_name, output_folder, arg_strings):
     _stop_container(container_name)
 
     if result:
-        print("Error executing build in container")
-
-    return result
+        raise OpenCEError("Error executing build in container")
 
 def build_with_docker(output_folder, arg_strings):
     """
@@ -153,11 +148,8 @@ def build_with_docker(output_folder, arg_strings):
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings)
 
-    result, image_name = build_image()
+    result, image_name = _build_image()
     if result:
-        print("Failure building image: " + image_name)
-        return result
+        raise OpenCEError("Failure building image: \"{}\"".format(image_name))
 
-    result = build_in_container(image_name, output_folder, unused_args)
-
-    return result
+    build_in_container(image_name, output_folder, unused_args)

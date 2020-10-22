@@ -44,15 +44,16 @@ def validate_env(arg_strings=None):
     variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
 
     for variant in variants:
-        result,_ = env_config.load_env_config_files(args.env_config_file, variant)
-        if result != 0:
-            raise OpenCEError("Error validating \"{}\" for variant {}".format(args.env_config_file, str(variant)))
+        try:
+            env_config.load_env_config_files(args.env_config_file, variant)
+        except OpenCEError as exc:
+            raise OpenCEError("Error validating \"{}\" for variant {}".format(args.env_config_file, str(variant))) from exc
 
 if __name__ == '__main__':
     try:
         validate_env()
     except OpenCEError as err:
-        print(err.msg)
+        print(err, file=sys.stderr)
         sys.exit(1)
 
     sys.exit(0)

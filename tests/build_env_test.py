@@ -12,12 +12,14 @@
 import sys
 import os
 import pathlib
+import pytest
+
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-
 import helpers
 import build_env
 import utils
+from utils import OpenCEError
 
 class PackageBuildTracker(object):
     def __init__(self):
@@ -105,9 +107,9 @@ def test_build_env(mocker):
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert build_env.build_env([env_file, "--python_versions", py_version]) == 0
+    build_env.build_env([env_file, "--python_versions", py_version])
     validate_conda_env_files(py_version)
- 
+
     #---The second test specifies a python version that is supported in the env file by package21.
     py_version = "2.1"
     package_deps = {"package11": ["package15"],
@@ -130,7 +132,7 @@ def test_build_env(mocker):
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert build_env.build_env([env_file, "--python_versions", py_version]) == 0
+    build_env.build_env([env_file, "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
      #---The third test verifies that the repository_folder argument is working properly.
@@ -141,7 +143,7 @@ def test_build_env(mocker):
     )
     py_version = "2.1"
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    assert build_env.build_env([env_file, "--repository_folder", "repo_folder", "--python_versions", py_version]) == 0
+    build_env.build_env([env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
@@ -190,9 +192,9 @@ def test_env_validate(mocker, capsys):
         side_effect=buildTracker.validate_build_feedstock
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
-    assert build_env.build_env([env_file]) == 1
-    captured = capsys.readouterr()
-    assert "Unexpected key chnnels was found in " in captured.err
+    with pytest.raises(OpenCEError) as exc:
+        build_env.build_env([env_file])
+        assert "Unexpected key chnnels was found in " in exc.message
 
 def test_build_env_docker_build(mocker):
     '''
@@ -204,7 +206,7 @@ def test_build_env_docker_build(mocker):
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
-    assert build_env.build_env(arg_strings) == 0
+    build_env.build_env(arg_strings)
 
 def test_build_env_if_no_conda_build(mocker):
     '''
@@ -213,6 +215,6 @@ def test_build_env_if_no_conda_build(mocker):
     arg_strings = ["my-env.yaml"]
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
-
-    assert build_env.build_env(arg_strings) == 1
+    with pytest.raises(OpenCEError):
+        build_env.build_env(arg_strings)
 

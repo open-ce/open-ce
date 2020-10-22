@@ -76,7 +76,7 @@ if __name__ == '__main__':
     try:
         validate_config()
     except OpenCEError as err:
-        print(err.msg)
+        print(err, file=sys.stderr)
         sys.exit(1)
 
     sys.exit(0)
