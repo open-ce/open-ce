@@ -12,12 +12,12 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 Script: validate_env.py
 
 Summary:
-  Performs syntactic validation on environment files used by build_env.py from
-  the open-ce project.
+    Performs syntactic validation on environment files used by build_env.py from
+    the open-ce project.
 
 Description:
-  This script will take a YAML build env file and will check that file and all
-  dependencies for syntactic errors.
+    This script will take a YAML build env file and will check that file and all
+    dependencies for syntactic errors.
 
 *******************************************************************************
 """
@@ -25,11 +25,12 @@ Description:
 import sys
 import env_config
 import utils
+from utils import OpenCEError
 
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [utils.Argument.ENV_FILE, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
     parser = utils.make_parser(arguments,
                                description = 'Lint Environment Files')
     return parser
@@ -40,14 +41,18 @@ def validate_env(arg_strings=None):
     '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
-    variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in utils.parse_arg_list(args.python_versions)
-                                                                  for build_type in utils.parse_arg_list(args.build_types)]
-    retval = 0
+    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
+
     for variant in variants:
         result,_ = env_config.load_env_config_files(args.env_config_file, variant)
-        retval += result
-
-    return retval
+        if result != 0:
+            raise OpenCEError("Error validating \"{}\" for variant {}".format(args.env_config_file, str(variant)))
 
 if __name__ == '__main__':
-    sys.exit(validate_env())
+    try:
+        validate_env()
+    except OpenCEError as err:
+        print(err.msg)
+        sys.exit(1)
+
+    sys.exit(0)

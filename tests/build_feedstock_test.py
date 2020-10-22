@@ -218,7 +218,7 @@ def test_build_feedstock_extra_args(mocker):
     )
     expect_config = { 'channel_urls' : ['test_channel', 'test_channel_2', 'test_channel_from_config']}
     expect_variants = {'python': '3.6', 'build_type': 'cpu', 'mpi_type': 'openmpi'}
-    reject_recipe = os.path.join(os.getcwd,'test_recipe_extra')
+    reject_recipe = os.path.join(os.getcwd(),'test_recipe_extra')
     mocker.patch(
         'conda_build.api.build',
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_config=expect_config, expect_variants=expect_variants, reject_recipe=reject_recipe, **kwargs))
