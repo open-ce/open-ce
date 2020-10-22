@@ -54,6 +54,8 @@ test/
 * `conda-build` >= 3.20
   * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
 * `python` >= 3.6
+* `docker` >= 1.13
+  * Docker is only required when using the `--docker_build` option (see below).
 
 ### CUDA Requirements
 
@@ -66,15 +68,25 @@ When building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.
 
 ### Building a Collection of Packages
 
-The `build_env.py` script can be used to build a collection of Open-CE packages. An environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`). For more details on `build_env.py`, please see [`doc/README.build_env.md`](doc/README.build_env.md).
+To build an entire integrated and functional conda channel using Open-CE, start by installing the needed tools in the [Requirements](#requirements) section above.
+The `build_env.py` script can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`). For more details on `build_env.py`, please see [`doc/README.build_env.md`](doc/README.build_env.md).
 
-The following commands will build all of the Open-CE packages for Python 3.6, including CUDA builds and cpu-only builds. The commands should be run from within the same directory that contains `local_files`.
+The following commands will use the opence-env.yaml Open-CE environment file to build all of the Open-CE packages for Python 3.6 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
 
 ```bash
 # Clone Open-CE from GitHub
 git clone https://github.com/open-ce/open-ce.git
 # Build packages
 ./open-ce/open-ce/build_env.py open-ce/envs/opence-env.yaml
+```
+
+The following commands will use opence-env.yaml Open-CE environment file from a specific Open-CE release to build all of the Open-CE packages for Python 3.6, 3.7 and 3.8, including only CUDA builds. The commands should be run from within the same directory that contains `local_files`.
+
+```bash
+# Clone a specific Open-CE release from GitHub
+git clone https://github.com/open-ce/open-ce.git --branch open-ce-v1.0.0
+# Build packages
+./open-ce/open-ce/build_env.py --python_versions 3.6,3.7,3.8 --build_types cuda open-ce/envs/opence-env.yaml
 ```
 
 #### Building within a docker container
