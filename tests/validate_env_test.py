@@ -31,7 +31,7 @@ def test_validate_env_negative(capsys):
     Negative test for validate_env.
     '''
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
-    with pytest.raises(OpenCEError) as err:
+    with pytest.raises(OpenCEError):
         validate_env.validate_env([env_file])
     captured = capsys.readouterr()
     assert "Unexpected key chnnels was found in " in captured.err
@@ -47,7 +47,7 @@ packages:
 external_dependencies: ext_dep
 '''
     mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
-    with pytest.raises(OpenCEError) as err:
+    with pytest.raises(OpenCEError):
         validate_env.validate_env([unused_env_for_arg])
     captured = capsys.readouterr()
     assert "ext_dep is not of expected type <class 'list'>" in captured.err
@@ -64,7 +64,7 @@ external_dependencies:
     - feedstock : ext_dep
 '''
     mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
-    with pytest.raises(OpenCEError) as err:
+    with pytest.raises(OpenCEError):
         validate_env.validate_env([unused_env_for_arg])
     captured = capsys.readouterr()
     assert "{'feedstock': 'ext_dep'} is not of expected type <class 'str'>" in captured.err
