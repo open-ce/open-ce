@@ -53,9 +53,6 @@ CONTAINER_NAME="conda_travis_build_$PACKAGE_NAME"
 CCACHE_DIR=/tmp/${PACKAGE_NAME}-ccache
 mkdir -p $CCACHE_DIR
 
-#Temporary change for building on next (wmlce) images
-IBM_POWERAI_LICENSE_ACCEPT=yes
-
 # Run command inside docker.
 docker run --pid=host \
   -e CCACHE_DIR=$CCACHE_DIR \
@@ -64,7 +61,6 @@ docker run --pid=host \
   -e GIT_PERS_TOKEN_PSW=${GITHUB_TOKEN}\
   -e GIT_PERS_TOKEN_USR=${GITHUB_USER}\
   -e OUTPUT_FOLDER=${OUTPUT_FOLDER} \
-  -e IBM_POWERAI_LICENSE_ACCEPT=${IBM_POWERAI_LICENSE_ACCEPT} \
   -v "$git_root:${EXTERNAL_GIT_ROOT}:$VOL_OPTS" \
   -v $CCACHE_DIR:$CCACHE_DIR$VOL_EXTRA_OPTS \
   --name=$CONTAINER_NAME \
