@@ -7,7 +7,6 @@ ENV CICD_GROUP=cicd
 ARG GROUP_ID=1500
 ENV BUILD_USER=builder
 ARG BUILD_ID=1084
-ENV IBM_POWERAI_LICENSE_ACCEPT=yes
 
 RUN export ARCH="$(uname -m)" && \
     yum repolist && yum install -y \
