@@ -186,11 +186,18 @@ def build_feedstock(args_string=None):
                                config=config, variants=variant)
         except Exception as exc: # pylint: disable=broad-except
             traceback.print_exc()
-            error_message = "Failure building recipe: {}\n{}".format(recipe['name'] if 'name' in recipe else os.getcwd, str(exc))
+            error_message = "Failure building recipe: {}\n{}".format(recipe['name'] if 'name' in recipe else os.getcwd,
+                                                                     str(exc))
             raise OpenCEError(error_message) from exc
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
 
 if __name__ == '__main__':
-    sys.exit(build_feedstock())
+    try:
+        build_feedstock()
+    except OpenCEError as err:
+        print(err.msg, file=sys.stderr)
+        sys.exit(1)
+
+    sys.exit(0)

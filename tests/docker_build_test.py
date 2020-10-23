@@ -104,7 +104,7 @@ def test_build_in_container(mocker):
 
     docker_build.build_in_container("my_image", "condabuild", ["path/to/my_script.py", "arg1", "arg2"])
 
-def test_docker_build_failures(mocker, capsys):
+def test_docker_build_failures(mocker):
     '''
     Test situations where the docker commands fail
     '''

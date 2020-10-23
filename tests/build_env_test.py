@@ -161,7 +161,7 @@ def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
         # Remove the file once it's existence is verified
         os.remove(cuda_env_file)
 
-def test_env_validate(mocker, capsys):
+def test_env_validate(mocker):
     '''
     This is a negative test of `build_env`, which passes an invalid env file.
     '''

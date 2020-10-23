@@ -55,7 +55,7 @@ if __name__ == '__main__':
     try:
         validate_env()
     except OpenCEError as err:
-        print(err, file=sys.stderr)
+        print(err.msg, file=sys.stderr)
         sys.exit(1)
 
     sys.exit(0)

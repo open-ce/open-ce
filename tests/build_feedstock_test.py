@@ -151,7 +151,7 @@ def test_build_feedstock_default_config_file(mocker):
     arg_input = []
     build_feedstock.build_feedstock(arg_input)
 
-def test_build_feedstock_nonexist_config_file(mocker, capsys):
+def test_build_feedstock_nonexist_config_file(mocker):
     """
     Tests that execution fails and the correct error message is shown if the default config file doesn't exist.
     """
@@ -181,7 +181,7 @@ def test_build_feedstock_local_src_dir_args(mocker):
     build_feedstock._set_local_src_dir("my_src_dir", None, None)
     assert os.environ["LOCAL_SRC_DIR"] == "my_src_dir"
 
-def test_build_feedstock_local_src_dir_args_fail(mocker, capsys):
+def test_build_feedstock_local_src_dir_args_fail(mocker):
     """
     Tests that providing the local_src_dir argument to a non-existant file fails properly.
     """
@@ -258,6 +258,6 @@ def test_build_feedstock_if_no_conda_build(mocker):
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     arg_input = []
-    with pytest.raises(OpenCEError) as exc:
+    with pytest.raises(OpenCEError):
         assert build_feedstock.build_feedstock(arg_input) == 1
 

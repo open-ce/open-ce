@@ -26,17 +26,16 @@ def test_validate_env():
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     validate_env.validate_env([env_file])
 
-def test_validate_env_negative(capsys):
+def test_validate_env_negative():
     '''
     Negative test for validate_env.
     '''
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
-    with pytest.raises(OpenCEError):
+    with pytest.raises(OpenCEError) as exc:
         validate_env.validate_env([env_file])
-    captured = capsys.readouterr()
-    assert "Unexpected key chnnels was found in " in captured.err
+    assert "Unexpected key chnnels was found in " in str(exc.value)
 
-def test_validate_env_wrong_external_deps(mocker, capsys):
+def test_validate_env_wrong_external_deps(mocker,):
     '''
     Test that validate env correctly handles invalid data for external dependencies.
     '''
@@ -47,12 +46,11 @@ packages:
 external_dependencies: ext_dep
 '''
     mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
-    with pytest.raises(OpenCEError):
+    with pytest.raises(OpenCEError) as exc:
         validate_env.validate_env([unused_env_for_arg])
-    captured = capsys.readouterr()
-    assert "ext_dep is not of expected type <class 'list'>" in captured.err
+    assert "ext_dep is not of expected type <class 'list'>" in str(exc.value)
 
-def test_validate_env_dict_for_external_deps(mocker, capsys):
+def test_validate_env_dict_for_external_deps(mocker,):
     '''
     Test that validate env correctly handles erroneously passing a dict for external dependencies.
     '''
@@ -64,7 +62,6 @@ external_dependencies:
     - feedstock : ext_dep
 '''
     mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
-    with pytest.raises(OpenCEError):
+    with pytest.raises(OpenCEError) as exc:
         validate_env.validate_env([unused_env_for_arg])
-    captured = capsys.readouterr()
-    assert "{'feedstock': 'ext_dep'} is not of expected type <class 'str'>" in captured.err
+    assert "{'feedstock': 'ext_dep'} is not of expected type <class 'str'>" in str(exc.value)

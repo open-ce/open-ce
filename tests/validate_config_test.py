@@ -105,7 +105,7 @@ def test_validate_negative(mocker):
         validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
     assert "Error while validating ./conda_build_config.yaml for " in str(err.value)
 
-def test_validate_bad_env(mocker, capsys):
+def test_validate_bad_env(mocker):
     '''
     This is a negative test of `validate_config` where the env file is bad.
     '''
@@ -141,6 +141,5 @@ def test_validate_bad_env(mocker, capsys):
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as err:
         validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
-    captured = capsys.readouterr()
     assert "Error while validating ./conda_build_config.yaml for " in str(err.value)
-    assert "Unexpected key chnnels was found in " in captured.err
+    assert "Unexpected key chnnels was found in " in str(err.value)

@@ -93,7 +93,7 @@ def test_clone_repo(mocker):
 
     mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, "master")
 
-def test_clone_repo_failure(mocker, capsys):
+def test_clone_repo_failure(mocker):
     '''
     Simple negative test for `_clone_repo`.
     '''
