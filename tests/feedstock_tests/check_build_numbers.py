@@ -30,6 +30,19 @@ def make_parser():
                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     return parser
 
+def get_build_numbers(build_config_data, config, variant):
+    build_numbers = dict()
+    for recipe in build_config_data["recipes"]:
+        metas = conda_build.api.render(recipe['path'],
+                                    config=config,
+                                    variants=variant,
+                                    bypass_env_check=True,
+                                    finalize=False)
+        for meta,_,_ in metas:
+            build_numbers[meta.meta['package']['name']] = {"version" : meta.meta['package']['version'],
+                                                           "number" : meta.meta['build']['number']}
+        return build_numbers
+
 def main(arg_strings=None):
     '''
     Entry function.
@@ -54,28 +67,10 @@ def main(arg_strings=None):
     variant_build_results = dict()
     for variant in variants:
         utils.run_and_log("git checkout {}".format(default_branch))
-        master_build_numbers = dict()
-        for recipe in build_config_data["recipes"]:
-            metas = conda_build.api.render(recipe['path'],
-                                        config=config,
-                                        variants=variant,
-                                        bypass_env_check=True,
-                                        finalize=False)
-            for meta,_,_ in metas:
-                master_build_numbers[meta.meta['package']['name']] = {"version" : meta.meta['package']['version'],
-                                                                    "number" : meta.meta['build']['number']}
+        master_build_numbers = get_build_numbers(build_config_data, config, variant)
 
         utils.run_and_log("git checkout {}".format(pr_branch))
-        current_pr_build_numbers = dict()
-        for recipe in build_config_data["recipes"]:
-            metas = conda_build.api.render(recipe['path'],
-                                        config=config,
-                                        variants=variant,
-                                        bypass_env_check=True,
-                                        finalize=False)
-            for meta,_,_ in metas:
-                current_pr_build_numbers[meta.meta['package']['name']] = {"version" : meta.meta['package']['version'],
-                                                                        "number" : meta.meta['build']['number']}
+        current_pr_build_numbers = get_build_numbers(build_config_data, config, variant)
 
         print("Build Info for Variant:   {}".format(variant))
         print("Current PR Build Info:    {}".format(current_pr_build_numbers))
