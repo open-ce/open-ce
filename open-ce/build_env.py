@@ -119,7 +119,7 @@ def build_env(arg_strings=None):
         try:
             build_feedstock.build_feedstock(build_args)
         except OpenCEError as exc:
-            raise OpenCEError("Unable to build recipe: {}".format(build_command.repository)) from exc
+            raise OpenCEError("Unable to build recipe: {}\n{}".format(build_command.repository, exc.msg)) from exc
 
         conda_env_data.update_conda_env_file_content(build_command, build_tree)
 

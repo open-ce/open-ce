@@ -194,7 +194,7 @@ def test_env_validate(mocker, capsys):
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as exc:
         build_env.build_env([env_file])
-        assert "Unexpected key chnnels was found in " in exc.message
+    assert "Unexpected key chnnels was found in " in str(exc.value)
 
 def test_build_env_docker_build(mocker):
     '''

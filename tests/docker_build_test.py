@@ -12,12 +12,13 @@
 import os
 import sys
 import pathlib
+import pytest
+
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-
 import helpers
-
 import docker_build
+from utils import OpenCEError
 
 def test_build_image(mocker):
     '''
@@ -34,7 +35,7 @@ def test_build_image(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    result, image_name = docker_build.build_image()
+    result, image_name = docker_build._build_image()
     assert result == 0
     assert image_name == intended_image_name
 
@@ -90,7 +91,7 @@ def test_execute_in_container(mocker):
                                                                "my_script.py arg1 arg2"])))
 
     assert docker_build._execute_in_container(container, command) == 0
- 
+
 def test_build_in_container(mocker):
     '''
     Simple test for build_in_container
@@ -101,7 +102,7 @@ def test_build_in_container(mocker):
 
     mocker.patch('os.system', return_value=0)
 
-    assert docker_build.build_in_container("my_image", "condabuild", ["path/to/my_script.py", "arg1", "arg2"]) == 0
+    docker_build.build_in_container("my_image", "condabuild", ["path/to/my_script.py", "arg1", "arg2"])
 
 def test_docker_build_failures(mocker, capsys):
     '''
@@ -116,40 +117,40 @@ def test_docker_build_failures(mocker, capsys):
     # Failed create
     mocker.patch('docker_build._create_container', return_value=1)
 
-    assert docker_build.build_in_container(image, output_folder, cmd) == 1
-    captured = capsys.readouterr()
-    assert "Error creating" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_in_container(image, output_folder, cmd)
+    assert "Error creating" in str(exc.value)
 
     # Failed first copy
     mocker.patch('docker_build._create_container', return_value=0)
     mocker.patch('docker_build._copy_to_container', side_effect=[1,1])
 
-    assert docker_build.build_in_container(image, output_folder, cmd) == 1
-    captured = capsys.readouterr()
-    assert "Error copying open-ce directory" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_in_container(image, output_folder, cmd)
+    assert "Error copying open-ce directory" in str(exc.value)
 
     # Failed second copy
     mocker.patch('docker_build._copy_to_container', side_effect=[0,1])
 
-    assert docker_build.build_in_container(image, output_folder, cmd) == 1
-    captured = capsys.readouterr()
-    assert "Error copying local_files" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_in_container(image, output_folder, cmd)
+    assert "Error copying local_files" in str(exc.value)
 
     # Failed start
     mocker.patch('docker_build._copy_to_container', return_value=0)
     mocker.patch('docker_build._start_container', return_value=1)
 
-    assert docker_build.build_in_container(image, output_folder, cmd) == 1
-    captured = capsys.readouterr()
-    assert "Error starting" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_in_container(image, output_folder, cmd)
+    assert "Error starting" in str(exc.value)
 
     # Failed execute
     mocker.patch('docker_build._start_container', return_value=0)
     mocker.patch('docker_build._execute_in_container', return_value=1)
 
-    assert docker_build.build_in_container(image, output_folder, cmd) == 1
-    captured = capsys.readouterr()
-    assert "Error executing" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_in_container(image, output_folder, cmd)
+    assert "Error executing" in str(exc.value)
 
 def test_build_with_docker(mocker):
     '''
@@ -159,13 +160,13 @@ def test_build_with_docker(mocker):
     output_folder = "condabuild"
     arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
 
-    mocker.patch('docker_build.build_image', return_value=(0, image_name))
+    mocker.patch('docker_build._build_image', return_value=(0, image_name))
 
     mocker.patch('docker_build.build_in_container', return_value=0)
 
-    assert docker_build.build_with_docker(output_folder, arg_strings) == 0
+    docker_build.build_with_docker(output_folder, arg_strings)
 
-def test_build_with_docker_failures(mocker, capsys):
+def test_build_with_docker_failures(mocker):
     '''
     Failure cases for build_with_docker
     '''
@@ -173,8 +174,8 @@ def test_build_with_docker_failures(mocker, capsys):
     output_folder = "condabuild"
     arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
 
-    mocker.patch('docker_build.build_image', return_value=(1, image_name))
+    mocker.patch('docker_build._build_image', return_value=(1, image_name))
 
-    assert docker_build.build_with_docker(output_folder, arg_strings) == 1
-    captured = capsys.readouterr()
-    assert "Failure building image" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_with_docker(output_folder, arg_strings)
+    assert "Failure building image" in str(exc.value)

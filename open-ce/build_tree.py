@@ -233,7 +233,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             try:
                 variant_recipes, external_deps = self._create_all_recipes(variant)
             except OpenCEError as exc:
-                raise OpenCEError("Error creating Build Tree") from exc
+                raise OpenCEError("Error creating Build Tree\n{}".format(exc.msg)) from exc
             self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
