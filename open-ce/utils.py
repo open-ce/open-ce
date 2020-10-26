@@ -114,6 +114,17 @@ class Argument(Enum):
                                              "should be relative to the directory containing open-ce. Only files "
                                              "within the open-ce directory and local_files will be visible at "
                                              "build time."))
+    CONDA_ENV_FILE = (lambda parser: parser.add_argument(
+                                        '--conda_env_file',
+                                        type=str,
+                                        help='Location of conda environment file.' ))
+
+    CONDABUILD_DIR = (lambda parser: parser.add_argument(
+                                        '--condabuild_dir',
+                                        type=str,
+                                        default=DEFAULT_OUTPUT_FOLDER,
+                                        help='Path where built conda packages are present.'))
+
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
