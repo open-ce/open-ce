@@ -19,7 +19,7 @@ sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import build_env
 import utils
-from utils import OpenCEError
+from errors import OpenCEError
 
 class PackageBuildTracker(object):
     def __init__(self):

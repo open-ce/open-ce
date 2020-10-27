@@ -11,7 +11,7 @@ import os
 import utils
 import env_config
 import build_feedstock
-from utils import OpenCEError
+from errors import OpenCEError, Error
 
 import conda_build.api
 from conda_build.config import get_or_merge_config
@@ -233,7 +233,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             try:
                 variant_recipes, external_deps = self._create_all_recipes(variant)
             except OpenCEError as exc:
-                raise OpenCEError("Error creating Build Tree\n{}".format(exc.msg)) from exc
+                raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
             self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
@@ -318,7 +318,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         print("Clone cmd: ", clone_cmd)
         clone_result = os.system(clone_cmd)
         if clone_result != 0:
-            raise OpenCEError("Unable to clone repository: {}".format(git_url))
+            raise OpenCEError(Error.CLONE_REPO, git_url)
 
     def __iter__(self):
         """

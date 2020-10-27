@@ -38,7 +38,7 @@ import sys
 import build_feedstock
 import docker_build
 import utils
-from utils import OpenCEError
+from errors import OpenCEError, Error
 from conda_env_file_generator import CondaEnvFileGenerator
 
 def make_parser():
@@ -119,7 +119,7 @@ def build_env(arg_strings=None):
         try:
             build_feedstock.build_feedstock(build_args)
         except OpenCEError as exc:
-            raise OpenCEError("Unable to build recipe: {}\n{}".format(build_command.repository, exc.msg)) from exc
+            raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
 
         conda_env_data.update_conda_env_file_content(build_command, build_tree)
 

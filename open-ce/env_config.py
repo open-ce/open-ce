@@ -11,7 +11,7 @@ import os
 from enum import Enum, unique, auto
 
 import utils
-from utils import OpenCEError
+from errors import OpenCEError, Error
 
 utils.check_if_conda_build_exists()
 
@@ -49,13 +49,11 @@ def _validate_config_file(env_file, variants):
     try:
         meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
         if not (Key.packages.name in meta_obj.meta.keys() or Key.imported_envs.name in meta_obj.meta.keys()):
-            raise OpenCEError("Content Error!:\n"
-                              "An environment file needs to specify packages or "
-                              "import another environment file.")
+            raise OpenCEError(Error.CONFIG_CONTENT)
         utils.validate_dict_schema(meta_obj.meta, _ENV_CONFIG_SCHEMA)
         return meta_obj
     except (Exception, SystemExit) as exc: #pylint: disable=broad-except
-        raise OpenCEError('***** Error in {}:\n  {}'.format(env_file, str(exc))) from exc
+        raise OpenCEError(Error.ERROR, "Error in {}:\n  {}".format(env_file, str(exc))) from exc
 
 def load_env_config_files(config_files, variants):
     '''

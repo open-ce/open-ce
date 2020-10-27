@@ -35,7 +35,7 @@ import traceback
 import yaml
 
 import utils
-from utils import OpenCEError
+from errors import OpenCEError, Error
 utils.check_if_conda_build_exists()
 
 # pylint: disable=wrong-import-position
@@ -114,7 +114,7 @@ def load_package_config(config_file=None):
         if not config_file:
             config_file = utils.DEFAULT_RECIPE_CONFIG_FILE
         if not os.path.exists(config_file):
-            raise OpenCEError("Unable to open provided config file: {}".format(config_file))
+            raise OpenCEError(Error.CONFIG_FILE, config_file)
 
         with open(config_file, 'r') as stream:
             build_config_data = yaml.safe_load(stream)
@@ -140,7 +140,7 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
 
     if local_src_dir:
         if not os.path.exists(local_src_dir):
-            raise OpenCEError("ERROR: local_src_dir path \"{}\" specified doesn't exist".format(local_src_dir))
+            raise OpenCEError(Error.LOCAL_SRC_DIR, local_src_dir)
         os.environ["LOCAL_SRC_DIR"] = local_src_dir
     else:
         if 'LOCAL_SRC_DIR' in os.environ:
@@ -186,9 +186,9 @@ def build_feedstock(args_string=None):
                                config=config, variants=variant)
         except Exception as exc: # pylint: disable=broad-except
             traceback.print_exc()
-            error_message = "Failure building recipe: {}\n{}".format(recipe['name'] if 'name' in recipe else os.getcwd,
-                                                                     str(exc))
-            raise OpenCEError(error_message) from exc
+            raise OpenCEError(Error.BUILD_RECIPE,
+                              recipe['name'] if 'name' in recipe else os.getcwd,
+                              str(exc)) from exc
 
     if saved_working_directory:
         os.chdir(saved_working_directory)

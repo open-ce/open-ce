@@ -25,7 +25,7 @@ Description:
 import sys
 import env_config
 import utils
-from utils import OpenCEError
+from errors import OpenCEError, Error
 
 def make_parser():
     ''' Parser for input arguments '''
@@ -47,9 +47,7 @@ def validate_env(arg_strings=None):
         try:
             env_config.load_env_config_files(args.env_config_file, variant)
         except OpenCEError as exc:
-            raise OpenCEError("Error validating \"{}\" for variant {}\n{}".format(args.env_config_file,
-                                                                                  str(variant),
-                                                                                  exc.msg)) from exc
+            raise OpenCEError(Error.VALIDATE_ENV, args.env_config_file, str(variant), exc.msg) from exc
 
 if __name__ == '__main__':
     try:

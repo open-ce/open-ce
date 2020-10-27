@@ -18,7 +18,7 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import build_tree
 import utils
-from utils import OpenCEError
+from errors import OpenCEError
 import helpers
 
 class TestBuildTree(build_tree.BuildTree):

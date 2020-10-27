@@ -18,7 +18,7 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import docker_build
-from utils import OpenCEError
+from errors import OpenCEError
 
 def test_build_image(mocker):
     '''
@@ -127,14 +127,14 @@ def test_docker_build_failures(mocker):
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_in_container(image, output_folder, cmd)
-    assert "Error copying open-ce directory" in str(exc.value)
+    assert "Error copying \"open-ce\" directory" in str(exc.value)
 
     # Failed second copy
     mocker.patch('docker_build._copy_to_container', side_effect=[0,1])
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_in_container(image, output_folder, cmd)
-    assert "Error copying local_files" in str(exc.value)
+    assert "Error copying \"local_files\"" in str(exc.value)
 
     # Failed start
     mocker.patch('docker_build._copy_to_container', return_value=0)

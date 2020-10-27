@@ -17,7 +17,7 @@ import pytest
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 import helpers
 import utils
-from utils import OpenCEError
+from errors import OpenCEError
 import build_feedstock
 
 def test_build_feedstock_default(mocker):
@@ -63,7 +63,7 @@ def test_build_feedstock_failure(mocker):
     arg_input = ""
     with pytest.raises(OpenCEError) as exc:
         build_feedstock.build_feedstock(arg_input)
-    assert "Failure building recipe: test_recipe" in str(exc.value)
+    assert "Unable to build recipe: test_recipe" in str(exc.value)
 
 def test_build_feedstock_working_dir(mocker):
     """
@@ -192,7 +192,7 @@ def test_build_feedstock_local_src_dir_args_fail(mocker):
 
     with pytest.raises(OpenCEError) as exc:
         build_feedstock._set_local_src_dir("my_src_dir", { 'local_src_dir' : "my_other_src_dir" }, None)
-    assert "ERROR: local_src_dir path \"my_src_dir\" specified doesn't exist" in str(exc.value)
+    assert "local_src_dir path \"my_src_dir\" specified doesn't exist" in str(exc.value)
 
 def test_build_feedstock_local_src_dir_recipe(mocker):
     """
