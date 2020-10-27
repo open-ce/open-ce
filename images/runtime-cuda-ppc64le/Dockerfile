@@ -1,4 +1,5 @@
-FROM nvidia/cuda-ppc64le:10.2-runtime-ubi7
+#FROM nvidia/cuda-ppc64le:10.2-runtime-ubi7
+FROM registry.access.redhat.com/ubi7/ubi:7.6
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
@@ -11,6 +12,7 @@ ENV OPENCE_USER=opence
 ARG USER_ID=1084
 ARG CONDABUILD_DIR
 ARG CONDA_ENV_FILE
+ARG TARGET_DIR
 
 # Remove preinclude system compilers
 #RUN rpm -e --nodeps --verbose gcc gcc-c++
@@ -22,7 +24,7 @@ RUN export ARCH="$(uname -m)" && \
     # Create CICD Group
     groupadd --non-unique --gid ${GROUP_ID} ${CICD_GROUP} && \
     # Adduser Builder
-    useradd -b /home --non-unique --create-home --gid ${GROUP_ID} --groups wheel \
+    adduser -b /home/ --non-unique --create-home --gid ${GROUP_ID} --groups wheel \
     --uid ${USER_ID} ${OPENCE_USER} && \
     echo "${OPENCE_USER}    ALL=NOPASSWD: ALL" > /etc/sudoers.d/user-${OPENCE_USER} && \
     curl -o /tmp/anaconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${ARCH}.sh && \
@@ -48,6 +50,11 @@ RUN export PATH="${PATH}" && \
     echo ". $CONDA_HOME/etc/profile.d/conda.sh" >> ${HOME}/.bashrc && \
     echo "conda activate base" >> ${HOME}/.bashrc
 
-COPY ${CONDABUILD_DIR} ${HOME}
-#RUN $CONDA_HOME/bin/conda env create -f ${HOME}/${CONDA_ENV_FILE}
+RUN echo "${TARGET_DIR}"
+
+RUN mkdir -p ${HOME}/${TARGET_DIR}
+
+COPY ${CONDABUILD_DIR} /home/opence/${TARGET_DIR}
+
+RUN $CONDA_HOME/bin/conda env create -f ${HOME}/${TARGET_DIR}/${CONDA_ENV_FILE}
 

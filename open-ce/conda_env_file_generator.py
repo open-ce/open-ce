@@ -70,7 +70,7 @@ class CondaEnvFileGenerator():
                 dependencies = self.dependency_dict[key],
             )
             with open(conda_env_file, 'w') as outfile:
-                yaml.dump(data, outfile, default_flow_style=False)
+                yaml.safe_dump(data, outfile, default_flow_style=False)
                 conda_env_files.append(conda_env_file)
 
         return conda_env_files
