@@ -169,7 +169,6 @@ def test_build_with_docker_failures(mocker):
     '''
     Failure cases for build_with_docker
     '''
-    image_name = "my_image"
     output_folder = "condabuild"
     arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
 
