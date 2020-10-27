@@ -35,9 +35,7 @@ def test_build_image(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    result, image_name = docker_build._build_image()
-    assert result == 0
-    assert image_name == intended_image_name
+    assert docker_build._build_image() == intended_image_name
 
 def test_create_container(mocker):
     '''
@@ -59,7 +57,7 @@ def test_create_container(mocker):
                                                                "-v /my_dir/" + output_folder,
                                                                image_name])))
 
-    assert docker_build._create_container(container_name, image_name, output_folder) == 0
+    docker_build._create_container(container_name, image_name, output_folder)
 
 def test_copy_to_container(mocker):
     '''
@@ -75,7 +73,7 @@ def test_copy_to_container(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=[docker_build.DOCKER_TOOL + " cp",
                                                                container + ":"])))
 
-    assert docker_build._copy_to_container(src, dest, container) == 0
+    docker_build._copy_to_container(src, dest, container)
 
 def test_execute_in_container(mocker):
     '''
@@ -90,7 +88,7 @@ def test_execute_in_container(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=[docker_build.DOCKER_TOOL + " exec " + container,
                                                                "my_script.py arg1 arg2"])))
 
-    assert docker_build._execute_in_container(container, command) == 0
+    docker_build._execute_in_container(container, command)
 
 def test_build_in_container(mocker):
     '''
@@ -115,38 +113,39 @@ def test_docker_build_failures(mocker):
     mocker.patch('os.path.isdir', return_value = True)
 
     # Failed create
-    mocker.patch('docker_build._create_container', return_value=1)
+    mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_in_container(image, output_folder, cmd)
     assert "Error creating" in str(exc.value)
 
     # Failed first copy
-    mocker.patch('docker_build._create_container', return_value=0)
-    mocker.patch('docker_build._copy_to_container', side_effect=[1,1])
+    mocker.patch('docker_build._create_container', return_value=None)
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_in_container(image, output_folder, cmd)
-    assert "Error copying \"open-ce\" directory" in str(exc.value)
+    assert "Error copying" in str(exc.value)
+    assert "open-ce" in str(exc.value)
 
     # Failed second copy
-    mocker.patch('docker_build._copy_to_container', side_effect=[0,1])
+    mocker.patch('os.system', side_effect=[0,1])
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_in_container(image, output_folder, cmd)
-    assert "Error copying \"local_files\"" in str(exc.value)
+    assert "Error copying" in str(exc.value)
+    assert "local_files" in str(exc.value)
 
     # Failed start
-    mocker.patch('docker_build._copy_to_container', return_value=0)
-    mocker.patch('docker_build._start_container', return_value=1)
+    mocker.patch('docker_build._copy_to_container', return_value=None)
+    mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_in_container(image, output_folder, cmd)
     assert "Error starting" in str(exc.value)
 
     # Failed execute
-    mocker.patch('docker_build._start_container', return_value=0)
-    mocker.patch('docker_build._execute_in_container', return_value=1)
+    mocker.patch('docker_build._start_container', return_value=None)
+    mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_in_container(image, output_folder, cmd)
@@ -174,7 +173,7 @@ def test_build_with_docker_failures(mocker):
     output_folder = "condabuild"
     arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
 
-    mocker.patch('docker_build._build_image', return_value=(1, image_name))
+    mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_with_docker(output_folder, arg_strings)

@@ -44,9 +44,10 @@ def _build_image():
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
     build_cmd += BUILD_IMAGE_PATH
 
-    result = os.system(build_cmd)
+    if os.system(build_cmd):
+        raise OpenCEError(Error.BUILD_IMAGE, image_name)
 
-    return result, image_name
+    return image_name
 
 def _add_volume(local_path, container_path):
     """
@@ -80,25 +81,24 @@ def _create_container(container_name, image_name, output_folder):
     docker_cmd += _add_volume(None, "/opt/conda/conda-bld")
 
     docker_cmd += image_name + " bash"
-    result = os.system(docker_cmd)
-
-    return result
+    if os.system(docker_cmd):
+        raise OpenCEError(Error.CREATE_CONTAINER, container_name)
 
 def _copy_to_container(src, dest, container_name):
-    result = os.system(DOCKER_TOOL + " cp " + src + " " + container_name + ":" + dest)
-    return result
+    if os.system(DOCKER_TOOL + " cp " + src + " " + container_name + ":" + dest):
+        raise OpenCEError(Error.COPY_DIR_TO_CONTAINER, src, container_name)
 
 def _start_container(container_name):
-    result = os.system(DOCKER_TOOL + " start " + container_name)
-    return result
+    if os.system(DOCKER_TOOL + " start " + container_name):
+        raise OpenCEError(Error.START_CONTAINER, container_name)
 
 def _execute_in_container(container_name, command):
     docker_cmd = DOCKER_TOOL + " exec " + container_name + " "
     # Change to home directory
     docker_cmd += "bash -c 'cd " + HOME_PATH + "; " + command + "'"
 
-    result = os.system(docker_cmd)
-    return result
+    if os.system(docker_cmd):
+        raise OpenCEError(Error.BUILD_IN_CONTAINER, container_name)
 
 def _stop_container(container_name):
     result = os.system(DOCKER_TOOL + " stop " + container_name)
@@ -111,35 +111,24 @@ def build_in_container(image_name, output_folder, arg_strings):
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     container_name = IMAGE_NAME + "-" + time_stamp
 
-    result = _create_container(container_name, image_name, output_folder)
-    if result:
-        raise OpenCEError(Error.CREATE_CONTAINER, container_name)
+    _create_container(container_name, image_name, output_folder)
 
     # Add the open-ce directory
-    result = _copy_to_container(OPEN_CE_PATH, HOME_PATH, container_name)
-    if result:
-        raise OpenCEError(Error.COPY_DIR_TO_CONTAINER, "open-ce")
+    _copy_to_container(OPEN_CE_PATH, HOME_PATH, container_name)
 
     # Add local_files directory (if it exists)
     if os.path.isdir(LOCAL_FILES_PATH):
-        result = _copy_to_container(LOCAL_FILES_PATH, HOME_PATH, container_name)
-        if result:
-            raise OpenCEError(Error.COPY_DIR_TO_CONTAINER, "local_files")
+        _copy_to_container(LOCAL_FILES_PATH, HOME_PATH, container_name)
 
-    result = _start_container(container_name)
-    if result:
-        raise OpenCEError(Error.START_CONTAINER, container_name)
+    _start_container(container_name)
 
     # Execute build command
     cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "open-ce", os.path.basename(arg_strings[0])) + " " +
               ' '.join(arg_strings[1:]))
-    result = _execute_in_container(container_name, cmd)
+    _execute_in_container(container_name, cmd)
 
     # Cleanup
     _stop_container(container_name)
-
-    if result:
-        raise OpenCEError(Error.BUILD_IN_CONTAINER, container_name)
 
 def build_with_docker(output_folder, arg_strings):
     """
@@ -148,8 +137,6 @@ def build_with_docker(output_folder, arg_strings):
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings)
 
-    result, image_name = _build_image()
-    if result:
-        raise OpenCEError(Error.BUILD_IMAGE, image_name)
+    image_name = _build_image()
 
     build_in_container(image_name, output_folder, unused_args)
