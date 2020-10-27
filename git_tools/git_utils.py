@@ -18,6 +18,8 @@ import requests
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 import utils # pylint: disable=wrong-import-position
 
+GITHUB_API = "https://api.github.com"
+
 @unique
 class Argument(Enum):
     '''Enum for Arguments'''
@@ -42,18 +44,26 @@ def get_all_repos(github_org, token):
     Use the github API to get all repos for an org.
     https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#list-organization-repositories
     '''
-    result = requests.get("https://api.github.com/orgs/{}/repos".format(github_org),
-                     headers={'Authorization' : 'token {}'.format(token)})
-    if result.status_code != 200:
-        raise Exception("Error loading repos.")
-    return yaml.safe_load(result.content)
+    retval = []
+    page_index = 1
+    while True:
+        options = "sort=full_name&order=asc&page={}&per_page=100".format(page_index)
+        result = requests.get("{}/orgs/{}/repos?{}".format(GITHUB_API, github_org, options),
+                              headers={'Authorization' : 'token {}'.format(token)})
+        if result.status_code != 200:
+            raise Exception("Error loading repos.")
+        yaml_result = yaml.safe_load(result.content)
+        if not yaml_result:
+            return retval
+        retval += yaml_result
+        page_index += 1
 
 def create_release(github_org, repo, token, tag_name, name, body, draft):# pylint: disable=too-many-arguments
     '''
     Use the github API to create an actual release on github.
     https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#create-a-release
     '''
-    result = requests.post("https://api.github.com/repos/{}/{}/releases".format(github_org, repo),
+    result = requests.post("{}/repos/{}/{}/releases".format(GITHUB_API, github_org, repo),
                             headers={'Authorization' : 'token {}'.format(token)},
                             json={
                             "tag_name": tag_name,
