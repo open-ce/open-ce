@@ -35,6 +35,7 @@ import traceback
 import yaml
 
 import utils
+from errors import OpenCEError, Error
 utils.check_if_conda_build_exists()
 
 # pylint: disable=wrong-import-position
@@ -113,8 +114,7 @@ def load_package_config(config_file=None):
         if not config_file:
             config_file = utils.DEFAULT_RECIPE_CONFIG_FILE
         if not os.path.exists(config_file):
-            print("Unable to open provided config file: " + config_file)
-            return None, config_file
+            raise OpenCEError(Error.CONFIG_FILE, config_file)
 
         with open(config_file, 'r') as stream:
             build_config_data = yaml.safe_load(stream)
@@ -140,14 +140,11 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
 
     if local_src_dir:
         if not os.path.exists(local_src_dir):
-            print("ERROR: local_src_dir path \"" + local_src_dir + "\" specified doesn't exist")
-            return 1
+            raise OpenCEError(Error.LOCAL_SRC_DIR, local_src_dir)
         os.environ["LOCAL_SRC_DIR"] = local_src_dir
     else:
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
-
-    return 0
 
 def build_feedstock(args_string=None):
     '''
@@ -162,11 +159,8 @@ def build_feedstock(args_string=None):
         os.chdir(os.path.abspath(args.working_directory))
 
     build_config_data, recipe_config_file  = load_package_config(args.recipe_config_file)
-    if build_config_data is None:
-        return 1
 
     args.recipes = utils.parse_arg_list(args.recipe_list)
-    result = 0
 
     # Build each recipe
     for recipe in build_config_data['recipes']:
@@ -184,24 +178,26 @@ def build_feedstock(args_string=None):
 
         config.channel_urls = args.channels_list + build_config_data.get('channels', [])
 
-        result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
-        if result != 0:
-            break
+        _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
 
         try:
             for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types):
                 conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
                                config=config, variants=variant)
-        except Exception: # pylint: disable=broad-except
+        except Exception as exc: # pylint: disable=broad-except
             traceback.print_exc()
-            print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
-            result = 1
-            break
+            raise OpenCEError(Error.BUILD_RECIPE,
+                              recipe['name'] if 'name' in recipe else os.getcwd,
+                              str(exc)) from exc
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
 
-    return result
-
 if __name__ == '__main__':
-    sys.exit(build_feedstock())
+    try:
+        build_feedstock()
+    except OpenCEError as err:
+        print(err.msg, file=sys.stderr)
+        sys.exit(1)
+
+    sys.exit(0)

@@ -38,7 +38,7 @@ import sys
 import build_feedstock
 import docker_build
 import utils
-from utils import OpenCEError
+from errors import OpenCEError, Error
 from conda_env_file_generator import CondaEnvFileGenerator
 
 def make_parser():
@@ -73,7 +73,8 @@ def build_env(arg_strings=None):
     args = parser.parse_args(arg_strings)
 
     if args.docker_build:
-        return docker_build.build_with_docker(args.output_folder, sys.argv)
+        docker_build.build_with_docker(args.output_folder, sys.argv)
+        return
 
     # Checking conda-build existence if --docker_build is not specified
     utils.check_if_conda_build_exists()
@@ -81,8 +82,6 @@ def build_env(arg_strings=None):
     # Here, importing BuildTree is intentionally done after checking
     # existence of conda-build as BuildTree uses conda_build APIs.
     from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
-
-    result = 0
 
     common_package_build_args = []
     common_package_build_args += ["--output_folder", os.path.abspath(args.output_folder)]
@@ -97,18 +96,14 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
-    try:
-        build_tree = BuildTree(env_config_files=args.env_config_file,
-                               python_versions=utils.parse_arg_list(args.python_versions),
-                               build_types=utils.parse_arg_list(args.build_types),
-                               mpi_types=utils.parse_arg_list(args.mpi_types),
-                               repository_folder=args.repository_folder,
-                               git_location=args.git_location,
-                               git_tag_for_env=args.git_tag_for_env,
-                               conda_build_config=args.conda_build_config)
-    except OpenCEError as err:
-        print(err.msg)
-        return 1
+    build_tree = BuildTree(env_config_files=args.env_config_file,
+                            python_versions=utils.parse_arg_list(args.python_versions),
+                            build_types=utils.parse_arg_list(args.build_types),
+                            mpi_types=utils.parse_arg_list(args.mpi_types),
+                            repository_folder=args.repository_folder,
+                            git_location=args.git_location,
+                            git_tag_for_env=args.git_tag_for_env,
+                            conda_build_config=args.conda_build_config)
 
     conda_env_data = CondaEnvFileGenerator(
                                python_versions=args.python_versions,
@@ -121,11 +116,10 @@ def build_env(arg_strings=None):
     # Build each package in the packages list
     for build_command in build_tree:
         build_args = common_package_build_args + build_command.feedstock_args()
-        result = build_feedstock.build_feedstock(build_args)
-
-        if result != 0:
-            print("Unable to build recipe: " +  build_command.repository)
-            return result
+        try:
+            build_feedstock.build_feedstock(build_args)
+        except OpenCEError as exc:
+            raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
 
         conda_env_data.update_conda_env_file_content(build_command, build_tree)
 
@@ -134,7 +128,11 @@ def build_env(arg_strings=None):
     print("INFO: One can use these environment files to create a conda" \
           " environment using \"conda env create -f <conda_env_file_name>.\"")
 
-    return result
-
 if __name__ == '__main__':
-    sys.exit(build_env())
+    try:
+        build_env()
+    except OpenCEError as err:
+        print(err.msg, file=sys.stderr)
+        sys.exit(1)
+
+    sys.exit(0)

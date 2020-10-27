@@ -12,10 +12,12 @@
 import sys
 import os
 import pathlib
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
+import pytest
 
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 import helpers
 import utils
+from errors import OpenCEError
 import build_feedstock
 
 def test_build_feedstock_default(mocker):
@@ -39,9 +41,9 @@ def test_build_feedstock_default(mocker):
     )
 
     arg_input = []
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    build_feedstock.build_feedstock(arg_input)
 
-def test_build_feedstock_failure(mocker, capsys):
+def test_build_feedstock_failure(mocker):
     """
     Tests that a 'conda_build.api.build' failure is handled correctly.
     """
@@ -59,9 +61,9 @@ def test_build_feedstock_failure(mocker, capsys):
     )
 
     arg_input = ""
-    assert build_feedstock.build_feedstock(arg_input) == 1
-    captured = capsys.readouterr()
-    assert "Failure building recipe: test_recipe" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        build_feedstock.build_feedstock(arg_input)
+    assert "Unable to build recipe: test_recipe" in str(exc.value)
 
 def test_build_feedstock_working_dir(mocker):
     """
@@ -87,7 +89,7 @@ def test_build_feedstock_working_dir(mocker):
     )
 
     arg_input = ["--working_directory", "/test/my_work_dir"]
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    build_feedstock.build_feedstock(arg_input)
 
 def test_build_feedstock_config_file(mocker):
     """
@@ -117,7 +119,7 @@ def test_build_feedstock_config_file(mocker):
     )
 
     arg_input = ["--recipe-config-file", "my_config.yml"]
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    build_feedstock.build_feedstock(arg_input)
 
 def test_build_feedstock_default_config_file(mocker):
     """
@@ -147,9 +149,9 @@ def test_build_feedstock_default_config_file(mocker):
     )
 
     arg_input = []
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    build_feedstock.build_feedstock(arg_input)
 
-def test_build_feedstock_nonexist_config_file(mocker, capsys):
+def test_build_feedstock_nonexist_config_file(mocker):
     """
     Tests that execution fails and the correct error message is shown if the default config file doesn't exist.
     """
@@ -163,9 +165,9 @@ def test_build_feedstock_nonexist_config_file(mocker, capsys):
     )
 
     arg_input = ["--recipe-config-file", "my_config.yml"]
-    assert build_feedstock.build_feedstock(arg_input) == 1
-    captured = capsys.readouterr()
-    assert "Unable to open provided config file: my_config.yml" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        build_feedstock.build_feedstock(arg_input)
+    assert "Unable to open provided config file: my_config.yml" in str(exc.value)
 
 def test_build_feedstock_local_src_dir_args(mocker):
     """
@@ -176,10 +178,10 @@ def test_build_feedstock_local_src_dir_args(mocker):
         return_value=True
     )
 
-    assert build_feedstock._set_local_src_dir("my_src_dir", None, None) == 0
+    build_feedstock._set_local_src_dir("my_src_dir", None, None)
     assert os.environ["LOCAL_SRC_DIR"] == "my_src_dir"
 
-def test_build_feedstock_local_src_dir_args_fail(mocker, capsys):
+def test_build_feedstock_local_src_dir_args_fail(mocker):
     """
     Tests that providing the local_src_dir argument to a non-existant file fails properly.
     """
@@ -188,9 +190,9 @@ def test_build_feedstock_local_src_dir_args_fail(mocker, capsys):
         return_value=False
     )
 
-    assert build_feedstock._set_local_src_dir("my_src_dir", { 'local_src_dir' : "my_other_src_dir" }, None) == 1
-    captured = capsys.readouterr()
-    assert "ERROR: local_src_dir path \"my_src_dir\" specified doesn't exist" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        build_feedstock._set_local_src_dir("my_src_dir", { 'local_src_dir' : "my_other_src_dir" }, None)
+    assert "local_src_dir path \"my_src_dir\" specified doesn't exist" in str(exc.value)
 
 def test_build_feedstock_local_src_dir_recipe(mocker):
     """
@@ -201,7 +203,7 @@ def test_build_feedstock_local_src_dir_recipe(mocker):
         return_value=True
     )
 
-    assert build_feedstock._set_local_src_dir(None, { 'local_src_dir' : "my_other_src_dir" } , "/test/location/recipe.yaml") == 0
+    build_feedstock._set_local_src_dir(None, { 'local_src_dir' : "my_other_src_dir" } , "/test/location/recipe.yaml")
     assert os.environ["LOCAL_SRC_DIR"] == "/test/location/my_other_src_dir"
 
 def test_build_feedstock_extra_args(mocker):
@@ -218,7 +220,7 @@ def test_build_feedstock_extra_args(mocker):
     )
     expect_config = { 'channel_urls' : ['test_channel', 'test_channel_2', 'test_channel_from_config']}
     expect_variants = {'python': '3.6', 'build_type': 'cpu', 'mpi_type': 'openmpi'}
-    reject_recipe = os.path.join(os.getcwd,'test_recipe_extra')
+    reject_recipe = os.path.join(os.getcwd(),'test_recipe_extra')
     mocker.patch(
         'conda_build.api.build',
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_config=expect_config, expect_variants=expect_variants, reject_recipe=reject_recipe, **kwargs))
@@ -247,7 +249,7 @@ channels:
                  "--python_versions", "3.6",
                  "--build_types", "cpu",
                  "--mpi_types", "openmpi"]
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    build_feedstock.build_feedstock(arg_input)
 
 def test_build_feedstock_if_no_conda_build(mocker):
     '''
@@ -256,5 +258,6 @@ def test_build_feedstock_if_no_conda_build(mocker):
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     arg_input = []
-    assert build_feedstock.build_feedstock(arg_input) == 1
+    with pytest.raises(OpenCEError):
+        assert build_feedstock.build_feedstock(arg_input) == 1
 

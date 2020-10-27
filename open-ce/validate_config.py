@@ -11,7 +11,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import sys
 import utils
-from utils import OpenCEError
+from errors import OpenCEError, Error
 
 utils.check_if_conda_build_exists()
 
@@ -44,9 +44,7 @@ def validate_config(arg_strings=None):
                                                repository_folder=args.repository_folder,
                                                conda_build_config=args.conda_build_config)
             except OpenCEError as err:
-                print(err.msg)
-                print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
-                return 1
+                raise OpenCEError(Error.VALIDATE_CONFIG, args.conda_build_config, env_file, variant, err.msg) from err
 
             packages = [package for recipe in recipes for package in recipe.packages]
             channels = {channel for recipe in recipes for channel in recipe.channels}
@@ -63,15 +61,19 @@ def validate_config(arg_strings=None):
             retval = utils.run_and_log(cli)
 
             if retval != 0:
-                print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
-                return 1
+                raise OpenCEError(Error.VALIDATE_CONFIG, args.conda_build_config, env_file, variant, "")
 
             print('Successfully validated {} for {} : {}'.format(args.conda_build_config, env_file, variant))
 
         print('Successfully validated {} for {}'.format(args.conda_build_config, variant))
 
     print("{} Successfully validated!".format(args.conda_build_config))
-    return 0
 
 if __name__ == '__main__':
-    sys.exit(validate_config())
+    try:
+        validate_config()
+    except OpenCEError as err:
+        print(err.msg, file=sys.stderr)
+        sys.exit(1)
+
+    sys.exit(0)

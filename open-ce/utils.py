@@ -15,6 +15,7 @@ from enum import Enum, unique
 from itertools import product
 import re
 import pkg_resources
+from errors import OpenCEError, Error
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
@@ -26,15 +27,6 @@ SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
 DEFAULT_OUTPUT_FOLDER = "condabuild"
-
-
-class OpenCEError(Exception):
-    """
-    Exception class for errors that occur in an Open-CE tool.
-    """
-    def __init__(self, msg):
-        super().__init__(msg)
-        self.msg = msg
 
 class OpenCEFormatter(argparse.ArgumentDefaultsHelpFormatter):
     """
@@ -160,14 +152,14 @@ def validate_type(value, schema_type):
         validate_dict_schema(value, schema_type)
     else:
         if not isinstance(value, schema_type):
-            raise OpenCEError("{} is not of expected type {}".format(value, schema_type))
+            raise OpenCEError(Error.ERROR, "{} is not of expected type {}".format(value, schema_type))
 
 def validate_dict_schema(dictionary, schema):
     '''Recursively validate a dictionary's schema.'''
     for k, (schema_type, required) in schema.items():
         if k not in dictionary:
             if required:
-                raise OpenCEError("Required key {} was not found in {}".format(k, dictionary))
+                raise OpenCEError(Error.ERROR, "Required key {} was not found in {}".format(k, dictionary))
             continue
         if isinstance(schema_type, list):
             if dictionary[k] is not None: #Handle if the yaml file has an empty list for this key.
@@ -178,7 +170,7 @@ def validate_dict_schema(dictionary, schema):
             validate_type(dictionary[k], schema_type)
     for k in dictionary:
         if not k in schema:
-            raise OpenCEError("Unexpected key {} was found in {}".format(k, dictionary))
+            raise OpenCEError(Error.ERROR, "Unexpected key {} was found in {}".format(k, dictionary))
 
 def run_and_log(command):
     '''Print a shell command and then execute it.'''
