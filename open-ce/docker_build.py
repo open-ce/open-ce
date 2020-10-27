@@ -122,21 +122,26 @@ def build_in_container(image_name, output_folder, arg_strings):
 
     _start_container(container_name)
 
+
     # Execute build command
     cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "open-ce", os.path.basename(arg_strings[0])) + " " +
               ' '.join(arg_strings[1:]))
     _execute_in_container(container_name, cmd)
 
     # Cleanup
-    _stop_container(container_name)
+    #_stop_container(container_name)
 
-def build_with_docker(output_folder, arg_strings):
+
+
+def build_with_docker(output_folder, cuda_versions, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings)
 
-    image_name = _build_image()
+    if not utils.cuda_level_supported(cuda_versions):
+        return "ERROR"
 
+    image_name = _build_image()
     build_in_container(image_name, output_folder, unused_args)

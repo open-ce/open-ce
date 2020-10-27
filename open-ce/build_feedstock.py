@@ -47,7 +47,8 @@ def make_parser():
     ''' Parser input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
                  utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES, 
+                 utils.Argument.CUDA_VERSIONS]
     parser = utils.make_parser(arguments,
                                description = 'Build conda packages as part of Open-CE')
 
@@ -181,7 +182,7 @@ def build_feedstock(args_string=None):
         _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
 
         try:
-            for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types):
+            for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions):
                 conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
                                config=config, variants=variant)
         except Exception as exc: # pylint: disable=broad-except

@@ -47,7 +47,7 @@ def make_parser():
                  utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-                 utils.Argument.DOCKER_BUILD]
+                 utils.Argument.CUDA_VERSIONS, utils.Argument.DOCKER_BUILD]
     parser = utils.make_parser(arguments,
                                description = 'Build conda environment as part of Open-CE')
 
@@ -73,7 +73,7 @@ def build_env(arg_strings=None):
     args = parser.parse_args(arg_strings)
 
     if args.docker_build:
-        docker_build.build_with_docker(args.output_folder, sys.argv)
+        docker_build.build_with_docker(args.output_folder, args.cuda_versions, sys.argv)
         return
 
     # Checking conda-build existence if --docker_build is not specified
@@ -96,19 +96,22 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
-    build_tree = BuildTree(env_config_files=args.env_config_file,
-                            python_versions=utils.parse_arg_list(args.python_versions),
-                            build_types=utils.parse_arg_list(args.build_types),
-                            mpi_types=utils.parse_arg_list(args.mpi_types),
-                            repository_folder=args.repository_folder,
-                            git_location=args.git_location,
-                            git_tag_for_env=args.git_tag_for_env,
-                            conda_build_config=args.conda_build_config)
+    try:
+        build_tree = BuildTree(env_config_files=args.env_config_file,
+                               python_versions=utils.parse_arg_list(args.python_versions),
+                               build_types=utils.parse_arg_list(args.build_types),
+                               mpi_types=utils.parse_arg_list(args.mpi_types),
+                               cuda_versions=utils.parse_arg_list(args.cuda_versions),
+                               repository_folder=args.repository_folder,
+                               git_location=args.git_location,
+                               git_tag_for_env=args.git_tag_for_env,
+                               conda_build_config=args.conda_build_config)
 
     conda_env_data = CondaEnvFileGenerator(
                                python_versions=args.python_versions,
                                build_types=args.build_types,
                                mpi_types=args.mpi_types,
+                               cuda_versions=args.cuda_versions,
                                channels=args.channels_list,
                                output_folder=os.path.abspath(args.output_folder),
                                )
