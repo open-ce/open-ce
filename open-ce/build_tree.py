@@ -350,7 +350,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
     def _detect_cycle(self):
         extract_build_tree = [x.build_command_dependencies for x in self.build_commands]
-        print(extract_build_tree)
         for start in range(len(self.build_commands)):
             cycle = find_cycle(extract_build_tree, start)
             if cycle:
