@@ -157,7 +157,7 @@ def _capable_of_cuda_containers(cuda_versions):
     Second, if the host driver is compatible with the level of cuda being used in the image
     '''
     
-    return True if not utils.cuda_driver_installed() or utils.cuda_level_supported(cuda_versions) else False
+    return not utils.cuda_driver_installed() or utils.cuda_level_supported(cuda_versions)
 
 def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
     """

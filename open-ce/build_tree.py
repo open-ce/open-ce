@@ -81,7 +81,7 @@ class BuildCommand():
         variant_string = utils.variant_string(self.python, self.build_type, self.mpi_type, self.cudatoolkit)
         if variant_string:
             result += "-" + variant_string
-            
+
         result = result.replace(".", "-")
         result = result.replace("_", "-")
         return result
@@ -233,18 +233,11 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
         self.build_commands = []
         for variant in self._possible_variants:
-<<<<<<< HEAD
             try:
                 variant_recipes, external_deps = self._create_all_recipes(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
-=======
-            result, variant_recipes, external_deps = self._create_all_recipes(variant)
-            print("VARIANTS")
-            print(variant)
-            if result != 0:
-                raise OpenCEError("Error creating Build Tree")
->>>>>>> WIP: Add initial cuda_versions capabilities
+
             self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
