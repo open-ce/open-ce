@@ -360,7 +360,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 def find_cycle(tree, current=0, seen=None):
     '''
     This function performs a depth first search of a tree from current, returning the first cycle detected.
-    If no cycles are detected, an emptry list is returned.
+    If no cycles are detected, an empty list is returned.
     '''
     if not seen:
         seen = []
