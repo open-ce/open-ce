@@ -28,6 +28,9 @@ class Error(Enum):
     BUILD_RECIPE = (11, "Unable to build recipe: {}\n{}")
     CONFIG_FILE = (12, "Unable to open provided config file: {}")
     LOCAL_SRC_DIR = (13, "local_src_dir path \"{}\" specified doesn't exist")
+    INCOMPAT_CUDA = (14, "Driver level \"{}\" is not new enough to support cuda \"{}\"")
+    UNSUPPORTED_CUDA = (15, "Cannot build using docker image for cuda \"{}\" no Dockerfile currently exists")
+    TOO_MANY_CUDA = (16, "Only one cuda version allowed to be built with docker at a time")
 
 class OpenCEError(Exception):
     """

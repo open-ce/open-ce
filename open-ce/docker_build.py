@@ -33,11 +33,7 @@ def make_parser():
 
     return parser
 
-<<<<<<< HEAD
-def _build_image():
-=======
 def build_image(build_image_path, dockerfile):
->>>>>>> staging commit before try/catch
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -147,7 +143,7 @@ def _generate_dockerfile_name(build_types, cuda_version):
         dockerfile = os.path.join(BUILD_CUDA_IMAGE_PATH, "Dockerfile.cuda-" + cuda_version)
         build_image_path = BUILD_CUDA_IMAGE_PATH
         if not os.path.isfile(dockerfile):
-            print("ERROR: Cannot build in docker image for cuda " + cuda_version + ". no Dockerfile currently exists.")
+            raise OpenCEError(Error.UNSUPPORTED_CUDA, cuda_version)
     else:
         #Build with cpu based image
         dockerfile = os.path.join(BUILD_IMAGE_PATH, "Dockerfile")
@@ -173,9 +169,9 @@ def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
     build_image_path, dockerfile = _generate_dockerfile_name(build_types, cuda_versions)
 
     if  'cuda' not in build_types or _capable_of_cuda_containers(cuda_versions):
-        image_name = _build_image(build_image_path, dockerfile)
+        image_name = build_image(build_image_path, dockerfile)
     else:
-        print("You driver version " +utils.get_driver_level()+ " does not support building cuda 11 images")
-        return 1
+        raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), cuda_versions)
+
     
     build_in_container(image_name, output_folder, unused_args)

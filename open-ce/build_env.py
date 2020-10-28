@@ -74,8 +74,7 @@ def build_env(arg_strings=None):
 
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
-            print("ERROR: Only one cuda version allowed to be built with docker at a time")
-            return 1
+            raise OpenCEError(Error.TOO_MANY_CUDA)
         docker_build.build_with_docker(args.output_folder, args.build_types, args.cuda_versions, sys.argv)
         return
 
@@ -100,8 +99,7 @@ def build_env(arg_strings=None):
         os.mkdir(args.repository_folder)
 
     # Create the build tree
-    try:
-        build_tree = BuildTree(env_config_files=args.env_config_file,
+    build_tree = BuildTree(env_config_files=args.env_config_file,
                                python_versions=utils.parse_arg_list(args.python_versions),
                                build_types=utils.parse_arg_list(args.build_types),
                                mpi_types=utils.parse_arg_list(args.mpi_types),

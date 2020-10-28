@@ -249,7 +249,7 @@ def get_driver_cuda_level():
         return re.search(r"CUDA Version\: (\d+\.\d+)", smi_out).group(1)
     except OSError as e:
         if e.errno == errno.ENOENT:
-          raise OpenCEError("No NVIDIA driver detected")
+          raise OpenCEError(Error.ERROR, "nvidia-smi command not detected")
 
 def get_driver_level():
     '''
@@ -260,7 +260,7 @@ def get_driver_level():
         return re.search(r"Driver Version\: (\d+\.\d+\.\d+)", smi_out).group(1)
     except OSError as e:
         if e.errno == errno.ENOENT:
-          raise OpenCEError("No NVIDIA driver detected")
+          raise OpenCEError(Error.ERROR, "nvidia-smi command not detected")
 
 def cuda_driver_installed():
     '''
@@ -274,4 +274,4 @@ def cuda_driver_installed():
             return True
     except OSError as e:
         if e.errno == errno.ENOENT:
-          raise OpenCEError("lsmod failed")
+          raise OpenCEError("lsmod command not detected")
