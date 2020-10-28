@@ -68,7 +68,7 @@ The other keywords that optionally can be used as part of the `packages` stanza
 include `git_tag`, `channels`, and `recipes`. By default, the git tag will be
 the current (i.e. main or master) branch of the specified source tree, such that
 you don't need to include this keyword unless you want to explicitly override it
-to fetch a different version.  To do this, you will simply specify the version
+to fetch a different version. To do this, you will simply specify the version
 value or the hexadecimal git tag value that you want to obtain during the build.
 An example might look something like this:
 ```
@@ -99,9 +99,9 @@ can build both a default GPU and CPU version, handled by using multiple
 recipes. While you could specify this as part of the `packages` stanza, you
 can find the more typical usage within Open-CE in which the respective
 package feedstock has its own `config/build-config.yaml` file that defines
-the individual recipes.  For example, the
+the individual recipes. For example, the
 [tensorflow-feedstock](https://github.com/open-ce/tensorflow-feedstock)
-file defines recipes in this way:
+`config/build_config.yaml` file defines recipes in this way:
 ```
 recipes:
   - name : tensorflow-select
@@ -114,11 +114,10 @@ recipes:
     path : meta_recipe
 ```
 If you look in the
-[tensorflow-feedstock](https://github.com/open-ce/tensorflow-feedstock)
-feedstock tree, you will see that each of these `path` specifiers has a
-directory name that is present in the feedstock repo, and within each
-path is a `meta.yaml` file which represents the recipe for each separate
-package.
+[tensorflow-feedstock](https://github.com/open-ce/tensorflow-feedstock) tree,
+you will see that each of these `path` specifiers has a directory name that is
+present in the feedstock repo, and within each path is a `meta.yaml` file which
+represents the recipe for each separate package.
 
 
 Another stanza type that you might see in some environment files is
@@ -150,7 +149,7 @@ channels:
 ```
 
 The keyword `git_tag_for_env` can also be used to set a universal key-value definition
-for an environment file.  This is much like the `git_tag` described above for an
+for an environment file. This is much like the `git_tag` described above for an
 individual package stanza, but in this case it would be in effect for the whole
 environment (although it can be overridden by an individual package `git_tag`).
 You would likely not typically use this, unless you are doing custom builds based
@@ -162,9 +161,10 @@ git_tag_for_env:
   - open-ce-v1.0.0
 ```
 
-These stanza types are the only elements that are used by the open-ce environment
+
+The stanza types above are the only elements that are used by the open-ce environment
 [build_env.py](README.build_env.md) builds. However, as each feedstock in the list is
 built, other file information is used from the individual configuration files of each
-respective feedstock repository, typically found as a recipe in the `config/meta.yaml`
+respective feedstock repository, normally found as a recipe in the `config/meta.yaml`
 within each feedstock.
 
