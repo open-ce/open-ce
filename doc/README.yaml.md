@@ -129,10 +129,10 @@ imported_envs:
   - pytorch-env.yaml
   - tensorflow-env.yaml
 ```
-This is straightforward; it simply imports the contents of the listed environment
-files. So if you are building the horovod environment, you will get a build of
-both pytorch and tensorflow as well because of the specified imported
-environments listed in this section.
+This is straightforward; it effectively creates a nested environment file by simply
+importing the contents of the listed environment files. So if you are building the
+horovod environment, you will get a build of both pytorch and tensorflow as well
+because of the specified imported environments listed in this section.
 
 
 As mentioned earlier, the `channels` specifier can also be used as a universal keyword
