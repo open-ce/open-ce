@@ -12,11 +12,13 @@
 import sys
 import os
 import pathlib
+import pytest
+
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-
 import build_tree
 import utils
+from errors import OpenCEError
 import helpers
 
 class TestBuildTree(build_tree.BuildTree):
@@ -89,9 +91,9 @@ def test_clone_repo(mocker):
                                                                "/test/my_repo"]))
     )
 
-    assert mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, "master") == 0
+    mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, "master")
 
-def test_clone_repo_failure(mocker, capsys):
+def test_clone_repo_failure(mocker):
     '''
     Simple negative test for `_clone_repo`.
     '''
@@ -102,9 +104,9 @@ def test_clone_repo_failure(mocker, capsys):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone"], retval=1))
     )
 
-    assert mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, "master") == 1
-    captured = capsys.readouterr()
-    assert "Unable to clone repository" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, "master")
+    assert "Unable to clone repository" in str(exc.value)
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",

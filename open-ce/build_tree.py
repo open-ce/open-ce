@@ -11,7 +11,7 @@ import os
 import utils
 import env_config
 import build_feedstock
-from utils import OpenCEError
+from errors import OpenCEError, Error
 
 import conda_build.api
 from conda_build.config import get_or_merge_config
@@ -74,12 +74,9 @@ class BuildCommand():
         Returns a name representing the Build Command
         """
         result = self.recipe
-        if self.python:
-            result +=  "-py" + self.python
-        if self.build_type:
-            result +=  "-" + self.build_type
-        if self.mpi_type:
-            result +=  "-" + self.mpi_type
+        variant_string = utils.variant_string(self.python, self.build_type, self.mpi_type)
+        if variant_string:
+            result += "-" + variant_string
 
         result = result.replace(".", "-")
         result = result.replace("_", "-")
@@ -230,9 +227,10 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types)
         self.build_commands = []
         for variant in self._possible_variants:
-            result, variant_recipes, external_deps = self._create_all_recipes(variant)
-            if result != 0:
-                raise OpenCEError("Error creating Build Tree")
+            try:
+                variant_recipes, external_deps = self._create_all_recipes(variant)
+            except OpenCEError as exc:
+                raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
             self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
@@ -243,9 +241,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         Create a recipe dictionary for each recipe needed for a given environment file.
         '''
 
-        result, env_config_data_list = env_config.load_env_config_files(self._env_config_files, variants)
-        if result != 0:
-            return result, [], []
+        env_config_data_list = env_config.load_env_config_files(self._env_config_files, variants)
         packages_seen = set()
         recipes = []
         external_deps = []
@@ -280,9 +276,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                     repo_dir = repository
 
                 if not os.path.exists(repo_dir):
-                    result = self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
-                    if result != 0:
-                        return result, []
+                    self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
 
                 recipes += _create_recipes(repo_dir,
                                            package.get('recipes'),
@@ -295,7 +289,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             if current_deps:
                 external_deps += current_deps
 
-        return result, recipes, external_deps
+        return recipes, external_deps
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
         """
@@ -321,10 +315,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         print("Clone cmd: ", clone_cmd)
         clone_result = os.system(clone_cmd)
         if clone_result != 0:
-            print("Unable to clone repository: " + git_url + " " + str(clone_result))
-            return 1
-
-        return 0
+            raise OpenCEError(Error.CLONE_REPO, git_url)
 
     def __iter__(self):
         """
