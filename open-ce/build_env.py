@@ -64,7 +64,7 @@ def make_parser():
         help='Git tag to be checked out for all of the packages in an environment.')
 
     return parser
-
+    
 def build_env(arg_strings=None):
     '''
     Entry function.
@@ -73,8 +73,12 @@ def build_env(arg_strings=None):
     args = parser.parse_args(arg_strings)
 
     if args.docker_build:
-        docker_build.build_with_docker(args.output_folder, args.cuda_versions, sys.argv)
+        if len(args.cuda_versions.split(',')) > 1:
+            print("ERROR: Only one cuda version allowed to be built with docker at a time")
+            return 1
+        docker_build.build_with_docker(args.output_folder, args.build_types, args.cuda_versions, sys.argv)
         return
+
 
     # Checking conda-build existence if --docker_build is not specified
     utils.check_if_conda_build_exists()

@@ -14,8 +14,10 @@ import utils
 from errors import OpenCEError, Error
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-BUILD_IMAGE_NAME = "builder-cuda-" + platform.machine()
+BUILD_IMAGE_NAME = "builder"
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", BUILD_IMAGE_NAME)
+BUILD_CUDA_IMAGE_NAME = "builder-cuda-" + platform.machine()
+BUILD_CUDA_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", BUILD_CUDA_IMAGE_NAME)
 LOCAL_FILES_PATH = os.path.join(os.path.join(os.getcwd(), "local_files"))
 HOME_PATH = "/home/builder"
 
@@ -31,18 +33,22 @@ def make_parser():
 
     return parser
 
+<<<<<<< HEAD
 def _build_image():
+=======
+def build_image(build_image_path, dockerfile):
+>>>>>>> staging commit before try/catch
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
     image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + str(os.getuid())
     build_cmd = DOCKER_TOOL + " build "
-    build_cmd += "-f " + os.path.join(BUILD_IMAGE_PATH, "Dockerfile") + " "
+    build_cmd += "-f " + dockerfile + " "
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
-    build_cmd += BUILD_IMAGE_PATH
+    build_cmd += build_image_path
 
     if os.system(build_cmd):
         raise OpenCEError(Error.BUILD_IMAGE, image_name)
@@ -129,19 +135,47 @@ def build_in_container(image_name, output_folder, arg_strings):
     _execute_in_container(container_name, cmd)
 
     # Cleanup
-    #_stop_container(container_name)
+    _stop_container(container_name)
 
 
 
-def build_with_docker(output_folder, cuda_versions, arg_strings):
+def _generate_dockerfile_name(build_types, cuda_version):
+    '''
+    Ensure we have valid combinations.  I.e. Specify a valid cuda version
+    '''
+    if 'cuda' in build_types:
+        dockerfile = os.path.join(BUILD_CUDA_IMAGE_PATH, "Dockerfile.cuda-" + cuda_version)
+        build_image_path = BUILD_CUDA_IMAGE_PATH
+        if not os.path.isfile(dockerfile):
+            print("ERROR: Cannot build in docker image for cuda " + cuda_version + ". no Dockerfile currently exists.")
+    else:
+        #Build with cpu based image
+        dockerfile = os.path.join(BUILD_IMAGE_PATH, "Dockerfile")
+        build_image_path = BUILD_IMAGE_PATH
+    return build_image_path, dockerfile
+    
+def _capable_of_cuda_containers(cuda_versions):
+    '''
+    Check if we can run containers with Cuda installed.  This can be accomplished in two ways
+    First if the host server does not have a driver installed
+    Second, if the host driver is compatible with the level of cuda being used in the image
+    '''
+    
+    return True if not utils.cuda_driver_installed() or utils.cuda_level_supported(cuda_versions) else False
+
+def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings)
+    
+    build_image_path, dockerfile = _generate_dockerfile_name(build_types, cuda_versions)
 
-    if not utils.cuda_level_supported(cuda_versions):
-        return "ERROR"
-
-    image_name = _build_image()
+    if  'cuda' not in build_types or _capable_of_cuda_containers(cuda_versions):
+        image_name = _build_image(build_image_path, dockerfile)
+    else:
+        print("You driver version " +utils.get_driver_level()+ " does not support building cuda 11 images")
+        return 1
+    
     build_in_container(image_name, output_folder, unused_args)

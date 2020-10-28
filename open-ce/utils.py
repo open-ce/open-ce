@@ -235,7 +235,7 @@ def cuda_level_supported(cuda_level):
     Check if the requested cuda level is supported by loaded NVIDIA driver
     '''
 
-    if float(get_driver_cuda_level()) >= cuda_level:
+    if float(get_driver_cuda_level()) >= float(cuda_level):
        return True
     else:
        return False
@@ -262,3 +262,16 @@ def get_driver_level():
         if e.errno == errno.ENOENT:
           raise OpenCEError("No NVIDIA driver detected")
 
+def cuda_driver_installed():
+    '''
+    Determine if the current machine has the NVIDIA driver installed
+    '''
+    try:
+        lsmod_out = subprocess.check_output("lsmod").decode("utf-8").strip()
+        if re.search(r"nvidia ", lsmod_out) is None:
+            return False
+        else:
+            return True
+    except OSError as e:
+        if e.errno == errno.ENOENT:
+          raise OpenCEError("lsmod failed")
