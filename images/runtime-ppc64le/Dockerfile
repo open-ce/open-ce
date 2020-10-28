@@ -1,27 +1,22 @@
-#FROM nvidia/cuda-ppc64le:10.2-runtime-ubi7
 FROM registry.access.redhat.com/ubi7/ubi:7.6
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
-
-ENV CICD_GROUP=cicd
-ARG GROUP_ID=1500
-ARG USER_ID=1084
 
 ARG OPENCE_USER
 ARG LOCAL_CONDA_CHANNEL
 ARG CONDA_ENV_FILE
 ARG TARGET_DIR
 
-# Remove preinclude system compilers
-#RUN rpm -e --nodeps --verbose gcc gcc-c++
+ENV OPENCE_GROUP=OPENCE_USER
+ARG GROUP_ID=1500
+ARG USER_ID=1084
 
 # Install basic requirements.
 RUN export ARCH="$(uname -m)" && \
     yum repolist && yum install -y \
     sudo openssh && \
-    # Create CICD Group
-    groupadd --non-unique --gid ${GROUP_ID} ${CICD_GROUP} && \
+    groupadd --non-unique --gid ${GROUP_ID} ${OPENCE_GROUP} && \
     # Adduser Builder
     adduser -b /home/ --non-unique --create-home --gid ${GROUP_ID} --groups wheel \
     --uid ${USER_ID} ${OPENCE_USER} && \
@@ -31,7 +26,7 @@ RUN export ARCH="$(uname -m)" && \
     /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda && \
     rm -f /tmp/anaconda.sh && \
     $CONDA_HOME/bin/conda install -y conda-build && \
-    chown -R ${OPENCE_USER}:${CICD_GROUP} ${CONDA_HOME}
+    chown -R ${OPENCE_USER}:${OPENCE_GROUP} ${CONDA_HOME}
 
 USER ${OPENCE_USER}
 RUN export PATH="${PATH}" && \
@@ -53,7 +48,7 @@ RUN mkdir -p ${TARGET_DIR}
 
 COPY ${LOCAL_CONDA_CHANNEL} ${TARGET_DIR}
 
-RUN sudo chown -R ${OPENCE_USER}:${CICD_GROUP} ${TARGET_DIR}
+RUN sudo chown -R ${OPENCE_USER}:${OPENCE_GROUP} ${TARGET_DIR}
 
 RUN $CONDA_HOME/bin/conda env create -f ${TARGET_DIR}/${CONDA_ENV_FILE}
 

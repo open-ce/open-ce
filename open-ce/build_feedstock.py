@@ -168,7 +168,7 @@ def build_feedstock(args_string=None):
             continue
 
         config = get_or_merge_config(None)
-#        config.skip_existing = True
+        config.skip_existing = True
         config.output_folder = args.output_folder
         config.variant_config_files = [args.conda_build_config]
 
