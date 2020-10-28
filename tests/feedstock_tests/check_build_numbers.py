@@ -41,7 +41,7 @@ def get_build_numbers(build_config_data, config, variant):
         for meta,_,_ in metas:
             build_numbers[meta.meta['package']['name']] = {"version" : meta.meta['package']['version'],
                                                            "number" : meta.meta['build']['number']}
-        return build_numbers
+    return build_numbers
 
 def main(arg_strings=None):
     '''
