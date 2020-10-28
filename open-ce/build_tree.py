@@ -235,6 +235,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
             self.build_commands += variant_recipes
+        self._detect_cycle()
 
     def _create_all_recipes(self, variants): #pylint: disable=too-many-branches
         '''
@@ -346,3 +347,28 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
     def get_external_dependencies(self, variant):
         '''Return the list of external dependencies for the given variant.'''
         return self._external_dependencies.get(str(variant), [])
+
+    def _detect_cycle(self):
+        extract_build_tree = [x.build_command_dependencies for x in self.build_commands]
+        print(extract_build_tree)
+        for start in range(len(self.build_commands)):
+            cycle = find_cycle(extract_build_tree, start)
+            if cycle:
+                cycle_print = " -> ".join([self.build_commands[i].recipe for i in cycle])
+                raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
+
+def find_cycle(tree, current=0, seen=None):
+    '''
+    This function performs a depth first search of a tree from current, returning the first cycle detected.
+    If no cycles are detected, an emptry list is returned.
+    '''
+    if not seen:
+        seen = []
+    current_branch = seen + [current]
+    if current in seen:
+        return current_branch
+    for dependency in tree[current]:
+        next_step = find_cycle(tree, dependency, current_branch)
+        if next_step:
+            return next_step
+    return []

@@ -150,3 +150,37 @@ def test_build_tree_len():
     mock_build_tree.build_commands = sample_build_commands
 
     assert len(mock_build_tree) == 3
+
+def test_build_tree_cycle_fail():
+    '''
+    Tests that a cycle is detected in a build_tree.
+    '''
+    cycle_build_commands = [build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1a", "package1b"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[1,2]),
+                            build_tree.BuildCommand("recipe2",
+                                                    "repo2",
+                                                    ["package2a"],
+                                                    python="2.6",
+                                                    build_type="cpu",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[0]),
+                            build_tree.BuildCommand("recipe3",
+                                                    "repo3",
+                                                    ["package3a", "package3b"],
+                                                    build_command_dependencies=[1])]
+
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi")
+    mock_build_tree.build_commands = cycle_build_commands
+
+    assert len(mock_build_tree) == 3
+
+    with pytest.raises(OpenCEError) as exc:
+        mock_build_tree._detect_cycle()
+
+    assert "Build dependencies should form a Directed Acyclic Graph." in str(exc.value)
+    assert "recipe1 -> recipe2 -> recipe1" in str(exc.value)

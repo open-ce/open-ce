@@ -28,6 +28,8 @@ class Error(Enum):
     BUILD_RECIPE = (11, "Unable to build recipe: {}\n{}")
     CONFIG_FILE = (12, "Unable to open provided config file: {}")
     LOCAL_SRC_DIR = (13, "local_src_dir path \"{}\" specified doesn't exist")
+    BUILD_TREE_CYCLE = (14, "Build dependencies should form a Directed Acyclic Graph.\n"
+                            "The following dependency cycle was detected in the build tree:\n{}")
 
 class OpenCEError(Exception):
     """
