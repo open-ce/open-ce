@@ -3,14 +3,13 @@ FROM registry.access.redhat.com/ubi7/ubi:7.6
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
-ENV CUDA_HOME=/usr/local/cuda
-
 
 ENV CICD_GROUP=cicd
 ARG GROUP_ID=1500
-ENV OPENCE_USER=opence
 ARG USER_ID=1084
-ARG CONDABUILD_DIR
+
+ARG OPENCE_USER
+ARG LOCAL_CONDA_CHANNEL
 ARG CONDA_ENV_FILE
 ARG TARGET_DIR
 
@@ -50,11 +49,11 @@ RUN export PATH="${PATH}" && \
     echo ". $CONDA_HOME/etc/profile.d/conda.sh" >> ${HOME}/.bashrc && \
     echo "conda activate base" >> ${HOME}/.bashrc
 
-RUN echo "${TARGET_DIR}"
+RUN mkdir -p ${TARGET_DIR}
 
-RUN mkdir -p ${HOME}/${TARGET_DIR}
+COPY ${LOCAL_CONDA_CHANNEL} ${TARGET_DIR}
 
-COPY ${CONDABUILD_DIR} /home/opence/${TARGET_DIR}
+RUN sudo chown -R ${OPENCE_USER}:${CICD_GROUP} ${TARGET_DIR}
 
-RUN $CONDA_HOME/bin/conda env create -f ${HOME}/${TARGET_DIR}/${CONDA_ENV_FILE}
+RUN $CONDA_HOME/bin/conda env create -f ${TARGET_DIR}/${CONDA_ENV_FILE}
 

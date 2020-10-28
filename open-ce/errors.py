@@ -28,6 +28,11 @@ class Error(Enum):
     BUILD_RECIPE = (11, "Unable to build recipe: {}\n{}")
     CONFIG_FILE = (12, "Unable to open provided config file: {}")
     LOCAL_SRC_DIR = (13, "local_src_dir path \"{}\" specified doesn't exist")
+    INCORRECT_INPUT_PATHS = (14, "Input paths specified don't exist")
+    LOCAL_CHANNEL_NOT_IN_CONTEXT = (15, "Specified local conda channel directory is not" +
+              " in the current build context. \n Either move the local conda channel" +
+              " directory in the current directory or run the script from the path" +
+              " which contains local conda channel directory.")
 
 class OpenCEError(Exception):
     """

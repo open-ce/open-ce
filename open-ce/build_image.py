@@ -9,31 +9,33 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 import os
 import sys
-import datetime
 import platform
 import shutil
 import yaml
 import utils
+from errors import OpenCEError, Error
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-RUNTIME_IMAGE_NAME = "runtime-cuda-" + platform.machine()
+RUNTIME_IMAGE_NAME = "runtime-" + platform.machine()
 RUNTIME_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", RUNTIME_IMAGE_NAME)
 REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-runtime"
 BUILD_CONTEXT = "."
 
-TARGET_DIR="opence-local-conda-channel"
+OPENCE_USER = "opence"
+LOCAL_CONDA_CHANNEL_IN_IMG = "opence-local-conda-channel"
+TARGET_DIR = "/home/{}/{}".format(OPENCE_USER, LOCAL_CONDA_CHANNEL_IN_IMG)
 
 DOCKER_TOOL = "docker"
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [utils.Argument.CONDABUILD_DIR, utils.Argument.CONDA_ENV_FILE]
+    arguments = [utils.Argument.LOCAL_CONDA_CHANNEL, utils.Argument.CONDA_ENV_FILE]
     parser = utils.make_parser(arguments, description='Run Open-CE tools within a container')
 
     return parser
 
-def build_image(condabuild_dir, conda_env_file):
+def build_image(local_conda_channel, conda_env_file):
     """
     Build a docker image from the Dockerfile in RUNTIME_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -42,59 +44,47 @@ def build_image(condabuild_dir, conda_env_file):
     build_cmd = DOCKER_TOOL + " build "
     build_cmd += "-f " + os.path.join(RUNTIME_IMAGE_PATH, "Dockerfile") + " "
     build_cmd += "-t " + image_name + " "
-    build_cmd += "--build-arg USER_ID=" + str(os.getuid()) + " "
-    build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
-    build_cmd += "--build-arg CONDABUILD_DIR=" + condabuild_dir + " "
-    build_cmd += "--build-arg CONDA_ENV_FILE=" + conda_env_file + " " 
+    build_cmd += "--build-arg OPENCE_USER=" + OPENCE_USER + " "
+    build_cmd += "--build-arg LOCAL_CONDA_CHANNEL=" + local_conda_channel + " "
+    build_cmd += "--build-arg CONDA_ENV_FILE=" + conda_env_file + " "
     build_cmd += "--build-arg TARGET_DIR=" + TARGET_DIR + " "
     build_cmd += BUILD_CONTEXT
 
     print("Docker build command: ", build_cmd)
-    result = os.system(build_cmd)
+    if os.system(build_cmd):
+        raise OpenCEError(Error.BUILD_IMAGE, image_name)
 
-    return result, image_name
-
-def _is_subdir(child_path, parent_path):
-    child = os.path.realpath(child_path)
-    parent = os.path.realpath(parent_path)
-
-    relative = os.path.relpath(child, start=parent)
-
-    return not relative.startswith(os.pardir)
+    return image_name
 
 def _update_channels(conda_env_file):
-    with open(conda_env_file, 'r') as f:
-        env_info = yaml.safe_load(f)
+    with open(conda_env_file, 'r') as file_handle:
+        env_info = yaml.safe_load(file_handle)
 
     channels = env_info['channels']
+    index = 0
     for channel in channels:
         if channel.startswith("file:"):
             index = channels.index(channel)
             channels.remove(channel)
-            channels.insert(index,"file://home/opence/" + TARGET_DIR)
             break
+
+    channels.insert(index, "file:/{}".format(TARGET_DIR))
     env_info['channels'] = channels
 
-    with open(conda_env_file, 'w') as f:
-        yaml.safe_dump(env_info, f)
+    with open(conda_env_file, 'w') as file_handle:
+        yaml.safe_dump(env_info, file_handle)
 
-def are_input_paths_valid(condabuild_dir, conda_env_file):
-    ret_val = False
-    condabuild_dir = os.path.abspath(condabuild_dir)
-    conda_env_file = os.path.abspath(conda_env_file)
-    if not os.path.exists(condabuild_dir) or not os.path.exists(conda_env_file):
-        print("Please provide correct paths for conda build directory and conda environment file")
-    elif not _is_subdir(condabuild_dir, os.path.abspath(BUILD_CONTEXT)):
-        print("Specified condabuild directory is not in the current directory. \n" +
-              "Either move the condabuild directory in the current directory or run" +
-              "the script from the path which contains condabuild directory")
-    else:
-        print("Inputs  given: ", condabuild_dir, conda_env_file)
-        shutil.copy(conda_env_file, condabuild_dir)
-        ret_val = True
+def _validate_input_paths(local_conda_channel, conda_env_file):
 
-    return ret_val
- 
+    # Check if path exists
+    if not os.path.exists(local_conda_channel) \
+        or not os.path.exists(conda_env_file):
+        raise OpenCEError(Error.INCORRECT_INPUT_PATHS)
+
+    # Check if local conda channel path is subdir of the docker build context
+    if not utils.is_subdir(local_conda_channel, os.path.abspath(BUILD_CONTEXT)):
+        raise OpenCEError(Error.LOCAL_CHANNEL_NOT_IN_CONTEXT)
+
 def build_runtime_docker_image(args_string=None):
     """
     Create a runtime image which will have a conda environment created
@@ -103,17 +93,29 @@ def build_runtime_docker_image(args_string=None):
     parser = make_parser()
     args = parser.parse_args(args_string)
 
-    if are_input_paths_valid(args.condabuild_dir, args.conda_env_file):
-        conda_env_file = os.path.join(os.path.abspath(args.condabuild_dir), os.path.basename(args.conda_env_file))
-        _update_channels(conda_env_file)
-        result, image_name = build_image(args.condabuild_dir, os.path.basename(args.conda_env_file))
+    local_conda_channel = os.path.abspath(args.local_conda_channel)
+    conda_env_file = os.path.abspath(args.conda_env_file)
+    _validate_input_paths(local_conda_channel, conda_env_file)
 
-    if result:
-        print("Failure building image: " + image_name)
-        return result
+    # Copy the conda environment file into the local conda channel to modify it
+    shutil.copy(conda_env_file, local_conda_channel)
+    conda_env_file = os.path.join(local_conda_channel, os.path.basename(conda_env_file))
+    _update_channels(conda_env_file)
 
-    return result
+    # Check if input local conda channel path is absolute
+    if os.path.isabs(args.local_conda_channel):
+        # make it relative to BUILD CONTEXT
+        args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
+
+    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file))
+
+    print("Docker image with name {} is built successfully.".format(image_name))
 
 if __name__ == '__main__':
-    sys.exit(build_runtime_docker_image())
+    try:
+        build_runtime_docker_image()
+    except OpenCEError as err:
+        print(err.msg, file=sys.stderr)
+        sys.exit(1)
 
+    sys.exit(0)
