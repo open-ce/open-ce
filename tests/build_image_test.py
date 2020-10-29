@@ -25,7 +25,7 @@ def test_build_image_positive_case(mocker):
     '''
     Simple test for build_image
     '''
-    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME 
+    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
 
     mocker.patch(
         'os.system',
@@ -133,5 +133,16 @@ def test_channel_update_in_conda_env(mocker):
 
     # Cleanup
     os.remove("tests/testcondabuild/test-conda-env.yaml") 
-    
 
+def test_for_failed_docker_build_cmd(mocker):
+    '''
+    Simple test for build_image being failed due to some error in building the image
+    '''
+    mocker.patch('os.system', return_value=1)
+
+    arg_strings = ["--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
+    with pytest.raises(OpenCEError) as exc:
+        build_image.build_runtime_docker_image(arg_strings)
+    assert "Failure building image" in str(exc.value)
+
+    os.remove("tests/testcondabuild/test-conda-env.yaml")
