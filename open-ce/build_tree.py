@@ -348,13 +348,16 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         '''Return the list of external dependencies for the given variant.'''
         return self._external_dependencies.get(str(variant), [])
 
-    def _detect_cycle(self):
+    def _detect_cycle(self, MAX_CYCLES=10):
         extract_build_tree = [x.build_command_dependencies for x in self.build_commands]
         cycles = []
         for start in range(len(self.build_commands)): # Check to see if there are any cycles that start anywhere in the tree.
             cycles += find_all_cycles(extract_build_tree, start)
         if cycles:
-            cycle_print = "\n".join([" -> ".join([self.build_commands[i].recipe for i in cycle]) for cycle in cycles])
+            cycle_print = "\n".join([" -> ".join([self.build_commands[i].recipe for i in cycle])
+                                                                                for cycle in cycles[:min(MAX_CYCLES, len(cycles))]])
+            if len(cycles) > MAX_CYCLES:
+                cycle_print += "\nCycles truncated after {}...".format(MAX_CYCLES)
             raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
 
 def find_all_cycles(tree, current=0, seen=None):
