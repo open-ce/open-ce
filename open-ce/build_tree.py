@@ -350,24 +350,26 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
     def _detect_cycle(self):
         extract_build_tree = [x.build_command_dependencies for x in self.build_commands]
-        for start in range(len(self.build_commands)):
-            cycle = find_cycle(extract_build_tree, start)
-            if cycle:
-                cycle_print = " -> ".join([self.build_commands[i].recipe for i in cycle])
-                raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
+        cycles = []
+        for start in range(len(self.build_commands)): # Check to see if there are any cycles that start anywhere in the tree.
+            cycles += find_all_cycles(extract_build_tree, start)
+        if cycles:
+            cycle_print = "\n".join([" -> ".join([self.build_commands[i].recipe for i in cycle]) for cycle in cycles])
+            raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
 
-def find_cycle(tree, current=0, seen=None):
+def find_all_cycles(tree, current=0, seen=None):
     '''
-    This function performs a depth first search of a tree from current, returning the first cycle detected.
-    If no cycles are detected, an empty list is returned.
+    This function performs a depth first search of a tree from current, returning all cycles
+    starting at current.
     '''
     if not seen:
         seen = []
     current_branch = seen + [current]
-    if current in seen:
-        return current_branch
+    if len(current_branch) != len(set(current_branch)):
+        return [current_branch]
+    result = []
     for dependency in tree[current]:
-        next_step = find_cycle(tree, dependency, current_branch)
+        next_step = find_all_cycles(tree, dependency, current_branch)
         if next_step:
-            return next_step
-    return []
+            result += next_step
+    return result

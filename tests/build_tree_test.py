@@ -175,12 +175,17 @@ def test_build_tree_cycle_fail():
                                                     build_command_dependencies=[1])]
 
     mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi")
-    mock_build_tree.build_commands = cycle_build_commands
+    mock_build_tree.build_commands = sample_build_commands
 
-    assert len(mock_build_tree) == 3
+    mock_build_tree._detect_cycle() #Make sure there isn't a false positive.
+
+    mock_build_tree.build_commands = cycle_build_commands
 
     with pytest.raises(OpenCEError) as exc:
         mock_build_tree._detect_cycle()
 
     assert "Build dependencies should form a Directed Acyclic Graph." in str(exc.value)
     assert "recipe1 -> recipe2 -> recipe1" in str(exc.value)
+    assert "recipe1 -> recipe3 -> recipe2 -> recipe1" in str(exc.value)
+    assert "recipe2 -> recipe1 -> recipe3 -> recipe2" in str(exc.value)
+    assert "recipe3 -> recipe2 -> recipe1 -> recipe2" in str(exc.value)
