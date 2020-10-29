@@ -77,8 +77,7 @@ def _update_channels(conda_env_file):
 def _validate_input_paths(local_conda_channel, conda_env_file):
 
     # Check if path exists
-    if not os.path.exists(local_conda_channel) \
-        or not os.path.exists(conda_env_file):
+    if not os.path.exists(local_conda_channel) or not os.path.exists(conda_env_file):
         raise OpenCEError(Error.INCORRECT_INPUT_PATHS)
 
     # Check if local conda channel path is subdir of the docker build context

@@ -17,7 +17,7 @@ RUN export ARCH="$(uname -m)" && \
     yum repolist && yum install -y \
     sudo openssh && \
     groupadd --non-unique --gid ${GROUP_ID} ${OPENCE_GROUP} && \
-    # Adduser Builder
+    # Adduser 
     adduser -b /home/ --non-unique --create-home --gid ${GROUP_ID} --groups wheel \
     --uid ${USER_ID} ${OPENCE_USER} && \
     echo "${OPENCE_USER}    ALL=NOPASSWD: ALL" > /etc/sudoers.d/user-${OPENCE_USER} && \
@@ -36,8 +36,6 @@ RUN export PATH="${PATH}" && \
     $CONDA_HOME/bin/conda config --system --set always_yes true && \
     $CONDA_HOME/bin/conda config --system --set auto_update_conda false && \
     $CONDA_HOME/bin/conda config --system --set notify_outdated_conda false && \
-    mkdir -p $CONDA_HOME/conda-bld && \
-    mkdir -p $HOME/.cache && \
     $CONDA_HOME/bin/conda --version && \
     sudo rm -f /run/nologin && \
     yes | ssh-keygen -f $HOME/.ssh/id_rsa -q -t rsa -N '' && cp $HOME/.ssh/id_rsa.pub $HOME/.ssh/authorized_keys && \
