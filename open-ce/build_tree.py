@@ -93,6 +93,20 @@ class BuildCommand():
         result = result.replace("_", "-")
         return result
 
+
+    def __key(self):
+        return (self.recipe, self.python,
+                self.mpi_type, self.build_type)
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        if isinstance(other, BuildCommand):
+            return self.__key() == other.__key()
+        #TODO: see if this needs to be changed
+        return NotImplemented
+
 def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
@@ -116,21 +130,26 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, run_deps, host_deps, build_deps, test_deps = _get_package_dependencies(recipe.get('path'),
+        packages, run_deps, host_deps, build_deps, test_deps, used_vars, noarch, string = _get_package_dependencies(
+                                                                                         recipe.get('path'),
                                                                                          combined_config_files,
                                                                                          variants)
+        req_vars = run_deps.union(used_vars)
+        if noarch == 'python':
+            req_vars = req_vars - {'python'}
+
         build_commands.append(BuildCommand(recipe=recipe.get('name', None),
-                                           repository=repository,
-                                           packages=packages,
-                                           python=variants['python'],
-                                           build_type=variants['build_type'],
-                                           mpi_type=variants['mpi_type'],
-                                           cudatoolkit=variants['cudatoolkit'],
-                                           run_dependencies=run_deps,
-                                           host_dependencies=host_deps,
-                                           build_dependencies=build_deps,
-                                           test_dependencies=test_deps,
-                                           channels=channels if channels else []))
+                                    repository=repository,
+                                    packages=packages,
+                                    python=variants['python'] if 'python' in req_vars else utils.DEFAULT_PYTHON_VERS,
+                                    build_type='cuda' if not ('cpu' in string or 'cpu' in str(packages)) else 'cpu',
+                                    mpi_type=variants['mpi_type'], #TODO: need to update this
+                                    cudatoolkit=variants['cudatoolkit'],
+                                    run_dependencies=run_deps,
+                                    host_dependencies=host_deps,
+                                    build_dependencies=build_deps,
+                                    test_dependencies=test_deps,
+                                    channels=channels if channels else []))
 
     test_commands = test_feedstock.gen_test_commands()
 
@@ -159,17 +178,21 @@ def _get_package_dependencies(path, variant_config_files, variants):
     host_deps = set()
     build_deps = set()
     test_deps = set()
+    used_vars = set()
     for meta,_,_ in metas:
         packages.add(meta.meta['package']['name'])
         run_deps.update(meta.meta['requirements'].get('run', []))
         host_deps.update(meta.meta['requirements'].get('host', []))
         build_deps.update(meta.meta['requirements'].get('build', []))
+        used_vars.update(meta.get_used_vars())
+        noarch = meta.noarch
+        string = meta.meta['build'].get('string', [])
         if 'test' in meta.meta:
             test_deps.update(meta.meta['test'].get('requires', []))
 
-    return packages, run_deps, host_deps, build_deps, test_deps
+    return packages, run_deps, host_deps, build_deps, test_deps, used_vars, noarch, string
 
-def _add_build_command_dependencies(build_commands, start_index=0):
+def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
     """
     Create a dependency tree for a list of build commands.
 
@@ -184,13 +207,13 @@ def _add_build_command_dependencies(build_commands, start_index=0):
     # Create a packages dictionary that uses all of a recipe's packages as key, with
     # the recipes index as values.
     packages = dict()
-    for index, build_command in enumerate(build_commands):
+    for index, build_command in enumerate(build_commands if build_commands else variant_build_commands):
         for package in build_command.packages:
             packages.update({ package : [start_index + index] + packages.get(package, []) })
 
     # Add a list of indices for dependency to a BuildCommand's `build_command_dependencies` value
     # Note: This will filter out all dependencies that aren't in the recipes list.
-    for index, build_command in enumerate(build_commands):
+    for index, build_command in enumerate(variant_build_commands):
         deps = []
         dependencies = set()
         dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
@@ -254,10 +277,22 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             self._conda_env_files[variant_string] = CondaEnvFileGenerator(build_commands, external_deps)
             self._test_commands[variant_string] = test_commands
 
+            #remove any duplicate build commands
+            variant_build_commands = []
+            for entry in variant_recipes:
+                if entry not in self.build_commands:
+                    variant_build_commands.append(entry)
+
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(build_commands, len(self.build_commands))
             self.build_commands += build_commands
         self._detect_cycle()
+
+        #TODO: Added for testing purpose
+        print("---------FINAL Build Command-----------")
+        for build_command in self.build_commands:
+            print(build_command.__dict__)
+        print("--------------------------------------")
 
     def _get_repo(self, env_config_data, package):
         # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
