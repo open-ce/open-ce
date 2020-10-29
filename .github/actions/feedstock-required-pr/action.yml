@@ -20,4 +20,5 @@ runs:
         python ${open_ce_path}/validate_config.py ${env_path}/*-env.yaml
                                                   --conda_build_config \
                                                   ./conda_build_config.yaml \
+                                                  --build_types cuda,cpu \
                                                   --repository_folder ../
