@@ -7,6 +7,16 @@ description: "Required global PR tests for Open-CE feedstocks."
 runs:
   using: "composite"
   steps:
-    - name: PR Test Placeholder
+    - name: Install dependencies
       shell: bash -l {0}
-      run: echo "No required tests added yet."
+      run: |
+        conda install -y conda-build
+    - name: Check Dependencies
+      shell: bash -l {0}
+      run: |
+        # Validate all env files with the new feedstock.
+        open_ce_path="$GITHUB_ACTION_PATH/../../../open-ce"
+        env_path="$GITHUB_ACTION_PATH/../../../envs"
+        python ${open_ce_path}/validate_config.py ${env_path}/*-env.yaml \
+                                                  --build_types cuda,cpu \
+                                                  --repository_folder ../
