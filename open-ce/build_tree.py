@@ -353,6 +353,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         cycles = []
         for start in range(len(self.build_commands)): # Check to see if there are any cycles that start anywhere in the tree.
             cycles += find_all_cycles(extract_build_tree, start)
+            if len(cycles) >= max_cycles:
+                break
         if cycles:
             cycle_print = "\n".join([" -> ".join([self.build_commands[i].recipe
                                                                     for i in cycle])
