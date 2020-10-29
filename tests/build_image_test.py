@@ -23,7 +23,7 @@ from errors import OpenCEError, Error
 
 def test_build_image_positive_case(mocker):
     '''
-    Simple test for build_image
+    Simple test for build_runtime_image
     '''
     intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
 
@@ -78,7 +78,7 @@ def test_out_of_context_local_channel(mocker):
 
 def test_local_conda_channel_with_absolute_path(mocker):
     '''
-    Test for build_image with local conda channel with its absolute path
+    Test for build_runtime_image with local conda channel with its absolute path
     '''
     intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
 
@@ -109,7 +109,7 @@ def get_channel_being_modified(conda_env_file):
 
 def test_channel_update_in_conda_env(mocker):
     '''
-    Test to see if channel is being updated in the conda env file before passing to build_image
+    Test to see if channel is being updated in the conda env file before passing to build_runtime_image
     '''
 
     intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
@@ -136,7 +136,7 @@ def test_channel_update_in_conda_env(mocker):
 
 def test_for_failed_docker_build_cmd(mocker):
     '''
-    Simple test for build_image being failed due to some error in building the image
+    Simple test for build_runtime_image being failed due to some error in building the image
     '''
     mocker.patch('os.system', return_value=1)
 
