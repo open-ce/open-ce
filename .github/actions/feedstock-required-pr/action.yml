@@ -14,12 +14,10 @@ runs:
     - name: Check Dependencies
       shell: bash -l {0}
       run: |
-        # Validate all env files that use the current feedstock.
+        # Validate all env files with the new feedstock.
         open_ce_path="$GITHUB_ACTION_PATH/../../../open-ce"
         env_path="$GITHUB_ACTION_PATH/../../../envs"
-        feedstock=$(echo ${PWD##*/} | sed 's|\(.*\)-.*|\1|')
-        for f in ${env_path}/*.yaml; do
-          if grep -Fq "${feedstock}" ${f}; then
-            python $open_ce_path/validate_config.py ${f} --repository_folder ../
-          fi
-        done
+        python ${open_ce_path}/validate_config.py ${env_path}/*-env.yaml
+                                                  --conda_build_config \
+                                                  ./conda_build_config.yaml \
+                                                  --repository_folder ../
