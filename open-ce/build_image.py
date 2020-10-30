@@ -16,7 +16,7 @@ import utils
 from errors import OpenCEError, Error
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-RUNTIME_IMAGE_NAME = "runtime-" + platform.machine()
+RUNTIME_IMAGE_NAME = "opence-runtime"
 RUNTIME_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", RUNTIME_IMAGE_NAME)
 REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-runtime"
