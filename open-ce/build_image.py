@@ -87,7 +87,7 @@ def _validate_input_paths(local_conda_channel, conda_env_file):
 def build_runtime_docker_image(args_string=None):
     """
     Create a runtime image which will have a conda environment created
-    using locally build conda packages and environment file.
+    using locally built conda packages and environment file.
     """
     parser = make_parser()
     args = parser.parse_args(args_string)

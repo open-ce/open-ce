@@ -236,4 +236,3 @@ def is_subdir(child_path, parent_path):
 
     relative = os.path.relpath(child, start=parent)
     return not relative.startswith(os.pardir)
-
