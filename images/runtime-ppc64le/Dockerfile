@@ -46,7 +46,6 @@ RUN mkdir -p ${TARGET_DIR}
 
 COPY ${LOCAL_CONDA_CHANNEL} ${TARGET_DIR}
 
-RUN sudo chown -R ${OPENCE_USER}:${OPENCE_GROUP} ${TARGET_DIR}
-
-RUN $CONDA_HOME/bin/conda env create -f ${TARGET_DIR}/${CONDA_ENV_FILE}
+RUN sudo chown -R ${OPENCE_USER}:${OPENCE_GROUP} ${TARGET_DIR} && \
+    $CONDA_HOME/bin/conda env create -f ${TARGET_DIR}/${CONDA_ENV_FILE}
 
