@@ -58,7 +58,7 @@ def test_validate_config(mocker):
         side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
+    validate_config._main(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
 
 def test_validate_negative(mocker):
     '''
@@ -102,7 +102,7 @@ def test_validate_negative(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     with pytest.raises(OpenCEError) as err:
-        validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
+        validate_config._main(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
     assert "Error validating \"./conda_build_config.yaml\" for " in str(err.value)
 
 def test_validate_bad_env(mocker):
@@ -140,6 +140,6 @@ def test_validate_bad_env(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as err:
-        validate_config.validate_config(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
+        validate_config._main(["--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
     assert "Error validating \"./conda_build_config.yaml\" for " in str(err.value)
     assert "Unexpected key chnnels was found in " in str(err.value)

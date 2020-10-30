@@ -66,6 +66,9 @@ def test_build_env(mocker):
         'os.chdir',
         side_effect=dirTracker.validate_chdir
     )
+    mocker.patch(
+        'validate_config.validate_env_config'
+    )
     #            +-------+
     #     +------+   15  +-----+
     #     |      +---+---+     |     +-------+

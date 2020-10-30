@@ -35,6 +35,7 @@ class Error(Enum):
               " in the current build context. \n Either move the local conda channel" +
               " directory in the current directory or run the script from the path" +
               " which contains local conda channel directory.")
+    VALIDATE_BUILD_TREE = (17, "Dependencies are not compatible.")
 
 class OpenCEError(Exception):
     """
