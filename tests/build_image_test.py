@@ -37,7 +37,7 @@ def test_build_image_positive_case(mocker):
     build_image.build_runtime_docker_image(arg_strings)
     os.remove("tests/testcondabuild/test-conda-env.yaml")
 
-def test_not_existing_local_conda_channel(mocker):
+def test_not_existing_local_conda_channel():
     '''
     Test for not existing local conda channel
     '''
@@ -47,7 +47,7 @@ def test_not_existing_local_conda_channel(mocker):
         build_image.build_runtime_docker_image(arg_strings)
     assert Error.INCORRECT_INPUT_PATHS.value[1] in str(exc.value)
 
-def test_not_existing_env_file(mocker):
+def test_not_existing_env_file():
     '''
     Test for not existing conda environment file
     '''
@@ -58,13 +58,13 @@ def test_not_existing_env_file(mocker):
         build_image.build_runtime_docker_image(arg_strings)
     assert Error.INCORRECT_INPUT_PATHS.value[1] in str(exc.value)
 
-def test_out_of_context_local_channel(mocker):
+def test_out_of_context_local_channel():
     '''
     Test for local conda channel not being in the build context
     '''
 
     # Local conda channel dir passed isn't within the build context
-    TEST_CONDA_CHANNEL_DIR = "../../testcondabuild-pytest"
+    TEST_CONDA_CHANNEL_DIR = "../testcondabuild-pytest"
 
     if not os.path.exists(os.path.abspath(TEST_CONDA_CHANNEL_DIR)):
         os.mkdir(TEST_CONDA_CHANNEL_DIR)
@@ -120,7 +120,7 @@ def test_channel_update_in_conda_env(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    channel_index_before, channel_to_be_modified = get_channel_being_modified("tests/test-conda-env.yaml")
+    channel_index_before, _ = get_channel_being_modified("tests/test-conda-env.yaml")
  
     arg_strings = ["--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
     build_image.build_runtime_docker_image(arg_strings)
