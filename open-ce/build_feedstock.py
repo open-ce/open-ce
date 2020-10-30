@@ -188,7 +188,7 @@ def build_feedstock(args_string=None):
             traceback.print_exc()
             raise OpenCEError(Error.BUILD_RECIPE,
                               recipe['name'] if 'name' in recipe else os.getcwd,
-                              str(exc)) from exc
+                              str(exc) from exc
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
