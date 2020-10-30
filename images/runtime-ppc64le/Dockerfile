@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi7/ubi:7.6
+FROM registry.access.redhat.com/ubi7/ubi
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
