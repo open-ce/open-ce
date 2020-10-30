@@ -9,7 +9,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 import os
 import sys
-import platform
 import shutil
 import yaml
 import utils
