@@ -35,7 +35,7 @@ def test_build_image(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    assert docker_build._build_image() == intended_image_name
+    assert docker_build.build_image() == intended_image_name
 
 def test_create_container(mocker):
     '''
