@@ -72,13 +72,14 @@ def build_env(arg_strings=None):
     parser = make_parser()
     args = parser.parse_args(arg_strings)
 
+    print(utils.parse_arg_list(args.cuda_versions))
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
         docker_build.build_with_docker(args.output_folder, args.build_types, args.cuda_versions, sys.argv)
         return
 
-
+    
     # Checking conda-build existence if --docker_build is not specified
     utils.check_if_conda_build_exists()
 

@@ -104,8 +104,10 @@ class Argument(Enum):
                                         '--cuda_versions',
                                         type=str,
                                         default=DEFAULT_CUDA_VERS,
-                                        help='Comma delimited list of cuda versions to build for '
-                                             ', such as "10.2" or "11.0".'))
+                                        #Supress description of cuda_versions flag until more robust testing
+                                        help=argparse.SUPPRESS))
+                                        #help='Comma delimited list of cuda versions to build for '
+                                        #     ', such as "10.2" or "11.0".'))
 
     DOCKER_BUILD = (lambda parser: parser.add_argument(
                                         '--docker_build',
@@ -265,7 +267,7 @@ def cuda_driver_installed():
     '''
     try:
         lsmod_out = subprocess.check_output("lsmod").decode("utf-8").strip()
-        return re.search(r"nvidia ", lsmod_out) is not None:
+        return re.search(r"nvidia ", lsmod_out) is not None
     except OSError as e:
         if e.errno == errno.ENOENT:
           raise OpenCEError("lsmod command not detected")
