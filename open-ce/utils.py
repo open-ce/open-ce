@@ -183,6 +183,18 @@ def validate_dict_schema(dictionary, schema):
         if not k in schema:
             raise OpenCEError(Error.ERROR, "Unexpected key {} was found in {}".format(k, dictionary))
 
+def run_command_capture(cmd):
+    """Run a shell command and capture the ret_code, stdout and stderr."""
+    process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
+        universal_newlines=True)
+    std_out, std_err = process.communicate()
+
+    return process.returncode == 0, std_out, std_err
+
 def run_and_log(command):
     '''Print a shell command and then execute it.'''
     print("--->{}".format(command))
@@ -191,7 +203,8 @@ def run_and_log(command):
 def get_output(command):
     '''Print and execute a shell command and then return the output.'''
     print("--->{}".format(command))
-    return subprocess.check_output(command, shell=True).decode("utf-8").strip()
+    _,std_out,_ = run_command_capture(command)
+    return std_out.strip()
 
 def variant_string(py_ver, build_type, mpi_type):
     '''

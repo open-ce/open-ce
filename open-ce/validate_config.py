@@ -37,7 +37,6 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
     for a given set of variants.
     '''
     for variant in variants:
-        print('Validating {} for {}'.format(conda_build_config, variant))
         for env_file in env_config_files:
             print('Validating {} for {} : {}'.format(conda_build_config, env_file, variant))
             try:
@@ -51,10 +50,6 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
             except OpenCEError as err:
                 raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
             print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
-
-        print('Successfully validated {} for {}'.format(conda_build_config, variant))
-
-    print("{} Successfully validated!".format(conda_build_config))
 
 def validate_build_tree(recipes, variant):
     '''
@@ -72,8 +67,9 @@ def validate_build_tree(recipes, variant):
 
     cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
 
-    if utils.run_and_log(cli):
-        raise OpenCEError(Error.VALIDATE_BUILD_TREE)
+    ret_code, std_out, std_err = utils.run_command_capture(cli)
+    if not ret_code:
+        raise OpenCEError(Error.VALIDATE_BUILD_TREE, cli, std_out, std_err)
 
 if __name__ == '__main__':
     try:
