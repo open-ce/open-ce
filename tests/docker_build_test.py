@@ -35,7 +35,7 @@ def test_build_image(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    assert docker_build.build_image() == intended_image_name
+    assert docker_build.build_image("test", "test") == intended_image_name
 
 def test_create_container(mocker):
     '''
@@ -160,7 +160,7 @@ def test_build_with_docker(mocker):
     arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
     build_type = "cuda"
     cudatoolkit = "10.2"
-    mocker.patch('docker_build._build_image', return_value=(0, image_name))
+    mocker.patch('docker_build.build_image', return_value=(0, image_name))
 
     mocker.patch('docker_build.build_in_container', return_value=0)
 
