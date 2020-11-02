@@ -91,11 +91,10 @@ def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
-def _create_recipes(repository, recipes, variant_config_files, variants, channels):#pylint: disable=too-many-locals
+def _create_commands(repository, recipes, variant_config_files, variants, channels):#pylint: disable=too-many-locals
     """
-    Create a recipe dictionary for each recipe within a repository. The dictionary
-    will have all of the information needed to build the recipe, as well as to
-    create the dependency tree.
+    Create a BuildCommand for each recipe within a repository.
+    Create a list of TestCommands for a repository.
     """
     saved_working_directory = os.getcwd()
     os.chdir(repository)
@@ -106,7 +105,7 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
     feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
     if feedstock_conda_build_config_file:
         combined_config_files.append(feedstock_conda_build_config_file)
-    outputs = []
+    build_commands = []
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
@@ -126,8 +125,10 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
                                     test_dependencies=test_deps,
                                     channels=channels if channels else []))
 
+    test_commands = gen_test_commands()
+
     os.chdir(saved_working_directory)
-    return outputs
+    return build_commands, test_commands
 
 def _get_package_dependencies(path, variant_config_files, variants):
     """
@@ -229,6 +230,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._conda_build_config = conda_build_config
         self._external_dependencies = dict()
         self._conda_env_files = dict()
+        self._test_commands = dict()
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
@@ -236,7 +238,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self.build_commands = []
         for variant in self._possible_variants:
             try:
-                variant_recipes, external_deps = self._create_all_recipes(variant)
+                variant_recipes, external_deps = self._create_all_commands(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
             variant_string = utils.variant_string(variant["python"], variant["build_type"],
@@ -249,14 +251,14 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             self.build_commands += variant_recipes
         self._detect_cycle()
 
-    def _create_all_recipes(self, variants): #pylint: disable=too-many-branches
+    def _create_all_commands(self, variants): #pylint: disable=too-many-branches
         '''
         Create a recipe dictionary for each recipe needed for a given environment file.
         '''
 
         env_config_data_list = env_config.load_env_config_files(self._env_config_files, variants)
         packages_seen = set()
-        recipes = []
+        build_commands = []
         external_deps = []
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
@@ -291,18 +293,24 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 if not os.path.exists(repo_dir):
                     self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
 
-                recipes += _create_recipes(repo_dir,
-                                           package.get('recipes'),
-                                           [os.path.abspath(self._conda_build_config)],
-                                           variants,
-                                           env_config_data.get(env_config.Key.channels.name, None))
+                repo_build_commands, test_commands +=
+                    _create_commands(repo_dir,
+                                    package.get('recipes'),
+                                    [os.path.abspath(self._conda_build_config)],
+                                    variants,
+                                    env_config_data.get(env_config.Key.channels.name, None))
+
+                build_commands += repo_build_commands
+                if test_commands and not repository in self._test_commands:
+                    self._test_commands[repository] = test_commands
+
                 packages_seen.add(_make_hash(package))
 
             current_deps = env_config_data.get(env_config.Key.external_dependencies.name, [])
             if current_deps:
                 external_deps += current_deps
 
-        return recipes, external_deps
+        return build_commands, external_deps
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
         """
@@ -376,6 +384,12 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                                    output_folder, env_file_prefix, path)
 
         return conda_env_files
+
+    def get_test_commands(self):
+        """
+        Return a dictionary of test commands, where each key is the repository name.
+        """
+        return self._test_commands
 
     def _detect_cycle(self, max_cycles=10):
         extract_build_tree = [x.build_command_dependencies for x in self.build_commands]
