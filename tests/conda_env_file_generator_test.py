@@ -31,13 +31,14 @@ class TestBuildTree(build_tree.BuildTree):
                  python_versions,
                  build_types,
                  mpi_types,
+                 cuda_versions,
                  external_depends=None,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
         super().__init__(env_config_files, python_versions, build_types, mpi_types,
-                         repository_folder, git_location, conda_build_config)
+                         cuda_versions, repository_folder, git_location, conda_build_config)
         if external_depends:
             self._external_dependencies = external_depends
         else:
@@ -52,9 +53,10 @@ class TestCondaEnvFileGenerator(conda_env_file_generator.CondaEnvFileGenerator):
                  python_versions,
                  build_types,
                  mpi_types,
+                 cuda_versions,
                  channels,
                  output_folder):
-        super().__init__(python_versions, build_types, mpi_types, channels, output_folder)
+        super().__init__(python_versions, build_types, mpi_types, cuda_versions, channels, output_folder)
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
@@ -62,6 +64,7 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     python="3.6",
                                     build_type="cuda",
                                     mpi_type="openmpi",
+                                    cudatoolkit="10.2",
                                     run_dependencies=["python     >=3.6", "pack1    1.0", "pack2   >=2.0"]),
                          build_tree.BuildCommand("recipe2",
                                     "repo2",
@@ -69,6 +72,7 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     python="3.6",
                                     build_type="cpu",
                                     mpi_type="system",
+                                    cudatoolkit="10.2",                                    
                                     run_dependencies=["python ==3.6", "pack1 >=1.0", "pack2   ==2.0", "pack3 3.3 build"]),
                          build_tree.BuildCommand("recipe3",
                                     "repo3",
@@ -76,6 +80,7 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     python="3.7",
                                     build_type="cpu",
                                     mpi_type="openmpi",
+                                    cudatoolkit="10.2",
                                     run_dependencies=["python 3.7", "pack1==1.0", "pack2 <=2.0", "pack3   3.0.*"]),
                          build_tree.BuildCommand("recipe4",
                                     "repo4",
@@ -83,11 +88,12 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     python="3.7",
                                     build_type="cuda",
                                     mpi_type="system",
+                                    cudatoolkit="10.2",
                                     run_dependencies=["pack1==1.0", "pack2 <=2.0", "pack3-suffix 3.0"])]
 
 
 external_deps = {}
-possible_variants = utils.make_variants(['3.6', '3.7'], ['cpu', 'cuda'], 'openmpi')
+possible_variants = utils.make_variants(['3.6', '3.7'], ['cpu', 'cuda'], 'openmpi', '10.2')
 for variant in possible_variants:
     external_deps[str(variant)] = ["external_pac1    1.2", "external_pack2", "external_pack3=1.2.3"]
 TMP_OPENCE_DIR="/tmp/opence-test/"
@@ -99,13 +105,15 @@ def test_conda_env_file_content():
     python_versions = "3.6,3.7"
     build_types = "cpu,cuda"
     mpi_types = "openmpi,system"
-    mock_build_tree = TestBuildTree([], python_versions, build_types, mpi_types, external_deps)
+    cuda_versions = "10.2"
+    mock_build_tree = TestBuildTree([], python_versions, build_types, mpi_types, cuda_versions, external_deps)
     mock_build_tree.build_commands = sample_build_commands
 
     output_dir = os.path.join(test_dir, '../condabuild' )
     mock_conda_env_file_generator = TestCondaEnvFileGenerator(python_versions,
                                                               build_types,
                                                               mpi_types,
+                                                              cuda_versions,
                                                               ["some channel"],
                                                               output_dir)
     expected_channels = ["file:/{}".format(output_dir), "some channel", "defaults"]
@@ -113,7 +121,7 @@ def test_conda_env_file_content():
     assert actual_channels == expected_channels
 
     variants = utils.make_variants(python_versions, build_types, mpi_types)
-    expected_keys = [utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'])
+    expected_keys = [utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'], variant['cudatoolkit'])
                      for variant in variants]
     actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
     assert Counter(actual_keys) == Counter(expected_keys)
@@ -184,18 +192,19 @@ def test_conda_env_file_for_only_selected_py():
     python_versions = "3.7"
     build_types = "cpu,cuda"
     mpi_types = "openmpi,system"
-    mock_build_tree = TestBuildTree([], python_versions, build_types, mpi_types, external_deps)
+    cuda_versions = "10.2"
+    mock_build_tree = TestBuildTree([], python_versions, build_types, mpi_types, cuda_versions, external_deps)
     mock_build_tree.build_commands = sample_build_commands[2:4] # Build cmds for py3.7
 
     output_dir = os.path.join(test_dir, '../condabuild' )
-    mock_conda_env_file_generator = TestCondaEnvFileGenerator(python_versions, build_types, mpi_types, None, output_dir)
+    mock_conda_env_file_generator = TestCondaEnvFileGenerator(python_versions, build_types, mpi_types, cuda_versions, None, output_dir)
 
     expected_channels = ["file:/{}".format(output_dir), "defaults"]
     actual_channels = mock_conda_env_file_generator.channels
     assert actual_channels == expected_channels
 
     variants = utils.make_variants(python_versions, build_types, mpi_types)
-    expected_keys = [utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'])
+    expected_keys = [utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'], variant['cudatoolkit'])
                      for variant in variants]
 
     actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
@@ -207,7 +216,7 @@ def test_conda_env_file_for_only_selected_py():
     mock_conda_env_file_generator.write_conda_env_files(TMP_OPENCE_DIR)
 
     # Conda env files should be generated only for py3.7-cpu-openmpi and py3.7-cuda-system variants
-    expected_files_keys = [utils.variant_string("3.7", "cpu", "openmpi"), utils.variant_string("3.7", "cuda", "system")]
+    expected_files_keys = [utils.variant_string("3.7", "cpu", "openmpi", "10.2"), utils.variant_string("3.7", "cuda", "system", "10.2")]
 
     # Check if conda env files are created for expected_files_keys
     for file_keys in expected_files_keys:
@@ -232,7 +241,8 @@ def test_conda_env_file_for_inapplicable_conf():
     python_versions = "3.7"
     build_types = "cuda"
     mpi_types = "openmpi"
-    mock_build_tree = TestBuildTree([], python_versions, build_types, mpi_types)
+    cuda_versions = "10.2"
+    mock_build_tree = TestBuildTree([], python_versions, build_types, mpi_types, cuda_versions)
 
     mock_build_tree.build_commands = [build_tree.BuildCommand("recipe1",
                                       "repo1",
@@ -240,10 +250,11 @@ def test_conda_env_file_for_inapplicable_conf():
                                       python=python_versions,
                                       build_type=build_types,
                                       mpi_type=mpi_types,
+                                      cudatoolkit=cuda_versions,
                                       run_dependencies=None)]
 
     output_dir = os.path.join(test_dir, '../condabuild' )
-    mock_conda_env_file_generator = TestCondaEnvFileGenerator(python_versions, build_types, mpi_types, [], output_dir)
+    mock_conda_env_file_generator = TestCondaEnvFileGenerator(python_versions, build_types, mpi_types, cuda_versions, [], output_dir)
 
     expected_keys = ["py3.7-cuda-openmpi"]
     actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
