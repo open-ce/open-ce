@@ -148,7 +148,6 @@ def parse_arg_list(arg_list):
 def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
 cuda_versions=DEFAULT_CUDA_VERS):
     '''Create a cross product of possible variant combinations.'''
-    print("MAKE VARIANT {}".format(cuda_versions))
     variants = { 'python' : parse_arg_list(python_versions),
                  'build_type' : parse_arg_list(build_types),
                  'mpi_type' :  parse_arg_list(mpi_types),
