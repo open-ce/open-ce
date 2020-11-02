@@ -87,7 +87,9 @@ class CondaEnvFileGenerator():
         This function updates dependency dictionary for each build command with
         its dependencies both internal and external.
         """
-        key = utils.variant_string(build_command.python, build_command.build_type, build_command.mpi_type, build_command.cudatoolkit)
+        key = utils.variant_string(build_command.python, build_command.build_type, build_command.mpi_type,
+        build_command.cudatoolkit)
+
         self._update_deps_lists(build_command.run_dependencies, key)
         self._update_deps_lists(build_command.packages, key)
 

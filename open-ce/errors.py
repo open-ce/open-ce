@@ -37,7 +37,7 @@ class Error(Enum):
               " which contains local conda channel directory.")
     INCOMPAT_CUDA = (17, "Driver level \"{}\" is not new enough to support cuda \"{}\"")
     UNSUPPORTED_CUDA = (18, "Cannot build using docker image for cuda \"{}\" no Dockerfile currently exists")
-    TOO_MANY_CUDA = (19, "Only one cuda version allowed to be built with docker at a time")    
+    TOO_MANY_CUDA = (19, "Only one cuda version allowed to be built with docker at a time")
 
 
 class OpenCEError(Exception):

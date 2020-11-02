@@ -79,7 +79,6 @@ def build_env(arg_strings=None):
         docker_build.build_with_docker(args.output_folder, args.build_types, args.cuda_versions, sys.argv)
         return
 
-    
     # Checking conda-build existence if --docker_build is not specified
     utils.check_if_conda_build_exists()
 

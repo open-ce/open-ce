@@ -149,14 +149,14 @@ def _generate_dockerfile_name(build_types, cuda_version):
         dockerfile = os.path.join(BUILD_IMAGE_PATH, "Dockerfile")
         build_image_path = BUILD_IMAGE_PATH
     return build_image_path, dockerfile
-    
+
 def _capable_of_cuda_containers(cuda_versions):
     '''
     Check if we can run containers with Cuda installed.  This can be accomplished in two ways
     First if the host server does not have a driver installed
     Second, if the host driver is compatible with the level of cuda being used in the image
     '''
-    
+
     return not utils.cuda_driver_installed() or utils.cuda_level_supported(cuda_versions)
 
 def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
@@ -165,7 +165,7 @@ def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
     """
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings)
-    
+
     build_image_path, dockerfile = _generate_dockerfile_name(build_types, cuda_versions)
 
     if  'cuda' not in build_types or _capable_of_cuda_containers(cuda_versions):
@@ -173,5 +173,5 @@ def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), cuda_versions)
 
-    
+
     build_in_container(image_name, output_folder, unused_args)

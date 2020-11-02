@@ -41,6 +41,7 @@ def validate_config(arg_strings=None):
                                                variant['python'],
                                                variant['build_type'],
                                                variant['mpi_type'],
+                                               variant['cuda_versions'],
                                                repository_folder=args.repository_folder,
                                                conda_build_config=args.conda_build_config)
             except OpenCEError as err:

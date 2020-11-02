@@ -11,6 +11,7 @@ import os
 import argparse
 import sys
 import subprocess
+import errno
 from enum import Enum, unique
 from itertools import product
 import re
@@ -144,7 +145,8 @@ def parse_arg_list(arg_list):
         return arg_list
     return arg_list.split(",") if not arg_list is None else list()
 
-def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES, cuda_versions=DEFAULT_CUDA_VERS):
+def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
+cuda_versions=DEFAULT_CUDA_VERS):
     '''Create a cross product of possible variant combinations.'''
     print("MAKE VARIANT {}".format(cuda_versions))
     variants = { 'python' : parse_arg_list(python_versions),
@@ -247,7 +249,7 @@ def cuda_level_supported(cuda_level):
     '''
     Check if the requested cuda level is supported by loaded NVIDIA driver
     '''
-    
+
     return float(get_driver_cuda_level()) >= float(cuda_level)
 
 def get_driver_cuda_level():
@@ -257,32 +259,39 @@ def get_driver_cuda_level():
     try:
         smi_out = subprocess.check_output("nvidia-smi").decode("utf-8").strip()
         return re.search(r"CUDA Version\: (\d+\.\d+)", smi_out).group(1)
-    except OSError as e:
-        if e.errno == errno.ENOENT:
-          raise OpenCEError(Error.ERROR, "nvidia-smi command not detected")
+    except OSError as err:
+        if err.errno == errno.ENOENT:
+            raise OpenCEError(Error.ERROR, "nvidia-smi command not found") from err
+
+        raise OpenCEError(Error.ERROR, "nvidia-smi command unexpectedly failed") from err
 
 def get_driver_level():
     '''
-    Return the NVIDIA driver level on the system. 
+    Return the NVIDIA driver level on the system.
     '''
     try:
         smi_out = subprocess.check_output("nvidia-smi").decode("utf-8").strip()
         return re.search(r"Driver Version\: (\d+\.\d+\.\d+)", smi_out).group(1)
-    except OSError as e:
-        if e.errno == errno.ENOENT:
-          raise OpenCEError(Error.ERROR, "nvidia-smi command not detected")
+    except OSError as err:
+        if err.errno == errno.ENOENT:
+            raise OpenCEError(Error.ERROR, "nvidia-smi command not found") from err
+
+        raise OpenCEError(Error.ERROR, "nvidia-smi command unexpectedly failed") from err
 
 def cuda_driver_installed():
     '''
     Determine if the current machine has the NVIDIA driver installed
     '''
+
     try:
-        lsmod_out = subprocess.check_output("lsmod").decode("utf-8").strip()
+        lsmod_out = subprocess.check_output("lsmod1").decode("utf-8").strip()
         return re.search(r"nvidia ", lsmod_out) is not None
-    except OSError as e:
-        if e.errno == errno.ENOENT:
-          raise OpenCEError("lsmod command not detected")
-          
+    except OSError as err:
+        if err.errno == errno.ENOENT:
+            raise OpenCEError(Error.ERROR, "lsmod command not found") from err
+
+        raise OpenCEError(Error.ERROR, "lsmod command unexpectedly failed") from err
+
 def is_subdir(child_path, parent_path):
     """ Checks if given child path is sub-directory of parent_path. """
 
@@ -291,4 +300,3 @@ def is_subdir(child_path, parent_path):
 
     relative = os.path.relpath(child, start=parent)
     return not relative.startswith(os.pardir)
-

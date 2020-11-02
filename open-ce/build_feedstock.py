@@ -47,7 +47,7 @@ def make_parser():
     ''' Parser input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
                  utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES, 
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
                  utils.Argument.CUDA_VERSIONS]
     parser = utils.make_parser(arguments,
                                description = 'Build conda packages as part of Open-CE')
