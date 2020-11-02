@@ -35,10 +35,10 @@ class Error(Enum):
               " in the current build context. \n Either move the local conda channel" +
               " directory in the current directory or run the script from the path" +
               " which contains local conda channel directory.")
-    INCOMPAT_CUDA = (17, "Driver level \"{}\" is not new enough to support cuda \"{}\"")
-    UNSUPPORTED_CUDA = (18, "Cannot build using docker image for cuda \"{}\" no Dockerfile currently exists")
-    TOO_MANY_CUDA = (19, "Only one cuda version allowed to be built with docker at a time")
-
+    VALIDATE_BUILD_TREE = (17, "Dependencies are not compatible.\nCommand:\n{}\nOutput:\n{}\nError:\n{}")
+    INCOMPAT_CUDA = (18, "Driver level \"{}\" is not new enough to support cuda \"{}\"")
+    UNSUPPORTED_CUDA = (19, "Cannot build using docker image for cuda \"{}\" no Dockerfile currently exists")
+    TOO_MANY_CUDA = (20, "Only one cuda version allowed to be built with docker at a time")
 
 class OpenCEError(Exception):
     """

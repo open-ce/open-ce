@@ -26,53 +26,55 @@ def make_parser():
                                description = 'Perform validation on a conda_build_config.yaml file.')
     return parser
 
-def validate_config(arg_strings=None):
-    '''
-    Entry function.
-    '''
+def _main(arg_strings=None):
     args = make_parser().parse_args(arg_strings)
     variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
+    validate_env_config(args.conda_build_config, args.env_config_file, variants, args.repository_folder)
+
+def validate_env_config(conda_build_config, env_config_files, variants, repository_folder):
+    '''
+    Validates a lits of Open-CE env files against a conda build config
+    for a given set of variants.
+    '''
     for variant in variants:
-        print('Validating {} for {}'.format(args.conda_build_config, variant))
-        for env_file in args.env_config_file:
-            print('Validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
+        for env_file in env_config_files:
+            print('Validating {} for {} : {}'.format(conda_build_config, env_file, variant))
             try:
                 recipes = build_tree.BuildTree([env_file],
                                                variant['python'],
                                                variant['build_type'],
                                                variant['mpi_type'],
                                                variant['cuda_versions'],
-                                               repository_folder=args.repository_folder,
-                                               conda_build_config=args.conda_build_config)
+                                               repository_folder=repository_folder,
+                                               conda_build_config=conda_build_config)
+                validate_build_tree(recipes, variant)
             except OpenCEError as err:
-                raise OpenCEError(Error.VALIDATE_CONFIG, args.conda_build_config, env_file, variant, err.msg) from err
+                raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
+            print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
 
-            packages = [package for recipe in recipes for package in recipe.packages]
-            channels = {channel for recipe in recipes for channel in recipe.channels}
-            deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
-            deps.update(recipes.get_external_dependencies(variant))
+def validate_build_tree(recipes, variant):
+    '''
+    Check a build tree for dependency compatability.
+    '''
+    packages = [package for recipe in recipes for package in recipe.packages]
+    channels = {channel for recipe in recipes for channel in recipe.channels}
+    deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
+    deps.update(recipes.get_external_dependencies(variant))
 
-            pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
-                                                                          if not utils.remove_version(dep) in packages])
+    pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
+                                                                    if not utils.remove_version(dep) in packages])
 
-            channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
+    channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
 
-            cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
+    cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
 
-            retval = utils.run_and_log(cli)
-
-            if retval != 0:
-                raise OpenCEError(Error.VALIDATE_CONFIG, args.conda_build_config, env_file, variant, "")
-
-            print('Successfully validated {} for {} : {}'.format(args.conda_build_config, env_file, variant))
-
-        print('Successfully validated {} for {}'.format(args.conda_build_config, variant))
-
-    print("{} Successfully validated!".format(args.conda_build_config))
+    ret_code, std_out, std_err = utils.run_command_capture(cli)
+    if not ret_code:
+        raise OpenCEError(Error.VALIDATE_BUILD_TREE, cli, std_out, std_err)
 
 if __name__ == '__main__':
     try:
-        validate_config()
+        _main()
     except OpenCEError as err:
         print(err.msg, file=sys.stderr)
         sys.exit(1)

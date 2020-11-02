@@ -38,6 +38,7 @@ import sys
 import build_feedstock
 import docker_build
 import utils
+import validate_config
 from errors import OpenCEError, Error
 from conda_env_file_generator import CondaEnvFileGenerator
 
@@ -97,6 +98,9 @@ def build_env(arg_strings=None):
     # If repository_folder doesn't exist, create it
     if args.repository_folder and not os.path.exists(args.repository_folder):
         os.mkdir(args.repository_folder)
+
+    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
+    validate_config.validate_env_config(args.conda_build_config, args.env_config_file, variants, args.repository_folder)
 
     # Create the build tree
     build_tree = BuildTree(env_config_files=args.env_config_file,
