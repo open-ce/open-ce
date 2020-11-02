@@ -242,6 +242,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
             self.build_commands += variant_recipes
+        self._detect_cycle()
 
     def _create_all_recipes(self, variants): #pylint: disable=too-many-branches
         '''
@@ -353,3 +354,35 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
     def get_external_dependencies(self, variant):
         '''Return the list of external dependencies for the given variant.'''
         return self._external_dependencies.get(str(variant), [])
+
+    def _detect_cycle(self, max_cycles=10):
+        extract_build_tree = [x.build_command_dependencies for x in self.build_commands]
+        cycles = []
+        for start in range(len(self.build_commands)): # Check to see if there are any cycles that start anywhere in the tree.
+            cycles += find_all_cycles(extract_build_tree, start)
+            if len(cycles) >= max_cycles:
+                break
+        if cycles:
+            cycle_print = "\n".join([" -> ".join([self.build_commands[i].recipe
+                                                                    for i in cycle])
+                                                                    for cycle in cycles[:min(max_cycles, len(cycles))]])
+            if len(cycles) > max_cycles:
+                cycle_print += "\nCycles truncated after {}...".format(max_cycles)
+            raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
+
+def find_all_cycles(tree, current=0, seen=None):
+    '''
+    This function performs a depth first search of a tree from current, returning all cycles
+    starting at current.
+    '''
+    if not seen:
+        seen = []
+    current_branch = seen + [current]
+    if len(current_branch) != len(set(current_branch)):
+        return [current_branch]
+    result = []
+    for dependency in tree[current]:
+        next_step = find_all_cycles(tree, dependency, current_branch)
+        if next_step:
+            result += next_step
+    return result
