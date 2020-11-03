@@ -256,7 +256,7 @@ def test_conda_env_file_for_inapplicable_conf():
     output_dir = os.path.join(test_dir, '../condabuild' )
     mock_conda_env_file_generator = TestCondaEnvFileGenerator(python_versions, build_types, mpi_types, cuda_versions, [], output_dir)
 
-    expected_keys = ["py3.7-cuda-openmpi"]
+    expected_keys = ["py3.7-cuda-openmpi-10.2"]
     actual_keys = list(mock_conda_env_file_generator.dependency_dict.keys())
     assert actual_keys == expected_keys
 

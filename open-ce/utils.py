@@ -296,7 +296,7 @@ def cuda_driver_installed():
     '''
 
     try:
-        lsmod_out = subprocess.check_output("lsmod1").decode("utf-8").strip()
+        lsmod_out = subprocess.check_output("lsmod").decode("utf-8").strip()
         return re.search(r"nvidia ", lsmod_out) is not None
     except OSError as err:
         if err.errno == errno.ENOENT:
