@@ -226,17 +226,25 @@ def _add_build_command_dependencies(build_commands, start_index=0):
         build_command.build_command_dependencies = deps
 
 def _remove_duplicate_build_commands(variant_recipes, build_commands):
+    """
+    Identify duplicate build_commands and remove them.
+
+    Update the `build_command_dependencies` for each build_command.
+    """
     start_index = len(build_commands)
+
+    # Create dictionary listing the index of entries that are present both in build_commands
+    # and in variant_recipes
     duplicates = {}
-    if build_commands:
-        for index, entry in enumerate(variant_recipes):
-            if entry in build_commands:
-                print("EXISTING entry at INDEX %s in buildcommands  matches entry at index %s in varrecipes"
+    for index, entry in enumerate(variant_recipes):
+        if entry in build_commands:
+            print("EXISTING entry at INDEX %s in buildcommands  matches entry at index %s in varrecipes"
                        % (build_commands.index(entry), index + start_index ))
-                duplicates[index + start_index] = build_commands.index(entry)
+            duplicates[index + start_index] = build_commands.index(entry)
     print(duplicates)
 
     print("---------REPLACING index variant recipes-----------")
+    # Replace duplicate indices in `build_command_dependencies` with corresponding original indices. 
     if duplicates:
         for build_command in variant_recipes:
             print("command deps %s" % (build_command.build_command_dependencies))
@@ -247,6 +255,7 @@ def _remove_duplicate_build_commands(variant_recipes, build_commands):
             print("updated deps %s" % (build_command.build_command_dependencies))
         print("--------------------------------------")
 
+    # Remove duplicate build_commands and update indices in `build_command_dependencies`
     for i,key in enumerate(duplicates):
         index = key - i
         print("INDEX being checked = %s" % (index))
@@ -314,8 +323,9 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             _add_build_command_dependencies(build_commands, len(self.build_commands))
 
             # Remove build commands from variant_recipes that are already in self.build_commands
-            _remove_duplicate_build_commands(build_commands, self.build_commands)
-            self.build_commands += build_commands 
+            if self.build_commands:
+                _remove_duplicate_build_commands(build_commands, self.build_commands)
+            self.build_commands += variant_recipes
         self._detect_cycle()
 
         #TODO: Added for testing purpose
