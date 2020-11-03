@@ -226,36 +226,37 @@ def _add_build_command_dependencies(build_commands, start_index=0):
         build_command.build_command_dependencies = deps
 
 def _remove_duplicate_build_commands(variant_recipes, build_commands):
-        start_index = len(build_commands)
-        duplicates = {}
-        if build_commands:
-            for index, entry in enumerate(variant_recipes):
-                if entry in build_commands:
-                    print("EXISTING entry at INDEX %s in buildcommands  matches entry at index %s in varrecipes" % (build_commands.index(entry), index + start_index ))
-                    duplicates[index + start_index] = build_commands.index(entry)
-            print(duplicates)
+    start_index = len(build_commands)
+    duplicates = {}
+    if build_commands:
+        for index, entry in enumerate(variant_recipes):
+            if entry in build_commands:
+                print("EXISTING entry at INDEX %s in buildcommands  matches entry at index %s in varrecipes"
+                       % (build_commands.index(entry), index + start_index ))
+                duplicates[index + start_index] = build_commands.index(entry)
+    print(duplicates)
 
-        print("---------REPLACING index variant recipes-----------")
-        if duplicates:
-            for v in variant_recipes:
-                print("command deps %s" % (v.build_command_dependencies))
-                y = []
-                for i in v.build_command_dependencies:
-                    y.append(duplicates.get(i,i))
-                v.build_command_dependencies = y
-                print("updated deps %s" % (v.build_command_dependencies))
-            print("--------------------------------------")
+    print("---------REPLACING index variant recipes-----------")
+    if duplicates:
+        for build_command in variant_recipes:
+            print("command deps %s" % (build_command.build_command_dependencies))
+            updated_command_deps = []
+            for i in build_command.build_command_dependencies:
+                updated_command_deps.append(duplicates.get(i,i))
+            build_command.build_command_dependencies = updated_command_deps
+            print("updated deps %s" % (build_command.build_command_dependencies))
+        print("--------------------------------------")
 
-        for i,key in enumerate(duplicates):
-            index = key - i
-            print("INDEX being checked = %s" % (index))
-            for v in variant_recipes:
-                print("------------OLD deps list %s" % (v.build_command_dependencies))
-                for i,value in enumerate(v.build_command_dependencies):
-                    if value >= index:
-                        v.build_command_dependencies[i]= value - 1;
-                print("------------NEW deps list %s" % ( v.build_command_dependencies))
-            variant_recipes.pop(index-start_index)
+    for i,key in enumerate(duplicates):
+        index = key - i
+        print("INDEX being checked = %s" % (index))
+        for build_command in variant_recipes:
+            print("------------OLD deps list %s" % (build_command.build_command_dependencies))
+            for k,value in enumerate(build_command.build_command_dependencies):
+                if value >= index:
+                    build_command.build_command_dependencies[k]= value - 1
+            print("------------NEW deps list %s" % ( build_command.build_command_dependencies))
+        variant_recipes.pop(index-start_index)
 
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
