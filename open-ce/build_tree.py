@@ -256,8 +256,6 @@ def _remove_duplicate_build_commands(variant_recipes, build_commands):
                         v.build_command_dependencies[i]= value - 1;
                 print("------------NEW deps list %s" % ( v.build_command_dependencies))
             variant_recipes.pop(index-start_index)
-        
-        return variant_recipes
 
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
@@ -314,9 +312,10 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(build_commands, len(self.build_commands))
 
-            reduced_variant_recipes = _remove_duplicate_build_commands(build_commands, self.build_commands)
-            self.build_commands += reduced_variant_recipes
-        self._detect_cycle()    
+            # Remove build commands from variant_recipes that are already in self.build_commands
+            _remove_duplicate_build_commands(build_commands, self.build_commands)
+            self.build_commands += build_commands 
+        self._detect_cycle()
 
         #TODO: Added for testing purpose
         print("---------FINAL Build Command-----------")
