@@ -233,6 +233,7 @@ def _remove_duplicate_build_commands(variant_recipes, build_commands):
     """
     start_index = len(build_commands)
 
+    #TODO: remove debug prints
     # Create dictionary listing the index of entries that are present both in build_commands
     # and in variant_recipes
     duplicates = {}
@@ -244,7 +245,7 @@ def _remove_duplicate_build_commands(variant_recipes, build_commands):
     print(duplicates)
 
     print("---------REPLACING index variant recipes-----------")
-    # Replace duplicate indices in `build_command_dependencies` with corresponding original indices. 
+    # Replace duplicate indices in `build_command_dependencies` with corresponding original indices.
     if duplicates:
         for build_command in variant_recipes:
             print("command deps %s" % (build_command.build_command_dependencies))
