@@ -192,7 +192,7 @@ def _get_package_dependencies(path, variant_config_files, variants):
 
     return packages, run_deps, host_deps, build_deps, test_deps, used_vars, noarch, string
 
-def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
+def _add_build_command_dependencies(build_commands, start_index=0):
     """
     Create a dependency tree for a list of build commands.
 
@@ -207,13 +207,13 @@ def _add_build_command_dependencies(variant_build_commands, build_commands, star
     # Create a packages dictionary that uses all of a recipe's packages as key, with
     # the recipes index as values.
     packages = dict()
-    for index, build_command in enumerate(build_commands if build_commands else variant_build_commands):
+    for index, build_command in enumerate(build_commands):
         for package in build_command.packages:
             packages.update({ package : [start_index + index] + packages.get(package, []) })
 
     # Add a list of indices for dependency to a BuildCommand's `build_command_dependencies` value
     # Note: This will filter out all dependencies that aren't in the recipes list.
-    for index, build_command in enumerate(variant_build_commands):
+    for index, build_command in enumerate(build_commands):
         deps = []
         dependencies = set()
         dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
@@ -224,6 +224,40 @@ def _add_build_command_dependencies(variant_build_commands, build_commands, star
             if dep in packages:
                 deps += filter(lambda x: x != start_index + index, packages[dep])
         build_command.build_command_dependencies = deps
+
+def _remove_duplicate_build_commands(variant_recipes, build_commands):
+        start_index = len(build_commands)
+        save = {}
+        for index, entry in enumerate(variant_recipes):
+            if entry in build_commands:
+                print("EXISTING entry at INDEX %s in buildcommands  matches entry at index %s in varrecipes" % (build_commands.index(entry), index + start_index ))
+#                x = index + start_index 
+                save[index + start_index] = build_commands.index(entry)
+        print(save)
+
+        print("---------REPLACING index variant recipes-----------")
+        if save:
+            for v in variant_recipes:
+                print("command deps %s" % (v.build_command_dependencies))
+                y = []
+                for i in v.build_command_dependencies:
+                    y.append(save.get(i,i))
+                v.build_command_dependencies = y
+                print("updated deps %s" % (v.build_command_dependencies))
+            print("--------------------------------------")
+
+        for i,key in enumerate(save):
+            index = key - i
+            print("INDEX being checked = %s" % (index))
+            for v in variant_recipes:
+                print("------------OLD deps list %s" % (v.build_command_dependencies))
+                for i,value in enumerate(v.build_command_dependencies):
+                    if value >= index:
+                        v.build_command_dependencies[i]= value - 1;
+                print("------------NEW deps list %s" % ( v.build_command_dependencies))
+            variant_recipes.pop(index-start_index)
+        
+        return variant_recipes
 
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
@@ -277,16 +311,12 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             self._conda_env_files[variant_string] = CondaEnvFileGenerator(build_commands, external_deps)
             self._test_commands[variant_string] = test_commands
 
-            #remove any duplicate build commands
-            variant_build_commands = []
-            for entry in variant_recipes:
-                if entry not in self.build_commands:
-                    variant_build_commands.append(entry)
-
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(build_commands, len(self.build_commands))
-            self.build_commands += build_commands
-        self._detect_cycle()
+
+            reduced_variant_recipes = _remove_duplicate_build_commands(build_commands, self.build_commands)
+            self.build_commands += reduced_variant_recipes
+        self._detect_cycle()    
 
         #TODO: Added for testing purpose
         print("---------FINAL Build Command-----------")
