@@ -228,12 +228,12 @@ def _add_build_command_dependencies(build_commands, start_index=0):
 def _remove_duplicate_build_commands(variant_recipes, build_commands):
         start_index = len(build_commands)
         duplicates = {}
-        for index, entry in enumerate(variant_recipes):
-            if entry in build_commands:
-                print("EXISTING entry at INDEX %s in buildcommands  matches entry at index %s in varrecipes" % (build_commands.index(entry), index + start_index ))
-#                x = index + start_index 
-                duplicates[index + start_index] = build_commands.index(entry)
-        print(duplicates)
+        if build_commands:
+            for index, entry in enumerate(variant_recipes):
+                if entry in build_commands:
+                    print("EXISTING entry at INDEX %s in buildcommands  matches entry at index %s in varrecipes" % (build_commands.index(entry), index + start_index ))
+                    duplicates[index + start_index] = build_commands.index(entry)
+            print(duplicates)
 
         print("---------REPLACING index variant recipes-----------")
         if duplicates:
