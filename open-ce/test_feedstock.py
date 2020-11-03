@@ -146,7 +146,7 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE):
     test_data = load_test_file(test_file)
 
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    conda_env = "open-ce-conda-env-" + time_stamp
+    conda_env = utils.CONDA_ENV_FILENAME_PREFIX + time_stamp
 
     test_commands = []
 
