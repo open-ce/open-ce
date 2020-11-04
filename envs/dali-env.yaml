@@ -10,4 +10,5 @@ packages:
   - feedstock : jpeg-turbo
   - feedstock : libflac
   - feedstock : libsndfile
+  - feedstock : protobuf          #[python == '3.8']
 {% endif %}
