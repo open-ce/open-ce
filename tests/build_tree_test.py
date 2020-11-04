@@ -53,7 +53,10 @@ def test_create_commands(mocker):
     render_result=helpers.make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
                                                         ['run_req1            1.3'],
                                                         ['host_req1            1.0', 'host_req2'],
-                                                        ['test_req1'])
+                                                        ['test_req1'],
+                                                        ['used_var1', 'used_var2'],
+                                                        '',
+                                                        ['string1_1'])
     mocker.patch(
         'conda_build.api.render',
         return_value=render_result
@@ -225,3 +228,62 @@ def test_build_tree_cycle_fail():
     assert "recipe1 -> recipe3 -> recipe2 -> recipe1" in str(exc.value)
     assert "recipe2 -> recipe1 -> recipe3 -> recipe2" in str(exc.value)
     assert "recipe3 -> recipe2 -> recipe1 -> recipe2" in str(exc.value)
+
+def test_build_tree_duplicates():
+    '''
+    Tests that `build_tree._remove_duplicate_build_commands` removes duplicate build_commands
+    and updates the `build_command_dependencies` accordingly.
+    '''
+
+    initial_build_commands = [build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1a"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[]),
+                              build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1b"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[0])]
+
+    duplicate_build_commands = [build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1a"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[]),
+                                build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1b"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[]),
+                                build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1a"],
+                                                    python="2.6",
+                                                    build_type="cpu",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[2])]
+    additional_build_commands = [build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1a"],
+                                                    python="2.6",
+                                                    build_type="cpu",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[])]
+                               
+    build_tree._remove_duplicate_build_commands(additional_build_commands, initial_build_commands)
+    assert len(additional_build_commands)==1  # Make sure the non-duplicates are not removed
+
+    build_tree._remove_duplicate_build_commands(duplicate_build_commands, initial_build_commands)
+    assert len(duplicate_build_commands)==1
+
+    for build_command in duplicate_build_commands:
+        assert build_command.build_command_dependencies == [0]
