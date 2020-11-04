@@ -3,6 +3,7 @@ packages:
   - feedstock : cudnn
   - feedstock : tensorrt
   - feedstock : onnx
+  - feedstock : protobuf          #[python == '3.8']
 {% endif %}
 
 git_tag_for_env: open-ce-v1.0.0

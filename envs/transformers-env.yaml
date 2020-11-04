@@ -2,6 +2,7 @@ packages:
   - feedstock : rust-nightly
   - feedstock : semantic
   - feedstock : tokenizers
+  - feedstock : protobuf          #[python == '3.8']
   - feedstock : sentencepiece
   - feedstock : sacremoses
   - feedstock : transformers
