@@ -6,4 +6,4 @@ packages:
   - feedstock : tensorboard-plugin-wit
   - feedstock : protobuf          #[python == '3.8']
 
-git_tag_for_env: open-ce-v1.0.0
+git_tag_for_env: open-ce-v1.0.1

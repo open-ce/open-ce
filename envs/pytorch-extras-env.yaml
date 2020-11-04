@@ -5,4 +5,4 @@ imported_envs:
 packages:
   - feedstock : pytorch-lightning
 
-git_tag_for_env: open-ce-v1.0.0
+git_tag_for_env: open-ce-v1.0.1
