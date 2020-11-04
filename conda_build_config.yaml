@@ -3,7 +3,7 @@ absl_py:
 astunparse:
   - 1.6
 attrs:
-  - 18.1.*
+  - 19
 autoconf:
   - 2.69
 automake:
@@ -77,7 +77,7 @@ h5py:
 jasper:
   - 2.0.14
 joblib:
-  - 0.13.2
+  - 0.17
 jpeg:
   - 9b
 jpegturbo:
