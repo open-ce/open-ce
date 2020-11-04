@@ -185,7 +185,7 @@ def _get_package_dependencies(path, variant_config_files, variants):
         host_deps.update(meta.meta['requirements'].get('host', []))
         build_deps.update(meta.meta['requirements'].get('build', []))
         used_vars.update(meta.get_used_vars())
-        noarch = meta.noarch
+        noarch = meta.meta['build'].get('noarch', [])
         string = meta.meta['build'].get('string', [])
         if 'test' in meta.meta:
             test_deps.update(meta.meta['test'].get('requires', []))
@@ -257,12 +257,12 @@ def _remove_duplicate_build_commands(variant_recipes, build_commands):
         print("--------------------------------------")
 
     # Remove duplicate build_commands and update indices in `build_command_dependencies`
-    for i,key in enumerate(duplicates):
+    for i, key in enumerate(duplicates):
         index = key - i
         print("INDEX being checked = %s" % (index))
         for build_command in variant_recipes:
             print("------------OLD deps list %s" % (build_command.build_command_dependencies))
-            for k,value in enumerate(build_command.build_command_dependencies):
+            for k, value in enumerate(build_command.build_command_dependencies):
                 if value >= index:
                     build_command.build_command_dependencies[k]= value - 1
             print("------------NEW deps list %s" % ( build_command.build_command_dependencies))
