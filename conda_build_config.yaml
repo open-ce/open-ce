@@ -29,7 +29,6 @@ coverage:
   - 4.*
 cudatoolkit:
   - 10.2.*
-  - 11.0.*
 cudnn:
   - 7.6.5.*
 cxx_compiler_version:
