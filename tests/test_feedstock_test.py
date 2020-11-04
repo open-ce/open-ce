@@ -17,6 +17,7 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
 import test_feedstock
+import utils
 
 def test_test_feedstock(mocker, capsys):
     '''
@@ -32,10 +33,10 @@ def test_test_feedstock(mocker, capsys):
 
     assert test_feedstock.test_feedstock(["--conda_env_file", "tests/test-conda-env2.yaml"]) == 0
     captured = capsys.readouterr()
-    assert "Running: Create conda environment open-ce-conda-env-" in captured.out
+    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
     assert "Running: Test 1" in captured.out
     assert "Running: Test 2" in captured.out
-    assert "Running: Remove conda environment open-ce-conda-env-" in captured.out
+    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
 
 def test_test_feedstock_failed_tests(mocker, capsys):
     '''
