@@ -132,8 +132,8 @@ optional arguments:
  Above command will output open-ce-conda-env-py3.7-cuda-openmpi.yaml in the specified
  output folder (or by default `./condabuild` directory).
 
- Following command can be used to create environment file using the generated conda
- environment -
+ Following command can be used to create conda environment using the generated conda
+ environment file -
 
 ```shell
     conda env create -f open-ce-conda-env-py3.7-cuda-openmpi.yaml
