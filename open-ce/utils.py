@@ -11,15 +11,18 @@ import os
 import argparse
 import sys
 import subprocess
+import errno
 from enum import Enum, unique
 from itertools import product
 import re
 import pkg_resources
 from errors import OpenCEError, Error
 
+
 DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.6"
 DEFAULT_MPI_TYPES = "openmpi"
+DEFAULT_CUDA_VERS = "10.2"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
                                           "..", "conda_build_config.yaml")
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
@@ -98,6 +101,15 @@ class Argument(Enum):
                                         default=DEFAULT_MPI_TYPES,
                                         help='Comma delimited list of mpi types, such as "openmpi" or "system".'))
 
+    CUDA_VERSIONS = (lambda parser: parser.add_argument(
+                                        '--cuda_versions',
+                                        type=str,
+                                        default=DEFAULT_CUDA_VERS,
+                                        #Supress description of cuda_versions flag until more robust testing
+                                        help=argparse.SUPPRESS))
+                                        #help='Comma delimited list of cuda versions to build for '
+                                        #     ', such as "10.2" or "11.0".'))
+
     DOCKER_BUILD = (lambda parser: parser.add_argument(
                                         '--docker_build',
                                         action='store_true',
@@ -133,11 +145,13 @@ def parse_arg_list(arg_list):
         return arg_list
     return arg_list.split(",") if not arg_list is None else list()
 
-def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES):
+def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
+cuda_versions=DEFAULT_CUDA_VERS):
     '''Create a cross product of possible variant combinations.'''
     variants = { 'python' : parse_arg_list(python_versions),
                  'build_type' : parse_arg_list(build_types),
-                 'mpi_type' :  parse_arg_list(mpi_types)}
+                 'mpi_type' :  parse_arg_list(mpi_types),
+                 'cudatoolkit' : parse_arg_list(cuda_versions)}
     return [dict(zip(variants,y)) for y in product(*variants.values())]
 
 def remove_version(package):
@@ -206,7 +220,7 @@ def get_output(command):
     _,std_out,_ = run_command_capture(command)
     return std_out.strip()
 
-def variant_string(py_ver, build_type, mpi_type):
+def variant_string(py_ver, build_type, mpi_type, cudatoolkit):
     '''
     Returns a variant key using python version and build type
     '''
@@ -217,6 +231,8 @@ def variant_string(py_ver, build_type, mpi_type):
         result +=  "-" + build_type
     if mpi_type:
         result +=  "-" + mpi_type
+    if cudatoolkit:
+        result += "-" + cudatoolkit
     return result
 
 def generalize_version(package):
@@ -240,6 +256,53 @@ def generalize_version(package):
                 package = name + operator + version + ".*" + build
 
     return package
+
+def cuda_level_supported(cuda_level):
+    '''
+    Check if the requested cuda level is supported by loaded NVIDIA driver
+    '''
+
+    return float(get_driver_cuda_level()) >= float(cuda_level)
+
+def get_driver_cuda_level():
+    '''
+    Return what level of Cuda the driver can support
+    '''
+    try:
+        smi_out = subprocess.check_output("nvidia-smi").decode("utf-8").strip()
+        return re.search(r"CUDA Version\: (\d+\.\d+)", smi_out).group(1)
+    except OSError as err:
+        if err.errno == errno.ENOENT:
+            raise OpenCEError(Error.ERROR, "nvidia-smi command not found") from err
+
+        raise OpenCEError(Error.ERROR, "nvidia-smi command unexpectedly failed") from err
+
+def get_driver_level():
+    '''
+    Return the NVIDIA driver level on the system.
+    '''
+    try:
+        smi_out = subprocess.check_output("nvidia-smi").decode("utf-8").strip()
+        return re.search(r"Driver Version\: (\d+\.\d+\.\d+)", smi_out).group(1)
+    except OSError as err:
+        if err.errno == errno.ENOENT:
+            raise OpenCEError(Error.ERROR, "nvidia-smi command not found") from err
+
+        raise OpenCEError(Error.ERROR, "nvidia-smi command unexpectedly failed") from err
+
+def cuda_driver_installed():
+    '''
+    Determine if the current machine has the NVIDIA driver installed
+    '''
+
+    try:
+        lsmod_out = subprocess.check_output("lsmod").decode("utf-8").strip()
+        return re.search(r"nvidia ", lsmod_out) is not None
+    except OSError as err:
+        if err.errno == errno.ENOENT:
+            raise OpenCEError(Error.ERROR, "lsmod command not found") from err
+
+        raise OpenCEError(Error.ERROR, "lsmod command unexpectedly failed") from err
 
 def is_subdir(child_path, parent_path):
     """ Checks if given child path is sub-directory of parent_path. """

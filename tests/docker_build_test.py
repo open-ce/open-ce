@@ -35,7 +35,7 @@ def test_build_image(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    assert docker_build._build_image() == intended_image_name
+    assert docker_build.build_image("test", "test") == intended_image_name
 
 def test_create_container(mocker):
     '''
@@ -158,12 +158,13 @@ def test_build_with_docker(mocker):
     image_name = "my_image"
     output_folder = "condabuild"
     arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
-
-    mocker.patch('docker_build._build_image', return_value=(0, image_name))
+    build_type = "cuda"
+    cudatoolkit = "10.2"
+    mocker.patch('docker_build.build_image', return_value=(0, image_name))
 
     mocker.patch('docker_build.build_in_container', return_value=0)
 
-    docker_build.build_with_docker(output_folder, arg_strings)
+    docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
 
 def test_build_with_docker_failures(mocker):
     '''
@@ -171,9 +172,10 @@ def test_build_with_docker_failures(mocker):
     '''
     output_folder = "condabuild"
     arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
-
+    build_type = "cuda"
+    cudatoolkit = "10.2"
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_with_docker(output_folder, arg_strings)
+        docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
     assert "Failure building image" in str(exc.value)

@@ -21,14 +21,14 @@ def make_parser():
     ''' Parser input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
+                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES, utils.Argument.CUDA_VERSIONS]
     parser = utils.make_parser(arguments,
                                description = 'Perform validation on a conda_build_config.yaml file.')
     return parser
 
 def _main(arg_strings=None):
     args = make_parser().parse_args(arg_strings)
-    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
+    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions)
     validate_env_config(args.conda_build_config, args.env_config_file, variants, args.repository_folder)
 
 def validate_env_config(conda_build_config, env_config_files, variants, repository_folder):
@@ -44,6 +44,7 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
                                                variant['python'],
                                                variant['build_type'],
                                                variant['mpi_type'],
+                                               variant['cudatoolkit'],
                                                repository_folder=repository_folder,
                                                conda_build_config=conda_build_config)
                 validate_build_tree(recipes, variant)

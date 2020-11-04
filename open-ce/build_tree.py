@@ -29,6 +29,7 @@ class BuildCommand():
                  python=None,
                  build_type=None,
                  mpi_type=None,
+                 cudatoolkit=None,
                  run_dependencies=None,
                  host_dependencies=None,
                  build_dependencies=None,
@@ -41,6 +42,7 @@ class BuildCommand():
         self.python = python
         self.build_type = build_type
         self.mpi_type = mpi_type
+        self.cudatoolkit = cudatoolkit
         self.run_dependencies = run_dependencies
         self.host_dependencies = host_dependencies
         self.build_dependencies = build_dependencies
@@ -63,6 +65,8 @@ class BuildCommand():
         build_args += ["--python_versions", self.python]
         build_args += ["--build_types", self.build_type]
         build_args += ["--mpi_types", self.mpi_type]
+        build_args += ["--cuda_versions", self.cudatoolkit]
+
 
         if self.recipe:
             build_args += ["--recipes", self.recipe]
@@ -74,7 +78,7 @@ class BuildCommand():
         Returns a name representing the Build Command
         """
         result = self.recipe
-        variant_string = utils.variant_string(self.python, self.build_type, self.mpi_type)
+        variant_string = utils.variant_string(self.python, self.build_type, self.mpi_type, self.cudatoolkit)
         if variant_string:
             result += "-" + variant_string
 
@@ -114,6 +118,7 @@ def _create_recipes(repository, recipes, variant_config_files, variants, channel
                                     python=variants['python'],
                                     build_type=variants['build_type'],
                                     mpi_type=variants['mpi_type'],
+                                    cudatoolkit=variants['cudatoolkit'],
                                     run_dependencies=run_deps,
                                     host_dependencies=host_deps,
                                     build_dependencies=build_deps,
@@ -210,6 +215,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  python_versions,
                  build_types,
                  mpi_types,
+                 cuda_versions,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
@@ -224,13 +230,14 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
-        self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types)
+        self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
         self.build_commands = []
         for variant in self._possible_variants:
             try:
                 variant_recipes, external_deps = self._create_all_recipes(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
+
             self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
