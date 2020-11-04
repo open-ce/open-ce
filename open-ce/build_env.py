@@ -73,7 +73,6 @@ def build_env(arg_strings=None):
     parser = make_parser()
     args = parser.parse_args(arg_strings)
 
-    print(utils.parse_arg_list(args.cuda_versions))
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
