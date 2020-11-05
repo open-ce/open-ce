@@ -238,13 +238,14 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self.build_commands = []
         for variant in self._possible_variants:
             try:
-                variant_recipes, external_deps = self._create_all_commands(variant)
+                variant_recipes, external_deps, test_commands = self._create_all_commands(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
             variant_string = utils.variant_string(variant["python"], variant["build_type"],
                                                   variant["mpi_type"], variant["cudatoolkit"])
             self._external_dependencies[variant_string] = external_deps
             self._conda_env_files[variant_string] = CondaEnvFileGenerator(variant_recipes, external_deps)
+            self._test_commands[variant_string] = test_commands
 
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
@@ -260,6 +261,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         packages_seen = set()
         build_commands = []
         external_deps = []
+        test_commands = dict()
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
 
@@ -293,7 +295,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 if not os.path.exists(repo_dir):
                     self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
 
-                repo_build_commands, test_commands +=
+                repo_build_commands, repo_test_commands +=
                     _create_commands(repo_dir,
                                     package.get('recipes'),
                                     [os.path.abspath(self._conda_build_config)],
@@ -310,7 +312,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             if current_deps:
                 external_deps += current_deps
 
-        return build_commands, external_deps
+        return build_commands, external_deps, test_commands
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
         """
@@ -378,9 +380,9 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         """
         Write a conda environment file for each variant.
         """
-        conda_env_files = []
+        conda_env_files = dict()
         for variant, conda_env_file in self._conda_env_files.items():
-            conda_env_files += conda_env_file.write_conda_env_file(variant, channels,
+            conda_env_files[variant] = conda_env_file.write_conda_env_file(variant, channels,
                                                                    output_folder, env_file_prefix, path)
 
         return conda_env_files

@@ -123,7 +123,7 @@ def build_env(arg_strings=None):
     conda_env_files = build_tree.write_conda_env_files(channels=args.channels_list,
                                                        output_folder=os.path.abspath(args.output_folder),
                                                        path=os.path.abspath(args.output_folder))
-    print("Generated conda environment files from the selected build arguments:", conda_env_files)
+    print("Generated conda environment files from the selected build arguments:", conda_env_files.values())
     print("INFO: One can use these environment files to create a conda" \
           " environment using \"conda env create -f <conda_env_file_name>.\"")
 
@@ -136,11 +136,21 @@ def build_env(arg_strings=None):
             except OpenCEError as exc:
                 raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
 
+    num_failed_tests = 0
+    if args.run_tests:
+        # Run test commands for each conda environment that was generated
+            for variant_string, conda_env_file in conda_env_files.items():
+                failed_tests += test_feedstock.run_test_commands(conda_env_file,
+                                                                 build_tree.get_test_commands(variant_string))
+
+            display_failed_tests(failed_tests)
+            num_failed_tests += len(failed_tests)
+
+    return num_failed_tests
+
 if __name__ == '__main__':
     try:
-        build_env()
+        sys.exit(build_env())
     except OpenCEError as err:
         print(err.msg, file=sys.stderr)
         sys.exit(1)
-
-    sys.exit(0)
