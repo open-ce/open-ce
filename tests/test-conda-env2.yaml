@@ -1,0 +1,5 @@
+channels:
+- defaults
+dependencies:
+- pytest
+name: opence-conda-env-py3.6-cuda-openmpi

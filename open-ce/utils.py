@@ -30,6 +30,7 @@ SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
 DEFAULT_OUTPUT_FOLDER = "condabuild"
+DEFAULT_TEST_CONFIG_FILE = "tests/open-ce-tests.yaml"
 
 class OpenCEFormatter(argparse.ArgumentDefaultsHelpFormatter):
     """
