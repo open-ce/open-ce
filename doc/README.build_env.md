@@ -63,8 +63,9 @@ usage: build_env.py [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                     [--repository_folder REPOSITORY_FOLDER]
                     [--python_versions PYTHON_VERSIONS]
                     [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
+                    [--skip_build_packages] [--docker_build]
                     [--git_location GIT_LOCATION]
-                    [--git_tag_for_env GIT_TAG_FOR_ENV] [--docker_build]
+                    [--git_tag_for_env GIT_TAG_FOR_ENV]
                     env_config_file [env_config_file ...]
 
 Build conda environment as part of Open-CE
@@ -78,8 +79,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        /mnt/pai/home/bnelson/git/open-ce/open-
-                        ce/../conda_build_config.yaml)
+                        conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)
@@ -100,17 +100,19 @@ optional arguments:
   --mpi_types MPI_TYPES
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
-  --git_location GIT_LOCATION
-                        The default location to clone git repositories from.
-                        (default: https://github.com/open-ce)
-  --git_tag_for_env GIT_TAG_FOR_ENV
-                        Git tag to be checked out for all of the packages in
-                        an environment. (default: None)
+  --skip_build_packages
+                        Do not perform builds of packages. (default: False)
   --docker_build        Perform a build within a docker container. NOTE: When
                         the --docker_build flag is used, all arguments with
                         paths should be relative to the directory containing
                         open-ce. Only files within the open-ce directory and
                         local_files will be visible at build time. (default:
                         False)
+  --git_location GIT_LOCATION
+                        The default location to clone git repositories from.
+                        (default: https://github.com/open-ce)
+  --git_tag_for_env GIT_TAG_FOR_ENV
+                        Git tag to be checked out for all of the packages in
+                        an environment. (default: None)
 ==============================================================================
 ```

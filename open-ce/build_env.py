@@ -40,7 +40,6 @@ import docker_build
 import utils
 import validate_config
 from errors import OpenCEError, Error
-from conda_env_file_generator import CondaEnvFileGenerator
 
 def make_parser():
     ''' Parser for input arguments '''
@@ -48,7 +47,9 @@ def make_parser():
                  utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-                 utils.Argument.CUDA_VERSIONS, utils.Argument.DOCKER_BUILD]
+                 utils.Argument.CUDA_VERSIONS, utils.Argument.SKIP_BUILD_PACKAGES,
+                 utils.Argument.DOCKER_BUILD]
+
     parser = utils.make_parser(arguments,
                                description = 'Build conda environment as part of Open-CE')
 
@@ -112,29 +113,21 @@ def build_env(arg_strings=None):
                                git_tag_for_env=args.git_tag_for_env,
                                conda_build_config=args.conda_build_config)
 
-    conda_env_data = CondaEnvFileGenerator(
-                               python_versions=args.python_versions,
-                               build_types=args.build_types,
-                               mpi_types=args.mpi_types,
-                               cuda_versions=args.cuda_versions,
-                               channels=args.channels_list,
-                               output_folder=os.path.abspath(args.output_folder),
-                               )
-
-    # Build each package in the packages list
-    for build_command in build_tree:
-        build_args = common_package_build_args + build_command.feedstock_args()
-        try:
-            build_feedstock.build_feedstock(build_args)
-        except OpenCEError as exc:
-            raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
-
-        conda_env_data.update_conda_env_file_content(build_command, build_tree)
-
-    conda_env_files = conda_env_data.write_conda_env_files()
+    # Generate conda environment files
+    conda_env_files = build_tree.write_conda_env_files(channels=args.channels_list,
+                                                       output_folder=os.path.abspath(args.output_folder))
     print("Generated conda environment files from the selected build arguments:", conda_env_files)
     print("INFO: One can use these environment files to create a conda" \
           " environment using \"conda env create -f <conda_env_file_name>.\"")
+
+    if not args.skip_build_packages:
+        # Build each package in the packages list
+        for build_command in build_tree:
+            build_args = common_package_build_args + build_command.feedstock_args()
+            try:
+                build_feedstock.build_feedstock(build_args)
+            except OpenCEError as exc:
+                raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
 
 if __name__ == '__main__':
     try:

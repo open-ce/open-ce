@@ -12,6 +12,7 @@ import utils
 import env_config
 import build_feedstock
 from errors import OpenCEError, Error
+from conda_env_file_generator import CondaEnvFileGenerator
 
 import conda_build.api
 from conda_build.config import get_or_merge_config
@@ -227,6 +228,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
         self._external_dependencies = dict()
+        self._conda_env_files = dict()
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
@@ -237,8 +239,11 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 variant_recipes, external_deps = self._create_all_recipes(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
+            variant_string = utils.variant_string(variant["python"], variant["build_type"],
+                                                  variant["mpi_type"], variant["cudatoolkit"])
+            self._external_dependencies[variant_string] = external_deps
+            self._conda_env_files[variant_string] = CondaEnvFileGenerator(variant_recipes, external_deps)
 
-            self._external_dependencies[str(variant)] = external_deps
             # Add dependency tree information to the packages list
             _add_build_command_dependencies(variant_recipes, len(self.build_commands))
             self.build_commands += variant_recipes
@@ -353,7 +358,24 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
     def get_external_dependencies(self, variant):
         '''Return the list of external dependencies for the given variant.'''
-        return self._external_dependencies.get(str(variant), [])
+        variant_string = utils.variant_string(variant["python"], variant["build_type"],
+                                              variant["mpi_type"], variant["cudatoolkit"])
+        return self._external_dependencies.get(variant_string, [])
+
+    def write_conda_env_files(self,
+                              channels=None,
+                              output_folder=None,
+                              env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
+                              path=os.getcwd()):
+        """
+        Write a conda environment file for each variant.
+        """
+        conda_env_files = []
+        for variant, conda_env_file in self._conda_env_files.items():
+            conda_env_files += conda_env_file.write_conda_env_file(variant, channels,
+                                                                   output_folder, env_file_prefix, path)
+
+        return conda_env_files
 
     def _detect_cycle(self, max_cycles=10):
         extract_build_tree = [x.build_command_dependencies for x in self.build_commands]

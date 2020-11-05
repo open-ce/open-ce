@@ -118,6 +118,12 @@ class Argument(Enum):
                                              "should be relative to the directory containing open-ce. Only files "
                                              "within the open-ce directory and local_files will be visible at "
                                              "build time."))
+
+    SKIP_BUILD_PACKAGES = (lambda parser: parser.add_argument(
+                                        '--skip_build_packages',
+                                        action='store_true',
+                                        help="Do not perform builds of packages."))
+
     CONDA_ENV_FILE = (lambda parser: parser.add_argument(
                                         '--conda_env_file',
                                         type=str,
