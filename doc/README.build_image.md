@@ -12,17 +12,17 @@ For example,
            --conda_env_file=open-ce-conda-env-py3.7-cuda-openmpi.yaml
 ```
 
-`local_conda_channel` is the output folder that has all the conda packages built. It has to
+`local_conda_channel` is the output folder that has all of the conda packages built within it. It has to
 be present in the directory from where this `build_image.py` script is run.
 `conda_env_file` is the conda environment file generated from build_env.py. 
 
 A docker image created has a conda environment that has all the packages mentioned in the 
-conda environment file, installed in it. Local conda channel being passed is also copied into the
-image that enables users to create their custom environments.
+conda environment file, installed in it. The local conda channel being passed is also copied into the
+image to enable users to create their custom environments.
 
 Note that the image will not necessarily have all the Open-CE packages installed.
-The packages to be installed strictly depends on the conda environment file which is used to build image.
-To know how conda environment file is generated and its content, please see 
+The packages to be installed strictly depends on the conda environment file which is used to build the image.
+For more information on how conda environment files are generated and their content, please see 
 [`doc/README.build_env.md`](doc/README.build_env.md).
 
 So, the ideal sequence of getting Open-CE packages built and installed in a container should be

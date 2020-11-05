@@ -118,7 +118,7 @@ The following command will install a package named `PACKAGE` from the local cond
 conda install -c ./condabuild PACKAGE
 ```
 
-The following command can be used to create a conda environment using conda environment file.
+The following command can be used to create a conda environment using a conda environment file.
 
 ```bash
 conda env create -f opence-conda-env-py3.6-cpu-openmpi.yaml

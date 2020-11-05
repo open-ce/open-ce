@@ -129,10 +129,10 @@ optional arguments:
     envs/tensorflow-env.yaml
 ```
 
- Above command will output open-ce-conda-env-py3.7-cuda-openmpi.yaml in the specified
+ The above command will output open-ce-conda-env-py3.7-cuda-openmpi.yaml in the specified
  output folder (or by default `./condabuild` directory).
 
- Following command can be used to create conda environment using the generated conda
+ The following command can be used to create a conda environment using the generated conda
  environment file -
 
 ```shell
@@ -144,6 +144,5 @@ given to `build_env.py`. For example, if `build_env.py` is run without any build
 3.7 and mpi_type as openmpi, then two files will be generated namely -
 open-ce-conda-env-py3.7-cuda-openmpi.yaml, open-ce-conda-env-py3.7-cpu-openmpi.yaml. 
 
-`build_env.py` can generate these environment files for given Open-CE environment file 
-and provided build configuration even without performing actual build.
-
+`build_env.py` can generate these environment files for a given Open-CE environment file 
+and provided build configuration even without performing an actual build.
