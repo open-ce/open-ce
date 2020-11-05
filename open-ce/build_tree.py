@@ -239,7 +239,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 variant_recipes, external_deps = self._create_all_recipes(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
-            variant_string = utils.variant_string(variant["python"], variant["build_type"], variant["mpi_type"], variant["cudatoolkit"])
+            variant_string = utils.variant_string(variant["python"], variant["build_type"],
+                                                  variant["mpi_type"], variant["cudatoolkit"])
             self._external_dependencies[variant_string] = external_deps
             self._conda_env_files[variant_string] = CondaEnvFileGenerator(variant_recipes, external_deps)
 
@@ -357,7 +358,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
     def get_external_dependencies(self, variant):
         '''Return the list of external dependencies for the given variant.'''
-        variant_string = utils.variant_string(variant["python"], variant["build_type"], variant["mpi_type"])
+        variant_string = utils.variant_string(variant["python"], variant["build_type"],
+                                              variant["mpi_type"], variant["cudatoolkit"])
         return self._external_dependencies.get(variant_string, [])
 
     def write_conda_env_files(self,
