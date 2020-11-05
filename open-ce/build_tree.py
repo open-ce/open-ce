@@ -95,8 +95,8 @@ class BuildCommand():
 
 
     def __key(self):
-        return (self.recipe, self.python,
-                self.mpi_type, self.build_type)
+        return (self.recipe, self.python, self.build_type,
+                self.mpi_type, self.cudatoolkit)
 
     def __hash__(self):
         return hash(self.__key())
