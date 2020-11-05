@@ -140,6 +140,10 @@ optional arguments:
 ```
 
 There could be one or more conda environment files generated for each variant based on inputs 
-given to `build_env.py`. If `build_env.py` is run without any build_type and python version 
+given to `build_env.py`. For example, if `build_env.py` is run without any build_type and python version 
 3.7 and mpi_type as openmpi, then two files will be generated namely -
 open-ce-conda-env-py3.7-cuda-openmpi.yaml, open-ce-conda-env-py3.7-cpu-openmpi.yaml. 
+
+`build_env.py` can generate these environment files for given Open-CE environment file 
+and provided build configuration even without performing actual build.
+

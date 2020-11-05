@@ -17,7 +17,7 @@ be present in the directory from where this `build_image.py` script is run.
 `conda_env_file` is the conda environment file generated from build_env.py. 
 
 A docker image created has a conda environment that has all the packages mentioned in the 
-conda environment file being passed. Local conda channel being passed is also copied into the
+conda environment file, installed in it. Local conda channel being passed is also copied into the
 image that enables users to create their custom environments.
 
 Note that the image will not necessarily have all the Open-CE packages installed.
