@@ -43,7 +43,6 @@ class CondaEnvFileGenerator():
         It returns a list of paths to the files that were writeen.
         """
 
-        conda_env_files = []
         if not os.path.exists(path):
             os.mkdir(path)
 
@@ -60,9 +59,9 @@ class CondaEnvFileGenerator():
         )
         with open(conda_env_file, 'w') as outfile:
             yaml.dump(data, outfile, default_flow_style=False)
-            conda_env_files.append(conda_env_file)
+            file_name = conda_env_file
 
-        return conda_env_files
+        return file_name
 
     def _update_deps_lists(self, dependencies):
         if not dependencies is None:

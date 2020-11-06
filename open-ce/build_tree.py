@@ -13,6 +13,7 @@ import env_config
 import build_feedstock
 from errors import OpenCEError, Error
 from conda_env_file_generator import CondaEnvFileGenerator
+import test_feedstock
 
 import conda_build.api
 from conda_build.config import get_or_merge_config
@@ -112,20 +113,20 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
         packages, run_deps, host_deps, build_deps, test_deps = _get_package_dependencies(recipe.get('path'),
                                                                                          combined_config_files,
                                                                                          variants)
-        outputs.append(BuildCommand(recipe=recipe.get('name', None),
-                                    repository=repository,
-                                    packages=packages,
-                                    python=variants['python'],
-                                    build_type=variants['build_type'],
-                                    mpi_type=variants['mpi_type'],
-                                    cudatoolkit=variants['cudatoolkit'],
-                                    run_dependencies=run_deps,
-                                    host_dependencies=host_deps,
-                                    build_dependencies=build_deps,
-                                    test_dependencies=test_deps,
-                                    channels=channels if channels else []))
+        build_commands.append(BuildCommand(recipe=recipe.get('name', None),
+                                           repository=repository,
+                                           packages=packages,
+                                           python=variants['python'],
+                                           build_type=variants['build_type'],
+                                           mpi_type=variants['mpi_type'],
+                                           cudatoolkit=variants['cudatoolkit'],
+                                           run_dependencies=run_deps,
+                                           host_dependencies=host_deps,
+                                           build_dependencies=build_deps,
+                                           test_dependencies=test_deps,
+                                           channels=channels if channels else []))
 
-    test_commands = gen_test_commands()
+    test_commands = test_feedstock.gen_test_commands()
 
     os.chdir(saved_working_directory)
     return build_commands, test_commands
@@ -211,7 +212,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
     recipes, infinite recursion can occur.
     """
 
-    #pylint: disable=too-many-arguments
+    #pylint: disable=too-many-arguments, too-many-locals
     def __init__(self,
                  env_config_files,
                  python_versions,
@@ -238,21 +239,47 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self.build_commands = []
         for variant in self._possible_variants:
             try:
-                variant_recipes, external_deps, test_commands = self._create_all_commands(variant)
+                build_commands, external_deps, test_commands = self._create_all_commands(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
             variant_string = utils.variant_string(variant["python"], variant["build_type"],
                                                   variant["mpi_type"], variant["cudatoolkit"])
             self._external_dependencies[variant_string] = external_deps
-            self._conda_env_files[variant_string] = CondaEnvFileGenerator(variant_recipes, external_deps)
+            self._conda_env_files[variant_string] = CondaEnvFileGenerator(build_commands, external_deps)
             self._test_commands[variant_string] = test_commands
 
             # Add dependency tree information to the packages list
-            _add_build_command_dependencies(variant_recipes, len(self.build_commands))
-            self.build_commands += variant_recipes
+            _add_build_command_dependencies(build_commands, len(self.build_commands))
+            self.build_commands += build_commands
         self._detect_cycle()
 
-    def _create_all_commands(self, variants): #pylint: disable=too-many-branches
+    def _get_repo(self, env_config_data, package):
+        # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
+        # combine with git_location and append "-feedstock.git"
+        feedstock_value = package[env_config.Key.feedstock.name]
+        if any(feedstock_value.startswith(protocol) for protocol in utils.SUPPORTED_GIT_PROTOCOLS):
+            git_url = feedstock_value
+            if not git_url.endswith(".git"):
+                git_url += ".git"
+            repository = os.path.splitext(os.path.basename(git_url))[0]
+        else:
+            git_url = "{}/{}-feedstock.git".format(self._git_location, feedstock_value)
+
+            repository = feedstock_value + "-feedstock"
+
+        # Check if the directory for the feedstock already exists.
+        # If it doesn't attempt to clone the repository.
+        if self._repository_folder:
+            repo_dir = os.path.join(self._repository_folder, repository)
+        else:
+            repo_dir = repository
+
+        if not os.path.exists(repo_dir):
+            self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
+
+        return repository, repo_dir
+
+    def _create_all_commands(self, variants):
         '''
         Create a recipe dictionary for each recipe needed for a given environment file.
         '''
@@ -272,39 +299,17 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 if _make_hash(package) in packages_seen:
                     continue
 
-                # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
-                # combine with git_location and append "-feedstock.git"
-                feedstock_value = package[env_config.Key.feedstock.name]
-                if any(feedstock_value.startswith(protocol) for protocol in utils.SUPPORTED_GIT_PROTOCOLS):
-                    git_url = feedstock_value
-                    if not git_url.endswith(".git"):
-                        git_url += ".git"
-                    repository = os.path.splitext(os.path.basename(git_url))[0]
-                else:
-                    git_url = "{}/{}-feedstock.git".format(self._git_location, feedstock_value)
+                repository, repo_dir = self._get_repo(env_config_data, package)
 
-                    repository = feedstock_value + "-feedstock"
-
-                # Check if the directory for the feedstock already exists.
-                # If it doesn't attempt to clone the repository.
-                if self._repository_folder:
-                    repo_dir = os.path.join(self._repository_folder, repository)
-                else:
-                    repo_dir = repository
-
-                if not os.path.exists(repo_dir):
-                    self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
-
-                repo_build_commands, repo_test_commands +=
-                    _create_commands(repo_dir,
-                                    package.get('recipes'),
-                                    [os.path.abspath(self._conda_build_config)],
-                                    variants,
-                                    env_config_data.get(env_config.Key.channels.name, None))
+                repo_build_commands, repo_test_commands = _create_commands(repo_dir,
+                                                            package.get('recipes'),
+                                                            [os.path.abspath(self._conda_build_config)],
+                                                            variants,
+                                                            env_config_data.get(env_config.Key.channels.name, None))
 
                 build_commands += repo_build_commands
-                if test_commands and not repository in self._test_commands:
-                    self._test_commands[repository] = test_commands
+                if repo_test_commands and not repository in self._test_commands:
+                    test_commands[repository] = repo_test_commands
 
                 packages_seen.add(_make_hash(package))
 
@@ -387,11 +392,11 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         return conda_env_files
 
-    def get_test_commands(self):
+    def get_test_commands(self, variant_string):
         """
         Return a dictionary of test commands, where each key is the repository name.
         """
-        return self._test_commands
+        return self._test_commands[variant_string]
 
     def _detect_cycle(self, max_cycles=10):
         extract_build_tree = [x.build_command_dependencies for x in self.build_commands]

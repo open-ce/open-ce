@@ -38,10 +38,11 @@ class TestBuildTree(build_tree.BuildTree):
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
+        self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
 
-def test_create_recipes(mocker):
+def test_create_commands(mocker):
     '''
-    Tests that `_create_recipes` correctly builds the recipe and extracts all
+    Tests that `_create_commands` correctly builds the recipe and extracts all
     of the dependencies from the conda_build render result.
     '''
     dirTracker = helpers.DirTracker()
@@ -63,16 +64,16 @@ def test_create_recipes(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    create_recipes_result = build_tree._create_recipes("/test/my_repo", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [])
-    assert create_recipes_result[0].packages == {'horovod'}
+    build_commands, _ = build_tree._create_commands("/test/my_repo", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [])
+    assert build_commands[0].packages == {'horovod'}
     for dep in {'build_req1', 'build_req2            1.2'}:
-        assert dep in create_recipes_result[0].build_dependencies
+        assert dep in build_commands[0].build_dependencies
     for dep in {'run_req1            1.3'}:
-        assert dep in create_recipes_result[0].run_dependencies
+        assert dep in build_commands[0].run_dependencies
     for dep in {'host_req1            1.0', 'host_req2'}:
-        assert dep in create_recipes_result[0].host_dependencies
+        assert dep in build_commands[0].host_dependencies
     for dep in {'test_req1'}:
-        assert dep in create_recipes_result[0].test_dependencies
+        assert dep in build_commands[0].test_dependencies
 
 def test_clone_repo(mocker):
     '''

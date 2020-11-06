@@ -131,6 +131,9 @@ def load_test_file(test_file):
     Args:
         test_file (str): Path to the test file to load.
     """
+    if not os.path.exists(test_file):
+        return None
+
     with open(test_file, 'r') as stream:
         test_file_data = yaml.safe_load(stream)
 
@@ -144,6 +147,8 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE):
         test_file (str): Path to the test file.
     """
     test_data = load_test_file(test_file)
+    if not test_data:
+        return []
 
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     conda_env = utils.CONDA_ENV_FILENAME_PREFIX + time_stamp
