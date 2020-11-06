@@ -71,7 +71,7 @@ When building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.
 To build an entire integrated and functional conda channel using Open-CE, start by installing the needed tools in the [Requirements](#requirements) section above.
 The `build_env.py` script can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`) and one or more conda environment file(s) in the output folder depending on the selected build configuration. For more details on `build_env.py`, please see [`doc/README.build_env.md`](doc/README.build_env.md).
 
-The following commands will use the opence-env.yaml Open-CE environment file to build all of the Open-CE packages for Python 3.6 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
+The following commands will use the `opence-env.yaml` Open-CE environment file to build all of the Open-CE packages for Python 3.6 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
 
 ```bash
 # Clone Open-CE from GitHub
@@ -110,7 +110,7 @@ git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
 
 ### Installing Packages
 
-After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. If the packages are built using build_env.py script, then a conda environment file will also be generated which can be used to generate a conda environment with the built packages installed in it. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/index.html) for more information on conda environments.
+After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. If the packages are built using build_env.py script, then a conda environment file will also be generated which can be used to generate a conda environment with the built packages installed in it. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for more information on conda environments.
 
 The following command will install a package named `PACKAGE` from the local conda channel `condabuild` into the currently active conda environment.
 
@@ -126,7 +126,7 @@ conda env create -f opence-conda-env-py3.6-cpu-openmpi.yaml
 
 ### Creating Docker Image with Open-CE Packages installed
 
-After performing the build using build_env.py, a `build_image.py` script can be used to create a runtime docker image having a conda environment created and built packages installed in it. This docker image can be further used to create containers that have Open-CE packages preinstalled. For more details on `build_image.py`, please see [`doc/README.build_image.md`](doc/README.build_image.md).
+After performing the build using `build_env.py`, a `build_image.py` script can be used to create a runtime docker image having a conda environment created and built packages installed in it. This docker image can be further used to create containers that have Open-CE packages preinstalled. For more details on `build_image.py`, please see [`doc/README.build_image.md`](doc/README.build_image.md).
 
 ### Contributions
 

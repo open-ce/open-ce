@@ -14,7 +14,7 @@ For example,
 
 `local_conda_channel` is the output folder that has all of the conda packages built within it. It has to
 be present in the directory from where this `build_image.py` script is run.
-`conda_env_file` is the conda environment file generated from build_env.py. 
+`conda_env_file` is the conda environment file generated from `build_env.py`. 
 
 A docker image created has a conda environment that has all the packages mentioned in the 
 conda environment file, installed in it. The local conda channel being passed is also copied into the

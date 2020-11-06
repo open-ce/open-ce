@@ -118,18 +118,18 @@ optional arguments:
 ## Conda environment files
 
 `build_env.py` also generates a conda environment file based on the configuration
- selected for build. For e.g. if `build_env.py` is run for tensorflow-env.yaml and
- for python version 3.7, build_type `cuda` and mpi_type being openmpi, then a
- conda environment file with name open-ce-conda-env-py3.7-cuda-openmpi.yaml gets
+ selected for build. For e.g. if `build_env.py` is run for `tensorflow-env.yaml` and
+ for python_versions `3.7`, build_type `cuda` and mpi_type being `openmpi`, then a
+ conda environment file with name `open-ce-conda-env-py3.7-cuda-openmpi.yaml` gets
  generated. This environment file can be used to create a conda environment with
- the packages listed in tensorflow-env.yaml installed in it.
+ the packages listed in `tensorflow-env.yaml` installed in it.
 
 ```shell
     ./open-ce/build_env.py --python_versions=3.7 --build_type=cuda --mpi_type=openmpi
     envs/tensorflow-env.yaml
 ```
 
- The above command will output open-ce-conda-env-py3.7-cuda-openmpi.yaml in the specified
+ The above command will output `open-ce-conda-env-py3.7-cuda-openmpi.yaml` in the specified
  output folder (or by default `./condabuild` directory).
 
  The following command can be used to create a conda environment using the generated conda
@@ -140,9 +140,9 @@ optional arguments:
 ```
 
 There could be one or more conda environment files generated for each variant based on inputs 
-given to `build_env.py`. For example, if `build_env.py` is run without any build_type and python version 
-3.7 and mpi_type as openmpi, then two files will be generated namely -
-open-ce-conda-env-py3.7-cuda-openmpi.yaml, open-ce-conda-env-py3.7-cpu-openmpi.yaml. 
+given to `build_env.py`. For example, if `build_env.py` is run without any `build_type` and python_versions 
+`3.7` and mpi_type as `openmpi`, then two files will be generated namely -
+`open-ce-conda-env-py3.7-cuda-openmpi.yaml`, `open-ce-conda-env-py3.7-cpu-openmpi.yaml`. 
 
-`build_env.py` can generate these environment files for a given Open-CE environment file 
+`build_env.py` can generate these target conda environment files for a given Open-CE environment file 
 and provided build configuration even without performing an actual build.
