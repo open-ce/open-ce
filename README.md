@@ -110,7 +110,7 @@ git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
 
 ### Installing Packages
 
-After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. If the packages are built using build_env.py script, then a conda environment file will also be generated which can be used to generate a conda environment with the built packages installed in it. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for more information on conda environments.
+After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. If the packages are built using `build_env.py` script, then a conda environment file will also be generated which can be used to generate a conda environment with the built packages installed in it. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for more information on conda environments.
 
 The following command will install a package named `PACKAGE` from the local conda channel `condabuild` into the currently active conda environment.
 
@@ -121,7 +121,7 @@ conda install -c ./condabuild PACKAGE
 The following command can be used to create a conda environment using a conda environment file.
 
 ```bash
-conda env create -f opence-conda-env-py3.6-cpu-openmpi.yaml
+conda env create -f <conda_environment_file>
 ```
 
 ### Creating Docker Image with Open-CE Packages installed

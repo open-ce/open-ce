@@ -26,8 +26,8 @@ For more information on how conda environment files are generated and their cont
 [`doc/README.build_env.md`](doc/README.build_env.md).
 
 So, the ideal sequence of getting Open-CE packages built and installed in a container should be
-1. `build_env.py` 
-2. `build_image.py`
+1. Build packages and target conda environment files using `build_env.py` 
+2. Create Docker image using `build_image.py`
 
 ## Command usage for `build_image.py`
 
