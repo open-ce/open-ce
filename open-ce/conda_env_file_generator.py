@@ -35,7 +35,7 @@ class CondaEnvFileGenerator():
                              channels=None,
                              output_folder=None,
                              env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
-                             path=os.getcwd()):
+                             path=utils.DEFAULT_OUTPUT_FOLDER ):
         """
         This function writes conda environment files using the dependency dictionary
         created from all the buildcommands.
