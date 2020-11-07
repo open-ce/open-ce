@@ -156,7 +156,7 @@ def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
     # Check if conda env files are created for given python versions and build variants
     variants = utils.make_variants(py_versions, build_types, mpi_types)
     for variant in variants:
-        cuda_env_file = os.path.join(os.getcwd(),
+        cuda_env_file = os.path.join(os.getcwd(), utils.DEFAULT_OUTPUT_FOLDER,
                                      "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
                                      utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'], variant['cudatoolkit'])))
 

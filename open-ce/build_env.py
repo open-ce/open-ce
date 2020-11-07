@@ -34,6 +34,7 @@ For usage description of arguments, this script supports use of --help:
 
 import os
 import sys
+import glob
 
 import build_feedstock
 import docker_build
@@ -77,7 +78,12 @@ def build_env(arg_strings=None):
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
-        docker_build.build_with_docker(args.output_folder, args.build_types, args.cuda_versions, sys.argv)
+        docker_build.build_with_docker(os.path.abspath(args.output_folder), args.build_types, args.cuda_versions, sys.argv)
+        for conda_env_file in glob.glob(os.path.join(args.output_folder, "*.yaml")):
+            utils.replace_conda_env_channels(conda_env_file,
+                                             os.path.abspath(os.path.join(docker_build.HOME_PATH,
+                                                                          utils.DEFAULT_OUTPUT_FOLDER)),
+                                             os.path.abspath(args.output_folder))
         return
 
     # Checking conda-build existence if --docker_build is not specified
@@ -115,7 +121,8 @@ def build_env(arg_strings=None):
 
     # Generate conda environment files
     conda_env_files = build_tree.write_conda_env_files(channels=args.channels_list,
-                                                       output_folder=os.path.abspath(args.output_folder))
+                                                       output_folder=os.path.abspath(args.output_folder),
+                                                       path=os.path.abspath(args.output_folder))
     print("Generated conda environment files from the selected build arguments:", conda_env_files)
     print("INFO: One can use these environment files to create a conda" \
           " environment using \"conda env create -f <conda_env_file_name>.\"")

@@ -15,6 +15,7 @@ import errno
 from enum import Enum, unique
 from itertools import product
 import re
+import yaml
 import pkg_resources
 from errors import OpenCEError, Error
 
@@ -319,3 +320,16 @@ def is_subdir(child_path, parent_path):
 
     relative = os.path.relpath(child, start=parent)
     return not relative.startswith(os.pardir)
+
+def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
+    '''
+    Use regex to substitute channels in a conda env file.
+    Regex 'original_channel' is replaced with 'new_channel'
+    '''
+    with open(conda_env_file, 'r') as file_handle:
+        env_info = yaml.safe_load(file_handle)
+
+    env_info['channels'] = [re.sub(original_channel, new_channel, channel) for channel in env_info['channels']]
+
+    with open(conda_env_file, 'w') as file_handle:
+        yaml.safe_dump(env_info, file_handle)
