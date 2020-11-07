@@ -170,7 +170,7 @@ python:
 python_lmdb:
   - 0.98.*
 pytorch:
-  - 1.6.*
+  - 1.7.*
 pyyaml:
   - 5.*
 requests:
@@ -210,13 +210,15 @@ thinc:
 tokenizers:
   - 0.7.0
 torchtext:
-  - 0.7.*
+  - 0.8.*
 torchvision:
-  - 0.7.*
+  - 0.8.*
 tqdm:
   - 4.41.*
 typing:
   - 3.7.4.1
+typing_extensions:
+  - 3.7.4.*
 uff:
   - 0.6.5
 unzip:
