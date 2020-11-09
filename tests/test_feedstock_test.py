@@ -61,7 +61,7 @@ def test_test_feedstock_failed_tests(mocker, capsys):
 
 def test_test_feedstock_working_dir(mocker, capsys):
     '''
-    This is a complete test of `test_feedstock`.
+    This tests that the working_dir arg works correctly.
     '''
 
     test_file = {"tests":
