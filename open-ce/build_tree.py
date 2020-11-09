@@ -143,7 +143,7 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
                                     packages=packages,
                                     python=variants['python'] if 'python' in req_vars else utils.DEFAULT_PYTHON_VERS,
                                     build_type='cuda' if not ('cpu' in string or 'cpu' in str(packages)) else 'cpu',
-                                    mpi_type=variants['mpi_type'], #TODO: need to update this
+                                    mpi_type=variants['mpi_type'],
                                     cudatoolkit=variants['cudatoolkit'],
                                     run_dependencies=run_deps,
                                     host_dependencies=host_deps,
