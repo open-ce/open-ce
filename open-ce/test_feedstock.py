@@ -62,7 +62,7 @@ class TestCommand():
 
         return output
 
-    def run(self, conda_env_file):
+    def run(self, conda_env_file, working_dir=os.getcwd()):
         """
         Runs the test.
 
@@ -75,21 +75,22 @@ class TestCommand():
         """
         print("Running: " + self.name)
         # Create file containing bash commands
-        with tempfile.NamedTemporaryFile(mode='w+t', dir=os.getcwd(), delete=False) as temp:
+        with tempfile.NamedTemporaryFile(mode='w+t', dir=working_dir, delete=False) as temp:
             temp.write("set -e\n")
             temp.write(self.get_test_command(conda_env_file))
             temp_file_name = temp.name
 
         # Execute file
-        test_process = subprocess.run(["bash", temp_file_name], stdout=subprocess.PIPE, check=False,
-                                      stderr=subprocess.STDOUT, universal_newlines=True)
+        retval,output,_ = utils.run_command_capture("bash {}".format(temp_file_name),
+                                                    stderr=subprocess.STDOUT,
+                                                    cwd=working_dir)
 
         # Remove file containing bash commands
         os.remove(temp_file_name)
 
-        result = TestResult(self.name, test_process.returncode, test_process.stdout)
+        result = TestResult(self.name, retval, output)
 
-        if test_process.returncode != 0:
+        if not retval:
             result.display_failed()
 
         return result
@@ -122,7 +123,7 @@ class TestResult():
         """
         Returns whether or not a test failed.
         """
-        return self.returncode != 0
+        return not self.returncode
 
 def load_test_file(test_file):
     """
@@ -169,7 +170,7 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE):
 
     return test_commands
 
-def run_test_commands(conda_env_file, test_commands):
+def run_test_commands(conda_env_file, test_commands, working_dir=os.getcwd()):
     """
     Run a list of tests within a conda environment.
 
@@ -179,7 +180,7 @@ def run_test_commands(conda_env_file, test_commands):
     """
     failed_tests = []
     for test_command in test_commands:
-        test_result = test_command.run(conda_env_file)
+        test_result = test_command.run(conda_env_file, working_dir)
         if test_result.failed():
             failed_tests.append(test_result)
 
@@ -202,7 +203,7 @@ def display_failed_tests(failed_tests):
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [utils.Argument.CONDA_ENV_FILE]
+    arguments = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
     parser = utils.make_parser(arguments, description = 'Test a feedstock as part of Open-CE')
 
     return parser
@@ -215,7 +216,7 @@ def test_feedstock(arg_strings=None):
     args = parser.parse_args(arg_strings)
 
     test_commands = gen_test_commands()
-    failed_tests = run_test_commands(args.conda_env_file, test_commands)
+    failed_tests = run_test_commands(args.conda_env_file, test_commands, args.test_working_dir)
     display_failed_tests(failed_tests)
 
     return len(failed_tests)
