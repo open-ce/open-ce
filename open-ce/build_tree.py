@@ -102,10 +102,9 @@ class BuildCommand():
         return hash(self.__key())
 
     def __eq__(self, other):
-        if isinstance(other, BuildCommand):
-            return self.__key() == other.__key()
-        #TODO: see if this needs to be changed
-        return NotImplemented
+        if not isinstance(other, BuildCommand):
+            return False
+        return self.__key() == other.__key()
 
 def _make_hash(to_hash):
     '''Generic hash function.'''
