@@ -64,7 +64,7 @@ googleapis_common_protos:
 graphsurgeon:
   - 0.4.1
 grpcio:
-  - 1.16.1
+  - 1.32.*
 harfbuzz:
   - 1.8
 # Note: hdf5 version must be compatible with h5py
