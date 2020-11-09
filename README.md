@@ -126,7 +126,7 @@ conda env create -f <conda_environment_file>
 
 ### Creating Docker Image with Open-CE Packages installed
 
-After performing the build using `build_env.py`, a `build_image.py` script can be used to create a runtime docker image having a conda environment created and built packages installed in it. This docker image can be further used to create containers that have Open-CE packages preinstalled. For more details on `build_image.py`, please see [`doc/README.build_image.md`](doc/README.build_image.md).
+After performing the build using `build_env.py`, the `build_image.py` script can be used to create a runtime docker image containing the newly created conda channel, as well as a conda environment with the newly build Open-CE packages. For more details on `build_image.py`, please see [`doc/README.build_image.md`](doc/README.build_image.md).
 
 ### Contributions
 
