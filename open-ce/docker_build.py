@@ -28,7 +28,7 @@ DOCKER_TOOL = "docker"
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [utils.Argument.DOCKER_BUILD]
+    arguments = [utils.Argument.DOCKER_BUILD, utils.Argument.OUTPUT_FOLDER]
     parser = utils.make_parser(arguments, description='Run Open-CE tools within a container')
 
     return parser
@@ -74,7 +74,8 @@ def _create_container(container_name, image_name, output_folder):
     docker_cmd = DOCKER_TOOL + " create -i --rm --name " + container_name + " "
 
     # Add output folder
-    docker_cmd += _add_volume(os.path.join(os.getcwd(), output_folder), os.path.join(HOME_PATH, output_folder))
+    docker_cmd += _add_volume(os.path.abspath(output_folder),
+                              os.path.abspath(os.path.join(HOME_PATH, utils.DEFAULT_OUTPUT_FOLDER)))
 
     # Add cache directory
     docker_cmd += _add_volume(None, os.path.join(HOME_PATH, ".cache"))

@@ -51,10 +51,6 @@ def test_build_env(mocker):
     '''
     dirTracker = helpers.DirTracker()
     mocker.patch(
-        'os.mkdir',
-        return_value=0 #Don't worry about making directories.
-    )
-    mocker.patch(
         'os.system',
         side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone"], retval=0)) #At this point all system calls are git clones. If that changes this should be updated.
     )
@@ -156,7 +152,7 @@ def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
     # Check if conda env files are created for given python versions and build variants
     variants = utils.make_variants(py_versions, build_types, mpi_types)
     for variant in variants:
-        cuda_env_file = os.path.join(os.getcwd(),
+        cuda_env_file = os.path.join(os.getcwd(), utils.DEFAULT_OUTPUT_FOLDER,
                                      "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
                                      utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'], variant['cudatoolkit'])))
 
