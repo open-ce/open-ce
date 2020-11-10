@@ -48,7 +48,7 @@ eigen:
   - 3.3.7
 ffmpeg:
   - 4.2
-flatbuffers
+flatbuffers:
   - 1.12.*
 freetype:
   - 2
