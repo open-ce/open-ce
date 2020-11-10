@@ -142,6 +142,12 @@ class Argument(Enum):
                                         default=DEFAULT_OUTPUT_FOLDER,
                                         help='Path where built conda packages are present.'))
 
+    TEST_WORKING_DIRECTORY = (lambda parser: parser.add_argument(
+                                        '--test_working_dir',
+                                        type=str,
+                                        default="./",
+                                        help="Directory where tests will be executed."))
+
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
@@ -210,14 +216,17 @@ def validate_dict_schema(dictionary, schema):
         if not k in schema:
             raise OpenCEError(Error.ERROR, "Unexpected key {} was found in {}".format(k, dictionary))
 
-def run_command_capture(cmd):
+def run_command_capture(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=None):
     """Run a shell command and capture the ret_code, stdout and stderr."""
+    if cwd and not os.path.exists(cwd):
+        os.mkdir(cwd)
     process = subprocess.Popen(
         cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stdout=stdout,
+        stderr=stderr,
         shell=True,
-        universal_newlines=True)
+        universal_newlines=True,
+        cwd=cwd)
     std_out, std_err = process.communicate()
 
     return process.returncode == 0, std_out, std_err
@@ -230,7 +239,7 @@ def run_and_log(command):
 def get_output(command):
     '''Print and execute a shell command and then return the output.'''
     print("--->{}".format(command))
-    _,std_out,_ = run_command_capture(command)
+    _,std_out,_ = run_command_capture(command, stderr=subprocess.STDOUT)
     return std_out.strip()
 
 def variant_string(py_ver, build_type, mpi_type, cudatoolkit):

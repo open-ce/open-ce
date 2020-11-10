@@ -29,14 +29,16 @@ class TestCommand():
         bash_command (str): The bash command to run.
         create_env (bool): Whether this is the command to create a new conda environment.
         clean_env (bool): Whether this is the command to remove a conda environment.
+        working_dir (str): Working directory to be used when executing the bash command.
     """
     #pylint: disable=too-many-arguments
-    def __init__(self, name, conda_env=None, bash_command="", create_env=False, clean_env=False):
+    def __init__(self, name, conda_env=None, bash_command="", create_env=False, clean_env=False, working_dir=os.getcwd()):
         self.bash_command = bash_command
         self.conda_env = conda_env
         self.name = name
         self.create_env = create_env
         self.clean_env = clean_env
+        self.working_dir = working_dir
 
     def get_test_command(self, conda_env_file=None):
         """"
@@ -75,21 +77,24 @@ class TestCommand():
         """
         print("Running: " + self.name)
         # Create file containing bash commands
-        with tempfile.NamedTemporaryFile(mode='w+t', dir=os.getcwd(), delete=False) as temp:
+        if not os.path.exists(self.working_dir):
+            os.mkdir(self.working_dir)
+        with tempfile.NamedTemporaryFile(mode='w+t', dir=self.working_dir, delete=False) as temp:
             temp.write("set -e\n")
             temp.write(self.get_test_command(conda_env_file))
             temp_file_name = temp.name
 
         # Execute file
-        test_process = subprocess.run(["bash", temp_file_name], stdout=subprocess.PIPE, check=False,
-                                      stderr=subprocess.STDOUT, universal_newlines=True)
+        retval,output,_ = utils.run_command_capture("bash {}".format(temp_file_name),
+                                                    stderr=subprocess.STDOUT,
+                                                    cwd=self.working_dir)
 
         # Remove file containing bash commands
         os.remove(temp_file_name)
 
-        result = TestResult(self.name, test_process.returncode, test_process.stdout)
+        result = TestResult(self.name, retval, output)
 
-        if test_process.returncode != 0:
+        if not retval:
             result.display_failed()
 
         return result
@@ -122,7 +127,7 @@ class TestResult():
         """
         Returns whether or not a test failed.
         """
-        return self.returncode != 0
+        return not self.returncode
 
 def load_test_file(test_file):
     """
@@ -139,7 +144,7 @@ def load_test_file(test_file):
 
     return test_file_data
 
-def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE):
+def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, working_dir=os.getcwd()):
     """
     Generate a list of test commands from the provided test file.
 
@@ -158,14 +163,19 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE):
     # Create conda environment for testing
     test_commands.append(TestCommand(name="Create conda environment " + conda_env,
                                      conda_env=conda_env,
-                                     create_env=True))
+                                     create_env=True,
+                                     working_dir=working_dir))
 
     for test in test_data['tests']:
-        test_commands.append(TestCommand(name=test.get('name'), conda_env=conda_env, bash_command=test.get('command')))
+        test_commands.append(TestCommand(name=test.get('name'),
+                                         conda_env=conda_env,
+                                         bash_command=test.get('command'),
+                                         working_dir=working_dir))
 
     test_commands.append(TestCommand(name="Remove conda environment " + conda_env,
                                      conda_env=conda_env,
-                                     clean_env=True))
+                                     clean_env=True,
+                                     working_dir=working_dir))
 
     return test_commands
 
@@ -202,7 +212,7 @@ def display_failed_tests(failed_tests):
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [utils.Argument.CONDA_ENV_FILE]
+    arguments = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
     parser = utils.make_parser(arguments, description = 'Test a feedstock as part of Open-CE')
 
     return parser
@@ -214,7 +224,7 @@ def test_feedstock(arg_strings=None):
     parser = make_parser()
     args = parser.parse_args(arg_strings)
 
-    test_commands = gen_test_commands()
+    test_commands = gen_test_commands(working_dir=args.test_working_dir)
     failed_tests = run_test_commands(args.conda_env_file, test_commands)
     display_failed_tests(failed_tests)
 
