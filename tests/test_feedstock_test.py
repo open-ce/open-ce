@@ -28,7 +28,7 @@ def test_test_feedstock(mocker, capsys):
                     [{"name" : "Test 1", "command" : "echo Test 1"},
                     {"name" : "Test 2", "command" : "echo Test 2a\necho Test2b"}]}
 
-    mocker.patch('os.path.exists', side_effect=(lambda x: x == utils.DEFAULT_TEST_CONFIG_FILE))
+    mocker.patch('os.path.exists', side_effect=(lambda x: x in (utils.DEFAULT_TEST_CONFIG_FILE, './')))
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
 
@@ -49,7 +49,7 @@ def test_test_feedstock_failed_tests(mocker, capsys):
                     {"name" : "Test 2", "command" : "[ 1 -eq 1 ]"},
                     {"name" : "Test 3", "command" : "[ 1 -eq 3 ]"}]}
 
-    mocker.patch('os.path.exists', side_effect=(lambda x: x == utils.DEFAULT_TEST_CONFIG_FILE))
+    mocker.patch('os.path.exists', side_effect=(lambda x: x in (utils.DEFAULT_TEST_CONFIG_FILE, './')))
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
 
@@ -68,10 +68,11 @@ def test_test_feedstock_working_dir(mocker, capsys):
                     [{"name" : "Test 1", "command" : "echo Test 1"},
                     {"name" : "Test 2", "command" : "echo Test 2a\necho Test2b"}]}
 
+    working_dir = "./my_working_dir"
+
+    mocker.patch('os.path.exists', side_effect=(lambda x: x == utils.DEFAULT_TEST_CONFIG_FILE or (x == working_dir and pathlib.Path(x).exists())))
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
-
-    working_dir = "./my_working_dir"
 
     assert not os.path.exists(working_dir)
     assert test_feedstock.test_feedstock(["--conda_env_file", "../tests/test-conda-env2.yaml", "--test_working_dir", working_dir]) == 0
