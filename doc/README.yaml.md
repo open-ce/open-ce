@@ -47,7 +47,7 @@ Most of these are optional. At a minimum, the environment files will define one
 or more feedstocks under the `packages` stanza. Other keyword elements are used
 only infrequently, typically to override defaults.
 
-#### packages and feedstock
+### packages and feedstock
 
 In the most common basic case, each environment file has a `packages` stanza
 which lists a number of feedstock repositories that are needed to build as
@@ -66,7 +66,7 @@ be built if the `build_type` is set to `cuda` when executing the `build_env.py`
 script, so it is considered an optional dependency that you may want to include
 if your runtime environment has CUDA available.
 
-#### git_tag
+### git_tag
 
 The other keywords that optionally can be used as part of the `packages` stanza
 include `git_tag`, `channels`, and `recipes`. By default, the git tag will be
@@ -83,7 +83,7 @@ packages:
 This might be useful if there is a new default version, but you want to
 specifically build an older tagged version.
 
-#### channels
+### channels
 
 For `channels`, if you need to add a package dependency that is not found within
 open-ce but which is available at some other external delivery channel, you can
@@ -99,7 +99,7 @@ While this example shows usage specific to one `packages` stanza, the `channels`
 keyword can also be defined on its own for use throughout the environment file
 (see below).
 
-#### recipes
+### recipes
 
 Finally, a package might define more than one recipe, particularly if it will
 build into more than one variant. One example of this is tensorflow, which
@@ -127,7 +127,7 @@ you will see that each of these `path` specifiers has a directory name that is
 present in the feedstock repo, and within each path is a `meta.yaml` file which
 represents the recipe for each separate package.
 
-#### imported_envs
+### imported_envs
 
 Another stanza type that you might see in some environment files is
 `imported_envs`. An example found in
@@ -157,7 +157,7 @@ channels:
   - https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/conda/
 ```
 
-#### git_tag_for_env
+### git_tag_for_env
 
 The keyword `git_tag_for_env` can also be used to set a universal key-value definition
 for an environment file. This is much like the `git_tag` described above for an
@@ -172,7 +172,7 @@ git_tag_for_env:
   - open-ce-v1.0.0
 ```
 
-#### external_dependencies
+### external_dependencies
 
 In the environment file, if you want to specify a dependency package without actually
 building it during `build_env.py` execution, you can indicate the dependency by using
