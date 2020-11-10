@@ -126,6 +126,11 @@ class Argument(Enum):
                                         action='store_true',
                                         help="Do not perform builds of packages."))
 
+    RUN_TESTS = (lambda parser: parser.add_argument(
+                                        '--run_tests',
+                                        action='store_true',
+                                        help="Run Open-CE tests for each potential conda environment"))
+
     CONDA_ENV_FILE = (lambda parser: parser.add_argument(
                                         '--conda_env_file',
                                         type=str,

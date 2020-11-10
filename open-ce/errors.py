@@ -39,6 +39,7 @@ class Error(Enum):
     INCOMPAT_CUDA = (18, "Driver level \"{}\" is not new enough to support cuda \"{}\"")
     UNSUPPORTED_CUDA = (19, "Cannot build using docker image for cuda \"{}\" no Dockerfile currently exists")
     TOO_MANY_CUDA = (20, "Only one cuda version allowed to be built with docker at a time")
+    FAILED_TESTS = (21, "There were {} test failures")
 
 class OpenCEError(Exception):
     """

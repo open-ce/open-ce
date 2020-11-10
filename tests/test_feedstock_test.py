@@ -28,6 +28,7 @@ def test_test_feedstock(mocker, capsys):
                     [{"name" : "Test 1", "command" : "echo Test 1"},
                     {"name" : "Test 2", "command" : "echo Test 2a\necho Test2b"}]}
 
+    mocker.patch('os.path.exists', side_effect=(lambda x: x == utils.DEFAULT_TEST_CONFIG_FILE))
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
 
@@ -48,6 +49,7 @@ def test_test_feedstock_failed_tests(mocker, capsys):
                     {"name" : "Test 2", "command" : "[ 1 -eq 1 ]"},
                     {"name" : "Test 3", "command" : "[ 1 -eq 3 ]"}]}
 
+    mocker.patch('os.path.exists', side_effect=(lambda x: x == utils.DEFAULT_TEST_CONFIG_FILE))
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
 

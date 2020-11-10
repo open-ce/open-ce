@@ -20,6 +20,8 @@ import helpers
 import build_env
 import utils
 from errors import OpenCEError
+from build_tree_test import TestBuildTree
+import test_feedstock
 
 class PackageBuildTracker(object):
     def __init__(self):
@@ -106,7 +108,7 @@ def test_build_env(mocker):
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    build_env.build_env([env_file, "--python_versions", py_version])
+    build_env.build_env([env_file, "--python_versions", py_version, "--run_tests"])
     validate_conda_env_files(py_version)
 
     #---The second test specifies a python version that is supported in the env file by package21.
@@ -217,3 +219,26 @@ def test_build_env_if_no_conda_build(mocker):
     with pytest.raises(OpenCEError):
         build_env.build_env(arg_strings)
 
+def test_run_tests():
+    '''
+    Test that the _run_tests function works properly.
+    '''
+    mock_build_tree = TestBuildTree([], "3.6", "cpu,cuda", "openmpi", "10.2")
+
+    conda_env_files = dict()
+    mock_build_tree._test_commands = dict()
+    for variant in mock_build_tree._possible_variants:
+        conda_env_files[str(variant)] = "conda_env_" + str(variant)
+        mock_build_tree._test_commands[str(variant)] = { "feedstock1" :
+                                                        [test_feedstock.TestCommand("Test1",
+                                                                                    conda_env=conda_env_files[str(variant)],
+                                                                                    bash_command="echo Test1"),
+                                                        test_feedstock.TestCommand("Test2",
+                                                                                    conda_env=conda_env_files[str(variant)],
+                                                                                    bash_command="[ 1 -eq 2 ]")]
+                                                       }
+
+    # Note: All of the tests should fail, since there isn't a real conda environment to activate
+    with pytest.raises(OpenCEError) as exc:
+        build_env._run_tests(mock_build_tree, conda_env_files)
+    assert "There were 4 test failures" in str(exc.value)
