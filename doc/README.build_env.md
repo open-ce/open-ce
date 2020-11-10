@@ -117,7 +117,7 @@ optional arguments:
 
 ## Conda environment files
 
-`build_env.py` also generates conda environments file based on the configuration
+`build_env.py` also generates conda environment files based on the configuration
  selected for a build. For e.g. if `build_env.py` is run for `tensorflow-env.yaml` and
  for python_versions `3.7`, build_type `cuda` and mpi_type being `openmpi`, then a
  conda environment file with name `open-ce-conda-env-py3.7-cuda-openmpi.yaml` gets
