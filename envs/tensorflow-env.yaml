@@ -14,7 +14,7 @@ packages:
   - feedstock : tensorflow-serving
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
-  - feedstock : python-flatbuffers-feedstock
+  - feedstock : python-flatbuffers
   - feedstock : tensorflow-estimator
   - feedstock : tensorboard
   - feedstock : tensorboard-plugin-wit
