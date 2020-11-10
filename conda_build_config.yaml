@@ -55,6 +55,8 @@ freetype:
 fortran_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
+fsspec:
+  - 0.8.*
 future:
   - 0.18.*
 gast:
