@@ -83,7 +83,7 @@ def _run_tests(build_tree, conda_env_files):
     for variant_string, conda_env_file in conda_env_files.items():
         test_commands = build_tree.get_test_commands(variant_string)
         if test_commands:
-            print("\n*** Running tests within the " + conda_env_file + " conda environment ***\n")
+            print("\n*** Running tests within the " + os.path.basename(conda_env_file) + " conda environment ***\n")
         for feedstock, feedstock_test_commands in test_commands.items():
             print("Running tests for " + feedstock)
             failed_tests += test_feedstock.run_test_commands(conda_env_file, feedstock_test_commands)

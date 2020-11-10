@@ -94,8 +94,9 @@ def _make_hash(to_hash):
 
 def _create_commands(repository, recipes, variant_config_files, variants, channels):#pylint: disable=too-many-locals
     """
-    Create a BuildCommand for each recipe within a repository.
-    Create a list of TestCommands for a repository.
+    Returns:
+        A list of BuildCommands for each recipe within a repository.
+        A list of TestCommands for an entire repository.
     """
     saved_working_directory = os.getcwd()
     os.chdir(repository)

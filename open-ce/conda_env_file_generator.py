@@ -40,7 +40,7 @@ class CondaEnvFileGenerator():
         This function writes conda environment files using the dependency dictionary
         created from all the buildcommands.
 
-        It returns a list of paths to the files that were writeen.
+        It returns the path to the file that was written.
         """
 
         if not os.path.exists(path):
