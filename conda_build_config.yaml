@@ -59,6 +59,10 @@ future:
   - 0.18.*
 gast:
   - 0.3.3
+google_auth:
+  - 1.23.*
+google_auth_oauthlib:
+  - 0.4.*
 google_pasta:
   - 0.2
 googleapis_common_protos:
