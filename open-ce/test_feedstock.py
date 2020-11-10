@@ -29,6 +29,7 @@ class TestCommand():
         bash_command (str): The bash command to run.
         create_env (bool): Whether this is the command to create a new conda environment.
         clean_env (bool): Whether this is the command to remove a conda environment.
+        working_dir (str): Working directory to be used when executing the bash command.
     """
     #pylint: disable=too-many-arguments
     def __init__(self, name, conda_env=None, bash_command="", create_env=False, clean_env=False, working_dir=os.getcwd()):
