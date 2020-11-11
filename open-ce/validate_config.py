@@ -17,19 +17,24 @@ utils.check_if_conda_build_exists()
 
 import build_tree # pylint: disable=wrong-import-position
 
+DESCRIPTION = 'Perform validation on a conda_build_config.yaml file.'
+
 def make_parser():
     ''' Parser input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.ENV_FILE,
                  utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
                  utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES, utils.Argument.CUDA_VERSIONS]
     parser = utils.make_parser(arguments,
-                               description = 'Perform validation on a conda_build_config.yaml file.')
+                               description = DESCRIPTION)
     return parser
+
+def _validate_config_parsed(args):
+    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions)
+    validate_env_config(args.conda_build_config, args.env_config_file, variants, args.repository_folder)
 
 def _main(arg_strings=None):
     args = make_parser().parse_args(arg_strings)
-    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions)
-    validate_env_config(args.conda_build_config, args.env_config_file, variants, args.repository_folder)
+    return _validate_config_parsed(args)
 
 def validate_env_config(conda_build_config, env_config_files, variants, repository_folder):
     '''

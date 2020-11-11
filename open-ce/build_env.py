@@ -43,6 +43,8 @@ import validate_config
 import test_feedstock
 from errors import OpenCEError, Error
 
+DESCRIPTION = 'Build conda environment as part of Open-CE'
+
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
@@ -52,8 +54,7 @@ def make_parser():
                  utils.Argument.CUDA_VERSIONS, utils.Argument.SKIP_BUILD_PACKAGES,
                  utils.Argument.RUN_TESTS, utils.Argument.DOCKER_BUILD]
 
-    parser = utils.make_parser(arguments,
-                               description = 'Build conda environment as part of Open-CE')
+    parser = utils.make_parser(arguments, description = DESCRIPTION)
 
     parser.add_argument(
         '--git_location',

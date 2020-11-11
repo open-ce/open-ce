@@ -19,6 +19,8 @@ import yaml
 import utils
 from utils import OpenCEError
 
+DESCRIPTION = 'Test a feedstock as part of Open-CE'
+
 class TestCommand():
     """
     Contains a test to run within a given conda environment.
@@ -213,7 +215,7 @@ def display_failed_tests(failed_tests):
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
-    parser = utils.make_parser(arguments, description = 'Test a feedstock as part of Open-CE')
+    parser = utils.make_parser(arguments, description = DESCRIPTION)
 
     return parser
 
