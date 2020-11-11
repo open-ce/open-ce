@@ -217,8 +217,6 @@ torchvision:
   - 0.8.*
 tqdm:
   - 4.41.*
-typing:
-  - 3.7.4.1
 typing_extensions:
   - 3.7.4.*
 uff:
