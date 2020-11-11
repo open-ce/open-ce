@@ -13,7 +13,6 @@ import argparse
 import sys
 import os
 import pathlib
-import argparse
 
 import conda_build.api
 from conda_build.config import get_or_merge_config
