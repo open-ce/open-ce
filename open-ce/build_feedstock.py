@@ -147,6 +147,15 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
 
+def check_cuda_version_match():
+    '''
+    Make sure cudatoolkit matches system CUDA version
+    '''
+    nvcc_version = os.system("nvcc --version | fgrep release | awk '{print $5}'  | cut -d, -f1")
+    cuda_version = os.system("nvidia-smi |fgrep 'CUDA Version' |awk '{print $9}'")
+    return (nvcc_version == cuda_version)
+
+
 def build_feedstock(args_string=None):
     '''
     Entry function.
@@ -162,6 +171,10 @@ def build_feedstock(args_string=None):
     build_config_data, recipe_config_file  = load_package_config(args.recipe_config_file)
 
     args.recipes = utils.parse_arg_list(args.recipe_list)
+
+    if not check_cuda_version_match():
+        print("cudatoolkit version does not match system CUDA version.")
+        sys.exit(1)
 
     # Build each recipe
     for recipe in build_config_data['recipes']:
