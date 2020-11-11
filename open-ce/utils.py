@@ -15,6 +15,7 @@ import errno
 from enum import Enum, unique
 from itertools import product
 import re
+import yaml
 import pkg_resources
 from errors import OpenCEError, Error
 
@@ -125,6 +126,11 @@ class Argument(Enum):
                                         action='store_true',
                                         help="Do not perform builds of packages."))
 
+    RUN_TESTS = (lambda parser: parser.add_argument(
+                                        '--run_tests',
+                                        action='store_true',
+                                        help="Run Open-CE tests for each potential conda environment"))
+
     CONDA_ENV_FILE = (lambda parser: parser.add_argument(
                                         '--conda_env_file',
                                         type=str,
@@ -135,6 +141,12 @@ class Argument(Enum):
                                         type=str,
                                         default=DEFAULT_OUTPUT_FOLDER,
                                         help='Path where built conda packages are present.'))
+
+    TEST_WORKING_DIRECTORY = (lambda parser: parser.add_argument(
+                                        '--test_working_dir',
+                                        type=str,
+                                        default="./",
+                                        help="Directory where tests will be executed."))
 
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
@@ -204,14 +216,17 @@ def validate_dict_schema(dictionary, schema):
         if not k in schema:
             raise OpenCEError(Error.ERROR, "Unexpected key {} was found in {}".format(k, dictionary))
 
-def run_command_capture(cmd):
+def run_command_capture(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=None):
     """Run a shell command and capture the ret_code, stdout and stderr."""
+    if cwd and not os.path.exists(cwd):
+        os.mkdir(cwd)
     process = subprocess.Popen(
         cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stdout=stdout,
+        stderr=stderr,
         shell=True,
-        universal_newlines=True)
+        universal_newlines=True,
+        cwd=cwd)
     std_out, std_err = process.communicate()
 
     return process.returncode == 0, std_out, std_err
@@ -224,7 +239,7 @@ def run_and_log(command):
 def get_output(command):
     '''Print and execute a shell command and then return the output.'''
     print("--->{}".format(command))
-    _,std_out,_ = run_command_capture(command)
+    _,std_out,_ = run_command_capture(command, stderr=subprocess.STDOUT)
     return std_out.strip()
 
 def variant_string(py_ver, build_type, mpi_type, cudatoolkit):
@@ -319,3 +334,16 @@ def is_subdir(child_path, parent_path):
 
     relative = os.path.relpath(child, start=parent)
     return not relative.startswith(os.pardir)
+
+def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
+    '''
+    Use regex to substitute channels in a conda env file.
+    Regex 'original_channel' is replaced with 'new_channel'
+    '''
+    with open(conda_env_file, 'r') as file_handle:
+        env_info = yaml.safe_load(file_handle)
+
+    env_info['channels'] = [re.sub(original_channel, new_channel, channel) for channel in env_info['channels']]
+
+    with open(conda_env_file, 'w') as file_handle:
+        yaml.safe_dump(env_info, file_handle)

@@ -10,7 +10,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import sys
 import shutil
-import yaml
 import utils
 from errors import OpenCEError, Error
 
@@ -55,24 +54,6 @@ def build_image(local_conda_channel, conda_env_file):
 
     return image_name
 
-def _update_channels(conda_env_file):
-    with open(conda_env_file, 'r') as file_handle:
-        env_info = yaml.safe_load(file_handle)
-
-    channels = env_info['channels']
-    index = 0
-    for channel in channels:
-        if channel.startswith("file:"):
-            index = channels.index(channel)
-            channels.remove(channel)
-            break
-
-    channels.insert(index, "file:/{}".format(TARGET_DIR))
-    env_info['channels'] = channels
-
-    with open(conda_env_file, 'w') as file_handle:
-        yaml.safe_dump(env_info, file_handle)
-
 def _validate_input_paths(local_conda_channel, conda_env_file):
 
     # Check if path exists
@@ -98,7 +79,7 @@ def build_runtime_docker_image(args_string=None):
     # Copy the conda environment file into the local conda channel to modify it
     shutil.copy(conda_env_file, local_conda_channel)
     conda_env_file = os.path.join(local_conda_channel, os.path.basename(conda_env_file))
-    _update_channels(conda_env_file)
+    utils.replace_conda_env_channels(conda_env_file, r'file:.*', "file:/{}".format(TARGET_DIR))
 
     # Check if input local conda channel path is absolute
     if os.path.isabs(args.local_conda_channel):
