@@ -153,7 +153,7 @@ def check_cuda_version_match():
     '''
     nvcc_version = os.system("nvcc --version | fgrep release | awk '{print $5}'  | cut -d, -f1")
     cuda_version = os.system("nvidia-smi |fgrep 'CUDA Version' |awk '{print $9}'")
-    return (nvcc_version == cuda_version)
+    return nvcc_version == cuda_version
 
 
 def build_feedstock(args_string=None):
