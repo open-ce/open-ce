@@ -138,7 +138,7 @@ numba:
 numpy:
   - 1.19.*
 onnx:
-  - 1.6.*
+  - 1.8.*
 openblas:
   - 0.3.6.*
 opencv:
