@@ -13,6 +13,7 @@ import argparse
 import sys
 import os
 import pathlib
+import argparse
 
 import conda_build.api
 from conda_build.config import get_or_merge_config
@@ -25,9 +26,9 @@ import utils # pylint: disable=wrong-import-position
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [utils.Argument.PYTHON_VERSIONS, utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
-    parser = utils.make_parser(arguments,
-                               description = 'PR Test for Feedstocks',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(arguments)
+    for argument in arguments:
+        argument(parser)
     return parser
 
 def get_build_numbers(build_config_data, config, variant):
