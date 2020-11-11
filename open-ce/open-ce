@@ -11,35 +11,40 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import sys
 import argparse
 import utils
+import argparse
 from errors import OpenCEError, Error
 import build_env
 import build_feedstock
 import test_feedstock
 import validate_config
 import validate_env
+import build_image
 
 def make_parser():
     ''' Parser for input arguments '''
-    parser = utils.make_parser([], description = 'Open-CE Tool')
+    parser = argparse.ArgumentParser(description = 'Open-CE Tool')
 
     subparsers = parser.add_subparsers(title='Open-CE Commands',
                                        description='Valid Commands',
                                        required=True)
 
-    build_env_parser = subparsers.add_parser('build_env', parents=[build_env.make_parser()], add_help=False, help=build_env.DESCRIPTION)
-    build_env_parser.set_defaults(func=build_env._build_env_parsed)
+    build_env_parser = utils.add_subparser(subparsers, build_env.COMMAND, build_env.ARGUMENTS, help=build_env.DESCRIPTION)
+    build_env_parser.set_defaults(func=build_env.build_env)
 
-    build_feedstock_parser = subparsers.add_parser('build_feedstock', parents=[build_feedstock.make_parser()], add_help=False, help=build_feedstock.DESCRIPTION)
-    build_feedstock_parser.set_defaults(func=build_feedstock._build_feedstock_parsed)
+    build_feedstock_parser = utils.add_subparser(subparsers, build_feedstock.COMMAND, build_feedstock.ARGUMENTS, help=build_feedstock.DESCRIPTION)
+    build_feedstock_parser.set_defaults(func=build_feedstock.build_feedstock)
 
-    test_feedstock_parser = subparsers.add_parser('test_feedstock', parents=[test_feedstock.make_parser()], add_help=False, help=test_feedstock.DESCRIPTION)
-    test_feedstock_parser.set_defaults(func=test_feedstock._test_feedstock_parsed)
+    test_feedstock_parser = utils.add_subparser(subparsers, test_feedstock.COMMAND, test_feedstock.ARGUMENTS, help=test_feedstock.DESCRIPTION)
+    test_feedstock_parser.set_defaults(func=test_feedstock.test_feedstock)
 
-    validate_config_parser = subparsers.add_parser('validate_config', parents=[validate_config.make_parser()], add_help=False, help=validate_config.DESCRIPTION)
-    validate_config_parser.set_defaults(func=validate_config._validate_config_parsed)
+    validate_config_parser = utils.add_subparser(subparsers, validate_config.COMMAND, validate_config.ARGUMENTS, help=validate_config.DESCRIPTION)
+    validate_config_parser.set_defaults(func=validate_config.validate_config)
 
-    validate_env_parser = subparsers.add_parser('validate_env', parents=[validate_env.make_parser()], add_help=False, help=validate_env.DESCRIPTION)
-    validate_env_parser.set_defaults(func=validate_env._validate_env_parsed)
+    validate_env_parser = utils.add_subparser(subparsers, validate_env.COMMAND, validate_env.ARGUMENTS, help=validate_env.DESCRIPTION)
+    validate_env_parser.set_defaults(func=validate_env.validate_env)
+
+    build_image_parser = utils.add_subparser(subparsers, build_image.COMMAND, build_image.ARGUMENTS, help=build_image.DESCRIPTION)
+    build_image_parser.set_defaults(func=build_image.build_runtime_docker_image)
 
     return parser
 

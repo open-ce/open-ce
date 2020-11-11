@@ -43,32 +43,26 @@ import validate_config
 import test_feedstock
 from errors import OpenCEError, Error
 
+COMMAND = "build_env"
+
 DESCRIPTION = 'Build conda environment as part of Open-CE'
 
-def make_parser():
-    ''' Parser for input arguments '''
-    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
-                 utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
-                 utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-                 utils.Argument.CUDA_VERSIONS, utils.Argument.SKIP_BUILD_PACKAGES,
-                 utils.Argument.RUN_TESTS, utils.Argument.DOCKER_BUILD]
-
-    parser = utils.make_parser(arguments, description = DESCRIPTION)
-
-    parser.add_argument(
-        '--git_location',
-        type=str,
-        default=utils.DEFAULT_GIT_LOCATION,
-        help='The default location to clone git repositories from.')
-
-    parser.add_argument(
-        '--git_tag_for_env',
-        type=str,
-        default=None,
-        help='Git tag to be checked out for all of the packages in an environment.')
-
-    return parser
+ARGUMENTS = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
+             utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
+             utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
+             utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
+             utils.Argument.CUDA_VERSIONS, utils.Argument.SKIP_BUILD_PACKAGES,
+             utils.Argument.RUN_TESTS, utils.Argument.DOCKER_BUILD,
+             (lambda parser: parser.add_argument(
+                    '--git_location',
+                    type=str,
+                    default=utils.DEFAULT_GIT_LOCATION,
+                    help='The default location to clone git repositories from.')),
+             (lambda parser: parser.add_argument(
+                    '--git_tag_for_env',
+                    type=str,
+                    default=None,
+                    help='Git tag to be checked out for all of the packages in an environment.'))]
 
 def _run_tests(build_tree, conda_env_files):
     """
@@ -93,7 +87,8 @@ def _run_tests(build_tree, conda_env_files):
     if failed_tests:
         raise OpenCEError(Error.FAILED_TESTS, len(failed_tests))
 
-def _build_env_parsed(args):
+def build_env(args):
+    '''Entry Function'''
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
@@ -157,20 +152,3 @@ def _build_env_parsed(args):
 
     if args.run_tests:
         _run_tests(build_tree, conda_env_files)
-
-def build_env(arg_strings=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(arg_strings)
-    return _build_env_parsed(args)
-
-if __name__ == '__main__':
-    try:
-        build_env()
-    except OpenCEError as err:
-        print(err.msg, file=sys.stderr)
-        sys.exit(1)
-
-    sys.exit(0)

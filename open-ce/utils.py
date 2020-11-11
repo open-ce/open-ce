@@ -149,14 +149,14 @@ class Argument(Enum):
                                         help="Directory where tests will be executed."))
 
 
-def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
+def add_subparser(subparsers, command, arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
     Make a parser from a list of OPEN-CE Arguments.
     '''
-    parser = argparse.ArgumentParser(*args, formatter_class=formatter_class, **kwargs)
+    subparser = subparsers.add_parser(command, *args, formatter_class=formatter_class, **kwargs)
     for argument in arguments:
-        argument(parser)
-    return parser
+        argument(subparser)
+    return subparser
 
 def parse_arg_list(arg_list):
     ''' Turn a comma delimited string into a python list'''

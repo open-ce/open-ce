@@ -11,15 +11,15 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import datetime
 import os
 import tempfile
-import sys
 import subprocess
 
 import yaml
 
 import utils
-from utils import OpenCEError
 
+COMMAND = 'test_feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
+ARGUMENTS = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
 
 class TestCommand():
     """
@@ -212,31 +212,10 @@ def display_failed_tests(failed_tests):
     else:
         print("All tests passed!")
 
-def make_parser():
-    ''' Parser for input arguments '''
-    arguments = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
-    parser = utils.make_parser(arguments, description = DESCRIPTION)
-
-    return parser
-
-def _test_feedstock_parsed(args):
+def test_feedstock(args):
+    '''Entry Function'''
     test_commands = gen_test_commands(working_dir=args.test_working_dir)
     failed_tests = run_test_commands(args.conda_env_file, test_commands)
     display_failed_tests(failed_tests)
 
     return len(failed_tests)
-
-def test_feedstock(arg_strings=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(arg_strings)
-    return _test_feedstock_parsed(args)
-
-if __name__ == '__main__':
-    try:
-        sys.exit(test_feedstock())
-    except OpenCEError as err:
-        print(err.msg, file=sys.stderr)
-        sys.exit(1)

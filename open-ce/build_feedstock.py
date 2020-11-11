@@ -29,7 +29,6 @@ For usage description of arguments, this script supports use of --help:
 *******************************************************************************
 """
 
-import sys
 import os
 import traceback
 import yaml
@@ -43,22 +42,19 @@ import conda_build.api
 from conda_build.config import get_or_merge_config
 # pylint: enable=wrong-import-position
 
+COMMAND = 'build_feedstock'
+
 DESCRIPTION = 'Build conda packages as part of Open-CE'
 
-def make_parser():
-    ''' Parser input arguments '''
-    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
-                 utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-                 utils.Argument.CUDA_VERSIONS]
-    parser = utils.make_parser(arguments,
-                               description = DESCRIPTION)
-
-    parser.add_argument(
-        '--recipe-config-file',
-        type=str,
-        default=None,
-        help="""R|Path to the recipe configuration YAML file. The configuration
+ARGUMENTS = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
+             utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
+             utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
+             utils.Argument.CUDA_VERSIONS,
+             (lambda parser: parser.add_argument(
+                    '--recipe-config-file',
+                    type=str,
+                    default=None,
+                    help="""R|Path to the recipe configuration YAML file. The configuration
 file lists paths to recipes to be built within a feedstock.
 
 Below is an example stating that there are two recipes to build,
@@ -74,27 +70,22 @@ recipes:
 If no path is given, the default value is build-config.yaml.
 If build-config.yaml does not exist, and no value is provided,
 it will be assumed there is a single recipe with the
-path of \"recipe\".""")
-
-    parser.add_argument(
-        '--recipes',
-        dest='recipe_list',
-        action='store',
-        default=None,
-        help='Comma separated list of recipe names to build.')
-
-    parser.add_argument(
-        '--working_directory',
-        type=str,
-        help='Directory to run the script in.')
-
-    parser.add_argument(
-        '--local_src_dir',
-        type=str,
-        required=False,
-        help='Path where package source is downloaded in the form of RPM/Debians/Tar.')
-
-    return parser
+path of \"recipe\".""")),
+             (lambda parser: parser.add_argument(
+                    '--recipes',
+                    dest='recipe_list',
+                    action='store',
+                    default=None,
+                    help='Comma separated list of recipe names to build.')),
+             (lambda parser: parser.add_argument(
+                    '--working_directory',
+                    type=str,
+                    help='Directory to run the script in.')),
+             (lambda parser: parser.add_argument(
+                    '--local_src_dir',
+                    type=str,
+                    required=False,
+                    help='Path where package source is downloaded in the form of RPM/Debians/Tar.'))]
 
 def get_conda_build_config():
     '''
@@ -149,7 +140,8 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
 
-def _build_feedstock_parsed(args):
+def build_feedstock(args):
+    '''Entry Function'''
     saved_working_directory = None
     if args.working_directory:
         saved_working_directory = os.getcwd()
@@ -189,20 +181,3 @@ def _build_feedstock_parsed(args):
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
-
-def build_feedstock(args_string=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(args_string)
-    return _build_feedstock_parsed(args)
-
-if __name__ == '__main__':
-    try:
-        build_feedstock()
-    except OpenCEError as err:
-        print(err.msg, file=sys.stderr)
-        sys.exit(1)
-
-    sys.exit(0)
