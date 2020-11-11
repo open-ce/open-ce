@@ -16,18 +16,14 @@ A script that can be used to cut an open-ce release.
 import sys
 import os
 import glob
-import pathlib
 import git_utils
 import tag_all_repos
 
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
-import utils # pylint: disable=wrong-import-position
-
 def _make_parser():
     ''' Parser input arguments '''
-    parser = utils.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
-                                git_utils.Argument.BRANCH],
-                               description = 'A script that can be used to cut an open-ce release.')
+    parser = git_utils.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
+                                    git_utils.Argument.BRANCH],
+                                    description = 'A script that can be used to cut an open-ce release.')
 
     parser.add_argument(
         '--github-org',

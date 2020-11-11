@@ -12,6 +12,7 @@ import os
 import sys
 import pathlib
 from enum import Enum, unique
+import argparse
 import yaml
 import requests
 
@@ -118,3 +119,12 @@ def ask_for_input(message, acceptable=None):
         print("{} is not a valid selection.".format(user_input))
         user_input = input(display_message)
     return user_input.lower()
+
+def make_parser(arguments, *args, formatter_class=utils.OpenCEFormatter, **kwargs):
+    '''
+    Make a parser from a list of OPEN-CE Arguments.
+    '''
+    parser = argparse.ArgumentParser(*args, formatter_class=formatter_class, **kwargs)
+    for argument in arguments:
+        argument(parser)
+    return parser

@@ -34,9 +34,9 @@ import utils # pylint: disable=wrong-import-position
 
 def _make_parser():
     ''' Parser input arguments '''
-    parser = utils.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
-                                git_utils.Argument.BRANCH],
-                               description = 'Tag all repos in an organization.')
+    parser = git_utils.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
+                                    git_utils.Argument.BRANCH],
+                                    description = 'Tag all repos in an organization.')
 
     parser.add_argument(
         'github_org',
