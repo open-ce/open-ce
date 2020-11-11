@@ -12,12 +12,16 @@
 import sys
 import os
 import pathlib
+import pytest
+import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
+open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
 import test_feedstock
 import utils
+from errors import OpenCEError
 
 def test_test_feedstock(mocker, capsys):
     '''
@@ -32,7 +36,7 @@ def test_test_feedstock(mocker, capsys):
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
 
-    assert test_feedstock.test_feedstock(["--conda_env_file", "tests/test-conda-env2.yaml"]) == 0
+    open_ce._main([test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
     captured = capsys.readouterr()
     assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
     assert "Running: Test 1" in captured.out
@@ -53,7 +57,9 @@ def test_test_feedstock_failed_tests(mocker, capsys):
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
 
-    assert test_feedstock.test_feedstock(["--conda_env_file", "tests/test-conda-env2.yaml"]) == 2
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main([test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
+    assert "There were 2 test failures" in str(exc.value)
     captured = capsys.readouterr()
     assert "Failed test: Test 1" in captured.out
     assert "Failed test: Test 3" in captured.out
@@ -75,7 +81,7 @@ def test_test_feedstock_working_dir(mocker, capsys):
     mocker.patch('builtins.open', side_effect=None)
 
     assert not os.path.exists(working_dir)
-    assert test_feedstock.test_feedstock(["--conda_env_file", "../tests/test-conda-env2.yaml", "--test_working_dir", working_dir]) == 0
+    open_ce._main([test_feedstock.COMMAND, "--conda_env_file", "../tests/test-conda-env2.yaml", "--test_working_dir", working_dir])
     assert os.path.exists(working_dir)
     os.rmdir(working_dir)
     captured = capsys.readouterr()

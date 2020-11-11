@@ -13,11 +13,13 @@ import sys
 import os
 import pathlib
 import pytest
+import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import build_env
+open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
 import utils
 from errors import OpenCEError
 from build_tree_test import TestBuildTree
@@ -108,7 +110,7 @@ def test_build_env(mocker):
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    build_env.build_env([env_file, "--python_versions", py_version, "--run_tests"])
+    open_ce._main([build_env.COMMAND, env_file, "--python_versions", py_version, "--run_tests"])
     validate_conda_env_files(py_version)
 
     #---The second test specifies a python version that is supported in the env file by package21.
@@ -133,7 +135,7 @@ def test_build_env(mocker):
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    build_env.build_env([env_file, "--python_versions", py_version])
+    open_ce._main([build_env.COMMAND, env_file, "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
      #---The third test verifies that the repository_folder argument is working properly.
@@ -144,7 +146,7 @@ def test_build_env(mocker):
     )
     py_version = "2.1"
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    build_env.build_env([env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
+    open_ce._main([build_env.COMMAND, env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
@@ -194,30 +196,30 @@ def test_env_validate(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as exc:
-        build_env.build_env([env_file])
+        open_ce._main([build_env.COMMAND, env_file])
     assert "Unexpected key chnnels was found in " in str(exc.value)
 
 def test_build_env_docker_build(mocker):
     '''
     Test that passing the --docker_build argument calls docker_build.build_with_docker
     '''
-    arg_strings = ["--docker_build", "my-env.yaml"]
+    arg_strings = [build_env.COMMAND, "--docker_build", "my-env.yaml"]
 
     mocker.patch('docker_build.build_with_docker', return_value=0)
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
-    build_env.build_env(arg_strings)
+    open_ce._main(arg_strings)
 
 def test_build_env_if_no_conda_build(mocker):
     '''
     Test that build_env should fail if conda_build isn't present and no --docker_build
     '''
-    arg_strings = ["my-env.yaml"]
+    arg_strings = [build_env.COMMAND, "my-env.yaml"]
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
     with pytest.raises(OpenCEError):
-        build_env.build_env(arg_strings)
+        open_ce._main(arg_strings)
 
 def test_run_tests():
     '''

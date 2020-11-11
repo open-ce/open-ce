@@ -16,6 +16,7 @@ import subprocess
 import yaml
 
 import utils
+from errors import OpenCEError, Error
 
 COMMAND = 'test_feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
@@ -212,10 +213,15 @@ def display_failed_tests(failed_tests):
     else:
         print("All tests passed!")
 
-def test_feedstock(args):
-    '''Entry Function'''
+def _test_feedstock(args):
     test_commands = gen_test_commands(working_dir=args.test_working_dir)
     failed_tests = run_test_commands(args.conda_env_file, test_commands)
     display_failed_tests(failed_tests)
 
     return len(failed_tests)
+
+def test_feedstock(args):
+    '''Entry Function'''
+    test_failures = _test_feedstock(args)
+    if test_failures:
+        raise OpenCEError(Error.FAILED_TESTS, test_failures)
