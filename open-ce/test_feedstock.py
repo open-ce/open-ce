@@ -217,18 +217,20 @@ def make_parser():
 
     return parser
 
+def _test_feedstock_parsed(args):
+    test_commands = gen_test_commands(working_dir=args.test_working_dir)
+    failed_tests = run_test_commands(args.conda_env_file, test_commands)
+    display_failed_tests(failed_tests)
+
+    return len(failed_tests)
+
 def test_feedstock(arg_strings=None):
     '''
     Entry function.
     '''
     parser = make_parser()
     args = parser.parse_args(arg_strings)
-
-    test_commands = gen_test_commands(working_dir=args.test_working_dir)
-    failed_tests = run_test_commands(args.conda_env_file, test_commands)
-    display_failed_tests(failed_tests)
-
-    return len(failed_tests)
+    return _test_feedstock_parsed(args)
 
 if __name__ == '__main__':
     try:

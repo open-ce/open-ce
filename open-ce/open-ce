@@ -24,18 +24,20 @@ def make_parser():
                                        required=True)
 
     build_env_parser = subparsers.add_parser('build_env', parents=[build_env.make_parser()], add_help=False, help="build_env help")
-    build_env_parser.set_defaults(func=build_env.build_env)
+    build_env_parser.set_defaults(func=build_env._build_env_parsed)
 
     test_feedstock_parser = subparsers.add_parser('test_feedstock', parents=[test_feedstock.make_parser()], add_help=False, help="test_feedstock help")
-    test_feedstock_parser.set_defaults(func=test_feedstock.test_feedstock)
+    test_feedstock_parser.set_defaults(func=test_feedstock._test_feedstock_parsed)
 
     return parser
 
 def _main(arg_strings=None):
     parser = make_parser()
+    if len(sys.argv) == 1:
+        parser.print_help()
+        return
     args = parser.parse_args(arg_strings)
     args.func(args)
-    return 0
 
 if __name__ == '__main__':
     try:

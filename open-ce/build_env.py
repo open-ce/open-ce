@@ -92,13 +92,7 @@ def _run_tests(build_tree, conda_env_files):
     if failed_tests:
         raise OpenCEError(Error.FAILED_TESTS, len(failed_tests))
 
-def build_env(arg_strings=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(arg_strings)
-
+def _build_env_parsed(args):
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
@@ -162,6 +156,14 @@ def build_env(arg_strings=None):
 
     if args.run_tests:
         _run_tests(build_tree, conda_env_files)
+
+def build_env(arg_strings=None):
+    '''
+    Entry function.
+    '''
+    parser = make_parser()
+    args = parser.parse_args(arg_strings)
+    return _build_env_parsed(args)
 
 if __name__ == '__main__':
     try:
