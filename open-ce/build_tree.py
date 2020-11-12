@@ -54,27 +54,6 @@ class BuildCommand():
         if self.build_command_dependencies is None:
             self.build_command_dependencies = []
 
-    def feedstock_args(self):
-        """
-        Returns a list of strings that can be provided to the build_feedstock function to
-        perform a build.
-        """
-        build_args = ["--working_directory", self.repository]
-
-        for channel in self.channels:
-            build_args += ["--channels", channel]
-
-        build_args += ["--python_versions", self.python]
-        build_args += ["--build_types", self.build_type]
-        build_args += ["--mpi_types", self.mpi_type]
-        build_args += ["--cuda_versions", self.cudatoolkit]
-
-
-        if self.recipe:
-            build_args += ["--recipes", self.recipe]
-
-        return build_args
-
     def name(self):
         """
         Returns a name representing the Build Command

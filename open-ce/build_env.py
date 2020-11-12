@@ -107,14 +107,6 @@ def build_env(args):
     # existence of conda-build as BuildTree uses conda_build APIs.
     from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
 
-    common_package_build_args = []
-    common_package_build_args += ["--output_folder", os.path.abspath(args.output_folder)]
-    common_package_build_args += ["--channel", os.path.abspath(args.output_folder)]
-    common_package_build_args += ["--conda_build_config", os.path.abspath(args.conda_build_config)]
-
-    for channel in args.channels_list:
-        common_package_build_args += ["--channels", channel]
-
     # If repository_folder doesn't exist, create it
     if args.repository_folder and not os.path.exists(args.repository_folder):
         os.mkdir(args.repository_folder)
@@ -144,9 +136,11 @@ def build_env(args):
     if not args.skip_build_packages:
         # Build each package in the packages list
         for build_command in build_tree:
-            build_args = common_package_build_args + build_command.feedstock_args()
             try:
-                build_feedstock.build_feedstock(build_args)
+                build_feedstock.build_feedstock_from_command(build_command,
+                                                            output_folder=os.path.abspath(args.output_folder),
+                                                            extra_channels=[os.path.abspath(args.output_folder)] + args.channels_list,
+                                                            conda_build_config=os.path.abspath(args.conda_build_config))
             except OpenCEError as exc:
                 raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
 

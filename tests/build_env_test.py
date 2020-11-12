@@ -29,23 +29,18 @@ class PackageBuildTracker(object):
     def __init__(self):
         self.built_packages = set()
 
-    def validate_build_feedstock(self, args, package_deps = None, expect=None, reject=None, retval = 0):
+    def validate_build_feedstock(self, build_command, package_deps = None, conditions=None):
         '''
         Used to mock the `build_feedstock` function and ensure that packages are built in a valid order.
         '''
         if package_deps:
-            package = args[-1][:-10]
-            self.built_packages.add(package)
-            for dependency in package_deps[package]:
-                assert dependency in self.built_packages
-        cli_string = " ".join(args)
-        if expect:
-            for term in expect:
-                assert term in cli_string
-        if reject:
-            for term in reject:
-                assert term not in cli_string
-        return retval
+            self.built_packages = self.built_packages.union(build_command.packages)
+            for package in build_command.packages:
+                for dependency in package_deps[package]:
+                    assert dependency in self.built_packages
+        if conditions:
+            for condition in conditions:
+                assert condition(build_command)
 
 def test_build_env(mocker):
     '''
@@ -104,9 +99,10 @@ def test_build_env(mocker):
     py_version = "2.0"
     buildTracker = PackageBuildTracker()
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
-        'build_feedstock.build_feedstock',
-        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps,
-                     expect=["--python_versions {}".format(py_version)], reject=["package21-feedstock"]))
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.python == py_version),
+                                 (lambda command: command.recipe != "package21-feedstock")]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
@@ -129,9 +125,9 @@ def test_build_env(mocker):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock',
-        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps,
-                     expect=["--python_versions {}".format(py_version)]))
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.python == py_version)]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
@@ -141,8 +137,9 @@ def test_build_env(mocker):
      #---The third test verifies that the repository_folder argument is working properly.
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock',
-        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps, expect=["--working_directory repo_folder/"]))
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.repository.startswith("repo_folder"))]))
     )
     py_version = "2.1"
     env_file = os.path.join(test_dir, 'test-env2.yaml')

@@ -41,6 +41,7 @@ utils.check_if_conda_build_exists()
 import conda_build.api
 from conda_build.config import get_or_merge_config
 # pylint: enable=wrong-import-position
+from build_tree import BuildCommand
 
 COMMAND = 'build_feedstock'
 
@@ -140,37 +141,43 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
 
-def build_feedstock(args):
-    '''Entry Function'''
+def build_feedstock_from_command(command,
+                                 recipe_config_file=None,
+                                 output_folder=utils.DEFAULT_OUTPUT_FOLDER,
+                                 extra_channels=None,
+                                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                                 local_src_dir=None):
+    if not extra_channels:
+        extra_channels = []
     saved_working_directory = None
-    if args.working_directory:
+    if command.repository:
         saved_working_directory = os.getcwd()
-        os.chdir(os.path.abspath(args.working_directory))
+        os.chdir(os.path.abspath(command.repository))
 
-    build_config_data, recipe_config_file  = load_package_config(args.recipe_config_file)
+    build_config_data, recipe_config_file  = load_package_config(recipe_config_file)
 
-    args.recipes = utils.parse_arg_list(args.recipe_list)
+    recipes_to_build = utils.parse_arg_list(command.recipe)
 
     # Build each recipe
     for recipe in build_config_data['recipes']:
-        if args.recipes and recipe['name'] not in args.recipes:
+        if recipes_to_build and recipe['name'] not in recipes_to_build:
             continue
 
         config = get_or_merge_config(None)
         config.skip_existing = True
-        config.output_folder = args.output_folder
-        config.variant_config_files = [args.conda_build_config]
+        config.output_folder = output_folder
+        config.variant_config_files = [conda_build_config]
 
         recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
         if os.path.exists(recipe_conda_build_config):
             config.variant_config_files.append(recipe_conda_build_config)
 
-        config.channel_urls = args.channels_list + build_config_data.get('channels', [])
+        config.channel_urls = command.channels + extra_channels + build_config_data.get('channels', [])
 
-        _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
+        _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
 
         try:
-            for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions):
+            for variant in utils.make_variants(command.python, command.build_type, command.mpi_type, command.cudatoolkit):
                 conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
                                config=config, variants=variant)
         except Exception as exc: # pylint: disable=broad-except
@@ -181,3 +188,19 @@ def build_feedstock(args):
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
+
+def build_feedstock(args):
+    '''Entry Function'''
+    command = BuildCommand(recipe=utils.parse_arg_list(args.recipe_list),
+                           repository=args.working_directory,
+                           packages=[],
+                           python=args.python_versions,
+                           build_type=args.build_types,
+                           mpi_type=args.mpi_types,
+                           cudatoolkit=args.cuda_versions,
+                           channels=args.channels_list)
+
+    build_feedstock_from_command(command,
+                                 recipe_config_file=args.recipe_config_file,
+                                 output_folder=args.output_folder,
+                                 local_src_dir=args.local_src_dir)
