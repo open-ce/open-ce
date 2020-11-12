@@ -36,7 +36,7 @@ def test_test_feedstock(mocker, capsys):
     mocker.patch('yaml.safe_load', return_value=test_file)
     mocker.patch('builtins.open', side_effect=None)
 
-    open_ce._main([test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
     captured = capsys.readouterr()
     assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
     assert "Running: Test 1" in captured.out
@@ -58,7 +58,7 @@ def test_test_feedstock_failed_tests(mocker, capsys):
     mocker.patch('builtins.open', side_effect=None)
 
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main([test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
+        open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
     assert "There were 2 test failures" in str(exc.value)
     captured = capsys.readouterr()
     assert "Failed test: Test 1" in captured.out
@@ -81,7 +81,7 @@ def test_test_feedstock_working_dir(mocker, capsys):
     mocker.patch('builtins.open', side_effect=None)
 
     assert not os.path.exists(working_dir)
-    open_ce._main([test_feedstock.COMMAND, "--conda_env_file", "../tests/test-conda-env2.yaml", "--test_working_dir", working_dir])
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "../tests/test-conda-env2.yaml", "--test_working_dir", working_dir])
     assert os.path.exists(working_dir)
     os.rmdir(working_dir)
     captured = capsys.readouterr()

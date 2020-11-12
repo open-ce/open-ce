@@ -24,6 +24,6 @@ jobs:
       - name: Build XGBoost
         shell: bash -l {0}
         run: |
-          ./open-ce/open-ce build_env envs/xgboost-env.yaml \
+          ./open-ce/open-ce build env envs/xgboost-env.yaml \
                             --python_versions 3.7 \
                             --build_types cpu

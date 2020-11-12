@@ -35,7 +35,7 @@ def test_build_image_positive_case(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    arg_strings = [build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
     open_ce._main(arg_strings)
     os.remove("tests/testcondabuild/test-conda-env.yaml")
 
@@ -44,7 +44,7 @@ def test_not_existing_local_conda_channel():
     Test for not existing local conda channel
     '''
     # Local conda channel dir passed doesn't exist
-    arg_strings = [build_image.COMMAND, "--local_conda_channel", "tests/not-existing-dir", "--conda_env_file", "tests/test-conda-env.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/not-existing-dir", "--conda_env_file", "tests/test-conda-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(arg_strings)
     assert Error.INCORRECT_INPUT_PATHS.value[1] in str(exc.value)
@@ -55,7 +55,7 @@ def test_not_existing_env_file():
     '''
 
     # Conda environment file passed doesn't exist
-    arg_strings = [build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/non-existing-env.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/non-existing-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(arg_strings)
     assert Error.INCORRECT_INPUT_PATHS.value[1] in str(exc.value)
@@ -71,7 +71,7 @@ def test_out_of_context_local_channel():
     if not os.path.exists(os.path.abspath(TEST_CONDA_CHANNEL_DIR)):
         os.mkdir(TEST_CONDA_CHANNEL_DIR)
 
-    arg_strings = [build_image.COMMAND, "--local_conda_channel", TEST_CONDA_CHANNEL_DIR, "--conda_env_file", "tests/test-conda-env.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", TEST_CONDA_CHANNEL_DIR, "--conda_env_file", "tests/test-conda-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(arg_strings)
     assert Error.LOCAL_CHANNEL_NOT_IN_CONTEXT.value[1] in str(exc.value)
@@ -90,7 +90,7 @@ def test_local_conda_channel_with_absolute_path(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    arg_strings = [build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
     open_ce._main(arg_strings)
     os.remove("tests/testcondabuild/test-conda-env.yaml")
 
@@ -124,7 +124,7 @@ def test_channel_update_in_conda_env(mocker):
 
     channel_index_before, _ = get_channel_being_modified("tests/test-conda-env.yaml")
 
-    arg_strings = [build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
     open_ce._main(arg_strings)
 
     # We copy conda environment file to the passed local conda channel before updating it
@@ -142,7 +142,7 @@ def test_for_failed_docker_build_cmd(mocker):
     '''
     mocker.patch('os.system', return_value=1)
 
-    arg_strings = [build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(arg_strings)
     assert "Failure building image" in str(exc.value)

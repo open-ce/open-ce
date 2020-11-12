@@ -12,7 +12,7 @@ import shutil
 import utils
 from errors import OpenCEError, Error
 
-COMMAND = 'build_image'
+COMMAND = 'image'
 DESCRIPTION = 'Run Open-CE tools within a container'
 ARGUMENTS = [utils.Argument.LOCAL_CONDA_CHANNEL, utils.Argument.CONDA_ENV_FILE]
 
@@ -82,3 +82,5 @@ def build_runtime_docker_image(args):
     image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file))
 
     print("Docker image with name {} is built successfully.".format(image_name))
+
+ENTRY_FUNCTION = build_runtime_docker_image

@@ -26,7 +26,7 @@ import env_config
 import utils
 from errors import OpenCEError, Error
 
-COMMAND = 'validate_env'
+COMMAND = 'env'
 
 DESCRIPTION = 'Lint Environment Files'
 
@@ -42,3 +42,5 @@ def validate_env(args):
             env_config.load_env_config_files(args.env_config_file, variant)
         except OpenCEError as exc:
             raise OpenCEError(Error.VALIDATE_ENV, args.env_config_file, str(variant), exc.msg) from exc
+
+ENTRY_FUNCTION = validate_env

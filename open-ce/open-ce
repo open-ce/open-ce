@@ -28,23 +28,38 @@ def make_parser():
                                        description='Valid Commands',
                                        required=True)
 
-    build_env_parser = utils.add_subparser(subparsers, build_env.COMMAND, build_env.ARGUMENTS, help=build_env.DESCRIPTION)
-    build_env_parser.set_defaults(func=build_env.build_env)
+    build_parser = utils.add_subparser(subparsers, 'build', [], help="Build")
+    build_sub_parsers = build_parser.add_subparsers(title='Build Commands',
+                                                    description='Valid Commands',
+                                                    required=True)
 
-    build_feedstock_parser = utils.add_subparser(subparsers, build_feedstock.COMMAND, build_feedstock.ARGUMENTS, help=build_feedstock.DESCRIPTION)
-    build_feedstock_parser.set_defaults(func=build_feedstock.build_feedstock)
+    build_env_parser = utils.add_subparser(build_sub_parsers, build_env.COMMAND, build_env.ARGUMENTS, help=build_env.DESCRIPTION)
+    build_env_parser.set_defaults(func=build_env.ENTRY_FUNCTION)
 
-    test_feedstock_parser = utils.add_subparser(subparsers, test_feedstock.COMMAND, test_feedstock.ARGUMENTS, help=test_feedstock.DESCRIPTION)
-    test_feedstock_parser.set_defaults(func=test_feedstock.test_feedstock)
+    build_feedstock_parser = utils.add_subparser(build_sub_parsers, build_feedstock.COMMAND, build_feedstock.ARGUMENTS, help=build_feedstock.DESCRIPTION)
+    build_feedstock_parser.set_defaults(func=build_feedstock.ENTRY_FUNCTION)
 
-    validate_config_parser = utils.add_subparser(subparsers, validate_config.COMMAND, validate_config.ARGUMENTS, help=validate_config.DESCRIPTION)
-    validate_config_parser.set_defaults(func=validate_config.validate_config)
+    build_image_parser = utils.add_subparser(build_sub_parsers, build_image.COMMAND, build_image.ARGUMENTS, help=build_image.DESCRIPTION)
+    build_image_parser.set_defaults(func=build_image.ENTRY_FUNCTION)
 
-    validate_env_parser = utils.add_subparser(subparsers, validate_env.COMMAND, validate_env.ARGUMENTS, help=validate_env.DESCRIPTION)
-    validate_env_parser.set_defaults(func=validate_env.validate_env)
+    test_parser = utils.add_subparser(subparsers, 'test', [], help="Test")
+    test_sub_parsers = test_parser.add_subparsers(title='Test Commands',
+                                                  description='Valid Commands',
+                                                  required=True)
 
-    build_image_parser = utils.add_subparser(subparsers, build_image.COMMAND, build_image.ARGUMENTS, help=build_image.DESCRIPTION)
-    build_image_parser.set_defaults(func=build_image.build_runtime_docker_image)
+    test_feedstock_parser = utils.add_subparser(test_sub_parsers, test_feedstock.COMMAND, test_feedstock.ARGUMENTS, help=test_feedstock.DESCRIPTION)
+    test_feedstock_parser.set_defaults(func=test_feedstock.ENTRY_FUNCTION)
+
+    validate_parser = utils.add_subparser(subparsers, 'validate', [], help="Validate")
+    validate_sub_parsers = validate_parser.add_subparsers(title='Validate Commands',
+                                                          description='Valid Commands',
+                                                          required=True)
+
+    validate_config_parser = utils.add_subparser(validate_sub_parsers, validate_config.COMMAND, validate_config.ARGUMENTS, help=validate_config.DESCRIPTION)
+    validate_config_parser.set_defaults(func=validate_config.ENTRY_FUNCTION)
+
+    validate_env_parser = utils.add_subparser(validate_sub_parsers, validate_env.COMMAND, validate_env.ARGUMENTS, help=validate_env.DESCRIPTION)
+    validate_env_parser.set_defaults(func=validate_env.ENTRY_FUNCTION)
 
     return parser
 

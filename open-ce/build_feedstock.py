@@ -43,7 +43,7 @@ import conda_build.api
 from conda_build.config import get_or_merge_config
 # pylint: enable=wrong-import-position
 
-COMMAND = 'build_feedstock'
+COMMAND = 'feedstock'
 
 DESCRIPTION = 'Build conda packages as part of Open-CE'
 
@@ -207,3 +207,5 @@ def build_feedstock(args):
                                  recipe_config_file=args.recipe_config_file,
                                  output_folder=args.output_folder,
                                  local_src_dir=args.local_src_dir)
+
+ENTRY_FUNCTION = build_feedstock

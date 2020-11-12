@@ -18,7 +18,7 @@ import yaml
 import utils
 from errors import OpenCEError, Error
 
-COMMAND = 'test_feedstock'
+COMMAND = 'feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
 ARGUMENTS = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
 
@@ -225,3 +225,5 @@ def test_feedstock(args):
     test_failures = _test_feedstock(args)
     if test_failures:
         raise OpenCEError(Error.FAILED_TESTS, test_failures)
+
+ENTRY_FUNCTION = test_feedstock

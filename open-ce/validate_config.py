@@ -16,7 +16,7 @@ utils.check_if_conda_build_exists()
 
 import build_tree # pylint: disable=wrong-import-position
 
-COMMAND = 'validate_config'
+COMMAND = 'config'
 
 DESCRIPTION = 'Perform validation on a conda_build_config.yaml file.'
 
@@ -69,3 +69,5 @@ def validate_build_tree(recipes, variant):
     ret_code, std_out, std_err = utils.run_command_capture(cli)
     if not ret_code:
         raise OpenCEError(Error.VALIDATE_BUILD_TREE, cli, std_out, std_err)
+
+ENTRY_FUNCTION = validate_config

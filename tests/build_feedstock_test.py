@@ -43,7 +43,7 @@ def test_build_feedstock_default(mocker):
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, expect_config=expect_config, **kwargs))
     )
 
-    open_ce._main([build_feedstock.COMMAND])
+    open_ce._main(["build", build_feedstock.COMMAND])
 
 def test_build_feedstock_failure(mocker):
     """
@@ -63,7 +63,7 @@ def test_build_feedstock_failure(mocker):
     )
 
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main([build_feedstock.COMMAND])
+        open_ce._main(["build", build_feedstock.COMMAND])
     assert "Unable to build recipe: test_recipe" in str(exc.value)
 
 def test_build_feedstock_working_dir(mocker):
@@ -90,7 +90,7 @@ def test_build_feedstock_working_dir(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    open_ce._main([build_feedstock.COMMAND, "--working_directory", working_dir])
+    open_ce._main(["build", build_feedstock.COMMAND, "--working_directory", working_dir])
 
 def test_build_feedstock_config_file(mocker):
     """
@@ -119,7 +119,7 @@ def test_build_feedstock_config_file(mocker):
         mocker.mock_open(read_data=test_recipe_config)
     )
 
-    open_ce._main([build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
+    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
 
 def test_build_feedstock_default_config_file(mocker):
     """
@@ -148,7 +148,7 @@ def test_build_feedstock_default_config_file(mocker):
         mocker.mock_open(read_data=test_recipe_config)
     )
 
-    open_ce._main([build_feedstock.COMMAND])
+    open_ce._main(["build", build_feedstock.COMMAND])
 
 def test_build_feedstock_nonexist_config_file(mocker):
     """
@@ -164,7 +164,7 @@ def test_build_feedstock_nonexist_config_file(mocker):
     )
 
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main([build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
+        open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
     assert "Unable to open provided config file: my_config.yml" in str(exc.value)
 
 def test_build_feedstock_local_src_dir_args(mocker):
@@ -241,7 +241,7 @@ channels:
         mocker.mock_open(read_data=test_recipe_config)
     )
 
-    arg_input = [build_feedstock.COMMAND,
+    arg_input = ["build", build_feedstock.COMMAND,
                  "--channels", "test_channel",
                  "--channels", "test_channel_2",
                  "--recipes", "my_project,my_variant",
@@ -257,5 +257,5 @@ def test_build_feedstock_if_no_conda_build(mocker):
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     with pytest.raises(OpenCEError):
-        assert open_ce._main([build_feedstock.COMMAND]) == 1
+        assert open_ce._main(["build", build_feedstock.COMMAND]) == 1
 

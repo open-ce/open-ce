@@ -26,7 +26,7 @@ def test_validate_env():
     Positive test for validate_env.
     '''
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main([validate_env.COMMAND, env_file])
+    open_ce._main(["validate", validate_env.COMMAND, env_file])
 
 def test_validate_env_negative():
     '''
@@ -34,7 +34,7 @@ def test_validate_env_negative():
     '''
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main([validate_env.COMMAND, env_file])
+        open_ce._main(["validate", validate_env.COMMAND, env_file])
     assert "Unexpected key chnnels was found in " in str(exc.value)
 
 def test_validate_env_wrong_external_deps(mocker,):
@@ -49,7 +49,7 @@ external_dependencies: ext_dep
 '''
     mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main([validate_env.COMMAND, unused_env_for_arg])
+        open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])
     assert "ext_dep is not of expected type <class 'list'>" in str(exc.value)
 
 def test_validate_env_dict_for_external_deps(mocker,):
@@ -65,5 +65,5 @@ external_dependencies:
 '''
     mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main([validate_env.COMMAND, unused_env_for_arg])
+        open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])
     assert "{'feedstock': 'ext_dep'} is not of expected type <class 'str'>" in str(exc.value)

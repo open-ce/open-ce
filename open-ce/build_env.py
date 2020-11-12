@@ -43,7 +43,7 @@ import validate_config
 import test_feedstock
 from errors import OpenCEError, Error
 
-COMMAND = "build_env"
+COMMAND = "env"
 
 DESCRIPTION = 'Build conda environment as part of Open-CE'
 
@@ -147,3 +147,5 @@ def build_env(args):
 
     if args.run_tests:
         _run_tests(build_tree, conda_env_files)
+
+ENTRY_FUNCTION = build_env
