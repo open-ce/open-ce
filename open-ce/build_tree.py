@@ -18,7 +18,7 @@ import test_feedstock
 import conda_build.api
 from conda_build.config import get_or_merge_config
 
-class BuildCommand():
+class BuildCommand(): #pylint: disable=too-few-public-methods
     """
     The BuildCommand class holds all of the information needed to call the build_feedstock
     function a single time.

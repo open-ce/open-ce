@@ -139,7 +139,8 @@ def build_env(args):
             try:
                 build_feedstock.build_feedstock_from_command(build_command,
                                                             output_folder=os.path.abspath(args.output_folder),
-                                                            extra_channels=[os.path.abspath(args.output_folder)] + args.channels_list,
+                                                            extra_channels=[os.path.abspath(args.output_folder)] +
+                                                                           args.channels_list,
                                                             conda_build_config=os.path.abspath(args.conda_build_config))
             except OpenCEError as exc:
                 raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc

@@ -35,13 +35,13 @@ import yaml
 
 import utils
 from errors import OpenCEError, Error
+from build_tree import BuildCommand
 utils.check_if_conda_build_exists()
 
 # pylint: disable=wrong-import-position
 import conda_build.api
 from conda_build.config import get_or_merge_config
 # pylint: enable=wrong-import-position
-from build_tree import BuildCommand
 
 COMMAND = 'build_feedstock'
 
@@ -141,12 +141,15 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
 
-def build_feedstock_from_command(command,
+def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
                                  recipe_config_file=None,
                                  output_folder=utils.DEFAULT_OUTPUT_FOLDER,
                                  extra_channels=None,
                                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
                                  local_src_dir=None):
+    '''
+    Build a feedstock from a build_command object.
+    '''
     if not extra_channels:
         extra_channels = []
     saved_working_directory = None
