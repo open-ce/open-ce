@@ -203,6 +203,8 @@ tensorboard_plugin_wit:
   - 1.6
 tensorflow:
   - 2.4.*
+tensorflow_hub:
+  - 0.10
 tensorrt:
   - 7.0.*
 termcolor:
