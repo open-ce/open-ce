@@ -12,7 +12,6 @@ import os
 import sys
 import pathlib
 from enum import Enum, unique
-import argparse
 import yaml
 import requests
 
