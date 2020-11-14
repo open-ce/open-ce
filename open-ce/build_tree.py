@@ -18,7 +18,7 @@ import test_feedstock
 import conda_build.api
 from conda_build.config import get_or_merge_config
 
-class BuildCommand(): #pylint: disable=too-few-public-methods
+class BuildCommand():
     """
     The BuildCommand class holds all of the information needed to call the build_feedstock
     function a single time.
@@ -53,6 +53,27 @@ class BuildCommand(): #pylint: disable=too-few-public-methods
         self.build_command_dependencies = build_command_dependencies
         if self.build_command_dependencies is None:
             self.build_command_dependencies = []
+
+    def feedstock_args(self):
+        """
+        Returns a list of strings that can be provided to the build_feedstock function to
+        perform a build.
+        """
+        build_args = ["--working_directory", self.repository]
+
+        for channel in self.channels:
+            build_args += ["--channels", channel]
+
+        build_args += ["--python_versions", self.python]
+        build_args += ["--build_types", self.build_type]
+        build_args += ["--mpi_types", self.mpi_type]
+        build_args += ["--cuda_versions", self.cudatoolkit]
+
+
+        if self.recipe:
+            build_args += ["--recipes", self.recipe]
+
+        return build_args
 
     def name(self):
         """

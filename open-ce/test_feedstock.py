@@ -16,11 +16,12 @@ import subprocess
 import yaml
 
 import utils
+from inputs import Argument
 from errors import OpenCEError, Error
 
 COMMAND = 'feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
-ARGUMENTS = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
+ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY]
 
 class TestCommand():
     """

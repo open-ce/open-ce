@@ -10,6 +10,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import utils
+from inputs import Argument
 from errors import OpenCEError, Error
 
 utils.check_if_conda_build_exists()
@@ -20,9 +21,9 @@ COMMAND = 'config'
 
 DESCRIPTION = 'Perform validation on a conda_build_config.yaml file.'
 
-ARGUMENTS = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.ENV_FILE,
-             utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-             utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES, utils.Argument.CUDA_VERSIONS]
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE,
+             Argument.REPOSITORY_FOLDER, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES, Argument.CUDA_VERSIONS]
 
 def validate_config(args):
     '''Entry Function'''

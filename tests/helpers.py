@@ -65,7 +65,6 @@ def validate_conda_build_args(recipe, expect_recipe=None, expect_config=None, ex
         config = kwargs['config']
         for term, value in expect_config.items():
             assert hasattr(config, term)
-            print("{}: {}".format(term, getattr(config, term)))
             assert getattr(config, term) == value
     if expect_variants:
         variants = kwargs['variants']

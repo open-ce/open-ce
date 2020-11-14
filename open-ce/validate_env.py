@@ -24,14 +24,15 @@ Description:
 
 import env_config
 import utils
+from inputs import Argument
 from errors import OpenCEError, Error
 
 COMMAND = 'env'
 
 DESCRIPTION = 'Lint Environment Files'
 
-ARGUMENTS = [utils.Argument.ENV_FILE, utils.Argument.PYTHON_VERSIONS,
-             utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
+ARGUMENTS = [Argument.ENV_FILE, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES]
 
 def validate_env(args):
     '''Entry Function'''

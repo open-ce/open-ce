@@ -10,11 +10,12 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import shutil
 import utils
+from inputs import Argument
 from errors import OpenCEError, Error
 
 COMMAND = 'image'
 DESCRIPTION = 'Run Open-CE tools within a container'
-ARGUMENTS = [utils.Argument.LOCAL_CONDA_CHANNEL, utils.Argument.CONDA_ENV_FILE]
+ARGUMENTS = [Argument.LOCAL_CONDA_CHANNEL, Argument.CONDA_ENV_FILE]
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RUNTIME_IMAGE_NAME = "opence-runtime"

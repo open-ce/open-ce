@@ -13,6 +13,7 @@ import argparse
 
 import utils
 from errors import OpenCEError, Error
+from inputs import Argument
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BUILD_IMAGE_NAME = "builder"
@@ -29,7 +30,7 @@ DOCKER_TOOL = "docker"
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [utils.Argument.DOCKER_BUILD, utils.Argument.OUTPUT_FOLDER]
+    arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER]
     parser = argparse.ArgumentParser(arguments)
     for argument in arguments:
         argument(parser)

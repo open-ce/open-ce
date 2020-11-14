@@ -34,6 +34,8 @@ import traceback
 import yaml
 
 import utils
+import inputs
+from inputs import Argument
 from errors import OpenCEError, Error
 from build_tree import BuildCommand
 utils.check_if_conda_build_exists()
@@ -47,46 +49,12 @@ COMMAND = 'feedstock'
 
 DESCRIPTION = 'Build conda packages as part of Open-CE'
 
-ARGUMENTS = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
-             utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
-             utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-             utils.Argument.CUDA_VERSIONS,
-             (lambda parser: parser.add_argument(
-                    '--recipe-config-file',
-                    type=str,
-                    default=None,
-                    help="""R|Path to the recipe configuration YAML file. The configuration
-file lists paths to recipes to be built within a feedstock.
-
-Below is an example stating that there are two recipes to build,
-one named my_project and one named my_variant.
-
-recipes:
-  - name : my_project
-    path : recipe
-
-  - name : my_variant
-    path: variants
-
-If no path is given, the default value is build-config.yaml.
-If build-config.yaml does not exist, and no value is provided,
-it will be assumed there is a single recipe with the
-path of \"recipe\".""")),
-             (lambda parser: parser.add_argument(
-                    '--recipes',
-                    dest='recipe_list',
-                    action='store',
-                    default=None,
-                    help='Comma separated list of recipe names to build.')),
-             (lambda parser: parser.add_argument(
-                    '--working_directory',
-                    type=str,
-                    help='Directory to run the script in.')),
-             (lambda parser: parser.add_argument(
-                    '--local_src_dir',
-                    type=str,
-                    required=False,
-                    help='Path where package source is downloaded in the form of RPM/Debians/Tar.'))]
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
+             Argument.CHANNELS, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES,
+             Argument.CUDA_VERSIONS, Argument.RECIPE_CONFIG_FILE,
+             Argument.RECIPES, Argument.WORKING_DIRECTORY,
+             Argument.LOCAL_SRC_DIR]
 
 def get_conda_build_config():
     '''
@@ -159,7 +127,7 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
 
     build_config_data, recipe_config_file  = load_package_config(recipe_config_file)
 
-    recipes_to_build = utils.parse_arg_list(command.recipe)
+    recipes_to_build = inputs.parse_arg_list(command.recipe)
 
     # Build each recipe
     for recipe in build_config_data['recipes']:
@@ -175,7 +143,7 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
         if os.path.exists(recipe_conda_build_config):
             config.variant_config_files.append(recipe_conda_build_config)
 
-        config.channel_urls = command.channels + extra_channels + build_config_data.get('channels', [])
+        config.channel_urls = extra_channels + command.channels + build_config_data.get('channels', [])
 
         _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
 
@@ -194,7 +162,7 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
 
 def build_feedstock(args):
     '''Entry Function'''
-    command = BuildCommand(recipe=utils.parse_arg_list(args.recipe_list),
+    command = BuildCommand(recipe=inputs.parse_arg_list(args.recipe_list),
                            repository=args.working_directory,
                            packages=[],
                            python=args.python_versions,

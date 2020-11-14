@@ -29,7 +29,7 @@ jobs:
       - name: Lint with pylint
         shell: bash -l {0}
         run: |
-          PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./open-ce
+          PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./open-ce ./open-ce/open-ce
       - name: Lint git tools with pylint
         shell: bash -l {0}
         run: |

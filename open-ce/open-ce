@@ -9,10 +9,8 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 """
 
 import sys
-import argparse
-import utils
-import argparse
-from errors import OpenCEError, Error
+import inputs
+from errors import OpenCEError
 import build_env
 import build_feedstock
 import test_feedstock
@@ -22,43 +20,62 @@ import build_image
 
 def make_parser():
     ''' Parser for input arguments '''
-    parser = argparse.ArgumentParser(description = 'Open-CE Tool')
+    parser = inputs.make_parser([], description = 'Open-CE Tool')
 
     subparsers = parser.add_subparsers(title='Open-CE Commands',
-                                       description='Valid Commands',
+                                       description='Choose from the following commands to perform.',
                                        required=True)
 
-    build_parser = utils.add_subparser(subparsers, 'build', [], help="Build")
+    build_parser = inputs.add_subparser(subparsers, 'build', [], help="Build a feedstock, an image, or an environment.")
     build_sub_parsers = build_parser.add_subparsers(title='Build Commands',
                                                     description='Valid Commands',
                                                     required=True)
 
-    build_env_parser = utils.add_subparser(build_sub_parsers, build_env.COMMAND, build_env.ARGUMENTS, help=build_env.DESCRIPTION)
+    build_env_parser = inputs.add_subparser(build_sub_parsers,
+                                            build_env.COMMAND,
+                                            build_env.ARGUMENTS,
+                                            help=build_env.DESCRIPTION)
     build_env_parser.set_defaults(func=build_env.ENTRY_FUNCTION)
 
-    build_feedstock_parser = utils.add_subparser(build_sub_parsers, build_feedstock.COMMAND, build_feedstock.ARGUMENTS, help=build_feedstock.DESCRIPTION)
+    build_feedstock_parser = inputs.add_subparser(build_sub_parsers,
+                                                  build_feedstock.COMMAND,
+                                                  build_feedstock.ARGUMENTS,
+                                                  help=build_feedstock.DESCRIPTION)
     build_feedstock_parser.set_defaults(func=build_feedstock.ENTRY_FUNCTION)
 
-    build_image_parser = utils.add_subparser(build_sub_parsers, build_image.COMMAND, build_image.ARGUMENTS, help=build_image.DESCRIPTION)
+    build_image_parser = inputs.add_subparser(build_sub_parsers,
+                                              build_image.COMMAND,
+                                              build_image.ARGUMENTS,
+                                              help=build_image.DESCRIPTION)
     build_image_parser.set_defaults(func=build_image.ENTRY_FUNCTION)
 
-    test_parser = utils.add_subparser(subparsers, 'test', [], help="Test")
+    test_parser = inputs.add_subparser(subparsers, 'test', [], help="Run tests within a feedstock.")
     test_sub_parsers = test_parser.add_subparsers(title='Test Commands',
                                                   description='Valid Commands',
                                                   required=True)
 
-    test_feedstock_parser = utils.add_subparser(test_sub_parsers, test_feedstock.COMMAND, test_feedstock.ARGUMENTS, help=test_feedstock.DESCRIPTION)
+    test_feedstock_parser = inputs.add_subparser(test_sub_parsers,
+                                                 test_feedstock.COMMAND,
+                                                 test_feedstock.ARGUMENTS,
+                                                 help=test_feedstock.DESCRIPTION)
     test_feedstock_parser.set_defaults(func=test_feedstock.ENTRY_FUNCTION)
 
-    validate_parser = utils.add_subparser(subparsers, 'validate', [], help="Validate")
+    validate_parser = inputs.add_subparser(subparsers, 'validate', [],
+                                           help="Validate an env file or a conda_build_config file.")
     validate_sub_parsers = validate_parser.add_subparsers(title='Validate Commands',
                                                           description='Valid Commands',
                                                           required=True)
 
-    validate_config_parser = utils.add_subparser(validate_sub_parsers, validate_config.COMMAND, validate_config.ARGUMENTS, help=validate_config.DESCRIPTION)
+    validate_config_parser = inputs.add_subparser(validate_sub_parsers,
+                                                  validate_config.COMMAND,
+                                                  validate_config.ARGUMENTS,
+                                                  help=validate_config.DESCRIPTION)
     validate_config_parser.set_defaults(func=validate_config.ENTRY_FUNCTION)
 
-    validate_env_parser = utils.add_subparser(validate_sub_parsers, validate_env.COMMAND, validate_env.ARGUMENTS, help=validate_env.DESCRIPTION)
+    validate_env_parser = inputs.add_subparser(validate_sub_parsers,
+                                               validate_env.COMMAND,
+                                               validate_env.ARGUMENTS,
+                                               help=validate_env.DESCRIPTION)
     validate_env_parser.set_defaults(func=validate_env.ENTRY_FUNCTION)
 
     return parser

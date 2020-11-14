@@ -39,6 +39,8 @@ import glob
 import build_feedstock
 import docker_build
 import utils
+import inputs
+from inputs import Argument
 import validate_config
 import test_feedstock
 from errors import OpenCEError, Error
@@ -47,22 +49,13 @@ COMMAND = "env"
 
 DESCRIPTION = 'Build conda environment as part of Open-CE'
 
-ARGUMENTS = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
-             utils.Argument.CHANNELS, utils.Argument.ENV_FILE,
-             utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-             utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-             utils.Argument.CUDA_VERSIONS, utils.Argument.SKIP_BUILD_PACKAGES,
-             utils.Argument.RUN_TESTS, utils.Argument.DOCKER_BUILD,
-             (lambda parser: parser.add_argument(
-                    '--git_location',
-                    type=str,
-                    default=utils.DEFAULT_GIT_LOCATION,
-                    help='The default location to clone git repositories from.')),
-             (lambda parser: parser.add_argument(
-                    '--git_tag_for_env',
-                    type=str,
-                    default=None,
-                    help='Git tag to be checked out for all of the packages in an environment.'))]
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
+             Argument.CHANNELS, Argument.ENV_FILE,
+             Argument.REPOSITORY_FOLDER, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES,
+             Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
+             Argument.RUN_TESTS, Argument.DOCKER_BUILD,
+             Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV]
 
 def _run_tests(build_tree, conda_env_files):
     """
@@ -116,10 +109,10 @@ def build_env(args):
 
     # Create the build tree
     build_tree = BuildTree(env_config_files=args.env_config_file,
-                               python_versions=utils.parse_arg_list(args.python_versions),
-                               build_types=utils.parse_arg_list(args.build_types),
-                               mpi_types=utils.parse_arg_list(args.mpi_types),
-                               cuda_versions=utils.parse_arg_list(args.cuda_versions),
+                               python_versions=inputs.parse_arg_list(args.python_versions),
+                               build_types=inputs.parse_arg_list(args.build_types),
+                               mpi_types=inputs.parse_arg_list(args.mpi_types),
+                               cuda_versions=inputs.parse_arg_list(args.cuda_versions),
                                repository_folder=args.repository_folder,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,
