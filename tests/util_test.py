@@ -14,7 +14,6 @@ import os
 import pathlib
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 
-import utils
 import inputs
 
 def test_parse_arg_list_list_input():
