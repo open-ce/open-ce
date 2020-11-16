@@ -75,7 +75,7 @@ def test_create_commands(mocker):
     for dep in {'test_req1'}:
         assert dep in build_commands[0].test_dependencies
 
-def test_feedstock_args(mocker):
+def test_feedstock_args():
     '''
     Tests that feedstock_args creates the correct arguments.
     '''
