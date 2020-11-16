@@ -1,10 +1,10 @@
 # README for `open-ce build` command
 
-* [`open-ce build env`](#build-env-sub-command)
-* [`open-ce build feedstock`](#build-feedstock-sub-command)
-* [`open-ce build image`](#build-image-sub-command)
+* [`open-ce build env`](#open-ce-build-env-sub-command)
+* [`open-ce build feedstock`](#open-ce-build-feedstock-sub-command)
+* [`open-ce build image`](#open-ce-build-image-sub-command)
 
-## `build env` sub command
+## `open-ce build env` sub command
 
 For a general build to generate desired images for a specific package,
 a build is achieved by executing the script `open-ce build env`. This will extract
@@ -156,7 +156,7 @@ given to `open-ce build env`. For example, if `open-ce build env` is run without
 `open-ce build env` can generate these target conda environment files for a given Open-CE environment file
 and provided build configuration even without performing an actual build.
 
-## `build feedstock` sub command<a name="build_feedstock"/>
+## `open-ce build feedstock` sub command
 
 The `open-ce build feedstock` script can be used to build an image of a specific
 individual feedstock repository from the Open-CE project.  In most cases, you
@@ -237,7 +237,7 @@ optional arguments:
 ==============================================================================
 ```
 
-## `open-ce build image` sub command<a name="build_image"/>
+## `open-ce build image` sub command
 
 This `open-ce build image` script is used to create a runtime docker image with Open-CE
 packages (generated from `open-ce build env`) installed in it. This script takes two arguments
@@ -262,7 +262,7 @@ image to enable users to create their custom environments.
 Note that the image will not necessarily have all the Open-CE packages installed.
 The packages to be installed strictly depends on the conda environment file which is used to build the image.
 For more information on how conda environment files are generated and their content, please see
-[`doc/README.build_env.md`](doc/README.build_env.md).
+[`doc/README.open_ce_build.md`](README.open_ce_build.md#open-ce-build-$1-sub-command).
 
 So, the ideal sequence of getting Open-CE packages built and installed in a container should be
 

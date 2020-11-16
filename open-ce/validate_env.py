@@ -7,19 +7,6 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-
-*******************************************************************************
-Script: validate_env.py
-
-Summary:
-    Performs syntactic validation on environment files used by build_env.py from
-    the open-ce project.
-
-Description:
-    This script will take a YAML build env file and will check that file and all
-    dependencies for syntactic errors.
-
-*******************************************************************************
 """
 
 import env_config

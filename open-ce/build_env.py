@@ -6,30 +6,6 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-
-*******************************************************************************
-Script: build_env.py
-
-Summary:
-  Build a conda package environment (e.g. tensorflow, pytorch, etc.) from
-open-ce project repositories.
-
-Description:
-  This script will take an YAML build env file for any defined general project
-package and dependencies and will build that project automatically, including
-the  dependencies. It will execute the build_feedstock.py script as needed in
-order to produce conda packages for the requested project.
-
-In the simplest case, a build for (e.g.) tensorflow may look like this:
-   $ ./open-ce/build_env.py envs/tensorflow-env.yaml
-(or similar, adjusting for your path or to choose a different project).
-
-Usage:
-   $ build_env.py [ arguments ] env_config_file [env_config_file ...]
-For usage description of arguments, this script supports use of --help:
-   $ build_env.py --help
-
-*******************************************************************************
 """
 
 import os

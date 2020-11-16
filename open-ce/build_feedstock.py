@@ -6,27 +6,6 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-
-*******************************************************************************
-Script: build_feedstock.py
-
-Summary:
-  Build conda package(s) from open-ce project feedstock repositories.
-
-Description:
-  This script will build any given Open-CE package from within the desired
-package feedstock.  It can be executed implicitly as part of Open-CE builds
-executed by build-env.py, or it can be run directly for a selected feedstock.
-It will build a conda package for the chosen feedstock using the default
-recipe(s) found within that package's build tree, or with an alternative
-recipe specified on the command line.
-
-Usage:
-   $ build_feedstock.py [ arguments ]
-For usage description of arguments, this script supports use of --help:
-   $ build_feedstock.py --help
-
-*******************************************************************************
 """
 
 import os
