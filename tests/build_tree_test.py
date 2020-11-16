@@ -75,6 +75,36 @@ def test_create_commands(mocker):
     for dep in {'test_req1'}:
         assert dep in build_commands[0].test_dependencies
 
+def test_feedstock_args(mocker):
+    '''
+    Tests that feedstock_args creates the correct arguments.
+    '''
+
+    build_commands = [
+        build_tree.BuildCommand("recipe", "repo", {"pkg1", "pkg2"}),
+
+        build_tree.BuildCommand("recipe2", "repo2", {"pkg1", "pkg2"},
+                                python="3.2", mpi_type="system",
+                                build_type="cuda", cudatoolkit="10.0")
+    ]
+
+    for build_command in build_commands:
+        build_string = " ".join(build_command.feedstock_args())
+        assert "--working_directory {}".format(build_command.repository) in build_string
+        if build_command.recipe:
+            assert "--recipes {}".format(build_command.recipe) in build_string
+        if build_command.channels:
+            for channel in build_command.channels:
+                assert "--channels {}".format(channel) in build_string
+        if build_command.python:
+            assert "--python_versions {}".format(build_command.python) in build_string
+        if build_command.build_type:
+            assert "--build_types {}".format(build_command.build_type) in build_string
+        if build_command.mpi_type:
+            assert "--mpi_types {}".format(build_command.mpi_type) in build_string
+        if build_command.cudatoolkit:
+            assert "--cuda_versions {}".format(build_command.cudatoolkit) in build_string
+
 def test_clone_repo(mocker):
     '''
     Simple positive test for `_clone_repo`.
