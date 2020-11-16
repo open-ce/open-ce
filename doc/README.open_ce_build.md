@@ -1,8 +1,8 @@
 # README for `open-ce build` command
 
-* [`open-ce build env`](#build_env_sub_command)
-* [`open-ce build feedstock`](#build_feedstock_sub_command)
-* [`open-ce build image`](#build_image_sub_command)
+* [`open-ce build env`](#build-env-sub-command)
+* [`open-ce build feedstock`](#build-feedstock-sub-command)
+* [`open-ce build image`](#build-image-sub-command)
 
 ## `build env` sub command
 
