@@ -52,11 +52,6 @@ def _make_parser():
 
     return parser
 
-def _main(arg_strings=None):
-    parser = _make_parser()
-    args = parser.parse_args(arg_strings)
-    tag_all_repos(args.github_org, args.tag, args.tag_msg, args.branch, args.repo_dir, args.pat, args.skipped_repos)
-
 def tag_all_repos(github_org, tag, tag_msg, branch, repo_dir, pat, skipped_repos): # pylint: disable=too-many-arguments
     '''
     Clones, then tags all repos with a given tag, and pushes back to remote.
@@ -92,15 +87,19 @@ def tag_all_repos(github_org, tag, tag_msg, branch, repo_dir, pat, skipped_repos
         except Exception as exc:# pylint: disable=broad-except
             print("Error encountered when trying to push {}".format(repo["name"]))
             print(exc)
-            cont = git_utils.ask_for_input("Would you like to continue with the other repos?")
-            if cont.startswith("y"):
+            cont_tag = git_utils.ask_for_input("Would you like to continue tagging other repos?")
+            if cont_tag.startswith("y"):
                 continue
             raise
+
+def _main(arg_strings=None):
+    parser = _make_parser()
+    args = parser.parse_args(arg_strings)
+    tag_all_repos(args.github_org, args.tag, args.tag_msg, args.branch, args.repo_dir, args.pat, args.skipped_repos)
 
 if __name__ == '__main__':
     try:
         _main()
-        sys.exit(0)
     except Exception as exc:# pylint: disable=broad-except
         print("Error: ", exc)
         sys.exit(1)

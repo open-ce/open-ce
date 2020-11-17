@@ -87,7 +87,8 @@ def create_release(github_org, repo, token, tag_name, name, body, draft):# pylin
         raise Exception("Error creating github release.")
     return yaml.safe_load(result.content)
 
-def create_pr(github_org, repo, token, title, body, head, base):
+def create_pr(github_org, repo, token, title, body, head, base):# pylint: disable=too-many-arguments
+    '''Create a PR in the given Repo.'''
     result = requests.post("{}/repos/{}/{}/pulls".format(GITHUB_API, github_org, repo),
                            headers={'Authorization' : 'token {}'.format(token)},
                            json={
@@ -148,4 +149,9 @@ def ask_for_input(message, acceptable=None):
     return user_input.lower()
 
 def get_current_branch(repo_path):
+    '''Retrieve the active branch of the given repo.'''
     return _execute_git_command(repo_path, "git rev-parse --abbrev-ref HEAD").strip()
+
+def apply_patch(repo_path, patch_path):
+    '''Apply a patch to the given repo.'''
+    _execute_git_command(repo_path, "cat \"{}\" | git am -3 -k".format(patch_path))
