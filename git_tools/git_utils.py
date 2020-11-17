@@ -116,7 +116,7 @@ def _execute_git_command(repo_path, git_cmd):
     result,std_out,_ = utils.run_command_capture(git_cmd, stderr=subprocess.STDOUT)
     os.chdir(saved_working_directory)
     if not result:
-        raise Exception("Git command failed: {}".format(git_cmd))
+        raise Exception("Git command failed: {}\n{}".format(git_cmd, std_out))
     return std_out
 
 def create_tag(repo_path, tag_name, tag_msg):
