@@ -11,6 +11,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import os
 import sys
 import pathlib
+import subprocess
 from enum import Enum, unique
 import yaml
 import requests
@@ -38,6 +39,17 @@ class Argument(Enum):
                             type=str,
                             default=None,
                             help="""Branch to work from."""))
+
+    ORG = (lambda parser: parser.add_argument(
+                            'github_org',
+                            type=str,
+                            help="""Github org to tag."""))
+
+    SKIPPED_REPOS = (lambda parser: parser.add_argument(
+                            '--skipped_repos',
+                            type=str,
+                            default="",
+                            help="""Comma delimitted list of repos to skip tagging."""))
 
 def get_all_repos(github_org, token):
     '''
@@ -75,6 +87,19 @@ def create_release(github_org, repo, token, tag_name, name, body, draft):# pylin
         raise Exception("Error creating github release.")
     return yaml.safe_load(result.content)
 
+def create_pr(github_org, repo, token, title, body, head, base):
+    result = requests.post("{}/repos/{}/{}/pulls".format(GITHUB_API, github_org, repo),
+                           headers={'Authorization' : 'token {}'.format(token)},
+                           json={
+                               "title": title,
+                               "body": body,
+                               "head": head,
+                               "base": base
+                               })
+    if result.status_code != 201:
+        raise Exception("Error creating PR.")
+    return yaml.safe_load(result.content)
+
 def clone_repo(git_url, repo_dir, git_tag=None):
     '''Clone a repo to the given location.'''
     if git_tag is None:
@@ -87,10 +112,12 @@ def clone_repo(git_url, repo_dir, git_tag=None):
 def _execute_git_command(repo_path, git_cmd):
     saved_working_directory = os.getcwd()
     os.chdir(repo_path)
-    result = utils.run_and_log(git_cmd)
+    print("--->{}".format(git_cmd))
+    result,std_out,_ = utils.run_command_capture(git_cmd, stderr=subprocess.STDOUT)
     os.chdir(saved_working_directory)
-    if result != 0:
+    if not result:
         raise Exception("Git command failed: {}".format(git_cmd))
+    return std_out
 
 def create_tag(repo_path, tag_name, tag_msg):
     '''Create an annotated tag in the given repo.'''
@@ -102,6 +129,7 @@ def create_branch(repo_path, branch_name):
 
 def commit_changes(repo_path, commit_msg):
     '''Commit the outstanding changes in the given repo.'''
+    _execute_git_command(repo_path, "git add ./*")
     _execute_git_command(repo_path, "git commit -avm \"{}\"".format(commit_msg))
 
 def push_branch(repo_path, branch_name, remote="origin"):
@@ -118,3 +146,6 @@ def ask_for_input(message, acceptable=None):
         print("{} is not a valid selection.".format(user_input))
         user_input = input(display_message)
     return user_input.lower()
+
+def get_current_branch(repo_path):
+    return _execute_git_command(repo_path, "git rev-parse --abbrev-ref HEAD").strip()

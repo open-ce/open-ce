@@ -35,13 +35,8 @@ import inputs # pylint: disable=wrong-import-position
 def _make_parser():
     ''' Parser input arguments '''
     parser = inputs.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
-                                    git_utils.Argument.BRANCH],
+                                    git_utils.Argument.BRANCH, git_utils.Argument.ORG, git_utils.Argument.SKIPPED_REPOS],
                                     description = 'Tag all repos in an organization.')
-
-    parser.add_argument(
-        'github_org',
-        type=str,
-        help="""Github org to tag.""")
 
     parser.add_argument(
         '--tag',
@@ -54,12 +49,6 @@ def _make_parser():
         type=str,
         required=True,
         help="""Tag message to use.""")
-
-    parser.add_argument(
-        '--skipped_repos',
-        type=str,
-        default="",
-        help="""Comma delimitted list of repos to skip tagging.""")
 
     return parser
 
