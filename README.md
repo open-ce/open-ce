@@ -29,9 +29,8 @@ Within this **open-ce** repository, you will find:
 conda_build_config.yaml:  This is a YAML config file which contains all package
     prerequisite information accumulated from across the Open-CE components
 open-ce/
-    This directory contains the parent build scripts, most notably
-    `build_env.py` and `build_feedstock.py`.
-    `build_env.py` is the script you will use to build Open-CE packages.
+    This directory contains the build and validation tool `open-ce`.
+    For more information run `./open-ce/open-ce -h`
 envs/
     Contains the YAML environment config files that identify the dependency
     feedstocks for each of the package environments within Open-CE, such as
@@ -69,7 +68,7 @@ When building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.
 ### Building a Collection of Packages
 
 To build an entire integrated and functional conda channel using Open-CE, start by installing the needed tools in the [Requirements](#requirements) section above.
-The `build_env.py` script can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `build_env.py` will be a local conda channel (by default called `condabuild`) and one or more conda environment file(s) in the output folder depending on the selected build configuration. For more details on `build_env.py`, please see [`doc/README.build_env.md`](doc/README.build_env.md).
+The `open-ce build env` command can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `open-ce build env` will be a local conda channel (by default called `condabuild`) and one or more conda environment file(s) in the output folder depending on the selected build configuration. For more details on `open-ce build env`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
 
 The following commands will use the `opence-env.yaml` Open-CE environment file to build all of the Open-CE packages for Python 3.6 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
 
@@ -77,7 +76,7 @@ The following commands will use the `opence-env.yaml` Open-CE environment file t
 # Clone Open-CE from GitHub
 git clone https://github.com/open-ce/open-ce.git
 # Build packages
-./open-ce/open-ce/build_env.py open-ce/envs/opence-env.yaml
+./open-ce/open-ce/open-ce build env open-ce/envs/opence-env.yaml
 ```
 
 The following commands will use opence-env.yaml Open-CE environment file from a specific Open-CE release to build all of the Open-CE packages for Python 3.6, 3.7 and 3.8, including only CUDA builds. The commands should be run from within the same directory that contains `local_files`.
@@ -86,16 +85,16 @@ The following commands will use opence-env.yaml Open-CE environment file from a 
 # Clone a specific Open-CE release from GitHub
 git clone https://github.com/open-ce/open-ce.git --branch open-ce-v1.0.0
 # Build packages
-./open-ce/open-ce/build_env.py --python_versions 3.6,3.7,3.8 --build_types cuda open-ce/envs/opence-env.yaml
+./open-ce/open-ce/open-ce build env --python_versions 3.6,3.7,3.8 --build_types cuda open-ce/envs/opence-env.yaml
 ```
 
 #### Building within a docker container
 
-Passing the `--docker_build` argument to the `build_env.py` script will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--docker_build` option, please see [`doc/README.build_env.md`](doc/README.build_env.md).
+Passing the `--docker_build` argument to the `open-ce build env` command will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--docker_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
 
 ### Building a Single Feedstock
 
-The `build_feedstock.py` script can be used to build a single feedstock (which could produce one or more conda packages). The output from running `build_feedstock.py` will be a local conda channel (by default called `condabuild`). For more details on `build_feedstock.py`, please see [`doc/README.build_feedstock.md`](doc/README.build_feedstock.md).
+The `open-ce build feedstock` command can be used to build a single feedstock (which could produce one or more conda packages). The output from running `open-ce build feedstock` will be a local conda channel (by default called `condabuild`). For more details on `open-ce build feedstock`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-feedstock-sub-command).
 
 The following commands will build all of the packages within a feedstock named `MY_FEEDSTOCK`.
 
@@ -105,12 +104,12 @@ git clone https://github.com/open-ce/open-ce.git
 # Clone MY_FEEDSTOCK from GitHub
 git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
 # Build packages
-./open-ce/open-ce/build_feedstock.py --working_directory MY_FEEDSTOCK-feedstock
+./open-ce/open-ce/open-ce build feedstock --working_directory MY_FEEDSTOCK-feedstock
 ```
 
 ### Installing Packages
 
-After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. If the packages are built using `build_env.py` script, then a conda environment file will also be generated which can be used to generate a conda environment with the built packages installed in it. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for more information on conda environments.
+After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. If the packages are built using `open-ce build env` script, then a conda environment file will also be generated which can be used to generate a conda environment with the built packages installed in it. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for more information on conda environments.
 
 The following command will install a package named `PACKAGE` from the local conda channel `condabuild` into the currently active conda environment.
 
@@ -126,7 +125,7 @@ conda env create -f <conda_environment_file>
 
 ### Creating Docker Image with Open-CE Packages installed
 
-After performing the build using `build_env.py`, the `build_image.py` script can be used to create a runtime docker image containing the newly created conda channel, as well as a conda environment with the newly build Open-CE packages. For more details on `build_image.py`, please see [`doc/README.build_image.md`](doc/README.build_image.md).
+After performing the build using `open-ce build env`, the `open-ce build image` command can be used to create a runtime docker image containing the newly created conda channel, as well as a conda environment with the newly build Open-CE packages. For more details on `open-ce build image`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-image-sub-command).
 
 ### Contributions
 

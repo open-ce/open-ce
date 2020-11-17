@@ -61,13 +61,18 @@ class BuildCommand():
         """
         build_args = ["--working_directory", self.repository]
 
-        for channel in self.channels:
-            build_args += ["--channels", channel]
+        if self.channels:
+            for channel in self.channels:
+                build_args += ["--channels", channel]
 
-        build_args += ["--python_versions", self.python]
-        build_args += ["--build_types", self.build_type]
-        build_args += ["--mpi_types", self.mpi_type]
-        build_args += ["--cuda_versions", self.cudatoolkit]
+        if self.python:
+            build_args += ["--python_versions", self.python]
+        if self.build_type:
+            build_args += ["--build_types", self.build_type]
+        if self.mpi_type:
+            build_args += ["--mpi_types", self.mpi_type]
+        if self.cudatoolkit:
+            build_args += ["--cuda_versions", self.cudatoolkit]
 
 
         if self.recipe:

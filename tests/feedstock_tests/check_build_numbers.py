@@ -21,13 +21,14 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', '..', 'open-ce'))
 import build_feedstock # pylint: disable=wrong-import-position
 import utils # pylint: disable=wrong-import-position
+import inputs # pylint: disable=wrong-import-position
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [utils.Argument.PYTHON_VERSIONS, utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
-    parser = utils.make_parser(arguments,
-                               description = 'PR Test for Feedstocks',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    arguments = [inputs.Argument.PYTHON_VERSIONS, inputs.Argument.BUILD_TYPES, inputs.Argument.MPI_TYPES]
+    parser = argparse.ArgumentParser(arguments)
+    for argument in arguments:
+        argument(parser)
     return parser
 
 def get_build_numbers(build_config_data, config, variant):

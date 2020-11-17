@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: goanpeca/setup-miniconda@v1
+      - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
@@ -29,7 +29,7 @@ jobs:
       - name: Lint with pylint
         shell: bash -l {0}
         run: |
-          PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./open-ce
+          PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./open-ce ./open-ce/open-ce
       - name: Lint git tools with pylint
         shell: bash -l {0}
         run: |
@@ -49,14 +49,14 @@ jobs:
           yamllint .github/actions/*/*.yml .github/workflows/*.yml
           yamllint ./conda_build_config.yaml
           # Use the conda_build api to lint the env files since they use jinja.
-          python ./open-ce/validate_env.py envs/*.yaml
+          ./open-ce/open-ce validate env envs/*.yaml
           # Validate conda_build_config for the main open-ce env file.
-          python ./open-ce/validate_config.py --conda_build_config \
-                                                 ./conda_build_config.yaml \
-                                                 ./envs/*-env.yaml \
-                                                 --python_versions 3.6,3.7,3.8 \
-                                                 --build_types cuda,cpu \
-                                                 --mpi_types openmpi,system
+          ./open-ce/open-ce validate config --conda_build_config \
+                                            ./conda_build_config.yaml \
+                                            ./envs/*-env.yaml \
+                                            --python_versions 3.6,3.7,3.8 \
+                                            --build_types cuda,cpu \
+                                            --mpi_types openmpi,system
       - name: Test with pytest and Generate coverage report
         shell: bash -l {0}
         run: |

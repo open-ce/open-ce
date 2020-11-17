@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: goanpeca/setup-miniconda@v1
+      - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           auto-update-conda: true
           python-version: "3.7"
@@ -24,6 +24,6 @@ jobs:
       - name: Build XGBoost
         shell: bash -l {0}
         run: |
-          python ./open-ce/build_env.py envs/xgboost-env.yaml \
-                                        --python_versions 3.7 \
-                                        --build_types cpu
+          ./open-ce/open-ce build env envs/xgboost-env.yaml \
+                            --python_versions 3.7 \
+                            --build_types cpu

@@ -13,11 +13,14 @@ import sys
 import os
 import pathlib
 import pytest
+import imp
 
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
+test_dir = pathlib.Path(__file__).parent.absolute()
+sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import utils
 from errors import OpenCEError
+open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
 import build_feedstock
 
 def test_build_feedstock_default(mocker):
@@ -40,8 +43,7 @@ def test_build_feedstock_default(mocker):
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, expect_config=expect_config, **kwargs))
     )
 
-    arg_input = []
-    build_feedstock.build_feedstock(arg_input)
+    open_ce._main(["build", build_feedstock.COMMAND])
 
 def test_build_feedstock_failure(mocker):
     """
@@ -60,9 +62,8 @@ def test_build_feedstock_failure(mocker):
         side_effect=ValueError("invalid literal for int() with base 10: 'xy'") #using ValueError to simulate a failure.
     )
 
-    arg_input = ""
     with pytest.raises(OpenCEError) as exc:
-        build_feedstock.build_feedstock(arg_input)
+        open_ce._main(["build", build_feedstock.COMMAND])
     assert "Unable to build recipe: test_recipe" in str(exc.value)
 
 def test_build_feedstock_working_dir(mocker):
@@ -82,14 +83,14 @@ def test_build_feedstock_working_dir(mocker):
         'conda_build.api.build',
         return_value=[]
     )
+    working_dir = "/test/my_work_dir"
     mocker.patch(
         'os.chdir',
-        side_effect=(lambda x: dirTracker.validate_chdir(x, expected_dirs=["/test/my_work_dir", # First the working directory should be changed to the arg.
+        side_effect=(lambda x: dirTracker.validate_chdir(x, expected_dirs=[working_dir, # First the working directory should be changed to the arg.
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    arg_input = ["--working_directory", "/test/my_work_dir"]
-    build_feedstock.build_feedstock(arg_input)
+    open_ce._main(["build", build_feedstock.COMMAND, "--working_directory", working_dir])
 
 def test_build_feedstock_config_file(mocker):
     """
@@ -118,8 +119,7 @@ def test_build_feedstock_config_file(mocker):
         mocker.mock_open(read_data=test_recipe_config)
     )
 
-    arg_input = ["--recipe-config-file", "my_config.yml"]
-    build_feedstock.build_feedstock(arg_input)
+    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
 
 def test_build_feedstock_default_config_file(mocker):
     """
@@ -148,8 +148,7 @@ def test_build_feedstock_default_config_file(mocker):
         mocker.mock_open(read_data=test_recipe_config)
     )
 
-    arg_input = []
-    build_feedstock.build_feedstock(arg_input)
+    open_ce._main(["build", build_feedstock.COMMAND])
 
 def test_build_feedstock_nonexist_config_file(mocker):
     """
@@ -164,9 +163,8 @@ def test_build_feedstock_nonexist_config_file(mocker):
         return_value=False
     )
 
-    arg_input = ["--recipe-config-file", "my_config.yml"]
     with pytest.raises(OpenCEError) as exc:
-        build_feedstock.build_feedstock(arg_input)
+        open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
     assert "Unable to open provided config file: my_config.yml" in str(exc.value)
 
 def test_build_feedstock_local_src_dir_args(mocker):
@@ -243,13 +241,14 @@ channels:
         mocker.mock_open(read_data=test_recipe_config)
     )
 
-    arg_input = ["--channels", "test_channel",
+    arg_input = ["build", build_feedstock.COMMAND,
+                 "--channels", "test_channel",
                  "--channels", "test_channel_2",
                  "--recipes", "my_project,my_variant",
                  "--python_versions", "3.6",
                  "--build_types", "cpu",
                  "--mpi_types", "openmpi"]
-    build_feedstock.build_feedstock(arg_input)
+    open_ce._main(arg_input)
 
 def test_build_feedstock_if_no_conda_build(mocker):
     '''
@@ -257,7 +256,6 @@ def test_build_feedstock_if_no_conda_build(mocker):
     '''
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
-    arg_input = []
     with pytest.raises(OpenCEError):
-        assert build_feedstock.build_feedstock(arg_input) == 1
+        assert open_ce._main(["build", build_feedstock.COMMAND]) == 1
 

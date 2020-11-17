@@ -7,40 +7,22 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-
-*******************************************************************************
-Script: validate_env.py
-
-Summary:
-    Performs syntactic validation on environment files used by build_env.py from
-    the open-ce project.
-
-Description:
-    This script will take a YAML build env file and will check that file and all
-    dependencies for syntactic errors.
-
-*******************************************************************************
 """
 
-import sys
 import env_config
 import utils
+from inputs import Argument
 from errors import OpenCEError, Error
 
-def make_parser():
-    ''' Parser for input arguments '''
-    arguments = [utils.Argument.ENV_FILE, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES]
-    parser = utils.make_parser(arguments,
-                               description = 'Lint Environment Files')
-    return parser
+COMMAND = 'env'
 
-def validate_env(arg_strings=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(arg_strings)
+DESCRIPTION = 'Lint Environment Files'
+
+ARGUMENTS = [Argument.ENV_FILE, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES]
+
+def validate_env(args):
+    '''Entry Function'''
     variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
 
     for variant in variants:
@@ -49,11 +31,4 @@ def validate_env(arg_strings=None):
         except OpenCEError as exc:
             raise OpenCEError(Error.VALIDATE_ENV, args.env_config_file, str(variant), exc.msg) from exc
 
-if __name__ == '__main__':
-    try:
-        validate_env()
-    except OpenCEError as err:
-        print(err.msg, file=sys.stderr)
-        sys.exit(1)
-
-    sys.exit(0)
+ENTRY_FUNCTION = validate_env

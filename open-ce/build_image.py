@@ -8,10 +8,14 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
 """
 import os
-import sys
 import shutil
 import utils
+from inputs import Argument
 from errors import OpenCEError, Error
+
+COMMAND = 'image'
+DESCRIPTION = 'Run Open-CE tools within a container'
+ARGUMENTS = [Argument.LOCAL_CONDA_CHANNEL, Argument.CONDA_ENV_FILE]
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RUNTIME_IMAGE_NAME = "opence-runtime"
@@ -25,13 +29,6 @@ LOCAL_CONDA_CHANNEL_IN_IMG = "opence-local-conda-channel"
 TARGET_DIR = "/home/{}/{}".format(OPENCE_USER, LOCAL_CONDA_CHANNEL_IN_IMG)
 
 DOCKER_TOOL = "docker"
-
-def make_parser():
-    ''' Parser for input arguments '''
-    arguments = [utils.Argument.LOCAL_CONDA_CHANNEL, utils.Argument.CONDA_ENV_FILE]
-    parser = utils.make_parser(arguments, description='Run Open-CE tools within a container')
-
-    return parser
 
 def build_image(local_conda_channel, conda_env_file):
     """
@@ -64,14 +61,11 @@ def _validate_input_paths(local_conda_channel, conda_env_file):
     if not utils.is_subdir(local_conda_channel, os.path.abspath(BUILD_CONTEXT)):
         raise OpenCEError(Error.LOCAL_CHANNEL_NOT_IN_CONTEXT)
 
-def build_runtime_docker_image(args_string=None):
+def build_runtime_docker_image(args):
     """
     Create a runtime image which will have a conda environment created
     using locally built conda packages and environment file.
     """
-    parser = make_parser()
-    args = parser.parse_args(args_string)
-
     local_conda_channel = os.path.abspath(args.local_conda_channel)
     conda_env_file = os.path.abspath(args.conda_env_file)
     _validate_input_paths(local_conda_channel, conda_env_file)
@@ -90,11 +84,4 @@ def build_runtime_docker_image(args_string=None):
 
     print("Docker image with name {} is built successfully.".format(image_name))
 
-if __name__ == '__main__':
-    try:
-        build_runtime_docker_image()
-    except OpenCEError as err:
-        print(err.msg, file=sys.stderr)
-        sys.exit(1)
-
-    sys.exit(0)
+ENTRY_FUNCTION = build_runtime_docker_image

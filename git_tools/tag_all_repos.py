@@ -30,13 +30,13 @@ import pathlib
 import git_utils
 
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
-import utils # pylint: disable=wrong-import-position
+import inputs # pylint: disable=wrong-import-position
 
 def _make_parser():
     ''' Parser input arguments '''
-    parser = utils.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
-                                git_utils.Argument.BRANCH],
-                               description = 'Tag all repos in an organization.')
+    parser = inputs.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
+                                    git_utils.Argument.BRANCH],
+                                    description = 'Tag all repos in an organization.')
 
     parser.add_argument(
         'github_org',
@@ -73,7 +73,7 @@ def tag_all_repos(github_org, tag, tag_msg, branch, repo_dir, pat, skipped_repos
     Clones, then tags all repos with a given tag, and pushes back to remote.
     These steps are performed in separate loops to make debugging easier.
     '''
-    skipped_repos = utils.parse_arg_list(skipped_repos)
+    skipped_repos = inputs.parse_arg_list(skipped_repos)
     repos = git_utils.get_all_repos(github_org, pat)
     repos = [repo for repo in repos if repo["name"] not in skipped_repos ]
     print("---------------------------Cloning all Repos")
