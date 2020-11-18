@@ -88,7 +88,10 @@ def create_release(github_org, repo, token, tag_name, name, body, draft):# pylin
     return yaml.safe_load(result.content)
 
 def create_pr(github_org, repo, token, title, body, head, base):# pylint: disable=too-many-arguments
-    '''Create a PR in the given Repo.'''
+    '''
+    Create a PR in the given Repo.
+    https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#create-a-pull-request
+    '''
     result = requests.post("{}/repos/{}/{}/pulls".format(GITHUB_API, github_org, repo),
                            headers={'Authorization' : 'token {}'.format(token)},
                            json={
