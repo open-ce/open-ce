@@ -31,7 +31,7 @@ def make_parser():
         argument(parser)
     return parser
 
-def get_build_numbers(build_config_data, config, variant):
+def _get_build_numbers(build_config_data, config, variant):
     build_numbers = dict()
     for recipe in build_config_data["recipes"]:
         metas = conda_build.api.render(recipe['path'],
@@ -44,6 +44,16 @@ def get_build_numbers(build_config_data, config, variant):
                                                            "number" : meta.meta['build']['number']}
     return build_numbers
 
+def _get_configs():
+    build_config_data, _ = build_feedstock.load_package_config()
+    config = get_or_merge_config(None)
+    config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG]
+    config.verbose = False
+    recipe_conda_build_config = build_feedstock.get_conda_build_config()
+    if recipe_conda_build_config:
+        config.variant_config_files.append(recipe_conda_build_config)
+    return build_config_data, config
+
 def main(arg_strings=None):
     '''
     Entry function.
@@ -52,26 +62,23 @@ def main(arg_strings=None):
     args = parser.parse_args(arg_strings)
     variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
 
-    build_config_data, _ = build_feedstock.load_package_config()
-
     pr_branch = utils.get_output("git log -1 --format='%H'")
     utils.run_and_log("git remote set-head origin -a")
     default_branch = utils.get_output("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
 
-    config = get_or_merge_config(None)
-    config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG]
+    utils.run_and_log("git checkout {}".format(default_branch))
+    master_build_config_data, master_config = _get_configs()
 
-    recipe_conda_build_config = build_feedstock.get_conda_build_config()
-    if recipe_conda_build_config:
-        config.variant_config_files.append(recipe_conda_build_config)
-    config.verbose = False
+    utils.run_and_log("git checkout {}".format(pr_branch))
+    pr_build_config_data, pr_config = _get_configs()
+
     variant_build_results = dict()
     for variant in variants:
         utils.run_and_log("git checkout {}".format(default_branch))
-        master_build_numbers = get_build_numbers(build_config_data, config, variant)
+        master_build_numbers = _get_build_numbers(master_build_config_data, master_config, variant)
 
         utils.run_and_log("git checkout {}".format(pr_branch))
-        current_pr_build_numbers = get_build_numbers(build_config_data, config, variant)
+        current_pr_build_numbers = _get_build_numbers(pr_build_config_data, pr_config, variant)
 
         print("Build Info for Variant:   {}".format(variant))
         print("Current PR Build Info:    {}".format(current_pr_build_numbers))
