@@ -173,7 +173,7 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, w
         test_file (str): Path to the test file.
     """
     test_data = load_test_file(test_file, variants)
-    if not test_data:
+    if not test_data or not test_data['tests']:
         return []
 
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -186,8 +186,7 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, w
                                      conda_env=conda_env,
                                      create_env=True,
                                      working_dir=working_dir))
-    if not test_data['tests']:
-        test_data['tests'] = []
+
     for test in test_data['tests']:
         test_commands.append(TestCommand(name=test.get('name'),
                                          conda_env=conda_env,

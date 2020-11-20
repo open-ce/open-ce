@@ -86,11 +86,11 @@ def test_test_feedstock_labels(mocker, capsys):
 
     open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
     captured = capsys.readouterr()
-    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert not "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
     assert not "Running: Test Long" in captured.out
     assert not "Running: Test Distributed" in captured.out
     assert not "Running: Test Long and Distributed" in captured.out
-    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert not "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
 
     open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_labels", "long"])
     captured = capsys.readouterr()
