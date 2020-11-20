@@ -12,6 +12,7 @@ import datetime
 import os
 import tempfile
 import subprocess
+from enum import Enum, unique, auto
 
 import utils
 import conda_utils
@@ -23,6 +24,22 @@ from errors import OpenCEError, Error
 COMMAND = 'feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
 ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY, Argument.TEST_LABELS]
+
+@unique
+class Key(Enum):
+    '''Enum for Test File Keys'''
+    tests = auto()
+    name = auto()
+    command = auto()
+
+_TEST_SCHEMA ={
+    Key.name.name: utils.make_schema_type(str, True),
+    Key.command.name: utils.make_schema_type(str, True)
+}
+
+_TEST_FILE_SCHEMA = {
+    Key.tests.name: utils.make_schema_type([_TEST_SCHEMA])
+}
 
 class TestCommand():
     """
@@ -144,7 +161,7 @@ def load_test_file(test_file, variants):
     if not os.path.exists(test_file):
         return None
 
-    test_file_data = conda_utils.render_yaml(test_file, variants, permit_undefined_jinja=True)
+    test_file_data = conda_utils.render_yaml(test_file, variants, permit_undefined_jinja=True, schema=_TEST_FILE_SCHEMA)
 
     return test_file_data
 
