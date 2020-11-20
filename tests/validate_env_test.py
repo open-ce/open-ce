@@ -43,7 +43,7 @@ def test_validate_env_wrong_external_deps(mocker,):
     '''
     unused_env_for_arg = os.path.join(test_dir, 'test-env-invalid1.yaml')
     env_file = { 'packages' : [{ 'feedstock' : 'test1' }], 'external_dependencies' : 'ext_dep' }
-    mocker.patch('conda_utils.render_yaml', return_value=env_file)
+    mocker.patch('conda_build.metadata.MetaData.get_rendered_recipe_text', return_value=env_file)
 
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])
@@ -55,7 +55,7 @@ def test_validate_env_dict_for_external_deps(mocker,):
     '''
     unused_env_for_arg = os.path.join(test_dir, 'test-env-invalid1.yaml')
     env_file = { 'packages' : [{ 'feedstock' : 'test1' }], 'external_dependencies' : [{ 'feedstock' : 'ext_dep'}] }
-    mocker.patch('conda_utils.render_yaml', return_value=env_file)
+    mocker.patch('conda_build.metadata.MetaData.get_rendered_recipe_text', return_value=env_file)
 
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])

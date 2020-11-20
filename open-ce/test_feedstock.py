@@ -186,7 +186,8 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, w
                                      conda_env=conda_env,
                                      create_env=True,
                                      working_dir=working_dir))
-
+    if not test_data['tests']:
+        test_data['tests'] = []
     for test in test_data['tests']:
         test_commands.append(TestCommand(name=test.get('name'),
                                          conda_env=conda_env,
