@@ -13,9 +13,9 @@ import os
 import tempfile
 import subprocess
 
-import yaml
-
 import utils
+import conda_utils
+import conda_env_file_generator
 from inputs import Argument
 from errors import OpenCEError, Error
 
@@ -133,7 +133,7 @@ class TestResult():
         """
         return not self.returncode
 
-def load_test_file(test_file):
+def load_test_file(test_file, variants):
     """
     Load a given test file.
 
@@ -143,19 +143,18 @@ def load_test_file(test_file):
     if not os.path.exists(test_file):
         return None
 
-    with open(test_file, 'r') as stream:
-        test_file_data = yaml.safe_load(stream)
+    test_file_data = conda_utils.render_yaml(test_file, variants)
 
     return test_file_data
 
-def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, working_dir=os.getcwd()):
+def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, working_dir=os.getcwd()):
     """
     Generate a list of test commands from the provided test file.
 
     Args:
         test_file (str): Path to the test file.
     """
-    test_data = load_test_file(test_file)
+    test_data = load_test_file(test_file, variants)
     if not test_data:
         return []
 
@@ -215,8 +214,15 @@ def display_failed_tests(failed_tests):
         print("All tests passed!")
 
 def _test_feedstock(args):
-    test_commands = gen_test_commands(working_dir=args.test_working_dir)
-    failed_tests = run_test_commands(args.conda_env_file, test_commands)
+    conda_env_file = os.path.abspath(args.conda_env_file)
+    var_string = conda_env_file_generator.get_variant_string(conda_env_file)
+    if var_string:
+        variant_dict = utils.variant_string_to_dict(var_string)
+    else:
+        variant_dict = None
+
+    test_commands = gen_test_commands(working_dir=args.test_working_dir, variants=variant_dict)
+    failed_tests = run_test_commands(conda_env_file, test_commands)
     display_failed_tests(failed_tests)
 
     return len(failed_tests)

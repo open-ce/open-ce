@@ -96,30 +96,13 @@ def test_build_feedstock_config_file(mocker):
     """
     Tests that the 'recipe_config_file' argument is correctly handled..
     """
-    mocker.patch(
-        'os.getcwd',
-        return_value="/test/test_recipe"
-    )
-    mocker.patch(
-        'os.path.exists',
-        return_value=True # 'path.exists' is mocked as true so that the input file is found to exist.
-    )
-    expect_recipe = os.path.join(os.getcwd(),'variants_from_config') #Checks that the value from the input config file is used.
+    expect_recipe = os.path.join(os.getcwd(),'cuda_recipe_path') #Checks that the value from the input config file is used.
     mocker.patch(
         'conda_build.api.build',
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
     )
-    #This is the data that is read in when 'open()' is called.
-    test_recipe_config =b"""recipes:
-    - name : my_variant
-      path: variants_from_config"""
 
-    mocker.patch(
-        'builtins.open',
-        mocker.mock_open(read_data=test_recipe_config)
-    )
-
-    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
+    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--build_type", "cuda"])
 
 def test_build_feedstock_default_config_file(mocker):
     """
@@ -139,14 +122,9 @@ def test_build_feedstock_default_config_file(mocker):
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
     )
 
-    test_recipe_config =b"""recipes:
-    - name : my_variant
-      path: variants_from_default_config"""
+    test_recipe_config = {'recipes' : [{'name' : 'my_variant', 'path' : 'variants_from_default_config'}]}
 
-    mocker.patch(
-        'builtins.open',
-        mocker.mock_open(read_data=test_recipe_config)
-    )
+    mocker.patch('conda_utils.render_yaml', return_value=test_recipe_config)
 
     open_ce._main(["build", build_feedstock.COMMAND])
 
@@ -224,22 +202,12 @@ def test_build_feedstock_extra_args(mocker):
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_config=expect_config, expect_variants=expect_variants, reject_recipe=reject_recipe, **kwargs))
     )
 
-    test_recipe_config =b"""recipes:
-    - name : my_project
-      path : recipe
+    test_recipe_config = { 'recipes' : [{ 'name' : 'my_project', 'path' : 'recipe'},
+                                        { 'name' : 'my_variant', 'path': 'variants'},
+                                        { 'name' : 'test_recipe_extra', 'path' : 'extra'}],
+                           'channels' : ['test_channel_from_config']}
 
-    - name : my_variant
-      path: variants
-
-    - name : test_recipe_extra
-      path: extra
-channels:
-    - test_channel_from_config"""
-
-    mocker.patch(
-        'builtins.open',
-        mocker.mock_open(read_data=test_recipe_config)
-    )
+    mocker.patch('conda_utils.render_yaml', return_value=test_recipe_config)
 
     arg_input = ["build", build_feedstock.COMMAND,
                  "--channels", "test_channel",
