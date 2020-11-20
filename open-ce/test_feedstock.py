@@ -12,16 +12,34 @@ import datetime
 import os
 import tempfile
 import subprocess
+from enum import Enum, unique, auto
 
 import utils
 import conda_utils
 import conda_env_file_generator
+import inputs
 from inputs import Argument
 from errors import OpenCEError, Error
 
 COMMAND = 'feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
-ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY]
+ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY, Argument.TEST_LABELS]
+
+@unique
+class Key(Enum):
+    '''Enum for Test File Keys'''
+    tests = auto()
+    name = auto()
+    command = auto()
+
+_TEST_SCHEMA ={
+    Key.name.name: utils.make_schema_type(str, True),
+    Key.command.name: utils.make_schema_type(str, True)
+}
+
+_TEST_FILE_SCHEMA = {
+    Key.tests.name: utils.make_schema_type([_TEST_SCHEMA])
+}
 
 class TestCommand():
     """
@@ -143,7 +161,7 @@ def load_test_file(test_file, variants):
     if not os.path.exists(test_file):
         return None
 
-    test_file_data = conda_utils.render_yaml(test_file, variants)
+    test_file_data = conda_utils.render_yaml(test_file, variants, permit_undefined_jinja=True, schema=_TEST_FILE_SCHEMA)
 
     return test_file_data
 
@@ -155,7 +173,7 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, w
         test_file (str): Path to the test file.
     """
     test_data = load_test_file(test_file, variants)
-    if not test_data:
+    if not test_data or not test_data['tests']:
         return []
 
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -219,8 +237,9 @@ def _test_feedstock(args):
     if var_string:
         variant_dict = utils.variant_string_to_dict(var_string)
     else:
-        variant_dict = None
-
+        variant_dict = dict()
+    for test_label in inputs.parse_arg_list(args.test_labels):
+        variant_dict[test_label] = True
     test_commands = gen_test_commands(working_dir=args.test_working_dir, variants=variant_dict)
     failed_tests = run_test_commands(conda_env_file, test_commands)
     display_failed_tests(failed_tests)
@@ -229,6 +248,8 @@ def _test_feedstock(args):
 
 def test_feedstock(args):
     '''Entry Function'''
+    if not args.conda_env_file:
+        raise OpenCEError(Error.CONDA_ENV_FILE_REQUIRED)
     test_failures = _test_feedstock(args)
     if test_failures:
         raise OpenCEError(Error.FAILED_TESTS, test_failures)
