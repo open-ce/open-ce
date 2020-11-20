@@ -241,6 +241,8 @@ def _add_build_command_dependencies(variant_build_commands, build_commands, star
                 deps += filter(lambda x: x != start_index + index, packages[dep])
         build_command.build_command_dependencies = deps
 
+    return variant_build_commands
+
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
     An interable container of BuildCommands.
@@ -295,14 +297,15 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
             # Add dependency tree information to the packages list and
             # remove build commands from build_commands that are already in self.build_commands 
-            _add_build_command_dependencies(build_commands, self.build_commands, len(self.build_commands))
+            build_commands = _add_build_command_dependencies(build_commands, self.build_commands, 
+                                        len(self.build_commands))
             self.build_commands += build_commands
         self._detect_cycle()
 
         #TODO: Added for testing purpose
         print("---------FINAL Build Command-----------")
         for build_command in self.build_commands:
-            print(build_command.__dict__)
+            print("%s %s %s %s" % (build_command.recipe, build_command.python, build_command.build_type, build_command.build_command_dependencies))
         print("--------------------------------------")
 
     def _get_repo(self, env_config_data, package):
