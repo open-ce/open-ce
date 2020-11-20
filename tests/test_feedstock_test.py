@@ -76,3 +76,53 @@ def test_test_feedstock_working_dir(mocker, capsys):
     assert "Running: Test 1" in captured.out
     assert "Running: Test 2" in captured.out
     assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+def test_test_feedstock_labels(mocker, capsys):
+    '''
+    Test that labels work correctly.
+    '''
+
+    mocker.patch('test_feedstock.load_test_file', side_effect=(lambda x, y: mock_load_test_file(os.path.join(test_dir, "open-ce-tests3.yaml"), y)))
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
+    captured = capsys.readouterr()
+    assert not "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert not "Running: Test Long" in captured.out
+    assert not "Running: Test Distributed" in captured.out
+    assert not "Running: Test Long and Distributed" in captured.out
+    assert not "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_labels", "long"])
+    captured = capsys.readouterr()
+    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert "Running: Test Long" in captured.out
+    assert not "Running: Test Distributed" in captured.out
+    assert not "Running: Test Long and Distributed" in captured.out
+    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_labels", "distributed"])
+    captured = capsys.readouterr()
+    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert not "Running: Test Long" in captured.out
+    assert "Running: Test Distributed" in captured.out
+    assert not "Running: Test Long and Distributed" in captured.out
+    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_labels", "long,distributed"])
+    captured = capsys.readouterr()
+    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert "Running: Test Long" in captured.out
+    assert "Running: Test Distributed" in captured.out
+    assert "Running: Test Long and Distributed" in captured.out
+    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+def test_test_feedstock_invalid_test_file(mocker,):
+    '''
+    Test that labels work correctly.
+    '''
+
+    mocker.patch('test_feedstock.load_test_file', side_effect=(lambda x, y: mock_load_test_file(os.path.join(test_dir, "open-ce-tests4.yaml"), y)))
+
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
+    assert "Unexpected Error: ['Test 1'] is not of expected type <class 'str'>" in str(exc.value)

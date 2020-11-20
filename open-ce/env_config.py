@@ -46,10 +46,9 @@ _ENV_CONFIG_SCHEMA = {
 def _validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
     try:
-        meta_obj = conda_utils.render_yaml(env_file, variants=variants)
+        meta_obj = conda_utils.render_yaml(env_file, variants=variants, schema=_ENV_CONFIG_SCHEMA)
         if not (Key.packages.name in meta_obj.keys() or Key.imported_envs.name in meta_obj.keys()):
             raise OpenCEError(Error.CONFIG_CONTENT)
-        utils.validate_dict_schema(meta_obj, _ENV_CONFIG_SCHEMA)
         return meta_obj
     except (Exception, SystemExit) as exc: #pylint: disable=broad-except
         raise OpenCEError(Error.ERROR, "Error in {}:\n  {}".format(env_file, str(exc))) from exc

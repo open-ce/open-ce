@@ -96,7 +96,7 @@ def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
-def _create_commands(repository, recipes, variant_config_files, variants, channels):#pylint: disable=too-many-locals
+def _create_commands(repository, recipes, variant_config_files, variants, channels, test_labels):#pylint: disable=too-many-locals,too-many-arguments
     """
     Returns:
         A list of BuildCommands for each recipe within a repository.
@@ -131,7 +131,11 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
                                            test_dependencies=test_deps,
                                            channels=channels if channels else []))
 
-    test_commands = test_feedstock.gen_test_commands(variants=variants)
+    variant_copy = dict(variants)
+    if test_labels:
+        for test_label in test_labels:
+            variant_copy[test_label] = True
+    test_commands = test_feedstock.gen_test_commands(variants=variant_copy)
 
     os.chdir(saved_working_directory)
     return build_commands, test_commands
@@ -218,7 +222,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
-                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
+                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                 test_labels=None):
 
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
@@ -228,6 +233,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._external_dependencies = dict()
         self._conda_env_files = dict()
         self._test_commands = dict()
+        self._test_labels = test_labels
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
@@ -301,7 +307,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                             package.get('recipes'),
                                                             [os.path.abspath(self._conda_build_config)],
                                                             variants,
-                                                            env_config_data.get(env_config.Key.channels.name, None))
+                                                            env_config_data.get(env_config.Key.channels.name, None),
+                                                            self._test_labels)
 
                 build_commands += repo_build_commands
                 if repo_test_commands and not repository in self._test_commands:
