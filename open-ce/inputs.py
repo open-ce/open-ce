@@ -178,6 +178,12 @@ path of \"recipe\"."""))
                                         default=None,
                                         help='Git tag to be checked out for all of the packages in an environment.'))
 
+    TEST_LABELS = (lambda parser: parser.add_argument(
+                                        '--test_labels',
+                                        type=str,
+                                        default="",
+                                        help="Comma delimitted list of labels indicating what tests to run."))
+
 
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
