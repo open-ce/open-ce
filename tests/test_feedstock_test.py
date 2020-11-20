@@ -116,7 +116,7 @@ def test_test_feedstock_labels(mocker, capsys):
     assert "Running: Test Long and Distributed" in captured.out
     assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
 
-def test_test_feedstock_invalid_test_file(mocker, capsys):
+def test_test_feedstock_invalid_test_file(mocker,):
     '''
     Test that labels work correctly.
     '''
