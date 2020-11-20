@@ -96,7 +96,7 @@ def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
-def _create_commands(repository, recipes, variant_config_files, variants, channels):#pylint: disable=too-many-locals
+def _create_commands(repository, recipes, variant_config_files, variants, channels, test_labels):#pylint: disable=too-many-locals,too-many-arguments
     """
     Returns:
         A list of BuildCommands for each recipe within a repository.
@@ -131,6 +131,9 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
                                            test_dependencies=test_deps,
                                            channels=channels if channels else []))
 
+    if test_labels:
+        for test_label in test_labels:
+            variants[test_label] = True
     test_commands = test_feedstock.gen_test_commands(variants=variants)
 
     os.chdir(saved_working_directory)
@@ -229,15 +232,13 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._external_dependencies = dict()
         self._conda_env_files = dict()
         self._test_commands = dict()
+        self._test_labels = test_labels
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
         self.build_commands = []
         for variant in self._possible_variants:
-            if test_labels:
-                for test_label in test_labels:
-                    variant[test_label] = True
             try:
                 build_commands, external_deps, test_commands = self._create_all_commands(variant)
             except OpenCEError as exc:
@@ -305,7 +306,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                             package.get('recipes'),
                                                             [os.path.abspath(self._conda_build_config)],
                                                             variants,
-                                                            env_config_data.get(env_config.Key.channels.name, None))
+                                                            env_config_data.get(env_config.Key.channels.name, None),
+                                                            self._test_labels)
 
                 build_commands += repo_build_commands
                 if repo_test_commands and not repository in self._test_commands:
