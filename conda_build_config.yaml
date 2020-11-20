@@ -72,7 +72,7 @@ google_pasta:
 googleapis_common_protos:
   - 1.52.*
 graphsurgeon:
-  - 0.4.1
+  - 0.4.5
 grpcio:
   - 1.32.*
 harfbuzz:
@@ -138,7 +138,9 @@ numba:
 numpy:
   - 1.19.*
 onnx:
-  - 1.8.*
+  - 1.6.*
+onnx_graphsurgeon:
+  - 0.2.*
 openblas:
   - 0.3.6.*
 opencv:
@@ -206,7 +208,7 @@ tensorflow:
 tensorflow_hub:
   - 0.10
 tensorrt:
-  - 7.0.*
+  - 7.2.*
 termcolor:
   - 1.1.0
 thinc:
@@ -222,7 +224,7 @@ tqdm:
 typing_extensions:
   - 3.7.4.*
 uff:
-  - 0.6.5
+  - 0.6.9
 unzip:
   - 6.0
 wasabi:
