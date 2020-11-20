@@ -218,7 +218,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env="master",
-                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
+                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                 test_labels=None):
 
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
@@ -234,6 +235,9 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
         self.build_commands = []
         for variant in self._possible_variants:
+            if test_labels:
+                for test_label in test_labels:
+                    variant[test_label] = True
             try:
                 build_commands, external_deps, test_commands = self._create_all_commands(variant)
             except OpenCEError as exc:
