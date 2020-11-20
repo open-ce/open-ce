@@ -13,11 +13,13 @@ import sys
 import os
 import pathlib
 import pytest
+import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import build_env
+open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
 import utils
 from errors import OpenCEError
 from build_tree_test import TestBuildTree
@@ -27,23 +29,18 @@ class PackageBuildTracker(object):
     def __init__(self):
         self.built_packages = set()
 
-    def validate_build_feedstock(self, args, package_deps = None, expect=None, reject=None, retval = 0):
+    def validate_build_feedstock(self, build_command, package_deps = None, conditions=None):
         '''
         Used to mock the `build_feedstock` function and ensure that packages are built in a valid order.
         '''
         if package_deps:
-            package = args[-1][:-10]
-            self.built_packages.add(package)
-            for dependency in package_deps[package]:
-                assert dependency in self.built_packages
-        cli_string = " ".join(args)
-        if expect:
-            for term in expect:
-                assert term in cli_string
-        if reject:
-            for term in reject:
-                assert term not in cli_string
-        return retval
+            self.built_packages = self.built_packages.union(build_command.packages)
+            for package in build_command.packages:
+                for dependency in package_deps[package]:
+                    assert dependency in self.built_packages
+        if conditions:
+            for condition in conditions:
+                assert condition(build_command)
 
 def test_build_env(mocker):
     '''
@@ -102,13 +99,14 @@ def test_build_env(mocker):
     py_version = "2.0"
     buildTracker = PackageBuildTracker()
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
-        'build_feedstock.build_feedstock',
-        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps,
-                     expect=["--python_versions {}".format(py_version)], reject=["package21-feedstock"]))
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.python == py_version),
+                                 (lambda command: command.recipe != "package21-feedstock")]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    build_env.build_env([env_file, "--python_versions", py_version, "--run_tests"])
+    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--run_tests"])
     validate_conda_env_files(py_version)
 
     #---The second test specifies a python version that is supported in the env file by package21.
@@ -127,24 +125,25 @@ def test_build_env(mocker):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock',
-        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps,
-                     expect=["--python_versions {}".format(py_version)]))
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.python == py_version)]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    build_env.build_env([env_file, "--python_versions", py_version])
+    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
      #---The third test verifies that the repository_folder argument is working properly.
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock',
-        side_effect=(lambda x: buildTracker.validate_build_feedstock(x, package_deps, expect=["--working_directory repo_folder/"]))
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.repository.startswith("repo_folder"))]))
     )
     py_version = "2.1"
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    build_env.build_env([env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
+    open_ce._main(["build", build_env.COMMAND, env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
@@ -194,30 +193,30 @@ def test_env_validate(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as exc:
-        build_env.build_env([env_file])
+        open_ce._main(["build", build_env.COMMAND, env_file])
     assert "Unexpected key chnnels was found in " in str(exc.value)
 
 def test_build_env_docker_build(mocker):
     '''
     Test that passing the --docker_build argument calls docker_build.build_with_docker
     '''
-    arg_strings = ["--docker_build", "my-env.yaml"]
+    arg_strings = ["build", build_env.COMMAND, "--docker_build", "my-env.yaml"]
 
     mocker.patch('docker_build.build_with_docker', return_value=0)
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
-    build_env.build_env(arg_strings)
+    open_ce._main(arg_strings)
 
 def test_build_env_if_no_conda_build(mocker):
     '''
     Test that build_env should fail if conda_build isn't present and no --docker_build
     '''
-    arg_strings = ["my-env.yaml"]
+    arg_strings = ["build", build_env.COMMAND, "my-env.yaml"]
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
     with pytest.raises(OpenCEError):
-        build_env.build_env(arg_strings)
+        open_ce._main(arg_strings)
 
 def test_run_tests():
     '''

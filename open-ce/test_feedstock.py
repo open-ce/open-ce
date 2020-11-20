@@ -11,13 +11,17 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 import datetime
 import os
 import tempfile
-import sys
 import subprocess
 
 import yaml
 
 import utils
-from utils import OpenCEError
+from inputs import Argument
+from errors import OpenCEError, Error
+
+COMMAND = 'feedstock'
+DESCRIPTION = 'Test a feedstock as part of Open-CE'
+ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY]
 
 class TestCommand():
     """
@@ -210,29 +214,17 @@ def display_failed_tests(failed_tests):
     else:
         print("All tests passed!")
 
-def make_parser():
-    ''' Parser for input arguments '''
-    arguments = [utils.Argument.CONDA_ENV_FILE, utils.Argument.TEST_WORKING_DIRECTORY]
-    parser = utils.make_parser(arguments, description = 'Test a feedstock as part of Open-CE')
-
-    return parser
-
-def test_feedstock(arg_strings=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(arg_strings)
-
+def _test_feedstock(args):
     test_commands = gen_test_commands(working_dir=args.test_working_dir)
     failed_tests = run_test_commands(args.conda_env_file, test_commands)
     display_failed_tests(failed_tests)
 
     return len(failed_tests)
 
-if __name__ == '__main__':
-    try:
-        sys.exit(test_feedstock())
-    except OpenCEError as err:
-        print(err.msg, file=sys.stderr)
-        sys.exit(1)
+def test_feedstock(args):
+    '''Entry Function'''
+    test_failures = _test_feedstock(args)
+    if test_failures:
+        raise OpenCEError(Error.FAILED_TESTS, test_failures)
+
+ENTRY_FUNCTION = test_feedstock

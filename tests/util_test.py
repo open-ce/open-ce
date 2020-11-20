@@ -14,14 +14,14 @@ import os
 import pathlib
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 
-import utils
+import inputs
 
 def test_parse_arg_list_list_input():
     '''
     Parse arg list should return the input argument if it's already a list.
     '''
     list_input = ["a", "b", "c"]
-    assert list_input == utils.parse_arg_list(list_input)
+    assert list_input == inputs.parse_arg_list(list_input)
 
 def test_parse_arg_list_small_string_input():
     '''
@@ -29,7 +29,7 @@ def test_parse_arg_list_small_string_input():
     '''
     string_input = "a,b,c"
     list_output = ["a", "b", "c"]
-    assert list_output == utils.parse_arg_list(string_input)
+    assert list_output == inputs.parse_arg_list(string_input)
 
 def test_parse_arg_list_large_string_input():
     '''
@@ -37,4 +37,4 @@ def test_parse_arg_list_large_string_input():
     '''
     string_input = "this,is a, big  , test  ,"
     list_output = ["this", "is a", " big  ", " test  ", ""]
-    assert list_output == utils.parse_arg_list(string_input)
+    assert list_output == inputs.parse_arg_list(string_input)

@@ -6,36 +6,17 @@ Licensed Materials - Property of IBM
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
-
-*******************************************************************************
-Script: build_feedstock.py
-
-Summary:
-  Build conda package(s) from open-ce project feedstock repositories.
-
-Description:
-  This script will build any given Open-CE package from within the desired
-package feedstock.  It can be executed implicitly as part of Open-CE builds
-executed by build-env.py, or it can be run directly for a selected feedstock.
-It will build a conda package for the chosen feedstock using the default
-recipe(s) found within that package's build tree, or with an alternative
-recipe specified on the command line.
-
-Usage:
-   $ build_feedstock.py [ arguments ]
-For usage description of arguments, this script supports use of --help:
-   $ build_feedstock.py --help
-
-*******************************************************************************
 """
 
-import sys
 import os
 import traceback
 import yaml
 
 import utils
+import inputs
+from inputs import Argument
 from errors import OpenCEError, Error
+from build_tree import BuildCommand
 utils.check_if_conda_build_exists()
 
 # pylint: disable=wrong-import-position
@@ -43,56 +24,16 @@ import conda_build.api
 from conda_build.config import get_or_merge_config
 # pylint: enable=wrong-import-position
 
-def make_parser():
-    ''' Parser input arguments '''
-    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
-                 utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES, utils.Argument.MPI_TYPES,
-                 utils.Argument.CUDA_VERSIONS]
-    parser = utils.make_parser(arguments,
-                               description = 'Build conda packages as part of Open-CE')
+COMMAND = 'feedstock'
 
-    parser.add_argument(
-        '--recipe-config-file',
-        type=str,
-        default=None,
-        help="""R|Path to the recipe configuration YAML file. The configuration
-file lists paths to recipes to be built within a feedstock.
+DESCRIPTION = 'Build conda packages as part of Open-CE'
 
-Below is an example stating that there are two recipes to build,
-one named my_project and one named my_variant.
-
-recipes:
-  - name : my_project
-    path : recipe
-
-  - name : my_variant
-    path: variants
-
-If no path is given, the default value is build-config.yaml.
-If build-config.yaml does not exist, and no value is provided,
-it will be assumed there is a single recipe with the
-path of \"recipe\".""")
-
-    parser.add_argument(
-        '--recipes',
-        dest='recipe_list',
-        action='store',
-        default=None,
-        help='Comma separated list of recipe names to build.')
-
-    parser.add_argument(
-        '--working_directory',
-        type=str,
-        help='Directory to run the script in.')
-
-    parser.add_argument(
-        '--local_src_dir',
-        type=str,
-        required=False,
-        help='Path where package source is downloaded in the form of RPM/Debians/Tar.')
-
-    return parser
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
+             Argument.CHANNELS, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES,
+             Argument.CUDA_VERSIONS, Argument.RECIPE_CONFIG_FILE,
+             Argument.RECIPES, Argument.WORKING_DIRECTORY,
+             Argument.LOCAL_SRC_DIR]
 
 def get_conda_build_config():
     '''
@@ -147,42 +88,46 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
 
-def build_feedstock(args_string=None):
+def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
+                                 recipe_config_file=None,
+                                 output_folder=utils.DEFAULT_OUTPUT_FOLDER,
+                                 extra_channels=None,
+                                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                                 local_src_dir=None):
     '''
-    Entry function.
+    Build a feedstock from a build_command object.
     '''
-    parser = make_parser()
-    args = parser.parse_args(args_string)
-
+    if not extra_channels:
+        extra_channels = []
     saved_working_directory = None
-    if args.working_directory:
+    if command.repository:
         saved_working_directory = os.getcwd()
-        os.chdir(os.path.abspath(args.working_directory))
+        os.chdir(os.path.abspath(command.repository))
 
-    build_config_data, recipe_config_file  = load_package_config(args.recipe_config_file)
+    build_config_data, recipe_config_file  = load_package_config(recipe_config_file)
 
-    args.recipes = utils.parse_arg_list(args.recipe_list)
+    recipes_to_build = inputs.parse_arg_list(command.recipe)
 
     # Build each recipe
     for recipe in build_config_data['recipes']:
-        if args.recipes and recipe['name'] not in args.recipes:
+        if recipes_to_build and recipe['name'] not in recipes_to_build:
             continue
 
         config = get_or_merge_config(None)
         config.skip_existing = True
-        config.output_folder = args.output_folder
-        config.variant_config_files = [args.conda_build_config]
+        config.output_folder = output_folder
+        config.variant_config_files = [conda_build_config]
 
         recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
         if os.path.exists(recipe_conda_build_config):
             config.variant_config_files.append(recipe_conda_build_config)
 
-        config.channel_urls = args.channels_list + build_config_data.get('channels', [])
+        config.channel_urls = extra_channels + command.channels + build_config_data.get('channels', [])
 
-        _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
+        _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
 
         try:
-            for variant in utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions):
+            for variant in utils.make_variants(command.python, command.build_type, command.mpi_type, command.cudatoolkit):
                 conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
                                config=config, variants=variant)
         except Exception as exc: # pylint: disable=broad-except
@@ -194,11 +139,20 @@ def build_feedstock(args_string=None):
     if saved_working_directory:
         os.chdir(saved_working_directory)
 
-if __name__ == '__main__':
-    try:
-        build_feedstock()
-    except OpenCEError as err:
-        print(err.msg, file=sys.stderr)
-        sys.exit(1)
+def build_feedstock(args):
+    '''Entry Function'''
+    command = BuildCommand(recipe=inputs.parse_arg_list(args.recipe_list),
+                           repository=args.working_directory,
+                           packages=[],
+                           python=args.python_versions,
+                           build_type=args.build_types,
+                           mpi_type=args.mpi_types,
+                           cudatoolkit=args.cuda_versions,
+                           channels=args.channels_list)
 
-    sys.exit(0)
+    build_feedstock_from_command(command,
+                                 recipe_config_file=args.recipe_config_file,
+                                 output_folder=args.output_folder,
+                                 local_src_dir=args.local_src_dir)
+
+ENTRY_FUNCTION = build_feedstock
