@@ -131,10 +131,11 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
                                            test_dependencies=test_deps,
                                            channels=channels if channels else []))
 
+    variant_copy = dict(variants)
     if test_labels:
         for test_label in test_labels:
-            variants[test_label] = True
-    test_commands = test_feedstock.gen_test_commands(variants=variants)
+            variant_copy[test_label] = True
+    test_commands = test_feedstock.gen_test_commands(variants=variant_copy)
 
     os.chdir(saved_working_directory)
     return build_commands, test_commands
