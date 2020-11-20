@@ -105,7 +105,7 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     saved_working_directory = os.getcwd()
     os.chdir(repository)
 
-    config_data, _ = build_feedstock.load_package_config()
+    config_data, _ = build_feedstock.load_package_config(variants=variants)
     combined_config_files = variant_config_files
 
     feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
