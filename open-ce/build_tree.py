@@ -104,7 +104,7 @@ class BuildCommand():
     def __eq__(self, other):
         if not isinstance(other, BuildCommand):
             return False
-        return self.__key() == other.__key()
+        return self.__key() == other.__key()  # pylint: disable=protected-access 
 
 def _make_hash(to_hash):
     '''Generic hash function.'''
