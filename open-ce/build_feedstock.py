@@ -16,7 +16,6 @@ import utils
 import inputs
 from inputs import Argument
 from errors import OpenCEError, Error
-from build_tree import BuildCommand
 utils.check_if_conda_build_exists()
 
 # pylint: disable=wrong-import-position
@@ -141,6 +140,10 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
 
 def build_feedstock(args):
     '''Entry Function'''
+
+    # Here, importing BuildCommand is intentionally done here to avoid circular import.
+
+    from build_tree import BuildCommand   # pylint: disable=import-outside-toplevel
     command = BuildCommand(recipe=inputs.parse_arg_list(args.recipe_list),
                            repository=args.working_directory,
                            packages=[],

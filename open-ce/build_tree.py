@@ -346,7 +346,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         else:
             clone_cmd = "git clone -b " + git_tag + " --single-branch " + git_url + " " + repo_dir
 
-        print("Clone cmd: ", clone_cmd)    
+        print("Clone cmd: ", clone_cmd)
         clone_result = os.system(clone_cmd)
         cur_dir = os.getcwd()
         clone_successful = clone_result == 0
@@ -369,20 +369,19 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                         raise OpenCEError(Error.CLONE_REPO, git_url)
             else:
                 raise OpenCEError(Error.CLONE_REPO, git_url)
-        
+
         if clone_successful:
             patches = package.get(env_config.Key.patches.name, []) if package else []
-            if len(patches):
+            if len(patches) > 0:
                 os.chdir(repo_dir)
                 open_ce_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-                for patch in patches:                
-                    patch_file = os.path.join(open_ce_path, patch) 
+                for patch in patches:
+                    patch_file = os.path.join(open_ce_path, patch)
                     patch_apply_cmd = "git apply {}".format(patch_file)
                     print("Patch apply command: ", patch_apply_cmd)
                     patch_apply_res = os.system(patch_apply_cmd)
                     if patch_apply_res != 0:
-                        raise OpenCEError(Error.PATCH_APPLICATION, patch, package[env_config.Key.feedstock.name])  
-
+                        raise OpenCEError(Error.PATCH_APPLICATION, patch, package[env_config.Key.feedstock.name])
                 os.chdir(cur_dir)
 
     def __iter__(self):
