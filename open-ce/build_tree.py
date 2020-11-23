@@ -210,16 +210,13 @@ def _add_build_command_dependencies(variant_build_commands, build_commands, star
 
     #save indices of build commands which are already present in build_commands
     duplicates = []    
-    #TODO: remove debug prints
     for var_index, build_command in enumerate(variant_build_commands):
         if build_command in build_commands:
             alt_index = build_commands.index(build_command)
-            print("ALTERNATE INDEX = %s for index =%s for recipe=%s" %(alt_index, var_index , build_command.recipe))
             duplicates.append(var_index)
             for package in build_command.packages:
                 packages.update({ package : [alt_index] + packages.get(package, []) })
         else:
-            print("INDEX = %s" %(index))
             for package in build_command.packages:
                 packages.update({ package : [start_index + index] + packages.get(package, []) })
             index +=1
@@ -301,12 +298,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                         len(self.build_commands))
             self.build_commands += build_commands
         self._detect_cycle()
-
-        #TODO: Added for testing purpose
-        print("---------FINAL Build Command-----------")
-        for build_command in self.build_commands:
-            print("%s %s %s %s" % (build_command.recipe, build_command.python, build_command.build_type, build_command.build_command_dependencies))
-        print("--------------------------------------")
 
     def _get_repo(self, env_config_data, package):
         # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
