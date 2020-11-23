@@ -31,7 +31,7 @@ class TestBuildTree(build_tree.BuildTree):
                  cuda_versions,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
-                 git_tag_for_env="master",
+                 git_tag_for_env=utils.DEFAULT_GIT_TAG,
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
@@ -111,7 +111,7 @@ def test_clone_repo(mocker):
     '''
     git_location = utils.DEFAULT_GIT_LOCATION
 
-    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2")
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2", git_tag_for_env="master")
 
     mocker.patch(
         'os.system',
@@ -123,7 +123,7 @@ def test_clone_repo(mocker):
                                                                "/test/my_repo"]))
     )
 
-    mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, "master")
+    mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, None)
 
 def test_clone_repo_failure(mocker):
     '''
@@ -137,7 +137,7 @@ def test_clone_repo_failure(mocker):
     )
 
     with pytest.raises(OpenCEError) as exc:
-        mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, "master")
+        mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, None)
     assert "Unable to clone repository" in str(exc.value)
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",

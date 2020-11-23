@@ -335,17 +335,18 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         git_tag = self._git_tag_for_env
         if git_tag is None:
-            git_tag_for_package = package[env_config.Key.git_tag.name]
+            git_tag_for_package = package.get(env_config.Key.git_tag.name, None) if package else None
             if git_tag_for_package:
                 git_tag = git_tag_for_package
             else:
-                git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
+                git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None) if env_config_data else None
 
         if git_tag is None:
             clone_cmd = "git clone " + git_url + " " + repo_dir
         else:
             clone_cmd = "git clone -b " + git_tag + " --single-branch " + git_url + " " + repo_dir
-             
+
+        print("Clone cmd: ", clone_cmd)    
         clone_result = os.system(clone_cmd)
         cur_dir = os.getcwd()
         clone_successful = clone_result == 0
@@ -370,18 +371,19 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 raise OpenCEError(Error.CLONE_REPO, git_url)
         
         if clone_successful:
-            os.chdir(repo_dir)
-            patches = package[env_config.Key.patches.name]
-            for patch in patches:
+            patches = package.get(env_config.Key.patches.name, []) if package else []
+            if len(patches):
+                os.chdir(repo_dir)
                 open_ce_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-                patch_file = os.path.join(open_ce_path, patch) 
-                patch_apply_cmd = "git apply {}".format(patch_file)
-                print("Patch apply command: ", patch_apply_cmd)
-                patch_apply_res = os.system(patch_apply_cmd)
-                if patch_apply_res != 0:
-                    raise OpenCEError(Error.PATCH_APPLICATION, patch, package[env_config.Key.feedstock.name])  
+                for patch in patches:                
+                    patch_file = os.path.join(open_ce_path, patch) 
+                    patch_apply_cmd = "git apply {}".format(patch_file)
+                    print("Patch apply command: ", patch_apply_cmd)
+                    patch_apply_res = os.system(patch_apply_cmd)
+                    if patch_apply_res != 0:
+                        raise OpenCEError(Error.PATCH_APPLICATION, patch, package[env_config.Key.feedstock.name])  
 
-            os.chdir(cur_dir)
+                os.chdir(cur_dir)
 
     def __iter__(self):
         """
