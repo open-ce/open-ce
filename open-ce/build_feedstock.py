@@ -10,7 +10,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import traceback
-import yaml
 
 import utils
 import inputs
@@ -21,6 +20,8 @@ utils.check_if_conda_build_exists()
 # pylint: disable=wrong-import-position
 import conda_build.api
 from conda_build.config import get_or_merge_config
+
+import conda_utils
 # pylint: enable=wrong-import-position
 
 COMMAND = 'feedstock'
@@ -42,7 +43,7 @@ def get_conda_build_config():
     recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
     return recipe_conda_build_config if os.path.exists(recipe_conda_build_config) else None
 
-def load_package_config(config_file=None):
+def load_package_config(config_file=None, variants=None):
     '''
     Check for a config file. If the user does not provide a recipe config
     file as an argument, it will be assumed that there is only one
@@ -57,8 +58,7 @@ def load_package_config(config_file=None):
         if not os.path.exists(config_file):
             raise OpenCEError(Error.CONFIG_FILE, config_file)
 
-        with open(config_file, 'r') as stream:
-            build_config_data = yaml.safe_load(stream)
+        build_config_data = conda_utils.render_yaml(config_file, variants)
 
     return build_config_data, config_file
 
@@ -103,37 +103,37 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
         saved_working_directory = os.getcwd()
         os.chdir(os.path.abspath(command.repository))
 
-    build_config_data, recipe_config_file  = load_package_config(recipe_config_file)
-
     recipes_to_build = inputs.parse_arg_list(command.recipe)
 
-    # Build each recipe
-    for recipe in build_config_data['recipes']:
-        if recipes_to_build and recipe['name'] not in recipes_to_build:
-            continue
+    for variant in utils.make_variants(command.python, command.build_type, command.mpi_type, command.cudatoolkit):
+        build_config_data, recipe_config_file  = load_package_config(recipe_config_file, variant)
 
-        config = get_or_merge_config(None)
-        config.skip_existing = True
-        config.output_folder = output_folder
-        config.variant_config_files = [conda_build_config]
+        # Build each recipe
+        for recipe in build_config_data['recipes']:
+            if recipes_to_build and recipe['name'] not in recipes_to_build:
+                continue
 
-        recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
-        if os.path.exists(recipe_conda_build_config):
-            config.variant_config_files.append(recipe_conda_build_config)
+            config = get_or_merge_config(None)
+            config.skip_existing = True
+            config.output_folder = output_folder
+            config.variant_config_files = [conda_build_config]
 
-        config.channel_urls = extra_channels + command.channels + build_config_data.get('channels', [])
+            recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
+            if os.path.exists(recipe_conda_build_config):
+                config.variant_config_files.append(recipe_conda_build_config)
 
-        _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
+            config.channel_urls = extra_channels + command.channels + build_config_data.get('channels', [])
 
-        try:
-            for variant in utils.make_variants(command.python, command.build_type, command.mpi_type, command.cudatoolkit):
+            _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
+
+            try:
                 conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
                                config=config, variants=variant)
-        except Exception as exc: # pylint: disable=broad-except
-            traceback.print_exc()
-            raise OpenCEError(Error.BUILD_RECIPE,
-                              recipe['name'] if 'name' in recipe else os.getcwd,
-                              str(exc)) from exc
+            except Exception as exc: # pylint: disable=broad-except
+                traceback.print_exc()
+                raise OpenCEError(Error.BUILD_RECIPE,
+                                  recipe['name'] if 'name' in recipe else os.getcwd,
+                                  str(exc)) from exc
 
     if saved_working_directory:
         os.chdir(saved_working_directory)

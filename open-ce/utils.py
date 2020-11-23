@@ -32,6 +32,7 @@ CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
 DEFAULT_OUTPUT_FOLDER = "condabuild"
 DEFAULT_TEST_CONFIG_FILE = "tests/open-ce-tests.yaml"
 DEFAULT_GIT_TAG = None
+OPEN_CE_VARIANT = "open-ce-variant"
 
 def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
 cuda_versions=DEFAULT_CUDA_VERS):
@@ -125,6 +126,18 @@ def variant_string(py_ver, build_type, mpi_type, cudatoolkit):
     if cudatoolkit:
         result += "-" + cudatoolkit
     return result
+
+def variant_string_to_dict(var_string):
+    """
+    Returns a dictionary of variants based on the versions within the variant string.
+    """
+    variants = var_string.split("-")
+    variant_dict = { 'python' : variants[0][2:],
+                     'build_type' : variants[1],
+                     'mpi_type' : variants[2],
+                     'cudatoolkit' : variants[3] }
+
+    return variant_dict
 
 def generalize_version(package):
     """Add `.*` to package versions when it is needed."""

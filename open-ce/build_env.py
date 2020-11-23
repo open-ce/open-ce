@@ -31,7 +31,8 @@ ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
              Argument.BUILD_TYPES, Argument.MPI_TYPES,
              Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
              Argument.RUN_TESTS, Argument.DOCKER_BUILD,
-             Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV]
+             Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV,
+             Argument.TEST_LABELS]
 
 def _run_tests(build_tree, conda_env_files):
     """
@@ -92,7 +93,8 @@ def build_env(args):
                                repository_folder=args.repository_folder,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,
-                               conda_build_config=args.conda_build_config)
+                               conda_build_config=args.conda_build_config,
+                               test_labels=inputs.parse_arg_list(args.test_labels))
 
     # Generate conda environment files
     conda_env_files = build_tree.write_conda_env_files(channels=args.channels_list,

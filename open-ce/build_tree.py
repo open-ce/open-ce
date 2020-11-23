@@ -9,14 +9,13 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import utils
+import conda_utils
 import env_config
 import build_feedstock
 from errors import OpenCEError, Error
 from conda_env_file_generator import CondaEnvFileGenerator
 import test_feedstock
 
-import conda_build.api
-from conda_build.config import get_or_merge_config
 
 class BuildCommand():
     """
@@ -97,7 +96,7 @@ def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
-def _create_commands(repository, recipes, variant_config_files, variants, channels):#pylint: disable=too-many-locals
+def _create_commands(repository, recipes, variant_config_files, variants, channels, test_labels):#pylint: disable=too-many-locals,too-many-arguments
     """
     Returns:
         A list of BuildCommands for each recipe within a repository.
@@ -106,7 +105,7 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     saved_working_directory = os.getcwd()
     os.chdir(repository)
 
-    config_data, _ = build_feedstock.load_package_config()
+    config_data, _ = build_feedstock.load_package_config(variants=variants)
     combined_config_files = variant_config_files
 
     feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
@@ -132,7 +131,11 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
                                            test_dependencies=test_deps,
                                            channels=channels if channels else []))
 
-    test_commands = test_feedstock.gen_test_commands()
+    variant_copy = dict(variants)
+    if test_labels:
+        for test_label in test_labels:
+            variant_copy[test_label] = True
+    test_commands = test_feedstock.gen_test_commands(variants=variant_copy)
 
     os.chdir(saved_working_directory)
     return build_commands, test_commands
@@ -142,16 +145,7 @@ def _get_package_dependencies(path, variant_config_files, variants):
     Return a list of output packages and a list of dependency packages
     for the recipe at a given path. Uses conda-render to determine this information.
     """
-    # Call conda-build's render tool to get a list of dictionaries representing
-    # the recipe for each variant that will be built.
-    config = get_or_merge_config(None)
-    config.variant_config_files = variant_config_files
-    config.verbose = False
-    metas = conda_build.api.render(path,
-                                   config=config,
-                                   variants=variants,
-                                   bypass_env_check=True,
-                                   finalize=False)
+    metas = conda_utils.render_yaml(path, variants, variant_config_files)
 
     # Parse out the package names and dependencies from each variant
     packages = set()
@@ -228,7 +222,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env=utils.DEFAULT_GIT_TAG,
-                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
+                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                 test_labels=None):
 
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
@@ -238,6 +233,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._external_dependencies = dict()
         self._conda_env_files = dict()
         self._test_commands = dict()
+        self._test_labels = test_labels
+
         # Create a dependency tree that includes recipes for every combination
         # of variants.
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
@@ -310,7 +307,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                             package.get('recipes'),
                                                             [os.path.abspath(self._conda_build_config)],
                                                             variants,
-                                                            env_config_data.get(env_config.Key.channels.name, None))
+                                                            env_config_data.get(env_config.Key.channels.name, None),
+                                                            self._test_labels)
 
                 build_commands += repo_build_commands
                 if repo_test_commands and not repository in self._test_commands:

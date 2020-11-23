@@ -19,6 +19,7 @@ sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
 import build_tree
 import conda_env_file_generator
+import utils
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
@@ -83,3 +84,16 @@ def test_create_channels():
     expected_channels = ["file:/{}".format(output_dir), "some channel", "defaults"]
 
     assert expected_channels == conda_env_file_generator._create_channels(["some channel"], output_dir)
+
+def test_get_variant_string(mocker):
+    var_str = "py3.6-cuda-openmpi-10.2"
+    test_env_file = "#" + utils.OPEN_CE_VARIANT + ":" + var_str + "\nsomething else"
+    mocker.patch('builtins.open', mocker.mock_open(read_data=test_env_file))
+
+    assert conda_env_file_generator.get_variant_string("some_file.yaml") == var_str
+
+def test_get_variant_string_no_string(mocker):
+    test_env_file = "some string without\n a variant string"
+    mocker.patch('builtins.open', mocker.mock_open(read_data=test_env_file))
+
+    assert conda_env_file_generator.get_variant_string("some_file.yaml") == None

@@ -1,0 +1,13 @@
+tests:
+{% if long %}
+  - name: Test Long
+    command: "[ 1 -eq 1 ]"
+{% endif %}
+{% if distributed  %}
+  - name: Test Distributed
+    command: "[ 2 -eq 2 ]"
+{% endif %}
+{% if long and distributed  %}
+  - name: Test Long and Distributed
+    command: "[ 3 -eq 3 ]"
+{% endif %}

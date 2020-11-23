@@ -58,6 +58,7 @@ class CondaEnvFileGenerator():
             dependencies = self._dependency_set,
         )
         with open(conda_env_file, 'w') as outfile:
+            outfile.write("#" + utils.OPEN_CE_VARIANT + ":" + variant_string + "\n")
             yaml.dump(data, outfile, default_flow_style=False)
             file_name = conda_env_file
 
@@ -77,6 +78,20 @@ class CondaEnvFileGenerator():
         self._update_deps_lists(build_command.packages)
 
         self._update_deps_lists(self._external_dependencies)
+
+def get_variant_string(conda_env_file):
+    """
+    Return the variant string from a conda environment file that was added by CondaEnvFileGenerator.
+    If a variant string was not added to the conda environment file, None will be returned.
+    """
+    with open(conda_env_file, 'r') as stream:
+        first_line = stream.readline().strip()[1:]
+        values = first_line.split(':')
+        if values[0] == utils.OPEN_CE_VARIANT:
+            return values[1]
+
+    return None
+
 
 def _create_channels(channels, output_folder):
     result = []
