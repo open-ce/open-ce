@@ -143,7 +143,7 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
                                     python=variants['python'] if 'python' in req_vars else utils.DEFAULT_PYTHON_VERS,
                                     build_type='cuda' if not ('cpu' in string or 'cpu' in str(packages)) else 'cpu',
                                     mpi_type=variants['mpi_type'] if variants['mpi_type'] in string else '',
-                                    cudatoolkit=variants['cudatoolkit'] if( variants['cudatoolkit']) in string else '' ,
+                                    cudatoolkit=variants['cudatoolkit'] if variants['cudatoolkit'] in string else '',
                                     run_dependencies=run_deps,
                                     host_dependencies=host_deps,
                                     build_dependencies=build_deps,
@@ -209,7 +209,7 @@ def _add_build_command_dependencies(variant_build_commands, build_commands, star
     index = 0
 
     #save indices of build commands which are already present in build_commands
-    duplicates = []    
+    duplicates = []
     for var_index, build_command in enumerate(variant_build_commands):
         if build_command in build_commands:
             alt_index = build_commands.index(build_command)
@@ -293,8 +293,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             self._test_commands[variant_string] = test_commands
 
             # Add dependency tree information to the packages list and
-            # remove build commands from build_commands that are already in self.build_commands 
-            build_commands = _add_build_command_dependencies(build_commands, self.build_commands, 
+            # remove build commands from build_commands that are already in self.build_commands
+            build_commands = _add_build_command_dependencies(build_commands, self.build_commands,
                                         len(self.build_commands))
             self.build_commands += build_commands
         self._detect_cycle()
