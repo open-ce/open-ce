@@ -14,9 +14,6 @@ import os
 class Namespace:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-    
-    def get_used_vars(self):
-        return {'used_var1', 'used_var2'}
 
 def validate_cli(cli_string, expect=None, reject=None, ignore=None, retval=0):
     """
@@ -102,7 +99,7 @@ class DirTracker(object):
         return self.current_dir
 
 def make_render_result(package_name, build_reqs=None, run_reqs=None, host_reqs=None, test_reqs=None,
-                          used_vars=None, noarch=None, string=None):
+                          noarch=None, string=None):
     '''
     Creates a YAML string that is a mocked result of `conda_build.api.render`.
     '''
@@ -110,7 +107,6 @@ def make_render_result(package_name, build_reqs=None, run_reqs=None, host_reqs=N
     if not run_reqs: run_reqs = []
     if not host_reqs: host_reqs = []
     if not test_reqs: test_reqs = []
-    if not used_vars: used_vars = []
     if not noarch: noarch = ''
     if not string: string = ''
 

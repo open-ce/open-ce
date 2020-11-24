@@ -54,7 +54,6 @@ def test_create_commands(mocker):
                                                         ['run_req1            1.3'],
                                                         ['host_req1            1.0', 'host_req2'],
                                                         ['test_req1'],
-                                                        ['used_var1', 'used_var2'],
                                                         '',
                                                         ['string1_1'])
     mocker.patch(
