@@ -40,8 +40,6 @@ class PackageBuildTracker(object):
                     assert dependency in self.built_packages
         if conditions:
             for condition in conditions:
-                print(condition)
-                print(build_command.__dict__)
                 assert condition(build_command)
 
 def test_build_env(mocker):
