@@ -374,7 +374,10 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 os.chdir(repo_dir)
                 open_ce_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
                 for patch in patches:
-                    patch_file = os.path.join(open_ce_path, patch)
+                    if os.path.isabs(patch) and os.path.exists(patch):
+                        patch_file = patch
+                    else:
+                        patch_file = os.path.join(open_ce_path, patch)
                     patch_apply_cmd = "git apply {}".format(patch_file)
                     print("Patch apply command: ", patch_apply_cmd)
                     patch_apply_res = os.system(patch_apply_cmd)
