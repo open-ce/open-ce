@@ -241,49 +241,75 @@ def test_build_tree_duplicates():
                                                     python="2.6",
                                                     build_type="cuda",
                                                     mpi_type="openmpi",
-                                                    build_command_dependencies=[]),
-                              build_tree.BuildCommand("recipe1",
-                                                    "repo1",
-                                                    ["package1b"],
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[]),
+                              build_tree.BuildCommand("recipe2",
+                                                    "repo2",
+                                                    ["package2a"],
                                                     python="2.6",
                                                     build_type="cuda",
                                                     mpi_type="openmpi",
-                                                    build_command_dependencies=[0])]
+                                                    build_command_dependencies=[0],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[])]
 
-    duplicate_build_commands = [build_tree.BuildCommand("recipe1",
+    duplicate_build_commands = [build_tree.BuildCommand("recipe2",
+                                                    "repo2",
+                                                    ["package2a"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[]),
+
+                                build_tree.BuildCommand("recipe1",
                                                     "repo1",
                                                     ["package1a"],
                                                     python="2.6",
                                                     build_type="cuda",
                                                     mpi_type="openmpi",
-                                                    build_command_dependencies=[]),
-                                build_tree.BuildCommand("recipe1",
-                                                    "repo1",
-                                                    ["package1b"],
-                                                    python="2.6",
-                                                    build_type="cuda",
-                                                    mpi_type="openmpi",
-                                                    build_command_dependencies=[]),
-                                build_tree.BuildCommand("recipe1",
-                                                    "repo1",
-                                                    ["package1a"],
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[]),
+
+                                build_tree.BuildCommand("recipe3",
+                                                    "repo3",
+                                                    ["package3a"],
                                                     python="2.6",
                                                     build_type="cpu",
                                                     mpi_type="openmpi",
-                                                    build_command_dependencies=[2])]
-    additional_build_commands = [build_tree.BuildCommand("recipe1",
-                                                    "repo1",
-                                                    ["package1a"],
+                                                    build_command_dependencies=[1],
+                                                    run_dependencies=[],
+                                                    build_dependencies=["package1a"],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[])]
+    additional_build_commands = [build_tree.BuildCommand("recipe4",
+                                                    "repo4",
+                                                    ["package4a"],
                                                     python="2.6",
                                                     build_type="cpu",
                                                     mpi_type="openmpi",
-                                                    build_command_dependencies=[])]
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[])]
                                
-    build_tree._remove_duplicate_build_commands(additional_build_commands, initial_build_commands)
-    assert len(additional_build_commands)==1  # Make sure the non-duplicates are not removed
+    out_commands = build_tree._add_build_command_dependencies(additional_build_commands,initial_build_commands,len(initial_build_commands))
+    assert len(out_commands)==1  # Make sure the non-duplicates are not removed
 
-    build_tree._remove_duplicate_build_commands(duplicate_build_commands, initial_build_commands)
-    assert len(duplicate_build_commands)==1
+    out_commands = build_tree._add_build_command_dependencies(duplicate_build_commands, initial_build_commands, len(initial_build_commands))
+    assert len(out_commands)==1
 
-    for build_command in duplicate_build_commands:
+    for build_command in out_commands:
         assert build_command.build_command_dependencies == [0]
