@@ -231,8 +231,8 @@ def test_build_tree_cycle_fail():
 
 def test_build_tree_duplicates():
     '''
-    Tests that `build_tree._remove_duplicate_build_commands` removes duplicate build_commands
-    and updates the `build_command_dependencies` accordingly.
+    Tests that `build_tree._add_build_command_dependencies` removes duplicate build_commands
+    and sets the `build_command_dependencies` accordingly.
     '''
 
     initial_build_commands = [build_tree.BuildCommand("recipe1",
