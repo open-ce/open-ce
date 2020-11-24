@@ -129,11 +129,11 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, run_deps, host_deps, build_deps, test_deps, used_vars, noarch, string = _get_package_dependencies(
+        packages, run_deps, host_deps, build_deps, test_deps, noarch, string = _get_package_dependencies(
                                                                                          recipe.get('path'),
                                                                                          combined_config_files,
                                                                                          variants)
-        req_vars = run_deps.union(used_vars)
+        req_vars = host_deps
         if noarch == 'python':
             req_vars = req_vars - {'python'}
 
@@ -177,19 +177,17 @@ def _get_package_dependencies(path, variant_config_files, variants):
     host_deps = set()
     build_deps = set()
     test_deps = set()
-    used_vars = set()
     for meta,_,_ in metas:
         packages.add(meta.meta['package']['name'])
         run_deps.update(meta.meta['requirements'].get('run', []))
         host_deps.update(meta.meta['requirements'].get('host', []))
         build_deps.update(meta.meta['requirements'].get('build', []))
-        used_vars.update(meta.get_used_vars())
         noarch = meta.meta['build'].get('noarch', [])
         string = meta.meta['build'].get('string', [])
         if 'test' in meta.meta:
             test_deps.update(meta.meta['test'].get('requires', []))
 
-    return packages, run_deps, host_deps, build_deps, test_deps, used_vars, noarch, string
+    return packages, run_deps, host_deps, build_deps, test_deps, noarch, string
 
 def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
     """
