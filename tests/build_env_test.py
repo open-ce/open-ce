@@ -40,6 +40,8 @@ class PackageBuildTracker(object):
                     assert dependency in self.built_packages
         if conditions:
             for condition in conditions:
+                print(condition)
+                print(build_command.__dict__)
                 assert condition(build_command)
 
 def test_build_env(mocker):
@@ -101,7 +103,7 @@ def test_build_env(mocker):
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
         'build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
-                     conditions=[(lambda command: command.python == py_version),
+                     conditions=[(lambda command: command.python == utils.DEFAULT_PYTHON_VERS), 
                                  (lambda command: command.recipe != "package21-feedstock")]))
     )
 
@@ -127,7 +129,7 @@ def test_build_env(mocker):
     mocker.patch(
         'build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
-                     conditions=[(lambda command: command.python == py_version)]))
+                     conditions=[(lambda command: command.python == utils.DEFAULT_PYTHON_VERS)]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
