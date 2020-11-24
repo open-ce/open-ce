@@ -207,7 +207,7 @@ def test_get_repo_with_patches(mocker, capsys):
                     captured = capsys.readouterr()
                     assert "Patch apply command:  git apply" in captured.out
 
-def test_get_repo_for_nonexisting_patch(mocker, capsys):
+def test_get_repo_for_nonexisting_patch(mocker):
     '''
     Test for `_get_repo` that verifies exception is thrown when patch application fails
     '''
