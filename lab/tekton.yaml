@@ -38,7 +38,7 @@ spec:
 	  params:
 	  - name: URL
 	    value: "https://github.com/ketank-new/open-ce.git"
-	  - name: REVISION
+	  - name: TAG
 	    value: master
       pipelineRef:
         name: pipeline
