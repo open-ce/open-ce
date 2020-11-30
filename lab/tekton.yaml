@@ -37,7 +37,7 @@ spec:
 	  type: git
 	  params:
 	  - name: URL
-	    value: "https://github.com/ketank-new/tekton-toolchain.git"
+	    value: "https://github.com/ketank-new/open-ce.git"
 	  - name: REVISION
 	    value: master
       pipelineRef:
@@ -54,7 +54,7 @@ spec:
       type: git
       params:
       - name: URL
-        value: "https://github.com/ketank-new/tekton-toolchain.git"
+        value: "https://github.com/ketank-new/open-ce.git"
       - name: TAG
         value: master
   tasks:
