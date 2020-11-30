@@ -1,0 +1,115 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: the-listener
+spec:
+  triggers:
+  - binding:
+      name: theTriggerBinding
+    template:
+      name: theTemplateTrigger
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: theTriggerBinding
+params:
+  - name: gitrevision
+    value: $(body.pull_request.head.sha)
+  - name: gitrepositoryurl
+    value: $(body.pull_request.head.repo.clone_url)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: theTemplateTrigger
+spec:
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      name: pipelinerun-$(uid)
+    spec:
+      resources:
+      - name: source
+        resourceSpec:
+	  type: git
+	  params:
+	  - name: URL
+	    value: "https://github.com/ketank-new/tekton-toolchain.git"
+	  - name: REVISION
+	    value: master
+      pipelineRef:
+        name: pipeline
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline
+spec:
+  resources:
+  - name: source
+    resourceSpec:
+      type: git
+      params:
+      - name: URL
+        value: "https://github.com/ketank-new/tekton-toolchain.git"
+      - name: TAG
+        value: master
+  tasks:
+  - name: xx1
+    taskRef:
+      name: the-task
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: the-task
+spec:
+  steps:
+  - args:
+    - [01 version, 'Hello', "TEST=$(params.TEST)"]
+    command:
+    - echo
+    image: ubuntu
+    name: echo
+  - args:
+    - -l
+    - /
+   
+    command:
+    - ls
+    image: ubuntu
+    name: lslslash
+  - args:
+    - -l
+    command:
+    - ls
+    image: ubuntu
+    name: lsl-ubuntu
+  - command:
+    - pwd
+    image: ubuntu
+    name: pwd
+  - command:
+    - ls
+    image: ubuntu
+    name: ls
+  - command:
+    - env
+    image: ubuntu
+    name: env
+  - args:
+    - -c
+    - echo stuff > file; ls; cat file
+    command:
+    - /bin/bash
+    image: ubuntu
+    name: write
+  - args:
+    - -l
+    command:
+    - ls
+    image: ubuntu
+    name: lsafterfilemissing
