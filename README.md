@@ -23,7 +23,7 @@ of the Open-CE environment, including (for example) Tensorflow, Pytorch,
 XGBoost, and other related packages and dependencies. These packages are built
 to run in a conda environment.
 
-Within this **open-ce** repository, you will find:
+Within this **open-ce** repository, you will find
 
 ```text
 conda_build_config.yaml:  This is a YAML config file which contains all package
