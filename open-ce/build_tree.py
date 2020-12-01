@@ -92,6 +92,19 @@ class BuildCommand():
         result = result.replace("_", "-")
         return result
 
+
+    def __key(self):
+        return (self.recipe, self.python, self.build_type,
+                self.mpi_type, self.cudatoolkit)
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        if not isinstance(other, BuildCommand):
+            return False
+        return self.__key() == other.__key()  # pylint: disable=protected-access 
+
 def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
@@ -115,21 +128,26 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, run_deps, host_deps, build_deps, test_deps = _get_package_dependencies(recipe.get('path'),
+        packages, run_deps, host_deps, build_deps, test_deps, noarch, string = _get_package_dependencies(
+                                                                                         recipe.get('path'),
                                                                                          combined_config_files,
                                                                                          variants)
+        req_vars = host_deps
+        if noarch == 'python':
+            req_vars = req_vars - {'python'}
+
         build_commands.append(BuildCommand(recipe=recipe.get('name', None),
-                                           repository=repository,
-                                           packages=packages,
-                                           python=variants['python'],
-                                           build_type=variants['build_type'],
-                                           mpi_type=variants['mpi_type'],
-                                           cudatoolkit=variants['cudatoolkit'],
-                                           run_dependencies=run_deps,
-                                           host_dependencies=host_deps,
-                                           build_dependencies=build_deps,
-                                           test_dependencies=test_deps,
-                                           channels=channels if channels else []))
+                                    repository=repository,
+                                    packages=packages,
+                                    python=variants['python'] if 'python' in req_vars else utils.DEFAULT_PYTHON_VERS,
+                                    build_type='cuda' if not ('cpu' in string or 'cpu' in str(packages)) else 'cpu',
+                                    mpi_type=variants['mpi_type'] if variants['mpi_type'] in string else '',
+                                    cudatoolkit=variants['cudatoolkit'] if variants['cudatoolkit'] in string else '',
+                                    run_dependencies=run_deps,
+                                    host_dependencies=host_deps,
+                                    build_dependencies=build_deps,
+                                    test_dependencies=test_deps,
+                                    channels=channels if channels else []))
 
     variant_copy = dict(variants)
     if test_labels:
@@ -158,12 +176,14 @@ def _get_package_dependencies(path, variant_config_files, variants):
         run_deps.update(meta.meta['requirements'].get('run', []))
         host_deps.update(meta.meta['requirements'].get('host', []))
         build_deps.update(meta.meta['requirements'].get('build', []))
+        noarch = meta.meta['build'].get('noarch', [])
+        string = meta.meta['build'].get('string', [])
         if 'test' in meta.meta:
             test_deps.update(meta.meta['test'].get('requires', []))
 
-    return packages, run_deps, host_deps, build_deps, test_deps
+    return packages, run_deps, host_deps, build_deps, test_deps, noarch, string
 
-def _add_build_command_dependencies(build_commands, start_index=0):
+def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
     """
     Create a dependency tree for a list of build commands.
 
@@ -178,13 +198,27 @@ def _add_build_command_dependencies(build_commands, start_index=0):
     # Create a packages dictionary that uses all of a recipe's packages as key, with
     # the recipes index as values.
     packages = dict()
-    for index, build_command in enumerate(build_commands):
-        for package in build_command.packages:
-            packages.update({ package : [start_index + index] + packages.get(package, []) })
+    index = 0
+
+    #save indices of build commands which are already present in build_commands
+    duplicates = []
+    for var_index, build_command in enumerate(variant_build_commands):
+        if build_command in build_commands:
+            alt_index = build_commands.index(build_command)
+            duplicates.append(var_index)
+            for package in build_command.packages:
+                packages.update({ package : [alt_index] + packages.get(package, []) })
+        else:
+            for package in build_command.packages:
+                packages.update({ package : [start_index + index] + packages.get(package, []) })
+            index +=1
+
+    # remove build commands that are already added to build_commands
+    variant_build_commands = [i for j, i in enumerate(variant_build_commands) if j not in duplicates]
 
     # Add a list of indices for dependency to a BuildCommand's `build_command_dependencies` value
     # Note: This will filter out all dependencies that aren't in the recipes list.
-    for index, build_command in enumerate(build_commands):
+    for index, build_command in enumerate(variant_build_commands):
         deps = []
         dependencies = set()
         dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
@@ -195,6 +229,8 @@ def _add_build_command_dependencies(build_commands, start_index=0):
             if dep in packages:
                 deps += filter(lambda x: x != start_index + index, packages[dep])
         build_command.build_command_dependencies = deps
+
+    return variant_build_commands
 
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
@@ -250,8 +286,10 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             self._conda_env_files[variant_string] = CondaEnvFileGenerator(build_commands, external_deps)
             self._test_commands[variant_string] = test_commands
 
-            # Add dependency tree information to the packages list
-            _add_build_command_dependencies(build_commands, len(self.build_commands))
+            # Add dependency tree information to the packages list and
+            # remove build commands from build_commands that are already in self.build_commands
+            build_commands = _add_build_command_dependencies(build_commands, self.build_commands,
+                                        len(self.build_commands))
             self.build_commands += build_commands
         self._detect_cycle()
 
