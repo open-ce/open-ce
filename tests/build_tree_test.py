@@ -114,14 +114,21 @@ def test_clone_repo(mocker):
 
     mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2", git_tag_for_env="master")
 
+    dir_tracker= helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dir_tracker.mocked_getcwd
+    )
+    mocker.patch(
+        'os.chdir',
+        side_effect=dir_tracker.validate_chdir
+    )
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone",
-                                                               "-b master",
-                                                               "--single-branch",
+        side_effect=(lambda x: helpers.validate_cli(x, possible_expect=["git clone",
                                                                git_location + "/my_repo.git",
-                                                               "/test/my_repo"]))
+                                                               "/test/my_repo", "git checkout master"]))
     )
 
     mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, None)
@@ -133,10 +140,19 @@ def test_get_repo_git_tag_options(mocker, capsys):
     env_file1 = os.path.join(test_dir, 'test-env1.yaml')
     mock_build_tree = TestBuildTree([env_file1], "3.6", "cpu", "openmpi", "10.2")
 
+    dir_tracker= helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dir_tracker.mocked_getcwd
+    )
+    mocker.patch(
+        'os.chdir',
+        side_effect=dir_tracker.validate_chdir
+    )
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone"]))
+        side_effect=(lambda x: helpers.validate_cli(x, possible_expect=["git clone", "git checkout"]))
     )
 
     possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
@@ -159,10 +175,17 @@ def test_get_repo_git_tag_options(mocker, capsys):
                 _, _ = mock_build_tree._get_repo(env_config_data, package)
                 validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
 
+
         # Setting git_tag_for_env in BuildTree back to Default and no git tags
         # specified in the config file too.
-        mock_build_tree._git_tag_for_env = "test_tag_for_all"
-        env_file2 = os.path.join(test_dir, 'test-env2.yaml')
+        mocker.patch(
+            'os.system',
+            return_value=0,
+            side_effect=(lambda x: helpers.validate_cli(x, possible_expect=["git clone", "git apply"], reject=["git checkout"]))
+        )
+
+        mock_build_tree._git_tag_for_env = None
+        env_file2 = os.path.join(test_dir, 'test-env3.yaml')
         env_config_data_list = env_config.load_env_config_files([env_file2], variant)
         for env_config_data in env_config_data_list:
             packages = env_config_data.get(env_config.Key.packages.name, [])
@@ -190,7 +213,7 @@ def test_get_repo_with_patches(mocker, capsys):
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["git apply"], ignore=["git clone"]))
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["git apply"], ignore=["git clone", "git checkout"]))
     )
 
     possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
@@ -225,7 +248,7 @@ def test_get_repo_for_nonexisting_patch(mocker):
     )
     mocker.patch(
         'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["git apply"], ignore=["git clone"], retval=1))
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["git apply"], ignore=["git clone", "git checkout"], retval=1))
     )
 
     possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
@@ -255,11 +278,12 @@ def validate_git_tags(git_tag_for_env, env_config_data, package, capsys):
         git_branch = package.get(env_config.Key.git_tag.name, None)
     if not git_branch:
         git_branch = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
-    branch_options = " "
-    if git_branch:
-        branch_options = " -b {} --single-branch ".format(git_branch)
-    assert "Clone cmd:  git clone{}".format(branch_options) in captured.out
+    
+    print(captured.out)
 
+    assert "Clone cmd:  git clone" in captured.out
+    if git_branch:
+        assert "Checkout branch/tag command:  git checkout {}".format(git_branch) in captured.out
 
 def test_clone_repo_failure(mocker):
     '''

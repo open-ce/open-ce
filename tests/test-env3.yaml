@@ -19,7 +19,5 @@ packages:
         - tests/package_22_fix1.patch
         - tests/package_22_fix2.patch
 
-git_tag_for_env: release-v1.0
-
 external_dependencies:
     - external_dep3=5.6.*

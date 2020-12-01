@@ -15,7 +15,7 @@ class Namespace:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-def validate_cli(cli_string, expect=None, reject=None, ignore=None, retval=0):
+def validate_cli(cli_string, expect=None, reject=None, ignore=None, possible_expect=None, retval=0):
     """
     Used to mock os.system with the assumption that it is making a call to 'conda-build'.
 
@@ -24,6 +24,8 @@ def validate_cli(cli_string, expect=None, reject=None, ignore=None, retval=0):
         expect: A list of strings that must occur in the 'cli_string' arg.
         reject: A list of strings that cannot occur in the 'cli_string' arg.
         ignore: Don't validate the CLI_STRING if one of these strings is contained in it.
+        possible_expect: A list of possible strings that the CLI may contain. CLI should contain
+                        atleast one of these.
         retval: The mocked value to return from 'os.system'.
     Returns:
         retval
@@ -31,12 +33,15 @@ def validate_cli(cli_string, expect=None, reject=None, ignore=None, retval=0):
     if not expect: expect = []
     if not reject: reject = []
     if not ignore: ignore = []
+    if not possible_expect: possible_expect = []
 
     if not any ({term in cli_string for term in ignore}):
         for term in expect:
             assert term in cli_string
         for term in reject:
             assert term not in cli_string
+        if len(expect) == 0:
+            assert any ({term in cli_string for term in possible_expect})
         return retval
     return 0
 

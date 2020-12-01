@@ -340,34 +340,22 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             else:
                 git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None) if env_config_data else None
 
-        if git_tag is None:
-            clone_cmd = "git clone " + git_url + " " + repo_dir
-        else:
-            clone_cmd = "git clone -b " + git_tag + " --single-branch " + git_url + " " + repo_dir
-
+        clone_cmd = "git clone " + git_url + " " + repo_dir
         print("Clone cmd: ", clone_cmd)
         clone_result = os.system(clone_cmd)
+
         cur_dir = os.getcwd()
         clone_successful = clone_result == 0
-        if not clone_successful:
+        if clone_successful:
             if not git_tag is None:
-                # If above clone command failed and git tag was specified,
-                # then retry git clone and git checkout for the given git_tag.
-                # This would be the case when git_tag specified is a commit hash
-                # instead of git tag or branch.
-
-                clone_cmd = "git clone " + git_url + " " + repo_dir
-                clone_result = os.system(clone_cmd)
-                if clone_result == 0:
-                    os.chdir(repo_dir)
-                    checkout_cmd = "git checkout " + git_tag
-                    checkout_res = os.system(checkout_cmd)
-                    os.chdir(cur_dir)
-                    clone_successful = checkout_res == 0
-                    if not clone_successful:
-                        raise OpenCEError(Error.CLONE_REPO, git_url)
-            else:
-                raise OpenCEError(Error.CLONE_REPO, git_url)
+                os.chdir(repo_dir)
+                checkout_cmd = "git checkout " + git_tag
+                print("Checkout branch/tag command: ", checkout_cmd)
+                checkout_res = os.system(checkout_cmd)
+                os.chdir(cur_dir)
+                clone_successful = checkout_res == 0
+        else:
+            raise OpenCEError(Error.CLONE_REPO, git_url)
 
         if clone_successful:
             patches = package.get(env_config.Key.patches.name, []) if package else []
