@@ -99,7 +99,7 @@ class DirTracker(object):
         return self.current_dir
 
 def make_render_result(package_name, build_reqs=None, run_reqs=None, host_reqs=None, test_reqs=None,
-                          noarch=None, string=None):
+                          string=None):
     '''
     Creates a YAML string that is a mocked result of `conda_build.api.render`.
     '''
@@ -107,7 +107,6 @@ def make_render_result(package_name, build_reqs=None, run_reqs=None, host_reqs=N
     if not run_reqs: run_reqs = []
     if not host_reqs: host_reqs = []
     if not test_reqs: test_reqs = []
-    if not noarch: noarch = ''
     if not string: string = ''
 
     retval = [(Namespace(meta={

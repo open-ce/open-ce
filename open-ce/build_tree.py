@@ -27,6 +27,7 @@ class BuildCommand():
                  recipe,
                  repository,
                  packages,
+                 build_strings=None,
                  python=None,
                  build_type=None,
                  mpi_type=None,
@@ -40,6 +41,7 @@ class BuildCommand():
         self.recipe = recipe
         self.repository = repository
         self.packages = packages
+        self.build_strings = build_strings
         self.python = python
         self.build_type = build_type
         self.mpi_type = mpi_type
@@ -94,8 +96,7 @@ class BuildCommand():
 
 
     def __key(self):
-        return (self.recipe, self.python, self.build_type,
-                self.mpi_type, self.cudatoolkit)
+        return (self.recipe, self.build_strings)
 
     def __hash__(self):
         return hash(self.__key())
@@ -128,21 +129,19 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, run_deps, host_deps, build_deps, test_deps, noarch, string = _get_package_dependencies(
+        packages, run_deps, host_deps, build_deps, test_deps, string = _get_package_dependencies(
                                                                                          recipe.get('path'),
                                                                                          combined_config_files,
                                                                                          variants)
-        req_vars = host_deps
-        if noarch == 'python':
-            req_vars = req_vars - {'python'}
 
         build_commands.append(BuildCommand(recipe=recipe.get('name', None),
                                     repository=repository,
                                     packages=packages,
-                                    python=variants['python'] if 'python' in req_vars else utils.DEFAULT_PYTHON_VERS,
-                                    build_type='cuda' if not ('cpu' in string or 'cpu' in str(packages)) else 'cpu',
-                                    mpi_type=variants['mpi_type'] if variants['mpi_type'] in string else '',
-                                    cudatoolkit=variants['cudatoolkit'] if variants['cudatoolkit'] in string else '',
+                                    build_strings=string,
+                                    python=variants['python'],
+                                    build_type=variants['build_type'],
+                                    mpi_type=variants['mpi_type'],
+                                    cudatoolkit=variants['cudatoolkit'],
                                     run_dependencies=run_deps,
                                     host_dependencies=host_deps,
                                     build_dependencies=build_deps,
@@ -176,12 +175,11 @@ def _get_package_dependencies(path, variant_config_files, variants):
         run_deps.update(meta.meta['requirements'].get('run', []))
         host_deps.update(meta.meta['requirements'].get('host', []))
         build_deps.update(meta.meta['requirements'].get('build', []))
-        noarch = meta.meta['build'].get('noarch', [])
         string = meta.meta['build'].get('string', [])
         if 'test' in meta.meta:
             test_deps.update(meta.meta['test'].get('requires', []))
 
-    return packages, run_deps, host_deps, build_deps, test_deps, noarch, string
+    return packages, run_deps, host_deps, build_deps, test_deps, string
 
 def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
     """
