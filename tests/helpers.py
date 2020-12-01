@@ -25,7 +25,7 @@ def validate_cli(cli_string, expect=None, reject=None, ignore=None, possible_exp
         reject: A list of strings that cannot occur in the 'cli_string' arg.
         ignore: Don't validate the CLI_STRING if one of these strings is contained in it.
         possible_expect: A list of possible strings that the CLI may contain. CLI should contain
-                        atleast one of these.
+                        at least one of these.
         retval: The mocked value to return from 'os.system'.
     Returns:
         retval
