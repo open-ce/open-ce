@@ -30,7 +30,7 @@ coverage:
 cudatoolkit:
   - 10.2.*
 cudnn:
-  - 7.6.5.*
+  - 8.0.4.*
 cxx_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
