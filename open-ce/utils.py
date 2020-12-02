@@ -31,6 +31,7 @@ DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
 DEFAULT_OUTPUT_FOLDER = "condabuild"
 DEFAULT_TEST_CONFIG_FILE = "tests/open-ce-tests.yaml"
+DEFAULT_GIT_TAG = None
 OPEN_CE_VARIANT = "open-ce-variant"
 
 def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,

@@ -13,11 +13,14 @@ channels:
     - https://anaconda.org/anaconda 
 packages:
     - feedstock : package11
+      git_tag : package11-bug-fix
     - feedstock : https://myhost.com/myorg/package12-feedstock
     - feedstock : http://myhost.com/myorg/package13-feedstock.git
     - feedstock : git@myhost/myorg/package14-feedstock.git
     - feedstock : package15
     - feedstock : package16
+
+git_tag_for_env: release-v1.0
 
 external_dependencies:
     - external_dep1

@@ -1,0 +1,23 @@
+# *****************************************************************
+#
+# Licensed Materials - Property of IBM
+#
+# (C) Copyright IBM Corp. 2020. All Rights Reserved.
+#
+# US Government Users Restricted Rights - Use, duplication or
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+#
+# *****************************************************************
+
+packages:
+    - feedstock : package21 #[python == '2.1']
+    - feedstock : package211
+      patches:
+        - tests/non-existing.patch
+    - feedstock : package22
+      patches:
+        - tests/package_22_fix1.patch
+        - tests/package_22_fix2.patch
+
+external_dependencies:
+    - external_dep3=5.6.*

@@ -41,6 +41,7 @@ class Error(Enum):
     TOO_MANY_CUDA = (20, "Only one cuda version allowed to be built with docker at a time")
     FAILED_TESTS = (21, "There were {} test failures")
     CONDA_ENV_FILE_REQUIRED = (22, "The '--conda_env_file' argument is required to run tests.")
+    PATCH_APPLICATION = (23, "Failed to apply patch {} on feedstock {}")
 
 class OpenCEError(Exception):
     """

@@ -7,3 +7,4 @@ imported_envs:
   - spacy-env.yaml
   - transformers-env.yaml
   - horovod-env.yaml
+  - lightgbm-env.yaml
