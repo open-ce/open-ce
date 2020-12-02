@@ -36,8 +36,9 @@ following:
 packages:      # The environment package name
   - feedstock: # Defines each feedstock comprising the environment
   - channels:  # Defines a channel location for obtaining dependencies
-  - git_tag:   # Defines a specific git tag to use for this package
+  - git_tag:   # Defines a specific git tag to use for this feedstock
   - recipes:   # Sets name and path of recipe location(s)
+  - patches:   # Specifies list of patches to be applied to this feedstock
 imported_envs: # Used to import content of one env file into another
 channels:      # Defines a channel location for obtaining dependencies
 git_tag_for_env: # Specify a git tag to use across all packages in environment
@@ -69,7 +70,7 @@ if your runtime environment has CUDA available.
 ### git_tag
 
 The other keywords that optionally can be used as part of the `packages` stanza
-include `git_tag`, `channels`, and `recipes`. By default, the git tag will be
+include `git_tag`, `patches`, `channels`, and `recipes`. By default, the git tag will be
 the current (i.e. main or master) branch of the specified source tree, such that
 you don't need to include this keyword unless you want to explicitly override it
 to fetch a different version. To do this, you will simply specify the version
@@ -78,10 +79,29 @@ An example might look something like this:
 ```
 packages:
   - feedstock: dummy_example
-  - git_tag: v1.0.0
+    git_tag: v1.0.0
 ```
 This might be useful if there is a new default version, but you want to
 specifically build an older tagged version.
+
+### patches
+
+This field specifies the list of patches that are to be applied to the feedstock.
+Patches to be applied are expected to be present in `feedstock-patches` directory
+within open-ce repository. Ideal way is to have the patches placed in the directory named
+as the feedstock, within `feedstock-patches` directory. 
+An example might look something like this:
+```
+packages:
+  - feedstock : https://github.com/conda-forge/cmake-feedstock
+    git_tag : 26e3ecb4156c14d90a66fd1433d52a1d7e27946d
+    patches :
+      - ./feedstock-patches/cmake/0001-Fix-test.patch
+```
+One can also specify the full path of the patch file if it is not part of open-ce repo.
+
+This might be useful if some feedstock is to be built from non-open-CE repo and it needs some 
+changes to be built in Open-CE build environment or specific to the ppc64le architecture. 
 
 ### channels
 
@@ -168,8 +188,7 @@ off of a tagged version of open-ce which is not the current default one. For
 example, if you wanted to stay doing custom build variants based on the very first
 open-ce release tag, you could achieve this by defining:
 ```
-git_tag_for_env:
-  - open-ce-v1.0.0
+git_tag_for_env: open-ce-v1.0.0
 ```
 
 ### external_dependencies
@@ -186,6 +205,6 @@ external_dependencies:
 The stanza types above are the only elements that are used by the open-ce environment
 [build_env.py](README.build_env.md) builds. However, as each feedstock in the list is
 built, other file information is used from the individual configuration files of each
-respective feedstock repository, normally found as a recipe in the `config/meta.yaml`
+respective feedstock repository, normally found as a recipe in the `recipe/meta.yaml`
 within each feedstock.
 

@@ -255,7 +255,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  cuda_versions,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
-                 git_tag_for_env="master",
+                 git_tag_for_env=utils.DEFAULT_GIT_TAG,
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
                  test_labels=None):
 
@@ -313,7 +313,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             repo_dir = repository
 
         if not os.path.exists(repo_dir):
-            self._clone_repo(git_url, repo_dir, env_config_data, package.get('git_tag'))
+            self._clone_repo(git_url, repo_dir, env_config_data, package)
 
         return repository, repo_dir
 
@@ -358,7 +358,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         return build_commands, external_deps, test_commands
 
-    def _clone_repo(self, git_url, repo_dir, env_config_data, git_tag_from_config):
+    #pylint: disable=too-many-branches
+    def _clone_repo(self, git_url, repo_dir, env_config_data, package):
         """
         Clone the git repo at repository.
         """
@@ -369,20 +370,45 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         git_tag = self._git_tag_for_env
         if git_tag is None:
-            if git_tag_from_config:
-                git_tag = git_tag_from_config
+            git_tag_for_package = package.get(env_config.Key.git_tag.name, None) if package else None
+            if git_tag_for_package:
+                git_tag = git_tag_for_package
             else:
-                git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
+                git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None) if env_config_data else None
 
-        if git_tag is None:
-            clone_cmd = "git clone " + git_url + " " + repo_dir
-        else:
-            clone_cmd = "git clone -b " + git_tag + " --single-branch " + git_url + " " + repo_dir
-
+        clone_cmd = "git clone " + git_url + " " + repo_dir
         print("Clone cmd: ", clone_cmd)
         clone_result = os.system(clone_cmd)
-        if clone_result != 0:
+
+        cur_dir = os.getcwd()
+        clone_successful = clone_result == 0
+        if clone_successful:
+            if not git_tag is None:
+                os.chdir(repo_dir)
+                checkout_cmd = "git checkout " + git_tag
+                print("Checkout branch/tag command: ", checkout_cmd)
+                checkout_res = os.system(checkout_cmd)
+                os.chdir(cur_dir)
+                clone_successful = checkout_res == 0
+        else:
             raise OpenCEError(Error.CLONE_REPO, git_url)
+
+        if clone_successful:
+            patches = package.get(env_config.Key.patches.name, []) if package else []
+            if len(patches) > 0:
+                os.chdir(repo_dir)
+                open_ce_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+                for patch in patches:
+                    if os.path.isabs(patch) and os.path.exists(patch):
+                        patch_file = patch
+                    else:
+                        patch_file = os.path.join(open_ce_path, patch)
+                    patch_apply_cmd = "git apply {}".format(patch_file)
+                    print("Patch apply command: ", patch_apply_cmd)
+                    patch_apply_res = os.system(patch_apply_cmd)
+                    if patch_apply_res != 0:
+                        raise OpenCEError(Error.PATCH_APPLICATION, patch, package[env_config.Key.feedstock.name])
+                os.chdir(cur_dir)
 
     def __iter__(self):
         """
