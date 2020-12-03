@@ -133,3 +133,6 @@ def mock_renderer(path, package_deps):
     '''
     package = os.path.basename(path)[:-10]
     return make_render_result(package, package_deps[package])
+
+def mock_get_output_file_paths(meta):
+    return [meta.meta['package']['name'] + meta.meta['build']['string']]
