@@ -7,6 +7,7 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
 """
 import os
+import pathlib
 
 import utils
 
@@ -44,3 +45,21 @@ def render_yaml(path, variants=None, variant_config_files=None, schema=None, per
     if schema:
         utils.validate_dict_schema(metas, schema)
     return metas
+
+def get_output_file_paths(meta, variants):
+    """
+    Get the paths of all of the generated packages for a recipe.
+    """
+    config = get_or_merge_config(None)
+    config.verbose = False
+
+    out_files = conda_build.api.get_output_file_paths(meta, config=config, variants=variants)
+
+    # Only return the package name and the parent directory. This will show where within the output
+    # directory the package should be.
+    result = []
+    for out_file in out_files:
+        path = pathlib.PurePath(out_file)
+        result.append(os.path.join(path.parent.name, path.name))
+
+    return result

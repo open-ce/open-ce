@@ -42,7 +42,7 @@ class PackageBuildTracker(object):
             for condition in conditions:
                 assert condition(build_command)
 
-def test_build_env(mocker):
+def test_build_env(mocker, capsys):
     '''
     This is a complete test of `build_env`.
     It uses `test-env2.yaml` which has a dependency on `test-env1.yaml`, and specifies a chain of package dependencies.
@@ -96,6 +96,11 @@ def test_build_env(mocker):
         'conda_build.api.render',
         side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
+    mocker.patch(
+        'conda_build.api.get_output_file_paths',
+        side_effect=(lambda meta, *args, **kwargs: helpers.mock_get_output_file_paths(meta))
+    )
+
     py_version = "2.0"
     buildTracker = PackageBuildTracker()
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
@@ -145,6 +150,16 @@ def test_build_env(mocker):
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     open_ce._main(["build", build_env.COMMAND, env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
     validate_conda_env_files(py_version)
+
+    #---The fourth test verifies that builds are skipped properly if they already exist.
+    mocker.patch(
+        'build_env._all_outputs_exist',
+        return_value=True)
+
+    captured = capsys.readouterr()
+    open_ce._main(["build", build_env.COMMAND, env_file])
+    captured = capsys.readouterr()
+    assert "Skipping build of" in captured.out
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
                              build_types=utils.DEFAULT_BUILD_TYPES,

@@ -57,6 +57,10 @@ def _run_tests(build_tree, conda_env_files):
     if failed_tests:
         raise OpenCEError(Error.FAILED_TESTS, len(failed_tests))
 
+def _all_outputs_exist(output_folder, output_files):
+    return all([os.path.exists(os.path.join(os.path.abspath(output_folder), package))
+                    for package in output_files])
+
 def build_env(args):
     '''Entry Function'''
     if args.docker_build:
@@ -107,14 +111,18 @@ def build_env(args):
     if not args.skip_build_packages:
         # Build each package in the packages list
         for build_command in build_tree:
-            try:
-                build_feedstock.build_feedstock_from_command(build_command,
+            if not _all_outputs_exist(args.output_folder, build_command.output_files):
+                try:
+                    print("Building " + build_command.recipe)
+                    build_feedstock.build_feedstock_from_command(build_command,
                                                             output_folder=os.path.abspath(args.output_folder),
                                                             extra_channels=[os.path.abspath(args.output_folder)] +
                                                                            args.channels_list,
                                                             conda_build_config=os.path.abspath(args.conda_build_config))
-            except OpenCEError as exc:
-                raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
+                except OpenCEError as exc:
+                    raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
+            else:
+                print("Skipping build of " + build_command.recipe + " because it already exists")
 
     if args.run_tests:
         _run_tests(build_tree, conda_env_files)

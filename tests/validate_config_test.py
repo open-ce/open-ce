@@ -63,6 +63,11 @@ def test_validate_config(mocker):
         'conda_build.api.render',
         side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
+    mocker.patch(
+        'conda_build.api.get_output_file_paths',
+        side_effect=(lambda meta, *args, **kwargs: helpers.mock_get_output_file_paths(meta))
+    )
+
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     open_ce._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
 
@@ -109,6 +114,11 @@ def test_validate_negative(mocker):
         'conda_build.api.render',
         side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
     )
+    mocker.patch(
+        'conda_build.api.get_output_file_paths',
+        side_effect=(lambda meta, *args, **kwargs: helpers.mock_get_output_file_paths(meta))
+    )
+
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     with pytest.raises(OpenCEError) as err:
         open_ce._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
