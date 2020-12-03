@@ -27,7 +27,7 @@ class BuildCommand():
                  recipe,
                  repository,
                  packages,
-                 build_strings=None,
+                 output_files=None,
                  python=None,
                  build_type=None,
                  mpi_type=None,
@@ -41,7 +41,7 @@ class BuildCommand():
         self.recipe = recipe
         self.repository = repository
         self.packages = packages
-        self.build_strings = build_strings
+        self.output_files = output_files
         self.python = python
         self.build_type = build_type
         self.mpi_type = mpi_type
@@ -96,7 +96,7 @@ class BuildCommand():
 
 
     def __key(self):
-        return (self.recipe, self.build_strings)
+        return (self.recipe, self.output_files)
 
     def __hash__(self):
         return hash(self.__key())
@@ -129,7 +129,7 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     for recipe in config_data.get('recipes', []):
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, run_deps, host_deps, build_deps, test_deps, string = _get_package_dependencies(
+        packages, run_deps, host_deps, build_deps, test_deps, output_files = _get_package_dependencies(
                                                                                          recipe.get('path'),
                                                                                          combined_config_files,
                                                                                          variants)
@@ -137,7 +137,7 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
         build_commands.append(BuildCommand(recipe=recipe.get('name', None),
                                     repository=repository,
                                     packages=packages,
-                                    build_strings=string,
+                                    output_files=output_files,
                                     python=variants['python'],
                                     build_type=variants['build_type'],
                                     mpi_type=variants['mpi_type'],
@@ -175,11 +175,11 @@ def _get_package_dependencies(path, variant_config_files, variants):
         run_deps.update(meta.meta['requirements'].get('run', []))
         host_deps.update(meta.meta['requirements'].get('host', []))
         build_deps.update(meta.meta['requirements'].get('build', []))
-        string = meta.meta['build'].get('string', [])
+        output_files = conda_utils.get_output_file_paths(meta, variants=variants)
         if 'test' in meta.meta:
             test_deps.update(meta.meta['test'].get('requires', []))
 
-    return packages, run_deps, host_deps, build_deps, test_deps, string
+    return packages, run_deps, host_deps, build_deps, test_deps, output_files
 
 def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
     """

@@ -61,6 +61,10 @@ def test_create_commands(mocker):
         return_value=render_result
     )
     mocker.patch(
+        'conda_build.api.get_output_file_paths',
+         return_value=['/output/path/linux/horovod.tar.gz']
+    )
+    mocker.patch(
         'os.chdir',
         side_effect=(lambda x: dir_tracker.validate_chdir(x, expected_dirs=["/test/my_repo", # First the working directory should be changed to the arg.
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
@@ -396,6 +400,7 @@ def test_build_tree_duplicates():
     initial_build_commands = [build_tree.BuildCommand("recipe1",
                                                     "repo1",
                                                     ["package1a"],
+                                                    output_files=["linux/package1a.tar.gz"],
                                                     python="2.6",
                                                     build_type="cuda",
                                                     mpi_type="openmpi",
@@ -407,6 +412,7 @@ def test_build_tree_duplicates():
                               build_tree.BuildCommand("recipe2",
                                                     "repo2",
                                                     ["package2a"],
+                                                    output_files=["linux/package2a.tar.gz"],
                                                     python="2.6",
                                                     build_type="cuda",
                                                     mpi_type="openmpi",
@@ -419,6 +425,7 @@ def test_build_tree_duplicates():
     duplicate_build_commands = [build_tree.BuildCommand("recipe2",
                                                     "repo2",
                                                     ["package2a"],
+                                                    output_files=["linux/package2a.tar.gz"],
                                                     python="2.6",
                                                     build_type="cuda",
                                                     mpi_type="openmpi",
@@ -431,6 +438,7 @@ def test_build_tree_duplicates():
                                 build_tree.BuildCommand("recipe1",
                                                     "repo1",
                                                     ["package1a"],
+                                                    output_files=["linux/package1a.tar.gz"],
                                                     python="2.6",
                                                     build_type="cuda",
                                                     mpi_type="openmpi",
@@ -443,6 +451,7 @@ def test_build_tree_duplicates():
                                 build_tree.BuildCommand("recipe3",
                                                     "repo3",
                                                     ["package3a"],
+                                                    output_files=["linux/package3a.tar.gz"],
                                                     python="2.6",
                                                     build_type="cpu",
                                                     mpi_type="openmpi",
@@ -454,6 +463,7 @@ def test_build_tree_duplicates():
     additional_build_commands = [build_tree.BuildCommand("recipe4",
                                                     "repo4",
                                                     ["package4a"],
+                                                    output_files=["linux/package4a.tar.gz"],
                                                     python="2.6",
                                                     build_type="cpu",
                                                     mpi_type="openmpi",
