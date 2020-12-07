@@ -28,7 +28,8 @@ cmake:
 coverage:
   - 4.*
 cudnn:
-  - 8.0.4.*
+  - 7.6.5.*                    # [cudatoolkit == '10.2']
+  - 8.0.4.*                    # [cudatoolkit == '11.0']
 cxx_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
@@ -70,7 +71,8 @@ google_pasta:
 googleapis_common_protos:
   - 1.52.*
 graphsurgeon:
-  - 0.4.5
+  - 0.4.1                     # [cudatoolkit == '10.2']
+  - 0.4.5                     # [cudatoolkit == '11.0']
 grpcio:
   - 1.31.*
 harfbuzz:
@@ -144,8 +146,8 @@ openblas:
 opencv:
   - 3.4.10.*
 openjdk:
-  - 8.0.152 # [x86_64]
-  - 1.8.0   # [ppc64le]
+  - 8.0.152                    # [x86_64]
+  - 1.8.0                      # [ppc64le]
 openmpi:
   - 3.1.3
 opt_einsum:
@@ -161,7 +163,7 @@ plac:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.9.*
+  - 3.13.*
 psutil:
   - 5
 pytest:
@@ -206,7 +208,8 @@ tensorflow:
 tensorflow_hub:
   - 0.10
 tensorrt:
-  - 7.2.*
+  - 7.0.*                    # [cudatoolkit == '10.2']
+  - 7.2.*                    # [cudatoolkit == '11.0']
 termcolor:
   - 1.1.0
 thinc:
@@ -222,7 +225,8 @@ tqdm:
 typing_extensions:
   - 3.7.4.*
 uff:
-  - 0.6.9
+  - 0.6.5                    # [cudatoolkit == '10.2']
+  - 0.6.9                    # [cudatoolkit == '11.0']
 unzip:
   - 6.0
 wasabi:
