@@ -113,8 +113,9 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
             if recipes_to_build and recipe['name'] not in recipes_to_build:
                 continue
 
-            config = get_or_merge_config(None)
+            config = get_or_merge_config(None, variant=variant)
             config.skip_existing = True
+            config.prefix_length = 225
             config.output_folder = output_folder
             config.variant_config_files = [conda_build_config]
 
@@ -128,7 +129,7 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
 
             try:
                 conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
-                               config=config, variants=variant)
+                               config=config)
             except Exception as exc: # pylint: disable=broad-except
                 traceback.print_exc()
                 raise OpenCEError(Error.BUILD_RECIPE,
