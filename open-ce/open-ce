@@ -14,6 +14,7 @@ from errors import OpenCEError
 import build_env
 import build_feedstock
 import test_feedstock
+import test_env
 import validate_config
 import validate_env
 import build_image
@@ -59,6 +60,12 @@ def make_parser():
                                                  test_feedstock.ARGUMENTS,
                                                  help=test_feedstock.DESCRIPTION)
     test_feedstock_parser.set_defaults(func=test_feedstock.ENTRY_FUNCTION)
+
+    test_env_parser = inputs.add_subparser(test_sub_parsers,
+                                           test_env.COMMAND,
+                                           test_env.ARGUMENTS,
+                                           help=test_env.DESCRIPTION)
+    test_env_parser.set_defaults(func=test_env.ENTRY_FUNCTION)
 
     validate_parser = inputs.add_subparser(subparsers, 'validate', [],
                                            help="Validate an env file or a conda_build_config file.")
