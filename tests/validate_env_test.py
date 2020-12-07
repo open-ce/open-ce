@@ -42,12 +42,9 @@ def test_validate_env_wrong_external_deps(mocker,):
     Test that validate env correctly handles invalid data for external dependencies.
     '''
     unused_env_for_arg = os.path.join(test_dir, 'test-env-invalid1.yaml')
-    env_file =b'''
-packages:
-    - feedstock : test1
-external_dependencies: ext_dep
-'''
-    mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
+    env_file = { 'packages' : [{ 'feedstock' : 'test1' }], 'external_dependencies' : 'ext_dep' }
+    mocker.patch('conda_build.metadata.MetaData.get_rendered_recipe_text', return_value=env_file)
+
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])
     assert "ext_dep is not of expected type <class 'list'>" in str(exc.value)
@@ -57,13 +54,9 @@ def test_validate_env_dict_for_external_deps(mocker,):
     Test that validate env correctly handles erroneously passing a dict for external dependencies.
     '''
     unused_env_for_arg = os.path.join(test_dir, 'test-env-invalid1.yaml')
-    env_file =b'''
-packages:
-    - feedstock : test1
-external_dependencies:
-    - feedstock : ext_dep
-'''
-    mocker.patch('builtins.open', mocker.mock_open(read_data=env_file))
+    env_file = { 'packages' : [{ 'feedstock' : 'test1' }], 'external_dependencies' : [{ 'feedstock' : 'ext_dep'}] }
+    mocker.patch('conda_build.metadata.MetaData.get_rendered_recipe_text', return_value=env_file)
+
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])
     assert "{'feedstock': 'ext_dep'} is not of expected type <class 'str'>" in str(exc.value)

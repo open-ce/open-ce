@@ -14,8 +14,7 @@ import utils
 from errors import OpenCEError, Error
 
 utils.check_if_conda_build_exists()
-
-import conda_build.metadata # pylint: disable=wrong-import-position, wrong-import-order
+import conda_utils  # pylint: disable=wrong-import-position, wrong-import-order
 
 @unique
 class Key(Enum):
@@ -28,12 +27,14 @@ class Key(Enum):
     feedstock = auto()
     recipes = auto()
     external_dependencies = auto()
+    patches = auto()
 
 _PACKAGE_SCHEMA ={
     Key.feedstock.name: utils.make_schema_type(str, True),
     Key.git_tag.name: utils.make_schema_type(str),
     Key.recipes.name: utils.make_schema_type([str]),
-    Key.channels.name: utils.make_schema_type([str])
+    Key.channels.name: utils.make_schema_type([str]),
+    Key.patches.name: utils.make_schema_type([str])
 }
 
 _ENV_CONFIG_SCHEMA = {
@@ -47,10 +48,9 @@ _ENV_CONFIG_SCHEMA = {
 def _validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
     try:
-        meta_obj = conda_build.metadata.MetaData(env_file, variant=variants)
-        if not (Key.packages.name in meta_obj.meta.keys() or Key.imported_envs.name in meta_obj.meta.keys()):
+        meta_obj = conda_utils.render_yaml(env_file, variants=variants, schema=_ENV_CONFIG_SCHEMA)
+        if not (Key.packages.name in meta_obj.keys() or Key.imported_envs.name in meta_obj.keys()):
             raise OpenCEError(Error.CONFIG_CONTENT)
-        utils.validate_dict_schema(meta_obj.meta, _ENV_CONFIG_SCHEMA)
         return meta_obj
     except (Exception, SystemExit) as exc: #pylint: disable=broad-except
         raise OpenCEError(Error.ERROR, "Error in {}:\n  {}".format(env_file, str(exc))) from exc
@@ -66,8 +66,7 @@ def load_env_config_files(config_files, variants):
     while env_config_files:
         # Load the environment config files using conda-build's API. This will allow for the
         # filtering of text using selectors and jinja2 functions
-        meta_obj = _validate_config_file(env_config_files[0], variants)
-        env = meta_obj.get_rendered_recipe_text()
+        env = _validate_config_file(env_config_files[0], variants)
 
         # Examine all of the imported_envs items and determine if they still need to be loaded.
         new_config_files = []

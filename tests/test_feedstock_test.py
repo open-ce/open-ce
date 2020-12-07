@@ -23,24 +23,22 @@ import test_feedstock
 import utils
 from errors import OpenCEError
 
+orig_load_test_file = test_feedstock.load_test_file
+def mock_load_test_file(x, y):
+    return orig_load_test_file(x, y)
+
 def test_test_feedstock(mocker, capsys):
     '''
     This is a complete test of `test_feedstock`.
     '''
 
-    test_file = {"tests":
-                    [{"name" : "Test 1", "command" : "echo Test 1"},
-                    {"name" : "Test 2", "command" : "echo Test 2a\necho Test2b"}]}
-
-    mocker.patch('os.path.exists', side_effect=(lambda x: x in (utils.DEFAULT_TEST_CONFIG_FILE, './')))
-    mocker.patch('yaml.safe_load', return_value=test_file)
-    mocker.patch('builtins.open', side_effect=None)
+    mocker.patch('test_feedstock.load_test_file', side_effect=(lambda x, y: mock_load_test_file(os.path.join(test_dir, "open-ce-tests1.yaml"), y)))
 
     open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
     captured = capsys.readouterr()
     assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
     assert "Running: Test 1" in captured.out
-    assert "Running: Test 2" in captured.out
+    assert not "Running: Test 2" in captured.out
     assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
 
 def test_test_feedstock_failed_tests(mocker, capsys):
@@ -48,14 +46,8 @@ def test_test_feedstock_failed_tests(mocker, capsys):
     Test that failed tests work correctly.
     '''
 
-    test_file = {"tests":
-                    [{"name" : "Test 1", "command" : "[ 1 -eq 2 ]"},
-                    {"name" : "Test 2", "command" : "[ 1 -eq 1 ]"},
-                    {"name" : "Test 3", "command" : "[ 1 -eq 3 ]"}]}
-
-    mocker.patch('os.path.exists', side_effect=(lambda x: x in (utils.DEFAULT_TEST_CONFIG_FILE, './')))
-    mocker.patch('yaml.safe_load', return_value=test_file)
-    mocker.patch('builtins.open', side_effect=None)
+    mocker.patch('test_feedstock.load_test_file', side_effect=(lambda x, y: mock_load_test_file(os.path.join(test_dir, "open-ce-tests2.yaml"), y)))
+    mocker.patch('conda_env_file_generator.get_variant_string', return_value=None)
 
     with pytest.raises(OpenCEError) as exc:
         open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
@@ -68,20 +60,15 @@ def test_test_feedstock_failed_tests(mocker, capsys):
 def test_test_feedstock_working_dir(mocker, capsys):
     '''
     This tests that the working_dir arg works correctly.
+    Also sets a different build_type variant than what is in `test_test_feedstock`.
     '''
 
-    test_file = {"tests":
-                    [{"name" : "Test 1", "command" : "echo Test 1"},
-                    {"name" : "Test 2", "command" : "echo Test 2a\necho Test2b"}]}
-
     working_dir = "./my_working_dir"
-
-    mocker.patch('os.path.exists', side_effect=(lambda x: x == utils.DEFAULT_TEST_CONFIG_FILE or (x == working_dir and pathlib.Path(x).exists())))
-    mocker.patch('yaml.safe_load', return_value=test_file)
-    mocker.patch('builtins.open', side_effect=None)
+    my_variants = {'build_type' : 'cpu'}
+    mocker.patch('test_feedstock.load_test_file', side_effect=(lambda x, y: mock_load_test_file(os.path.join(test_dir, "open-ce-tests1.yaml"), my_variants)))
 
     assert not os.path.exists(working_dir)
-    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "../tests/test-conda-env2.yaml", "--test_working_dir", working_dir])
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_working_dir", working_dir])
     assert os.path.exists(working_dir)
     os.rmdir(working_dir)
     captured = capsys.readouterr()
@@ -89,3 +76,53 @@ def test_test_feedstock_working_dir(mocker, capsys):
     assert "Running: Test 1" in captured.out
     assert "Running: Test 2" in captured.out
     assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+def test_test_feedstock_labels(mocker, capsys):
+    '''
+    Test that labels work correctly.
+    '''
+
+    mocker.patch('test_feedstock.load_test_file', side_effect=(lambda x, y: mock_load_test_file(os.path.join(test_dir, "open-ce-tests3.yaml"), y)))
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
+    captured = capsys.readouterr()
+    assert not "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert not "Running: Test Long" in captured.out
+    assert not "Running: Test Distributed" in captured.out
+    assert not "Running: Test Long and Distributed" in captured.out
+    assert not "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_labels", "long"])
+    captured = capsys.readouterr()
+    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert "Running: Test Long" in captured.out
+    assert not "Running: Test Distributed" in captured.out
+    assert not "Running: Test Long and Distributed" in captured.out
+    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_labels", "distributed"])
+    captured = capsys.readouterr()
+    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert not "Running: Test Long" in captured.out
+    assert "Running: Test Distributed" in captured.out
+    assert not "Running: Test Long and Distributed" in captured.out
+    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+    open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_labels", "long,distributed"])
+    captured = capsys.readouterr()
+    assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+    assert "Running: Test Long" in captured.out
+    assert "Running: Test Distributed" in captured.out
+    assert "Running: Test Long and Distributed" in captured.out
+    assert "Running: Remove conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
+
+def test_test_feedstock_invalid_test_file(mocker,):
+    '''
+    Test that labels work correctly.
+    '''
+
+    mocker.patch('test_feedstock.load_test_file', side_effect=(lambda x, y: mock_load_test_file(os.path.join(test_dir, "open-ce-tests4.yaml"), y)))
+
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml"])
+    assert "Unexpected Error: ['Test 1'] is not of expected type <class 'str'>" in str(exc.value)

@@ -18,6 +18,7 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import build_tree
 import utils
+import env_config
 from errors import OpenCEError
 import helpers
 
@@ -31,7 +32,7 @@ class TestBuildTree(build_tree.BuildTree):
                  cuda_versions,
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
-                 git_tag_for_env="master",
+                 git_tag_for_env=utils.DEFAULT_GIT_TAG,
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
@@ -45,7 +46,7 @@ def test_create_commands(mocker):
     Tests that `_create_commands` correctly builds the recipe and extracts all
     of the dependencies from the conda_build render result.
     '''
-    dirTracker = helpers.DirTracker()
+    dir_tracker = helpers.DirTracker()
     mocker.patch(
         'os.getcwd',
         return_value="/test/starting_dir"
@@ -53,18 +54,23 @@ def test_create_commands(mocker):
     render_result=helpers.make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
                                                         ['run_req1            1.3'],
                                                         ['host_req1            1.0', 'host_req2'],
-                                                        ['test_req1'])
+                                                        ['test_req1'],
+                                                        ['string1_1'])
     mocker.patch(
         'conda_build.api.render',
         return_value=render_result
     )
     mocker.patch(
+        'conda_build.api.get_output_file_paths',
+         return_value=['/output/path/linux/horovod.tar.gz']
+    )
+    mocker.patch(
         'os.chdir',
-        side_effect=(lambda x: dirTracker.validate_chdir(x, expected_dirs=["/test/my_repo", # First the working directory should be changed to the arg.
+        side_effect=(lambda x: dir_tracker.validate_chdir(x, expected_dirs=["/test/my_repo", # First the working directory should be changed to the arg.
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    build_commands, _ = build_tree._create_commands("/test/my_repo", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [])
+    build_commands, _ = build_tree._create_commands("/test/my_repo", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
     assert build_commands[0].packages == {'horovod'}
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in build_commands[0].build_dependencies
@@ -111,19 +117,178 @@ def test_clone_repo(mocker):
     '''
     git_location = utils.DEFAULT_GIT_LOCATION
 
-    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2")
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2", git_tag_for_env="master")
+
+    dir_tracker= helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dir_tracker.mocked_getcwd
+    )
+    mocker.patch(
+        'os.chdir',
+        side_effect=dir_tracker.validate_chdir
+    )
+    mocker.patch(
+        'os.system',
+        return_value=0,
+        side_effect=(lambda x: helpers.validate_cli(x, possible_expect=["git clone",
+                                                               git_location + "/my_repo.git",
+                                                               "/test/my_repo", "git checkout master"]))
+    )
+
+    mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, None)
+
+def test_get_repo_git_tag_options(mocker, capsys):
+    '''
+    Test for `_get_repo` that verifies `git_tag` and `git_tag_for_env` priorities.
+    '''
+    env_file1 = os.path.join(test_dir, 'test-env1.yaml')
+    mock_build_tree = TestBuildTree([env_file1], "3.6", "cpu", "openmpi", "10.2")
+
+    dir_tracker= helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dir_tracker.mocked_getcwd
+    )
+    mocker.patch(
+        'os.chdir',
+        side_effect=dir_tracker.validate_chdir
+    )
+    mocker.patch(
+        'os.system',
+        return_value=0,
+        side_effect=(lambda x: helpers.validate_cli(x, possible_expect=["git clone", "git checkout"]))
+    )
+
+    possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
+    for variant in possible_variants:
+
+        # test-env1.yaml has defined "git_tag" and "git_tag_for_env".
+        env_config_data_list = env_config.load_env_config_files([env_file1], variant)
+        for env_config_data in env_config_data_list:
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            for package in packages:
+                _, _ = mock_build_tree._get_repo(env_config_data, package)
+                validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
+
+        # Setting git_tag_for_env in BuildTree should override whatever is in the config file
+        mock_build_tree._git_tag_for_env = "test_tag_for_all"
+        env_config_data_list = env_config.load_env_config_files([env_file1], variant)
+        for env_config_data in env_config_data_list:
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            for package in packages:
+                _, _ = mock_build_tree._get_repo(env_config_data, package)
+                validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
+
+
+        # Setting git_tag_for_env in BuildTree back to Default and no git tags
+        # specified in the config file too.
+        mocker.patch(
+            'os.system',
+            return_value=0,
+            side_effect=(lambda x: helpers.validate_cli(x, possible_expect=["git clone", "git apply"], reject=["git checkout"]))
+        )
+
+        mock_build_tree._git_tag_for_env = None
+        env_file2 = os.path.join(test_dir, 'test-env3.yaml')
+        env_config_data_list = env_config.load_env_config_files([env_file2], variant)
+        for env_config_data in env_config_data_list:
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            for package in packages:
+                _, _ = mock_build_tree._get_repo(env_config_data, package)
+                validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
+
+def test_get_repo_with_patches(mocker, capsys):
+    '''
+    Test for `_get_repo` that verifies `patches` field
+    '''
+    env_file = os.path.join(test_dir, 'test-env3.yaml')
+    mock_build_tree = TestBuildTree([env_file], "3.6", "cpu", "openmpi", "10.2")
+
+    dir_tracker= helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dir_tracker.mocked_getcwd
+    )
+    mocker.patch(
+        'os.chdir',
+        side_effect=dir_tracker.validate_chdir
+    )
 
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone",
-                                                               "-b master",
-                                                               "--single-branch",
-                                                               git_location + "/my_repo.git",
-                                                               "/test/my_repo"]))
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["git apply"], ignore=["git clone", "git checkout"]))
     )
 
-    mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, "master")
+    possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
+    for variant in possible_variants:
+        # test-env3.yaml has specified "patches".
+        env_config_data_list = env_config.load_env_config_files([env_file], variant)
+        for env_config_data in env_config_data_list:
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            for package in packages:
+
+                # "package211" has specified a non-existing patch
+                if package.get(env_config.Key.feedstock.name) != "package211":
+                    _, _ = mock_build_tree._get_repo(env_config_data, package)
+                    captured = capsys.readouterr()
+                    assert "Patch apply command:  git apply" in captured.out
+
+def test_get_repo_for_nonexisting_patch(mocker):
+    '''
+    Test for `_get_repo` that verifies exception is thrown when patch application fails
+    '''
+    env_file = os.path.join(test_dir, 'test-env3.yaml')
+    mock_build_tree = TestBuildTree([env_file], "3.6", "cpu", "openmpi", "10.2")
+
+    dir_tracker= helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dir_tracker.mocked_getcwd
+    )
+    mocker.patch(
+        'os.chdir',
+        side_effect=dir_tracker.validate_chdir
+    )
+    mocker.patch(
+        'os.system',
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["git apply"], ignore=["git clone", "git checkout"], retval=1))
+    )
+
+    possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
+    for variant in possible_variants:
+        # test-env3.yaml has defined "patches".
+        env_config_data_list = env_config.load_env_config_files([env_file], variant)
+        for env_config_data in env_config_data_list:
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            for package in packages:
+
+                # "package211" has specified a non-existing patch
+                if package.get(env_config.Key.feedstock.name) == "package211":
+                    with pytest.raises(OpenCEError) as exc:
+                        _, _ = mock_build_tree._get_repo(env_config_data, package)
+                    assert "Failed to apply patch " in str(exc.value)
+
+
+def validate_git_tags(git_tag_for_env, env_config_data, package, capsys):
+    '''
+    Validation function for git tag being used for each feedstock. Note, this logic depends
+    on logic used in code to decide which git_tag to be used. If that changes, this also needs
+    to be updated.
+    '''
+    captured = capsys.readouterr()
+    git_branch = git_tag_for_env
+    if not git_branch:
+        git_branch = package.get(env_config.Key.git_tag.name, None)
+    if not git_branch:
+        git_branch = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
+    
+    print(captured.out)
+
+    assert "Clone cmd:  git clone" in captured.out
+    if git_branch:
+        assert "Checkout branch/tag command:  git checkout {}".format(git_branch) in captured.out
 
 def test_clone_repo_failure(mocker):
     '''
@@ -137,7 +302,7 @@ def test_clone_repo_failure(mocker):
     )
 
     with pytest.raises(OpenCEError) as exc:
-        mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, "master")
+        mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, None)
     assert "Unable to clone repository" in str(exc.value)
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
@@ -225,3 +390,94 @@ def test_build_tree_cycle_fail():
     assert "recipe1 -> recipe3 -> recipe2 -> recipe1" in str(exc.value)
     assert "recipe2 -> recipe1 -> recipe3 -> recipe2" in str(exc.value)
     assert "recipe3 -> recipe2 -> recipe1 -> recipe2" in str(exc.value)
+
+def test_build_tree_duplicates():
+    '''
+    Tests that `build_tree._add_build_command_dependencies` removes duplicate build_commands
+    and sets the `build_command_dependencies` accordingly.
+    '''
+
+    initial_build_commands = [build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1a"],
+                                                    output_files=["linux/package1a.tar.gz"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[]),
+                              build_tree.BuildCommand("recipe2",
+                                                    "repo2",
+                                                    ["package2a"],
+                                                    output_files=["linux/package2a.tar.gz"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[0],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[])]
+
+    duplicate_build_commands = [build_tree.BuildCommand("recipe2",
+                                                    "repo2",
+                                                    ["package2a"],
+                                                    output_files=["linux/package2a.tar.gz"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[]),
+
+                                build_tree.BuildCommand("recipe1",
+                                                    "repo1",
+                                                    ["package1a"],
+                                                    output_files=["linux/package1a.tar.gz"],
+                                                    python="2.6",
+                                                    build_type="cuda",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[]),
+
+                                build_tree.BuildCommand("recipe3",
+                                                    "repo3",
+                                                    ["package3a"],
+                                                    output_files=["linux/package3a.tar.gz"],
+                                                    python="2.6",
+                                                    build_type="cpu",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[1],
+                                                    run_dependencies=[],
+                                                    build_dependencies=["package1a"],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[])]
+    additional_build_commands = [build_tree.BuildCommand("recipe4",
+                                                    "repo4",
+                                                    ["package4a"],
+                                                    output_files=["linux/package4a.tar.gz"],
+                                                    python="2.6",
+                                                    build_type="cpu",
+                                                    mpi_type="openmpi",
+                                                    build_command_dependencies=[],
+                                                    run_dependencies=[],
+                                                    build_dependencies=[],
+                                                    host_dependencies=[],
+                                                    test_dependencies=[])]
+                               
+    out_commands = build_tree._add_build_command_dependencies(additional_build_commands,initial_build_commands,len(initial_build_commands))
+    assert len(out_commands)==1  # Make sure the non-duplicates are not removed
+
+    out_commands = build_tree._add_build_command_dependencies(duplicate_build_commands, initial_build_commands, len(initial_build_commands))
+    assert len(out_commands)==1
+
+    for build_command in out_commands:
+        assert build_command.build_command_dependencies == [0]

@@ -1,3 +1,4 @@
+#open-ce-variant:py3.6-cuda-openmpi-10.2
 channels:
 - defaults
 dependencies:

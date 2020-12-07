@@ -31,7 +31,8 @@ ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
              Argument.BUILD_TYPES, Argument.MPI_TYPES,
              Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
              Argument.RUN_TESTS, Argument.DOCKER_BUILD,
-             Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV]
+             Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV,
+             Argument.TEST_LABELS]
 
 def _run_tests(build_tree, conda_env_files):
     """
@@ -55,6 +56,10 @@ def _run_tests(build_tree, conda_env_files):
     test_feedstock.display_failed_tests(failed_tests)
     if failed_tests:
         raise OpenCEError(Error.FAILED_TESTS, len(failed_tests))
+
+def _all_outputs_exist(output_folder, output_files):
+    return all([os.path.exists(os.path.join(os.path.abspath(output_folder), package))
+                    for package in output_files])
 
 def build_env(args):
     '''Entry Function'''
@@ -92,7 +97,8 @@ def build_env(args):
                                repository_folder=args.repository_folder,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,
-                               conda_build_config=args.conda_build_config)
+                               conda_build_config=args.conda_build_config,
+                               test_labels=inputs.parse_arg_list(args.test_labels))
 
     # Generate conda environment files
     conda_env_files = build_tree.write_conda_env_files(channels=args.channels_list,
@@ -105,14 +111,18 @@ def build_env(args):
     if not args.skip_build_packages:
         # Build each package in the packages list
         for build_command in build_tree:
-            try:
-                build_feedstock.build_feedstock_from_command(build_command,
+            if not _all_outputs_exist(args.output_folder, build_command.output_files):
+                try:
+                    print("Building " + build_command.recipe)
+                    build_feedstock.build_feedstock_from_command(build_command,
                                                             output_folder=os.path.abspath(args.output_folder),
                                                             extra_channels=[os.path.abspath(args.output_folder)] +
                                                                            args.channels_list,
                                                             conda_build_config=os.path.abspath(args.conda_build_config))
-            except OpenCEError as exc:
-                raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
+                except OpenCEError as exc:
+                    raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
+            else:
+                print("Skipping build of " + build_command.recipe + " because it already exists")
 
     if args.run_tests:
         _run_tests(build_tree, conda_env_files)
