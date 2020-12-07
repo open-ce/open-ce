@@ -24,14 +24,13 @@ def render_yaml(path, variants=None, variant_config_files=None, schema=None, per
     Call conda-build's render tool to get a list of dictionaries of the
     rendered YAML file for each variant that will be built.
     """
-    config = get_or_merge_config(None)
+    config = get_or_merge_config(None, variant=variants)
     config.variant_config_files = variant_config_files
     config.verbose = False
 
     if not os.path.isfile(path):
         metas = conda_build.api.render(path,
                                        config=config,
-                                       variants=variants,
                                        bypass_env_check=True,
                                        finalize=False)
     else:
@@ -40,7 +39,6 @@ def render_yaml(path, variants=None, variant_config_files=None, schema=None, per
         # The absolute path is needed because MetaData seems to do some caching based on file name.
         metas = conda_build.metadata.MetaData(
                             os.path.abspath(path),
-                            variant=variants,
                             config=config).get_rendered_recipe_text(permit_undefined_jinja=permit_undefined_jinja)
     if schema:
         utils.validate_dict_schema(metas, schema)
@@ -50,10 +48,10 @@ def get_output_file_paths(meta, variants):
     """
     Get the paths of all of the generated packages for a recipe.
     """
-    config = get_or_merge_config(None)
+    config = get_or_merge_config(None, variant=variants)
     config.verbose = False
 
-    out_files = conda_build.api.get_output_file_paths(meta, config=config, variants=variants)
+    out_files = conda_build.api.get_output_file_paths(meta, config=config)
 
     # Only return the package name and the parent directory. This will show where within the output
     # directory the package should be.
