@@ -17,6 +17,8 @@ boost:
 c_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
+catalogue:
+  - 1.0.0
 cffi:
   - 1.14.*
 click:
@@ -184,7 +186,7 @@ setuptools_rust:
 six:
   - 1.15.0
 srsly:
-  - 0.2.0
+  - 1.0.4
 tabulate:
   - 0.8.*
 tensorboard:
@@ -198,7 +200,7 @@ tensorrt:
 termcolor:
   - 1.1.0
 thinc:
-  - 7.1.1
+  - 7.4.1
 tokenizers:
   - 0.7.0
 torchtext:
