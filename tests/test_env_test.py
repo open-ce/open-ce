@@ -12,7 +12,6 @@
 import sys
 import os
 import pathlib
-import pytest
 import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
