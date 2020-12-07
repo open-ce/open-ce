@@ -172,17 +172,17 @@ requests:
 regex:
   - 2020.6.*
 rust_nightly:
-  - 1.43.0
+  - 1.50.0
 scikit_image:
   - 0.16
 scipy:
   - 1.4.*
 sentencepiece:
-  - 0.1.86
+  - 0.1.91
 setuptools:
   - 41.*
 setuptools_rust:
-  - 0.10.6
+  - 0.11.3
 six:
   - 1.15.0
 srsly:
@@ -202,7 +202,7 @@ termcolor:
 thinc:
   - 7.4.1
 tokenizers:
-  - 0.7.0
+  - 0.9.3
 torchtext:
   - 0.7.*
 torchvision:
