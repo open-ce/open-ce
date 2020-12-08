@@ -109,6 +109,9 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
         build_config_data, recipe_config_file  = load_package_config(recipe_config_file, variant)
 
         # Build each recipe
+        if build_config_data['recipes'] is None:
+            build_config_data['recipes'] = []
+            print("No recipe to build for given configuration.")
         for recipe in build_config_data['recipes']:
             if recipes_to_build and recipe['name'] not in recipes_to_build:
                 continue
