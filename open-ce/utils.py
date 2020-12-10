@@ -40,7 +40,7 @@ cuda_versions=DEFAULT_CUDA_VERS):
     variants = { 'python' : inputs.parse_arg_list(python_versions),
                  'build_type' : inputs.parse_arg_list(build_types),
                  'mpi_type' :  inputs.parse_arg_list(mpi_types),
-                 'cuda_variant' : inputs.parse_arg_list(cuda_versions)}
+                 'cudatoolkit' : inputs.parse_arg_list(cuda_versions)}
     return [dict(zip(variants,y)) for y in product(*variants.values())]
 
 def remove_version(package):

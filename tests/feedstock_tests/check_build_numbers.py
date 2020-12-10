@@ -47,8 +47,8 @@ def _get_build_numbers(build_config_data, config, variant):
                                                            "number" : meta.meta['build']['number']}
     return build_numbers
 
-def _get_configs():
-    build_config_data, _ = build_feedstock.load_package_config()
+def _get_configs(variant):
+    build_config_data, _ = build_feedstock.load_package_config(variants=variant)
     config = get_or_merge_config(None)
     config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG]
     config.verbose = False
@@ -69,20 +69,14 @@ def main(arg_strings=None):
     utils.run_and_log("git remote set-head origin -a")
     default_branch = utils.get_output("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
 
-    utils.run_and_log("git checkout {}".format(default_branch))
-    master_build_config_data, master_config = _get_configs()
-
-    utils.run_and_log("git checkout {}".format(pr_branch))
-    pr_build_config_data, pr_config = _get_configs()
-
     variant_build_results = dict()
     for variant in variants:
-        print("Variant:")
-        print(variant)
         utils.run_and_log("git checkout {}".format(default_branch))
+        master_build_config_data, master_config = _get_configs(variant)
         master_build_numbers = _get_build_numbers(master_build_config_data, master_config, variant)
 
         utils.run_and_log("git checkout {}".format(pr_branch))
+        pr_build_config_data, pr_config = _get_configs(variant)
         current_pr_build_numbers = _get_build_numbers(pr_build_config_data, pr_config, variant)
 
         print("Build Info for Variant:   {}".format(variant))
