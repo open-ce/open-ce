@@ -77,6 +77,8 @@ def main(arg_strings=None):
 
     variant_build_results = dict()
     for variant in variants:
+        print("Variant:")
+        print(variant)
         utils.run_and_log("git checkout {}".format(default_branch))
         master_build_numbers = _get_build_numbers(master_build_config_data, master_config, variant)
 
