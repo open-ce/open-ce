@@ -34,6 +34,8 @@ def make_parser():
 
 def _get_build_numbers(build_config_data, config, variant):
     build_numbers = dict()
+    print("Variant:")
+    print(variant)
     for recipe in build_config_data["recipes"]:
         metas = conda_build.api.render(recipe['path'],
                                     config=config,
