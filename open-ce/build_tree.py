@@ -11,6 +11,7 @@ import os
 import utils
 import conda_utils
 import env_config
+import validate_config
 import build_feedstock
 from errors import OpenCEError, Error
 from conda_env_file_generator import CondaEnvFileGenerator
@@ -288,6 +289,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # remove build commands from build_commands that are already in self.build_commands
             build_commands = _add_build_command_dependencies(build_commands, self.build_commands,
                                         len(self.build_commands))
+            validate_config.validate_build_tree(build_commands, external_deps)
             self.build_commands += build_commands
         self._detect_cycle()
 

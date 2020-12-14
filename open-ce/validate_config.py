@@ -39,26 +39,25 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
         for env_file in env_config_files:
             print('Validating {} for {} : {}'.format(conda_build_config, env_file, variant))
             try:
-                recipes = build_tree.BuildTree([env_file],
-                                               variant['python'],
-                                               variant['build_type'],
-                                               variant['mpi_type'],
-                                               variant['cudatoolkit'],
-                                               repository_folder=repository_folder,
-                                               conda_build_config=conda_build_config)
-                validate_build_tree(recipes, variant)
+                _ = build_tree.BuildTree([env_file],
+                                          variant['python'],
+                                          variant['build_type'],
+                                          variant['mpi_type'],
+                                          variant['cudatoolkit'],
+                                          repository_folder=repository_folder,
+                                          conda_build_config=conda_build_config)
             except OpenCEError as err:
                 raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
             print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
 
-def validate_build_tree(recipes, variant):
+def validate_build_tree(build_commands, external_deps):
     '''
     Check a build tree for dependency compatability.
     '''
-    packages = [package for recipe in recipes for package in recipe.packages]
-    channels = {channel for recipe in recipes for channel in recipe.channels}
-    deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
-    deps.update(recipes.get_external_dependencies(variant))
+    packages = [package for recipe in build_commands for package in recipe.packages]
+    channels = {channel for recipe in build_commands for channel in recipe.channels}
+    deps = {dep for recipe in build_commands for dep in recipe.run_dependencies}
+    deps.update(external_deps)
 
     pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
                                                                     if not utils.remove_version(dep) in packages])
