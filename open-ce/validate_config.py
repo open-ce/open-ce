@@ -46,7 +46,6 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
                                                variant['cudatoolkit'],
                                                repository_folder=repository_folder,
                                                conda_build_config=conda_build_config)
-                validate_build_tree(recipes, recipes.get_external_dependencies(variant))
             except OpenCEError as err:
                 raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
             print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
