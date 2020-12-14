@@ -20,14 +20,9 @@ class CondaEnvFileGenerator():
     """
 
     def __init__(self,
-                 build_commands,
-                 external_dependencies,
+                 dependencies,
                  ):
-        self._dependency_set = set()
-        self._external_dependencies = external_dependencies
-
-        for build_command in build_commands:
-            self._update_conda_env_file_content(build_command)
+        self._dependency_set = dependencies
 
     #pylint: disable=too-many-arguments
     def write_conda_env_file(self,
@@ -63,21 +58,6 @@ class CondaEnvFileGenerator():
             file_name = conda_env_file
 
         return file_name
-
-    def _update_deps_lists(self, dependencies):
-        if not dependencies is None:
-            for dep in dependencies:
-                self._dependency_set.add(utils.generalize_version(dep))
-
-    def _update_conda_env_file_content(self, build_command):
-        """
-        This function updates dependency dictionary for each build command with
-        its dependencies both internal and external.
-        """
-        self._update_deps_lists(build_command.run_dependencies)
-        self._update_deps_lists(build_command.packages)
-
-        self._update_deps_lists(self._external_dependencies)
 
 def get_variant_string(conda_env_file):
     """

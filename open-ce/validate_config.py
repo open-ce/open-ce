@@ -46,27 +46,28 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
                                                variant['cudatoolkit'],
                                                repository_folder=repository_folder,
                                                conda_build_config=conda_build_config)
-                validate_build_tree(recipes, variant)
+                variant_string = utils.variant_string(variant["python"], variant["build_type"],
+                                               variant["mpi_type"], variant["cudatoolkit"])
+
+                validate_build_tree(recipes, variant_string)
             except OpenCEError as err:
                 raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
             print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
 
-def validate_build_tree(recipes, variant):
+def validate_build_tree(recipes, variant_string):
     '''
     Check a build tree for dependency compatability.
     '''
-    packages = [package for recipe in recipes for package in recipe.packages]
     channels = {channel for recipe in recipes for channel in recipe.channels}
-    deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
-    deps.update(recipes.get_external_dependencies(variant))
 
-    pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
-                                                                    if not utils.remove_version(dep) in packages])
+    deps = recipes.get_installable_packages(variant_string)
+    print("Dependencies from build tree: ", deps)
+    pkg_args = " ".join(["\"{}\"".format(dep) for dep in deps])
 
     channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
 
     cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
-
+    print("cli cmd: ", cli)
     ret_code, std_out, std_err = utils.run_command_capture(cli)
     if not ret_code:
         raise OpenCEError(Error.VALIDATE_BUILD_TREE, cli, std_out, std_err)

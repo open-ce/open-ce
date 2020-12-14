@@ -29,13 +29,15 @@ class Key(Enum):
     external_dependencies = auto()
     patches = auto()
     opence_env_file_path = auto()
+    runtime_package = auto()
 
 _PACKAGE_SCHEMA ={
     Key.feedstock.name: utils.make_schema_type(str, True),
     Key.git_tag.name: utils.make_schema_type(str),
     Key.recipes.name: utils.make_schema_type([str]),
     Key.channels.name: utils.make_schema_type([str]),
-    Key.patches.name: utils.make_schema_type([str])
+    Key.patches.name: utils.make_schema_type([str]),
+    Key.runtime_package.name: utils.make_schema_type(bool)
 }
 
 _ENV_CONFIG_SCHEMA = {
