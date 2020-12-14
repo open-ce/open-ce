@@ -64,16 +64,16 @@ will require that the MPI environment is correctly set up.
 ```shell
 ==============================================================================
 usage: open-ce build env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
-                    [--output_folder OUTPUT_FOLDER] [--channels CHANNELS_LIST]
-                    [--repository_folder REPOSITORY_FOLDER]
-                    [--python_versions PYTHON_VERSIONS]
-                    [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
-                    [--skip_build_packages] [--run_tests] [--docker_build]
-                    [--git_location GIT_LOCATION]
-                    [--git_tag_for_env GIT_TAG_FOR_ENV]
-                    env_config_file [env_config_file ...]
-
-Build conda environment as part of Open-CE
+                         [--output_folder OUTPUT_FOLDER]
+                         [--channels CHANNELS_LIST]
+                         [--repository_folder REPOSITORY_FOLDER]
+                         [--python_versions PYTHON_VERSIONS]
+                         [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
+                         [--skip_build_packages] [--run_tests]
+                         [--docker_build] [--git_location GIT_LOCATION]
+                         [--git_tag_for_env GIT_TAG_FOR_ENV]
+                         [--test_labels TEST_LABELS]
+                         env_config_file [env_config_file ...]
 
 positional arguments:
   env_config_file       Environment config file. This should be a YAML file
@@ -121,6 +121,9 @@ optional arguments:
   --git_tag_for_env GIT_TAG_FOR_ENV
                         Git tag to be checked out for all of the packages in
                         an environment. (default: None)
+  --test_labels TEST_LABELS
+                        Comma delimited list of labels indicating what tests
+                        to run. (default: )
 ==============================================================================
 ```
 

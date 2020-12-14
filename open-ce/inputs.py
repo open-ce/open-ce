@@ -182,7 +182,7 @@ path of \"recipe\"."""))
                                         '--test_labels',
                                         type=str,
                                         default="",
-                                        help="Comma delimitted list of labels indicating what tests to run."))
+                                        help="Comma delimited list of labels indicating what tests to run."))
 
 
 
