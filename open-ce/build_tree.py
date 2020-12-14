@@ -500,7 +500,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 installable_packages = check_and_add(build_command.packages, installable_packages)
 
         installable_packages = check_and_add(self._external_dependencies[variant_str], installable_packages)
-        print("Lenght of final installable packages: ", len(installable_packages))
         return installable_packages
 
     def write_conda_env_files(self,

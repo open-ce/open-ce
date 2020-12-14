@@ -59,15 +59,14 @@ def validate_build_tree(recipes, variant_string):
     Check a build tree for dependency compatability.
     '''
     channels = {channel for recipe in recipes for channel in recipe.channels}
-
+    packages = [package for recipe in recipes for package in recipe.packages]
     deps = recipes.get_installable_packages(variant_string)
-    print("Dependencies from build tree: ", deps)
-    pkg_args = " ".join(["\"{}\"".format(dep) for dep in deps])
 
+    pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
+                                                                    if not utils.remove_version(dep) in packages])
     channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
 
     cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
-    print("cli cmd: ", cli)
     ret_code, std_out, std_err = utils.run_command_capture(cli)
     if not ret_code:
         raise OpenCEError(Error.VALIDATE_BUILD_TREE, cli, std_out, std_err)
