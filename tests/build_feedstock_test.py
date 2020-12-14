@@ -145,6 +145,21 @@ def test_build_feedstock_nonexist_config_file(mocker):
         open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
     assert "Unable to open provided config file: my_config.yml" in str(exc.value)
 
+def test_recipe_config_file_for_inapplicable_configuration(mocker, capsys):
+    """
+    Tests the case when build is triggered for a configuration for which no recipes are applicable.
+    """
+
+    expect_recipe = os.path.join(os.getcwd(),'cuda_recipe_path') #Checks that the value from the input config file is used.
+    mocker.patch(
+        'conda_build.api.build',
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
+    )
+    
+    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--python_versions", "4.1"])
+    captured = capsys.readouterr()
+    assert "INFO: No recipe to build for given configuration." in captured.out
+
 def test_build_feedstock_local_src_dir_args(mocker):
     """
     Tests that providing the local_src_dir argument sets the LOCAL_SRC_DIR environment variable correctly.
