@@ -555,5 +555,5 @@ def get_installable_packages(build_commands, external_deps):
             installable_packages = check_and_add(build_command.packages, installable_packages)
 
     installable_packages = check_and_add(external_deps, installable_packages)
-    return installable_packages
+    return sorted(installable_packages, key=len)
 
