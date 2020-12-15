@@ -11,6 +11,7 @@ import os
 import utils
 import conda_utils
 import env_config
+import validate_config
 import build_feedstock
 from errors import OpenCEError, Error
 from conda_env_file_generator import CondaEnvFileGenerator
@@ -288,6 +289,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # remove build commands from build_commands that are already in self.build_commands
             build_commands = _add_build_command_dependencies(build_commands, self.build_commands,
                                         len(self.build_commands))
+            validate_config.validate_build_tree(build_commands, external_deps)
             self.build_commands += build_commands
         self._detect_cycle()
 
@@ -397,12 +399,13 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             patches = package.get(env_config.Key.patches.name, []) if package else []
             if len(patches) > 0:
                 os.chdir(repo_dir)
-                open_ce_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
                 for patch in patches:
                     if os.path.isabs(patch) and os.path.exists(patch):
                         patch_file = patch
                     else:
-                        patch_file = os.path.join(open_ce_path, patch)
+                        # Look for patch relative to where the Open-CE environment file is
+                        patch_file = os.path.join(os.path.dirname(env_config_data.get(
+                                                  env_config.Key.opence_env_file_path)), patch)
                     patch_apply_cmd = "git apply {}".format(patch_file)
                     print("Patch apply command: ", patch_apply_cmd)
                     patch_apply_res = os.system(patch_apply_cmd)

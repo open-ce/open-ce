@@ -24,13 +24,15 @@ def make_parser():
     parser = inputs.make_parser([], description = 'Open-CE Tool')
 
     subparsers = parser.add_subparsers(title='Open-CE Commands',
-                                       description='Choose from the following commands to perform.',
-                                       required=True)
+                                       description='Choose from the following commands to perform.')
+    subparsers.required = True
+    subparsers.dest = 'command'
 
     build_parser = inputs.add_subparser(subparsers, 'build', [], help="Build a feedstock, an image, or an environment.")
     build_sub_parsers = build_parser.add_subparsers(title='Build Commands',
-                                                    description='Valid Commands',
-                                                    required=True)
+                                                    description='Valid Commands')
+    build_sub_parsers.required = True
+    build_sub_parsers.dest = 'build_command'
 
     build_env_parser = inputs.add_subparser(build_sub_parsers,
                                             build_env.COMMAND,
@@ -52,8 +54,10 @@ def make_parser():
 
     test_parser = inputs.add_subparser(subparsers, 'test', [], help="Run tests within a feedstock.")
     test_sub_parsers = test_parser.add_subparsers(title='Test Commands',
-                                                  description='Valid Commands',
-                                                  required=True)
+                                                  description='Valid Commands')
+    test_sub_parsers.required = True
+    test_sub_parsers.dest = 'test_command'
+
 
     test_feedstock_parser = inputs.add_subparser(test_sub_parsers,
                                                  test_feedstock.COMMAND,
@@ -70,8 +74,9 @@ def make_parser():
     validate_parser = inputs.add_subparser(subparsers, 'validate', [],
                                            help="Validate an env file or a conda_build_config file.")
     validate_sub_parsers = validate_parser.add_subparsers(title='Validate Commands',
-                                                          description='Valid Commands',
-                                                          required=True)
+                                                          description='Valid Commands')
+    validate_sub_parsers.required = True
+    validate_sub_parsers.dest = 'validate_command'
 
     validate_config_parser = inputs.add_subparser(validate_sub_parsers,
                                                   validate_config.COMMAND,

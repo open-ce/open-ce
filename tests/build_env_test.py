@@ -62,7 +62,7 @@ def test_build_env(mocker, capsys):
         side_effect=dirTracker.validate_chdir
     )
     mocker.patch(
-        'validate_config.validate_env_config'
+        'validate_config.validate_build_tree'
     )
     #            +-------+
     #     +------+   15  +-----+
