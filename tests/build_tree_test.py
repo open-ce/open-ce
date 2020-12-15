@@ -306,12 +306,11 @@ def test_clone_repo_failure(mocker):
         mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, None)
     assert "Unable to clone repository" in str(exc.value)
 
-def test_check_runtime_package_field(mocker):
+def test_check_runtime_package_field():
     '''
     Test for `runtime_package` field
     '''
     env_file = os.path.join(test_dir, 'test-env3.yaml')
-    mock_build_tree = TestBuildTree([env_file], "3.6", "cpu", "openmpi", "10.2")
 
     possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
     for variant in possible_variants:
@@ -322,7 +321,7 @@ def test_check_runtime_package_field(mocker):
             packages = env_config_data.get(env_config.Key.packages.name, [])
             for package in packages:
                 if package.get(env_config.Key.feedstock.name) == "package222":
-                    assert False == package.get(env_config.Key.runtime_package.name)
+                    assert package.get(env_config.Key.runtime_package.name) == "False"
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
@@ -529,6 +528,9 @@ def test_get_installable_package_for_non_runtime_package():
     assert not "package1a" in packages
 
 def test_get_installable_package_with_no_duplicates():
+    '''
+    This test verifies that get_installable_package doesn't return duplicate dependencies.
+    '''
     build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
                                     ["package1a"],

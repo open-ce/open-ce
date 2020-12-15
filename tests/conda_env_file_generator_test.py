@@ -35,7 +35,7 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     python="3.6",
                                     build_type="cpu",
                                     mpi_type="system",
-                                    cudatoolkit="10.2",                                    
+                                    cudatoolkit="10.2", 
                                     run_dependencies=["python ==3.6", "pack1 >=1.0", "pack2   ==2.0", "pack3 3.3 build"]),
                          build_tree.BuildCommand("recipe3",
                                     "repo3",
@@ -44,7 +44,8 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     build_type="cpu",
                                     mpi_type="openmpi",
                                     cudatoolkit="10.2",
-                                    run_dependencies=["python 3.7", "pack1==1.0", "pack2 <=2.0", "pack3   3.0.*", "pack4=1.15.0=py38h6ffa863_0"]),
+                                    run_dependencies=["python 3.7", "pack1==1.0", "pack2 <=2.0", "pack3   3.0.*",
+                                                      "pack4=1.15.0=py38h6ffa863_0"]),
                          build_tree.BuildCommand("recipe4",
                                     "repo4",
                                     ["package4a", "package4b"],
@@ -100,4 +101,4 @@ def test_get_variant_string_no_string(mocker):
     test_env_file = "some string without\n a variant string"
     mocker.patch('builtins.open', mocker.mock_open(read_data=test_env_file))
 
-    assert conda_env_file_generator.get_variant_string("some_file.yaml") == None
+    assert conda_env_file_generator.get_variant_string("some_file.yaml") is None

@@ -346,10 +346,10 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                     continue
 
                 repository, repo_dir = self._get_repo(env_config_data, package)
-                runtime_package = package.get(env_config.Key.packages.runtime_package.name, True)
+                runtime_package = package.get(env_config.Key.runtime_package.name, True)
                 repo_build_commands, repo_test_commands = _create_commands(repo_dir,
                                                             runtime_package,
-                                                            package.get('recipes'),
+                                                            package.get(env_config.Key.recipes.name),
                                                             [os.path.abspath(self._conda_build_config)],
                                                             variants,
                                                             env_config_data.get(env_config.Key.channels.name, None),
