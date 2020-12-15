@@ -163,6 +163,8 @@ python_lmdb:
   - 0.98.*
 pytorch:
   - 1.6.*
+pytorch_lightning:
+  - 1.1.0  
 pyyaml:
   - 5.*
 requests:
