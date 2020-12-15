@@ -23,7 +23,7 @@ class BuildCommand():
     The BuildCommand class holds all of the information needed to call the build_feedstock
     function a single time.
     """
-    #pylint: disable=too-many-instance-attributes,too-many-arguments
+    #pylint: disable=too-many-instance-attributes,too-many-arguments,too-many-locals
     def __init__(self,
                  recipe,
                  repository,
@@ -41,9 +41,9 @@ class BuildCommand():
                  channels=None,
                  build_command_dependencies=None):
         self.recipe = recipe
-        self.runtime_package = runtime_package
         self.repository = repository
         self.packages = packages
+        self.runtime_package = runtime_package
         self.output_files = output_files
         self.python = python
         self.build_type = build_type
@@ -506,6 +506,10 @@ def find_all_cycles(tree, current=0, seen=None):
     return result
 
 def get_installable_packages(build_commands, external_deps):
+    '''
+    This function retrieves the list of unique dependencies that are needed at runtime, from the
+    build commands and external dependencies that are passed to it.
+    '''
     installable_packages =  set()
 
     def check_matching(deps_set, dep_to_be_added):
@@ -532,7 +536,7 @@ def get_installable_packages(build_commands, external_deps):
 
     def _get_unique_deps_names(dependencies):
         deps = set()
-        if not dependencies is None:
+        if dependencies:
             for dep in dependencies:
                 generalized_dep = utils.generalize_version(dep)
                 dep_to_update = check_matching(deps, generalized_dep)
@@ -556,4 +560,3 @@ def get_installable_packages(build_commands, external_deps):
 
     installable_packages = check_and_add(external_deps, installable_packages)
     return sorted(installable_packages, key=len)
-
