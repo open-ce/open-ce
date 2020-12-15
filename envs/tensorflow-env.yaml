@@ -9,6 +9,7 @@ packages:
   - feedstock : nccl
   - feedstock : cudnn
 {% endif %}
+  - feedstock : python-flatbuffers
   - feedstock : tensorflow
   - feedstock : libevent
   - feedstock : tensorflow-serving
