@@ -84,6 +84,8 @@ hypothesis:
   - 5.*
 h5py:
   - 2.10.0
+importlib_resources:
+  - 3.3.0
 jasper:
   - 2.0.14
 joblib:
