@@ -1,5 +1,6 @@
 packages:
-{% if build_type == 'cuda' %}
+{% set py_ver = python | float %}
+{% if build_type == 'cuda' and py_ver < 3.8 %}
   - feedstock : cudnn
   - feedstock : tensorrt
   - feedstock : onnx
