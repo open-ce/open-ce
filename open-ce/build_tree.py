@@ -127,8 +127,11 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
     if feedstock_conda_build_config_file:
         combined_config_files.append(feedstock_conda_build_config_file)
     build_commands = []
-    for recipe in config_data.get('recipes', []):
-        if recipes and not recipe.get('name') in recipes:
+    recipes_from_config = config_data.get('recipes', [])
+    if recipes_from_config is None:
+        recipes_from_config = []
+    for recipe in recipes_from_config:
+        if recipes and not recipe.get('name', "") in recipes:
             continue
         packages, run_deps, host_deps, build_deps, test_deps, output_files = _get_package_dependencies(
                                                                                          recipe.get('path'),
