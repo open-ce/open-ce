@@ -287,12 +287,12 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             self._external_dependencies[variant_string] = external_deps
             self._conda_env_files[variant_string] = CondaEnvFileGenerator(build_commands, external_deps)
             self._test_commands[variant_string] = test_commands
+            validate_config.validate_build_tree(build_commands, external_deps)
 
             # Add dependency tree information to the packages list and
             # remove build commands from build_commands that are already in self.build_commands
             build_commands = _add_build_command_dependencies(build_commands, self.build_commands,
                                         len(self.build_commands))
-            validate_config.validate_build_tree(build_commands, external_deps)
             self.build_commands += build_commands
         self._detect_cycle()
 
