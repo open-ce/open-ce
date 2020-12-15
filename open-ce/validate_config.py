@@ -39,28 +39,24 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
         for env_file in env_config_files:
             print('Validating {} for {} : {}'.format(conda_build_config, env_file, variant))
             try:
-                recipes = build_tree.BuildTree([env_file],
-                                               variant['python'],
-                                               variant['build_type'],
-                                               variant['mpi_type'],
-                                               variant['cudatoolkit'],
-                                               repository_folder=repository_folder,
-                                               conda_build_config=conda_build_config)
-                variant_string = utils.variant_string(variant["python"], variant["build_type"],
-                                               variant["mpi_type"], variant["cudatoolkit"])
-
-                validate_build_tree(recipes, variant_string)
+                _ = build_tree.BuildTree([env_file],
+                                          variant['python'],
+                                          variant['build_type'],
+                                          variant['mpi_type'],
+                                          variant['cudatoolkit'],
+                                          repository_folder=repository_folder,
+                                          conda_build_config=conda_build_config)
             except OpenCEError as err:
                 raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
             print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
 
-def validate_build_tree(recipes, variant_string):
+def validate_build_tree(build_commands, external_deps):
     '''
     Check a build tree for dependency compatability.
     '''
-    channels = {channel for recipe in recipes for channel in recipe.channels}
-    packages = [package for recipe in recipes for package in recipe.packages]
-    deps = recipes.get_installable_packages(variant_string)
+    packages = [package for recipe in build_commands for package in recipe.packages]
+    channels = {channel for recipe in build_commands for channel in recipe.channels}
+    deps = build_tree.get_installable_packages(build_commands, external_deps)
 
     pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
                                                                     if not utils.remove_version(dep) in packages])
