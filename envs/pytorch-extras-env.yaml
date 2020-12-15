@@ -4,3 +4,4 @@ imported_envs:
 
 packages:
   - feedstock : pytorch-lightning
+  - feedstock : pytorch-lightning-bolts
