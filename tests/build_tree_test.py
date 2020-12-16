@@ -321,7 +321,7 @@ def test_check_runtime_package_field():
             packages = env_config_data.get(env_config.Key.packages.name, [])
             for package in packages:
                 if package.get(env_config.Key.feedstock.name) == "package222":
-                    assert package.get(env_config.Key.runtime_package.name) == "False"
+                    assert package.get(env_config.Key.runtime_package.name) == False
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
