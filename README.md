@@ -123,6 +123,10 @@ The following command can be used to create a conda environment using a conda en
 conda env create -f <conda_environment_file>
 ```
 
+### Testing Packages
+
+After performing the build using the `open-ce build env` tool, the `open-ce test` tool can be used to either test a package or a collection of packages. For more details on `open-ce test`, please see [`doc/README.open_ce_test.md`](doc/README.open_ce_test.md).
+
 ### Creating Docker Image with Open-CE Packages installed
 
 After performing the build using `open-ce build env`, the `open-ce build image` command can be used to create a runtime docker image containing the newly created conda channel, as well as a conda environment with the newly build Open-CE packages. For more details on `open-ce build image`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-image-sub-command).
