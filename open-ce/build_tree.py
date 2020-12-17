@@ -23,11 +23,12 @@ class BuildCommand():
     The BuildCommand class holds all of the information needed to call the build_feedstock
     function a single time.
     """
-    #pylint: disable=too-many-instance-attributes,too-many-arguments
+    #pylint: disable=too-many-instance-attributes,too-many-arguments,too-many-locals
     def __init__(self,
                  recipe,
                  repository,
                  packages,
+                 runtime_package=True,
                  output_files=None,
                  python=None,
                  build_type=None,
@@ -42,6 +43,7 @@ class BuildCommand():
         self.recipe = recipe
         self.repository = repository
         self.packages = packages
+        self.runtime_package = runtime_package
         self.output_files = output_files
         self.python = python
         self.build_type = build_type
@@ -111,7 +113,7 @@ def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
-def _create_commands(repository, recipes, variant_config_files, variants, channels, test_labels):#pylint: disable=too-many-locals,too-many-arguments
+def _create_commands(repository, runtime_package, recipes, variant_config_files, variants, channels, test_labels):#pylint: disable=too-many-locals,too-many-arguments
     """
     Returns:
         A list of BuildCommands for each recipe within a repository.
@@ -141,6 +143,7 @@ def _create_commands(repository, recipes, variant_config_files, variants, channe
         build_commands.append(BuildCommand(recipe=recipe.get('name', None),
                                     repository=repository,
                                     packages=packages,
+                                    runtime_package=runtime_package,
                                     output_files=output_files,
                                     python=variants['python'],
                                     build_type=variants['build_type'],
@@ -285,15 +288,18 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             variant_string = utils.variant_string(variant["python"], variant["build_type"],
                                                   variant["mpi_type"], variant["cudatoolkit"])
             self._external_dependencies[variant_string] = external_deps
-            self._conda_env_files[variant_string] = CondaEnvFileGenerator(build_commands, external_deps)
             self._test_commands[variant_string] = test_commands
             validate_config.validate_build_tree(build_commands, external_deps)
+
+            installable_packages = get_installable_packages(build_commands, external_deps)
+            self._conda_env_files[variant_string] = CondaEnvFileGenerator(installable_packages)
 
             # Add dependency tree information to the packages list and
             # remove build commands from build_commands that are already in self.build_commands
             build_commands = _add_build_command_dependencies(build_commands, self.build_commands,
                                         len(self.build_commands))
             self.build_commands += build_commands
+
         self._detect_cycle()
 
     def _get_repo(self, env_config_data, package):
@@ -343,9 +349,10 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                     continue
 
                 repository, repo_dir = self._get_repo(env_config_data, package)
-
+                runtime_package = package.get(env_config.Key.runtime_package.name, True)
                 repo_build_commands, repo_test_commands = _create_commands(repo_dir,
-                                                            package.get('recipes'),
+                                                            runtime_package,
+                                                            package.get(env_config.Key.recipes.name),
                                                             [os.path.abspath(self._conda_build_config)],
                                                             variants,
                                                             env_config_data.get(env_config.Key.channels.name, None),
@@ -500,3 +507,59 @@ def find_all_cycles(tree, current=0, seen=None):
         if next_step:
             result += next_step
     return result
+
+def get_installable_packages(build_commands, external_deps):
+    '''
+    This function retrieves the list of unique dependencies that are needed at runtime, from the
+    build commands and external dependencies that are passed to it.
+    '''
+    installable_packages =  set()
+
+    def check_matching(deps_set, dep_to_be_added):
+        # If exact match already present in the set, no need to add again
+        if dep_to_be_added in deps_set:
+            return None
+
+        # Check only dependency name if it is present
+        # For e.g. If dep_to_be_added is tensorflow-base >=2.4.* and set has tensorflow-base
+        dep_name_to_be_added = dep_to_be_added.split()[0]
+        if dep_name_to_be_added in deps_set and len(dep_to_be_added.split()) > 1:
+            deps_set.remove(dep_name_to_be_added)
+            return dep_to_be_added
+
+        # For e.g. If set has tensorflow-base 2.4.* and dep_to_be_added is
+        # either just tensorflow-base or tensorflow-base >=2.4.*
+        for dep in deps_set:
+            dep_name_from_set = dep.split()[0]
+            if dep_name_to_be_added == dep_name_from_set:
+                return None
+
+        # If no match found, just add it
+        return dep_to_be_added
+
+    def _get_unique_deps_names(dependencies):
+        deps = set()
+        if dependencies:
+            for dep in dependencies:
+                generalized_dep = utils.generalize_version(dep)
+                dep_to_update = check_matching(deps, generalized_dep)
+                if dep_to_update:
+                    deps.add(dep_to_update)
+        return deps
+
+    def check_and_add(dependencies, parent_set):
+        dependencies = _get_unique_deps_names(dependencies)
+        for dep in dependencies:
+            pack_to_add = check_matching(parent_set, dep)
+            if pack_to_add:
+                parent_set.add(pack_to_add)
+
+        return parent_set
+
+    for build_command in build_commands:
+        if build_command.runtime_package:
+            installable_packages = check_and_add(build_command.run_dependencies, installable_packages)
+            installable_packages = check_and_add(build_command.packages, installable_packages)
+
+    installable_packages = check_and_add(external_deps, installable_packages)
+    return sorted(installable_packages, key=len)

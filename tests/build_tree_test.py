@@ -11,6 +11,7 @@
 
 import sys
 import os
+from collections import Counter
 import pathlib
 import pytest
 
@@ -70,7 +71,7 @@ def test_create_commands(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    build_commands, _ = build_tree._create_commands("/test/my_repo", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
+    build_commands, _ = build_tree._create_commands("/test/my_repo", "True", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
     assert build_commands[0].packages == {'horovod'}
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in build_commands[0].build_dependencies
@@ -229,11 +230,11 @@ def test_get_repo_with_patches(mocker, capsys):
             packages = env_config_data.get(env_config.Key.packages.name, [])
             for package in packages:
 
-                # "package211" has specified a non-existing patch
-                if package.get(env_config.Key.feedstock.name) != "package211":
+                if package.get(env_config.Key.feedstock.name) == "package22":
                     _, _ = mock_build_tree._get_repo(env_config_data, package)
                     captured = capsys.readouterr()
                     assert "Patch apply command:  git apply" in captured.out
+                    break
 
 def test_get_repo_for_nonexisting_patch(mocker):
     '''
@@ -304,6 +305,23 @@ def test_clone_repo_failure(mocker):
     with pytest.raises(OpenCEError) as exc:
         mock_build_tree._clone_repo("https://bad_url", "/test/my_repo", None, None)
     assert "Unable to clone repository" in str(exc.value)
+
+def test_check_runtime_package_field():
+    '''
+    Test for `runtime_package` field
+    '''
+    env_file = os.path.join(test_dir, 'test-env3.yaml')
+
+    possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
+    for variant in possible_variants:
+
+        # test-env3.yaml has defined "runtime_package" for "package222".
+        env_config_data_list = env_config.load_env_config_files([env_file], variant)
+        for env_config_data in env_config_data_list:
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            for package in packages:
+                if package.get(env_config.Key.feedstock.name) == "package222":
+                    assert package.get(env_config.Key.runtime_package.name) == False
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
@@ -481,3 +499,60 @@ def test_build_tree_duplicates():
 
     for build_command in out_commands:
         assert build_command.build_command_dependencies == [0]
+
+def test_get_installable_package_for_non_runtime_package():
+    '''
+    Tests that `get_installable_package` doesn't return the packages marked as
+    non-runtime i.e. build command with runtime_package=False.
+    '''
+
+    build_commands = [build_tree.BuildCommand("recipe1",
+                                    "repo1",
+                                    ["package1a"],
+                                    runtime_package=False,
+                                    python="2.6",
+                                    build_type="cuda",
+                                    mpi_type="openmpi",
+                                    cudatoolkit="10.2",
+                                    build_command_dependencies=[1,2]),
+                         build_tree.BuildCommand("recipe2",
+                                    "repo2",
+                                    ["package2a"],
+                                    python="2.6",
+                                    build_type="cpu",
+                                    mpi_type="openmpi",
+                                    cudatoolkit="10.2",
+                                    build_command_dependencies=[])]
+    external_deps = ["external_pac1    1.2", "external_pack2", "external_pack3=1.2.3"]
+    packages = build_tree.get_installable_packages(build_commands, external_deps)
+    assert not "package1a" in packages
+
+def test_get_installable_package_with_no_duplicates():
+    '''
+    This test verifies that get_installable_package doesn't return duplicate dependencies.
+    '''
+    build_commands = [build_tree.BuildCommand("recipe1",
+                                    "repo1",
+                                    ["package1a"],
+                                    runtime_package=False, 
+                                    run_dependencies=["python 3.7", "pack1a==1.0"]),
+                         build_tree.BuildCommand("recipe2",
+                                    "repo2",
+                                    ["package2a"],
+                                    run_dependencies=["python 3.7", "pack1 ==1.0", "pack1", "pack2 <=2.0",
+                                    "pack2 2.0", "pack3   3.0.*", "pack2"]),
+                         build_tree.BuildCommand("recipe3",
+                                    "repo3",
+                                    ["package3a", "package3b"],
+                                    run_dependencies=["pack1 >=1.0", "pack1", "pack4 <=2.0",
+                                    "pack2 2.0", "pack3   3.0.*", "pack4"])]
+    external_deps = ["external_pac1    1.2"]
+    packages = build_tree.get_installable_packages(build_commands, external_deps)
+    assert not "package1a" in packages
+    assert not "pack1a" in packages
+
+    print("Packages: ", packages)
+
+    expected_packages = ["package2a", "python 3.7.*", "pack1 ==1.0.*", "pack2 <=2.0", "pack3 3.0.*",
+                         "package3a", "package3b", "pack4 <=2.0", "external_pac1 1.2.*"]
+    assert Counter(packages) == Counter(expected_packages) 

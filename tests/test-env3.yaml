@@ -18,6 +18,8 @@ packages:
       patches:
         - tests/package_22_fix1.patch
         - tests/package_22_fix2.patch
+    - feedstock : package222
+      runtime_package : False
 
 external_dependencies:
     - external_dep3=5.6.*
