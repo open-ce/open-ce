@@ -79,8 +79,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        /tmp/nemanich/open-ce/open-
-                        ce/../conda_build_config.yaml)
+                        conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)

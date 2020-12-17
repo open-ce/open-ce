@@ -63,6 +63,7 @@ will require that the MPI environment is correctly set up.
 
 ```shell
 ==============================================================================
+usage: open-ce build env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                          [--output_folder OUTPUT_FOLDER]
                          [--channels CHANNELS_LIST]
                          [--repository_folder REPOSITORY_FOLDER]
@@ -84,8 +85,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        /tmp/nemanich/open-ce/open-
-                        ce/../conda_build_config.yaml)
+                        conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)
@@ -199,8 +199,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        /tmp/nemanich/open-ce/open-
-                        ce/../conda_build_config.yaml)
+                        conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)
@@ -221,17 +220,17 @@ optional arguments:
   --recipe-config-file RECIPE_CONFIG_FILE
                         Path to the recipe configuration YAML file. The configuration
                         file lists paths to recipes to be built within a feedstock.
-                        
+
                         Below is an example stating that there are two recipes to build,
                         one named my_project and one named my_variant.
-                        
+
                         recipes:
                           - name : my_project
                             path : recipe
-                        
+
                           - name : my_variant
                             path: variants
-                        
+
                         If no path is given, the default value is build-config.yaml.
                         If build-config.yaml does not exist, and no value is provided,
                         it will be assumed there is a single recipe with the
