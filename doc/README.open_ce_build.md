@@ -63,12 +63,12 @@ will require that the MPI environment is correctly set up.
 
 ```shell
 ==============================================================================
-usage: open-ce build env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                          [--output_folder OUTPUT_FOLDER]
                          [--channels CHANNELS_LIST]
                          [--repository_folder REPOSITORY_FOLDER]
                          [--python_versions PYTHON_VERSIONS]
                          [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
+                         [--cuda_versions CUDA_VERSIONS]
                          [--skip_build_packages] [--run_tests]
                          [--docker_build] [--git_location GIT_LOCATION]
                          [--git_tag_for_env GIT_TAG_FOR_ENV]
@@ -84,7 +84,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        conda_build_config.yaml)
+                        /tmp/nemanich/open-ce/open-
+                        ce/../conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)
@@ -105,6 +106,9 @@ optional arguments:
   --mpi_types MPI_TYPES
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
+  --cuda_versions CUDA_VERSIONS
+                        Comma delimited list of cuda versions to build for ,
+                        such as "10.2" or "11.0". (default: 10.2)
   --skip_build_packages
                         Do not perform builds of packages. (default: False)
   --run_tests           Run Open-CE tests for each potential conda environment
@@ -180,22 +184,22 @@ Command usage for the `open-ce build feedstock` command:
 ```shell
 ==============================================================================
 usage: open-ce build feedstock [-h] [--conda_build_config CONDA_BUILD_CONFIG]
-                          [--output_folder OUTPUT_FOLDER]
-                          [--channels CHANNELS_LIST]
-                          [--python_versions PYTHON_VERSIONS]
-                          [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
-                          [--recipe-config-file RECIPE_CONFIG_FILE]
-                          [--recipes RECIPE_LIST]
-                          [--working_directory WORKING_DIRECTORY]
-                          [--local_src_dir LOCAL_SRC_DIR]
-
-Build conda packages as part of Open-CE
+                               [--output_folder OUTPUT_FOLDER]
+                               [--channels CHANNELS_LIST]
+                               [--python_versions PYTHON_VERSIONS]
+                               [--build_types BUILD_TYPES]
+                               [--mpi_types MPI_TYPES]
+                               [--cuda_versions CUDA_VERSIONS]
+                               [--recipe-config-file RECIPE_CONFIG_FILE]
+                               [--recipes RECIPE_LIST]
+                               [--working_directory WORKING_DIRECTORY]
+                               [--local_src_dir LOCAL_SRC_DIR]
 
 optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        /mnt/pai/home/bnelson/git/open-ce/open-
+                        /tmp/nemanich/open-ce/open-
                         ce/../conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
@@ -211,20 +215,23 @@ optional arguments:
   --mpi_types MPI_TYPES
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
+  --cuda_versions CUDA_VERSIONS
+                        Comma delimited list of cuda versions to build for ,
+                        such as "10.2" or "11.0". (default: 10.2)
   --recipe-config-file RECIPE_CONFIG_FILE
                         Path to the recipe configuration YAML file. The configuration
                         file lists paths to recipes to be built within a feedstock.
-
+                        
                         Below is an example stating that there are two recipes to build,
                         one named my_project and one named my_variant.
-
+                        
                         recipes:
                           - name : my_project
                             path : recipe
-
+                        
                           - name : my_variant
                             path: variants
-
+                        
                         If no path is given, the default value is build-config.yaml.
                         If build-config.yaml does not exist, and no value is provided,
                         it will be assumed there is a single recipe with the

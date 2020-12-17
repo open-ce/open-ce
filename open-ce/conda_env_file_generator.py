@@ -9,7 +9,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 
-import yaml
 import utils
 
 #pylint: disable=too-few-public-methods
@@ -37,6 +36,8 @@ class CondaEnvFileGenerator():
 
         It returns the path to the file that was written.
         """
+        #pylint: disable=import-outside-toplevel
+        import yaml
 
         if not os.path.exists(path):
             os.mkdir(path)

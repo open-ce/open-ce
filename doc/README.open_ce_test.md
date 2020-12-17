@@ -64,7 +64,8 @@ usage: open-ce test env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                         [--repository_folder REPOSITORY_FOLDER]
                         [--python_versions PYTHON_VERSIONS]
                         [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
-                        [--docker_build] [--git_location GIT_LOCATION]
+                        [--cuda_versions CUDA_VERSIONS] [--docker_build]
+                        [--git_location GIT_LOCATION]
                         [--git_tag_for_env GIT_TAG_FOR_ENV]
                         [--test_labels TEST_LABELS]
                         env_config_file [env_config_file ...]
@@ -78,7 +79,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        conda_build_config.yaml)
+                        /tmp/nemanich/open-ce/open-
+                        ce/../conda_build_config.yaml)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)
@@ -99,6 +101,9 @@ optional arguments:
   --mpi_types MPI_TYPES
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
+  --cuda_versions CUDA_VERSIONS
+                        Comma delimited list of cuda versions to build for ,
+                        such as "10.2" or "11.0". (default: 10.2)
   --docker_build        Perform a build within a docker container. NOTE: When
                         the --docker_build flag is used, all arguments with
                         paths should be relative to the directory containing

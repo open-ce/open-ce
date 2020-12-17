@@ -9,7 +9,6 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 
 import os
 import utils
-import conda_utils
 import env_config
 import validate_config
 import build_feedstock
@@ -169,6 +168,9 @@ def _get_package_dependencies(path, variant_config_files, variants):
     Return a list of output packages and a list of dependency packages
     for the recipe at a given path. Uses conda-render to determine this information.
     """
+    #pylint: disable=import-outside-toplevel
+    import conda_utils
+
     metas = conda_utils.render_yaml(path, variants, variant_config_files)
 
     # Parse out the package names and dependencies from each variant

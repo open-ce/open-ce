@@ -15,7 +15,6 @@ import subprocess
 from enum import Enum, unique, auto
 
 import utils
-import conda_utils
 import conda_env_file_generator
 import inputs
 from inputs import Argument
@@ -158,6 +157,9 @@ def load_test_file(test_file, variants):
     Args:
         test_file (str): Path to the test file to load.
     """
+    #pylint: disable=import-outside-toplevel
+    import conda_utils
+
     if not os.path.exists(test_file):
         return None
 

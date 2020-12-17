@@ -13,8 +13,6 @@ import utils
 from inputs import Argument
 from errors import OpenCEError, Error
 
-utils.check_if_conda_build_exists()
-
 import build_tree # pylint: disable=wrong-import-position
 
 COMMAND = 'config'

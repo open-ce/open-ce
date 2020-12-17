@@ -85,10 +85,8 @@ class Argument(Enum):
                                         '--cuda_versions',
                                         type=str,
                                         default=utils.DEFAULT_CUDA_VERS,
-                                        #Supress description of cuda_versions flag until more robust testing
-                                        help=argparse.SUPPRESS))
-                                        #help='Comma delimited list of cuda versions to build for '
-                                        #     ', such as "10.2" or "11.0".'))
+                                        help='Comma delimited list of cuda versions to build for '
+                                             ', such as "10.2" or "11.0".'))
 
     DOCKER_BUILD = (lambda parser: parser.add_argument(
                                         '--docker_build',
