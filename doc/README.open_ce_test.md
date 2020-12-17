@@ -46,6 +46,10 @@ tests:
 {% endif %}
 ```
 
+## Running Tests After a Build
+
+Tests can be run immediately after a build has completed by passing the `--run_tests` argument to `open-ce build env`. Tests will be run for every package that was built (but not until every package has been built). Tests will be run for every combination of build variants that were specified by the build command. For example, if `python_versions` is set to `3.6,3.7`, tests will be run for the python 3.6 packages and python 3.7 packages. For more information on the `open-ce build env` command, see [doc/README.open_ce_build.md] (README.open_ce_build.md).
+
 ## `open-ce test env` sub command
 
 The `open-ce test env` command can be used to run tests for every package listed within an Open-CE Environment [file](README.yaml.md). Tests will be run for every combination of build variants that are specified. For example, if `python_versions` is set to `3.6,3.7`, tests will be run for the python 3.6 packages and python 3.7 packages.
