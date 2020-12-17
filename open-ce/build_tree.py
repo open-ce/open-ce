@@ -177,12 +177,13 @@ def _get_package_dependencies(path, variant_config_files, variants):
     host_deps = set()
     build_deps = set()
     test_deps = set()
+    output_files = []
     for meta,_,_ in metas:
         packages.add(meta.meta['package']['name'])
         run_deps.update(meta.meta['requirements'].get('run', []))
         host_deps.update(meta.meta['requirements'].get('host', []))
         build_deps.update(meta.meta['requirements'].get('build', []))
-        output_files = conda_utils.get_output_file_paths(meta, variants=variants)
+        output_files += conda_utils.get_output_file_paths(meta, variants=variants)
         if 'test' in meta.meta:
             test_deps.update(meta.meta['test'].get('requires', []))
 
