@@ -11,6 +11,7 @@ packages:
   - feedstock : magma
   - feedstock : cudnn
 {% endif %}
+  - feedstock : sentencepiece
   - feedstock : torchtext
   - feedstock : onnx
   - feedstock : av
