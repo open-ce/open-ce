@@ -13,9 +13,6 @@ from enum import Enum, unique, auto
 import utils
 from errors import OpenCEError, Error
 
-utils.check_if_conda_build_exists()
-import conda_utils  # pylint: disable=wrong-import-position, wrong-import-order
-
 @unique
 class Key(Enum):
     '''Enum for Env Config Keys'''
@@ -50,6 +47,9 @@ _ENV_CONFIG_SCHEMA = {
 
 def _validate_config_file(env_file, variants):
     '''Perform some validation on the environment file after loading it.'''
+    # pylint: disable=import-outside-toplevel
+    import conda_utils
+
     try:
         meta_obj = conda_utils.render_yaml(env_file, variants=variants, schema=_ENV_CONFIG_SCHEMA)
         if not (Key.packages.name in meta_obj.keys() or Key.imported_envs.name in meta_obj.keys()):

@@ -15,14 +15,6 @@ import utils
 import inputs
 from inputs import Argument
 from errors import OpenCEError, Error
-utils.check_if_conda_build_exists()
-
-# pylint: disable=wrong-import-position
-import conda_build.api
-from conda_build.config import get_or_merge_config
-
-import conda_utils
-# pylint: enable=wrong-import-position
 
 COMMAND = 'feedstock'
 
@@ -49,6 +41,9 @@ def load_package_config(config_file=None, variants=None):
     file as an argument, it will be assumed that there is only one
     recipe to build, and it is in the directory called 'recipe'.
     '''
+    # pylint: disable=import-outside-toplevel
+    import conda_utils
+
     if not config_file and not os.path.exists(utils.DEFAULT_RECIPE_CONFIG_FILE):
         recipe_name = os.path.basename(os.getcwd())
         build_config_data = {'recipes':[{'name':recipe_name, 'path':'recipe'}]}
@@ -87,7 +82,7 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
 
-def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
+def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, too-many-locals
                                  recipe_config_file=None,
                                  output_folder=utils.DEFAULT_OUTPUT_FOLDER,
                                  extra_channels=None,
@@ -96,6 +91,12 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
     '''
     Build a feedstock from a build_command object.
     '''
+    utils.check_if_conda_build_exists()
+
+    # pylint: disable=import-outside-toplevel
+    import conda_build.api
+    from conda_build.config import get_or_merge_config
+
     if not extra_channels:
         extra_channels = []
     saved_working_directory = None
@@ -143,7 +144,6 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments
 
 def build_feedstock(args):
     '''Entry Function'''
-
     # Here, importing BuildCommand is intentionally done here to avoid circular import.
 
     from build_tree import BuildCommand   # pylint: disable=import-outside-toplevel

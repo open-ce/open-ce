@@ -13,7 +13,6 @@ import subprocess
 import errno
 from itertools import product
 import re
-import yaml
 import pkg_resources
 from errors import OpenCEError, Error
 import inputs
@@ -222,6 +221,9 @@ def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
     Use regex to substitute channels in a conda env file.
     Regex 'original_channel' is replaced with 'new_channel'
     '''
+    #pylint: disable=import-outside-toplevel
+    import yaml
+
     with open(conda_env_file, 'r') as file_handle:
         env_info = yaml.safe_load(file_handle)
 
