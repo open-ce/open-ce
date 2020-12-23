@@ -32,6 +32,14 @@ This example will:
 1. If running within a CUDA environment, run the bash instructions specified by `command` in "CUDA Test" within a new bash shell that activates the conda environment from step 1.
 1. Removes the conda environment created in step 1.
 
+#### Open-CE Test File Environment Variables
+
+The following environment variables can be referenced within the command section of an Open-CE test:
+
+| Environment Variable | Description |
+| -------------------- | ----------- |
+| FEEDSTOCK_DIR        | Path of the feedstock directory containing the test |
+
 ### Test Labels
 
 Labels can be added to tests using jinja. Labels can be activated using the `--test_labels` argument to the `open-ce test` tools. Below is an example of a test file that only runs the second test if the `long` label is activated.
