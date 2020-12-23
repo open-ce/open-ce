@@ -158,7 +158,7 @@ def _create_commands(repository, runtime_package, recipes, variant_config_files,
     if test_labels:
         for test_label in test_labels:
             variant_copy[test_label] = True
-    test_commands = test_feedstock.gen_test_commands(variants=variant_copy)
+    test_commands = test_feedstock.gen_test_commands(repository=repository, variants=variant_copy)
 
     os.chdir(saved_working_directory)
     return build_commands, test_commands
