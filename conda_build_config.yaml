@@ -190,7 +190,7 @@ regex:
 rust_nightly:
   - 1.50.0
 scikit_image:
-  - 0.16
+  - 0.17
 scipy:
   - 1.4.*
 sentencepiece:
