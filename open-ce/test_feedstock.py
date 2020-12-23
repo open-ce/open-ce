@@ -51,15 +51,17 @@ class TestCommand():
         create_env (bool): Whether this is the command to create a new conda environment.
         clean_env (bool): Whether this is the command to remove a conda environment.
         working_dir (str): Working directory to be used when executing the bash command.
+        repository (str): Directory corresponding to the feedstock.
     """
     #pylint: disable=too-many-arguments
-    def __init__(self, name, conda_env=None, bash_command="", create_env=False, clean_env=False, working_dir=os.getcwd()):
+    def __init__(self, name, conda_env=None, bash_command="", create_env=False, clean_env=False, working_dir=os.getcwd(), repository=""):
         self.bash_command = bash_command
         self.conda_env = conda_env
         self.name = name
         self.create_env = create_env
         self.clean_env = clean_env
         self.working_dir = working_dir
+        self.repository = repository
 
     def get_test_command(self, conda_env_file=None):
         """"
@@ -80,6 +82,7 @@ class TestCommand():
 
         output += "CONDA_BIN=$(dirname $(which conda))\n"
         output += "source ${CONDA_BIN}/../etc/profile.d/conda.sh\n"
+        output += "export FEEDSTOCK_DIR=" + os.path.abspath(self.repository) + "\n"
         output += "conda activate " + self.conda_env + "\n"
         output += self.bash_command + "\n"
 
@@ -167,7 +170,7 @@ def load_test_file(test_file, variants):
 
     return test_file_data
 
-def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, working_dir=os.getcwd()):
+def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, repository="", working_dir=os.getcwd()):
     """
     Generate a list of test commands from the provided test file.
 
@@ -187,18 +190,21 @@ def gen_test_commands(test_file=utils.DEFAULT_TEST_CONFIG_FILE, variants=None, w
     test_commands.append(TestCommand(name="Create conda environment " + conda_env,
                                      conda_env=conda_env,
                                      create_env=True,
-                                     working_dir=working_dir))
+                                     working_dir=working_dir,
+                                     repository=repository))
 
     for test in test_data['tests']:
         test_commands.append(TestCommand(name=test.get('name'),
                                          conda_env=conda_env,
                                          bash_command=test.get('command'),
-                                         working_dir=working_dir))
+                                         working_dir=working_dir,
+                                         repository=repository))
 
     test_commands.append(TestCommand(name="Remove conda environment " + conda_env,
                                      conda_env=conda_env,
                                      clean_env=True,
-                                     working_dir=working_dir))
+                                     working_dir=working_dir,
+                                     repository=repository))
 
     return test_commands
 
@@ -242,7 +248,7 @@ def _test_feedstock(args):
         variant_dict = dict()
     for test_label in inputs.parse_arg_list(args.test_labels):
         variant_dict[test_label] = True
-    test_commands = gen_test_commands(working_dir=args.test_working_dir, variants=variant_dict)
+    test_commands = gen_test_commands(repository=os.getcwd(), working_dir=args.test_working_dir, variants=variant_dict)
     failed_tests = run_test_commands(conda_env_file, test_commands)
     display_failed_tests(failed_tests)
 
