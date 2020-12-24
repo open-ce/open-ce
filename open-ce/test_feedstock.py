@@ -83,8 +83,7 @@ class TestCommand():
         output += "CONDA_BIN=$(dirname $(which conda))\n"
         output += "source ${CONDA_BIN}/../etc/profile.d/conda.sh\n"
         output += "conda activate " + self.conda_env + "\n"
-        if self.feedstock_dir:
-            output += "export FEEDSTOCK_DIR=" + self.feedstock_dir + "\n"
+        output += "export FEEDSTOCK_DIR=" + self.feedstock_dir + "\n"
         output += self.bash_command + "\n"
 
         return output
