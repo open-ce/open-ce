@@ -53,13 +53,15 @@ class TestCommand():
         working_dir (str): Working directory to be used when executing the bash command.
     """
     #pylint: disable=too-many-arguments
-    def __init__(self, name, conda_env=None, bash_command="", create_env=False, clean_env=False, working_dir=os.getcwd()):
+    def __init__(self, name, conda_env=None, bash_command="",
+                 create_env=False, clean_env=False, working_dir=os.getcwd()):
         self.bash_command = bash_command
         self.conda_env = conda_env
         self.name = name
         self.create_env = create_env
         self.clean_env = clean_env
         self.working_dir = working_dir
+        self.feedstock_dir = os.getcwd()
 
     def get_test_command(self, conda_env_file=None):
         """"
@@ -81,6 +83,7 @@ class TestCommand():
         output += "CONDA_BIN=$(dirname $(which conda))\n"
         output += "source ${CONDA_BIN}/../etc/profile.d/conda.sh\n"
         output += "conda activate " + self.conda_env + "\n"
+        output += "export FEEDSTOCK_DIR=" + self.feedstock_dir + "\n"
         output += self.bash_command + "\n"
 
         return output
