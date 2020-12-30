@@ -64,6 +64,8 @@ future:
   - 0.18.*
 gast:
   - 0.3.3
+git:
+  - 2.2
 google_auth:
   - 1.23.*
 google_auth_oauthlib:
