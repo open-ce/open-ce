@@ -72,7 +72,7 @@ def _get_repo_name(repo_url):
         repo_url += ".git"
     return os.path.splitext(os.path.basename(repo_url))[0]
 
-def _main(arg_strings=None):
+def _create_version_branch(arg_strings=None):
     parser = _make_parser()
     args = parser.parse_args(arg_strings)
 
@@ -100,7 +100,7 @@ def _main(arg_strings=None):
 
 if __name__ == '__main__':
     try:
-        _main()
+        _create_version_branch()
     except Exception as exc:# pylint: disable=broad-except
         print("Error: ", exc)
         sys.exit(1)
