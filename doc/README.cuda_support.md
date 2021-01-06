@@ -17,7 +17,7 @@ is a reference table below.
 |-----------------|--------------|
 | 1.0 (marmotini) | 10.2         |
 |-----------------|--------------|
-| 1.1 (marmotini) | 10.2 | 11.0  |
+| 1.1 (marmotini) | 10.2 \| 11.0  |
 
 It's important to install CUDA correctly. This procedure is dependent on the system
 type and CUDA version. It's advised to follow NVIDIA's [official installation documentation](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
