@@ -1,13 +1,14 @@
+[![Open-CE Stars](https://img.shields.io/github/stars/open-ce?style=social)](https://github.com/open-ce/open-ce/stargazers)
+
 <p align="center">
   <img src="https://avatars0.githubusercontent.com/u/68873540?s=400&u=a02dc4156e50cdffb23172aba7133e44381885d4&v=4" alt="Open-CE Logo" width="30%">
 </p>
 
-![Open-CE Stars](https://img.shields.io/github/stars/open-ce?style=social)
 ![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/Open-CE%20Builder%20Unit%20Tests/badge.svg)
 [![Builder Unit Test Coverage](https://codecov.io/gh/open-ce/open-ce/branch/master/graph/badge.svg)](https://codecov.io/gh/open-ce/open-ce)
 ![Python Support](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)
-![Cuda Support](https://img.shields.io/badge/cuda-10.2%20%7C%2011.0-blue)
-![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)
+[![Cuda Support](https://img.shields.io/badge/cuda-10.2%20%7C%2011.0-blue)](README.cuda_support.md)
+[![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
 ---
 
 This is the Open-CE repo for feedstock collection, environment data, and build scripts
