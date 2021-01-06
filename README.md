@@ -60,7 +60,7 @@ test/
 
 ### CUDA Requirements
 
-Currently CUDA 10.2 is supported by the recipes in Open-CE. Please see [`doc/README.cuda_support.md`](doc/README.cuda_support.md) for details on setting
+Currently CUDA 10.2 and 11.0 is supported by the recipes in Open-CE. Please see [`doc/README.cuda_support.md`](doc/README.cuda_support.md) for details on setting
 up a proper build enviornment for CUDA support.
 
 Open-CE expects the `CUDA_HOME` environment variable to be set to the location of the CUDA installation.
