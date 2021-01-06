@@ -90,7 +90,7 @@ The tag can also be used per line shown in this example for the xgboost [meta.ya
 The `--cuda_versions` flag can be passed to `open-ce` to specify which version of CUDA to build conda packages for.
 
 ```shell
-    open-ce build env --build_types cuda --cuda_versions 11.0 envs/opence-env.yaml
+open-ce build env --build_types cuda --cuda_versions 11.0 envs/opence-env.yaml
 ```
 
 ---
