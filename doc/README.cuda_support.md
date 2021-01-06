@@ -39,14 +39,18 @@ docker build open-ce/images/build-cuda-x86_64
 
 The Open-CE build image presets the `CUDA_HOME` environment variable to the appropriate location.
 
-## Automatic docker builds
+### Automatic docker builds
 
 The [`open-ce build env`](README.open_ce_build.md#open-ce-build-env-sub-command) command supports the `--docker_build` command line argument.
 This argument will automatically build the Open-CE CUDA-enabled build image and when combined
 with the `--build_types=cuda` command line argument, it will build CUDA support into all of the
 recipes included in the Open-CE environment file that are enabled to do so.
 
-## CUDA Build Type
+---
+
+## Building with CUDA
+
+### CUDA Build Type
 
 Both the [`open-ce build env`](README.open_ce_build.md#open-ce-build-env.md) and [`open-ce build feedstock`](README.build_feedstock-sub-command) scripts
 support the `--build_types=cuda` command line argument. This is required when CUDA support is desired in the build.
@@ -80,6 +84,16 @@ The tag can also be used per line shown in this example for the xgboost [meta.ya
     - cudatoolkit {{ cudatoolkit }}            #[build_type == 'cuda']
     - nccl {{ nccl }}                          #[build_type == 'cuda']
 ```
+
+### Specifying CUDA Version
+
+The `--cuda_versions` flag can be passed to `open-ce` to specify which version of CUDA to build conda packages for.
+
+```shell
+    open-ce build env --build_types cuda --cuda_versions 11.0 envs/opence-env.yaml
+```
+
+---
 
 ## CUDA Runtime support
 
