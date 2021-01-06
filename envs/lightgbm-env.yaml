@@ -1,6 +1,6 @@
 packages:
   - feedstock : LightGBM
-  - feedstock : openmpi          #[mpi_type == 'openmpi']
+  - feedstock : openmpi          #[mpi_type == 'openmpi' and build_type == 'cuda']
   - feedstock : https://github.com/conda-forge/cmake-feedstock
     git_tag : 26e3ecb4156c14d90a66fd1433d52a1d7e27946d
     patches :
