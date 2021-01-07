@@ -121,7 +121,7 @@ must match the version of Open-CE.
 | Open-CE version | TensorRT version | file type |
 |-----------------|------------------|-----------|
 | 1.0 (marmotini) | 7.0.0.11         |  tar.gz   |
-| 1.1 (unnamed)   | 7.2.0.13         |  tar.gz   |
+| 1.1 (unnamed)   | 7.2.*            |  tar.gz   |
 
 Note that the Open-CE recipe for TensorRT also includes some [open source samples and parsers](https://github.com/nvidia/tensorrt).
 These are fetched automatically to match the version of TensorRT included in the version of Open-CE being used.
