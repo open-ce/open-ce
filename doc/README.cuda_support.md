@@ -16,7 +16,7 @@ is a reference table below.
 | Open-CE version | CUDA version |
 |-----------------|--------------|
 | 1.0 (marmotini) | 10.2         |
-| 1.1 (unnamed) | 10.2 \| 11.0  |
+| 1.1 (unnamed)   | 10.2 \| 11.0  |
 
 It's important to install CUDA correctly. This procedure is dependent on the system
 type and CUDA version. It's advised to follow NVIDIA's [official installation documentation](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
@@ -93,6 +93,14 @@ The `--cuda_versions` flag can be passed to `open-ce` to specify which version o
 open-ce build env --build_types cuda --cuda_versions 11.0 envs/opence-env.yaml
 ```
 
+Only one CUDA version can be specified at a time. To build for both on the same system, the build must be run twice in one of the following ways:
+
+* Use the `docker_build` option, which automatically handles the cuda version.
+* For bare metal builds:
+  * install both CUDA versions locally
+  * ensure the CUDA 11 driver is used
+  * adjust CUDA_HOME appropriately for each build
+
 ---
 
 ## CUDA Runtime support
@@ -116,12 +124,12 @@ optimizer and runtime that delivers low latency and high-throughput for deep lea
 PyTorch, TensorFlow, and TensorFlow Serving include optional TensorRT support. Open-CE is unable to automatically
 fetch TensorRT at build time. The appropriate version of TensorRT must be downloaded from NVIDIA's [TensorRT website](https://developer.nvidia.com/nvidia-tensorrt-download)
 and saved in a directory called `local_files` adjacent to the `open-ce` repository. The version of TensorRT
-must match the version of Open-CE.
+must match the version of CUDA.
 
-| Open-CE version | TensorRT version | file type |
-|-----------------|------------------|-----------|
-| 1.0 (marmotini) | 7.0.0.11         |  tar.gz   |
-| 1.1 (unnamed)   | 7.2.*            |  tar.gz   |
+| CUDA version | TensorRT version | file type |
+|--------------|------------------|-----------|
+| 10.2         | 7.0.0.11         |  tar.gz   |
+| 11.0         | 7.2.*            |  tar.gz   |
 
 Note that the Open-CE recipe for TensorRT also includes some [open source samples and parsers](https://github.com/nvidia/tensorrt).
 These are fetched automatically to match the version of TensorRT included in the version of Open-CE being used.
