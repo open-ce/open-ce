@@ -8,6 +8,7 @@ packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : cudnn
+  - feedstock : libc_wrappers
 {% endif %}
   - feedstock : python-flatbuffers
   - feedstock : tensorflow
