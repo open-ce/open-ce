@@ -107,7 +107,7 @@ optional arguments:
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
   --cuda_versions CUDA_VERSIONS
-                        Comma delimited list of cuda versions to build for ,
+                        CUDA version to build for ,
                         such as "10.2" or "11.0". (default: 10.2)
   --skip_build_packages
                         Do not perform builds of packages. (default: False)
@@ -215,7 +215,7 @@ optional arguments:
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
   --cuda_versions CUDA_VERSIONS
-                        Comma delimited list of cuda versions to build for ,
+                        CUDA version to build for ,
                         such as "10.2" or "11.0". (default: 10.2)
   --recipe-config-file RECIPE_CONFIG_FILE
                         Path to the recipe configuration YAML file. The configuration
