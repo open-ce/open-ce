@@ -92,7 +92,7 @@ git clone https://github.com/open-ce/open-ce.git --branch open-ce-v1.0.0
 
 #### Building within a docker container
 
-Passing the `--docker_build` argument to the `open-ce build env` command will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--docker_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
+Passing the `--docker_build` argument to the `open-ce build env` command will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. The `--docker_build` command does not currently work with `podman`. For more information on the `--docker_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
 
 ### Building a Single Feedstock
 
