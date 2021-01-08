@@ -49,6 +49,8 @@ The paths to the `env_config_file`s and `--conda_build_config` must point to
 files within the `open-ce` directory and be relative to the directory
 containing the `open-ce` directory.
 
+> Note: The `--docker_build` option does not currently work with `podman`.
+
 ### Use System MPI
 
 By default, building the entire
@@ -107,7 +109,7 @@ optional arguments:
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
   --cuda_versions CUDA_VERSIONS
-                        Comma delimited list of cuda versions to build for ,
+                        CUDA version to build for ,
                         such as "10.2" or "11.0". (default: 10.2)
   --skip_build_packages
                         Do not perform builds of packages. (default: False)
@@ -215,7 +217,7 @@ optional arguments:
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
   --cuda_versions CUDA_VERSIONS
-                        Comma delimited list of cuda versions to build for ,
+                        CUDA version to build for ,
                         such as "10.2" or "11.0". (default: 10.2)
   --recipe-config-file RECIPE_CONFIG_FILE
                         Path to the recipe configuration YAML file. The configuration

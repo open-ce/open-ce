@@ -85,7 +85,7 @@ class Argument(Enum):
                                         '--cuda_versions',
                                         type=str,
                                         default=utils.DEFAULT_CUDA_VERS,
-                                        help='Comma delimited list of cuda versions to build for '
+                                        help='CUDA version to build for '
                                              ', such as "10.2" or "11.0".'))
 
     DOCKER_BUILD = (lambda parser: parser.add_argument(

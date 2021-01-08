@@ -1,12 +1,14 @@
+[![Open-CE Stars](https://img.shields.io/github/stars/open-ce?style=social)](https://github.com/open-ce/open-ce/stargazers)
+
 <p align="center">
   <img src="https://avatars0.githubusercontent.com/u/68873540?s=400&u=a02dc4156e50cdffb23172aba7133e44381885d4&v=4" alt="Open-CE Logo" width="30%">
 </p>
 
-![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/Open-CE%20Builder%20Unit%20Tests/badge.svg)
+[![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/Open-CE%20Builder%20Unit%20Tests/badge.svg)](https://github.com/open-ce/open-ce/actions?query=workflow%3A%22Open-CE+Builder+Unit+Tests%22+branch%3Amaster)
 [![Builder Unit Test Coverage](https://codecov.io/gh/open-ce/open-ce/branch/master/graph/badge.svg)](https://codecov.io/gh/open-ce/open-ce)
-![Python version](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)
-![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)
-
+[![Python Support](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)](#requirements)
+[![Cuda Support](https://img.shields.io/badge/cuda-10.2%20%7C%2011.0-blue)](doc/README.cuda_support.md)
+[![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
 ---
 
 This is the Open-CE repo for feedstock collection, environment data, and build scripts
@@ -58,12 +60,12 @@ test/
 
 ### CUDA Requirements
 
-Currently CUDA 10.2 is supported by the recipes in Open-CE. Please see [`doc/README.cuda_support.md`](doc/README.cuda_support.md) for details on setting
+Currently CUDA 10.2 and 11.0 are supported by the recipes in Open-CE. Please see [`doc/README.cuda_support.md`](doc/README.cuda_support.md) for details on setting
 up a proper build enviornment for CUDA support.
 
 Open-CE expects the `CUDA_HOME` environment variable to be set to the location of the CUDA installation.
 
-When building packages that use CUDA, a tar package of TensorRT 7.0 for CUDA 10.2 will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`. The [cuda README](doc/README.cuda_support.md) has more information.
+When building packages that use CUDA, a tar package of TensorRT for the intended CUDA version will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`. The [cuda README](doc/README.cuda_support.md) has more information.
 
 ### Building a Collection of Packages
 
@@ -90,7 +92,7 @@ git clone https://github.com/open-ce/open-ce.git --branch open-ce-v1.0.0
 
 #### Building within a docker container
 
-Passing the `--docker_build` argument to the `open-ce build env` command will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--docker_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
+Passing the `--docker_build` argument to the `open-ce build env` command will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. The `--docker_build` command does not currently work with `podman`. For more information on the `--docker_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
 
 ### Building a Single Feedstock
 
