@@ -49,7 +49,7 @@ The paths to the `env_config_file`s and `--conda_build_config` must point to
 files within the `open-ce` directory and be relative to the directory
 containing the `open-ce` directory.
 
-Note: The `--docker_build` option does not currently work with `podman`.
+> Note: The `--docker_build` option does not currently work with `podman`.
 
 ### Use System MPI
 
