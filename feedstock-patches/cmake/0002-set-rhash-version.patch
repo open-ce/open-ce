@@ -1,0 +1,22 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index dd20d84..d37d3e2 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,7 +28,7 @@ requirements:
+     - xz              # [unix]
+     - zlib            # [unix]
+     - libuv           # [unix]
+-    - rhash           # [unix]
++    - rhash 1.4.0          # [unix]
+ 
+   run:
+     - bzip2           # [unix]
+@@ -38,7 +38,7 @@ requirements:
+     - xz              # [unix]
+     - zlib            # [unix]
+     - libuv           # [unix]
+-    - rhash           # [unix]
++    - rhash 1.4.0          # [unix]
+     - vs2015_runtime  # [win]
+   
+   run_constrained:
