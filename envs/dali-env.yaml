@@ -12,3 +12,5 @@ packages:
   - feedstock : libsndfile
   - feedstock : protobuf          #[python == '3.8']
 {% endif %}
+
+git_tag_for_env: open-ce-v1.1.0
