@@ -3,6 +3,8 @@ FROM registry.access.redhat.com/ubi7/ubi
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
 
+ENV OPEN_CE_CONDA_BUILD=3.20.5
+
 ARG OPENCE_USER
 ARG LOCAL_CONDA_CHANNEL
 ARG CONDA_ENV_FILE
@@ -17,7 +19,7 @@ RUN export ARCH="$(uname -m)" && \
     yum repolist && yum install -y \
     sudo openssh && \
     groupadd --non-unique --gid ${GROUP_ID} ${OPENCE_GROUP} && \
-    # Adduser 
+    # Adduser
     adduser -b /home/ --non-unique --create-home --gid ${GROUP_ID} --groups wheel \
     --uid ${USER_ID} ${OPENCE_USER} && \
     echo "${OPENCE_USER}    ALL=NOPASSWD: ALL" > /etc/sudoers.d/user-${OPENCE_USER} && \
@@ -25,7 +27,7 @@ RUN export ARCH="$(uname -m)" && \
     chmod +x /tmp/anaconda.sh && \
     /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda && \
     rm -f /tmp/anaconda.sh && \
-    $CONDA_HOME/bin/conda install -y conda-build && \
+    $CONDA_HOME/bin/conda install -y conda-build=${OPEN_CE_CONDA_BUILD} && \
     chown -R ${OPENCE_USER}:${OPENCE_GROUP} ${CONDA_HOME}
 
 USER ${OPENCE_USER}

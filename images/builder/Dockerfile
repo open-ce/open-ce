@@ -3,6 +3,8 @@ FROM registry.access.redhat.com/ubi7/ubi
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
 
+ENV OPEN_CE_CONDA_BUILD=3.20.5
+
 ENV CICD_GROUP=cicd
 ARG GROUP_ID=1500
 ENV BUILD_USER=builder
@@ -24,7 +26,7 @@ RUN export ARCH="$(uname -m)" && \
     chmod +x /tmp/anaconda.sh && \
     /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda && \
     rm -f /tmp/anaconda.sh && \
-    $CONDA_HOME/bin/conda install -y conda-build && \
+    $CONDA_HOME/bin/conda install -y conda-build=${OPEN_CE_CONDA_BUILD} && \
     chown -R ${BUILD_USER}:${CICD_GROUP} ${CONDA_HOME}
 
 USER ${BUILD_USER}
@@ -42,7 +44,3 @@ RUN export PATH="${PATH}" && \
     yes | ssh-keygen -f $HOME/.ssh/id_rsa -q -t rsa -N '' && cp $HOME/.ssh/id_rsa.pub $HOME/.ssh/authorized_keys && \
     echo ". $CONDA_HOME/etc/profile.d/conda.sh" >> ${HOME}/.bashrc && \
     echo "conda activate base" >> ${HOME}/.bashrc
-    
-
-    
-    

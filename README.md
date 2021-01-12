@@ -52,7 +52,7 @@ test/
 
 * `conda` >= 3.8.3
   * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
-* `conda-build` >= 3.20
+* `conda-build` == 3.20.5 (Other versions >=3.20 may work, but issues have been encountered with some versions.)
   * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
 * `python` >= 3.6
 * `docker` >= 1.13
