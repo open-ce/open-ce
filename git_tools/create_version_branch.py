@@ -2,7 +2,7 @@
 """
 *****************************************************************
 Licensed Materials - Property of IBM
-(C) Copyright IBM Corp. 2020. All Rights Reserved.
+(C) Copyright IBM Corp. 2021. All Rights Reserved.
 US Government Users Restricted Rights - Use, duplication or
 disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 *****************************************************************
@@ -65,6 +65,7 @@ def _get_repo_version(repo_path):
                 os.chdir(saved_working_directory)
                 return package_version
 
+    os.chdir(saved_working_directory)
     raise Exception("Error: Unable to determine current version of the feedstock")
 
 def _get_repo_name(repo_url):
