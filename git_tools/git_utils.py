@@ -131,6 +131,10 @@ def create_branch(repo_path, branch_name):
     '''Create a branch in the given repo.'''
     _execute_git_command(repo_path, "git checkout -b {}".format(branch_name))
 
+def branch_exists(repo_path, branch_name):
+    '''Returns true if branch already exists.'''
+    return _execute_git_command(repo_path, "git ls-remote --heads origin {}".format(branch_name)) != ""
+
 def commit_changes(repo_path, commit_msg):
     '''Commit the outstanding changes in the given repo.'''
     _execute_git_command(repo_path, "git add ./*")
@@ -139,6 +143,10 @@ def commit_changes(repo_path, commit_msg):
 def push_branch(repo_path, branch_name, remote="origin"):
     '''Push the given repo to the remote branch.'''
     _execute_git_command(repo_path, "git push {} {}".format(remote, branch_name))
+
+def checkout(repo_path, commit):
+    '''Checkout a commit of a given repo.'''
+    _execute_git_command(repo_path, "git checkout {}".format(commit))
 
 def ask_for_input(message, acceptable=None):
     '''Repeatedly ask for user input until an acceptable response is given.'''
