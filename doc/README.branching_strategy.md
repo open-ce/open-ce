@@ -13,10 +13,10 @@ TBD
 
 ## Working Branch
 
-We want to ensure that the `master` branch always builds in total and take
-reasonable precautions to keep the `master` branch functional. However, this
-becomes difficult when integrating new versions of frameworks that may not be
-compatible or fully integrated yet.
+We want to ensure that the default branch (`master` or `main` depending on the
+repo) always builds in total and take reasonable precautions to keep the
+default branch functional. However, this becomes difficult when integrating
+new versions of frameworks that may not be compatible or fully integrated yet.
 
 The following branching strategy is to be used under these circumstances.
 
@@ -25,7 +25,7 @@ The following branching strategy is to be used under these circumstances.
    (e.g.`pytorch_18_update`). PRs can be made against this branch across all
    repos that need changes.
 
-2. Builds can be performed using the `open-ce` tool by specifying the update
+1. Builds can be performed using the `open-ce` tool by specifying the update
    branch as an input. The `open-ce` tool will automatically use the default
    branch if the specified branch doesn't exist.
 
@@ -33,6 +33,6 @@ The following branching strategy is to be used under these circumstances.
     open-ce build env --git_tag_for_env pytorch_18_update envs/opence-env.yaml
     ```
 
-3. Once integration and testing has been finished, the PRs can be created to
-   merge all the update branches into master. Merge commits would probably be
+1. Once integration and testing has been finished, the PRs can be created to
+   merge all the update branches into default. Merge commits would probably be
    best for these to maintain the separate history.
