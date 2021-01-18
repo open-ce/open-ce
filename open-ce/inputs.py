@@ -1,3 +1,4 @@
+"""
 # *****************************************************************
 # (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
 #
@@ -13,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # *****************************************************************
+"""
 
 import argparse
 from enum import Enum, unique
