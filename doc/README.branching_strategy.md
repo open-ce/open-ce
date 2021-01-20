@@ -9,7 +9,19 @@ This document outlines the overall git branching strategy for the
 
 ## Feedstock Version Branching
 
-TBD
+We want to track upstream version branches for each feedstock. This makes it possible to have environment files select specific versions of feedstocks.
+
+The following branching strategy will be used for feedstocks.
+
+1. All work for the current upstream version will be done in the default branch.
+
+1. When a new version is tagged upstream the following is done:
+
+   - Any Pending PRs should be reviewed and merged.
+
+   - A branch for the previous version should be created at the current head of the default branch.
+
+   - Changes to update the version are pushed to the feedstock default branch.
 
 ## Working Branch
 
