@@ -145,7 +145,7 @@ def build_in_container(image_name, output_folder, arg_strings):
               ' '.join(arg_strings[1:]))
 
     try:
-       _execute_in_container(container_name, cmd)
+        _execute_in_container(container_name, cmd)
     finally:
         # Cleanup
         _stop_container(container_name)
