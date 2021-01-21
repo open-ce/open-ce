@@ -74,12 +74,14 @@ def build_env(args):
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
-        docker_build.build_with_docker(os.path.abspath(args.output_folder), args.build_types, args.cuda_versions, sys.argv)
-        for conda_env_file in glob.glob(os.path.join(args.output_folder, "*.yaml")):
-            utils.replace_conda_env_channels(conda_env_file,
-                                             os.path.abspath(os.path.join(docker_build.HOME_PATH,
-                                                                          utils.DEFAULT_OUTPUT_FOLDER)),
-                                             os.path.abspath(args.output_folder))
+        try:
+            docker_build.build_with_docker(os.path.abspath(args.output_folder), args.build_types, args.cuda_versions, sys.argv)
+        finally:
+            for conda_env_file in glob.glob(os.path.join(args.output_folder, "*.yaml")):
+                utils.replace_conda_env_channels(conda_env_file,
+                                                 os.path.abspath(os.path.join(docker_build.HOME_PATH,
+                                                                              utils.DEFAULT_OUTPUT_FOLDER)),
+                                                 os.path.abspath(args.output_folder))
         return
 
     # Checking conda-build existence if --docker_build is not specified
