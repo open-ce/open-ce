@@ -121,6 +121,7 @@ def test_build_env(mocker, capsys):
 
     #---The second test specifies a python version that is supported in the env file by package21.
     py_version = "2.1"
+    channel = "my_channel"
     package_deps = {"package11": ["package15"],
                     "package12": ["package11"],
                     "package13": ["package12", "package14"],
@@ -137,11 +138,11 @@ def test_build_env(mocker, capsys):
     mocker.patch(
         'build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
-                     conditions=[(lambda command: command.python == py_version)]))
+                     conditions=[(lambda command: command.python == py_version and channel in command.channels)]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version])
+    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--channels", channel])
     validate_conda_env_files(py_version)
 
      #---The third test verifies that the repository_folder argument is working properly.

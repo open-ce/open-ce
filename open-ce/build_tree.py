@@ -61,7 +61,7 @@ class BuildCommand():
         self.host_dependencies = host_dependencies
         self.build_dependencies = build_dependencies
         self.test_dependencies = test_dependencies
-        self.channels = channels
+        self.channels = channels if channels else []
         self.build_command_dependencies = build_command_dependencies
         if self.build_command_dependencies is None:
             self.build_command_dependencies = []
@@ -161,7 +161,7 @@ def _create_commands(repository, runtime_package, recipes, variant_config_files,
                                     host_dependencies=host_deps,
                                     build_dependencies=build_deps,
                                     test_dependencies=test_deps,
-                                    channels=channels if channels else []))
+                                    channels=channels))
 
     variant_copy = dict(variants)
     if test_labels:
@@ -273,6 +273,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  mpi_types,
                  cuda_versions,
                  repository_folder="./",
+                 channels=None,
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env=utils.DEFAULT_GIT_TAG,
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
@@ -280,6 +281,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
+        self._channels = channels
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
@@ -352,7 +354,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         test_commands = dict()
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
-
+            channels = self._channels + env_config_data.get(env_config.Key.channels.name, [])
             packages = env_config_data.get(env_config.Key.packages.name, [])
             if not packages:
                 packages = []
@@ -367,7 +369,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                             package.get(env_config.Key.recipes.name),
                                                             [os.path.abspath(self._conda_build_config)],
                                                             variants,
-                                                            env_config_data.get(env_config.Key.channels.name, None),
+                                                            channels,
                                                             self._test_labels)
 
                 build_commands += repo_build_commands
@@ -468,8 +470,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         return self._external_dependencies.get(variant_string, [])
 
     def write_conda_env_files(self,
-                              channels=None,
-                              output_folder=None,
                               env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
                               path=os.getcwd()):
         """
@@ -477,8 +477,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         """
         conda_env_files = dict()
         for variant, conda_env_file in self._conda_env_files.items():
-            conda_env_files[variant] = conda_env_file.write_conda_env_file(variant, channels,
-                                                                   output_folder, env_file_prefix, path)
+            conda_env_files[variant] = conda_env_file.write_conda_env_file(variant, self._channels,
+                                                                   env_file_prefix, path)
 
         return conda_env_files
 
