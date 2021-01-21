@@ -143,10 +143,12 @@ def build_in_container(image_name, output_folder, arg_strings):
     # Execute build command
     cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "open-ce", os.path.basename(arg_strings[0])) + " " +
               ' '.join(arg_strings[1:]))
-    _execute_in_container(container_name, cmd)
 
-    # Cleanup
-    _stop_container(container_name)
+    try:
+        _execute_in_container(container_name, cmd)
+    finally:
+        # Cleanup
+        _stop_container(container_name)
 
 
 
