@@ -75,7 +75,8 @@ def build_env(args):
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
         try:
-            docker_build.build_with_docker(os.path.abspath(args.output_folder), args.build_types, args.cuda_versions, sys.argv)
+            docker_build.build_with_docker(os.path.abspath(args.output_folder),
+                                           args.build_types, args.cuda_versions, sys.argv)
         finally:
             for conda_env_file in glob.glob(os.path.join(args.output_folder, "*.yaml")):
                 utils.replace_conda_env_channels(conda_env_file,
