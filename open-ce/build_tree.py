@@ -61,7 +61,7 @@ class BuildCommand():
         self.host_dependencies = host_dependencies
         self.build_dependencies = build_dependencies
         self.test_dependencies = test_dependencies
-        self.channels = channels if channels else []
+        self.channels = channels
         self.build_command_dependencies = build_command_dependencies
         if self.build_command_dependencies is None:
             self.build_command_dependencies = []
@@ -281,7 +281,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
-        self._channels = channels
+        self._channels = channels if channels else []
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
@@ -470,6 +470,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         return self._external_dependencies.get(variant_string, [])
 
     def write_conda_env_files(self,
+                              output_folder=None,
                               env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
                               path=os.getcwd()):
         """
@@ -478,7 +479,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         conda_env_files = dict()
         for variant, conda_env_file in self._conda_env_files.items():
             conda_env_files[variant] = conda_env_file.write_conda_env_file(variant, self._channels,
-                                                                   env_file_prefix, path)
+                                                                   output_folder, env_file_prefix, path)
 
         return conda_env_files
 

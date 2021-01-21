@@ -133,7 +133,9 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, 
             if os.path.exists(recipe_conda_build_config):
                 config.variant_config_files.append(recipe_conda_build_config)
 
-            config.channel_urls = command.channels + build_config_data.get('channels', [])
+            config.channel_urls = [os.path.abspath(output_folder)]
+            config.channel_urls += command.channels
+            config.channel_urls += build_config_data.get('channels', [])
 
             _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
             try:

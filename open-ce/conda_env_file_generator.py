@@ -36,6 +36,7 @@ class CondaEnvFileGenerator():
     def write_conda_env_file(self,
                              variant_string,
                              channels=None,
+                             output_folder=None,
                              env_file_prefix=utils.CONDA_ENV_FILENAME_PREFIX,
                              path=utils.DEFAULT_OUTPUT_FOLDER ):
         """
@@ -54,7 +55,7 @@ class CondaEnvFileGenerator():
         conda_env_file = conda_env_name + ".yaml"
         conda_env_file = os.path.join(path, conda_env_file)
 
-        channels = _create_channels(channels)
+        channels = _create_channels(channels, output_folder)
 
         data = dict(
             name = conda_env_name,
@@ -82,9 +83,10 @@ def get_variant_string(conda_env_file):
     return None
 
 
-def _create_channels(channels):
+def _create_channels(channels, output_folder):
     result = []
 
+    result.append("file:/" + output_folder)
     if channels:
         result += channels
     result.append("defaults")

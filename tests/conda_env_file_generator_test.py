@@ -90,9 +90,10 @@ def test_conda_env_file_content():
     assert Counter(expected_deps) == Counter(mock_conda_env_file_generator._dependency_set)
 
 def test_create_channels():
-    expected_channels = ["some channel", "defaults"]
+    output_dir = os.path.join(test_dir, '../condabuild' )
+    expected_channels = ["file:/{}".format(output_dir), "some channel", "defaults"]
 
-    assert expected_channels == conda_env_file_generator._create_channels(["some channel"])
+    assert expected_channels == conda_env_file_generator._create_channels(["some channel"], output_dir)
 
 def test_get_variant_string(mocker):
     var_str = "py3.6-cuda-openmpi-10.2"
