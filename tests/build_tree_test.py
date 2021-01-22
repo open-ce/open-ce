@@ -59,7 +59,7 @@ def test_create_commands(mocker):
     )
     render_result=helpers.make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
                                                         ['run_req1            1.3'],
-                                                        ['host_req1            1.0', 'host_req2'],
+                                                        ['Host_req1            1.0', 'host_req2'],
                                                         ['test_req1'],
                                                         ['string1_1'])
     mocker.patch(
@@ -76,8 +76,9 @@ def test_create_commands(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    build_commands, _ = build_tree._create_commands("/test/my_repo", "True", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
+    build_commands, _ = build_tree._create_commands("/test/my_repo", "True", "my_recipe_path", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
     assert build_commands[0].packages == {'horovod'}
+    assert build_commands[0].recipe_path == "my_recipe_path"
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in build_commands[0].build_dependencies
     for dep in {'run_req1            1.3'}:

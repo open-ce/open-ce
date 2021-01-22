@@ -36,6 +36,7 @@ class Key(Enum):
     patches = auto()
     opence_env_file_path = auto()
     runtime_package = auto()
+    recipe_path = auto()
 
 _PACKAGE_SCHEMA ={
     Key.feedstock.name: utils.make_schema_type(str, True),
@@ -43,7 +44,8 @@ _PACKAGE_SCHEMA ={
     Key.recipes.name: utils.make_schema_type([str]),
     Key.channels.name: utils.make_schema_type([str]),
     Key.patches.name: utils.make_schema_type([str]),
-    Key.runtime_package.name: utils.make_schema_type(bool)
+    Key.runtime_package.name: utils.make_schema_type(bool),
+    Key.recipe_path.name: utils.make_schema_type(str)
 }
 
 _ENV_CONFIG_SCHEMA = {
