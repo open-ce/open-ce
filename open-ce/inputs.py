@@ -37,7 +37,7 @@ class Argument(Enum):
     CONDA_BUILD_CONFIG = (lambda parser: parser.add_argument(
                                         '--conda_build_config',
                                         type=str,
-                                        default=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                                        default=None,
                                         help='Location of conda_build_config.yaml file.' ))
 
     OUTPUT_FOLDER = (lambda parser: parser.add_argument(

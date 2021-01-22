@@ -18,6 +18,7 @@
 """
 
 import sys
+import os
 import inputs
 from errors import OpenCEError
 import build_env
@@ -27,6 +28,7 @@ import test_env
 import validate_config
 import validate_env
 import build_image
+import utils
 
 def make_parser():
     ''' Parser for input arguments '''
@@ -107,6 +109,12 @@ def _main(arg_strings=None):
         parser.print_help()
         return
     args = parser.parse_args(arg_strings)
+    if "conda_build_config" in vars(args).keys() and args.conda_build_config is None:
+        if "env_config_file" in vars(args).keys() and args.env_config_file:
+            args.conda_build_config = os.path.abspath(os.path.join(os.path.dirname(args.env_config_file[0]),
+                                                                                   utils.CONDA_BUILD_CONFIG_FILE))
+        else:
+            args.conda_build_config = utils.DEFAULT_CONDA_BUILD_CONFIG
     args.func(args)
 
 if __name__ == '__main__':
