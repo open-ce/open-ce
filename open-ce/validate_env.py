@@ -28,11 +28,12 @@ COMMAND = 'env'
 DESCRIPTION = 'Lint Environment Files'
 
 ARGUMENTS = [Argument.ENV_FILE, Argument.PYTHON_VERSIONS,
-             Argument.BUILD_TYPES, Argument.MPI_TYPES]
+             Argument.BUILD_TYPES, Argument.MPI_TYPES, Argument.CUDA_VERSIONS]
 
 def validate_env(args):
     '''Entry Function'''
-    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types)
+    variants = utils.make_variants(args.python_versions, args.build_types, 
+                                   args.mpi_types, args.cuda_versions)
 
     for variant in variants:
         try:

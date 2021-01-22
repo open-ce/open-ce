@@ -228,18 +228,6 @@ def test_build_env_docker_build(mocker):
 
     open_ce._main(arg_strings)
 
-def test_build_env_docker_build_unsupported_cuda_versions(mocker):
-    '''
-    Tests that passing unsupported value in --cuda_versions argument with docker_build fails.
-    '''
-
-    arg_strings = ["build", build_env.COMMAND, "--docker_build",
-                   "--cuda_versions", "9.0", "my-env.yaml"]
-
-    with pytest.raises(OpenCEError) as exc:
-        open_ce._main(arg_strings)
-    assert "Cannot build using docker" in str(exc.value)
-	
 def test_build_env_docker_build_multiple_cuda_versions(mocker):
     '''
     Tests that passing mutiple values in --cuda_versions argument with docker_build fails.
