@@ -168,15 +168,15 @@ def test_build_env(mocker, capsys):
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
                              build_types=utils.DEFAULT_BUILD_TYPES,
-                             mpi_types=utils.DEFAULT_MPI_TYPES):
-
+                             mpi_types=utils.DEFAULT_MPI_TYPES,
+                             cuda_versions=utils.DEFAULT_CUDA_VERS):
     # Check if conda env files are created for given python versions and build variants
-    variants = utils.make_variants(py_versions, build_types, mpi_types)
+    variants = utils.make_variants(py_versions, build_types, mpi_types, cuda_versions)
     for variant in variants:
         cuda_env_file = os.path.join(os.getcwd(), utils.DEFAULT_OUTPUT_FOLDER,
                                      "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
                                      utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'], variant['cudatoolkit'])))
-
+        print("----TEST %s" %(cuda_env_file))
         assert os.path.exists(cuda_env_file)
         # Remove the file once it's existence is verified
         os.remove(cuda_env_file)
@@ -227,6 +227,47 @@ def test_build_env_docker_build(mocker):
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     open_ce._main(arg_strings)
+
+def test_build_env_docker_build_unsupported_cuda_versions(mocker):
+    '''
+    Tests that passing unsupported value in --cuda_versions argument with docker_build fails.
+    '''
+
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--cuda_versions", "9.0", "my-env.yaml"]
+
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main(arg_strings)
+    assert "Cannot build using docker" in str(exc.value)
+	
+def test_build_env_docker_build_multiple_cuda_versions(mocker):
+    '''
+    Tests that passing mutiple values in --cuda_versions argument with docker_build fails.
+    '''
+
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--cuda_versions", "10.2,11.0", "my-env.yaml"]
+
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main(arg_strings)
+    assert "Only one cuda version" in str(exc.value)
+
+def test_build_env_docker_build_cuda_versions(mocker):
+    '''
+    Tests that passing --cuda_versions argument with docker_build argument works correctly.
+    '''
+    dirTracker = helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dirTracker.mocked_getcwd
+    )
+    mocker.patch('docker_build.build_with_docker', return_value=0)
+
+    cuda_version = "10.2"
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--cuda_versions", cuda_version, "my-env.yaml"]
+    open_ce._main(arg_strings)
+    validate_conda_env_files(cuda_versions=cuda_version)
 
 def test_build_env_if_no_conda_build(mocker):
     '''
