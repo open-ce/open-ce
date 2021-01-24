@@ -235,7 +235,8 @@ def test_build_feedstock_extra_args(mocker):
                  "--recipes", "my_project,my_variant",
                  "--python_versions", "3.6",
                  "--build_types", "cpu",
-                 "--mpi_types", "openmpi"]
+                 "--mpi_types", "openmpi",
+                 "--cuda_versions", "10.2"]
     open_ce._main(arg_input)
 
 def test_build_feedstock_if_no_conda_build(mocker):
