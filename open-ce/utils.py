@@ -28,7 +28,7 @@ import inputs
 
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"
-DEFAULT_PYTHON_VERS = "3.6"
+DEFAULT_PYTHON_VERS = "3.7"
 DEFAULT_MPI_TYPES = "openmpi"
 DEFAULT_CUDA_VERS = "10.2"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
