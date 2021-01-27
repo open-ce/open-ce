@@ -237,6 +237,7 @@ def test_build_with_docker_incompatible_cuda_versions(mocker):
     cuda_versions = "11.0"
 
     mocker.patch('docker_build._capable_of_cuda_containers', return_value=0)
+    mocker.patch('utils.get_driver_level',return_value="abc")
 
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_with_docker(output_folder, build_type, cuda_versions, arg_strings)
