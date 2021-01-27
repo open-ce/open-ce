@@ -275,7 +275,7 @@ def test_build_env_docker_build(mocker):
 
     open_ce._main(arg_strings)
 
-def test_build_env_docker_build_multiple_cuda_versions(mocker):
+def test_build_env_docker_build_multiple_cuda_versions():
     '''
     Tests that passing mutiple values in --cuda_versions argument with docker_build fails.
     '''

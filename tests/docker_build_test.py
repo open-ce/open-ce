@@ -185,7 +185,7 @@ def test_build_with_docker_failures(mocker):
         docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
     assert "Failure building image" in str(exc.value)
 
-def test_generate_dockerfile_name(mocker):
+def test_generate_dockerfile_name():
     '''
     Simple test for _generate_dockerfile_name
     '''
