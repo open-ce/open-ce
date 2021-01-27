@@ -59,15 +59,15 @@ def test_cuda_level_supported(mocker):
 
     #expected cuda version not supported by the system
     cuda_version="11.0"
+    mocker.patch('utils.get_driver_cuda_level',return_value="10.2")
     assert utils.cuda_level_supported(cuda_version) == False
 
 def test_get_driver_cuda_level(mocker):
     '''
     Simple test for get_driver_cuda_level
     '''
-    cuda_version = "10.2"
     mocker.patch('subprocess.check_output',return_value=bytes("CUDA Version: 10.2","utf-8"))
-    assert utils.get_driver_cuda_level() == cuda_version
+    assert utils.get_driver_cuda_level() == "10.2" 
 
 def test_get_driver_cuda_level_failures(mocker):
     '''
