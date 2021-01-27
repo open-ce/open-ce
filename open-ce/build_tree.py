@@ -36,6 +36,7 @@ class BuildCommand():
                  recipe,
                  repository,
                  packages,
+                 recipe_path=None,
                  runtime_package=True,
                  output_files=None,
                  python=None,
@@ -51,6 +52,7 @@ class BuildCommand():
         self.recipe = recipe
         self.repository = repository
         self.packages = packages
+        self.recipe_path = recipe_path
         self.runtime_package = runtime_package
         self.output_files = output_files
         self.python = python
@@ -121,7 +123,9 @@ def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
 
-def _create_commands(repository, runtime_package, recipes, variant_config_files, variants, channels, test_labels):#pylint: disable=too-many-locals,too-many-arguments
+#pylint: disable=too-many-locals,too-many-arguments
+def _create_commands(repository, runtime_package, recipe_path,
+                     recipes, variant_config_files, variants, channels, test_labels):
     """
     Returns:
         A list of BuildCommands for each recipe within a repository.
@@ -130,7 +134,7 @@ def _create_commands(repository, runtime_package, recipes, variant_config_files,
     saved_working_directory = os.getcwd()
     os.chdir(repository)
 
-    config_data, _ = build_feedstock.load_package_config(variants=variants)
+    config_data, _ = build_feedstock.load_package_config(variants=variants, recipe_path=recipe_path)
     combined_config_files = variant_config_files
 
     feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
@@ -151,6 +155,7 @@ def _create_commands(repository, runtime_package, recipes, variant_config_files,
         build_commands.append(BuildCommand(recipe=recipe.get('name', None),
                                     repository=repository,
                                     packages=packages,
+                                    recipe_path=recipe_path,
                                     runtime_package=runtime_package,
                                     output_files=output_files,
                                     python=variants['python'],
@@ -172,6 +177,14 @@ def _create_commands(repository, runtime_package, recipes, variant_config_files,
     os.chdir(saved_working_directory)
     return build_commands, test_commands
 
+def _clean_dep(dep):
+    return dep.lower()
+
+def _clean_deps(deps):
+    deps = [_clean_dep(dep) for dep in deps]
+
+    return deps
+
 def _get_package_dependencies(path, variant_config_files, variants):
     """
     Return a list of output packages and a list of dependency packages
@@ -190,13 +203,13 @@ def _get_package_dependencies(path, variant_config_files, variants):
     test_deps = set()
     output_files = []
     for meta,_,_ in metas:
-        packages.add(meta.meta['package']['name'])
-        run_deps.update(meta.meta['requirements'].get('run', []))
-        host_deps.update(meta.meta['requirements'].get('host', []))
-        build_deps.update(meta.meta['requirements'].get('build', []))
+        packages.add(_clean_dep(meta.meta['package']['name']))
+        run_deps.update(_clean_deps(meta.meta['requirements'].get('run', [])))
+        host_deps.update(_clean_deps(meta.meta['requirements'].get('host', [])))
+        build_deps.update(_clean_deps(meta.meta['requirements'].get('build', [])))
         output_files += conda_utils.get_output_file_paths(meta, variants=variants)
         if 'test' in meta.meta:
-            test_deps.update(meta.meta['test'].get('requires', []))
+            test_deps.update(_clean_deps(meta.meta['test'].get('requires', [])))
 
     return packages, run_deps, host_deps, build_deps, test_deps, output_files
 
@@ -364,6 +377,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 runtime_package = package.get(env_config.Key.runtime_package.name, True)
                 repo_build_commands, repo_test_commands = _create_commands(repo_dir,
                                                             runtime_package,
+                                                            package.get(env_config.Key.recipe_path.name),
                                                             package.get(env_config.Key.recipes.name),
                                                             [os.path.abspath(self._conda_build_config)],
                                                             variants,

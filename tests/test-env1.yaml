@@ -19,6 +19,7 @@ channels:
 packages:
     - feedstock : package11
       git_tag : package11-bug-fix
+      recipe_path: package11_recipe_path
     - feedstock : https://myhost.com/myorg/package12-feedstock
     - feedstock : http://myhost.com/myorg/package13-feedstock.git
     - feedstock : git@myhost/myorg/package14-feedstock.git

@@ -59,7 +59,7 @@ def test_create_commands(mocker):
     )
     render_result=helpers.make_render_result("horovod", ['build_req1', 'build_req2            1.2'],
                                                         ['run_req1            1.3'],
-                                                        ['host_req1            1.0', 'host_req2'],
+                                                        ['Host_req1            1.0', 'host_req2'],
                                                         ['test_req1'],
                                                         ['string1_1'])
     mocker.patch(
@@ -76,8 +76,9 @@ def test_create_commands(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    build_commands, _ = build_tree._create_commands("/test/my_repo", "True", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
+    build_commands, _ = build_tree._create_commands("/test/my_repo", "True", "my_recipe_path", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
     assert build_commands[0].packages == {'horovod'}
+    assert build_commands[0].recipe_path == "my_recipe_path"
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in build_commands[0].build_dependencies
     for dep in {'run_req1            1.3'}:
@@ -327,6 +328,23 @@ def test_check_runtime_package_field():
             for package in packages:
                 if package.get(env_config.Key.feedstock.name) == "package222":
                     assert package.get(env_config.Key.runtime_package.name) == False
+
+def test_check_recipe_path_package_field():
+    '''
+    Test for `runtime_package` field
+    '''
+    env_file = os.path.join(test_dir, 'test-env1.yaml')
+
+    possible_variants = utils.make_variants("3.6", "cpu", "openmpi", "10.2")
+    for variant in possible_variants:
+
+        # test-env1.yaml has defined "recipe_path" as "package11_recipe_path" for "package11".
+        env_config_data_list = env_config.load_env_config_files([env_file], variant)
+        for env_config_data in env_config_data_list:
+            packages = env_config_data.get(env_config.Key.packages.name, [])
+            for package in packages:
+                if package.get(env_config.Key.feedstock.name) == "package11":
+                    assert package.get(env_config.Key.recipe_path.name) == "package11_recipe_path"
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",

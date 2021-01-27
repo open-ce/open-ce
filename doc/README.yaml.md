@@ -33,16 +33,17 @@ serving a different purpose. All are used to define key-value pairs as used in a
 YAML file format. The keywords recognized for Open-CE environments include the
 following:
 ```
-packages:      # The environment package name
-  - feedstock: # Defines each feedstock comprising the environment
-  - channels:  # Defines a channel location for obtaining dependencies
-  - git_tag:   # Defines a specific git tag to use for this feedstock
-  - recipes:   # Sets name and path of recipe location(s)
-  - patches:   # Specifies list of patches to be applied to this feedstock
+packages:            # The environment package name
+  - feedstock:       # Defines each feedstock comprising the environment
+  - channels:        # Defines a channel location for obtaining dependencies
+  - git_tag:         # Defines a specific git tag to use for this feedstock
+  - recipe_path:     # Specifies the path to the recipe within this feedstock
+  - recipes:         # Sets name and path of recipe location(s)
+  - patches:         # Specifies list of patches to be applied to this feedstock
   - runtime_package: # Specifies if the package is needed at runtime for the main frameworks to install
-imported_envs: # Used to import content of one env file into another
-channels:      # Defines a channel location for obtaining dependencies
-git_tag_for_env: # Specify a git tag to use across all packages in environment
+imported_envs:       # Used to import content of one env file into another
+channels:            # Defines a channel location for obtaining dependencies
+git_tag_for_env:     # Specify a git tag to use across all packages in environment
 ```
 
 Most of these are optional. At a minimum, the environment files will define one
@@ -68,22 +69,38 @@ be built if the `build_type` is set to `cuda` when executing the `build_env.py`
 script, so it is considered an optional dependency that you may want to include
 if your runtime environment has CUDA available.
 
+The other keywords that optionally can be used as part of the `packages` stanza
+include `git_tag`, `recipe_path`, `patches`, `channels`, `runtime_package` and
+`recipes`.
+
 ### git_tag
 
-The other keywords that optionally can be used as part of the `packages` stanza
-include `git_tag`, `patches`, `channels`, `runtime_package` and `recipes`. By default,
-the git tag will be the current (i.e. main or master) branch of the specified source
-tree, such that you don't need to include this keyword unless you want to explicitly
+By default, the git tag will be the current (i.e. main or master) branch of the specified
+source tree, such that you don't need to include this keyword unless you want to explicitly
 override it to fetch a different version. To do this, you will simply specify the version
 value or the hexadecimal git tag value that you want to obtain during the build.
+
 An example might look something like this:
 ```
 packages:
   - feedstock: dummy_example
     git_tag: v1.0.0
 ```
-This might be useful if there is a new default version, but you want to
+This can be useful if there is a new default version, but you want to
 specifically build an older tagged version.
+
+### recipe_path
+
+By default, the recipe_path will be `recipe`. This field specifies the path within the
+feedstock containing the conda recipe.
+
+An example might look something like this:
+
+```
+packages:
+  - feedstock: dummy_example
+    recipe_path: my_recipe_path
+``` 
 
 ### runtime_package
 

@@ -44,7 +44,7 @@ def get_conda_build_config():
     recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
     return recipe_conda_build_config if os.path.exists(recipe_conda_build_config) else None
 
-def load_package_config(config_file=None, variants=None):
+def load_package_config(config_file=None, variants=None, recipe_path=None):
     '''
     Check for a config file. If the user does not provide a recipe config
     file as an argument, it will be assumed that there is only one
@@ -53,7 +53,10 @@ def load_package_config(config_file=None, variants=None):
     # pylint: disable=import-outside-toplevel
     import conda_utils
 
-    if not config_file and not os.path.exists(utils.DEFAULT_RECIPE_CONFIG_FILE):
+    if recipe_path:
+        recipe_name = os.path.basename(os.getcwd())
+        build_config_data = {'recipes':[{'name':recipe_name, 'path':recipe_path}]}
+    elif not config_file and not os.path.exists(utils.DEFAULT_RECIPE_CONFIG_FILE):
         recipe_name = os.path.basename(os.getcwd())
         build_config_data = {'recipes':[{'name':recipe_name, 'path':'recipe'}]}
     else:
@@ -116,7 +119,7 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, 
     recipes_to_build = inputs.parse_arg_list(command.recipe)
 
     for variant in utils.make_variants(command.python, command.build_type, command.mpi_type, command.cudatoolkit):
-        build_config_data, recipe_config_file  = load_package_config(recipe_config_file, variant)
+        build_config_data, recipe_config_file  = load_package_config(recipe_config_file, variant, command.recipe_path)
 
         # Build each recipe
         if build_config_data['recipes'] is None:
