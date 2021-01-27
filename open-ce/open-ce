@@ -115,6 +115,8 @@ def _main(arg_strings=None):
                                                                                    utils.CONDA_BUILD_CONFIG_FILE))
         else:
             args.conda_build_config = utils.DEFAULT_CONDA_BUILD_CONFIG
+    elif "conda_build_config" in vars(args).keys():
+        args.conda_build_config = os.path.abspath(args.conda_build_config)
     args.func(args)
 
 if __name__ == '__main__':

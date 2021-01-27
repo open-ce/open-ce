@@ -70,24 +70,28 @@ When building packages that use CUDA, a tar package of TensorRT for the intended
 ### Building a Collection of Packages
 
 To build an entire integrated and functional conda channel using Open-CE, start by installing the needed tools in the [Requirements](#requirements) section above.
-The `open-ce build env` command can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the `envs` directory for different frameworks such as TensorFlow and PyTorch. The output from running `open-ce build env` will be a local conda channel (by default called `condabuild`) and one or more conda environment file(s) in the output folder depending on the selected build configuration. For more details on `open-ce build env`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
+The `open-ce build env` command can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the [`open-ce-environments` repo](https://github.com/open-ce/open-ce-environments) for different frameworks such as TensorFlow and PyTorch. The output from running `open-ce build env` will be a local conda channel (by default called `condabuild`) and one or more conda environment file(s) in the output folder depending on the selected build configuration. For more details on `open-ce build env`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
 
 The following commands will use the `opence-env.yaml` Open-CE environment file to build all of the Open-CE packages for Python 3.7 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
 
 ```bash
 # Clone Open-CE from GitHub
 git clone https://github.com/open-ce/open-ce.git
+# Clone Open-CE Environments from GitHub
+git clone https://github.com/open-ce/open-ce-environments.git
 # Build packages
-./open-ce/open-ce/open-ce build env open-ce/envs/opence-env.yaml
+./open-ce/open-ce/open-ce build env ./open-ce-environments/envs/opence-env.yaml
 ```
 
-The following commands will use opence-env.yaml Open-CE environment file from a specific Open-CE release to build all of the Open-CE packages for Python 3.6, 3.7 and 3.8, including only CUDA builds. The commands should be run from within the same directory that contains `local_files`.
+The following commands will use the `opence-env.yaml` Open-CE environment file from a specific Open-CE release to build all of the Open-CE packages for Python 3.6, 3.7 and 3.8, including only CUDA builds. The commands should be run from within the same directory that contains `local_files`.
 
 ```bash
 # Clone a specific Open-CE release from GitHub
 git clone https://github.com/open-ce/open-ce.git --branch open-ce-v1.0.0
+# Clone Open-CE Environments from GitHub
+git clone https://github.com/open-ce/open-ce-environments.git --branch open-ce-v2021.1.0
 # Build packages
-./open-ce/open-ce/open-ce build env --python_versions 3.6,3.7,3.8 --build_types cuda open-ce/envs/opence-env.yaml
+./open-ce/open-ce/open-ce build env --python_versions 3.6,3.7,3.8 --build_types cuda ./open-ce-environments/envs/opence-env.yaml
 ```
 
 #### Building within a docker container
@@ -103,10 +107,12 @@ The following commands will build all of the packages within a feedstock named `
 ```bash
 # Clone Open-CE from GitHub
 git clone https://github.com/open-ce/open-ce.git
+# Clone Open-CE Environments from GitHub
+git clone https://github.com/open-ce/open-ce-environments.git
 # Clone MY_FEEDSTOCK from GitHub
 git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
 # Build packages
-./open-ce/open-ce/open-ce build feedstock --working_directory MY_FEEDSTOCK-feedstock
+./open-ce/open-ce/open-ce build feedstock --conda_build_config ./open-ce-environments/envs/conda_build_config.yaml --working_directory ./MY_FEEDSTOCK-feedstock
 ```
 
 ### Installing Packages
