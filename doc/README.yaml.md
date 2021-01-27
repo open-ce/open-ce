@@ -2,7 +2,7 @@
 # README for Open-CE Environment Files
 
 This README documents the Open-CE Environment YAML files used by the build scripts
-[open-ce build env](hREADME.open_ce_build.md#open-ce-build-env-sub-command)
+[open-ce build env](README.open_ce_build.md#open-ce-build-env-sub-command)
 and [open-ce build feedstock](README.open_ce_build.md#open-ce-build-feedstock-sub-command).
 Please refer to the respective README files for each of these two scripts.
 
