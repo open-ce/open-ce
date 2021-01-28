@@ -54,7 +54,7 @@ def test_create_container(mocker):
     container_name = "my_container"
     image_name = "my_image"
     output_folder = "condabuild"
-    env_folder = "/test/my_envs"
+    env_folders = ["/test/my_envs"]
 
     mocker.patch(
         'os.system',
@@ -65,7 +65,7 @@ def test_create_container(mocker):
                                                                "-v /test/my_envs",
                                                                image_name])))
 
-    docker_build._create_container(container_name, image_name, output_folder, env_folder)
+    docker_build._create_container(container_name, image_name, output_folder, env_folders)
 
 def test_copy_to_container(mocker):
     '''

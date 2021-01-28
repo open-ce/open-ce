@@ -82,7 +82,7 @@ def _add_volume(local_path, container_path):
 
     return volume_arg
 
-def _create_container(container_name, image_name, output_folder, env_dir):
+def _create_container(container_name, image_name, output_folder, env_folders):
     """
     Create a docker container
     """
@@ -100,7 +100,8 @@ def _create_container(container_name, image_name, output_folder, env_dir):
     docker_cmd += _add_volume(None, "/opt/conda/conda-bld")
 
     # Add env file directory
-    docker_cmd += _add_volume(env_dir, os.path.abspath(os.path.join(HOME_PATH, "envs")))
+    for env_folder in env_folders:
+        docker_cmd += _add_volume(env_folder, os.path.abspath(os.path.join(HOME_PATH, "envs", os.path.basename(env_folder))))
 
     docker_cmd += image_name + " bash"
     if os.system(docker_cmd):
@@ -134,14 +135,19 @@ def build_in_container(image_name, args, arg_strings):
     container_name = IMAGE_NAME + "-" + time_stamp
 
     output_folder = os.path.abspath(args.output_folder)
-    env_file = os.path.abspath(args.env_config_file[0])
+    env_files = [os.path.abspath(env_file) for env_file in args.env_config_file]
     conda_build_config = os.path.abspath(args.conda_build_config)
 
-    env_folder = os.path.dirname(env_file)
-    env_file_in_container = os.path.join(HOME_PATH, "envs", os.path.basename(env_file))
-    arg_strings = [env_file_in_container] + arg_strings
+    #use set comprehension to remove duplicates
+    env_folders = {os.path.dirname(env_file) for env_file in env_files}
+    env_files_in_container = {os.path.join(HOME_PATH,
+                                           "envs",
+                                           os.path.basename(os.path.dirname(env_file)),
+                                           os.path.basename(env_file))
+                                    for env_file in env_files}
+    arg_strings = list(env_files_in_container) + arg_strings
 
-    _create_container(container_name, image_name, output_folder, env_folder)
+    _create_container(container_name, image_name, output_folder, env_folders)
 
     # Add the open-ce directory
     _copy_to_container(OPEN_CE_PATH, HOME_PATH, container_name)
