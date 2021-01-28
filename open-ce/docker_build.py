@@ -82,6 +82,11 @@ def _add_volume(local_path, container_path):
 
     return volume_arg
 
+def _mount_name(folder_path):
+    if len(folder_path) <= 1:
+        return ""
+    return _mount_name(os.path.dirname(folder_path)) + os.path.basename(folder_path)
+
 def _create_container(container_name, image_name, output_folder, env_folders):
     """
     Create a docker container
@@ -101,7 +106,7 @@ def _create_container(container_name, image_name, output_folder, env_folders):
 
     # Add env file directory
     for env_folder in env_folders:
-        docker_cmd += _add_volume(env_folder, os.path.abspath(os.path.join(HOME_PATH, "envs", os.path.basename(env_folder))))
+        docker_cmd += _add_volume(env_folder, os.path.abspath(os.path.join(HOME_PATH, "envs", _mount_name(env_folder))))
 
     docker_cmd += image_name + " bash"
     if os.system(docker_cmd):
@@ -142,7 +147,7 @@ def build_in_container(image_name, args, arg_strings):
     env_folders = {os.path.dirname(env_file) for env_file in env_files}
     env_files_in_container = {os.path.join(HOME_PATH,
                                            "envs",
-                                           os.path.basename(os.path.dirname(env_file)),
+                                           _mount_name(os.path.dirname(env_file)),
                                            os.path.basename(env_file))
                                     for env_file in env_files}
     arg_strings = list(env_files_in_container) + arg_strings
