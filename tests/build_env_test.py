@@ -144,7 +144,7 @@ def test_build_env(mocker, capsys):
     open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
-     #---The third test verifies that the repository_folder argument is working properly.
+    #---The third test verifies that the repository_folder argument is working properly.
     buildTracker = PackageBuildTracker()
     mocker.patch(
         'build_feedstock.build_feedstock_from_command',
@@ -166,17 +166,64 @@ def test_build_env(mocker, capsys):
     captured = capsys.readouterr()
     assert "Skipping build of" in captured.out
 
+    #---The fifth test specifies a cuda version that isn't supported in the env file by package21.
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
+    )
+    mocker.patch(
+        'conda_build.api.get_output_file_paths',
+        side_effect=(lambda meta, *args, **kwargs: helpers.mock_get_output_file_paths(meta))
+    )
+
+    cuda_version = "9.1"
+    buildTracker = PackageBuildTracker()
+    mocker.patch( # This ensures that 'package21' is not built when the cuda version is 9.1  
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.cudatoolkit == cuda_version)
+                                 (lambda command: command.recipe != "package21-feedstock")]))
+    )
+
+    env_file = os.path.join(test_dir, 'test-env2.yaml')
+    open_ce._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version, "--run_tests"])
+    validate_conda_env_files(cuda_versions=cuda_version)
+
+    #---The sixth test specifies a cuda version that is supported in the env file by package21.
+    cuda_version = "9.2"
+    package_deps = {"package11": ["package15"],
+                    "package12": ["package11"],
+                    "package13": ["package12", "package14"],
+                    "package14": ["package15", "package16"],
+                    "package15": [],
+                    "package16": ["package15"],
+                    "package21": ["package13"],
+                    "package22": ["package21"]}
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
+    )
+    buildTracker = PackageBuildTracker()
+    mocker.patch(
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: command.cudatoolkit == cuda_version)]))
+    )
+
+    env_file = os.path.join(test_dir, 'test-env2.yaml')
+    open_ce._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version])
+    validate_conda_env_files(cuda_versions=cuda_version)
+
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
                              build_types=utils.DEFAULT_BUILD_TYPES,
-                             mpi_types=utils.DEFAULT_MPI_TYPES):
-
+                             mpi_types=utils.DEFAULT_MPI_TYPES,
+                             cuda_versions=utils.DEFAULT_CUDA_VERS):
     # Check if conda env files are created for given python versions and build variants
-    variants = utils.make_variants(py_versions, build_types, mpi_types)
+    variants = utils.make_variants(py_versions, build_types, mpi_types, cuda_versions)
     for variant in variants:
         cuda_env_file = os.path.join(os.getcwd(), utils.DEFAULT_OUTPUT_FOLDER,
                                      "{}{}.yaml".format(utils.CONDA_ENV_FILENAME_PREFIX,
                                      utils.variant_string(variant['python'], variant['build_type'], variant['mpi_type'], variant['cudatoolkit'])))
-
         assert os.path.exists(cuda_env_file)
         # Remove the file once it's existence is verified
         os.remove(cuda_env_file)
@@ -227,6 +274,35 @@ def test_build_env_docker_build(mocker):
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     open_ce._main(arg_strings)
+
+def test_build_env_docker_build_multiple_cuda_versions():
+    '''
+    Tests that passing mutiple values in --cuda_versions argument with docker_build fails.
+    '''
+
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--cuda_versions", "10.2,11.0", "my-env.yaml"]
+
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main(arg_strings)
+    assert "Only one cuda version" in str(exc.value)
+
+def test_build_env_docker_build_cuda_versions(mocker):
+    '''
+    Tests that passing --cuda_versions argument with docker_build argument works correctly.
+    '''
+    dirTracker = helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dirTracker.mocked_getcwd
+    )
+    mocker.patch('docker_build.build_with_docker', return_value=0)
+
+    cuda_version = "10.2"
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--cuda_versions", cuda_version, "my-env.yaml"]
+    open_ce._main(arg_strings)
+    validate_conda_env_files(cuda_versions=cuda_version)
 
 def test_build_env_if_no_conda_build(mocker):
     '''

@@ -19,7 +19,7 @@ imported_envs:
 channels:
     - https://anaconda.org/anaconda 
 packages:
-    - feedstock : package21 #[python == '2.1']
+    - feedstock : package21 #[python == '2.1' or cudatoolkit=='9.2']
     - feedstock : package22
 
 external_dependencies:

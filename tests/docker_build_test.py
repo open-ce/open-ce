@@ -184,3 +184,61 @@ def test_build_with_docker_failures(mocker):
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
     assert "Failure building image" in str(exc.value)
+
+def test_generate_dockerfile_name():
+    '''
+    Simple test for _generate_dockerfile_name
+    '''
+    #CUDA build
+    build_type = "cuda"
+    cuda_version = "11.0"
+    image_path, docker_file_name = docker_build._generate_dockerfile_name(build_type, cuda_version)
+    assert docker_file_name == os.path.join(image_path, "Dockerfile.cuda-" + cuda_version) 
+
+    #CPU build 	
+    build_type = "cpu"
+    cuda_version = "11.0"	
+    image_path, docker_file_name = docker_build._generate_dockerfile_name(build_type, cuda_version)
+    assert docker_file_name == os.path.join(image_path, "Dockerfile")
+
+    #Unsupported CUDA version
+    build_type = "cuda"
+    cuda_version = "9.0"	
+    with pytest.raises(OpenCEError) as exc:
+        docker_build._generate_dockerfile_name(build_type, cuda_version)
+    assert "Cannot build using docker" in str(exc.value)	
+
+def test_capable_of_cuda_containers(mocker):
+    '''
+    Simple test for _capable_of_cuda_containers 
+    '''
+    cuda_version = "10.2"
+    mocker.patch('utils.cuda_driver_installed', return_value=0)
+    ret = docker_build._capable_of_cuda_containers(cuda_version)
+    assert ret == True
+
+    mocker.patch('utils.cuda_driver_installed', return_value=1)
+    mocker.patch('utils.cuda_level_supported', return_value=0)
+    ret = docker_build._capable_of_cuda_containers(cuda_version)
+    assert ret == False
+
+    mocker.patch('utils.cuda_driver_installed', return_value=1)
+    mocker.patch('utils.cuda_level_supported', return_value=1)
+    ret = docker_build._capable_of_cuda_containers(cuda_version)
+    assert ret == True
+
+def test_build_with_docker_incompatible_cuda_versions(mocker):
+    '''
+    Tests that passing incompatible value in --cuda_versions argument fails.
+    '''
+    output_folder = "condabuild"
+    arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
+    build_type = "cuda"
+    cuda_versions = "11.0"
+
+    mocker.patch('docker_build._capable_of_cuda_containers', return_value=0)
+    mocker.patch('utils.get_driver_level',return_value="abc")
+
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_with_docker(output_folder, build_type, cuda_versions, arg_strings)
+    assert "Driver level" in str(exc.value)
