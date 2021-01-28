@@ -56,7 +56,7 @@ class Argument(Enum):
 
     ENV_FILE = (lambda parser: parser.add_argument(
                                         'env_config_file',
-                                        nargs='+',
+                                        nargs=1,
                                         type=str,
                                         help="Environment config file. This should be a YAML file "
                                              "describing the package environment you wish to build. A collection "

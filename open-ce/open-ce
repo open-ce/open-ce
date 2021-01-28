@@ -43,7 +43,7 @@ def make_parser():
     build_sub_parsers = build_parser.add_subparsers(title='Build Commands',
                                                     description='Valid Commands')
     build_sub_parsers.required = True
-    build_sub_parsers.dest = 'build_command'
+    build_sub_parsers.dest = 'sub_command'
 
     build_env_parser = inputs.add_subparser(build_sub_parsers,
                                             build_env.COMMAND,
@@ -67,7 +67,7 @@ def make_parser():
     test_sub_parsers = test_parser.add_subparsers(title='Test Commands',
                                                   description='Valid Commands')
     test_sub_parsers.required = True
-    test_sub_parsers.dest = 'test_command'
+    test_sub_parsers.dest = 'sub_command'
 
 
     test_feedstock_parser = inputs.add_subparser(test_sub_parsers,
@@ -87,7 +87,7 @@ def make_parser():
     validate_sub_parsers = validate_parser.add_subparsers(title='Validate Commands',
                                                           description='Valid Commands')
     validate_sub_parsers.required = True
-    validate_sub_parsers.dest = 'validate_command'
+    validate_sub_parsers.dest = 'sub_command'
 
     validate_config_parser = inputs.add_subparser(validate_sub_parsers,
                                                   validate_config.COMMAND,

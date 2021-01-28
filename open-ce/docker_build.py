@@ -40,8 +40,10 @@ DOCKER_TOOL = "docker"
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER]
+    arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER, Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE]
     parser = argparse.ArgumentParser(arguments)
+    parser.add_argument('command_placeholder', nargs=1, type=str)
+    parser.add_argument('sub_command_placeholder', nargs=1, type=str)
     for argument in arguments:
         argument(parser)
 
@@ -80,7 +82,7 @@ def _add_volume(local_path, container_path):
 
     return volume_arg
 
-def _create_container(container_name, image_name, output_folder):
+def _create_container(container_name, image_name, output_folder, env_dir):
     """
     Create a docker container
     """
@@ -96,6 +98,9 @@ def _create_container(container_name, image_name, output_folder):
 
     # Add conda-bld directory
     docker_cmd += _add_volume(None, "/opt/conda/conda-bld")
+
+    # Add env file directory
+    docker_cmd += _add_volume(env_dir, os.path.abspath(os.path.join(HOME_PATH, "envs")))
 
     docker_cmd += image_name + " bash"
     if os.system(docker_cmd):
@@ -121,17 +126,30 @@ def _stop_container(container_name):
     result = os.system(DOCKER_TOOL + " stop " + container_name)
     return result
 
-def build_in_container(image_name, output_folder, arg_strings):
+def build_in_container(image_name, args, arg_strings):
     """
     Run a build inside of a container using the provided image_name.
     """
     time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     container_name = IMAGE_NAME + "-" + time_stamp
 
-    _create_container(container_name, image_name, output_folder)
+    output_folder = os.path.abspath(args.output_folder)
+    env_file = os.path.abspath(args.env_config_file[0])
+    conda_build_config = os.path.abspath(args.conda_build_config)
+
+    env_folder = os.path.dirname(env_file)
+    env_file_in_container = os.path.join(HOME_PATH, "envs", os.path.basename(env_file))
+    arg_strings = [env_file_in_container] + arg_strings
+
+    _create_container(container_name, image_name, output_folder, env_folder)
 
     # Add the open-ce directory
     _copy_to_container(OPEN_CE_PATH, HOME_PATH, container_name)
+
+    # Add the conda_build_config
+    _copy_to_container(conda_build_config, HOME_PATH, container_name)
+    config_in_container = os.path.join(HOME_PATH, os.path.basename(conda_build_config))
+    arg_strings = arg_strings + ["--conda_build_config", config_in_container]
 
     # Add local_files directory (if it exists)
     if os.path.isdir(LOCAL_FILES_PATH):
@@ -139,18 +157,16 @@ def build_in_container(image_name, output_folder, arg_strings):
 
     _start_container(container_name)
 
-
     # Execute build command
-    cmd = ("python " + os.path.join(HOME_PATH, "open-ce", "open-ce", os.path.basename(arg_strings[0])) + " " +
-              ' '.join(arg_strings[1:]))
-
+    cmd = "python {} {} {} {}".format(os.path.join(HOME_PATH, "open-ce", "open-ce", "open-ce"),
+                                      args.command,
+                                      args.sub_command,
+                                      ' '.join(arg_strings[0:]))
     try:
         _execute_in_container(container_name, cmd)
     finally:
         # Cleanup
         _stop_container(container_name)
-
-
 
 def _generate_dockerfile_name(build_types, cuda_version):
     '''
@@ -176,19 +192,19 @@ def _capable_of_cuda_containers(cuda_versions):
 
     return not utils.cuda_driver_installed() or utils.cuda_level_supported(cuda_versions)
 
-def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
+def build_with_docker(args, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
     parser = make_parser()
-    _, unused_args = parser.parse_known_args(arg_strings)
+    _, unused_args = parser.parse_known_args(arg_strings[1:])
 
-    build_image_path, dockerfile = _generate_dockerfile_name(build_types, cuda_versions)
+    build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
 
-    if  'cuda' not in build_types or _capable_of_cuda_containers(cuda_versions):
+    if  'cuda' not in args.build_types or _capable_of_cuda_containers(args.cuda_versions):
         image_name = build_image(build_image_path, dockerfile)
     else:
-        raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), cuda_versions)
+        raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), args.cuda_versions)
 
 
-    build_in_container(image_name, output_folder, unused_args)
+    build_in_container(image_name, args, unused_args)
