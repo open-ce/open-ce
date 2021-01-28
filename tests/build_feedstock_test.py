@@ -214,7 +214,8 @@ def test_build_feedstock_extra_args(mocker):
         'os.path.exists',
         return_value=True
     )
-    expect_config = { 'channel_urls' : ['test_channel', 'test_channel_2', 'test_channel_from_config']}
+
+    expect_config = { 'channel_urls' : ['/test/test_recipe/condabuild', 'test_channel', 'test_channel_2', 'test_channel_from_config']}
     expect_variants = {'python': '3.6', 'build_type': 'cpu', 'mpi_type': 'openmpi'}
     reject_recipe = os.path.join(os.getcwd(),'test_recipe_extra')
     mocker.patch(

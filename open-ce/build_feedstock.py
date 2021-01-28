@@ -97,7 +97,6 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
 def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, too-many-locals
                                  recipe_config_file=None,
                                  output_folder=utils.DEFAULT_OUTPUT_FOLDER,
-                                 extra_channels=None,
                                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
                                  local_src_dir=None):
     '''
@@ -109,8 +108,6 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, 
     import conda_build.api
     from conda_build.config import get_or_merge_config
 
-    if not extra_channels:
-        extra_channels = []
     saved_working_directory = None
     if command.repository:
         saved_working_directory = os.getcwd()
@@ -139,7 +136,9 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, 
             if os.path.exists(recipe_conda_build_config):
                 config.variant_config_files.append(recipe_conda_build_config)
 
-            config.channel_urls = extra_channels + command.channels + build_config_data.get('channels', [])
+            config.channel_urls = [os.path.abspath(output_folder)]
+            config.channel_urls += command.channels
+            config.channel_urls += build_config_data.get('channels', [])
 
             _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
             try:

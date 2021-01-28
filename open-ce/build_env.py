@@ -103,14 +103,14 @@ def build_env(args):
                                mpi_types=inputs.parse_arg_list(args.mpi_types),
                                cuda_versions=inputs.parse_arg_list(args.cuda_versions),
                                repository_folder=args.repository_folder,
+                               channels=args.channels_list,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,
                                conda_build_config=args.conda_build_config,
                                test_labels=inputs.parse_arg_list(args.test_labels))
 
     # Generate conda environment files
-    conda_env_files = build_tree.write_conda_env_files(channels=args.channels_list,
-                                                       output_folder=os.path.abspath(args.output_folder),
+    conda_env_files = build_tree.write_conda_env_files(output_folder=os.path.abspath(args.output_folder),
                                                        path=os.path.abspath(args.output_folder))
     print("Generated conda environment files from the selected build arguments:", conda_env_files.values())
     print("INFO: One can use these environment files to create a conda" \
@@ -124,8 +124,6 @@ def build_env(args):
                     print("Building " + build_command.recipe)
                     build_feedstock.build_feedstock_from_command(build_command,
                                                             output_folder=os.path.abspath(args.output_folder),
-                                                            extra_channels=[os.path.abspath(args.output_folder)] +
-                                                                           args.channels_list,
                                                             conda_build_config=os.path.abspath(args.conda_build_config))
                 except OpenCEError as exc:
                     raise OpenCEError(Error.BUILD_RECIPE, build_command.repository, exc.msg) from exc
