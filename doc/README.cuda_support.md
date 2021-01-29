@@ -11,7 +11,7 @@ The standard CUDA installation location is in `/usr/local/cuda` which is typical
 a symbolic link to either `/usr/local/cuda-10.2` or `/usr/local/cuda-11.0`. Most of 
 the code bases that are built in Open-CE are flexible enough to tolerate CUDA
 installations in non-standard locations, but not all of them. The reference table below
-includes the recipes that will not work in this case.
+includes the recipes that will not work when CUDA is installed elsewhere.
 
 | CUDA_HOME restrictions |
 |-----------------|
