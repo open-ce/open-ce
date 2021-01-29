@@ -139,5 +139,5 @@ For contribution information, please see the [CONTRIBUTING.md](CONTRIBUTING.md) 
 
 ### Slack Community
 
-Join us on Slack! Use [this link](https://join.slack.com/t/open-ce/shared_invite/zt-llqq5z03-24_f08SyEfxklK5_qwzXEA) or ping the [@open-ce/open-ce-dev-team](https://github.com/orgs/open-ce/teams/open-ce-dev-team) for an invite.
+Join us on [Slack!](http://open-ce.slack.com/) Use [this link](https://join.slack.com/t/open-ce/shared_invite/zt-llqq5z03-24_f08SyEfxklK5_qwzXEA) or ping the [@open-ce/open-ce-dev-team](https://github.com/orgs/open-ce/teams/open-ce-dev-team) for an invite.
 
