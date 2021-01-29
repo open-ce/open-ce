@@ -17,7 +17,6 @@ includes the recipes that will not work when CUDA is installed elsewhere.
 |-----------------|
 | tensorflow-serving |
 
-
 ## Bare metal builds
 
 If you are using Open-CE on a bare metal system. Install the appropriate version
