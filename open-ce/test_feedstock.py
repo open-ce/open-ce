@@ -31,7 +31,8 @@ from errors import OpenCEError, Error
 
 COMMAND = 'feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
-ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY, Argument.TEST_LABELS]
+ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY, Argument.TEST_LABELS,
+             Argument.WORKING_DIRECTORY]
 
 @unique
 class Key(Enum):
