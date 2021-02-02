@@ -18,4 +18,4 @@ packages:
   - feedstock : torchvision
   - feedstock : protobuf          #[python == '3.8']
 
-git_tag_for_env: open-ce-v1.1.1
+git_tag_for_env: open-ce-v1.1.2

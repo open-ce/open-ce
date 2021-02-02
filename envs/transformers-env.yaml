@@ -7,4 +7,4 @@ packages:
   - feedstock : sacremoses
   - feedstock : transformers
 
-git_tag_for_env: open-ce-v1.1.1
+git_tag_for_env: open-ce-v1.1.2

@@ -26,4 +26,4 @@ packages:
   - feedstock : tensorflow-model-optimization
   - feedstock : tensorflow-addons
 
-git_tag_for_env: open-ce-v1.1.1
+git_tag_for_env: open-ce-v1.1.2
