@@ -40,7 +40,7 @@ ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
              Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
              Argument.RUN_TESTS, Argument.DOCKER_BUILD,
              Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV,
-             Argument.TEST_LABELS]
+             Argument.TEST_LABELS, Argument.DOCKER_BUILD_ENV_VARS]
 
 def _run_tests(build_tree, conda_env_files):
     """
@@ -76,7 +76,8 @@ def build_env(args):
             raise OpenCEError(Error.TOO_MANY_CUDA)
         try:
             docker_build.build_with_docker(os.path.abspath(args.output_folder),
-                                           args.build_types, args.cuda_versions, sys.argv)
+                                           args.build_types, args.cuda_versions,
+                                           args.docker_build_env_vars, sys.argv)
         finally:
             for conda_env_file in glob.glob(os.path.join(args.output_folder, "*.yaml")):
                 utils.replace_conda_env_channels(conda_env_file,

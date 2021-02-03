@@ -47,7 +47,7 @@ def make_parser():
 
     return parser
 
-def build_image(build_image_path, dockerfile):
+def build_image(build_image_path, dockerfile, env_vars_list=None):
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -58,6 +58,8 @@ def build_image(build_image_path, dockerfile):
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
+    for var in env_vars_list:
+        build_cmd += "--build-arg {} ".format(var.strip())
     build_cmd += build_image_path
 
     if os.system(build_cmd):
@@ -176,7 +178,7 @@ def _capable_of_cuda_containers(cuda_versions):
 
     return not utils.cuda_driver_installed() or utils.cuda_level_supported(cuda_versions)
 
-def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
+def build_with_docker(output_folder, build_types, cuda_versions, docker_build_env_vars, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
@@ -185,8 +187,11 @@ def build_with_docker(output_folder, build_types, cuda_versions, arg_strings):
 
     build_image_path, dockerfile = _generate_dockerfile_name(build_types, cuda_versions)
 
+    env_vars_list = []
+    if docker_build_env_vars:
+        env_vars_list = docker_build_env_vars.split(",")
     if  'cuda' not in build_types or _capable_of_cuda_containers(cuda_versions):
-        image_name = build_image(build_image_path, dockerfile)
+        image_name = build_image(build_image_path, dockerfile, env_vars_list)
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), cuda_versions)
 

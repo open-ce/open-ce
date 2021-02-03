@@ -191,6 +191,13 @@ path of \"recipe\"."""))
                                         default="",
                                         help="Comma delimited list of labels indicating what tests to run."))
 
+    DOCKER_BUILD_ENV_VARS = (lambda parser: parser.add_argument(
+                                        '--docker_build_env_vars',
+                                        type=str,
+                                        default=None,
+                                        help="Comma separated environment variables that are to be"
+                                             " passed to the docker build."))
+
 
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
