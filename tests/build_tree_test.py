@@ -46,6 +46,7 @@ class TestBuildTree(build_tree.BuildTree):
         self._git_tag_for_env = git_tag_for_env
         self._conda_build_config = conda_build_config
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
+        self._test_feedstocks = dict()
 
 def test_create_commands(mocker):
     '''
@@ -76,7 +77,7 @@ def test_create_commands(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    build_commands, _ = build_tree._create_commands("/test/my_repo", "True", "my_recipe_path", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [], [])
+    build_commands = build_tree._create_commands("/test/my_repo", "True", "my_recipe_path", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [])
     assert build_commands[0].packages == {'horovod'}
     assert build_commands[0].recipe_path == "my_recipe_path"
     for dep in {'build_req1', 'build_req2            1.2'}:

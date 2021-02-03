@@ -248,6 +248,9 @@ def display_failed_tests(failed_tests):
 
 def test_feedstock(conda_env_file, test_labels=None,
                    test_working_dir=utils.DEFAULT_TEST_WORKING_DIRECTORY, working_directory=None):
+    """
+    Test a particular feedstock, provided by the working_directory argument.
+    """
     saved_working_directory = None
     if working_directory:
         saved_working_directory = os.getcwd()

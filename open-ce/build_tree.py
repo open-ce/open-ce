@@ -167,8 +167,6 @@ def _create_commands(repository, runtime_package, recipe_path,
                                     test_dependencies=test_deps,
                                     channels=channels))
 
-    variant_copy = dict(variants)
-
     os.chdir(saved_working_directory)
     return build_commands
 
