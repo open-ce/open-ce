@@ -28,15 +28,9 @@ to run in a conda environment.
 Within this **open-ce** repository, you will find:
 
 ```text
-conda_build_config.yaml:  This is a YAML config file which contains all package
-    prerequisite information accumulated from across the Open-CE components
 open-ce/
     This directory contains the build and validation tool `open-ce`.
     For more information run `./open-ce/open-ce -h`
-envs/
-    Contains the YAML environment config files that identify the dependency
-    feedstocks for each of the package environments within Open-CE, such as
-    tensorflow and pytorch.
 ci_common_scripts/
     Contains shell scripts for executing a build of Open-CE components within
     a docker container via `docker_common_run_build_pkg.sh`
