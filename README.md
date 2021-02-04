@@ -28,8 +28,6 @@ to run in a conda environment.
 Within this **open-ce** repository, you will find:
 
 ```text
-conda_build_config.yaml:  This is a YAML config file which contains all package
-    prerequisite information accumulated from across the Open-CE components
 open-ce/
     This directory contains the build and validation tool `open-ce`.
     For more information run `./open-ce/open-ce -h`
