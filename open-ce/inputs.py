@@ -102,9 +102,9 @@ class Argument(Enum):
                                         action='store_true',
                                         help="Perform a build within a docker container. "
                                              "NOTE: When the --docker_build flag is used, all arguments with paths "
-                                             "should be relative to the directory containing open-ce. Only files "
-                                             "within the open-ce directory and local_files will be visible at "
-                                             "build time."))
+                                             "should be relative to the directory containing root level open-ce "
+                                             "directory. Only files within the root level open-ce directory and "
+                                             "local_files will be visible at build time."))
 
     SKIP_BUILD_PACKAGES = (lambda parser: parser.add_argument(
                                         '--skip_build_packages',
