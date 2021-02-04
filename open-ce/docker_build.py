@@ -204,5 +204,4 @@ def build_with_docker(output_folder, build_types, cuda_versions, docker_build_en
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), cuda_versions)
 
-
     build_in_container(image_name, output_folder, unused_args)
