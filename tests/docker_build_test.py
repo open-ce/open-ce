@@ -32,7 +32,9 @@ def test_build_image(mocker):
     mocker.patch('os.getuid', return_value=1234)
     mocker.patch('os.getgid', return_value=5678)
 
-    intended_image_name = docker_build.REPO_NAME + ":" + docker_build.IMAGE_NAME + "-1234"
+    #CUDA build
+    cuda_version="11.0"
+    intended_image_name = docker_build.REPO_NAME + ":" + docker_build.IMAGE_NAME + "-cuda" + cuda_version + "-1234"
 
     mocker.patch(
         'os.system',
@@ -40,6 +42,16 @@ def test_build_image(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
+    assert docker_build.build_image("test", "test", cuda_version) == intended_image_name
+
+    #CPU build  
+    intended_image_name = docker_build.REPO_NAME + ":" + docker_build.IMAGE_NAME + "-cpu" + "-1234"
+
+    mocker.patch(
+        'os.system',
+        return_value=0,
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
+                                                               "-t " + intended_image_name])))
     assert docker_build.build_image("test", "test") == intended_image_name
 
 def test_create_container(mocker):
