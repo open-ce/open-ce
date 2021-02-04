@@ -203,7 +203,9 @@ def build_with_docker(output_folder, build_types, cuda_versions, docker_build_en
     build_image_path, dockerfile = _generate_dockerfile_name(build_types, cuda_versions)
 
     if  'cuda' not in build_types or _capable_of_cuda_containers(cuda_versions):
-        image_name = build_image(build_image_path, dockerfile, cuda_versions if 'cuda' in build_types else None, docker_build_env_vars)
+        image_name = build_image(build_image_path, dockerfile,
+                                 cuda_versions if 'cuda' in build_types else None,
+                                 docker_build_env_vars)
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), cuda_versions)
 
