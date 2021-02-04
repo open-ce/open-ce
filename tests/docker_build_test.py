@@ -23,7 +23,7 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import docker_build
-from errors import OpenCEError
+from errors import OpenCEError, Error
 
 def test_build_image(mocker):
     '''
@@ -169,7 +169,7 @@ def test_build_with_docker(mocker):
 
     mocker.patch('docker_build.build_in_container', return_value=0)
 
-    docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
+    docker_build.build_with_docker(output_folder, build_type, cudatoolkit, None, arg_strings)
 
 def test_build_with_docker_failures(mocker):
     '''
@@ -182,7 +182,7 @@ def test_build_with_docker_failures(mocker):
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
+        docker_build.build_with_docker(output_folder, build_type, cudatoolkit, None, arg_strings)
     assert "Failure building image" in str(exc.value)
 
 def test_generate_dockerfile_name():
@@ -240,5 +240,27 @@ def test_build_with_docker_incompatible_cuda_versions(mocker):
     mocker.patch('utils.get_driver_level',return_value="abc")
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_with_docker(output_folder, build_type, cuda_versions, arg_strings)
+        docker_build.build_with_docker(output_folder, build_type, cuda_versions, None, arg_strings)
     assert "Driver level" in str(exc.value)
+
+def test_add_env_vars():
+    '''
+    Tests that environment variables are parsed and passed to docker build.
+    '''
+    env_vars = "ENV1=test1,ENV2=test2"
+
+    build_cmd = "docker build "
+    build_cmd = docker_build._add_env_vars(build_cmd, env_vars)
+    assert(build_cmd == "docker build --build-arg ENV1=test1 --build-arg ENV2=test2 ")
+
+def test_add_env_vars_in_wrong_format():
+    '''
+    Tests that an exception is thrown when the environment variables passed are in incorrect format.
+    '''
+    env_vars = "ENV1=test1,ENV2,test2"
+
+    build_cmd = "docker build "
+
+    with pytest.raises(OpenCEError) as exc:
+        build_cmd = docker_build._add_env_vars(build_cmd, env_vars)
+    assert Error.DOCKER_BUILD_ENV_VARS.value[1].format("ENV2") in str(exc.value)
