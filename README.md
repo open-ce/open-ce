@@ -63,7 +63,7 @@ test/
 Currently CUDA 10.2 and 11.0 are supported by the recipes in Open-CE. Please see [`doc/README.cuda_support.md`](doc/README.cuda_support.md) for details on setting
 up a proper build enviornment for CUDA support.
 
-Open-CE expects the `CUDA_HOME` environment variable to be set to the location of the CUDA installation.
+Open-CE expects the `CUDA_HOME` environment variable to be set to the location of the CUDA installation. Note that not all recipes work when `CUDA_HOME` references a non-standard CUDA installation location. Reference the [cuda README](doc/README.cuda_support.md) for more information.
 
 When building packages that use CUDA, a tar package of TensorRT for the intended CUDA version will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`. The [cuda README](doc/README.cuda_support.md) has more information.
 
@@ -142,3 +142,8 @@ After performing the build using `open-ce build env`, the `open-ce build image` 
 ### Contributions
 
 For contribution information, please see the [CONTRIBUTING.md](CONTRIBUTING.md) page.
+
+### Slack Community
+
+Join us on [Slack!](http://open-ce.slack.com/) Use [this link](https://join.slack.com/t/open-ce/shared_invite/zt-llqq5z03-24_f08SyEfxklK5_qwzXEA) or ping the [@open-ce/open-ce-dev-team](https://github.com/orgs/open-ce/teams/open-ce-dev-team) for an invite.
+

@@ -49,12 +49,15 @@ def make_parser():
 
     return parser
 
-def build_image(build_image_path, dockerfile):
+def build_image(build_image_path, dockerfile, cuda_version=None):
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
-    image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + str(os.getuid())
+    if cuda_version:
+        image_name = REPO_NAME + ":" + IMAGE_NAME + "-cuda" + cuda_version + "-" + str(os.getuid())
+    else:
+        image_name = REPO_NAME + ":" + IMAGE_NAME + "-cpu-" + str(os.getuid())
     build_cmd = DOCKER_TOOL + " build "
     build_cmd += "-f " + dockerfile + " "
     build_cmd += "-t " + image_name + " "
@@ -213,7 +216,7 @@ def build_with_docker(args, arg_strings):
     build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
 
     if  'cuda' not in args.build_types or _capable_of_cuda_containers(args.cuda_versions):
-        image_name = build_image(build_image_path, dockerfile)
+        image_name = build_image(build_image_path, dockerfile, args.cuda_versions if 'cuda' in args.build_types else None)
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), args.cuda_versions)
 
