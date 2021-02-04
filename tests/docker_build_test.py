@@ -18,6 +18,7 @@ import os
 import sys
 import pathlib
 import pytest
+from argparse import Namespace
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
@@ -65,6 +66,7 @@ def test_create_container(mocker):
     container_name = "my_container"
     image_name = "my_image"
     output_folder = "condabuild"
+    env_folders = ["/test/my_envs"]
 
     mocker.patch(
         'os.system',
@@ -72,9 +74,10 @@ def test_create_container(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=[docker_build.DOCKER_TOOL + " create",
                                                                "--name " + container_name,
                                                                "-v /my_dir/" + output_folder,
+                                                               "-v /test/my_envs",
                                                                image_name])))
 
-    docker_build._create_container(container_name, image_name, output_folder)
+    docker_build._create_container(container_name, image_name, output_folder, env_folders)
 
 def test_copy_to_container(mocker):
     '''
@@ -107,6 +110,23 @@ def test_execute_in_container(mocker):
 
     docker_build._execute_in_container(container, command)
 
+def make_args(command="build",
+              sub_command="env",
+              output_folder="condabuild",
+              env_config_file="open-ce.yaml",
+              conda_build_config="conda_build_config.yaml",
+              build_types="cuda",
+              cuda_versions="10.2",
+              **kwargs):
+    return Namespace(command = command,
+                     sub_command = sub_command,
+                     output_folder = output_folder,
+                     env_config_file = env_config_file,
+                     conda_build_config = conda_build_config,
+                     build_types=build_types,
+                     cuda_versions=cuda_versions,
+                     **kwargs)
+
 def test_build_in_container(mocker):
     '''
     Simple test for build_in_container
@@ -117,15 +137,17 @@ def test_build_in_container(mocker):
 
     mocker.patch('os.system', return_value=0)
 
-    docker_build.build_in_container("my_image", "condabuild", ["path/to/my_script.py", "arg1", "arg2"])
+    args = make_args()
+
+    docker_build.build_in_container("my_image", args, ["arg1", "arg2"])
 
 def test_docker_build_failures(mocker):
     '''
     Test situations where the docker commands fail
     '''
     image = "my_image"
-    output_folder = "condabuild"
-    cmd = ["path/to/my_script.py", "arg1", "arg2"]
+    args = make_args()
+    cmd = ["arg1", "arg2"]
 
     mocker.patch('os.path.isdir', return_value = True)
 
@@ -133,14 +155,14 @@ def test_docker_build_failures(mocker):
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_in_container(image, output_folder, cmd)
+        docker_build.build_in_container(image, args, cmd)
     assert "Error creating" in str(exc.value)
 
     # Failed first copy
     mocker.patch('docker_build._create_container', return_value=None)
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_in_container(image, output_folder, cmd)
+        docker_build.build_in_container(image, args, cmd)
     assert "Error copying" in str(exc.value)
     assert "open-ce" in str(exc.value)
 
@@ -148,7 +170,15 @@ def test_docker_build_failures(mocker):
     mocker.patch('os.system', side_effect=[0,1])
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_in_container(image, output_folder, cmd)
+        docker_build.build_in_container(image, args, cmd)
+    assert "Error copying" in str(exc.value)
+    assert "conda_build_config" in str(exc.value)
+
+    # Failed third copy
+    mocker.patch('os.system', side_effect=[0,0,1])
+
+    with pytest.raises(OpenCEError) as exc:
+        docker_build.build_in_container(image, args, cmd)
     assert "Error copying" in str(exc.value)
     assert "local_files" in str(exc.value)
 
@@ -157,7 +187,7 @@ def test_docker_build_failures(mocker):
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_in_container(image, output_folder, cmd)
+        docker_build.build_in_container(image, args, cmd)
     assert "Error starting" in str(exc.value)
 
     # Failed execute
@@ -165,7 +195,7 @@ def test_docker_build_failures(mocker):
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_in_container(image, output_folder, cmd)
+        docker_build.build_in_container(image, args, cmd)
     assert "Error executing" in str(exc.value)
 
 def test_build_with_docker(mocker):
@@ -173,28 +203,26 @@ def test_build_with_docker(mocker):
     Simple test for build_with_docker
     '''
     image_name = "my_image"
-    output_folder = "condabuild"
-    arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
-    build_type = "cuda"
-    cudatoolkit = "10.2"
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--cuda_versions", "10.2", "--build_types", "cuda"]
+    args = make_args()
     mocker.patch('docker_build.build_image', return_value=(0, image_name))
 
     mocker.patch('docker_build.build_in_container', return_value=0)
 
-    docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
+    docker_build.build_with_docker(args, arg_strings)
 
 def test_build_with_docker_failures(mocker):
     '''
     Failure cases for build_with_docker
     '''
-    output_folder = "condabuild"
-    arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
-    build_type = "cuda"
-    cudatoolkit = "10.2"
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--cuda_versions", "10.2", "--build_types", "cuda"]
+    args = make_args()
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_with_docker(output_folder, build_type, cudatoolkit, arg_strings)
+        docker_build.build_with_docker(args, arg_strings)
     assert "Failure building image" in str(exc.value)
 
 def test_generate_dockerfile_name():
@@ -205,24 +233,24 @@ def test_generate_dockerfile_name():
     build_type = "cuda"
     cuda_version = "11.0"
     image_path, docker_file_name = docker_build._generate_dockerfile_name(build_type, cuda_version)
-    assert docker_file_name == os.path.join(image_path, "Dockerfile.cuda-" + cuda_version) 
+    assert docker_file_name == os.path.join(image_path, "Dockerfile.cuda-" + cuda_version)
 
-    #CPU build 	
+    #CPU build
     build_type = "cpu"
-    cuda_version = "11.0"	
+    cuda_version = "11.0"
     image_path, docker_file_name = docker_build._generate_dockerfile_name(build_type, cuda_version)
     assert docker_file_name == os.path.join(image_path, "Dockerfile")
 
     #Unsupported CUDA version
     build_type = "cuda"
-    cuda_version = "9.0"	
+    cuda_version = "9.0"
     with pytest.raises(OpenCEError) as exc:
         docker_build._generate_dockerfile_name(build_type, cuda_version)
-    assert "Cannot build using docker" in str(exc.value)	
+    assert "Cannot build using docker" in str(exc.value)
 
 def test_capable_of_cuda_containers(mocker):
     '''
-    Simple test for _capable_of_cuda_containers 
+    Simple test for _capable_of_cuda_containers
     '''
     cuda_version = "10.2"
     mocker.patch('utils.cuda_driver_installed', return_value=0)
@@ -243,14 +271,13 @@ def test_build_with_docker_incompatible_cuda_versions(mocker):
     '''
     Tests that passing incompatible value in --cuda_versions argument fails.
     '''
-    output_folder = "condabuild"
-    arg_strings = ["path/to/my_script.py", "--docker_build", "my-env.yaml"]
-    build_type = "cuda"
-    cuda_versions = "11.0"
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--cuda_versions", "10.2", "--build_types", "cuda"]
+    args = make_args()
 
     mocker.patch('docker_build._capable_of_cuda_containers', return_value=0)
     mocker.patch('utils.get_driver_level',return_value="abc")
 
     with pytest.raises(OpenCEError) as exc:
-        docker_build.build_with_docker(output_folder, build_type, cuda_versions, arg_strings)
+        docker_build.build_with_docker(args, arg_strings)
     assert "Driver level" in str(exc.value)
