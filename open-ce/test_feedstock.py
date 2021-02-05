@@ -31,7 +31,8 @@ from errors import OpenCEError, Error
 
 COMMAND = 'feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
-ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY, Argument.TEST_LABELS]
+ARGUMENTS = [Argument.CONDA_ENV_FILE, Argument.TEST_WORKING_DIRECTORY, Argument.TEST_LABELS,
+             Argument.WORKING_DIRECTORY]
 
 @unique
 class Key(Enum):
@@ -245,27 +246,42 @@ def display_failed_tests(failed_tests):
     else:
         print("All tests passed!")
 
-def _test_feedstock(args):
-    conda_env_file = os.path.abspath(args.conda_env_file)
+def test_feedstock(conda_env_file, test_labels=None,
+                   test_working_dir=utils.DEFAULT_TEST_WORKING_DIRECTORY, working_directory=None):
+    """
+    Test a particular feedstock, provided by the working_directory argument.
+    """
+    saved_working_directory = None
+    if working_directory:
+        saved_working_directory = os.getcwd()
+        os.chdir(os.path.abspath(working_directory))
+
+    conda_env_file = os.path.abspath(conda_env_file)
     var_string = conda_env_file_generator.get_variant_string(conda_env_file)
     if var_string:
         variant_dict = utils.variant_string_to_dict(var_string)
     else:
         variant_dict = dict()
-    for test_label in inputs.parse_arg_list(args.test_labels):
+    for test_label in inputs.parse_arg_list(test_labels):
         variant_dict[test_label] = True
-    test_commands = gen_test_commands(working_dir=args.test_working_dir, variants=variant_dict)
+    test_commands = gen_test_commands(working_dir=test_working_dir, variants=variant_dict)
     failed_tests = run_test_commands(conda_env_file, test_commands)
-    display_failed_tests(failed_tests)
 
-    return len(failed_tests)
+    if saved_working_directory:
+        os.chdir(saved_working_directory)
 
-def test_feedstock(args):
+    return failed_tests
+
+def test_feedstock_entry(args):
     '''Entry Function'''
     if not args.conda_env_file:
         raise OpenCEError(Error.CONDA_ENV_FILE_REQUIRED)
-    test_failures = _test_feedstock(args)
+    test_failures = test_feedstock(args.conda_env_file,
+                                   args.test_labels,
+                                   args.test_working_dir,
+                                   args.working_directory)
     if test_failures:
-        raise OpenCEError(Error.FAILED_TESTS, test_failures)
+        display_failed_tests(test_failures)
+        raise OpenCEError(Error.FAILED_TESTS, len(test_failures))
 
-ENTRY_FUNCTION = test_feedstock
+ENTRY_FUNCTION = test_feedstock_entry

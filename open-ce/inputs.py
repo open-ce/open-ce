@@ -130,7 +130,7 @@ class Argument(Enum):
     TEST_WORKING_DIRECTORY = (lambda parser: parser.add_argument(
                                         '--test_working_dir',
                                         type=str,
-                                        default="./",
+                                        default=utils.DEFAULT_TEST_WORKING_DIRECTORY,
                                         help="Directory where tests will be executed."))
 
     RECIPE_CONFIG_FILE = (lambda parser: parser.add_argument(
