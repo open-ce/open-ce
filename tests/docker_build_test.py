@@ -24,7 +24,7 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import docker_build
-from errors import OpenCEError, Error
+from errors import OpenCEError
 
 def test_build_image(mocker):
     '''
