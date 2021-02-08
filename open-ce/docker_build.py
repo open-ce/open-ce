@@ -59,7 +59,7 @@ def build_image(build_image_path, dockerfile, cuda_version=None, docker_build_ar
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cuda" + cuda_version + "-" + str(os.getuid())
     else:
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cpu-" + str(os.getuid())
-    build_cmd = DOCKER_TOOL + " build --no-cache "
+    build_cmd = DOCKER_TOOL + " build "
     build_cmd += "-f " + dockerfile + " "
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
