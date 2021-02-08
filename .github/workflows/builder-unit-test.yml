@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           auto-update-conda: true
@@ -51,16 +53,6 @@ jobs:
         run: |
           # Use yamllint to check the actual yaml files.
           yamllint .github/actions/*/*.yml .github/workflows/*.yml
-          yamllint ./conda_build_config.yaml
-          # Use the conda_build api to lint the env files since they use jinja.
-          ./open-ce/open-ce validate env envs/*.yaml
-          # Validate conda_build_config for the main open-ce env file.
-          ./open-ce/open-ce validate config --conda_build_config \
-                                            ./conda_build_config.yaml \
-                                            ./envs/*-env.yaml \
-                                            --python_versions 3.6,3.7,3.8 \
-                                            --build_types cuda,cpu \
-                                            --mpi_types openmpi,system
       - name: Test with pytest and Generate coverage report
         shell: bash -l {0}
         run: |

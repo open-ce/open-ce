@@ -31,8 +31,8 @@ DEFAULT_BUILD_TYPES = "cpu,cuda"
 DEFAULT_PYTHON_VERS = "3.7"
 DEFAULT_MPI_TYPES = "openmpi"
 DEFAULT_CUDA_VERS = "10.2"
-DEFAULT_CONDA_BUILD_CONFIG = os.path.join(os.path.dirname(__file__),
-                                          "..", "conda_build_config.yaml")
+CONDA_BUILD_CONFIG_FILE = "conda_build_config.yaml"
+DEFAULT_CONDA_BUILD_CONFIG = os.path.abspath(os.path.join(os.getcwd(), CONDA_BUILD_CONFIG_FILE))
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
 SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
@@ -41,6 +41,7 @@ DEFAULT_OUTPUT_FOLDER = "condabuild"
 DEFAULT_TEST_CONFIG_FILE = "tests/open-ce-tests.yaml"
 DEFAULT_GIT_TAG = None
 OPEN_CE_VARIANT = "open-ce-variant"
+DEFAULT_TEST_WORKING_DIRECTORY = "./"
 
 def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
 cuda_versions=DEFAULT_CUDA_VERS):

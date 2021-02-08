@@ -42,7 +42,7 @@ ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
              Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV,
              Argument.TEST_LABELS, Argument.DOCKER_BUILD_ENV_VARS]
 
-def _run_tests(build_tree, conda_env_files):
+def _run_tests(build_tree, test_labels, conda_env_files):
     """
     Run through all of the tests within a build tree for the given conda environment files.
 
@@ -54,12 +54,14 @@ def _run_tests(build_tree, conda_env_files):
     failed_tests = []
     # Run test commands for each conda environment that was generated
     for variant_string, conda_env_file in conda_env_files.items():
-        test_commands = build_tree.get_test_commands(variant_string)
-        if test_commands:
+        test_feedstocks = build_tree.get_test_feedstocks(variant_string)
+        if test_feedstocks:
             print("\n*** Running tests within the " + os.path.basename(conda_env_file) + " conda environment ***\n")
-        for feedstock, feedstock_test_commands in test_commands.items():
+        for feedstock in test_feedstocks:
             print("Running tests for " + feedstock)
-            failed_tests += test_feedstock.run_test_commands(conda_env_file, feedstock_test_commands)
+            failed_tests += test_feedstock.test_feedstock(conda_env_file,
+                                                          test_labels=test_labels,
+                                                          working_directory=feedstock)
 
     test_feedstock.display_failed_tests(failed_tests)
     if failed_tests:
@@ -75,9 +77,7 @@ def build_env(args):
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
         try:
-            docker_build.build_with_docker(os.path.abspath(args.output_folder),
-                                           args.build_types, args.cuda_versions,
-                                           args.docker_build_env_vars, sys.argv)
+            docker_build.build_with_docker(args, sys.argv)
         finally:
             for conda_env_file in glob.glob(os.path.join(args.output_folder, "*.yaml")):
                 utils.replace_conda_env_channels(conda_env_file,
@@ -107,8 +107,7 @@ def build_env(args):
                                channels=args.channels_list,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,
-                               conda_build_config=args.conda_build_config,
-                               test_labels=inputs.parse_arg_list(args.test_labels))
+                               conda_build_config=args.conda_build_config)
 
     # Generate conda environment files
     conda_env_files = build_tree.write_conda_env_files(output_folder=os.path.abspath(args.output_folder),
@@ -132,6 +131,6 @@ def build_env(args):
                 print("Skipping build of " + build_command.recipe + " because it already exists")
 
     if args.run_tests:
-        _run_tests(build_tree, conda_env_files)
+        _run_tests(build_tree, inputs.parse_arg_list(args.test_labels), conda_env_files)
 
 ENTRY_FUNCTION = build_env

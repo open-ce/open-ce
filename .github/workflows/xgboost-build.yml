@@ -17,6 +17,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: open-ce/open-ce-environments
+          path: ./envs
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           auto-update-conda: true
@@ -28,6 +32,6 @@ jobs:
       - name: Build XGBoost
         shell: bash -l {0}
         run: |
-          ./open-ce/open-ce build env envs/xgboost-env.yaml \
+          ./open-ce/open-ce build env ./envs/envs/xgboost-env.yaml \
                             --python_versions ${{ matrix.python-version }} \
                             --build_types cpu

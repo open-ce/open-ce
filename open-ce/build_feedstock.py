@@ -170,6 +170,7 @@ def build_feedstock(args):
     build_feedstock_from_command(command,
                                  recipe_config_file=args.recipe_config_file,
                                  output_folder=args.output_folder,
-                                 local_src_dir=args.local_src_dir)
+                                 local_src_dir=args.local_src_dir,
+                                 conda_build_config=args.conda_build_config)
 
 ENTRY_FUNCTION = build_feedstock
