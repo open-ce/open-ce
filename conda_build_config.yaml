@@ -159,7 +159,7 @@ openmpi:
 opt_einsum:
   - 3.1.0
 pillow:
-  - 7.1.*
+  - 8.1.*
 pip:
   - 19*
 pkg_config:
