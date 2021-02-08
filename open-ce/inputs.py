@@ -191,12 +191,13 @@ path of \"recipe\"."""))
                                         default="",
                                         help="Comma delimited list of labels indicating what tests to run."))
 
-    DOCKER_BUILD_ENV_VARS = (lambda parser: parser.add_argument(
-                                        '--docker_build_env_vars',
+    DOCKER_BUILD_ARGS = (lambda parser: parser.add_argument(
+                                        '--docker_build_args',
                                         type=str,
-                                        default=None,
-                                        help="Comma separated environment variables that are to be"
-                                             " passed to the docker build."))
+                                        default="",
+                                        help="Docker build arguments like environment variables "
+                                             " to be set in the container or cpus or gpus to be used "
+                                             " such as \"--build-arg ENV1=test1 --cpuset-cpus 0,1\"."))
 
 
 

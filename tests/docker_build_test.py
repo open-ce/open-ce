@@ -117,6 +117,7 @@ def make_args(command="build",
               conda_build_config="conda_build_config.yaml",
               build_types="cuda",
               cuda_versions="10.2",
+              docker_build_args="",
               **kwargs):
     return Namespace(command = command,
                      sub_command = sub_command,
@@ -125,6 +126,7 @@ def make_args(command="build",
                      conda_build_config = conda_build_config,
                      build_types=build_types,
                      cuda_versions=cuda_versions,
+                     docker_build_args=docker_build_args,
                      **kwargs)
 
 def test_build_in_container(mocker):
@@ -282,24 +284,15 @@ def test_build_with_docker_incompatible_cuda_versions(mocker):
         docker_build.build_with_docker(args, arg_strings)
     assert "Driver level" in str(exc.value)
 
-def test_add_env_vars():
+def test_docker_build_with_docker_build_args(mocker):
     '''
-    Tests that environment variables are parsed and passed to docker build.
+    Tests that docker build arguments are parsed and passed to docker build.
     '''
-    env_vars = "ENV1=test1,ENV2=test2"
+    build_args = "--build-arg ENV1=test1 --build-arg ENV2=test2 same_setting 0,1"
 
-    build_cmd = "docker build "
-    build_cmd = docker_build._add_env_vars(build_cmd, env_vars)
-    assert(build_cmd == "docker build --build-arg ENV1=test1 --build-arg ENV2=test2 ")
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--docker_build_args", build_args]
+    args = make_args()
+    mocker.patch('os.system', return_value=0)
 
-def test_add_env_vars_in_wrong_format():
-    '''
-    Tests that an exception is thrown when the environment variables passed are in incorrect format.
-    '''
-    env_vars = "ENV1=test1,ENV2,test2"
-
-    build_cmd = "docker build "
-
-    with pytest.raises(OpenCEError) as exc:
-        build_cmd = docker_build._add_env_vars(build_cmd, env_vars)
-    assert Error.DOCKER_BUILD_ENV_VARS.value[1].format("ENV2") in str(exc.value)
+    docker_build.build_with_docker(args, arg_strings)

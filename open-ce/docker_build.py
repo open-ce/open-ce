@@ -41,7 +41,7 @@ DOCKER_TOOL = "docker"
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER,
-                 Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE, Argument.DOCKER_BUILD_ENV_VARS]
+                 Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE, Argument.DOCKER_BUILD_ARGS]
     parser = argparse.ArgumentParser(arguments)
     parser.add_argument('command_placeholder', nargs=1, type=str)
     parser.add_argument('sub_command_placeholder', nargs=1, type=str)
@@ -50,7 +50,7 @@ def make_parser():
 
     return parser
 
-def build_image(build_image_path, dockerfile, cuda_version=None, env_vars=None):
+def build_image(build_image_path, dockerfile, cuda_version=None, docker_build_args=""):
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -59,31 +59,19 @@ def build_image(build_image_path, dockerfile, cuda_version=None, env_vars=None):
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cuda" + cuda_version + "-" + str(os.getuid())
     else:
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cpu-" + str(os.getuid())
-    build_cmd = DOCKER_TOOL + " build "
+    build_cmd = DOCKER_TOOL + " build --no-cache "
     build_cmd += "-f " + dockerfile + " "
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
 
-    build_cmd = _add_env_vars(build_cmd, env_vars)
+    build_cmd += docker_build_args + " "
     build_cmd += build_image_path
 
     if os.system(build_cmd):
         raise OpenCEError(Error.BUILD_IMAGE, image_name)
 
     return image_name
-
-def _add_env_vars(build_cmd, env_vars):
-    env_vars_list = []
-    if env_vars:
-        env_vars_list = env_vars.split(",")
-
-    for var in env_vars_list:
-        var = var.strip()
-        if var.find("=") == -1:
-            raise OpenCEError(Error.DOCKER_BUILD_ENV_VARS, var)
-        build_cmd += "--build-arg {} ".format(var.strip())
-    return build_cmd
 
 def _add_volume(local_path, container_path):
     """
@@ -234,7 +222,7 @@ def build_with_docker(args, arg_strings):
     if  'cuda' not in args.build_types or _capable_of_cuda_containers(args.cuda_versions):
         image_name = build_image(build_image_path, dockerfile,
                                  args.cuda_versions if 'cuda' in args.build_types else None,
-                                 args.docker_build_env_vars)
+                                 args.docker_build_args)
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), args.cuda_versions)
 

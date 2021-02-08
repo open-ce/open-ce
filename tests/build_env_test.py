@@ -301,13 +301,13 @@ def test_build_env_docker_build_cuda_versions(mocker):
 
     cuda_version = "10.2"
     arg_strings = ["build", build_env.COMMAND, "--docker_build",
-                   "--cuda_versions", cuda_version, "--docker_build_env_vars", "ENV1=test1", "my-env.yaml"]
+                   "--cuda_versions", cuda_version, "my-env.yaml"]
     open_ce._main(arg_strings)
     validate_conda_env_files(cuda_versions=cuda_version)
 
-def test_build_env_docker_build_with_env_vars(mocker):
+def test_build_env_docker_build_with_build_args(mocker):
     '''
-    Tests that passing --docker_build_env_vars argument with docker_build argument works correctly.
+    Tests that passing --docker_build_args argument with docker_build argument works correctly.
     '''
     dirTracker = helpers.DirTracker()
     mocker.patch(
@@ -317,7 +317,7 @@ def test_build_env_docker_build_with_env_vars(mocker):
     mocker.patch('docker_build.build_with_docker', return_value=0)
 
     arg_strings = ["build", build_env.COMMAND, "--docker_build",
-                   "--docker_build_env_vars", "ENV1=test1, ENV2=test2", "my-env.yaml"]
+                   "--docker_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
     open_ce._main(arg_strings)
 
 def test_build_env_if_no_conda_build(mocker):
