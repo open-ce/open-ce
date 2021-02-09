@@ -84,7 +84,7 @@ usage: open-ce build env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                          [--docker_build] [--git_location GIT_LOCATION]
                          [--git_tag_for_env GIT_TAG_FOR_ENV]
                          [--test_labels TEST_LABELS]
-                         [--docker_build_env_vars DOCKER_BUILD_ENV_VARS]
+                         [--docker_build_args DOCKER_BUILD_ARGS]
                          env_config_file [env_config_file ...]
 
 positional arguments:
