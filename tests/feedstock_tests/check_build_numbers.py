@@ -33,7 +33,7 @@ import inputs # pylint: disable=wrong-import-position
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [inputs.Argument.PYTHON_VERSIONS, inputs.Argument.BUILD_TYPES, inputs.Argument.MPI_TYPES,
-                 inputs.Argument.CUDA_VERSIONS]
+                 inputs.Argument.CUDA_VERSIONS, inputs.Argument.CONDA_BUILD_CONFIG]
     parser = argparse.ArgumentParser(arguments)
     for argument in arguments:
         argument(parser)
@@ -67,7 +67,7 @@ def main(arg_strings=None):
     Entry function.
     '''
     parser = make_parser()
-    args = parser.parse_args(arg_strings)
+    args = inputs.parse_args(parser, arg_strings)
     variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions)
 
     pr_branch = utils.get_output("git log -1 --format='%H'")
