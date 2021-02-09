@@ -42,7 +42,15 @@ directory; simply specify the file for whichever package environment you want.
 The `--docker_build` option will build an image and run the build command
 inside of a container based on the new image.
 
-As part of this process, it will copy a local_files directory that is in the
+Along with `--docker_build` option, `--docker_build_args` can be passed
+to set docker build options like environment variables or other settings
+like cpusets.
+
+```shell
+    ./open-ce/open-ce build env --docker_build --docker_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" envs/pytorch-env.yaml
+```
+
+As part of this process of docker build, it will copy a local_files directory that is in the
 current working directory into the container, if the directory exists.
 
 The paths to the `env_config_file`s and `--conda_build_config` must point to
@@ -76,6 +84,7 @@ usage: open-ce build env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                          [--docker_build] [--git_location GIT_LOCATION]
                          [--git_tag_for_env GIT_TAG_FOR_ENV]
                          [--test_labels TEST_LABELS]
+                         [--docker_build_args DOCKER_BUILD_ARGS]
                          env_config_file [env_config_file ...]
 
 positional arguments:
@@ -118,9 +127,9 @@ optional arguments:
   --docker_build        Perform a build within a docker container. NOTE: When
                         the --docker_build flag is used, all arguments with
                         paths should be relative to the directory containing
-                        open-ce. Only files within the open-ce directory and
-                        local_files will be visible at build time. (default:
-                        False)
+                        root level open-ce directory. Only files within the
+                        root level open-ce directory and local_files will be
+                        visible at build time. (default: False)
   --git_location GIT_LOCATION
                         The default location to clone git repositories from.
                         (default: https://github.com/open-ce)
@@ -130,6 +139,11 @@ optional arguments:
   --test_labels TEST_LABELS
                         Comma delimited list of labels indicating what tests
                         to run. (default: )
+  --docker_build_args DOCKER_BUILD_ARGS
+                        Docker build arguments like environment variables to
+                        be set in the container or cpus or gpus to be used
+                        such as "--build-arg ENV1=test1 --cpuset-cpus 0,1".
+                        (default: )
 ==============================================================================
 ```
 

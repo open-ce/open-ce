@@ -40,7 +40,8 @@ DOCKER_TOOL = "docker"
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER, Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE]
+    arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER,
+                 Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE, Argument.DOCKER_BUILD_ARGS]
     parser = argparse.ArgumentParser(arguments)
     parser.add_argument('command_placeholder', nargs=1, type=str)
     parser.add_argument('sub_command_placeholder', nargs=1, type=str)
@@ -49,7 +50,7 @@ def make_parser():
 
     return parser
 
-def build_image(build_image_path, dockerfile, cuda_version=None):
+def build_image(build_image_path, dockerfile, cuda_version=None, docker_build_args=""):
     """
     Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -63,6 +64,8 @@ def build_image(build_image_path, dockerfile, cuda_version=None):
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
+
+    build_cmd += docker_build_args + " "
     build_cmd += build_image_path
 
     if os.system(build_cmd):
@@ -169,6 +172,7 @@ def build_in_container(image_name, args, arg_strings):
     if os.path.isdir(LOCAL_FILES_PATH):
         _copy_to_container(LOCAL_FILES_PATH, HOME_PATH, container_name)
 
+
     _start_container(container_name)
 
     # Execute build command
@@ -216,9 +220,10 @@ def build_with_docker(args, arg_strings):
     build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
 
     if  'cuda' not in args.build_types or _capable_of_cuda_containers(args.cuda_versions):
-        image_name = build_image(build_image_path, dockerfile, args.cuda_versions if 'cuda' in args.build_types else None)
+        image_name = build_image(build_image_path, dockerfile,
+                                 args.cuda_versions if 'cuda' in args.build_types else None,
+                                 args.docker_build_args)
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), args.cuda_versions)
-
 
     build_in_container(image_name, args, unused_args)
