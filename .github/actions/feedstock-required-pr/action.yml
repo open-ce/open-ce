@@ -14,7 +14,8 @@ runs:
     - name: Clone environments
       shell: bash -l {0}
       run: |
-        git clone https://github.com/open-ce/open-ce-environments.git ./open-ce-environments
+        git clone https://github.com/open-ce/open-ce-environments.git \
+                  ./open-ce-environments
     - name: Check Dependencies
       shell: bash -l {0}
       run: |
