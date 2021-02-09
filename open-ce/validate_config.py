@@ -1,90 +1,77 @@
 #!/usr/bin/env python
 
 """
-*****************************************************************
-Licensed Materials - Property of IBM
-(C) Copyright IBM Corp. 2020. All Rights Reserved.
-US Government Users Restricted Rights - Use, duplication or
-disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-*****************************************************************
+# *****************************************************************
+# (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# *****************************************************************
 """
 
-import argparse
-import os
-import sys
-import build_tree
 import utils
-from utils import OpenCEError
+from inputs import Argument
+from errors import OpenCEError, Error
 
-def make_parser():
-    ''' Parser input arguments '''
-    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.ENV_FILE,
-                 utils.Argument.REPOSITORY_FOLDER, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES]
-    parser = utils.make_parser(arguments,
-                               description = 'Perform validation on a cond_build_config.yaml file.',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    return parser
+import build_tree # pylint: disable=wrong-import-position
 
-def run_and_log(command):
-    '''Print a shell command and then execute it.'''
-    print("--->{}".format(command))
-    return os.system(command)
+COMMAND = 'config'
 
-def generalize_version(package):
-    """Add `.*` to package versions when it is needed."""
-    dep = package
-    if ("=" in dep or (dep[-1].isdigit() and "." in dep)) and not dep[-2:] == ".*":
-        dep += ".*"
-    if " " in dep and not "." in dep.split()[1]:
-        dep += ".*"
-    return dep
+DESCRIPTION = 'Perform validation on a conda_build_config.yaml file.'
 
-def validate_config(arg_strings=None):
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE,
+             Argument.REPOSITORY_FOLDER, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES, Argument.CUDA_VERSIONS]
+
+def validate_config(args):
+    '''Entry Function'''
+    variants = utils.make_variants(args.python_versions, args.build_types, args.mpi_types, args.cuda_versions)
+    validate_env_config(args.conda_build_config, args.env_config_file, variants, args.repository_folder)
+
+def validate_env_config(conda_build_config, env_config_files, variants, repository_folder):
     '''
-    Entry function.
+    Validates a lits of Open-CE env files against a conda build config
+    for a given set of variants.
     '''
-    args = make_parser().parse_args(arg_strings)
-    variants = [{ 'python' : py_vers, 'build_type' : build_type } for py_vers in utils.parse_arg_list(args.python_versions)
-                                                                  for build_type in utils.parse_arg_list(args.build_types)]
     for variant in variants:
-        print('Validating {} for {}'.format(args.conda_build_config, variant))
-        for env_file in args.env_config_file:
-            print('Validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
+        for env_file in env_config_files:
+            print('Validating {} for {} : {}'.format(conda_build_config, env_file, variant))
             try:
-                recipes = build_tree.BuildTree([env_file],
-                                               variant['python'],
-                                               variant['build_type'],
-                                               repository_folder=args.repository_folder,
-                                               conda_build_config=args.conda_build_config)
+                _ = build_tree.BuildTree([env_file],
+                                          variant['python'],
+                                          variant['build_type'],
+                                          variant['mpi_type'],
+                                          variant['cudatoolkit'],
+                                          repository_folder=repository_folder,
+                                          conda_build_config=conda_build_config)
             except OpenCEError as err:
-                print(err.msg)
-                print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
-                return 1
+                raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
+            print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
 
-            packages = [package for recipe in recipes for package in recipe.packages]
-            channels = {channel for recipe in recipes for channel in recipe.channels}
-            deps = {dep for recipe in recipes for dep in recipe.run_dependencies}
+def validate_build_tree(build_commands, external_deps):
+    '''
+    Check a build tree for dependency compatability.
+    '''
+    packages = [package for recipe in build_commands for package in recipe.packages]
+    channels = {channel for recipe in build_commands for channel in recipe.channels}
+    deps = build_tree.get_installable_packages(build_commands, external_deps)
 
-            pkg_args = " ".join(["\"{}\"".format(generalize_version(dep)) for dep in deps
-                                                                          if not utils.remove_version(dep) in packages])
+    pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
+                                                                    if not utils.remove_version(dep) in packages])
+    channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
 
-            channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
+    cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
+    ret_code, std_out, std_err = utils.run_command_capture(cli)
+    if not ret_code:
+        raise OpenCEError(Error.VALIDATE_BUILD_TREE, cli, std_out, std_err)
 
-            cli = "conda create --dry-run -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
-
-            retval = run_and_log(cli)
-
-            if retval != 0:
-                print('Error while validating {} for {} : {}'.format(args.conda_build_config, env_file, variant))
-                return 1
-
-            print('Successfully validated {} for {} : {}'.format(args.conda_build_config, env_file, variant))
-
-        print('Successfully validated {} for {}'.format(args.conda_build_config, variant))
-
-    print("{} Successfully validated!".format(args.conda_build_config))
-    return 0
-
-if __name__ == '__main__':
-    sys.exit(validate_config())
+ENTRY_FUNCTION = validate_config

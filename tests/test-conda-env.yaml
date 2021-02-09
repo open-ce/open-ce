@@ -1,0 +1,11 @@
+channels:
+- file://home/user/opence-work/condabuild
+- defaults
+dependencies:
+- package1 1.2.*
+- package2 1.2.*
+- package3 1.2.*
+- package4 1.2.*
+- package5 1.2.*
+- package6 1.2.*
+name: opence-conda-env-py3.6-cuda-openmpi

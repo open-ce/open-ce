@@ -1,28 +1,36 @@
 # *****************************************************************
+# (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
 #
-# Licensed Materials - Property of IBM
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# (C) Copyright IBM Corp. 2020. All Rights Reserved.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# US Government Users Restricted Rights - Use, duplication or
-# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # *****************************************************************
 
 import sys
 import os
 import pathlib
+import errno
+import pytest
 sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 
-import pytest
+import inputs
 import utils
+from errors import OpenCEError
 
 def test_parse_arg_list_list_input():
     '''
     Parse arg list should return the input argument if it's already a list.
     '''
     list_input = ["a", "b", "c"]
-    assert list_input == utils.parse_arg_list(list_input)
+    assert list_input == inputs.parse_arg_list(list_input)
 
 def test_parse_arg_list_small_string_input():
     '''
@@ -30,7 +38,7 @@ def test_parse_arg_list_small_string_input():
     '''
     string_input = "a,b,c"
     list_output = ["a", "b", "c"]
-    assert list_output == utils.parse_arg_list(string_input)
+    assert list_output == inputs.parse_arg_list(string_input)
 
 def test_parse_arg_list_large_string_input():
     '''
@@ -38,4 +46,81 @@ def test_parse_arg_list_large_string_input():
     '''
     string_input = "this,is a, big  , test  ,"
     list_output = ["this", "is a", " big  ", " test  ", ""]
-    assert list_output == utils.parse_arg_list(string_input)
+    assert list_output == inputs.parse_arg_list(string_input)
+
+def test_cuda_level_supported(mocker):
+    '''
+    Simple test for cuda_level_supported
+    '''
+    #expected cuda version supported by the system
+    cuda_version="10.2"
+    mocker.patch('utils.get_driver_cuda_level',return_value="10.2")
+    assert utils.cuda_level_supported(cuda_version) == True
+
+    #expected cuda version not supported by the system
+    cuda_version="11.0"
+    mocker.patch('utils.get_driver_cuda_level',return_value="10.2")
+    assert utils.cuda_level_supported(cuda_version) == False
+
+def test_get_driver_cuda_level(mocker):
+    '''
+    Simple test for get_driver_cuda_level
+    '''
+    mocker.patch('subprocess.check_output',return_value=bytes("CUDA Version: 10.2","utf-8"))
+    assert utils.get_driver_cuda_level() == "10.2" 
+
+def test_get_driver_cuda_level_failures(mocker):
+    '''
+    Simple test for get_driver_cuda_level failure scenarios
+    '''
+    mocker.patch('subprocess.check_output',side_effect=OSError(errno.ENOENT,"" ))
+    with pytest.raises(OpenCEError) as exc:
+        utils.get_driver_cuda_level()
+    assert "nvidia-smi command not found" in str(exc.value)
+
+    mocker.patch('subprocess.check_output',side_effect=OSError(errno.EPERM,"" ))
+    with pytest.raises(OpenCEError) as exc:
+        utils.get_driver_cuda_level()
+    assert "nvidia-smi command unexpectedly failed" in str(exc.value)
+
+def test_get_driver_level(mocker):
+    '''
+    Simple test for get_driver_level
+    '''    
+    mocker.patch('subprocess.check_output',return_value=bytes("Driver Version: 440.33.01","utf-8"))
+    assert utils.get_driver_level() == "440.33.01"
+
+def test_get_driver_level_failures(mocker):
+    '''
+    Simple test for get_driver_level failure scenarios
+    '''
+    mocker.patch('subprocess.check_output',side_effect=OSError(errno.ENOENT,"" ))
+    with pytest.raises(OpenCEError) as exc:
+        utils.get_driver_level()
+    assert "nvidia-smi command not found" in str(exc.value)
+
+    mocker.patch('subprocess.check_output',side_effect=OSError(errno.EPERM,"" ))
+    with pytest.raises(OpenCEError) as exc:
+        utils.get_driver_level()
+    assert "nvidia-smi command unexpectedly failed" in str(exc.value)
+
+def test_cuda_driver_installed(mocker):
+    '''
+    Simple test for cuda_driver_installed
+    '''
+    mocker.patch('subprocess.check_output',return_value=bytes("nvidia   123","utf-8"))
+    assert utils.cuda_driver_installed() == True
+
+def test_cuda_driver_installed_failures(mocker):
+    '''
+    Simple test for cuda_driver_installed failure scenarios
+    '''
+    mocker.patch('subprocess.check_output',side_effect=OSError(errno.ENOENT,"" ))
+    with pytest.raises(OpenCEError) as exc:
+        utils.cuda_driver_installed()
+    assert "lsmod command not found" in str(exc.value)    
+
+    mocker.patch('subprocess.check_output',side_effect=OSError(errno.EPERM,"" ))
+    with pytest.raises(OpenCEError) as exc:
+        utils.cuda_driver_installed()
+    assert "lsmod command unexpectedly failed" in str(exc.value)    

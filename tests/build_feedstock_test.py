@@ -1,26 +1,58 @@
 # *****************************************************************
+# (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
 #
-# Licensed Materials - Property of IBM
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# (C) Copyright IBM Corp. 2020. All Rights Reserved.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# US Government Users Restricted Rights - Use, duplication or
-# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # *****************************************************************
 
 import sys
 import os
 import pathlib
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
-
 import pytest
+import imp
+
+test_dir = pathlib.Path(__file__).parent.absolute()
+sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
+import utils
+from errors import OpenCEError
+open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
 import build_feedstock
 
 def test_build_feedstock_default(mocker):
     """
-    Tests that the default arguments for 'build_feedstock' generate the correct 'conda-build' command.
+    Tests that the default arguments for 'build_feedstock' generate the correct 'conda_build.api.build' input args.
+    """
+    mocker.patch(
+        'os.getcwd',
+        return_value="/test/test_recipe"
+    )
+    mocker.patch(
+        'os.path.exists',
+        return_value=False
+    )
+    expect_recipe = os.path.join(os.getcwd(),'recipe')
+    expect_config = {'variant_config_files' : [utils.DEFAULT_CONDA_BUILD_CONFIG],
+                'output_folder' : utils.DEFAULT_OUTPUT_FOLDER}
+    mocker.patch(
+        'conda_build.api.build',
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, expect_config=expect_config, **kwargs))
+    )
+
+    open_ce._main(["build", build_feedstock.COMMAND])
+
+def test_build_feedstock_failure(mocker):
+    """
+    Tests that a 'conda_build.api.build' failure is handled correctly.
     """
     mocker.patch(
         'os.getcwd',
@@ -31,95 +63,53 @@ def test_build_feedstock_default(mocker):
         return_value=False
     )
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "--output-folder condabuild",
-                                                               "conda_build_config.yaml",
-                                                               "recipe"]))
+        'conda_build.api.build',
+        side_effect=ValueError("invalid literal for int() with base 10: 'xy'") #using ValueError to simulate a failure.
     )
 
-    arg_input = []
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main(["build", build_feedstock.COMMAND])
+    assert "Unable to build recipe: test_recipe" in str(exc.value)
 
-def test_build_feedstock_failure(mocker, capsys):
-    """
-    Tests that a 'conda-build' failure is handled correctly.
-    """
-    mocker.patch(
-        'os.getcwd',
-        return_value="/test/test_recipe"
-    )
-    mocker.patch(
-        'os.path.exists',
-        return_value=False
-    )
-    mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build"], retval=1)) # Retval is 1 to simulate a failure.
-    )
-
-    arg_input = ""
-    assert build_feedstock.build_feedstock(arg_input) == 1
-    captured = capsys.readouterr()
-    assert "Failure building recipe: test_recipe" in captured.out
-
-def test_build_feedstock_working_dir(mocker, capsys):
+def test_build_feedstock_working_dir(mocker):
     """
     Tests that the 'working_dir' argument is correctly handled and the original working directory is restored after execution.
     """
+    dirTracker = helpers.DirTracker("/test/starting_dir")
     mocker.patch(
         'os.getcwd',
-        side_effect=helpers.mocked_getcwd
+        side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch(
         'os.path.exists',
         return_value=False
     )
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build"]))
+        'conda_build.api.build',
+        return_value=[]
     )
+    working_dir = "/test/my_work_dir"
     mocker.patch(
         'os.chdir',
-        side_effect=(lambda x: helpers.validate_chdir(x, expected_dirs=["/test/my_work_dir", # First the working directory should be changed to the arg.
-                                                                        "/test/test_recipe"])) # And then changed back to the starting directory.
+        side_effect=(lambda x: dirTracker.validate_chdir(x, expected_dirs=[working_dir, # First the working directory should be changed to the arg.
+                                                                           "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    arg_input = ["--working_directory", "/test/my_work_dir"]
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    open_ce._main(["build", build_feedstock.COMMAND, "--working_directory", working_dir])
 
-def test_build_feedstock_config_file(mocker, capsys):
+def test_build_feedstock_config_file(mocker):
     """
     Tests that the 'recipe_config_file' argument is correctly handled..
     """
+    expect_recipe = os.path.join(os.getcwd(),'cuda_recipe_path') #Checks that the value from the input config file is used.
     mocker.patch(
-        'os.getcwd',
-        return_value="/test/test_recipe"
-    )
-    mocker.patch(
-        'os.path.exists',
-        return_value=True # 'path.exists' is mocked as true so that the input file is found to exist.
-    )
-    mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "variants_from_config"])) #Checks that the value from the input config file is used.
+        'conda_build.api.build',
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
     )
 
-    #This is the data that is read in when 'open()' is called.
-    test_recipe_config =b"""recipes:
-    - name : my_variant
-      path: variants_from_config"""
+    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--build_type", "cuda"])
 
-    mocker.patch(
-        'builtins.open',
-        mocker.mock_open(read_data=test_recipe_config)
-    )
-
-    arg_input = ["--recipe-config-file", "my_config.yml"]
-    assert build_feedstock.build_feedstock(arg_input) == 0
-
-def test_build_feedstock_default_config_file(mocker, capsys):
+def test_build_feedstock_default_config_file(mocker):
     """
     Tests that the default config file is loaded when no argument is specified.
     """
@@ -131,25 +121,19 @@ def test_build_feedstock_default_config_file(mocker, capsys):
         'os.path.exists',
         return_value=True #True for default config file.
     )
+    expect_recipe = os.path.join(os.getcwd(),'variants_from_default_config')#Checks that the value from the default config file is used.
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "variants_from_default_config"]))#Checks that the value from the default config file is used.
+        'conda_build.api.build',
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
     )
 
-    test_recipe_config =b"""recipes:
-    - name : my_variant
-      path: variants_from_default_config"""
+    test_recipe_config = {'recipes' : [{'name' : 'my_variant', 'path' : 'variants_from_default_config'}]}
 
-    mocker.patch(
-        'builtins.open',
-        mocker.mock_open(read_data=test_recipe_config)
-    )
+    mocker.patch('conda_utils.render_yaml', return_value=test_recipe_config)
 
-    arg_input = []
-    assert build_feedstock.build_feedstock(arg_input) == 0
+    open_ce._main(["build", build_feedstock.COMMAND])
 
-def test_build_feedstock_nonexist_config_file(mocker, capsys):
+def test_build_feedstock_nonexist_config_file(mocker):
     """
     Tests that execution fails and the correct error message is shown if the default config file doesn't exist.
     """
@@ -162,12 +146,26 @@ def test_build_feedstock_nonexist_config_file(mocker, capsys):
         return_value=False
     )
 
-    arg_input = ["--recipe-config-file", "my_config.yml"]
-    assert build_feedstock.build_feedstock(arg_input) == 1
-    captured = capsys.readouterr()
-    assert "Unable to open provided config file: my_config.yml" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
+    assert "Unable to open provided config file: my_config.yml" in str(exc.value)
 
-def test_build_feedstock_local_src_dir_args(mocker, capsys):
+def test_recipe_config_file_for_inapplicable_configuration(mocker, capsys):
+    """
+    Tests the case when build is triggered for a configuration for which no recipes are applicable.
+    """
+
+    expect_recipe = os.path.join(os.getcwd(),'cuda_recipe_path') #Checks that the value from the input config file is used.
+    mocker.patch(
+        'conda_build.api.build',
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
+    )
+    
+    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--python_versions", "4.1"])
+    captured = capsys.readouterr()
+    assert "INFO: No recipe to build for given configuration." in captured.out
+
+def test_build_feedstock_local_src_dir_args(mocker):
     """
     Tests that providing the local_src_dir argument sets the LOCAL_SRC_DIR environment variable correctly.
     """
@@ -176,10 +174,10 @@ def test_build_feedstock_local_src_dir_args(mocker, capsys):
         return_value=True
     )
 
-    assert build_feedstock._set_local_src_dir("my_src_dir", None, None) == 0
+    build_feedstock._set_local_src_dir("my_src_dir", None, None)
     assert os.environ["LOCAL_SRC_DIR"] == "my_src_dir"
 
-def test_build_feedstock_local_src_dir_args_fail(mocker, capsys):
+def test_build_feedstock_local_src_dir_args_fail(mocker):
     """
     Tests that providing the local_src_dir argument to a non-existant file fails properly.
     """
@@ -188,11 +186,11 @@ def test_build_feedstock_local_src_dir_args_fail(mocker, capsys):
         return_value=False
     )
 
-    assert build_feedstock._set_local_src_dir("my_src_dir", { 'local_src_dir' : "my_other_src_dir" }, None) == 1
-    captured = capsys.readouterr()
-    assert "ERROR: local_src_dir path \"my_src_dir\" specified doesn't exist" in captured.out
+    with pytest.raises(OpenCEError) as exc:
+        build_feedstock._set_local_src_dir("my_src_dir", { 'local_src_dir' : "my_other_src_dir" }, None)
+    assert "local_src_dir path \"my_src_dir\" specified doesn't exist" in str(exc.value)
 
-def test_build_feedstock_local_src_dir_recipe(mocker, capsys):
+def test_build_feedstock_local_src_dir_recipe(mocker):
     """
     Tests that providing the local_src_dir in a recipe sets the LOCAL_SRC_DIR environment variable correctly.
     """
@@ -201,12 +199,12 @@ def test_build_feedstock_local_src_dir_recipe(mocker, capsys):
         return_value=True
     )
 
-    assert build_feedstock._set_local_src_dir(None, { 'local_src_dir' : "my_other_src_dir" } , "/test/location/recipe.yaml") == 0
+    build_feedstock._set_local_src_dir(None, { 'local_src_dir' : "my_other_src_dir" } , "/test/location/recipe.yaml")
     assert os.environ["LOCAL_SRC_DIR"] == "/test/location/my_other_src_dir"
 
-def test_build_feedstock_extra_args(mocker, capsys):
+def test_build_feedstock_extra_args(mocker):
     """
-    Tests that additional arguments add the expected values to the conda-build command.
+    Tests that additional arguments add the expected values to the 'conda_build.api.build' arguments.
     """
     mocker.patch(
         'os.getcwd',
@@ -216,36 +214,38 @@ def test_build_feedstock_extra_args(mocker, capsys):
         'os.path.exists',
         return_value=True
     )
+
+    expect_config = { 'channel_urls' : ['/test/test_recipe/condabuild', 'test_channel', 'test_channel_2', 'test_channel_from_config']}
+    expect_variants = {'python': '3.6', 'build_type': 'cpu', 'mpi_type': 'openmpi'}
+    reject_recipe = os.path.join(os.getcwd(),'test_recipe_extra')
     mocker.patch(
-        'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["conda-build",
-                                                               "-c test_channel",
-                                                               "-c test_channel_2",
-                                                               "-c test_channel_from_config",
-                                                               "--variants \"{'python': ['3.6', '3.7'], 'build_type': ['cpu', 'gpu']}\""],
-                                                       reject=["test_recipe_extra"]))
+        'conda_build.api.build',
+        side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_config=expect_config, expect_variants=expect_variants, reject_recipe=reject_recipe, **kwargs))
     )
 
-    test_recipe_config =b"""recipes:
-    - name : my_project
-      path : recipe
+    test_recipe_config = { 'recipes' : [{ 'name' : 'my_project', 'path' : 'recipe'},
+                                        { 'name' : 'my_variant', 'path': 'variants'},
+                                        { 'name' : 'test_recipe_extra', 'path' : 'extra'}],
+                           'channels' : ['test_channel_from_config']}
 
-    - name : my_variant
-      path: variants
+    mocker.patch('conda_utils.render_yaml', return_value=test_recipe_config)
 
-    - name : test_recipe_extra
-      path: extra
-channels:
-    - test_channel_from_config"""
-
-    mocker.patch(
-        'builtins.open',
-        mocker.mock_open(read_data=test_recipe_config)
-    )
-
-    arg_input = ["--channels", "test_channel",
+    arg_input = ["build", build_feedstock.COMMAND,
+                 "--channels", "test_channel",
                  "--channels", "test_channel_2",
                  "--recipes", "my_project,my_variant",
-                 "--python_versions", "3.6,3.7",
-                 "--build_types", "cpu,gpu"]
-    assert build_feedstock.build_feedstock(arg_input) == 0
+                 "--python_versions", "3.6",
+                 "--build_types", "cpu",
+                 "--mpi_types", "openmpi",
+                 "--cuda_versions", "10.2"]
+    open_ce._main(arg_input)
+
+def test_build_feedstock_if_no_conda_build(mocker):
+    '''
+    Test that build_feedstock should fail if conda_build isn't present
+    '''
+    mocker.patch('pkg_resources.get_distribution', return_value=None)
+
+    with pytest.raises(OpenCEError):
+        assert open_ce._main(["build", build_feedstock.COMMAND]) == 1
+

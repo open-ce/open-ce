@@ -1,8 +1,0 @@
-imported_envs:
-  - pytorch-env.yaml
-  - tensorflow-env.yaml
-  - xgboost-env.yaml
-  - dali-env.yaml  #[build_type == 'cuda']
-  - spacy-env.yaml
-  - transformers-env.yaml
-  - horovod-env.yaml #[build_type == 'cuda']

@@ -1,0 +1,9 @@
+tests:
+  - name: Test 1
+    command: echo Test 1
+{% if build_type=='cpu' %}
+  - name: Test 2
+    command: |
+        echo Test 2a
+        echo Test 2b
+{% endif %}

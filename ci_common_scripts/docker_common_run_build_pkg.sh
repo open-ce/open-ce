@@ -1,13 +1,18 @@
 #!/bin/bash
 # *****************************************************************
+# (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
 #
-# Licensed Materials - Property of IBM
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# (C) Copyright IBM Corp. 2020. All Rights Reserved.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# US Government Users Restricted Rights - Use, duplication or
-# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # *****************************************************************
 set -e
 
@@ -53,9 +58,6 @@ CONTAINER_NAME="conda_travis_build_$PACKAGE_NAME"
 CCACHE_DIR=/tmp/${PACKAGE_NAME}-ccache
 mkdir -p $CCACHE_DIR
 
-#Temporary change for building on next (wmlce) images
-IBM_POWERAI_LICENSE_ACCEPT=yes
-
 # Run command inside docker.
 docker run --pid=host \
   -e CCACHE_DIR=$CCACHE_DIR \
@@ -64,7 +66,6 @@ docker run --pid=host \
   -e GIT_PERS_TOKEN_PSW=${GITHUB_TOKEN}\
   -e GIT_PERS_TOKEN_USR=${GITHUB_USER}\
   -e OUTPUT_FOLDER=${OUTPUT_FOLDER} \
-  -e IBM_POWERAI_LICENSE_ACCEPT=${IBM_POWERAI_LICENSE_ACCEPT} \
   -v "$git_root:${EXTERNAL_GIT_ROOT}:$VOL_OPTS" \
   -v $CCACHE_DIR:$CCACHE_DIR$VOL_EXTRA_OPTS \
   --name=$CONTAINER_NAME \

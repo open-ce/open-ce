@@ -1,112 +1,71 @@
 #!/usr/bin/env python
 """
-*****************************************************************
-Licensed Materials - Property of IBM
-(C) Copyright IBM Corp. 2020. All Rights Reserved.
-US Government Users Restricted Rights - Use, duplication or
-disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-*****************************************************************
-
-*******************************************************************************
-Script: build_feedstock.py
-
-Summary:
-  Build conda package(s) from open-ce project feedstock repositories.
-
-Description:
-  This script will build any given Open-CE package from within the desired
-package feedstock.  It can be executed implicitly as part of Open-CE builds
-executed by build-env.py, or it can be run directly for a selected feedstock.
-It will build a conda package for the chosen feedstock using the default
-recipe(s) found within that package's build tree, or with an alternative
-recipe specified on the command line.
-
-Usage:
-   $ build_feedstock.py [ arguments ]
-For usage description of arguments, this script supports use of --help:
-   $ build_feedstock.py --help
-
-*******************************************************************************
+# *****************************************************************
+# (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# *****************************************************************
 """
 
-import argparse
-import sys
 import os
-import yaml
+import traceback
 
 import utils
+import inputs
+from inputs import Argument
+from errors import OpenCEError, Error
 
-DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
+COMMAND = 'feedstock'
 
-def make_parser():
-    ''' Parser input arguments '''
-    arguments = [utils.Argument.CONDA_BUILD_CONFIG, utils.Argument.OUTPUT_FOLDER,
-                 utils.Argument.CHANNELS, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES]
-    parser = utils.make_parser(arguments,
-                               description = 'Build conda packages as part of Open-CE',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+DESCRIPTION = 'Build conda packages as part of Open-CE'
 
-    parser.add_argument(
-        '--recipe-config-file',
-        type=str,
-        default=None,
-        help="""Path to the recipe configuration YAML file. The configuration
-file lists paths to recipes to be built within a feedstock.
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
+             Argument.CHANNELS, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES,
+             Argument.CUDA_VERSIONS, Argument.RECIPE_CONFIG_FILE,
+             Argument.RECIPES, Argument.WORKING_DIRECTORY,
+             Argument.LOCAL_SRC_DIR]
 
-Below is an example stating that there are two recipes to build,
-one named my_project and one named my_variant.
+def get_conda_build_config():
+    '''
+    Checks for a conda_build_config file inside config dir of the feedstock.
+    And returns the same if it exists.
+    '''
+    recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
+    return recipe_conda_build_config if os.path.exists(recipe_conda_build_config) else None
 
-recipes:
-  - name : my_project
-    path : recipe
-
-  - name : my_variant
-    path: variants
-
-If no path is given, the default value is build-config.yaml.
-If build-config.yaml does not exist, and no value is provided,
-it will be assumed there is a single recipe with the
-path of \"recipe\".""")
-
-    parser.add_argument(
-        '--recipes',
-        dest='recipe_list',
-        action='store',
-        default=None,
-        help='Comma separated list of recipe names to build.')
-
-    parser.add_argument(
-        '--working_directory',
-        type=str,
-        help='Directory to run the script in.')
-
-    parser.add_argument(
-        '--local_src_dir',
-        type=str,
-        required=False,
-        help='Path where package source is downloaded in the form of RPM/Debians/Tar.')
-
-    return parser
-
-def load_package_config(config_file=None):
+def load_package_config(config_file=None, variants=None, recipe_path=None):
     '''
     Check for a config file. If the user does not provide a recipe config
     file as an argument, it will be assumed that there is only one
     recipe to build, and it is in the directory called 'recipe'.
     '''
-    if not config_file and not os.path.exists(DEFAULT_RECIPE_CONFIG_FILE):
+    # pylint: disable=import-outside-toplevel
+    import conda_utils
+
+    if recipe_path:
+        recipe_name = os.path.basename(os.getcwd())
+        build_config_data = {'recipes':[{'name':recipe_name, 'path':recipe_path}]}
+    elif not config_file and not os.path.exists(utils.DEFAULT_RECIPE_CONFIG_FILE):
         recipe_name = os.path.basename(os.getcwd())
         build_config_data = {'recipes':[{'name':recipe_name, 'path':'recipe'}]}
     else:
         if not config_file:
-            config_file = DEFAULT_RECIPE_CONFIG_FILE
+            config_file = utils.DEFAULT_RECIPE_CONFIG_FILE
         if not os.path.exists(config_file):
-            print("Unable to open provided config file: " + config_file)
-            return None, config_file
+            raise OpenCEError(Error.CONFIG_FILE, config_file)
 
-        with open(config_file, 'r') as stream:
-            build_config_data = yaml.safe_load(stream)
+        build_config_data = conda_utils.render_yaml(config_file, variants)
 
     return build_config_data, config_file
 
@@ -129,74 +88,89 @@ def _set_local_src_dir(local_src_dir_arg, recipe, recipe_config_file):
 
     if local_src_dir:
         if not os.path.exists(local_src_dir):
-            print("ERROR: local_src_dir path \"" + local_src_dir + "\" specified doesn't exist")
-            return 1
+            raise OpenCEError(Error.LOCAL_SRC_DIR, local_src_dir)
         os.environ["LOCAL_SRC_DIR"] = local_src_dir
     else:
         if 'LOCAL_SRC_DIR' in os.environ:
             del os.environ['LOCAL_SRC_DIR']
 
-    return 0
+def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, too-many-locals
+                                 recipe_config_file=None,
+                                 output_folder=utils.DEFAULT_OUTPUT_FOLDER,
+                                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                                 local_src_dir=None):
+    '''
+    Build a feedstock from a build_command object.
+    '''
+    utils.check_if_conda_build_exists()
 
-def build_feedstock(args_string=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(args_string)
+    # pylint: disable=import-outside-toplevel
+    import conda_build.api
+    from conda_build.config import get_or_merge_config
 
     saved_working_directory = None
-    if args.working_directory:
+    if command.repository:
         saved_working_directory = os.getcwd()
-        os.chdir(os.path.abspath(args.working_directory))
+        os.chdir(os.path.abspath(command.repository))
 
-    build_config_data, recipe_config_file  = load_package_config(args.recipe_config_file)
-    if build_config_data is None:
-        return 1
+    recipes_to_build = inputs.parse_arg_list(command.recipe)
 
-    args.recipes = utils.parse_arg_list(args.recipe_list)
-    result = 0
+    for variant in utils.make_variants(command.python, command.build_type, command.mpi_type, command.cudatoolkit):
+        build_config_data, recipe_config_file  = load_package_config(recipe_config_file, variant, command.recipe_path)
 
-    # Build each recipe
-    for recipe in build_config_data['recipes']:
-        if args.recipes and recipe['name'] not in args.recipes:
-            continue
-        conda_build_args = "conda-build "
-        conda_build_args += "--skip-existing "
-        conda_build_args += "--output-folder " + args.output_folder + " "
-        conda_build_args += "-m " + args.conda_build_config + " "
-        recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
-        if os.path.exists(recipe_conda_build_config):
-            conda_build_args += " -m " + recipe_conda_build_config + " "
+        # Build each recipe
+        if build_config_data['recipes'] is None:
+            build_config_data['recipes'] = []
+            print("INFO: No recipe to build for given configuration.")
+        for recipe in build_config_data['recipes']:
+            if recipes_to_build and recipe['name'] not in recipes_to_build:
+                continue
 
-        conda_build_args += " ".join(["-c " + c + " " for c in args.channels_list])
-        conda_build_args += " ".join(["-c " + c + " " for c in build_config_data.get('channels', [])])
+            config = get_or_merge_config(None, variant=variant)
+            config.skip_existing = True
+            config.prefix_length = 225
+            config.output_folder = output_folder
+            config.variant_config_files = [conda_build_config]
 
-        variants = dict()
-        if args.python_versions:
-            variants['python'] = utils.parse_arg_list(args.python_versions)
-        if args.build_types:
-            variants['build_type'] = utils.parse_arg_list(args.build_types)
-        if variants:
-            conda_build_args += "--variants \"" + str(variants) + "\" "
+            recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
+            if os.path.exists(recipe_conda_build_config):
+                config.variant_config_files.append(recipe_conda_build_config)
 
-        conda_build_args += recipe['path']
+            config.channel_urls = [os.path.abspath(output_folder)]
+            config.channel_urls += command.channels
+            config.channel_urls += build_config_data.get('channels', [])
 
-        result = _set_local_src_dir(args.local_src_dir, recipe, recipe_config_file)
-        if result != 0:
-            break
-
-        print(conda_build_args)
-        result = os.system(conda_build_args)
-        if result != 0:
-            print("Failure building recipe: " + (recipe['name'] if 'name' in recipe else os.getcwd))
-            result = 1
-            break
+            _set_local_src_dir(local_src_dir, recipe, recipe_config_file)
+            try:
+                conda_build.api.build(os.path.join(os.getcwd(), recipe['path']),
+                               config=config)
+            except Exception as exc: # pylint: disable=broad-except
+                traceback.print_exc()
+                raise OpenCEError(Error.BUILD_RECIPE,
+                                  recipe['name'] if 'name' in recipe else os.getcwd,
+                                  str(exc)) from exc
 
     if saved_working_directory:
         os.chdir(saved_working_directory)
 
-    return result
+def build_feedstock(args):
+    '''Entry Function'''
+    # Here, importing BuildCommand is intentionally done here to avoid circular import.
 
-if __name__ == '__main__':
-    sys.exit(build_feedstock())
+    from build_tree import BuildCommand   # pylint: disable=import-outside-toplevel
+    command = BuildCommand(recipe=inputs.parse_arg_list(args.recipe_list),
+                           repository=args.working_directory,
+                           packages=[],
+                           python=args.python_versions,
+                           build_type=args.build_types,
+                           mpi_type=args.mpi_types,
+                           cudatoolkit=args.cuda_versions,
+                           channels=args.channels_list)
+
+    build_feedstock_from_command(command,
+                                 recipe_config_file=args.recipe_config_file,
+                                 output_folder=args.output_folder,
+                                 local_src_dir=args.local_src_dir,
+                                 conda_build_config=args.conda_build_config)
+
+ENTRY_FUNCTION = build_feedstock

@@ -1,7 +1,0 @@
-packages:
-  - feedstock : rust-nightly
-  - feedstock : semantic
-  - feedstock : tokenizers
-  - feedstock : sentencepiece
-  - feedstock : sacremoses
-  - feedstock : transformers

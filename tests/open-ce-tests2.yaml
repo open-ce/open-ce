@@ -1,0 +1,7 @@
+tests:
+  - name: Test 1
+    command: "[ 1 -eq 2 ]"
+  - name: Test 2
+    command: "[ 1 -eq 1 ]"
+  - name: Test 3
+    command: "[ 1 -eq 3 ]"

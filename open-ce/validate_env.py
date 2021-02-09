@@ -1,52 +1,44 @@
 #!/usr/bin/env python
 
 """
-*****************************************************************
-Licensed Materials - Property of IBM
-(C) Copyright IBM Corp. 2020. All Rights Reserved.
-US Government Users Restricted Rights - Use, duplication or
-disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-*****************************************************************
-
-*******************************************************************************
-Script: validate_env.py
-
-Summary:
-  Performs syntactic validation on environment files used by build_env.py from
-  the open-ce project.
-
-Description:
-  This script will take a YAML build env file and will check that file and all
-  dependencies for syntactic errors.
-
-*******************************************************************************
+# *****************************************************************
+# (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# *****************************************************************
 """
 
-import argparse
-import sys
 import env_config
 import utils
+from inputs import Argument
+from errors import OpenCEError, Error
 
-def make_parser():
-    ''' Parser for input arguments '''
-    arguments = [utils.Argument.ENV_FILE, utils.Argument.PYTHON_VERSIONS,
-                 utils.Argument.BUILD_TYPES]
-    parser = utils.make_parser(arguments,
-                               description = 'Lint Environment Files',
-                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    return parser
+COMMAND = 'env'
 
-def validate_env(arg_strings=None):
-    '''
-    Entry function.
-    '''
-    parser = make_parser()
-    args = parser.parse_args(arg_strings)
-    variants = { 'python' : utils.parse_arg_list(args.python_versions),
-                 'build_type' : utils.parse_arg_list(args.build_types) }
-    retval,_ = env_config.load_env_config_files(args.env_config_file, variants)
+DESCRIPTION = 'Lint Environment Files'
 
-    return retval
+ARGUMENTS = [Argument.ENV_FILE, Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES, Argument.MPI_TYPES, Argument.CUDA_VERSIONS]
 
-if __name__ == '__main__':
-    sys.exit(validate_env())
+def validate_env(args):
+    '''Entry Function'''
+    variants = utils.make_variants(args.python_versions, args.build_types,
+                                   args.mpi_types, args.cuda_versions)
+
+    for variant in variants:
+        try:
+            env_config.load_env_config_files(args.env_config_file, variant)
+        except OpenCEError as exc:
+            raise OpenCEError(Error.VALIDATE_ENV, args.env_config_file, str(variant), exc.msg) from exc
+
+ENTRY_FUNCTION = validate_env

@@ -1,0 +1,7 @@
+recipes:
+{% set py_ver = python | float %}
+{% if py_ver < 4.0 %}
+  - name : my_variant
+    path: cuda_recipe_path #[build_type == 'cuda']
+    path: cpu_recipe_path #[build_type == 'cpu' ]
+{% endif %}
