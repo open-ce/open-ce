@@ -42,12 +42,12 @@ directory; simply specify the file for whichever package environment you want.
 The `--docker_build` option will build an image and run the build command
 inside of a container based on the new image.
 
-Along with `--docker_build` option, `--docker_build_env_vars` can be passed
-to set environment variables in the container built from the built image.
-This option takes comma separated values in the form `name=value`.
+Along with `--docker_build` option, `--docker_build_args` can be passed
+to set docker build options like environment variables or other settings
+like cpusets.
 
 ```shell
-    ./open-ce/open-ce build env --docker_build --docker_build_env_vars="ENV1=test1,ENV2=test2" envs/pytorch-env.yaml
+    ./open-ce/open-ce build env --docker_build --docker_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" envs/pytorch-env.yaml
 ```
 
 As part of this process of docker build, it will copy a local_files directory that is in the
@@ -139,9 +139,11 @@ optional arguments:
   --test_labels TEST_LABELS
                         Comma delimited list of labels indicating what tests
                         to run. (default: )
-  --docker_build_env_vars DOCKER_BUILD_ENV_VARS
-                        Comma separated environment variables that are to be
-                        passed to the docker build. (default: None)
+  --docker_build_args DOCKER_BUILD_ARGS
+                        Docker build arguments like environment variables to
+                        be set in the container or cpus or gpus to be used
+                        such as "--build-arg ENV1=test1 --cpuset-cpus 0,1".
+                        (default: )
 ==============================================================================
 ```
 
