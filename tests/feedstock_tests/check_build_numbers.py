@@ -52,10 +52,10 @@ def _get_build_numbers(build_config_data, config, variant):
                                                            "number" : meta.meta['build']['number']}
     return build_numbers
 
-def _get_configs(variant):
+def _get_configs(variant, conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
     build_config_data, _ = build_feedstock.load_package_config(variants=variant)
     config = get_or_merge_config(None)
-    config.variant_config_files = [utils.DEFAULT_CONDA_BUILD_CONFIG]
+    config.variant_config_files = [conda_build_config]
     config.verbose = False
     recipe_conda_build_config = build_feedstock.get_conda_build_config()
     if recipe_conda_build_config:
@@ -77,11 +77,11 @@ def main(arg_strings=None):
     variant_build_results = dict()
     for variant in variants:
         utils.run_and_log("git checkout {}".format(default_branch))
-        master_build_config_data, master_config = _get_configs(variant)
+        master_build_config_data, master_config = _get_configs(variant, args.conda_build_config)
         master_build_numbers = _get_build_numbers(master_build_config_data, master_config, variant)
 
         utils.run_and_log("git checkout {}".format(pr_branch))
-        pr_build_config_data, pr_config = _get_configs(variant)
+        pr_build_config_data, pr_config = _get_configs(variant, args.conda_build_config)
         current_pr_build_numbers = _get_build_numbers(pr_build_config_data, pr_config, variant)
 
         print("Build Info for Variant:   {}".format(variant))
