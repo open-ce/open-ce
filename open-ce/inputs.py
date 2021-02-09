@@ -16,6 +16,8 @@
 # *****************************************************************
 """
 
+import os
+
 import argparse
 from enum import Enum, unique
 import utils
@@ -199,8 +201,6 @@ path of \"recipe\"."""))
                                              " to be set in the container or cpus or gpus to be used "
                                              " such as \"--build-arg ENV1=test1 --cpuset-cpus 0,1\"."))
 
-
-
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
     Make a parser from a list of OPEN-CE Arguments.
@@ -218,6 +218,24 @@ def add_subparser(subparsers, command, arguments, *args, formatter_class=OpenCEF
     for argument in arguments:
         argument(subparser)
     return subparser
+
+def parse_args(parser, arg_strings=None):
+    '''
+    Parses input arguments and handles more complex defaults.
+    - conda_build_config: If not passed in the default is with the env file,
+                          if is passed in, otherwise it is  expected ot be in
+                          the local path.
+    '''
+    args = parser.parse_args(arg_strings)
+    if "conda_build_config" in vars(args).keys() and args.conda_build_config is None:
+        if "env_config_file" in vars(args).keys() and args.env_config_file:
+            args.conda_build_config = os.path.abspath(os.path.join(os.path.dirname(args.env_config_file[0]),
+                                                                                   utils.CONDA_BUILD_CONFIG_FILE))
+        else:
+            args.conda_build_config = utils.DEFAULT_CONDA_BUILD_CONFIG
+    elif "conda_build_config" in vars(args).keys():
+        args.conda_build_config = os.path.abspath(args.conda_build_config)
+    return args
 
 def parse_arg_list(arg_list):
     ''' Turn a comma delimited string into a python list'''
