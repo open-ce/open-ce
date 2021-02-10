@@ -23,6 +23,7 @@ COMMAND = 'env'
 DESCRIPTION = 'Test Open-CE Environment'
 ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
              Argument.CHANNELS, Argument.ENV_FILE,
+             Argument.PACKAGES,
              Argument.REPOSITORY_FOLDER, Argument.PYTHON_VERSIONS,
              Argument.BUILD_TYPES, Argument.MPI_TYPES,
              Argument.CUDA_VERSIONS, Argument.DOCKER_BUILD,
