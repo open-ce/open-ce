@@ -236,8 +236,10 @@ def parse_args(parser, arg_strings=None):
     args = parser.parse_args(arg_strings)
     if "conda_build_config" in vars(args).keys() and args.conda_build_config is None:
         if "env_config_file" in vars(args).keys() and args.env_config_file:
-            args.conda_build_config = os.path.abspath(os.path.join(os.path.dirname(args.env_config_file[0]),
-                                                                                   utils.CONDA_BUILD_CONFIG_FILE))
+            args.conda_build_config = os.path.join(os.path.dirname(args.env_config_file[0]),
+                                                   utils.CONDA_BUILD_CONFIG_FILE)
+            if not utils.is_url(args.conda_build_config):
+                args.conda_build_config = os.path.abspath(args.conda_build_config)
         else:
             args.conda_build_config = utils.DEFAULT_CONDA_BUILD_CONFIG
     elif "conda_build_config" in vars(args).keys():

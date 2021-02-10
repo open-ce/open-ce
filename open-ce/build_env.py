@@ -20,6 +20,7 @@
 import os
 import sys
 import glob
+import urllib.request
 
 import build_feedstock
 import docker_build
@@ -72,8 +73,11 @@ def _all_outputs_exist(output_folder, output_files):
     return all([os.path.exists(os.path.join(os.path.abspath(output_folder), package))
                     for package in output_files])
 
-def build_env(args):
+def build_env(args): #pylint: disable=too-many-branches
     '''Entry Function'''
+    if utils.is_url(args.conda_build_config):
+        args.conda_build_config, _ = urllib.request.urlretrieve(args.conda_build_config)
+
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)

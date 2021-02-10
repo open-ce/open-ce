@@ -227,6 +227,12 @@ def is_subdir(child_path, parent_path):
     relative = os.path.relpath(child, start=parent)
     return not relative.startswith(os.pardir)
 
+def is_url(to_check):
+    '''
+    Determines if a string is a URL
+    '''
+    return to_check.startswith("http:") or to_check.startswith("https:")
+
 def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
     '''
     Use regex to substitute channels in a conda env file.
