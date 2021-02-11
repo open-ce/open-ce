@@ -81,13 +81,15 @@ usage: open-ce test env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
 positional arguments:
   env_config_file       Environment config file. This should be a YAML file
                         describing the package environment you wish to build.
-                        A collection of files exist under the envs directory.
+                        A collection of files exist at
+                        https://github.com/open-ce/open-ce-environments. This
+                        argument can be a URL.
 
 optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
-                        Location of conda_build_config.yaml file. (default:
-                        None)
+                        Location of conda_build_config.yaml file. Can be a
+                        valid URL. (default: None)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)

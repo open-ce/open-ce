@@ -1,6 +1,20 @@
 
 # README for Open-CE Environment Files
 
+- [README for Open-CE Environment Files](#readme-for-open-ce-environment-files)
+  - [Open-CE Environment File](#open-ce-environment-file)
+    - [packages and feedstock](#packages-and-feedstock)
+      - [git_tag](#git_tag)
+      - [recipe_path](#recipe_path)
+      - [runtime_package](#runtime_package)
+      - [patches](#patches)
+      - [channels(feedstock)](#channelsfeedstock)
+      - [recipes](#recipes)
+    - [imported_envs](#imported_envs)
+    - [channels](#channels)
+    - [git_tag_for_env](#git_tag_for_env)
+    - [external_dependencies](#external_dependencies)
+
 This README documents the Open-CE Environment YAML files used by the build scripts
 [open-ce build env](README.open_ce_build.md#open-ce-build-env-sub-command)
 and [open-ce build feedstock](README.open_ce_build.md#open-ce-build-feedstock-sub-command).
@@ -32,17 +46,18 @@ YAML file format. The keywords recognized for Open-CE environments include the
 following:
 
 ```yaml
-packages:            # The environment package name
-  - feedstock:       # Defines each feedstock comprising the environment
-  - channels:        # Defines a channel location for obtaining dependencies
-  - git_tag:         # Defines a specific git tag to use for this feedstock
-  - recipe_path:     # Specifies the path to the recipe within this feedstock
-  - recipes:         # Sets name and path of recipe location(s)
-  - patches:         # Specifies list of patches to be applied to this feedstock
-  - runtime_package: # Specifies if the package is needed at runtime for the main frameworks to install
-imported_envs:       # Used to import content of one env file into another
-channels:            # Defines a channel location for obtaining dependencies
-git_tag_for_env:     # Specify a git tag to use across all packages in environment
+packages:              # The environment package name
+  - feedstock:         # Defines each feedstock comprising the environment
+    channels:          # Defines a channel location for obtaining dependencies
+    git_tag:           # Defines a specific git tag to use for this feedstock
+    recipe_path:       # Specifies the path to the recipe within this feedstock
+    recipes:           # Sets name and path of recipe location(s)
+    patches:           # Specifies list of patches to be applied to this feedstock
+    runtime_package:   # Specifies if the package is needed at runtime for the main frameworks to install
+imported_envs:         # Used to import content of one env file into another
+channels:              # Defines a channel location for obtaining dependencies
+git_tag_for_env:       # Specify a git tag to use across all packages in environment
+external_dependencies: # Specify a list of external dependencies  for compatibility validation
 ```
 
 Most of these are optional. At a minimum, the environment files will define one
@@ -74,7 +89,7 @@ The other keywords that optionally can be used as part of the `packages` stanza
 include `git_tag`, `recipe_path`, `patches`, `channels`, `runtime_package` and
 `recipes`.
 
-### git_tag
+#### git_tag
 
 By default, the git tag will be the current (i.e. main or master) branch of the specified
 source tree, such that you don't need to include this keyword unless you want to explicitly
@@ -92,7 +107,7 @@ packages:
 This can be useful if there is a new default version, but you want to
 specifically build an older tagged version.
 
-### recipe_path
+#### recipe_path
 
 By default, the recipe_path will be `recipe`. This field specifies the path within the
 feedstock containing the conda recipe.
@@ -105,7 +120,7 @@ packages:
     recipe_path: my_recipe_path
 ```
 
-### runtime_package
+#### runtime_package
 
 This field is used to specify if the feedstock is needed at the runtime for the main
 frameworks like Tensorflow or Pytorch to install and work. If this is set to `False`,
@@ -119,7 +134,7 @@ packages:
     runtime_package: False
 ```
 
-### patches
+#### patches
 
 This field specifies the list of patches that are to be applied to the feedstock.
 Patches to be applied are expected to be present in `feedstock-patches` directory
@@ -140,7 +155,7 @@ One can also specify the full path of the patch file if it is not part of open-c
 This might be useful if some feedstock is to be built from non-open-CE repo and it needs some
 changes to be built in Open-CE build environment or specific to the ppc64le architecture.
 
-### channels
+#### channels(feedstock)
 
 For `channels`, if you need to add a package dependency that is not found within
 open-ce but which is available at some other external delivery channel, you can
@@ -157,7 +172,7 @@ While this example shows usage specific to one `packages` stanza, the `channels`
 keyword can also be defined on its own for use throughout the environment file
 (see below).
 
-### recipes
+#### recipes
 
 Finally, a package might define more than one recipe, particularly if it will
 build into more than one variant. One example of this is tensorflow, which
@@ -204,6 +219,17 @@ This is straightforward; it effectively creates a nested environment file by sim
 importing the contents of the listed environment files. So if you are building the
 horovod environment, you will get a build of both pytorch and tensorflow as well
 because of the specified imported environments listed in this section.
+
+Using URL's for `imported_envs` is also supported. For example, the following imports
+a local PyTorch env, and a TensorFlow env pulled directly from GitHub.
+
+```yaml
+imported_envs:
+  - pytorch-env.yaml
+  - https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/tensorflow-env.yaml
+```
+
+### channels
 
 As mentioned earlier, the `channels` specifier can also be used as a universal keyword
 within an environment file; in fact, this is probably the more common usage.

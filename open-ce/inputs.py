@@ -40,7 +40,8 @@ class Argument(Enum):
                                         '--conda_build_config',
                                         type=str,
                                         default=None,
-                                        help='Location of conda_build_config.yaml file.' ))
+                                        help="Location of conda_build_config.yaml file. Can "
+                                             "be a valid URL."))
 
     OUTPUT_FOLDER = (lambda parser: parser.add_argument(
                                         '--output_folder',
@@ -62,16 +63,17 @@ class Argument(Enum):
                                         type=str,
                                         help="Environment config file. This should be a YAML file "
                                              "describing the package environment you wish to build. A collection "
-                                             "of files exist under the envs directory."))
+                                             "of files exist at https://github.com/open-ce/open-ce-environments. "
+                                             "This argument can be a URL."))
 
     REPOSITORY_FOLDER = (lambda parser: parser.add_argument(
                                         '--repository_folder',
                                         type=str,
                                         default="",
                                         help="Directory that contains the repositories. If the "
-                                            "repositories don't exist locally, they will be "
-                                            "downloaded from OpenCE's git repository. If no value is provided, "
-                                            "repositories will be downloaded to the current working directory."))
+                                             "repositories don't exist locally, they will be "
+                                             "downloaded from OpenCE's git repository. If no value is provided, "
+                                             "repositories will be downloaded to the current working directory."))
 
     PYTHON_VERSIONS = (lambda parser: parser.add_argument(
                                         '--python_versions',
