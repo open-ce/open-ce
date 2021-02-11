@@ -106,6 +106,10 @@ leveldb:
   - 1.20.*
 libevent:
   - 2.1.*
+libgcc:
+  - 9.1.*                      # [x86_64]
+libstdcxx:
+  - 9.1.*                      # [x86_64]
 libgfortran:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
