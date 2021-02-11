@@ -438,7 +438,7 @@ def test_build_env_url(mocker):
     )
     mocker.patch(
         'os.system',
-        side_effect=(lambda x: helpers.validate_cli(x, possible=["git clone"], retval=0)) #At this point all system calls are git clones. If that changes this should be updated.
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["git clone"], retval=0)) #At this point all system calls are git clones. If that changes this should be updated.
     )
     mocker.patch(
         'os.getcwd',
