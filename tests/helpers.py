@@ -39,8 +39,7 @@ def validate_cli(cli_string, expect=None, reject=None, ignore=None, possible_exp
     if not reject: reject = []
     if not ignore: ignore = []
     if not possible_expect: possible_expect = []
-    print("CLI String:")
-    print(cli_string)
+
     if not any ({term in cli_string for term in ignore}):
         for term in expect:
             assert term in cli_string

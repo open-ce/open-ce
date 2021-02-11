@@ -256,6 +256,23 @@ def test_build_env(mocker, capsys):
     assert "No recipes were found for package35" in captured.out
 
     #---The eighth test makes sure that relative URL paths work.
+    package_deps = {"package11": ["package15"],
+                    "package12": ["package11"],
+                    "package13": ["package12", "package14"],
+                    "package14": ["package15", "package16"],
+                    "package15": [],
+                    "package16": ["package15"],
+                    "package21": ["package13"],
+                    "package22": ["package15"]}
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
+    )
+    buildTracker = PackageBuildTracker()
+    mocker.patch(
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps))
+    )
     mocker.patch(
         'urllib.request.urlretrieve',
         side_effect=(lambda x: (os.path.join(test_dir, os.path.basename(x)), None))
