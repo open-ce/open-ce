@@ -225,7 +225,7 @@ def test_build_env(mocker, capsys):
     open_ce._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version])
     validate_conda_env_files(cuda_versions=cuda_version)
 
-    #---The seventh test specifices specific packages that should be built (plus their dependencies)
+    #---The seventh test specifies specific packages that should be built (plus their dependencies)
     package_deps = {"package11": ["package15"],
                     "package12": ["package11"],
                     "package13": ["package12", "package14"],
