@@ -201,6 +201,13 @@ path of \"recipe\"."""))
                                              " to be set in the container or cpus or gpus to be used "
                                              " such as \"--build-arg ENV1=test1 --cpuset-cpus 0,1\"."))
 
+    PACKAGES = (lambda parser: parser.add_argument(
+                               '--packages',
+                               type=str,
+                               default=None,
+                               help="Only build this list of comma delimited packages (plus their dependencies)."))
+
+
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
     Make a parser from a list of OPEN-CE Arguments.

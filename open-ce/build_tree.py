@@ -35,6 +35,7 @@ class BuildCommand():
                  recipe,
                  repository,
                  packages,
+                 version=None,
                  recipe_path=None,
                  runtime_package=True,
                  output_files=None,
@@ -51,6 +52,7 @@ class BuildCommand():
         self.recipe = recipe
         self.repository = repository
         self.packages = packages
+        self.version = version
         self.recipe_path = recipe_path
         self.runtime_package = runtime_package
         self.output_files = output_files
@@ -118,6 +120,23 @@ class BuildCommand():
             return False
         return self.__key() == other.__key()  # pylint: disable=protected-access 
 
+def traverse_build_commands(commands, deps):
+    """
+    Generator function that goes through a list of BuildCommand's dependency tree.
+    """
+    if not deps:
+        deps = range(len(commands))
+    is_seen = [False for i in range(len(commands))]
+    yield from _traverse_build_commands(commands, is_seen, deps)
+
+def _traverse_build_commands(commands, is_seen, deps):
+    for dep in deps:
+        if is_seen[dep]:
+            continue
+        yield from _traverse_build_commands(commands, is_seen, commands[dep].build_command_dependencies)
+        yield commands[dep]
+        is_seen[dep] = True
+
 def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
@@ -146,7 +165,7 @@ def _create_commands(repository, runtime_package, recipe_path,
     for recipe in recipes_from_config:
         if recipes and not recipe.get('name') in recipes:
             continue
-        packages, run_deps, host_deps, build_deps, test_deps, output_files = _get_package_dependencies(
+        packages, version, run_deps, host_deps, build_deps, test_deps, output_files = _get_package_dependencies(
                                                                                          recipe.get('path'),
                                                                                          combined_config_files,
                                                                                          variants)
@@ -154,6 +173,7 @@ def _create_commands(repository, runtime_package, recipe_path,
         build_commands.append(BuildCommand(recipe=recipe.get('name', None),
                                     repository=repository,
                                     packages=packages,
+                                    version=version,
                                     recipe_path=recipe_path,
                                     runtime_package=runtime_package,
                                     output_files=output_files,
@@ -189,14 +209,16 @@ def _get_package_dependencies(path, variant_config_files, variants):
     metas = conda_utils.render_yaml(path, variants, variant_config_files)
 
     # Parse out the package names and dependencies from each variant
-    packages = set()
+    packages = []
+    versions = []
     run_deps = set()
     host_deps = set()
     build_deps = set()
     test_deps = set()
     output_files = []
     for meta,_,_ in metas:
-        packages.add(_clean_dep(meta.meta['package']['name']))
+        packages.append(_clean_dep(meta.meta['package']['name']))
+        versions.append(meta.meta['package']['version'])
         run_deps.update(_clean_deps(meta.meta['requirements'].get('run', [])))
         host_deps.update(_clean_deps(meta.meta['requirements'].get('host', [])))
         build_deps.update(_clean_deps(meta.meta['requirements'].get('build', [])))
@@ -204,7 +226,7 @@ def _get_package_dependencies(path, variant_config_files, variants):
         if 'test' in meta.meta:
             test_deps.update(_clean_deps(meta.meta['test'].get('requires', [])))
 
-    return packages, run_deps, host_deps, build_deps, test_deps, output_files
+    return packages, versions, run_deps, host_deps, build_deps, test_deps, output_files
 
 def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
     """
@@ -253,7 +275,7 @@ def _add_build_command_dependencies(variant_build_commands, build_commands, star
                 deps += filter(lambda x: x != start_index + index, packages[dep])
         build_command.build_command_dependencies = deps
 
-    return variant_build_commands
+    return variant_build_commands, packages
 
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
@@ -282,7 +304,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  channels=None,
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env=utils.DEFAULT_GIT_TAG,
-                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
+                 conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
+                 packages=None):
 
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
@@ -293,6 +316,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._external_dependencies = dict()
         self._conda_env_files = dict()
         self._test_feedstocks = dict()
+        self._initial_package_indices = []
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
@@ -300,25 +324,45 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self.build_commands = []
         for variant in self._possible_variants:
             try:
-                build_commands, external_deps, test_feedstocks = self._create_all_commands(variant)
+                build_commands, external_deps = self._create_all_commands(variant)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
             variant_string = utils.variant_string(variant["python"], variant["build_type"],
                                                   variant["mpi_type"], variant["cudatoolkit"])
             self._external_dependencies[variant_string] = external_deps
-            self._test_feedstocks[variant_string] = test_feedstocks
-            validate_config.validate_build_tree(build_commands, external_deps)
-
-            installable_packages = get_installable_packages(build_commands, external_deps)
-            self._conda_env_files[variant_string] = CondaEnvFileGenerator(installable_packages)
 
             # Add dependency tree information to the packages list and
             # remove build commands from build_commands that are already in self.build_commands
-            build_commands = _add_build_command_dependencies(build_commands, self.build_commands,
-                                        len(self.build_commands))
+            build_commands, package_indices = _add_build_command_dependencies(build_commands, self.build_commands,
+                                                                              len(self.build_commands))
             self.build_commands += build_commands
+            self._detect_cycle()
 
-        self._detect_cycle()
+            # If the packages argument is provided, find the indices into the build_commands for all
+            # of the packages that were requested.
+            variant_package_indices = []
+            if packages:
+                for package in packages:
+                    if package in package_indices:
+                        variant_package_indices += package_indices[package]
+                    else:
+                        print("INFO: No recipes were found for " + package + " for variant " + variant_string)
+            else:
+                for package in package_indices:
+                    variant_package_indices += package_indices[package]
+            self._initial_package_indices += variant_package_indices
+
+            validate_config.validate_build_tree(self.build_commands, external_deps, variant_package_indices)
+            installable_packages = get_installable_packages(self.build_commands, external_deps, variant_package_indices)
+
+            filtered_packages = [package for package in installable_packages
+                                     if utils.remove_version(package) in package_indices or
+                                        utils.remove_version(package) in utils.KNOWN_VARIANT_PACKAGES]
+            self._conda_env_files[variant_string] = CondaEnvFileGenerator(filtered_packages)
+
+            self._test_feedstocks[variant_string] = []
+            for build_command in traverse_build_commands(self.build_commands, variant_package_indices):
+                self._test_feedstocks[variant_string] += build_command.repository
 
     def _get_repo(self, env_config_data, package):
         # If the feedstock value starts with any of the SUPPORTED_GIT_PROTOCOLS, treat it as a url. Otherwise
@@ -344,7 +388,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         if not os.path.exists(repo_dir):
             self._clone_repo(git_url, repo_dir, env_config_data, package)
 
-        return repository, repo_dir
+        return repo_dir
 
     def _create_all_commands(self, variants):
         '''
@@ -355,7 +399,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         packages_seen = set()
         build_commands = []
         external_deps = []
-        test_feedstocks = []
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
             channels = self._channels + env_config_data.get(env_config.Key.channels.name, [])
@@ -366,7 +409,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 if _make_hash(package) in packages_seen:
                     continue
 
-                repository, repo_dir = self._get_repo(env_config_data, package)
+                repo_dir = self._get_repo(env_config_data, package)
                 runtime_package = package.get(env_config.Key.runtime_package.name, True)
                 repo_build_commands = _create_commands(repo_dir,
                                                        runtime_package,
@@ -377,7 +420,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                        channels)
 
                 build_commands += repo_build_commands
-                test_feedstocks.append(repository)
 
                 packages_seen.add(_make_hash(package))
 
@@ -385,7 +427,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             if current_deps:
                 external_deps += current_deps
 
-        return build_commands, external_deps, test_feedstocks
+        return build_commands, external_deps
 
     #pylint: disable=too-many-branches
     def _clone_repo(self, git_url, repo_dir, env_config_data, package):
@@ -446,19 +488,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         If a recipe has dependencies, those recipes will be returned
         first.
         """
-        is_seen = [False for i in range(len(self.build_commands))]
-        yield from self._traverse_deps_tree(is_seen, range(len(self.build_commands)))
-
-    def _traverse_deps_tree(self, is_seen, deps):
-        """
-        Generator function that goes through a recipes dependency tree.
-        """
-        for dep in deps:
-            if is_seen[dep]:
-                continue
-            yield from self._traverse_deps_tree(is_seen, self.build_commands[dep].build_command_dependencies)
-            yield self.build_commands[dep]
-            is_seen[dep] = True
+        yield from traverse_build_commands(self.build_commands, self._initial_package_indices)
 
     def __getitem__(self, key):
         return self.build_commands[key]
@@ -507,6 +537,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                 cycle_print += "\nCycles truncated after {}...".format(max_cycles)
             raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
 
+
 def find_all_cycles(tree, current=0, seen=None):
     '''
     This function performs a depth first search of a tree from current, returning all cycles
@@ -524,7 +555,7 @@ def find_all_cycles(tree, current=0, seen=None):
             result += next_step
     return result
 
-def get_installable_packages(build_commands, external_deps):
+def get_installable_packages(build_commands, external_deps, package_indices=None):
     '''
     This function retrieves the list of unique dependencies that are needed at runtime, from the
     build commands and external dependencies that are passed to it.
@@ -572,10 +603,12 @@ def get_installable_packages(build_commands, external_deps):
 
         return parent_set
 
-    for build_command in build_commands:
+    for build_command in traverse_build_commands(build_commands, package_indices):
         if build_command.runtime_package:
             installable_packages = check_and_add(build_command.run_dependencies, installable_packages)
-            installable_packages = check_and_add(build_command.packages, installable_packages)
+            installable_packages = check_and_add([package + (" " + build_command.version[i] if build_command.version else "")
+                                                      for i, package in enumerate(build_command.packages)],
+                                                 installable_packages)
 
     installable_packages = check_and_add(external_deps, installable_packages)
     return sorted(installable_packages, key=len)

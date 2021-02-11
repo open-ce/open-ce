@@ -68,7 +68,7 @@ The `open-ce test env` command can be used to run tests for every package listed
 ==============================================================================
 usage: open-ce test env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                         [--output_folder OUTPUT_FOLDER]
-                        [--channels CHANNELS_LIST]
+                        [--channels CHANNELS_LIST] [--packages PACKAGES]
                         [--repository_folder REPOSITORY_FOLDER]
                         [--python_versions PYTHON_VERSIONS]
                         [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
@@ -87,12 +87,14 @@ optional arguments:
   -h, --help            show this help message and exit
   --conda_build_config CONDA_BUILD_CONFIG
                         Location of conda_build_config.yaml file. (default:
-                        conda_build_config.yaml)
+                        None)
   --output_folder OUTPUT_FOLDER
                         Path where built conda packages will be saved.
                         (default: condabuild)
   --channels CHANNELS_LIST
                         Conda channels to be used. (default: [])
+  --packages PACKAGES   Only build this list of comma delimited packages (plus
+                        their dependencies). (default: None)
   --repository_folder REPOSITORY_FOLDER
                         Directory that contains the repositories. If the
                         repositories don't exist locally, they will be
@@ -109,14 +111,14 @@ optional arguments:
                         Comma delimited list of mpi types, such as "openmpi"
                         or "system". (default: openmpi)
   --cuda_versions CUDA_VERSIONS
-                        CUDA version to build for ,
-                        such as "10.2" or "11.0". (default: 10.2)
+                        CUDA version to build for , such as "10.2" or "11.0".
+                        (default: 10.2)
   --docker_build        Perform a build within a docker container. NOTE: When
                         the --docker_build flag is used, all arguments with
                         paths should be relative to the directory containing
-                        open-ce. Only files within the open-ce directory and
-                        local_files will be visible at build time. (default:
-                        False)
+                        root level open-ce directory. Only files within the
+                        root level open-ce directory and local_files will be
+                        visible at build time. (default: False)
   --git_location GIT_LOCATION
                         The default location to clone git repositories from.
                         (default: https://github.com/open-ce)

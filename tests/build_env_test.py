@@ -166,6 +166,9 @@ def test_build_env(mocker, capsys):
     open_ce._main(["build", build_env.COMMAND, env_file])
     captured = capsys.readouterr()
     assert "Skipping build of" in captured.out
+    mocker.patch(
+        'build_env._all_outputs_exist',
+        return_value=False)
 
     #---The fifth test specifies a cuda version that isn't supported in the env file by package21.
     mocker.patch(
@@ -178,12 +181,19 @@ def test_build_env(mocker, capsys):
     )
 
     cuda_version = "9.1"
+    package_deps = {"package11": ["package15"],
+                    "package12": ["package11"],
+                    "package13": ["package12", "package14"],
+                    "package14": ["package15", "package16"],
+                    "package15": [],
+                    "package16": ["package15"],
+                    "package21": ["package13"],
+                    "package22": ["package15"]}
     buildTracker = PackageBuildTracker()
     mocker.patch( # This ensures that 'package21' is not built when the cuda version is 9.1  
         'build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
-                     conditions=[(lambda command: command.cudatoolkit == cuda_version)
-                                 (lambda command: command.recipe != "package21-feedstock")]))
+                     conditions=[(lambda command: command.recipe != "package21-feedstock")]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
@@ -214,6 +224,36 @@ def test_build_env(mocker, capsys):
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     open_ce._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version])
     validate_conda_env_files(cuda_versions=cuda_version)
+
+    #---The seventh test specifies specific packages that should be built (plus their dependencies)
+    package_deps = {"package11": ["package15"],
+                    "package12": ["package11"],
+                    "package13": ["package12", "package14"],
+                    "package14": ["package15", "package16"],
+                    "package15": [],
+                    "package16": ["package15"],
+                    "package21": ["package13"],
+                    "package22": ["package21"]}
+    mocker.patch(
+        'conda_build.api.render',
+        side_effect=(lambda path, *args, **kwargs: helpers.mock_renderer(os.getcwd(), package_deps))
+    )
+    buildTracker = PackageBuildTracker()
+    mocker.patch(
+        'build_feedstock.build_feedstock_from_command',
+        side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
+                     conditions=[(lambda command: not command.recipe in ["package11-feedstock",
+                                                                         "package12-feedstock",
+                                                                         "package13-feedstock",
+                                                                         "package21-feedstock",
+                                                                         "package22-feedstock"])]))
+    )
+
+    env_file = os.path.join(test_dir, 'test-env2.yaml')
+    captured = capsys.readouterr()
+    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--packages", "package14,package35"])
+    captured = capsys.readouterr()
+    assert "No recipes were found for package35" in captured.out
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
                              build_types=utils.DEFAULT_BUILD_TYPES,

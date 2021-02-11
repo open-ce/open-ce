@@ -47,6 +47,7 @@ class TestBuildTree(build_tree.BuildTree):
         self._conda_build_config = conda_build_config
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
         self._test_feedstocks = dict()
+        self._initial_package_indices = None
 
 def test_create_commands(mocker):
     '''
@@ -78,7 +79,7 @@ def test_create_commands(mocker):
     )
 
     build_commands = build_tree._create_commands("/test/my_repo", "True", "my_recipe_path", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [])
-    assert build_commands[0].packages == {'horovod'}
+    assert build_commands[0].packages == ['horovod']
     assert build_commands[0].recipe_path == "my_recipe_path"
     for dep in {'build_req1', 'build_req2            1.2'}:
         assert dep in build_commands[0].build_dependencies
@@ -176,7 +177,7 @@ def test_get_repo_git_tag_options(mocker, capsys):
         for env_config_data in env_config_data_list:
             packages = env_config_data.get(env_config.Key.packages.name, [])
             for package in packages:
-                _, _ = mock_build_tree._get_repo(env_config_data, package)
+                _ = mock_build_tree._get_repo(env_config_data, package)
                 validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
 
         # Setting git_tag_for_env in BuildTree should override whatever is in the config file
@@ -185,7 +186,7 @@ def test_get_repo_git_tag_options(mocker, capsys):
         for env_config_data in env_config_data_list:
             packages = env_config_data.get(env_config.Key.packages.name, [])
             for package in packages:
-                _, _ = mock_build_tree._get_repo(env_config_data, package)
+                _ = mock_build_tree._get_repo(env_config_data, package)
                 validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
 
 
@@ -203,7 +204,7 @@ def test_get_repo_git_tag_options(mocker, capsys):
         for env_config_data in env_config_data_list:
             packages = env_config_data.get(env_config.Key.packages.name, [])
             for package in packages:
-                _, _ = mock_build_tree._get_repo(env_config_data, package)
+                _ = mock_build_tree._get_repo(env_config_data, package)
                 validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
 
 def test_get_repo_with_patches(mocker, capsys):
@@ -238,7 +239,7 @@ def test_get_repo_with_patches(mocker, capsys):
             for package in packages:
 
                 if package.get(env_config.Key.feedstock.name) == "package22":
-                    _, _ = mock_build_tree._get_repo(env_config_data, package)
+                    _ = mock_build_tree._get_repo(env_config_data, package)
                     captured = capsys.readouterr()
                     assert "Patch apply command:  git apply" in captured.out
                     break
@@ -275,7 +276,7 @@ def test_get_repo_for_nonexisting_patch(mocker):
                 # "package211" has specified a non-existing patch
                 if package.get(env_config.Key.feedstock.name) == "package211":
                     with pytest.raises(OpenCEError) as exc:
-                        _, _ = mock_build_tree._get_repo(env_config_data, package)
+                        _ = mock_build_tree._get_repo(env_config_data, package)
                     assert "Failed to apply patch " in str(exc.value)
 
 
@@ -515,10 +516,10 @@ def test_build_tree_duplicates():
                                                     host_dependencies=[],
                                                     test_dependencies=[])]
                                
-    out_commands = build_tree._add_build_command_dependencies(additional_build_commands,initial_build_commands,len(initial_build_commands))
+    out_commands, _ = build_tree._add_build_command_dependencies(additional_build_commands,initial_build_commands,len(initial_build_commands))
     assert len(out_commands)==1  # Make sure the non-duplicates are not removed
 
-    out_commands = build_tree._add_build_command_dependencies(duplicate_build_commands, initial_build_commands, len(initial_build_commands))
+    out_commands, _ = build_tree._add_build_command_dependencies(duplicate_build_commands, initial_build_commands, len(initial_build_commands))
     assert len(out_commands)==1
 
     for build_command in out_commands:
@@ -538,7 +539,7 @@ def test_get_installable_package_for_non_runtime_package():
                                     build_type="cuda",
                                     mpi_type="openmpi",
                                     cudatoolkit="10.2",
-                                    build_command_dependencies=[1,2]),
+                                    build_command_dependencies=[1]),
                          build_tree.BuildCommand("recipe2",
                                     "repo2",
                                     ["package2a"],
