@@ -40,7 +40,7 @@ ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
              Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
              Argument.RUN_TESTS, Argument.DOCKER_BUILD,
              Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV,
-             Argument.TEST_LABELS]
+             Argument.TEST_LABELS, Argument.DOCKER_BUILD_ARGS]
 
 def _run_tests(build_tree, test_labels, conda_env_files):
     """

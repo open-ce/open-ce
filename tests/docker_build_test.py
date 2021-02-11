@@ -117,6 +117,7 @@ def make_args(command="build",
               conda_build_config="conda_build_config.yaml",
               build_types="cuda",
               cuda_versions="10.2",
+              docker_build_args="",
               **kwargs):
     return Namespace(command = command,
                      sub_command = sub_command,
@@ -125,6 +126,7 @@ def make_args(command="build",
                      conda_build_config = conda_build_config,
                      build_types=build_types,
                      cuda_versions=cuda_versions,
+                     docker_build_args=docker_build_args,
                      **kwargs)
 
 def test_build_in_container(mocker):
@@ -281,3 +283,16 @@ def test_build_with_docker_incompatible_cuda_versions(mocker):
     with pytest.raises(OpenCEError) as exc:
         docker_build.build_with_docker(args, arg_strings)
     assert "Driver level" in str(exc.value)
+
+def test_docker_build_with_docker_build_args(mocker):
+    '''
+    Tests that docker build arguments are parsed and passed to docker build.
+    '''
+    build_args = "--build-arg ENV1=test1 --build-arg ENV2=test2 same_setting 0,1"
+
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--docker_build_args", build_args]
+    args = make_args()
+    mocker.patch('os.system', return_value=0)
+
+    docker_build.build_with_docker(args, arg_strings)
