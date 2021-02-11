@@ -292,7 +292,7 @@ def validate_git_tags(git_tag_for_env, env_config_data, package, capsys):
         git_branch = package.get(env_config.Key.git_tag.name, None)
     if not git_branch:
         git_branch = env_config_data.get(env_config.Key.git_tag_for_env.name, None)
-    
+
     print(captured.out)
 
     assert "Clone cmd:  git clone" in captured.out
@@ -515,7 +515,7 @@ def test_build_tree_duplicates():
                                                     build_dependencies=[],
                                                     host_dependencies=[],
                                                     test_dependencies=[])]
-                               
+
     out_commands, _ = build_tree._add_build_command_dependencies(additional_build_commands,initial_build_commands,len(initial_build_commands))
     assert len(out_commands)==1  # Make sure the non-duplicates are not removed
 
@@ -559,7 +559,7 @@ def test_get_installable_package_with_no_duplicates():
     build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
                                     ["package1a"],
-                                    runtime_package=False, 
+                                    runtime_package=False,
                                     run_dependencies=["python 3.7", "pack1a==1.0"]),
                          build_tree.BuildCommand("recipe2",
                                     "repo2",
@@ -580,4 +580,4 @@ def test_get_installable_package_with_no_duplicates():
 
     expected_packages = ["package2a", "python 3.7.*", "pack1 ==1.0.*", "pack2 <=2.0", "pack3 3.0.*",
                          "package3a", "package3b", "pack4 <=2.0", "external_pac1 1.2.*"]
-    assert Counter(packages) == Counter(expected_packages) 
+    assert Counter(packages) == Counter(expected_packages)
