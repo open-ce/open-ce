@@ -94,7 +94,7 @@ positional arguments:
                         A collection of files exist at https://github.com/open-ce/open-ce-environments.
 
                         This argument can be a URL, in which case imported_envs and the conda_build_config
-                        will be automatically located in the same remote directory. E.g.:
+                        will be automatically discovered in the same remote directory. E.g.:
                         >$ open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/opence-env.yaml
 
                         For complete documentation on Open-CE environment files see:
