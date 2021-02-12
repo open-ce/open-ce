@@ -43,6 +43,7 @@ DEFAULT_GIT_TAG = None
 OPEN_CE_VARIANT = "open-ce-variant"
 DEFAULT_TEST_WORKING_DIRECTORY = "./"
 KNOWN_VARIANT_PACKAGES = ["python", "cudatoolkit"]
+DEFAULT_LICENSES_FILE = "licenses.csv"
 
 def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
 cuda_versions=DEFAULT_CUDA_VERS):
