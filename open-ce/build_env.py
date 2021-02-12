@@ -72,7 +72,7 @@ def _all_outputs_exist(output_folder, output_files):
     return all([os.path.exists(os.path.join(os.path.abspath(output_folder), package))
                     for package in output_files])
 
-def build_env(args): #pylint: disable=too-many-branches
+def build_env(args):
     '''Entry Function'''
     if args.docker_build:
         if len(args.cuda_versions.split(',')) > 1:
