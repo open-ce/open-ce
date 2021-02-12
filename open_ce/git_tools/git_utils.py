@@ -25,8 +25,8 @@ from enum import Enum, unique
 import yaml
 import requests
 
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
-import utils # pylint: disable=wrong-import-position
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open_ce'))
+import open_ce.utils as utils # pylint: disable=wrong-import-position
 
 GITHUB_API = "https://api.github.com"
 

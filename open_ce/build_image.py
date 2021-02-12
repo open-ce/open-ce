@@ -19,7 +19,7 @@
 
 import os
 import shutil
-import utils
+import open_ce.utils as utils
 from open_ce.inputs import Argument
 from open_ce.errors import OpenCEError, Error
 

@@ -18,7 +18,7 @@
 # *****************************************************************
 """
 
-import open_ce.utils
+import open_ce.utils as utils
 from open_ce.inputs import Argument
 from open_ce.errors import OpenCEError, Error
 
@@ -63,7 +63,7 @@ def validate_build_tree(build_commands, external_deps):
     '''
     packages = [package for recipe in build_commands for package in recipe.packages]
     channels = {channel for recipe in build_commands for channel in recipe.channels}
-    deps = build_tree.get_installable_packages(build_commands, external_deps)
+    deps = open_ce.build_tree.get_installable_packages(build_commands, external_deps)
 
     pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
                                                                     if not utils.remove_version(dep) in packages])

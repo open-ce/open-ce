@@ -18,15 +18,15 @@
 """
 
 import sys
-import inputs
-from errors import OpenCEError
-import build_env
-import build_feedstock
-import test_feedstock
-import test_env
-import validate_config
-import validate_env
-import build_image
+import open_ce.inputs as inputs
+from open_ce.errors import OpenCEError
+import open_ce.build_env as build_env
+import open_ce.build_feedstock as build_feedstock
+import open_ce.test_feedstock as test_feedstock
+import open_ce.test_env as test_env
+import open_ce.validate_config as validate_config
+import open_ce.validate_env as validate_env
+import open_ce.build_image as build_image
 
 def make_parser():
     ''' Parser for input arguments '''

@@ -18,9 +18,9 @@
 
 import os
 import open_ce.utils as utils
-import open_ce.env_config
-import open_ce.validate_config
-import open_ce.build_feedstock
+import open_ce.env_config as env_config
+import open_ce.validate_config as validate_config
+import open_ce.build_feedstock as build_feedstock
 from open_ce.errors import OpenCEError, Error
 from open_ce.conda_env_file_generator import CondaEnvFileGenerator
 
@@ -184,7 +184,7 @@ def _get_package_dependencies(path, variant_config_files, variants):
     for the recipe at a given path. Uses conda-render to determine this information.
     """
     #pylint: disable=import-outside-toplevel
-    import conda_utils
+    import open_ce.conda_utils as conda_utils
 
     metas = conda_utils.render_yaml(path, variants, variant_config_files)
 

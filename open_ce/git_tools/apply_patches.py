@@ -20,10 +20,10 @@
 import os
 import sys
 import pathlib
-import git_utils
+import git_tools.git_utils as git_utils
 
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
-import inputs # pylint: disable=wrong-import-position
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open_ce'))
+import open_ce.inputs as inputs # pylint: disable=wrong-import-position
 
 
 def make_parser():
