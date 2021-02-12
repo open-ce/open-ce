@@ -51,6 +51,7 @@ class Error(Enum):
     FAILED_TESTS = (21, "There were {} test failures")
     CONDA_ENV_FILE_REQUIRED = (22, "The '--conda_env_file' argument is required to run tests.")
     PATCH_APPLICATION = (23, "Failed to apply patch {} on feedstock {}")
+    FILE_DOWNLOAD = (24, "Failed to download {} with error:\n{}")
 
 class OpenCEError(Exception):
     """

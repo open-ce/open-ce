@@ -22,6 +22,7 @@ import subprocess
 import errno
 from itertools import product
 import re
+import urllib.request
 import pkg_resources
 from errors import OpenCEError, Error
 import inputs
@@ -232,6 +233,18 @@ def is_url(to_check):
     Determines if a string is a URL
     '''
     return to_check.startswith("http:") or to_check.startswith("https:")
+
+def download_file(url):
+    '''
+    Downloads a file from a url string.
+    Raises an OpenCE Error if an exception is encountered.
+    '''
+    retval = None
+    try:
+        retval, _ = urllib.request.urlretrieve(url)
+    except Exception as exc: # pylint: disable=broad-except
+        raise OpenCEError(Error.FILE_DOWNLOAD, url, str(exc)) from exc
+    return retval
 
 def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
     '''

@@ -17,7 +17,6 @@
 """
 
 import os
-import urllib.request
 
 import argparse
 from enum import Enum, unique
@@ -254,7 +253,7 @@ def parse_args(parser, arg_strings=None):
                 args.conda_build_config = utils.DEFAULT_CONDA_BUILD_CONFIG
 
         if utils.is_url(args.conda_build_config):
-            args.conda_build_config, _ = urllib.request.urlretrieve(args.conda_build_config)
+            args.conda_build_config = utils.download_file(args.conda_build_config)
         else:
             args.conda_build_config = os.path.abspath(args.conda_build_config)
 

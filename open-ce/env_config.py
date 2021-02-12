@@ -18,7 +18,6 @@
 
 import os
 from enum import Enum, unique, auto
-import urllib.request
 
 import utils
 from errors import OpenCEError, Error
@@ -64,7 +63,7 @@ def _validate_config_file(env_file, variants):
 
     try:
         if utils.is_url(env_file):
-            env_file, _ = urllib.request.urlretrieve(env_file)
+            env_file = utils.download_file(env_file)
         meta_obj = conda_utils.render_yaml(env_file, variants=variants, schema=_ENV_CONFIG_SCHEMA)
         if not (Key.packages.name in meta_obj.keys() or Key.imported_envs.name in meta_obj.keys()):
             raise OpenCEError(Error.CONFIG_CONTENT)
