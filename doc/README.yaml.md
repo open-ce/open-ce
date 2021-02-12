@@ -220,7 +220,7 @@ importing the contents of the listed environment files. So if you are building t
 horovod environment, you will get a build of both pytorch and tensorflow as well
 because of the specified imported environments listed in this section.
 
-Using URL's for `imported_envs` is also supported. For example, the following imports
+Using URLs for `imported_envs` is also supported. For example, the following imports
 a local PyTorch env, and a TensorFlow env pulled directly from GitHub.
 
 ```yaml

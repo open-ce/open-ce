@@ -429,7 +429,9 @@ def test_run_tests(mocker):
 
 def test_build_env_url(mocker):
     '''
-    This is a negative test of `build_env`, which passes an invalid env file.
+    This tests that if a URL is passed in for an env file that it is downloaded.
+    I mock urlretrieve to return the test-env-invalid1.yaml file so that I can check
+    for the invalid channels identifier, ensuring that the download function was called.
     '''
     dirTracker = helpers.DirTracker()
     mocker.patch(
