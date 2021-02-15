@@ -1,12 +1,12 @@
 packages:
 {% set py_ver = python | float %}
 {% if build_type == 'cuda' %}
-  - feedstock: libc_wrappers     #[cudatoolkit == '11.0']
+  - feedstock: libc_wrappers     #[x86_64 and cudatoolkit == '11.0']
 {% if py_ver < 3.8 %}
   - feedstock : cudnn
   - feedstock : tensorrt
   - feedstock : onnx
-  - feedstock : protobuf          #[python == '3.8']
+  - feedstock : protobuf          #[ppc64le and python == '3.8']
 {% endif %}
 {% endif %}
 

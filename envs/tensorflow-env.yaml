@@ -21,7 +21,7 @@ packages:
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
   - feedstock : tensorflow-datasets
-  - feedstock : protobuf          #[python == '3.8']
+  - feedstock : protobuf          #[ppc64le and python == '3.8']
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
   - feedstock : tensorflow-addons
