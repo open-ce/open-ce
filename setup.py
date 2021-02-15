@@ -43,9 +43,6 @@ setup(
     author="Open-CE Dev Team",
     author_email="",
     packages = find_packages(),
-#    entry_points={
-#        "console_scripts": CONSOLE_SCRIPTS,
-#    },
     scripts = ["open_ce/open-ce"],
     include_package_data=True,
     package_data={
