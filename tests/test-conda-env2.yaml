@@ -2,5 +2,5 @@
 channels:
 - defaults
 dependencies:
-- pytest
+- pytest 6.2.2
 name: opence-conda-env-py3.6-cuda-openmpi
