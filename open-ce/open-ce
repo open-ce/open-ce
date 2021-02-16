@@ -29,6 +29,7 @@ import validate_env
 import build_image
 import get_licenses
 
+#pylint: disable=too-many-locals
 def make_parser():
     ''' Parser for input arguments '''
     parser = inputs.make_parser([], description = 'Open-CE Tool')
