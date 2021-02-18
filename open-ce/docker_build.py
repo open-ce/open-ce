@@ -229,7 +229,7 @@ def build_with_docker(args, arg_strings):
     _, unused_args = parser.parse_known_args(arg_strings[1:])
 
     if args.docker_tool:
-        global DOCKER_TOOL
+        global DOCKER_TOOL  # pylint: disable=W0603
         DOCKER_TOOL = args.docker_tool
 
     build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
