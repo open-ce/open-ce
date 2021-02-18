@@ -98,7 +98,8 @@ def _create_container(container_name, image_name, output_folder, env_folders):
     Create a docker container
     """
     # Create the container
-    docker_cmd = DOCKER_TOOL + " create" + (" --userns=keep-id" if DOCKER_TOOL=="podman" else "" ) + " -i --rm --name " + container_name + " "
+    docker_cmd = DOCKER_TOOL + " create" + (" --userns=keep-id" if DOCKER_TOOL=="podman" else "" )\
+                 + " -i --rm --name " + container_name + " "
 
     # Add output folder
     docker_cmd += _add_volume(os.path.abspath(output_folder),
@@ -226,7 +227,7 @@ def build_with_docker(args, arg_strings):
 
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings[1:])
-    
+
     if args.docker_tool:
         global DOCKER_TOOL
         DOCKER_TOOL = args.docker_tool
