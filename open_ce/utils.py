@@ -224,6 +224,41 @@ def cuda_driver_installed():
 
         raise OpenCEError(Error.ERROR, "lsmod command unexpectedly failed") from err
 
+def check_cuda_version_match(command):
+    '''
+    Check whether cudatoolkit matches the system CUDA version (as per CUDA_HOME).
+    If not, it's a fatal error as far as the build is concerned.
+    '''
+
+    # Version is recorded in $CUDA_HOME/version.txt; make sure $CUDA_HOME is set first.
+    check_cuda_home():
+    cudavers_file = os.environ['CUDA_HOME'] + '/version.txt'
+    try:
+        cudafile = open(cudavers_file,'r')
+        cuda_home_version = cudafile.readline()
+        close(cudafile)
+    except OSError as err:
+        if err.errno == errno.ENOENT:
+            raise OpenCEError(Error.ERROR, "Could not read version from $CUDA_HOME/version.txt") from err
+
+    version_match = cuda_home_version.find(str(command.cudatoolkit))
+
+    if version_match > 0:
+        return True
+
+    # Versions do not match.  Raise an error
+    raise OpenCEError(Error.ERROR, "cudatoolkit version does not match $CUDA_HOME version")
+
+def check_cuda_home():
+    '''
+    Ensure CUDA_HOME is set.
+    If unset, then set to default of /usr/local/cuda
+    '''
+
+    if 'CUDA_HOME' not in os.environ:
+        # CUDA_HOME is not set, so set it to the default location
+        os.environ['CUDA_HOME'] = "/usr/local/cuda"
+
 def is_subdir(child_path, parent_path):
     """ Checks if given child path is sub-directory of parent_path. """
 
