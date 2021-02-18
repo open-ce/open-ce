@@ -36,12 +36,12 @@ HOME_PATH = "/home/builder"
 REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-builder"
 
-DOCKER_TOOL = "docker"
+DOCKER_TOOL = utils.DEFAULT_DOCKER_TOOL
 
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER,
-                 Argument.CONDA_BUILD_CONFIG, Argument.DOCKER_BUILD_ARGS]
+                 Argument.CONDA_BUILD_CONFIG, Argument.DOCKER_BUILD_ARGS, Argument.DOCKER_TOOL]
     parser = argparse.ArgumentParser(arguments)
     parser.add_argument('command_placeholder', nargs=1, type=str)
     parser.add_argument('sub_command_placeholder', nargs=1, type=str)
@@ -226,6 +226,10 @@ def build_with_docker(args, arg_strings):
 
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings[1:])
+    
+    if args.docker_tool:
+        global DOCKER_TOOL
+        DOCKER_TOOL = args.docker_tool
 
     build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
 

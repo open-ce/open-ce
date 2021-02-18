@@ -24,6 +24,7 @@ test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 import helpers
 import docker_build
+import utils
 from errors import OpenCEError
 
 def test_build_image(mocker):
@@ -118,6 +119,7 @@ def make_args(command="build",
               build_types="cuda",
               cuda_versions="10.2",
               docker_build_args="",
+              docker_tool=utils.DEFAULT_DOCKER_TOOL,
               **kwargs):
     return Namespace(command = command,
                      sub_command = sub_command,
@@ -127,6 +129,7 @@ def make_args(command="build",
                      build_types=build_types,
                      cuda_versions=cuda_versions,
                      docker_build_args=docker_build_args,
+                     docker_tool=docker_tool,
                      **kwargs)
 
 def test_build_in_container(mocker):

@@ -216,6 +216,11 @@ path of \"recipe\"."""))
                                default=None,
                                help="Only build this list of comma delimited packages (plus their dependencies)."))
 
+    DOCKER_TOOL = (lambda parser: parser.add_argument(
+                                        '--docker_tool',
+                                        type=str,
+                                        default=utils.DEFAULT_DOCKER_TOOL,
+                                        help="Docker build tool to be used."))
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
