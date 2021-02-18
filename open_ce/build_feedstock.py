@@ -104,6 +104,9 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, 
     '''
     utils.check_if_conda_build_exists()
 
+    if 'cuda' in command.build_type:
+        utils.check_cuda_version_match(command)
+
     # pylint: disable=import-outside-toplevel
     import conda_build.api
     from conda_build.config import get_or_merge_config
