@@ -299,3 +299,16 @@ def test_docker_build_with_docker_build_args(mocker):
     mocker.patch('os.system', return_value=0)
 
     docker_build.build_with_docker(args, arg_strings)
+
+def test_docker_build_with_docker_tool(mocker):
+    '''
+    Tests that docker_tool argument is parsed and passed to docker build.
+    '''
+    docker_tool = "podman"
+
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--docker_tool", docker_tool]
+    args = make_args()
+    mocker.patch('os.system', return_value=0)
+
+    docker_build.build_with_docker(args, arg_strings)
