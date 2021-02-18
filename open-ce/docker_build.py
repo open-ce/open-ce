@@ -98,7 +98,7 @@ def _create_container(container_name, image_name, output_folder, env_folders):
     Create a docker container
     """
     # Create the container
-    docker_cmd = DOCKER_TOOL + " create -i --rm --name " + container_name + " "
+    docker_cmd = DOCKER_TOOL + " create" + (" --userns=keep-id" if DOCKER_TOOL=="podman" else "" ) + " -i --rm --name " + container_name + " "
 
     # Add output folder
     docker_cmd += _add_volume(os.path.abspath(output_folder),
