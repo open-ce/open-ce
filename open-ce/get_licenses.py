@@ -20,6 +20,15 @@ import os
 import json
 import datetime
 import utils
+import glob
+import yaml
+import tarfile
+import zipfile
+import requests
+import shutil
+from subprocess import CalledProcessError
+import conda_build.source
+
 from errors import OpenCEError, Error
 from inputs import Argument
 
@@ -28,6 +37,10 @@ COMMAND = 'licenses'
 DESCRIPTION = 'Gather license information for a group of packages'
 
 ARGUMENTS = [Argument.OUTPUT_FOLDER, Argument.CONDA_ENV_FILE]
+
+COPYRIGHT_STRINGS = ["Copyright", "All rights reserved", "copyright (C)"]
+EXCLUDE_STRINGS = ["Grant of Copyright License", "Copyright [y", "Copyright {y", "Copyright (C) <y", "\"Copyright", "Copyright (C) year", "Copyright Notice and", "the Copyright"]
+EXCLUDE_EXACT = ["All rights reserved."]
 
 class LicenseGenerator():
     """
@@ -38,20 +51,21 @@ class LicenseGenerator():
         """
         The LicenseInfo class holds license information for a single package.
         """
-        def __init__(self, name, version, url, license_type):
+        def __init__(self, name, version, url, license_type, copyrights):
             self.name = name
             self.version = version
             self.url = url
             self.license_type = license_type
+            self.copyrights = copyrights
 
         def __str__(self):
-            return "{}\t{}\t{}\t{}".format(self.name, self.version, self.url, self.license_type)
+            return "{}\t{}\t{}\t{}\t{}".format(self.name, self.version, self.url, self.license_type, self.copyrights)
 
         def __lt__(self, other):
-            return self.name < other.name
+            return self.name + str(self.version) < other.name + str(other.version)
 
         def __hash__(self):
-            return hash(self.name)
+            return hash(self.name + str(self.version))
 
     def __init__(self):
         self._licenses = set()
@@ -78,6 +92,63 @@ class LicenseGenerator():
         if not ret_code:
             raise OpenCEError(Error.GET_LICENSES, cli, std_out, std_err)
 
+    def add_licenses_from_file(self, license_file):
+        with open(license_file) as file_stream:
+            license_data = yaml.safe_load(file_stream)
+
+        if not license_data.get("packages"):
+            return
+
+        for package in license_data.get("packages"):
+            print("Downloading: " + package["name"])
+            source_folder = os.path.join(utils.TMP_LICENSE_DIR, package["name"] + "-" + str(package["version"]))
+            if not os.path.exists(source_folder):
+                os.makedirs(source_folder)
+            urls = package["url"]
+            if not isinstance(urls, list):
+                urls = [urls]
+            for url in urls:
+                if url.endswith(".git"):
+                    try:
+                        utils.git_clone(url, package["version"], source_folder)
+                    except OpenCEError:
+                        print("Unable to clone source for " + package["name"])
+                else:
+                    try:
+                        res = requests.get(url)
+                        local_path = os.path.join(source_folder, os.path.basename(url))
+                        with open(local_path, 'wb') as file_stream:
+                            file_stream.write(res.content)
+
+                        if tarfile.is_tarfile(local_path):
+                            tar_file = tarfile.open(local_path)
+                            tar_file.extractall(source_folder)
+                            tar_file.close()
+                        elif zipfile.is_zipfile(local_path):
+                            with zipfile.ZipFile(local_path, 'r') as zip_stream:
+                                zip_stream.extractall(source_folder)
+
+                    except Exception:
+                        print("Unable to download source for " + package["name"])
+
+            license_files = []
+
+            license_files += glob.glob(os.path.join(source_folder, "**", "*LICENSE*"), recursive=True)
+            license_files += glob.glob(os.path.join(source_folder, "**", "*COPYING*"), recursive=True)
+            #license_files += glob.glob(os.path.join(source_folder, "**", "*README*"), recursive=True)
+
+            if not license_files:
+                copyright_string = "Missing File"
+            else:
+                copyright_string = self._get_copyrights_from_files(license_files)
+
+            info = LicenseGenerator.LicenseInfo(package["name"],
+                                                package["version"],
+                                                package["url"],
+                                                package["license"],
+                                                copyright_string)
+            self._licenses.add(info)
+
     def write_licenses_file(self, output_folder):
         """
         Write all of the license information to the provided path.
@@ -96,6 +167,75 @@ class LicenseGenerator():
 
         print("INFO: Licenses file generated: " + licenses_file)
 
+    def _get_source(self, pkg_dir):
+        source_folder = os.path.join(utils.TMP_LICENSE_DIR, os.path.basename(pkg_dir))
+        if not os.path.exists(source_folder):
+            os.makedirs(source_folder)
+
+        with open(os.path.join(pkg_dir, "info", "recipe", "meta.yaml")) as file_stream:
+            recipe_data = yaml.safe_load(file_stream)
+
+        if not recipe_data.get("source"):
+            return source_folder
+
+        sources = recipe_data["source"]
+        if not isinstance(sources, list):
+            sources = [sources]
+
+        for source in sources:
+            if source.get("url"):
+                try:
+                    local_path, _ = conda_build.source.download_to_cache(source_folder, pkg_dir, source, False)
+                    if tarfile.is_tarfile(local_path):
+                        tar_file = tarfile.open(local_path)
+                        tar_file.extractall(source_folder)
+                        tar_file.close()
+                except RuntimeError:
+                    print("Unable to download source for " + pkg_dir)
+            elif source.get("git_url"):
+                try:
+                    utils.git_clone(source["git_url"], source.get("git_rev"), source_folder)
+                except OpenCEError:
+                    print("Unable to clone source for " + pkg_dir)
+
+        return source_folder
+
+    def _get_copyrights(self, meta_data, about_data):
+        license_files = set()
+        pkg_dir = meta_data["extracted_package_dir"]
+
+        # Get every file in the licenses directory
+        for root, _, files in os.walk(os.path.join(pkg_dir, "info", "licenses")):
+            for file in files:
+                license_files.add(os.path.join(root,file))
+
+        # Get every file within the package directory with LICENSE in its name
+        license_files.update(glob.glob(os.path.join(pkg_dir, "info", "*LICENSE*")))
+        license_files.update(glob.glob(os.path.join(pkg_dir, "info", "*COPYING*")))
+        #license_files.update(glob.glob(os.path.join(pkg_dir, "**", "*LICENSE*"), recursive=True))
+
+        if not license_files:
+            source_folder = self._get_source(pkg_dir)
+            license_files.update(glob.glob(os.path.join(source_folder, "**", "*LICENSE*"), recursive=True))
+            license_files.update(glob.glob(os.path.join(source_folder, "**", "*COPYING*"), recursive=True))
+
+        if not license_files:
+            return "Missing File"
+
+        return self._get_copyrights_from_files(license_files)
+
+    def _get_copyrights_from_files(self, license_files):
+        copyright_notices = []
+        for license_file in license_files:
+            if not os.path.isfile(license_file):
+                continue
+            with open(license_file, 'r') as file_stream:
+                for line in file_stream.readlines():
+                    if any(copyright in line for copyright in COPYRIGHT_STRINGS) and all(not exclude in line for exclude in EXCLUDE_STRINGS) and all(not exclude == line.strip() for exclude in EXCLUDE_EXACT):
+                        copyright_notices.append(line.strip())
+
+        return str(list(copyright_notices))
+
     def _add_licenses_from_environment(self, conda_env):
         # For each meta-pkg within an environment, find its about.json file.
         meta_files = [meta_file for meta_file in os.listdir(os.path.join(conda_env, "conda-meta"))
@@ -112,19 +252,25 @@ class LicenseGenerator():
             info = LicenseGenerator.LicenseInfo(meta_data["name"],
                                                 meta_data["version"],
                                                 about_data.get("dev_url", about_data.get("home", "none")),
-                                                about_data.get("license", "none"))
+                                                about_data.get("license", "none"),
+                                                self._get_copyrights(meta_data, about_data))
             self._licenses.add(info)
+
+        if os.path.exists(utils.TMP_LICENSE_DIR):
+            shutil.rmdir(utils.TMP_LICENSE_DIR)
 
 
 def get_licenses(args):
     """
     Entry point for `get licenses`.
     """
-    if not args.conda_env_file:
-        raise OpenCEError(Error.CONDA_ENV_FILE_REQUIRED)
+    #if not args.conda_env_file:
+    #    raise OpenCEError(Error.CONDA_ENV_FILE_REQUIRED)
 
     gen = LicenseGenerator()
-    gen.add_licenses(args.conda_env_file)
+    #gen.add_licenses(args.conda_env_file)
+    gen.add_licenses_from_file("static.yaml")
     gen.write_licenses_file(args.output_folder)
 
 ENTRY_FUNCTION = get_licenses
+
