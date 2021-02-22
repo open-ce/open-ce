@@ -275,7 +275,7 @@ def test_build_env(mocker, capsys):
     )
     mocker.patch(
         'urllib.request.urlretrieve',
-        side_effect=(lambda x, y=None: (os.path.join(test_dir, os.path.basename(x)), None))
+        side_effect=(lambda x, filename=None: (os.path.join(test_dir, os.path.basename(x)), None))
     )
 
     env_file = 'https://test.com/test-env2.yaml'
@@ -461,7 +461,7 @@ def test_build_env_url(mocker):
     )
     mocker.patch(
         'urllib.request.urlretrieve',
-        side_effect=(lambda x, y=None: (os.path.join(test_dir, os.path.basename(x)), None))
+        side_effect=(lambda x, filename=None: (os.path.join(test_dir, os.path.basename(x)), None))
     )
 
     env_file = 'https://test.com/test-env-invalid1.yaml'
