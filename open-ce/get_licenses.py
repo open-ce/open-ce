@@ -38,9 +38,9 @@ DESCRIPTION = 'Gather license information for a group of packages'
 
 ARGUMENTS = [Argument.OUTPUT_FOLDER, Argument.CONDA_ENV_FILE]
 
-COPYRIGHT_STRINGS = ["Copyright", "All rights reserved", "copyright (C)"]
-EXCLUDE_STRINGS = ["Grant of Copyright License", "Copyright [y", "Copyright {y", "Copyright (C) <y", "\"Copyright", "Copyright (C) year", "Copyright Notice and", "the Copyright"]
-EXCLUDE_EXACT = ["All rights reserved."]
+COPYRIGHT_STRINGS = ["Copyright", "copyright (C)"]
+SECONDARY_COPYRIGHT_STRINGS = ["All rights reserved"]
+EXCLUDE_STRINGS = ["Grant of Copyright License", "Copyright [y", "Copyright {y", "Copyright (C) <y", "\"Copyright", "Copyright (C) year", "Copyright Notice", "the Copyright", "Our Copyright", "Copyright (c) <y", "our Copyright", "Copyright and", "Copyright remains"]
 
 class LicenseGenerator():
     """
@@ -59,7 +59,7 @@ class LicenseGenerator():
             self.copyrights = copyrights
 
         def __str__(self):
-            return "{}\t{}\t{}\t{}\t{}".format(self.name, self.version, self.url, self.license_type, self.copyrights)
+            return "{}\t{}\t{}\t{}\t{}".format(self.name, self.version, self.url, self.license_type, ", ".join(self.copyrights))
 
         def __lt__(self, other):
             return self.name + str(self.version) < other.name + str(other.version)
@@ -104,7 +104,7 @@ class LicenseGenerator():
             source_folder = os.path.join(utils.TMP_LICENSE_DIR, package["name"] + "-" + str(package["version"]))
             if not os.path.exists(source_folder):
                 os.makedirs(source_folder)
-            urls = package["url"]
+            urls = package["license_url"] if "license_url" in package else package["url"]
             if not isinstance(urls, list):
                 urls = [urls]
             for url in urls:
@@ -134,11 +134,12 @@ class LicenseGenerator():
             license_files = []
 
             license_files += glob.glob(os.path.join(source_folder, "**", "*LICENSE*"), recursive=True)
+            license_files += glob.glob(os.path.join(source_folder, "**", "*LICENCE*"), recursive=True)
             license_files += glob.glob(os.path.join(source_folder, "**", "*COPYING*"), recursive=True)
-            #license_files += glob.glob(os.path.join(source_folder, "**", "*README*"), recursive=True)
+            license_files += glob.glob(os.path.join(source_folder, "**", "*d.ts"), recursive=True)
 
-            if not license_files:
-                copyright_string = "Missing File"
+            if "copyright_string" in package:
+                copyright_string = [package["copyright_string"]]
             else:
                 copyright_string = self._get_copyrights_from_files(license_files)
 
@@ -224,17 +225,55 @@ class LicenseGenerator():
 
         return self._get_copyrights_from_files(license_files)
 
+    def _get_copyrights_from_ts(self, ts_file):
+        ts_start = "// Definitions by:"
+        ts_end = "// Definitions:"
+        copyrights = []
+        with open(ts_file, 'r') as file_stream:
+            for line in file_stream.readlines():
+                if line.startswith(ts_start):
+                    copyrights.append("Copyright " + line[len(ts_start):].strip())
+                elif line.startswith(ts_end):
+                    return copyrights
+                elif copyrights:
+                    copyrights.append("Copyright " + line[2:].strip())
+        return copyrights
+    
+    def _clean_copyright_string(self, copyright, primary=True):
+        copyright_str = copyright.strip()
+        copyright_index = copyright_str.find(next(filter(str.isalpha, copyright_str)))
+        copyright_str = copyright_str[copyright_index:]
+        
+        if primary:
+            for copyright in COPYRIGHT_STRINGS:
+                copyright_index = copyright_str.find(copyright)
+                if copyright_index >= 0:
+                  return copyright_str[copyright_index:]
+
+        return copyright_str
+
     def _get_copyrights_from_files(self, license_files):
         copyright_notices = []
         for license_file in license_files:
             if not os.path.isfile(license_file):
                 continue
-            with open(license_file, 'r') as file_stream:
+            if license_file.endswith(".d.ts"):
+                copyright_notices += self._get_copyrights_from_ts(license_file)
+                continue  
+            with open(license_file, 'r', errors='ignore') as file_stream:
+                just_found = False
                 for line in file_stream.readlines():
-                    if any(copyright in line for copyright in COPYRIGHT_STRINGS) and all(not exclude in line for exclude in EXCLUDE_STRINGS) and all(not exclude == line.strip() for exclude in EXCLUDE_EXACT):
-                        copyright_notices.append(line.strip())
+                    if any(copyright in line for copyright in COPYRIGHT_STRINGS) and all(not exclude in line for exclude in EXCLUDE_STRINGS):
+                        cleaned_line = self._clean_copyright_string(line)
+                        #if any(cleaned_line.startswith(copyright) for copyright in COPYRIGHT_STRINGS):
+                        copyright_notices.append(cleaned_line)
+                        just_found = True
+                    elif just_found and any(copyright in line for copyright in SECONDARY_COPYRIGHT_STRINGS):
+                        copyright_notices[-1] = copyright_notices[-1] + " " + self._clean_copyright_string(line, primary=False)
+                    else:
+                        just_found = False
 
-        return str(list(copyright_notices))
+        return list(copyright_notices)
 
     def _add_licenses_from_environment(self, conda_env):
         # For each meta-pkg within an environment, find its about.json file.
