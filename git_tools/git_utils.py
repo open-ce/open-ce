@@ -173,7 +173,7 @@ def get_current_branch(repo_path):
     return _execute_git_command(repo_path, "git rev-parse --abbrev-ref HEAD").strip()
 
 def get_current_commit(repo_path):
-    '''Retrieve the active branch of the given repo.'''
+    '''Retrieve the current commit of the given repo.'''
     return _execute_git_command(repo_path, "git rev-parse --abbrev-ref HEAD").strip()
 
 def apply_patch(repo_path, patch_path):
