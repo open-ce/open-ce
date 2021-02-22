@@ -128,7 +128,7 @@ def _create_version_branch(arg_strings=None):
         git_utils.checkout(repo_path, args.commit)
 
     make_branch = True
-    if args.branch_if_changed and _version_changed(repo_path):
+    if args.branch_if_changed and not _version_changed(repo_path):
         make_branch = False
 
     if make_branch
