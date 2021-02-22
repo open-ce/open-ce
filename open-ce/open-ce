@@ -27,7 +27,9 @@ import test_env
 import validate_config
 import validate_env
 import build_image
+import get_licenses
 
+#pylint: disable=too-many-locals
 def make_parser():
     ''' Parser for input arguments '''
     parser = inputs.make_parser([], description = 'Open-CE Tool')
@@ -98,6 +100,19 @@ def make_parser():
                                                validate_env.ARGUMENTS,
                                                help=validate_env.DESCRIPTION)
     validate_env_parser.set_defaults(func=validate_env.ENTRY_FUNCTION)
+
+    get_parser = inputs.add_subparser(subparsers, 'get', [],
+                                      help="Get information about Open-CE builds.")
+    get_sub_parsers = get_parser.add_subparsers(title='Get Commands',
+                                                description='Valid Commands')
+    get_sub_parsers.required = True
+    get_sub_parsers.dest = 'sub_command'
+
+    get_licenses_parser = inputs.add_subparser(get_sub_parsers,
+                                               get_licenses.COMMAND,
+                                               get_licenses.ARGUMENTS,
+                                               help=get_licenses.DESCRIPTION)
+    get_licenses_parser.set_defaults(func=get_licenses.ENTRY_FUNCTION)
 
     return parser
 

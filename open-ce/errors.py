@@ -49,9 +49,10 @@ class Error(Enum):
     UNSUPPORTED_CUDA = (19, "Cannot build using docker image for cuda \"{}\" no Dockerfile currently exists")
     TOO_MANY_CUDA = (20, "Only one cuda version allowed to be built with docker at a time")
     FAILED_TESTS = (21, "There were {} test failures")
-    CONDA_ENV_FILE_REQUIRED = (22, "The '--conda_env_file' argument is required to run tests.")
+    CONDA_ENV_FILE_REQUIRED = (22, "The '--conda_env_file' argument is required.")
     PATCH_APPLICATION = (23, "Failed to apply patch {} on feedstock {}")
-    FILE_DOWNLOAD = (24, "Failed to download {} with error:\n{}")
+    GET_LICENSES = (24, "Error generating licenses file.\nCommand:\n{}\nOUTPUT:\n{}Errpr:\n{}")
+    FILE_DOWNLOAD = (25, "Failed to download {} with error:\n{}")
 
 class OpenCEError(Exception):
     """
