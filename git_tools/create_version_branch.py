@@ -127,11 +127,10 @@ def _create_version_branch(arg_strings=None):
     if args.commit:
         git_utils.checkout(repo_path, args.commit)
 
-    make_branch = True
     if args.branch_if_changed and not _version_changed(repo_path):
-        make_branch = False
-
-    if make_branch
+        print("The version has not changed, no branch created.")
+    else:
+        print("The version has changed, creating branch.")
         repo_version = _get_repo_version(repo_path)
         branch_name = "r" + repo_version
 
