@@ -23,6 +23,7 @@ import errno
 from itertools import product
 import re
 import urllib.request
+import tempfile
 import pkg_resources
 from errors import OpenCEError, Error
 import inputs
@@ -235,14 +236,18 @@ def is_url(to_check):
     '''
     return to_check.startswith("http:") or to_check.startswith("https:")
 
-def download_file(url):
+def download_file(url, filename=None):
     '''
     Downloads a file from a url string.
     Raises an OpenCE Error if an exception is encountered.
     '''
     retval = None
     try:
-        retval, _ = urllib.request.urlretrieve(url)
+        if not filename:
+            download_path = tempfile.NamedTemporaryFile(suffix=os.path.basename(url), delete=False).name
+        else:
+            download_path = tempfile.NamedTemporaryFile(suffix=filename, delete=False).name
+        retval, _ = urllib.request.urlretrieve(url, filename=download_path)
     except Exception as exc: # pylint: disable=broad-except
         raise OpenCEError(Error.FILE_DOWNLOAD, url, str(exc)) from exc
     return retval

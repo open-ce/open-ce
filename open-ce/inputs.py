@@ -253,7 +253,8 @@ def parse_args(parser, arg_strings=None):
                 args.conda_build_config = utils.DEFAULT_CONDA_BUILD_CONFIG
 
         if utils.is_url(args.conda_build_config):
-            args.conda_build_config = utils.download_file(args.conda_build_config)
+            args.conda_build_config = utils.download_file(args.conda_build_config,
+                                                          filename=utils.CONDA_BUILD_CONFIG_FILE)
         else:
             args.conda_build_config = os.path.abspath(args.conda_build_config)
 
