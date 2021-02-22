@@ -22,6 +22,8 @@ import subprocess
 import errno
 from itertools import product
 import re
+import urllib.request
+import tempfile
 import pkg_resources
 from errors import OpenCEError, Error
 import inputs
@@ -227,6 +229,28 @@ def is_subdir(child_path, parent_path):
 
     relative = os.path.relpath(child, start=parent)
     return not relative.startswith(os.pardir)
+
+def is_url(to_check):
+    '''
+    Determines if a string is a URL
+    '''
+    return to_check.startswith("http:") or to_check.startswith("https:")
+
+def download_file(url, filename=None):
+    '''
+    Downloads a file from a url string.
+    Raises an OpenCE Error if an exception is encountered.
+    '''
+    retval = None
+    try:
+        if not filename:
+            download_path = tempfile.NamedTemporaryFile(suffix=os.path.basename(url), delete=False).name
+        else:
+            download_path = tempfile.NamedTemporaryFile(suffix=filename, delete=False).name
+        retval, _ = urllib.request.urlretrieve(url, filename=download_path)
+    except Exception as exc: # pylint: disable=broad-except
+        raise OpenCEError(Error.FILE_DOWNLOAD, url, str(exc)) from exc
+    return retval
 
 def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
     '''

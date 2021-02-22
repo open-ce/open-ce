@@ -429,7 +429,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         return build_commands, external_deps
 
-    #pylint: disable=too-many-branches
     def _clone_repo(self, git_url, repo_dir, env_config_data, package):
         """
         Clone the git repo at repository.

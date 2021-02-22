@@ -88,6 +88,15 @@ git clone https://github.com/open-ce/open-ce-environments.git --branch open-ce-v
 ./open-ce/open-ce/open-ce build env --python_versions 3.6,3.7,3.8 --build_types cuda ./open-ce-environments/envs/opence-env.yaml
 ```
 
+Builds can also be performed without cloning the environments repo, by specifying the URL of an environment file. For example:
+
+```bash
+# Clone Open-CE from GitHub
+git clone https://github.com/open-ce/open-ce.git
+# Build packages
+./open-ce/open-ce/open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/opence-env.yaml
+```
+
 #### Building within a docker container
 
 Passing the `--docker_build` argument to the `open-ce build env` command will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. The `--docker_build` command does not currently work with `podman`. For more information on the `--docker_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).

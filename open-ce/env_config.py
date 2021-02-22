@@ -62,6 +62,8 @@ def _validate_config_file(env_file, variants):
     import conda_utils
 
     try:
+        if utils.is_url(env_file):
+            env_file = utils.download_file(env_file)
         meta_obj = conda_utils.render_yaml(env_file, variants=variants, schema=_ENV_CONFIG_SCHEMA)
         if not (Key.packages.name in meta_obj.keys() or Key.imported_envs.name in meta_obj.keys()):
             raise OpenCEError(Error.CONFIG_CONTENT)
@@ -75,7 +77,7 @@ def load_env_config_files(config_files, variants):
     Load all of the environment config files, plus any that come from "imported_envs"
     within an environment config file.
     '''
-    env_config_files = [os.path.abspath(e) for e in config_files]
+    env_config_files = [os.path.abspath(e) if not utils.is_url(e) else e for e in config_files]
     env_config_data_list = []
     loaded_files = []
     while env_config_files:
@@ -90,7 +92,7 @@ def load_env_config_files(config_files, variants):
             imported_envs = []
         for imported_env in imported_envs:
             imported_env = os.path.expanduser(imported_env)
-            if not os.path.isabs(imported_env):
+            if not utils.is_url(imported_env) and not os.path.isabs(imported_env):
                 imported_env = os.path.join(os.path.dirname(env_config_files[0]), imported_env)
             if not imported_env in env_config_files and not imported_env in loaded_files:
                 new_config_files += [imported_env]
@@ -102,7 +104,6 @@ def load_env_config_files(config_files, variants):
             env_config_files = new_config_files + env_config_files
         else:
             env_config_data_list += [env]
-            loaded_files += [env_config_files[0]]
-            env_config_files.pop(0)
+            loaded_files += [env_config_files.pop(0)]
 
     return env_config_data_list
