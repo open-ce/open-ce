@@ -46,7 +46,7 @@ def _make_parser():
     parser.add_argument(
         '--repository',
         type=str,
-        required=True,
+        required=False,
         help="""URL to the git repository.""")
 
     parser.add_argument(
@@ -54,6 +54,12 @@ def _make_parser():
         type=str,
         required=False,
         help="""Commit to branch from. If none is provided, the head of the repo will be used.""")
+
+    parser.add_argument(
+        '--branch_if_changed',
+        action='store_true',
+        required=False,
+        help="""If there was a change in version form the previous commit to the current one, create a version branch.""")
 
     return parser
 
@@ -77,6 +83,25 @@ def _get_repo_version(repo_path):
     os.chdir(saved_working_directory)
     raise Exception("Error: Unable to determine current version of the feedstock")
 
+def _version_changed(repo_path):
+    '''
+    Determine if the version changed between this commit and the previous.
+    '''
+    saved_working_directory = os.getcwd()
+    os.chdir(os.path.abspath(repo_path))
+
+    current_commit = git_utils.get_current_commit(repo_path)
+
+    current_version = _get_repo_version(repo_path)
+
+    git_utils.checkout(repo_path, "HEAD~")
+    previous_version = _get_repo_version(repo_path)
+
+    git_utils.checkout(repo_path, current_commit)
+    os.chdir(saved_working_directory)
+
+    return not (current_version == previous_version)
+
 def _get_repo_name(repo_url):
     if not repo_url.endswith(".git"):
         repo_url += ".git"
@@ -86,27 +111,38 @@ def _create_version_branch(arg_strings=None):
     parser = _make_parser()
     args = parser.parse_args(arg_strings)
 
-    repo_name = _get_repo_name(args.repository)
-    repo_url = args.repository
-    repo_path = os.path.abspath(os.path.join(args.repo_dir, repo_name))
-    print("--->Making clone location: " + repo_path)
-    os.makedirs(repo_path, exist_ok=True)
-    print("--->Cloning {}".format(repo_name))
-    git_utils.clone_repo(repo_url, repo_path)
+    if args.repository:
+        repo_name = _get_repo_name(args.repository)
+        repo_url = args.repository
+        repo_path = os.path.abspath(os.path.join(args.repo_dir, repo_name))
+        print("--->Making clone location: " + repo_path)
+        os.makedirs(repo_path, exist_ok=True)
+        print("--->Cloning {}".format(repo_name))
+        git_utils.clone_repo(repo_url, repo_path)
+    elif args.repo_dir:
+        repo_path = args.repo_dir
+    else:
+        repo_path = "./"
 
     if args.commit:
         git_utils.checkout(repo_path, args.commit)
 
-    repo_version = _get_repo_version(repo_path)
-    branch_name = "r" + repo_version
+    make_branch = True
+    if args.branch_if_changed and _version_changed(repo_path):
+        make_branch = False
 
-    if git_utils.branch_exists(repo_path, branch_name):
-        print("The branch {} already exists.".format(branch_name))
-    else:
-        git_utils.create_branch(repo_path, branch_name)
-        git_utils.push_branch(repo_path, branch_name)
+    if make_branch
+        repo_version = _get_repo_version(repo_path)
+        branch_name = "r" + repo_version
 
-    shutil.rmtree(repo_path)
+        if git_utils.branch_exists(repo_path, branch_name):
+            print("The branch {} already exists.".format(branch_name))
+        else:
+            git_utils.create_branch(repo_path, branch_name)
+            git_utils.push_branch(repo_path, branch_name)
+
+    if args.repository:
+        shutil.rmtree(repo_path)
 
 if __name__ == '__main__':
     try:
