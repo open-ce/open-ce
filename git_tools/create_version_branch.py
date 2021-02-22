@@ -83,25 +83,6 @@ def _get_repo_version(repo_path):
     os.chdir(saved_working_directory)
     raise Exception("Error: Unable to determine current version of the feedstock")
 
-def _version_changed(repo_path):
-    '''
-    Determine if the version changed between this commit and the previous.
-    '''
-    saved_working_directory = os.getcwd()
-    os.chdir(os.path.abspath(repo_path))
-
-    current_commit = git_utils.get_current_commit(repo_path)
-
-    current_version = _get_repo_version(repo_path)
-
-    git_utils.checkout(repo_path, "HEAD~")
-    previous_version = _get_repo_version(repo_path)
-
-    git_utils.checkout(repo_path, current_commit)
-    os.chdir(saved_working_directory)
-
-    return not (current_version == previous_version)
-
 def _get_repo_name(repo_url):
     if not repo_url.endswith(".git"):
         repo_url += ".git"
@@ -126,19 +107,33 @@ def _create_version_branch(arg_strings=None):
 
     if args.commit:
         git_utils.checkout(repo_path, args.commit)
+    current_commit = git_utils.get_current_commit(repo_path)
 
-    if args.branch_if_changed and not _version_changed(repo_path):
+    git_utils.checkout(repo_path, "HEAD~")
+    previous_version = _get_repo_version(repo_path)
+
+    git_utils.checkout(repo_path, current_commit)
+    current_version = _get_repo_version(repo_path)
+
+    if args.branch_if_changed and current_version == previous_version:
         print("The version has not changed, no branch created.")
     else:
-        print("The version has changed, creating branch.")
-        repo_version = _get_repo_version(repo_path)
-        branch_name = "r" + repo_version
+        if args.branch_if_changed:
+            print("The version has changed, creating branch.")
+            git_utils.checkout(repo_path, "HEAD~")
+            branch_name = "r" + previous_version
+        else:
+            print("Creating branch.")
+            branch_name = "r" + current_version
 
         if git_utils.branch_exists(repo_path, branch_name):
             print("The branch {} already exists.".format(branch_name))
         else:
             git_utils.create_branch(repo_path, branch_name)
             git_utils.push_branch(repo_path, branch_name)
+
+        if args.branch_if_changed:
+            git_utils.checkout(repo_path, current_commit)
 
     if args.repository:
         shutil.rmtree(repo_path)
