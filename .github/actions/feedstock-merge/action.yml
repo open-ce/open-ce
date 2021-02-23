@@ -1,0 +1,21 @@
+name: Open-CE Feedstock Merge Triggers
+
+author: "Open-CE"
+
+description: "Tasks to be completed at merge time for Open-CE feedstocks."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      shell: bash -l {0}
+      run: |
+        conda install -y conda-build
+    - name: Clone open-ce
+      shell: bash -l {0}
+      run: |
+        git clone https://github.com/open-ce/open-ce.git ./open-ce
+    - name: Create Version Branch
+      shell: bash -l {0}
+      run: |
+        python ./open-ce/git_tools/create_version_branch.py --branch_if_changed
