@@ -23,10 +23,10 @@ import shutil
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
-import get_licenses
-import utils
-from errors import OpenCEError
+open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
+import open_ce.get_licenses as get_licenses
+import open_ce.utils as utils
+from open_ce.errors import OpenCEError
 
 def test_get_licenses():
     '''

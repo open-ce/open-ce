@@ -19,9 +19,9 @@
 import os
 import json
 import datetime
-import utils
-from errors import OpenCEError, Error
-from inputs import Argument
+import open_ce.utils as utils
+from open_ce.errors import OpenCEError, Error
+from open_ce.inputs import Argument
 
 COMMAND = 'licenses'
 
