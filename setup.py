@@ -30,7 +30,6 @@ CONSOLE_SCRIPTS = [
 ]
 
 REQUIRED_PACKAGES = [
-    "conda-build==3.20.5",
     "pyyaml",
 ]
 

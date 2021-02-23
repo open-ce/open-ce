@@ -21,7 +21,7 @@ import datetime
 import platform
 import argparse
 
-import open_ce.utils
+import open_ce.utils as utils
 from open_ce.errors import OpenCEError, Error
 from open_ce.inputs import Argument
 
@@ -130,7 +130,6 @@ def _execute_in_container(container_name, command):
     docker_cmd = DOCKER_TOOL + " exec " + container_name + " "
     # Change to home directory
     docker_cmd += "bash -c 'cd " + HOME_PATH + "; " + command + "'"
-
     if os.system(docker_cmd):
         raise OpenCEError(Error.BUILD_IN_CONTAINER, container_name)
 
@@ -176,7 +175,7 @@ def build_in_container(image_name, args, arg_strings):
     _start_container(container_name)
 
     # Execute build command
-    cmd = "python {} {} {} {}".format(os.path.join(HOME_PATH, "open-ce", "open-ce", "open-ce"),
+    cmd = "source $HOME/.bashrc; python {} {} {} {}".format(os.path.join(HOME_PATH, "open_ce", "open-ce"),
                                       args.command,
                                       args.sub_command,
                                       ' '.join(arg_strings[0:]))
