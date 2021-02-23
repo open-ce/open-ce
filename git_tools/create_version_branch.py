@@ -107,7 +107,7 @@ def _create_version_branch(arg_strings=None):
 
     if args.commit:
         git_utils.checkout(repo_path, args.commit)
-    current_commit = git_utils.get_current_commit(repo_path)
+    current_commit = git_utils.get_current_branch(repo_path)
 
     git_utils.checkout(repo_path, "HEAD~")
     previous_version = _get_repo_version(repo_path)
