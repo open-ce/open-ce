@@ -16,7 +16,7 @@
 # *****************************************************************
 """
 
-import open_ce.build_env
+import open_ce.build_env as build_env
 from open_ce.inputs import Argument
 
 COMMAND = 'env'
