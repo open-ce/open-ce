@@ -25,7 +25,7 @@ import open_ce.utils
 from open_ce.errors import OpenCEError, Error
 from open_ce.inputs import Argument
 
-OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 BUILD_IMAGE_NAME = "builder"
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", BUILD_IMAGE_NAME)
 BUILD_CUDA_IMAGE_NAME = "builder-cuda-" + platform.machine()
