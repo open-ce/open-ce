@@ -18,4 +18,8 @@ runs:
     - name: Create Version Branch
       shell: bash -l {0}
       run: |
-        python ./open-ce/git_tools/create_version_branch.py --branch_if_changed
+        echo "If the package version changed from the last commit to this"
+        echo "one, a new branch will be created for the previous version"
+        echo "from the last commit."
+        python ./open-ce/git_tools/create_version_branch.py \
+                  --branch_if_changed
