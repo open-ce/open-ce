@@ -22,6 +22,8 @@ import subprocess
 import errno
 from itertools import product
 import re
+import urllib.request
+import tempfile
 import pkg_resources
 from open_ce.errors import OpenCEError, Error
 import open_ce.inputs as inputs
@@ -42,6 +44,8 @@ DEFAULT_TEST_CONFIG_FILE = "tests/open-ce-tests.yaml"
 DEFAULT_GIT_TAG = None
 OPEN_CE_VARIANT = "open-ce-variant"
 DEFAULT_TEST_WORKING_DIRECTORY = "./"
+KNOWN_VARIANT_PACKAGES = ["python", "cudatoolkit"]
+DEFAULT_LICENSES_FILE = "licenses.csv"
 
 def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
 cuda_versions=DEFAULT_CUDA_VERS):
@@ -225,6 +229,28 @@ def is_subdir(child_path, parent_path):
 
     relative = os.path.relpath(child, start=parent)
     return not relative.startswith(os.pardir)
+
+def is_url(to_check):
+    '''
+    Determines if a string is a URL
+    '''
+    return to_check.startswith("http:") or to_check.startswith("https:")
+
+def download_file(url, filename=None):
+    '''
+    Downloads a file from a url string.
+    Raises an OpenCE Error if an exception is encountered.
+    '''
+    retval = None
+    try:
+        if not filename:
+            download_path = tempfile.NamedTemporaryFile(suffix=os.path.basename(url), delete=False).name
+        else:
+            download_path = tempfile.NamedTemporaryFile(suffix=filename, delete=False).name
+        retval, _ = urllib.request.urlretrieve(url, filename=download_path)
+    except Exception as exc: # pylint: disable=broad-except
+        raise OpenCEError(Error.FILE_DOWNLOAD, url, str(exc)) from exc
+    return retval
 
 def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
     '''

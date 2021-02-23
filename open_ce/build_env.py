@@ -35,6 +35,7 @@ DESCRIPTION = 'Build conda environment as part of Open-CE'
 
 ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
              Argument.CHANNELS, Argument.ENV_FILE,
+             Argument.PACKAGES,
              Argument.REPOSITORY_FOLDER, Argument.PYTHON_VERSIONS,
              Argument.BUILD_TYPES, Argument.MPI_TYPES,
              Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
@@ -107,7 +108,8 @@ def build_env(args):
                                channels=args.channels_list,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,
-                               conda_build_config=args.conda_build_config)
+                               conda_build_config=args.conda_build_config,
+                               packages=inputs.parse_arg_list(args.packages))
 
     # Generate conda environment files
     conda_env_files = build_tree.write_conda_env_files(output_folder=os.path.abspath(args.output_folder),

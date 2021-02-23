@@ -41,7 +41,7 @@ DOCKER_TOOL = "docker"
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER,
-                 Argument.CONDA_BUILD_CONFIG, Argument.ENV_FILE, Argument.DOCKER_BUILD_ARGS]
+                 Argument.CONDA_BUILD_CONFIG, Argument.DOCKER_BUILD_ARGS]
     parser = argparse.ArgumentParser(arguments)
     parser.add_argument('command_placeholder', nargs=1, type=str)
     parser.add_argument('sub_command_placeholder', nargs=1, type=str)
@@ -145,15 +145,17 @@ def build_in_container(image_name, args, arg_strings):
     container_name = IMAGE_NAME + "-" + time_stamp
 
     output_folder = os.path.abspath(args.output_folder)
-    env_files = [os.path.abspath(env_file) for env_file in args.env_config_file]
+    env_files = [os.path.abspath(e) if not utils.is_url(e) else e for e in args.env_config_file]
     conda_build_config = os.path.abspath(args.conda_build_config)
 
     #use set comprehension to remove duplicates
-    env_folders = {os.path.dirname(env_file) for env_file in env_files}
+    env_folders = {os.path.dirname(env_file) for env_file in env_files if not utils.is_url(env_file)}
     env_files_in_container = {os.path.join(HOME_PATH,
                                            "envs",
                                            _mount_name(os.path.dirname(env_file)),
                                            os.path.basename(env_file))
+                              if not utils.is_url(env_file)
+                              else env_file
                                     for env_file in env_files}
     arg_strings = list(env_files_in_container) + arg_strings
 
@@ -213,6 +215,14 @@ def build_with_docker(args, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
+
+    # env_config_file being positional argument cause problem while parsing known
+    # arguments. Hence removing it from arg_strings, as it is anyway being read
+    # from args ahead.
+    for env_file in args.env_config_file:
+        if env_file in arg_strings:
+            arg_strings.remove(env_file)
+
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings[1:])
 
