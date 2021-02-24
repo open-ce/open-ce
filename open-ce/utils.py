@@ -270,6 +270,9 @@ def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
         yaml.safe_dump(env_info, file_handle)
 
 def git_clone(git_url, git_tag, location):
+    '''
+    Clone a git repository and checkout a certain branch.
+    '''
     clone_cmd = "git clone " + git_url + " " + location
     print("Clone cmd: ", clone_cmd)
     clone_result = os.system(clone_cmd)
