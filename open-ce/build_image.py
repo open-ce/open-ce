@@ -25,7 +25,7 @@ from errors import OpenCEError, Error
 
 COMMAND = 'image'
 DESCRIPTION = 'Run Open-CE tools within a container'
-ARGUMENTS = [Argument.LOCAL_CONDA_CHANNEL, Argument.CONDA_ENV_FILE]
+ARGUMENTS = [Argument.LOCAL_CONDA_CHANNEL, Argument.CONDA_ENV_FILE, Argument.CONTAINER_TOOL]
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RUNTIME_IMAGE_NAME = "opence-runtime"
@@ -38,15 +38,15 @@ OPENCE_USER = "opence"
 LOCAL_CONDA_CHANNEL_IN_IMG = "opence-local-conda-channel"
 TARGET_DIR = "/home/{}/{}".format(OPENCE_USER, LOCAL_CONDA_CHANNEL_IN_IMG)
 
-DOCKER_TOOL = "docker"
+CONTAINER_TOOL = utils.DEFAULT_CONTAINER_TOOL
 
 def build_image(local_conda_channel, conda_env_file):
     """
-    Build a docker image from the Dockerfile in RUNTIME_IMAGE_PATH.
+    Build a container image from the Dockerfile in RUNTIME_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
     image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + str(os.getuid())
-    build_cmd = DOCKER_TOOL + " build "
+    build_cmd = CONTAINER_TOOL + " build "
     build_cmd += "-f " + os.path.join(RUNTIME_IMAGE_PATH, "Dockerfile") + " "
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg OPENCE_USER=" + OPENCE_USER + " "
@@ -55,7 +55,7 @@ def build_image(local_conda_channel, conda_env_file):
     build_cmd += "--build-arg TARGET_DIR=" + TARGET_DIR + " "
     build_cmd += BUILD_CONTEXT
 
-    print("Docker build command: ", build_cmd)
+    print("Container build command: ", build_cmd)
     if os.system(build_cmd):
         raise OpenCEError(Error.BUILD_IMAGE, image_name)
 
@@ -67,15 +67,19 @@ def _validate_input_paths(local_conda_channel, conda_env_file):
     if not os.path.exists(local_conda_channel) or not os.path.exists(conda_env_file):
         raise OpenCEError(Error.INCORRECT_INPUT_PATHS)
 
-    # Check if local conda channel path is subdir of the docker build context
+    # Check if local conda channel path is subdir of the container build context
     if not utils.is_subdir(local_conda_channel, os.path.abspath(BUILD_CONTEXT)):
         raise OpenCEError(Error.LOCAL_CHANNEL_NOT_IN_CONTEXT)
 
-def build_runtime_docker_image(args):
+def build_runtime_container_image(args):
     """
     Create a runtime image which will have a conda environment created
     using locally built conda packages and environment file.
     """
+    if args.container_tool:
+        global CONTAINER_TOOL  # pylint: disable=W0603
+        CONTAINER_TOOL = args.container_tool
+
     local_conda_channel = os.path.abspath(args.local_conda_channel)
     conda_env_file = os.path.abspath(args.conda_env_file)
     _validate_input_paths(local_conda_channel, conda_env_file)
@@ -92,6 +96,6 @@ def build_runtime_docker_image(args):
 
     image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file))
 
-    print("Docker image with name {} is built successfully.".format(image_name))
+    print("Container image with name {} is built successfully.".format(image_name))
 
-ENTRY_FUNCTION = build_runtime_docker_image
+ENTRY_FUNCTION = build_runtime_container_image

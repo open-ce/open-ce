@@ -141,7 +141,7 @@ def test_channel_update_in_conda_env(mocker):
     # Cleanup
     os.remove("tests/testcondabuild/test-conda-env.yaml") 
 
-def test_for_failed_docker_build_cmd(mocker):
+def test_for_failed_container_build_cmd(mocker):
     '''
     Simple test for build_runtime_image being failed due to some error in building the image
     '''

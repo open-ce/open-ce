@@ -36,12 +36,12 @@ HOME_PATH = "/home/builder"
 REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-builder"
 
-DOCKER_TOOL = utils.DEFAULT_DOCKER_TOOL
+CONTAINER_TOOL = utils.DEFAULT_CONTAINER_TOOL
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [Argument.DOCKER_BUILD, Argument.OUTPUT_FOLDER,
-                 Argument.CONDA_BUILD_CONFIG, Argument.DOCKER_BUILD_ARGS, Argument.DOCKER_TOOL]
+    arguments = [Argument.CONTAINER_BUILD, Argument.OUTPUT_FOLDER,
+                 Argument.CONDA_BUILD_CONFIG, Argument.CONTAINER_BUILD_ARGS, Argument.CONTAINER_TOOL]
     parser = argparse.ArgumentParser(arguments)
     parser.add_argument('command_placeholder', nargs=1, type=str)
     parser.add_argument('sub_command_placeholder', nargs=1, type=str)
@@ -50,22 +50,22 @@ def make_parser():
 
     return parser
 
-def build_image(build_image_path, dockerfile, cuda_version=None, docker_build_args=""):
+def build_image(build_image_path, dockerfile, cuda_version=None, container_build_args=""):
     """
-    Build a docker image from the Dockerfile in BUILD_IMAGE_PATH.
+    Build a container image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
     if cuda_version:
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cuda" + cuda_version + "-" + str(os.getuid())
     else:
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cpu-" + str(os.getuid())
-    build_cmd = DOCKER_TOOL + " build "
+    build_cmd = CONTAINER_TOOL + " build "
     build_cmd += "-f " + dockerfile + " "
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
 
-    build_cmd += docker_build_args + " "
+    build_cmd += container_build_args + " "
     build_cmd += build_image_path
 
     if os.system(build_cmd):
@@ -95,48 +95,48 @@ def _mount_name(folder_path):
 
 def _create_container(container_name, image_name, output_folder, env_folders):
     """
-    Create a docker container
+    Create a container
     """
     # Create the container
-    docker_cmd = DOCKER_TOOL + " create" + (" --userns=keep-id" if DOCKER_TOOL=="podman" else "" )\
+    container_cmd = CONTAINER_TOOL + " create" + (" --userns=keep-id" if CONTAINER_TOOL=="podman" else "" )\
                  + " -i --rm --name " + container_name + " "
 
     # Add output folder
-    docker_cmd += _add_volume(os.path.abspath(output_folder),
+    container_cmd += _add_volume(os.path.abspath(output_folder),
                               os.path.abspath(os.path.join(HOME_PATH, utils.DEFAULT_OUTPUT_FOLDER)))
 
     # Add cache directory
-    docker_cmd += _add_volume(None, os.path.join(HOME_PATH, ".cache"))
+    container_cmd += _add_volume(None, os.path.join(HOME_PATH, ".cache"))
 
     # Add conda-bld directory
-    docker_cmd += _add_volume(None, "/opt/conda/conda-bld")
+    container_cmd += _add_volume(None, "/opt/conda/conda-bld")
 
     # Add env file directory
     for env_folder in env_folders:
-        docker_cmd += _add_volume(env_folder, os.path.abspath(os.path.join(HOME_PATH, "envs", _mount_name(env_folder))))
+        container_cmd += _add_volume(env_folder, os.path.abspath(os.path.join(HOME_PATH, "envs", _mount_name(env_folder))))
 
-    docker_cmd += image_name + " bash"
-    if os.system(docker_cmd):
+    container_cmd += image_name + " bash"
+    if os.system(container_cmd):
         raise OpenCEError(Error.CREATE_CONTAINER, container_name)
 
 def _copy_to_container(src, dest, container_name):
-    if os.system(DOCKER_TOOL + " cp " + src + " " + container_name + ":" + dest):
+    if os.system(CONTAINER_TOOL + " cp " + src + " " + container_name + ":" + dest):
         raise OpenCEError(Error.COPY_DIR_TO_CONTAINER, src, container_name)
 
 def _start_container(container_name):
-    if os.system(DOCKER_TOOL + " start " + container_name):
+    if os.system(CONTAINER_TOOL + " start " + container_name):
         raise OpenCEError(Error.START_CONTAINER, container_name)
 
 def _execute_in_container(container_name, command):
-    docker_cmd = DOCKER_TOOL + " exec " + container_name + " "
+    container_cmd = CONTAINER_TOOL + " exec " + container_name + " "
     # Change to home directory
-    docker_cmd += "bash -c 'cd " + HOME_PATH + "; " + command + "'"
+    container_cmd += "bash -c 'cd " + HOME_PATH + "; " + command + "'"
 
-    if os.system(docker_cmd):
+    if os.system(container_cmd):
         raise OpenCEError(Error.BUILD_IN_CONTAINER, container_name)
 
 def _stop_container(container_name):
-    result = os.system(DOCKER_TOOL + " stop " + container_name)
+    result = os.system(CONTAINER_TOOL + " stop " + container_name)
     return result
 
 def build_in_container(image_name, args, arg_strings):
@@ -213,7 +213,7 @@ def _capable_of_cuda_containers(cuda_versions):
 
     return not utils.cuda_driver_installed() or utils.cuda_level_supported(cuda_versions)
 
-def build_with_docker(args, arg_strings):
+def build_with_container_tool(args, arg_strings):
     """
     Create a build image and run a build inside of container based on that image.
     """
@@ -228,16 +228,16 @@ def build_with_docker(args, arg_strings):
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings[1:])
 
-    if args.docker_tool:
-        global DOCKER_TOOL  # pylint: disable=W0603
-        DOCKER_TOOL = args.docker_tool
+    if args.container_tool:
+        global CONTAINER_TOOL  # pylint: disable=W0603
+        CONTAINER_TOOL = args.container_tool
 
     build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
 
     if  'cuda' not in args.build_types or _capable_of_cuda_containers(args.cuda_versions):
         image_name = build_image(build_image_path, dockerfile,
                                  args.cuda_versions if 'cuda' in args.build_types else None,
-                                 args.docker_build_args)
+                                 args.container_build_args)
     else:
         raise OpenCEError(Error.INCOMPAT_CUDA, utils.get_driver_level(), args.cuda_versions)
 
