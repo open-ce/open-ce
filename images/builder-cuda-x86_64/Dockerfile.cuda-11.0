@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.0-devel-ubi8
+FROM nvidia/cuda:11.0.3-devel-ubi8
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
