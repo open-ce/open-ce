@@ -49,9 +49,9 @@ docker build open-ce/images/build-cuda-x86_64
 
 The Open-CE build image presets the `CUDA_HOME` environment variable to the appropriate location.
 
-### Automatic docker builds
+### Automatic container builds
 
-The [`open-ce build env`](README.open_ce_build.md#open-ce-build-env-sub-command) command supports the `--docker_build` command line argument.
+The [`open-ce build env`](README.open_ce_build.md#open-ce-build-env-sub-command) command supports the `--container_build` command line argument.
 This argument will automatically build the Open-CE CUDA-enabled build image and when combined
 with the `--build_types=cuda` command line argument, it will build CUDA support into all of the
 recipes included in the Open-CE environment file that are enabled to do so.
@@ -105,7 +105,7 @@ open-ce build env --build_types cuda --cuda_versions 11.0 envs/opence-env.yaml
 
 Only one CUDA version can be specified at a time. To build for both on the same system, the build must be run twice in one of the following ways:
 
-* Use the `docker_build` option, which automatically handles the cuda version.
+* Use the `container_build` option, which automatically handles the cuda version.
 * For bare metal builds:
   * install both CUDA versions locally
   * ensure the CUDA 11 driver is used

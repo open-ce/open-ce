@@ -220,7 +220,7 @@ path of \"recipe\"."""))
                                         '--container_tool',
                                         type=str,
                                         default=utils.DEFAULT_CONTAINER_TOOL,
-                                        help="Container build tool to be used."))
+                                        help="Container tool to be used."))
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
