@@ -153,3 +153,14 @@ def test_for_failed_container_build_cmd(mocker):
     assert "Failure building image" in str(exc.value)
 
     os.remove("tests/testcondabuild/test-conda-env.yaml")
+
+def test_build_image_with_container_tool(mocker):
+    '''
+    Tests that container_tool argument is parsed and passed to build image.
+    '''
+    mocker.patch('os.system', return_value=0)
+
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml", "--container_tool", "podman"]
+    open_ce._main(arg_strings)
+
+    os.remove("tests/testcondabuild/test-conda-env.yaml")

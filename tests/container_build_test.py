@@ -300,7 +300,7 @@ def test_container_build_with_container_tool_build_args(mocker):
 
     container_build.build_with_container_tool(args, arg_strings)
 
-def test_container_build_with_container_tool_tool(mocker):
+def test_container_build_with_container_tool(mocker):
     '''
     Tests that container_tool argument is parsed and passed to container build.
     '''
