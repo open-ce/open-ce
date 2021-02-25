@@ -14,9 +14,14 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
+        architecture: [x86, ppc64le]
 
     steps:
       - uses: actions/checkout@v2
+      - uses: uraimo/run-on-arch-action@v2.0.1
+        with:
+          arch: ${{ matrix.architecture }}
+          distro: ubuntu18.04
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           auto-update-conda: true
