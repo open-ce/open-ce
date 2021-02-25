@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: uraimo/run-on-arch-action@v2.0.1
         with:
-          arch: ${{ matrix.architecture }}
+          arch: ppc64le
           distro: ubuntu18.04
         run: |
           CONDA_HOME=${CONDA_HOME:-/opt/conda}
@@ -55,7 +55,6 @@ jobs:
           rm -f /tmp/anaconda.sh && \
           $CONDA_HOME/bin/conda install -y conda-build=${OPEN_CE_CONDA_BUILD} && \
           chown -R ${BUILD_USER}:${CICD_GROUP} ${CONDA_HOME}
-        if: matrix.architecture == 'ppc64le'
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           auto-update-conda: true
