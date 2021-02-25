@@ -36,7 +36,7 @@ jobs:
 
             ARCH="$(uname -m)"
 
-            # Remove preinclude system compilers
+            apt install -y curl
             curl -o /tmp/anaconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${ARCH}.sh
             chmod +x /tmp/anaconda.sh
             /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda
