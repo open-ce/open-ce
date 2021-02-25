@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: uraimo/run-on-arch-action@v2.0.9
+        if: matrix.architecture == 'ppc64le'
         with:
           arch: ${{ matrix.architecture }}
           distro: ubuntu18.04
@@ -42,17 +43,25 @@ jobs:
             chmod +x /tmp/anaconda.sh
             /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda
             rm -f /tmp/anaconda.sh
-            $CONDA_HOME/bin/conda install -y conda-build=${OPEN_CE_CONDA_BUILD}
-        if: matrix.architecture == 'ppc64le'
+            . $CONDA_HOME/etc/profile.d/conda.sh
+            conda activate base
+            conda install -y conda-build=${OPEN_CE_CONDA_BUILD}
+            ls -hal
+            ./open-ce/open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/xgboost-env.yaml \
+                            --python_versions ${{ matrix.python-version }} \
+                            --build_types cpu
       - uses: conda-incubator/setup-miniconda@v2.0.0
+        if: matrix.architecture == 'x86'
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
+        if: matrix.architecture == 'x86'
         shell: bash -l {0}
         run: |
           conda install -y conda-build
       - name: Build XGBoost
+        if: matrix.architecture == 'x86'
         shell: bash -l {0}
         # yamllint disable rule:line-length
         run: |
