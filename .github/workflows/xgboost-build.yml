@@ -22,6 +22,39 @@ jobs:
         with:
           arch: ${{ matrix.architecture }}
           distro: ubuntu18.04
+        run: |
+          CONDA_HOME=${CONDA_HOME:-/opt/conda}
+          PATH=$CONDA_HOME/bin:$PATH
+          CUDA_HOME=/usr/local/cuda
+
+          OPEN_CE_CONDA_BUILD=3.20.5
+
+          CICD_GROUP=cicd
+          GROUP_ID=1500
+          BUILD_USER=builder
+          BUILD_ID=1084
+
+          # Remove preinclude system compilers
+          rpm -e --nodeps --verbose gcc gcc-c++
+          export ARCH="$(uname -m)" && \
+          yum repolist && yum install -y \
+          sudo \
+          bzip2 \
+          rsync \
+          git \
+          patch &&\
+          # Create CICD Group
+          groupadd --non-unique --gid ${GROUP_ID} ${CICD_GROUP} && \
+          # Adduser Builder
+          useradd -b /home --non-unique --create-home --gid ${GROUP_ID} --groups wheel \
+          --uid ${BUILD_ID} --comment "User for Building" ${BUILD_USER} && \
+          echo "${BUILD_USER}    ALL=NOPASSWD: ALL" > /etc/sudoers.d/user-${BUILD_USER} && \
+          curl -o /tmp/anaconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${ARCH}.sh && \
+          chmod +x /tmp/anaconda.sh && \
+          /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda && \
+          rm -f /tmp/anaconda.sh && \
+          $CONDA_HOME/bin/conda install -y conda-build=${OPEN_CE_CONDA_BUILD} && \
+          chown -R ${BUILD_USER}:${CICD_GROUP} ${CONDA_HOME}
         if: matrix.architecture == 'ppc64le'
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
