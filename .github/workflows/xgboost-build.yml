@@ -35,9 +35,9 @@ jobs:
             BUILD_ID=1084
 
             # Remove preinclude system compilers
-            rpm -e --nodeps --verbose gcc gcc-c++
+            # rpm -e --nodeps --verbose gcc gcc-c++
             export ARCH="$(uname -m)" && \
-            yum repolist && yum install -y \
+            apt install -y \
             sudo \
             bzip2 \
             rsync \
