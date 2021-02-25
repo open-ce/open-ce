@@ -25,15 +25,8 @@ jobs:
           distro: ubuntu18.04
           run: |
             CONDA_HOME=${CONDA_HOME:-/opt/conda}
-            PATH=$CONDA_HOME/bin:$PATH
-            CUDA_HOME=/usr/local/cuda
 
             OPEN_CE_CONDA_BUILD=3.20.5
-
-            CICD_GROUP=cicd
-            GROUP_ID=1500
-            BUILD_USER=builder
-            BUILD_ID=1084
 
             ARCH="$(uname -m)"
 
@@ -42,13 +35,13 @@ jobs:
             dpkg -r --force-depends gcc gcc-c++
             curl -o /tmp/anaconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${ARCH}.sh
             chmod +x /tmp/anaconda.sh
-            /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda
+            /bin/bash /tmp/anaconda.sh -f -b -p $CONDA_HOME
             rm -f /tmp/anaconda.sh
             . $CONDA_HOME/etc/profile.d/conda.sh
             conda activate base
             conda install -y conda-build=${OPEN_CE_CONDA_BUILD}
             ls -hal
-            ./open-ce/open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/xgboost-env.yaml \
+            ./open-ce/open-ce validate config https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/xgboost-env.yaml \
                             --python_versions ${{ matrix.python-version }} \
                             --build_types cpu
       - uses: conda-incubator/setup-miniconda@v2.0.0
