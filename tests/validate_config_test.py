@@ -21,11 +21,12 @@ import pytest
 import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
+sys.path.append(os.path.join(test_dir, '.'))
 import helpers
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
+opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import validate_config
-from errors import OpenCEError
+from open_ce.errors import OpenCEError
 
 def test_validate_config(mocker):
     '''
@@ -41,7 +42,7 @@ def test_validate_config(mocker):
         return_value=0
     )
     mocker.patch(
-        'utils.run_command_capture',
+        'open_ce.utils.run_command_capture',
         side_effect=(lambda x: helpers.validate_cli(x, expect=["conda create --dry-run",
                                                                "upstreamdep1 2.3.*",
                                                                "upstreamdep2 2.*"],
@@ -74,7 +75,7 @@ def test_validate_config(mocker):
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
+    opence._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
 
 def test_validate_negative(mocker):
     '''
@@ -90,7 +91,7 @@ def test_validate_negative(mocker):
         return_value=0
     )
     mocker.patch(
-        'utils.run_command_capture',
+        'open_ce.utils.run_command_capture',
         side_effect=(lambda x: helpers.validate_cli(x, expect=["conda create --dry-run",
                                                                "upstreamdep1 2.3.*", #Checks that the value from the default config file is used.
                                                                "external_dep1", # Checks that the external dependencies were used.
@@ -126,7 +127,7 @@ def test_validate_negative(mocker):
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
+        opence._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
     assert "Error validating \"" in str(err.value)
     assert "conda_build_config.yaml\" for " in str(err.value)
     assert "Dependencies are not compatible.\nCommand:\nconda create" in str(err.value)
@@ -166,7 +167,7 @@ def test_validate_bad_env(mocker):
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
+        opence._main(["validate", validate_config.COMMAND, "--conda_build_config", "./conda_build_config.yaml", env_file, "--python_versions", "3.6", "--build_types", "cuda"])
     assert "Error validating \"" in str(err.value)
     assert "conda_build_config.yaml\" for " in str(err.value)
     assert "Unexpected key chnnels was found in " in str(err.value)

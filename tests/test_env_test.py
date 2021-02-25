@@ -20,9 +20,9 @@ import pathlib
 import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
 
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
+opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import test_env
 
 def test_test_env(mocker):
@@ -34,6 +34,6 @@ def test_test_env(mocker):
         assert args.skip_build_packages == True
         assert args.run_tests == True
 
-    mocker.patch('build_env.build_env', side_effect=validate_build_env)
+    mocker.patch('open_ce.build_env.build_env', side_effect=validate_build_env)
 
-    open_ce._main(["test", test_env.COMMAND, "some_env_file.yaml"])
+    opence._main(["test", test_env.COMMAND, "some_env_file.yaml"])

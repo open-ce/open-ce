@@ -22,11 +22,13 @@ import pytest
 import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+print(test_dir)
+sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
+sys.path.append(os.path.join(test_dir, '.'))
 import helpers
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
+opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import build_image
-from errors import OpenCEError, Error
+from open_ce.errors import OpenCEError, Error
 
 def test_build_image_positive_case(mocker):
     '''
@@ -41,7 +43,7 @@ def test_build_image_positive_case(mocker):
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
     os.remove("tests/testcondabuild/test-conda-env.yaml")
 
 def test_not_existing_local_conda_channel():
@@ -51,7 +53,7 @@ def test_not_existing_local_conda_channel():
     # Local conda channel dir passed doesn't exist
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/not-existing-dir", "--conda_env_file", "tests/test-conda-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(arg_strings)
+        opence._main(arg_strings)
     assert Error.INCORRECT_INPUT_PATHS.value[1] in str(exc.value)
 
 def test_not_existing_env_file():
@@ -62,7 +64,7 @@ def test_not_existing_env_file():
     # Conda environment file passed doesn't exist
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/non-existing-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(arg_strings)
+        opence._main(arg_strings)
     assert Error.INCORRECT_INPUT_PATHS.value[1] in str(exc.value)
 
 def test_out_of_context_local_channel():
@@ -78,7 +80,7 @@ def test_out_of_context_local_channel():
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", TEST_CONDA_CHANNEL_DIR, "--conda_env_file", "tests/test-conda-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(arg_strings)
+        opence._main(arg_strings)
     assert Error.LOCAL_CHANNEL_NOT_IN_CONTEXT.value[1] in str(exc.value)
 
     os.rmdir(TEST_CONDA_CHANNEL_DIR)
@@ -96,7 +98,7 @@ def test_local_conda_channel_with_absolute_path(mocker):
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
     os.remove("tests/testcondabuild/test-conda-env.yaml")
 
 def get_channel_being_modified(conda_env_file):
@@ -130,7 +132,7 @@ def test_channel_update_in_conda_env(mocker):
     channel_index_before, _ = get_channel_being_modified("tests/test-conda-env.yaml")
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
 
     # We copy conda environment file to the passed local conda channel before updating it
     channel_index_after, channel_modified = get_channel_being_modified("tests/testcondabuild/test-conda-env.yaml")
@@ -149,7 +151,7 @@ def test_for_failed_docker_build_cmd(mocker):
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(arg_strings)
+        opence._main(arg_strings)
     assert "Failure building image" in str(exc.value)
 
     os.remove("tests/testcondabuild/test-conda-env.yaml")

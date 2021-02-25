@@ -21,7 +21,7 @@ import pathlib
 import pytest
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
 import build_tree
 import utils
 import env_config
