@@ -21,14 +21,15 @@ import pytest
 import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+sys.path.append(os.path.join(test_dir, '..'))
+print("Path: ", sys.path)
 import helpers
 import build_env
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
+open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import utils
 from errors import OpenCEError
 from build_tree_test import TestBuildTree
-import test_feedstock
+import test_feedstock as test_feedstock
 
 class PackageBuildTracker(object):
     def __init__(self):
