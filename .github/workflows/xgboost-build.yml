@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: uraimo/run-on-arch-action@v2
+      - uses: uraimo/run-on-arch-action@v2.0.9
         with:
           arch: ${{ matrix.architecture }}
           distro: ubuntu18.04
