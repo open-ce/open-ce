@@ -36,8 +36,6 @@ HOME_PATH = "/home/builder"
 REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-builder"
 
-CONTAINER_TOOL = utils.DEFAULT_CONTAINER_TOOL
-
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [Argument.CONTAINER_BUILD, Argument.OUTPUT_FOLDER,
@@ -50,7 +48,7 @@ def make_parser():
 
     return parser
 
-def build_image(build_image_path, dockerfile, cuda_version=None, container_build_args=""):
+def build_image(build_image_path, dockerfile, container_tool, cuda_version=None, container_build_args=""):
     """
     Build a container image from the Dockerfile in BUILD_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -59,7 +57,7 @@ def build_image(build_image_path, dockerfile, cuda_version=None, container_build
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cuda" + cuda_version + "-" + str(os.getuid())
     else:
         image_name = REPO_NAME + ":" + IMAGE_NAME + "-cpu-" + str(os.getuid())
-    build_cmd = CONTAINER_TOOL + " build "
+    build_cmd = container_tool + " build "
     build_cmd += "-f " + dockerfile + " "
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg BUILD_ID=" + str(os.getuid()) + " "
@@ -93,12 +91,12 @@ def _mount_name(folder_path):
         return ""
     return _mount_name(os.path.dirname(folder_path)) + os.path.basename(folder_path)
 
-def _create_container(container_name, image_name, output_folder, env_folders):
+def _create_container(container_name, image_name, output_folder, env_folders, container_tool):
     """
     Create a container
     """
     # Create the container
-    container_cmd = CONTAINER_TOOL + " create" + (" --userns=keep-id" if CONTAINER_TOOL=="podman" else "" )\
+    container_cmd = container_tool + " create" + (" --userns=keep-id" if container_tool=="podman" else "" )\
                  + " -i --rm --name " + container_name + " "
 
     # Add output folder
@@ -119,24 +117,24 @@ def _create_container(container_name, image_name, output_folder, env_folders):
     if os.system(container_cmd):
         raise OpenCEError(Error.CREATE_CONTAINER, container_name)
 
-def _copy_to_container(src, dest, container_name):
-    if os.system(CONTAINER_TOOL + " cp " + src + " " + container_name + ":" + dest):
+def _copy_to_container(src, dest, container_name, container_tool):
+    if os.system(container_tool + " cp " + src + " " + container_name + ":" + dest):
         raise OpenCEError(Error.COPY_DIR_TO_CONTAINER, src, container_name)
 
-def _start_container(container_name):
-    if os.system(CONTAINER_TOOL + " start " + container_name):
+def _start_container(container_name, container_tool):
+    if os.system(container_tool + " start " + container_name):
         raise OpenCEError(Error.START_CONTAINER, container_name)
 
-def _execute_in_container(container_name, command):
-    container_cmd = CONTAINER_TOOL + " exec " + container_name + " "
+def _execute_in_container(container_name, command, container_tool):
+    container_cmd = container_tool + " exec " + container_name + " "
     # Change to home directory
     container_cmd += "bash -c 'cd " + HOME_PATH + "; " + command + "'"
 
     if os.system(container_cmd):
         raise OpenCEError(Error.BUILD_IN_CONTAINER, container_name)
 
-def _stop_container(container_name):
-    result = os.system(CONTAINER_TOOL + " stop " + container_name)
+def _stop_container(container_name, container_tool):
+    result = os.system(container_tool + " stop " + container_name)
     return result
 
 def build_in_container(image_name, args, arg_strings):
@@ -161,22 +159,22 @@ def build_in_container(image_name, args, arg_strings):
                                     for env_file in env_files}
     arg_strings = list(env_files_in_container) + arg_strings
 
-    _create_container(container_name, image_name, output_folder, env_folders)
+    _create_container(container_name, image_name, output_folder, env_folders, args.container_tool)
 
     # Add the open-ce directory
-    _copy_to_container(OPEN_CE_PATH, HOME_PATH, container_name)
+    _copy_to_container(OPEN_CE_PATH, HOME_PATH, container_name, args.container_tool)
 
     # Add the conda_build_config
-    _copy_to_container(conda_build_config, HOME_PATH, container_name)
+    _copy_to_container(conda_build_config, HOME_PATH, container_name, args.container_tool)
     config_in_container = os.path.join(HOME_PATH, os.path.basename(conda_build_config))
     arg_strings = arg_strings + ["--conda_build_config", config_in_container]
 
     # Add local_files directory (if it exists)
     if os.path.isdir(LOCAL_FILES_PATH):
-        _copy_to_container(LOCAL_FILES_PATH, HOME_PATH, container_name)
+        _copy_to_container(LOCAL_FILES_PATH, HOME_PATH, container_name, args.container_tool)
 
 
-    _start_container(container_name)
+    _start_container(container_name, args.container_tool)
 
     # Execute build command
     cmd = "python {} {} {} {}".format(os.path.join(HOME_PATH, "open-ce", "open-ce", "open-ce"),
@@ -184,10 +182,10 @@ def build_in_container(image_name, args, arg_strings):
                                       args.sub_command,
                                       ' '.join(arg_strings[0:]))
     try:
-        _execute_in_container(container_name, cmd)
+        _execute_in_container(container_name, cmd, args.container_tool)
     finally:
         # Cleanup
-        _stop_container(container_name)
+        _stop_container(container_name, args.container_tool)
 
 def _generate_dockerfile_name(build_types, cuda_version):
     '''
@@ -228,14 +226,10 @@ def build_with_container_tool(args, arg_strings):
     parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings[1:])
 
-    if args.container_tool:
-        global CONTAINER_TOOL  # pylint: disable=W0603
-        CONTAINER_TOOL = args.container_tool
-
     build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
 
     if  'cuda' not in args.build_types or _capable_of_cuda_containers(args.cuda_versions):
-        image_name = build_image(build_image_path, dockerfile,
+        image_name = build_image(build_image_path, dockerfile, args.container_tool,
                                  args.cuda_versions if 'cuda' in args.build_types else None,
                                  args.container_build_args)
     else:

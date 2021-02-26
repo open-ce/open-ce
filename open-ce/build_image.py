@@ -38,15 +38,13 @@ OPENCE_USER = "opence"
 LOCAL_CONDA_CHANNEL_IN_IMG = "opence-local-conda-channel"
 TARGET_DIR = "/home/{}/{}".format(OPENCE_USER, LOCAL_CONDA_CHANNEL_IN_IMG)
 
-CONTAINER_TOOL = utils.DEFAULT_CONTAINER_TOOL
-
-def build_image(local_conda_channel, conda_env_file):
+def build_image(local_conda_channel, conda_env_file, container_tool):
     """
     Build a container image from the Dockerfile in RUNTIME_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
     image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + str(os.getuid())
-    build_cmd = CONTAINER_TOOL + " build "
+    build_cmd = container_tool + " build "
     build_cmd += "-f " + os.path.join(RUNTIME_IMAGE_PATH, "Dockerfile") + " "
     build_cmd += "-t " + image_name + " "
     build_cmd += "--build-arg OPENCE_USER=" + OPENCE_USER + " "
@@ -76,9 +74,6 @@ def build_runtime_container_image(args):
     Create a runtime image which will have a conda environment created
     using locally built conda packages and environment file.
     """
-    if args.container_tool:
-        global CONTAINER_TOOL  # pylint: disable=W0603
-        CONTAINER_TOOL = args.container_tool
 
     local_conda_channel = os.path.abspath(args.local_conda_channel)
     conda_env_file = os.path.abspath(args.conda_env_file)
@@ -94,7 +89,7 @@ def build_runtime_container_image(args):
         # make it relative to BUILD CONTEXT
         args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
 
-    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file))
+    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file), args.container_tool)
 
     print("Container image with name {} is built successfully.".format(image_name))
 
