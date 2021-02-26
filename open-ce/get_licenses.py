@@ -24,9 +24,9 @@ import tarfile
 import zipfile
 import shutil
 
+import requests
 import yaml
 import conda_build.source
-import requests
 
 import utils
 from errors import OpenCEError, Error
@@ -107,38 +107,42 @@ class LicenseGenerator():
         """
         Add all of the licensing information from an info file.
         """
+        if not os.path.exists(license_file):
+            return
+
         with open(license_file) as file_stream:
             license_data = yaml.safe_load(file_stream)
 
         if not license_data.get("third_party_packages"):
             return
 
-        for package in license_data.get("third_parth_packages"):
+        for package in license_data.get("third_party_packages"):
             source_folder = os.path.join(utils.TMP_LICENSE_DIR, package["name"] + "-" + str(package["version"]))
             if not os.path.exists(source_folder):
                 os.makedirs(source_folder)
 
-            urls = package["license_url"] if "license_url" in package else package["url"]
-            if not isinstance(urls, list):
-                urls = [urls]
+                urls = package["license_url"] if "license_url" in package else package["url"]
+                if not isinstance(urls, list):
+                    urls = [urls]
 
-            # Download the source from each URL
-            for url in urls:
-                if url.endswith(".git"):
-                    try:
-                        utils.git_clone(url, package["version"], source_folder)
-                    except OpenCEError:
-                        print("Unable to clone source for " + package["name"])
-                else:
-                    try:
-                        res = requests.get(url)
-                        local_path = os.path.join(source_folder, os.path.basename(url))
-                        with open(local_path, 'wb') as file_stream:
-                            file_stream.write(res.content)
-                        _extract(local_path, source_folder)
+                # Download the source from each URL
+                for url in urls:
+                    if url.endswith(".git"):
+                        try:
+                            utils.git_clone(url, package["version"], source_folder)
+                        except OpenCEError:
+                            print("Unable to clone source for " + package["name"])
+                    else:
+                        try:
+                            res = requests.get(url)
+                            local_path = os.path.join(source_folder, os.path.basename(url))
+                            with open(local_path, 'wb') as file_stream:
+                                file_stream.write(res.content)
+                            _extract(local_path, source_folder)
 
-                    except Exception:
-                        print("Unable to download source for " + package["name"])
+                        #pylint: disable=broad-except
+                        except Exception:
+                            print("Unable to download source for " + package["name"])
 
             # Find every license file within the downloaded source
             license_files = _find_license_files(source_folder)
@@ -155,9 +159,6 @@ class LicenseGenerator():
                                                 package["license"],
                                                 copyright_string)
             self._licenses.add(info)
-
-        if os.path.exists(utils.TMP_LICENSE_DIR):
-            shutil.rmtree(utils.TMP_LICENSE_DIR)
 
     def write_licenses_file(self, output_folder):
         """
@@ -187,8 +188,12 @@ class LicenseGenerator():
             with open(os.path.join(conda_env, "conda-meta", meta_file)) as file_stream:
                 meta_data = json.load(file_stream)
 
-            with open(os.path.join(meta_data["extracted_package_dir"], "info", "about.json")) as file_stream:
+            package_info_dir = os.path.join(meta_data["extracted_package_dir"], "info")
+            with open(os.path.join(package_info_dir, "about.json")) as file_stream:
                 about_data = json.load(file_stream)
+
+            open_ce_info = os.path.join(package_info_dir, "recipe", utils.OPEN_CE_INFO_FILE)
+            self.add_licenses_from_info_file(open_ce_info)
 
             info = LicenseGenerator.LicenseInfo(meta_data["name"],
                                                 meta_data["version"],
@@ -230,28 +235,30 @@ def _get_source_from_conda_package(pkg_dir):
     if not os.path.exists(source_folder):
         os.makedirs(source_folder)
 
-    with open(os.path.join(pkg_dir, "info", "recipe", "meta.yaml")) as file_stream:
-        recipe_data = yaml.safe_load(file_stream)
+        # Find the recipe's meta.yaml file and download the values within the "source" field.
+        with open(os.path.join(pkg_dir, "info", "recipe", "meta.yaml")) as file_stream:
+            recipe_data = yaml.safe_load(file_stream)
 
-    if not recipe_data.get("source"):
-        return source_folder
+        if not recipe_data.get("source"):
+            return source_folder
 
-    sources = recipe_data["source"]
-    if not isinstance(sources, list):
-        sources = [sources]
+        sources = recipe_data["source"]
+        if not isinstance(sources, list):
+            sources = [sources]
 
-    for source in sources:
-        if source.get("url"):
-            try:
-                local_path, _ = conda_build.source.download_to_cache(source_folder, pkg_dir, source, False)
-                _extract(local_path, source_folder)
-            except RuntimeError:
-                print("Unable to download source for " + pkg_dir)
-        elif source.get("git_url"):
-            try:
-                utils.git_clone(source["git_url"], source.get("git_rev"), source_folder)
-            except OpenCEError:
-                print("Unable to clone source for " + pkg_dir)
+        for source in sources:
+            # If the source comes from a url, use conda-build's download_to_cache function.
+            if source.get("url"):
+                try:
+                    local_path, _ = conda_build.source.download_to_cache(source_folder, pkg_dir, source, False)
+                    _extract(local_path, source_folder)
+                except RuntimeError:
+                    print("Unable to download source for " + os.path.basename(pkg_dir))
+            elif source.get("git_url"):
+                try:
+                    utils.git_clone(source["git_url"], source.get("git_rev"), source_folder)
+                except OpenCEError:
+                    print("Unable to clone source for " + os.path.basename(pkg_dir))
 
     return source_folder
 
@@ -286,8 +293,10 @@ def _get_copyrights_from_files(license_files):
     """
     copyright_notices = []
     for license_file in license_files:
+        # If the license_file is a folder, skip it
         if not os.path.isfile(license_file):
             continue
+        # Special case for TypeScript files
         if license_file.endswith(".d.ts"):
             copyright_notices += _get_copyrights_from_ts(license_file)
             continue
@@ -325,7 +334,7 @@ def _get_copyrights_from_ts(ts_file):
             if line.startswith(ts_start):
                 copyrights.append("Copyright " + line[len(ts_start):].strip())
             elif line.startswith(ts_end):
-                return copyrights
+                break
             elif copyrights:
                 copyrights.append("Copyright " + line[2:].strip())
     return copyrights
@@ -355,7 +364,6 @@ def get_licenses(args):
 
     gen = LicenseGenerator()
     gen.add_licenses(args.conda_env_file)
-    gen.add_licenses_from_info_file("static.yaml")
     gen.write_licenses_file(args.output_folder)
 
 ENTRY_FUNCTION = get_licenses
