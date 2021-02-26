@@ -36,6 +36,7 @@ def test_build_image(mocker):
 
     #CUDA build
     cuda_version="11.0"
+    container_tool = "docker"
     intended_image_name = container_build.REPO_NAME + ":" + container_build.IMAGE_NAME + "-cuda" + cuda_version + "-1234"
 
     mocker.patch(
@@ -44,7 +45,7 @@ def test_build_image(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
 
-    assert container_build.build_image("test", "test", cuda_version) == intended_image_name
+    assert container_build.build_image("test", "test", container_tool, cuda_version) == intended_image_name
 
     #CPU build  
     intended_image_name = container_build.REPO_NAME + ":" + container_build.IMAGE_NAME + "-cpu" + "-1234"
@@ -54,7 +55,7 @@ def test_build_image(mocker):
         return_value=0,
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
-    assert container_build.build_image("test", "test") == intended_image_name
+    assert container_build.build_image("test", "test", container_tool) == intended_image_name
 
 def test_create_container(mocker):
     '''
@@ -68,17 +69,17 @@ def test_create_container(mocker):
     image_name = "my_image"
     output_folder = "condabuild"
     env_folders = ["/test/my_envs"]
-
+    container_tool = "docker"
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=[container_build.CONTAINER_TOOL + " create",
+        side_effect=(lambda x: helpers.validate_cli(x, expect=[container_tool + " create",
                                                                "--name " + container_name,
                                                                "-v /my_dir/" + output_folder,
                                                                "-v /test/my_envs",
                                                                image_name])))
 
-    container_build._create_container(container_name, image_name, output_folder, env_folders)
+    container_build._create_container(container_name, image_name, output_folder, env_folders, container_tool)
 
 def test_copy_to_container(mocker):
     '''
@@ -87,14 +88,15 @@ def test_copy_to_container(mocker):
     src = "my_src"
     dest = "my_dest"
     container = "my_container"
-
+    container_tool = "docker" 
+    
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=[container_build.CONTAINER_TOOL + " cp",
+        side_effect=(lambda x: helpers.validate_cli(x, expect=[container_tool + " cp",
                                                                container + ":"])))
 
-    container_build._copy_to_container(src, dest, container)
+    container_build._copy_to_container(src, dest, container, container_tool)
 
 def test_execute_in_container(mocker):
     '''
@@ -102,14 +104,15 @@ def test_execute_in_container(mocker):
     '''
     container = "my_container"
     command = "my_script.py arg1 arg2"
+    container_tool = "docker"
 
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=[container_build.CONTAINER_TOOL + " exec " + container,
+        side_effect=(lambda x: helpers.validate_cli(x, expect=[container_tool + " exec " + container,
                                                                "my_script.py arg1 arg2"])))
 
-    container_build._execute_in_container(container, command)
+    container_build._execute_in_container(container, command, container_tool)
 
 def make_args(command="build",
               sub_command="env",
