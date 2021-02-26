@@ -23,6 +23,7 @@ import glob
 import tarfile
 import zipfile
 import shutil
+from enum import Enum, unique, auto
 
 import requests
 import yaml
@@ -44,6 +45,30 @@ EXCLUDE_STRINGS = ["Grant of Copyright License", "Copyright [y", "Copyright {y",
                    "Copyright (C) <y", "\"Copyright", "Copyright (C) year",
                    "Copyright Notice", "the Copyright", "Our Copyright",
                    "Copyright (c) <y", "our Copyright", "Copyright and", "Copyright remains"]
+
+@unique
+class Key(Enum):
+    '''Enum for Open-CE Info Keys'''
+    third_party_packages = auto()
+    name = auto()
+    version = auto()
+    license = auto()
+    url = auto()
+    license_url = auto()
+    copyright_string = auto()
+
+_THIRD_PARTY_PACKAGE_SCHEMA ={
+    Key.name.name: utils.make_schema_type(str, True),
+    Key.version.name: utils.make_schema_type(str, True),
+    Key.license.name: utils.make_schema_type(str, True),
+    Key.url.name: utils.make_schema_type(str, True),
+    Key.license_url.name: utils.make_schema_type(str),
+    Key.copyright_string.name: utils.make_schema_type(str),
+}
+
+_OPEN_CE_INFO_SCHEMA = {
+    Key.third_party_packages.name: utils.make_schema_type([_THIRD_PARTY_PACKAGE_SCHEMA]),
+}
 
 class LicenseGenerator():
     """
@@ -113,15 +138,15 @@ class LicenseGenerator():
         with open(license_file) as file_stream:
             license_data = yaml.safe_load(file_stream)
 
-        if not license_data.get("third_party_packages"):
-            return
+        utils.validate_dict_schema(license_data, _OPEN_CE_INFO_SCHEMA)
 
-        for package in license_data.get("third_party_packages"):
-            source_folder = os.path.join(utils.TMP_LICENSE_DIR, package["name"] + "-" + str(package["version"]))
+        for package in license_data.get(Key.third_party_packages.name, []):
+            source_folder = os.path.join(utils.TMP_LICENSE_DIR,
+                                         package[Key.name.name] + "-" + str(package[Key.version.name]))
             if not os.path.exists(source_folder):
                 os.makedirs(source_folder)
 
-                urls = package["license_url"] if "license_url" in package else package["url"]
+                urls = package[Key.license_url.name] if Key.license_url.name in package else package[Key.url.name]
                 if not isinstance(urls, list):
                     urls = [urls]
 
@@ -129,9 +154,9 @@ class LicenseGenerator():
                 for url in urls:
                     if url.endswith(".git"):
                         try:
-                            utils.git_clone(url, package["version"], source_folder)
+                            utils.git_clone(url, package[Key.version.name], source_folder)
                         except OpenCEError:
-                            print("Unable to clone source for " + package["name"])
+                            print("Unable to clone source for " + package[Key.name.name])
                     else:
                         try:
                             res = requests.get(url)
@@ -142,21 +167,21 @@ class LicenseGenerator():
 
                         #pylint: disable=broad-except
                         except Exception:
-                            print("Unable to download source for " + package["name"])
+                            print("Unable to download source for " + package[Key.name.name])
 
             # Find every license file within the downloaded source
             license_files = _find_license_files(source_folder)
 
             # Get copyright information from the downloaded source (unless the copyright string is provided)
-            if "copyright_string" in package:
-                copyright_string = [package["copyright_string"]]
+            if Key.copyright_string.name in package:
+                copyright_string = [package[Key.copyright_string.name]]
             else:
                 copyright_string = _get_copyrights_from_files(license_files)
 
-            info = LicenseGenerator.LicenseInfo(package["name"],
-                                                package["version"],
-                                                package["url"],
-                                                package["license"],
+            info = LicenseGenerator.LicenseInfo(package[Key.name.name],
+                                                package[Key.version.name],
+                                                package[Key.url.name],
+                                                package[Key.license.name],
                                                 copyright_string)
             self._licenses.add(info)
 

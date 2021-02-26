@@ -113,24 +113,6 @@ def test_add_licenses_from_info_file(capsys):
     shutil.rmtree(output_folder)
     shutil.rmtree(utils.TMP_LICENSE_DIR)
 
-def test_bad_info_file():
-    '''
-    Test that an empty file is returned when an info file has no third_party_packages.
-    '''
-    output_folder = "get_licenses_output"
-    gen = get_licenses.LicenseGenerator()
-    gen.add_licenses_from_info_file(os.path.join("tests", "test-conda-env.yaml"))
-    gen.write_licenses_file(output_folder)
-
-    output_file = os.path.join(output_folder, utils.DEFAULT_LICENSES_FILE)
-    assert os.path.exists(output_file)
-    with open(output_file) as file_stream:
-        license_contents = file_stream.read()
-
-    assert license_contents == ""
-
-    shutil.rmtree(output_folder)
-
 def test_no_info_file():
     '''
     Test that an empty file is returned when an info file doesn't exist at the provided path.
