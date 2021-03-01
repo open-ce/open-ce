@@ -22,7 +22,6 @@ from argparse import Namespace
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
-sys.path.append(os.path.join(test_dir, '.'))
 import helpers
 import open_ce.docker_build as docker_build
 from open_ce.errors import OpenCEError

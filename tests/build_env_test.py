@@ -22,10 +22,10 @@ import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
-sys.path.append(os.path.join(test_dir, '.'))
+#sys.path.append(os.path.join(test_dir, '.'))
 import helpers
 import build_env
-import docker_build
+#import docker_build
 opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import utils
 from open_ce.errors import OpenCEError
