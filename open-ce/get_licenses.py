@@ -90,7 +90,7 @@ class LicenseGenerator():
         def __str__(self):
             return "{}\t{}\t{}\t{}\t{}".format(self.name,
                                                self.version,
-                                               self.url,
+                                               ", ".join(self.url) if isinstance(self.url, list) else self.url,
                                                self.license_type,
                                                ", ".join(self.copyrights))
 
