@@ -20,6 +20,7 @@ $ conda install pytest pytest-cov pytest-mock
 To execute the tests use the following command:
 
 ```shell
+$ export PYTHONPATH=$PYTHONPATH:./open_ce
 $ pytest tests/
 ================================================================================ test session starts =================================================================================
 platform linux -- Python 3.7.7, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
@@ -33,10 +34,10 @@ tests/util_test.py ...                                                          
 ----------- coverage: platform linux, python 3.7.7-final-0 -----------
 Name                         Stmts   Miss  Cover   Missing
 ----------------------------------------------------------
-open-ce/__init__.py              0      0   100%
-open-ce/build_env.py           163    163     0%   2-332
-open-ce/build_feedstock.py      83      6    93%   173-178, 193
-open-ce/utils.py                  4      0   100%
+open_ce/__init__.py              0      0   100%
+open_ce/build_env.py           163    163     0%   2-332
+open_ce/build_feedstock.py      83      6    93%   173-178, 193
+open_ce/utils.py                  4      0   100%
 ----------------------------------------------------------
 TOTAL                          250    169    32%
 

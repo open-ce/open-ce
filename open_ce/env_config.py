@@ -67,7 +67,7 @@ def _validate_config_file(env_file, variants):
         meta_obj = conda_utils.render_yaml(env_file, variants=variants, schema=_ENV_CONFIG_SCHEMA)
         if not (Key.packages.name in meta_obj.keys() or Key.imported_envs.name in meta_obj.keys()):
             raise OpenCEError(Error.CONFIG_CONTENT)
-        meta_obj[Key.opence_env_file_path] = env_file
+        meta_obj[Key.opence_env_file_path.name] = env_file
         return meta_obj
     except (Exception, SystemExit) as exc: #pylint: disable=broad-except
         raise OpenCEError(Error.ERROR, "Error in {}:\n  {}".format(env_file, str(exc))) from exc

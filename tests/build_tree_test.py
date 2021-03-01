@@ -25,7 +25,7 @@ sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
 import build_tree
 import utils
 import env_config
-from errors import OpenCEError
+from open_ce.errors import OpenCEError
 import helpers
 
 class TestBuildTree(build_tree.BuildTree):

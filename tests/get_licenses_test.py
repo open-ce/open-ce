@@ -23,7 +23,8 @@ import shutil
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
+import open_ce
+opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import open_ce.get_licenses as get_licenses
 import open_ce.utils as utils
 from open_ce.errors import OpenCEError
@@ -33,7 +34,7 @@ def test_get_licenses():
     This is a complete test of `get_licenses`.
     '''
     output_folder = "get_licenses_output"
-    open_ce._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--output_folder", output_folder])
+    opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--output_folder", output_folder])
 
     output_file = os.path.join(output_folder, utils.DEFAULT_LICENSES_FILE)
     assert os.path.exists(output_file)
@@ -50,10 +51,10 @@ def test_get_licenses_failed_conda_create(mocker):
     This tests that an exception is thrown when `conda env create` fails.
     '''
     output_folder = "get_licenses_output"
-    mocker.patch('utils.run_command_capture', side_effect=[(False, "", "")])
+    mocker.patch('open_ce.utils.run_command_capture', side_effect=[(False, "", "")])
 
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--output_folder", output_folder])
+        opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--output_folder", output_folder])
 
     assert "Error generating licenses file." in str(err.value)
 
@@ -62,11 +63,11 @@ def test_get_licenses_failed_conda_remove(mocker):
     This tests that an exception is thrown when `conda env remove` is called.
     '''
     output_folder = "get_licenses_output"
-    mocker.patch('utils.run_command_capture', side_effect=[(True, "", ""), (False, "", "")])
-    mocker.patch('get_licenses.LicenseGenerator._add_licenses_from_environment', return_value=[])
+    mocker.patch('open_ce.utils.run_command_capture', side_effect=[(True, "", ""), (False, "", "")])
+    mocker.patch('open_ce.get_licenses.LicenseGenerator._add_licenses_from_environment', return_value=[])
 
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--output_folder", output_folder])
+        opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--output_folder", output_folder])
 
     assert "Error generating licenses file." in str(err.value)
 
@@ -75,6 +76,6 @@ def test_get_licenses_no_conda_env():
     This test ensures that an exception is thrown when no conda environment is provided.
     '''
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["get", get_licenses.COMMAND])
+        opence._main(["get", get_licenses.COMMAND])
 
     assert "The \'--conda_env_file\' argument is required." in str(err.value)

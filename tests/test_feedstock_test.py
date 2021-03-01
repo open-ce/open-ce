@@ -23,6 +23,7 @@ import imp
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
 sys.path.append(os.path.join(test_dir, '.'))
+import open_ce
 opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import test_feedstock
 import utils

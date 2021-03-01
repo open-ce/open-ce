@@ -473,7 +473,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                     else:
                         # Look for patch relative to where the Open-CE environment file is
                         patch_file = os.path.join(os.path.dirname(env_config_data.get(
-                                                  env_config.Key.opence_env_file_path)), patch)
+                                                  env_config.Key.opence_env_file_path.name)), patch)
                     patch_apply_cmd = "git apply {}".format(patch_file)
                     print("Patch apply command: ", patch_apply_cmd)
                     patch_apply_res = os.system(patch_apply_cmd)

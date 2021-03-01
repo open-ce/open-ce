@@ -19,11 +19,11 @@ import os
 import pathlib
 import errno
 import pytest
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open_ce'))
 
 import inputs
 import utils
-from errors import OpenCEError
+from open_ce.errors import OpenCEError
 
 def test_parse_arg_list_list_input():
     '''

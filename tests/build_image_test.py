@@ -26,6 +26,7 @@ print(test_dir)
 sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
 sys.path.append(os.path.join(test_dir, '.'))
 import helpers
+import open_ce
 opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import build_image
 from open_ce.errors import OpenCEError, Error
