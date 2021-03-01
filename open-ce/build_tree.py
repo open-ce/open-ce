@@ -446,26 +446,12 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             else:
                 git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None) if env_config_data else None
 
-        clone_cmd = "git clone " + git_url + " " + repo_dir
-        print("Clone cmd: ", clone_cmd)
-        clone_result = os.system(clone_cmd)
-
-        cur_dir = os.getcwd()
-        clone_successful = clone_result == 0
-        if clone_successful:
-            if not git_tag is None:
-                os.chdir(repo_dir)
-                checkout_cmd = "git checkout " + git_tag
-                print("Checkout branch/tag command: ", checkout_cmd)
-                checkout_res = os.system(checkout_cmd)
-                os.chdir(cur_dir)
-                clone_successful = checkout_res == 0
-        else:
-            raise OpenCEError(Error.CLONE_REPO, git_url)
+        clone_successful = utils.git_clone(git_url, git_tag, repo_dir)
 
         if clone_successful:
             patches = package.get(env_config.Key.patches.name, []) if package else []
             if len(patches) > 0:
+                cur_dir = os.getcwd()
                 os.chdir(repo_dir)
                 for patch in patches:
                     if os.path.isabs(patch) and os.path.exists(patch):
