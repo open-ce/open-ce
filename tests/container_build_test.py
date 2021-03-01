@@ -279,13 +279,21 @@ def test_build_with_container_tool_incompatible_cuda_versions(mocker):
     '''
     Tests that passing incompatible value in --cuda_versions argument fails.
     '''
-    arg_strings = ["path/to/open-ce", "build", "env", "--container_build", "my-env.yaml",
-                   "--cuda_versions", "10.2", "--build_types", "cuda"]
-    args = make_args()
-
     mocker.patch('container_build._capable_of_cuda_containers', return_value=0)
     mocker.patch('utils.get_driver_level',return_value="abc")
 
+    #with docker_build argument
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--cuda_versions", "10.2", "--build_types", "cuda"]
+    args = make_args()
+    with pytest.raises(OpenCEError) as exc:
+        container_build.build_with_container_tool(args, arg_strings)
+    assert "Driver level" in str(exc.value)
+
+    #with container_build argument
+    arg_strings = ["path/to/open-ce", "build", "env", "--container_build", "my-env.yaml",
+                   "--cuda_versions", "10.2", "--build_types", "cuda"]
+    args = make_args()
     with pytest.raises(OpenCEError) as exc:
         container_build.build_with_container_tool(args, arg_strings)
     assert "Driver level" in str(exc.value)
@@ -296,6 +304,15 @@ def test_container_build_with_container_tool_build_args(mocker):
     '''
     build_args = "--build-arg ENV1=test1 --build-arg ENV2=test2 same_setting 0,1"
 
+    #with docker_build argument
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--container_build_args", build_args]
+    args = make_args()
+    mocker.patch('os.system', return_value=0)
+
+    container_build.build_with_container_tool(args, arg_strings)
+
+    #with container_build argument
     arg_strings = ["path/to/open-ce", "build", "env", "--container_build", "my-env.yaml",
                    "--container_build_args", build_args]
     args = make_args()
@@ -309,6 +326,15 @@ def test_container_build_with_container_tool(mocker):
     '''
     container_tool = "podman"
 
+    #with docker_build argument
+    arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
+                   "--container_tool", container_tool]
+    args = make_args()
+    mocker.patch('os.system', return_value=0)
+
+    container_build.build_with_container_tool(args, arg_strings)
+
+    #with container_build argument
     arg_strings = ["path/to/open-ce", "build", "env", "--container_build", "my-env.yaml",
                    "--container_tool", container_tool]
     args = make_args()

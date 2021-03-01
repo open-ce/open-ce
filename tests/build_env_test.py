@@ -387,9 +387,9 @@ def test_build_env_container_build_with_build_args(mocker):
                    "--container_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
     open_ce._main(arg_strings)
 
-def test_build_env_container_build_with_container_tool_tool(mocker):
+def test_build_env_container_build_with_container_tool(mocker):
     '''
-    Tests that passing --container_tool argument with container_build argument works correctly.
+    Tests that passing --container_tool argument works correctly.
     '''
     dirTracker = helpers.DirTracker()
     mocker.patch(
@@ -398,6 +398,12 @@ def test_build_env_container_build_with_container_tool_tool(mocker):
     )
     mocker.patch('container_build.build_with_container_tool', return_value=0)
 
+    #with docker_build argument
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--container_tool", "podman", "my-env.yaml"]
+    open_ce._main(arg_strings)
+
+    #with container_build argument
     arg_strings = ["build", build_env.COMMAND, "--container_build",
                    "--container_tool", "podman", "my-env.yaml"]
     open_ce._main(arg_strings)
