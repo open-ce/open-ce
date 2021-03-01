@@ -46,9 +46,8 @@ test/
 * `conda-build` == 3.20.5 (Other versions >=3.20 may work, but issues have been encountered with some versions.)
   * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
 * `python` >= 3.6
-* `docker` >= 1.13
-* `podman` >= 2.0.5 
-  * docker/podman only required when using the `--container_build` option (see below).
+* `docker` >= 1.13 or `podman` >= 2.0.5
+  * docker or podman required only when building within a container (see below).
 
 ### CUDA Requirements
 
