@@ -33,16 +33,24 @@ COMMAND = "env"
 
 DESCRIPTION = 'Build conda environment as part of Open-CE'
 
-ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
-             Argument.CHANNELS, Argument.ENV_FILE,
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG,
+             Argument.OUTPUT_FOLDER,
+             Argument.CHANNELS,
+             Argument.ENV_FILE,
              Argument.PACKAGES,
-             Argument.REPOSITORY_FOLDER, Argument.PYTHON_VERSIONS,
-             Argument.BUILD_TYPES, Argument.MPI_TYPES,
-             Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
-             Argument.RUN_TESTS, Argument.DOCKER_BUILD,
-             Argument.CONTAINER_BUILD, Argument.GIT_LOCATION,
-             Argument.GIT_TAG_FOR_ENV, Argument.TEST_LABELS,
-             Argument.CONTAINER_BUILD_ARGS, Argument.CONTAINER_TOOL]
+             Argument.REPOSITORY_FOLDER,
+             Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES,
+             Argument.MPI_TYPES,
+             Argument.CUDA_VERSIONS,
+             Argument.SKIP_BUILD_PACKAGES,
+             Argument.RUN_TESTS,
+             Argument.CONTAINER_BUILD,
+             Argument.GIT_LOCATION,
+             Argument.GIT_TAG_FOR_ENV,
+             Argument.TEST_LABELS,
+             Argument.CONTAINER_BUILD_ARGS,
+             Argument.CONTAINER_TOOL]
 
 def _run_tests(build_tree, test_labels, conda_env_files):
     """

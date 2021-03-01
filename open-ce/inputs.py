@@ -108,19 +108,9 @@ https://github.com/open-ce/open-ce/blob/master/doc/README.yaml.md"""))
                                         help='CUDA version to build for '
                                              ', such as "10.2" or "11.0".'))
 
-    DOCKER_BUILD = (lambda parser: parser.add_argument(
-                                        '--docker_build',
-                                        dest='container_build',
-                                        action='store_true',
-                                        help="Perform a build within a container. "
-                                             "NOTE: When the --docker_build flag is used, all arguments with paths "
-                                             "should be relative to the directory containing root level open-ce "
-                                             "directory. Only files within the root level open-ce directory and "
-                                             "local_files will be visible at build time."))
-
     CONTAINER_BUILD = (lambda parser: parser.add_argument(
                                         '--container_build',
-                                        dest='container_build',
+                                        '--docker_build',
                                         action='store_true',
                                         help="Perform a build within a container. "
                                              "NOTE: When the --container_build flag is used, all arguments with paths "

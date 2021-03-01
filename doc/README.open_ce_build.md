@@ -134,7 +134,8 @@ optional arguments:
                         Do not perform builds of packages. (default: False)
   --run_tests           Run Open-CE tests for each potential conda environment
                         (default: False)
-  --container_build        Perform a build within a container. NOTE: When the
+  --container_build, --docker_build
+                        Perform a build within a container. NOTE: When the
                         --container_build flag is used, all arguments with
                         paths should be relative to the directory containing
                         root level open-ce directory. Only files within the

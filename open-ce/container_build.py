@@ -38,8 +38,11 @@ IMAGE_NAME = "open-ce-builder"
 
 def make_parser():
     ''' Parser for input arguments '''
-    arguments = [Argument.DOCKER_BUILD, Argument.CONTAINER_BUILD, Argument.OUTPUT_FOLDER,
-                 Argument.CONDA_BUILD_CONFIG, Argument.CONTAINER_BUILD_ARGS, Argument.CONTAINER_TOOL]
+    arguments = [Argument.CONTAINER_BUILD,
+                 Argument.OUTPUT_FOLDER,
+                 Argument.CONDA_BUILD_CONFIG,
+                 Argument.CONTAINER_BUILD_ARGS,
+                 Argument.CONTAINER_TOOL]
     parser = argparse.ArgumentParser(arguments)
     parser.add_argument('command_placeholder', nargs=1, type=str)
     parser.add_argument('sub_command_placeholder', nargs=1, type=str)

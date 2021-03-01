@@ -121,7 +121,8 @@ optional arguments:
   --cuda_versions CUDA_VERSIONS
                         CUDA version to build for , such as "10.2" or "11.0".
                         (default: 10.2)
-  --container_build        Perform a build within a container. NOTE: When
+  --container_build, --docker_build
+                        Perform a build within a container. NOTE: When
                         the --container_build flag is used, all arguments with
                         paths should be relative to the directory containing
                         root level open-ce directory. Only files within the
