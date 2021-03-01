@@ -61,7 +61,7 @@ _THIRD_PARTY_PACKAGE_SCHEMA ={
     Key.name.name: utils.make_schema_type(str, True),
     Key.version.name: utils.make_schema_type(str, True),
     Key.license.name: utils.make_schema_type(str, True),
-    Key.url.name: utils.make_schema_type(str, True),
+    Key.url.name: utils.make_schema_type([str], True),
     Key.license_url.name: utils.make_schema_type(str),
     Key.copyright_string.name: utils.make_schema_type(str),
 }
@@ -308,6 +308,7 @@ def _find_license_files(directory):
     license_files += glob.glob(os.path.join(directory, "**", "*LICENSE*"), recursive=True)
     license_files += glob.glob(os.path.join(directory, "**", "*LICENCE*"), recursive=True)
     license_files += glob.glob(os.path.join(directory, "**", "*COPYING*"), recursive=True)
+    license_files += glob.glob(os.path.join(directory, "**", "*CopyrightNotice*"), recursive=True)
     license_files += glob.glob(os.path.join(directory, "**", "*d.ts"), recursive=True)
 
     return license_files
