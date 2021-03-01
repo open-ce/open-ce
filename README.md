@@ -31,9 +31,6 @@ Within this **open-ce** repository, you will find:
 open-ce/
     This directory contains the build and validation tool `open-ce`.
     For more information run `./open-ce/open-ce -h`
-ci_common_scripts/
-    Contains shell scripts for executing a build of Open-CE components within
-    a docker container via `docker_common_run_build_pkg.sh`
 doc/
     Documentation files
 test/
