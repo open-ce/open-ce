@@ -15,19 +15,20 @@
 # limitations under the License.
 # *****************************************************************
 """
-
 import os
 import pathlib
 
-import open_ce.utils as utils
+# Disabling pylint warning "cyclic-import" locally here doesn't work. So, added it in .pylintrc
+# according to https://github.com/PyCQA/pylint/issues/59
+from open_ce.utils import validate_dict_schema, check_if_conda_build_exists # pylint: disable=cyclic-import
 
-utils.check_if_conda_build_exists()
+check_if_conda_build_exists()
 
-# pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position,wrong-import-order
 import conda_build.api
 from conda_build.config import get_or_merge_config
 import conda_build.metadata
-# pylint: enable=wrong-import-position
+# pylint: enable=wrong-import-position,wrong-import-order
 
 def render_yaml(path, variants=None, variant_config_files=None, schema=None, permit_undefined_jinja=False):
     """
@@ -51,7 +52,7 @@ def render_yaml(path, variants=None, variant_config_files=None, schema=None, per
                             os.path.abspath(path),
                             config=config).get_rendered_recipe_text(permit_undefined_jinja=permit_undefined_jinja)
     if schema:
-        utils.validate_dict_schema(metas, schema)
+        validate_dict_schema(metas, schema)
     return metas
 
 def get_output_file_paths(meta, variants):
