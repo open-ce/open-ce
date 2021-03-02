@@ -22,6 +22,7 @@ import sys
 import pathlib
 import subprocess
 from enum import Enum, unique
+import tempfile
 import yaml
 import requests
 
@@ -38,11 +39,13 @@ class Argument(Enum):
                                           type=str,
                                           required=True,
                                           help="""Github public access token."""))
+
     REPO_DIR = (lambda parser: parser.add_argument(
                               '--repo-dir',
                               type=str,
                               default="./",
                               help="""Directory to store repos."""))
+
     BRANCH = (lambda parser: parser.add_argument(
                             '--branch',
                             type=str,
@@ -59,6 +62,24 @@ class Argument(Enum):
                             type=str,
                             default="",
                             help="""Comma delimitted list of repos to skip tagging."""))
+
+    REVIEWERS = (lambda parser: parser.add_argument(
+                            '--reviewers',
+                            type=str,
+                            default="",
+                            help="""Comma delimitted list of PR reviewers."""))
+
+    TEAM_REVIEWERS = (lambda parser: parser.add_argument(
+                            '--team_reviewers',
+                            type=str,
+                            default="",
+                            help="""Comma delimitted list of PR review teams."""))
+
+    PARAMS = (lambda parser: parser.add_argument(
+                            '--params',
+                            type=str,
+                            default="",
+                            help="""Comma delimitted list of <key>:<val> param pairs."""))
 
 def get_all_repos(github_org, token):
     '''
@@ -111,6 +132,25 @@ def create_pr(github_org, repo, token, title, body, head, base):# pylint: disabl
                                })
     if result.status_code != 201:
         raise Exception("Error creating PR.")
+    return yaml.safe_load(result.content)
+
+def request_pr_review(github_org, repo, token, pull_number, reviewers=None, team_reviewers=None):# pylint: disable=too-many-arguments
+    '''
+    Request reviewers for a pull request
+    https://docs.github.com/en/rest/reference/pulls#request-reviewers-for-a-pull-request
+    '''
+    if not reviewers:
+        reviewers = []
+    if not team_reviewers:
+        team_reviewers = []
+    result = requests.post("{}/repos/{}/{}/pulls/{}/requested_reviewers".format(GITHUB_API, github_org, repo, pull_number),
+                           headers={'Authorization' : 'token {}'.format(token)},
+                           json={
+                               "reviewers": reviewers,
+                               "team_reviewers": team_reviewers
+                               })
+    if result.status_code != 201:
+        raise Exception("Error requesting PR review.:\n{}".format(result.content))
     return yaml.safe_load(result.content)
 
 def clone_repo(git_url, repo_dir, git_tag=None):
@@ -175,3 +215,26 @@ def get_current_branch(repo_path):
 def apply_patch(repo_path, patch_path):
     '''Apply a patch to the given repo.'''
     _execute_git_command(repo_path, "cat \"{}\" | git am -3 -k".format(patch_path))
+
+def fill_in_params(filename, params=None, **kwargs):
+    '''
+    Replace occurrences of `${key}` with `val`.
+    '''
+    with open(filename,mode='r') as text_file:
+        text = text_file.read()
+
+    if not params:
+        params = dict()
+
+    for key, value in params:
+        text = text.replace("${{{}}}".format(key), value)
+
+    for key, value in kwargs.items():
+        text = text.replace("${{{}}}".format(key), value)
+
+    replaced_filename = tempfile.NamedTemporaryFile(suffix=os.path.basename(filename), delete=False).name
+
+    with open(replaced_filename,mode='w') as text_file:
+        text_file.write(text)
+
+    return replaced_filename
