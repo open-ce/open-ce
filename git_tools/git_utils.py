@@ -228,7 +228,7 @@ def fill_in_params(filename, params=None, **kwargs):
         params = dict()
 
     for key, value in params:
-        text = text.replace("${{{0}}}".format(key), value)
+        text = text.replace("${{{}}}".format(key), value)
 
     for key, value in kwargs.items():
         text = text.replace("${{{}}}".format(key), value)
