@@ -19,6 +19,7 @@ import os
 import pathlib
 import pytest
 import imp
+import shutil
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
@@ -75,7 +76,7 @@ def test_test_feedstock_working_dir(mocker, capsys):
     assert not os.path.exists(working_dir)
     opence._main(["test", test_feedstock.COMMAND, "--conda_env_file", "tests/test-conda-env2.yaml", "--test_working_dir", working_dir])
     assert os.path.exists(working_dir)
-    os.rmdir(working_dir)
+    shutil.rmtree(working_dir)
     captured = capsys.readouterr()
     assert "Running: Create conda environment " + utils.CONDA_ENV_FILENAME_PREFIX in captured.out
     assert "Running: Test 1" in captured.out

@@ -46,6 +46,8 @@ OPEN_CE_VARIANT = "open-ce-variant"
 DEFAULT_TEST_WORKING_DIRECTORY = "./"
 KNOWN_VARIANT_PACKAGES = ["python", "cudatoolkit"]
 DEFAULT_LICENSES_FILE = "licenses.csv"
+TMP_LICENSE_DIR = "tmp_license_src"
+OPEN_CE_INFO_FILE = "open-ce-info.yaml"
 
 def make_variants(python_versions=DEFAULT_PYTHON_VERS, build_types=DEFAULT_BUILD_TYPES, mpi_types=DEFAULT_MPI_TYPES,
 cuda_versions=DEFAULT_CUDA_VERS):
@@ -267,3 +269,26 @@ def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
 
     with open(conda_env_file, 'w') as file_handle:
         yaml.safe_dump(env_info, file_handle)
+
+def git_clone(git_url, git_tag, location):
+    '''
+    Clone a git repository and checkout a certain branch.
+    '''
+    clone_cmd = "git clone " + git_url + " " + location
+    print("Clone cmd: ", clone_cmd)
+    clone_result = os.system(clone_cmd)
+
+    cur_dir = os.getcwd()
+    clone_successful = clone_result == 0
+    if clone_successful:
+        if not git_tag is None:
+            os.chdir(location)
+            checkout_cmd = "git checkout " + git_tag
+            print("Checkout branch/tag command: ", checkout_cmd)
+            checkout_res = os.system(checkout_cmd)
+            os.chdir(cur_dir)
+            clone_successful = checkout_res == 0
+    else:
+        raise OpenCEError(Error.CLONE_REPO, git_url)
+
+    return clone_successful
