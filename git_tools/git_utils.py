@@ -221,8 +221,8 @@ def fill_in_params(filename, params=None, **kwargs):
     '''
     Replace occurrences of `${key}` with `val`.
     '''
-    with open(filename,mode='r') as f:
-        text = f.read()
+    with open(filename,mode='r') as text_file:
+        text = text_file.read()
 
     if not params:
         params = dict()
@@ -235,7 +235,7 @@ def fill_in_params(filename, params=None, **kwargs):
 
     replaced_filename = tempfile.NamedTemporaryFile(suffix=os.path.basename(filename), delete=False).name
 
-    with open(replaced_filename,mode='w') as f:
-        f.write(text)
+    with open(replaced_filename,mode='w') as text_file:
+        text_file.write(text)
 
     return replaced_filename
