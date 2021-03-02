@@ -149,7 +149,6 @@ def request_pr_review(github_org, repo, token, pull_number, reviewers=None, team
                                "reviewers": reviewers,
                                "team_reviewers": team_reviewers
                                })
-    print(result.content)
     if result.status_code != 201:
         raise Exception("Error requesting PR review.:\n{}".format(result.content))
     return yaml.safe_load(result.content)
