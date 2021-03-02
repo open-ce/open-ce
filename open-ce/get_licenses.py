@@ -39,12 +39,15 @@ DESCRIPTION = 'Gather license information for a group of packages'
 
 ARGUMENTS = [Argument.OUTPUT_FOLDER, Argument.CONDA_ENV_FILE]
 
-COPYRIGHT_STRINGS = ["Copyright", "copyright (C)"]
+COPYRIGHT_STRINGS = ["Copyright", "copyright (C)", "copyright (c)"]
 SECONDARY_COPYRIGHT_STRINGS = ["All rights reserved"]
 EXCLUDE_STRINGS = ["Grant of Copyright License", "Copyright [y", "Copyright {y",
                    "Copyright (C) <y", "\"Copyright", "Copyright (C) year",
                    "Copyright Notice", "the Copyright", "Our Copyright",
-                   "Copyright (c) <y", "our Copyright", "Copyright and", "Copyright remains"]
+                   "Copyright (c) <y", "our Copyright", "Copyright and", "Copyright remains",
+                   "Copyright (C) ____", "Copyright laws", "Copyright Treaty",
+                   "Copyright to"]
+CONNECTOR_STRINGS = [",", "and", "by"]
 
 @unique
 class Key(Enum):
@@ -241,9 +244,14 @@ def _get_copyrights_from_conda_package(pkg_dir):
         for file in files:
             license_files.add(os.path.join(root,file))
 
-    # Get every file within the package directory with LICENSE in its name
-    license_files.update(glob.glob(os.path.join(pkg_dir, "info", "*LICENSE*")))
-    license_files.update(glob.glob(os.path.join(pkg_dir, "info", "*COPYING*")))
+    # Get every file within the package directory that might be a license file
+    search_dirs = [os.path.join(pkg_dir, "info"),
+                   os.path.join(pkg_dir, "site-packages", "*-info"),
+                   os.path.join(pkg_dir, "lib", "python*", "site-packages", "*-info")]
+    potential_files = ["*LICENSE*", "*COPYING*"]
+    for search_dir in search_dirs:
+        for potential_file in potential_files:
+            license_files.update(glob.glob(os.path.join(search_dir, potential_file)))
 
     if not license_files:
         # Find license files within source code of package
@@ -335,12 +343,18 @@ def _get_copyrights_from_files(license_files):
                     copyright_notices.append(cleaned_line)
                     just_found = True
                 # Look for lines that come just after a copyright notification
-                elif just_found and any(copyright in line for copyright in SECONDARY_COPYRIGHT_STRINGS):
-                    copyright_notices[-1] = copyright_notices[-1] + " " + _clean_copyright_string(line, primary=False)
+                elif just_found and (any(copyright in line for copyright in SECONDARY_COPYRIGHT_STRINGS) or
+                                     any(copyright_notices[-1].endswith(connector) for connector in CONNECTOR_STRINGS)):
+                    next_string = _clean_copyright_string(line, primary=False)
+                    if not next_string:
+                        just_found = False
+                    else:
+                        copyright_notices[-1] = copyright_notices[-1] + " " + _clean_copyright_string(line, primary=False)
                 else:
                     just_found = False
 
-    return copyright_notices
+    # Remove duplicates
+    return list(dict.fromkeys(copyright_notices))
 
 def _get_copyrights_from_ts(ts_file):
     """
@@ -370,7 +384,13 @@ def _clean_copyright_string(copyright_str, primary=True):
     Clean a copyright string.
     """
     copyright_str = copyright_str.strip()
-    copyright_index = copyright_str.find(next(filter(str.isalpha, copyright_str)))
+    copyright_index = -1
+    for index, char in enumerate(copyright_str):
+        if char.isalnum:
+            copyright_index = index
+            break
+    if copyright_index < 0:
+        return ""
     copyright_str = copyright_str[copyright_index:]
 
     if primary:
