@@ -35,15 +35,15 @@ jobs:
       - name: Lint with pylint
         shell: bash -l {0}
         run: |
-          PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./open-ce ./open-ce/open-ce
+          PYTHONPATH=./open_ce/:${PYTHONPATH} pylint ./open_ce ./open_ce/open-ce
       - name: Lint git tools with pylint
         shell: bash -l {0}
         run: |
-          PYTHONPATH=./open-ce/:${PYTHONPATH} pylint ./git_tools/*.py
+          PYTHONPATH=./open_ce/:${PYTHONPATH} pylint ./git_tools/*.py
       - name: Lint all test files for warnings and errors only
         shell: bash -l {0}
         run: |
-          PYTHONPATH=./open-ce/:./tests/:${PYTHONPATH} \
+          PYTHONPATH=./open_ce/:./tests/:${PYTHONPATH} \
                   pylint \
                     --disable=R,C,protected-access \
                     ./tests/*.py \

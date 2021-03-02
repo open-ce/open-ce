@@ -252,7 +252,7 @@ good-names=i,
            ex,
            Run,
            _,
-           open-ce
+           open_ce
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted

@@ -20,7 +20,7 @@ runs:
       shell: bash -l {0}
       run: |
         # Validate all env files with the new feedstock.
-        open_ce_path="$GITHUB_ACTION_PATH/../../../open-ce"
+        open_ce_path="$GITHUB_ACTION_PATH/../../../open_ce"
         env_path="./open-ce-environments/envs"
         python ${open_ce_path}/open-ce validate config \
                                        ${env_path}/*-env.yaml \
