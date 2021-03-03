@@ -1,6 +1,4 @@
-#pylint: disable=invalid-name
 #!/usr/bin/env python
-#pylint: enable=invalid-name
 """
 # *****************************************************************
 # (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
