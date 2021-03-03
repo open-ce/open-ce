@@ -26,7 +26,7 @@ import urllib.request
 import tempfile
 import pkg_resources
 from open_ce.errors import OpenCEError, Error
-import open_ce.inputs as inputs
+from open_ce import inputs
 
 
 DEFAULT_BUILD_TYPES = "cpu,cuda"

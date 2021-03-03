@@ -20,8 +20,8 @@
 import os
 import traceback
 
-import open_ce.utils as utils
-import open_ce.inputs as inputs
+from open_ce import utils
+from open_ce import inputs
 from open_ce.inputs import Argument
 from open_ce.errors import OpenCEError, Error
 
@@ -51,7 +51,7 @@ def load_package_config(config_file=None, variants=None, recipe_path=None):
     recipe to build, and it is in the directory called 'recipe'.
     '''
     # pylint: disable=import-outside-toplevel
-    import open_ce.conda_utils as conda_utils
+    from open_ce import conda_utils
 
     if recipe_path:
         recipe_name = os.path.basename(os.getcwd())

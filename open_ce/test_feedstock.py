@@ -23,9 +23,9 @@ import tempfile
 import subprocess
 from enum import Enum, unique, auto
 
-import open_ce.utils as utils
-import open_ce.conda_env_file_generator as conda_env_file_generator
-import open_ce.inputs as inputs
+from open_ce import utils
+from open_ce import conda_env_file_generator
+from open_ce import inputs
 from open_ce.inputs import Argument
 from open_ce.errors import OpenCEError, Error
 
@@ -171,7 +171,7 @@ def load_test_file(test_file, variants):
         test_file (str): Path to the test file to load.
     """
     #pylint: disable=import-outside-toplevel
-    import open_ce.conda_utils as conda_utils
+    from open_ce import conda_utils
 
     if not os.path.exists(test_file):
         return None

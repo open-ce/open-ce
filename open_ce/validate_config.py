@@ -18,11 +18,11 @@
 # *****************************************************************
 """
 
-import open_ce.utils as utils
+from open_ce import utils
 from open_ce.inputs import Argument
 from open_ce.errors import OpenCEError, Error
 
-import open_ce.build_tree as build_tree # pylint: disable=wrong-import-position
+from open_ce import build_tree # pylint: disable=wrong-import-position
 
 COMMAND = 'config'
 

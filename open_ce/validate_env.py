@@ -18,8 +18,8 @@
 # *****************************************************************
 """
 
-import open_ce.env_config as env_config
-import open_ce.utils as utils
+from open_ce import env_config
+from open_ce import utils
 from open_ce.inputs import Argument
 from open_ce.errors import OpenCEError, Error
 

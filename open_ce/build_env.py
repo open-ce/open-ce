@@ -21,12 +21,12 @@ import os
 import sys
 import glob
 
-import open_ce.build_feedstock as build_feedstock
-import open_ce.docker_build as docker_build
-import open_ce.utils as utils
-import open_ce.inputs as inputs
+from open_ce import build_feedstock
+from open_ce import docker_build
+from open_ce import utils
+from open_ce import inputs
 from open_ce.inputs import Argument
-import open_ce.test_feedstock as test_feedstock
+from open_ce import test_feedstock
 from open_ce.errors import OpenCEError, Error
 
 COMMAND = "env"

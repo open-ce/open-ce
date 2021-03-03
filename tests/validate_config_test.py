@@ -21,7 +21,7 @@ import pytest
 import imp
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..'))
+
 import helpers
 opence = imp.load_source('opence', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
 import open_ce.validate_config as validate_config

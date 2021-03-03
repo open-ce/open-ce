@@ -16,7 +16,7 @@
 # *****************************************************************
 """
 
-import open_ce.build_env as build_env
+from open_ce import build_env
 
 COMMAND = 'env'
 DESCRIPTION = 'Test Open-CE Environment'

@@ -20,7 +20,7 @@ import pathlib
 from collections import Counter
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..'))
+
 
 import open_ce.build_tree as build_tree
 import open_ce.conda_env_file_generator as conda_env_file_generator

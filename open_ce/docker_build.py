@@ -21,7 +21,7 @@ import datetime
 import platform
 import argparse
 
-import open_ce.utils as utils
+from open_ce import utils
 from open_ce.errors import OpenCEError, Error
 from open_ce.inputs import Argument
 
