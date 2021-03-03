@@ -29,7 +29,9 @@ import open_ce.inputs as inputs # pylint: disable=wrong-import-position
 def make_parser():
     ''' Parser input arguments '''
     parser = inputs.make_parser([git_utils.Argument.PUBLIC_ACCESS_TOKEN, git_utils.Argument.REPO_DIR,
-                                    git_utils.Argument.BRANCH, git_utils.Argument.ORG, git_utils.Argument.SKIPPED_REPOS],
+                                    git_utils.Argument.BRANCH, git_utils.Argument.ORG, git_utils.Argument.SKIPPED_REPOS,
+                                    git_utils.Argument.REVIEWERS, git_utils.Argument.TEAM_REVIEWERS,
+                                    git_utils.Argument.PARAMS],
                                     description = 'Apply patches to all repos in an organization.')
 
     parser.add_argument(
@@ -60,6 +62,8 @@ def _main(arg_strings=None):
     repos = git_utils.get_all_repos(args.github_org, args.pat)
     repos = [repo for repo in repos if repo["name"] not in skipped_repos]
 
+    param_dict = {param.split(":")[0]: param.split(":")[1] for param in args.params}
+
     patches = [os.path.abspath(arg_file) for arg_file in inputs.parse_arg_list(args.patches)]
     for repo in repos:
         try:
@@ -74,20 +78,29 @@ def _main(arg_strings=None):
             git_utils.create_branch(repo_path, args.branch)
 
             for patch in patches:
-                print("--->Applying Patch {}".format(patch))
-                git_utils.apply_patch(repo_path, patch)
+                replaced_patch = git_utils.fill_in_params(patch, param_dict, default_branch=head_branch)
+                print("--->Applying Patch {}".format(replaced_patch))
+                git_utils.apply_patch(repo_path, replaced_patch)
 
             print("--->Pushing Branch")
             git_utils.push_branch(repo_path, args.branch)
 
             print("--->Creating PR")
-            git_utils.create_pr(args.github_org,
-                                repo["name"],
-                                args.pat,
-                                args.commit_msg,
-                                args.pr_msg,
-                                args.branch,
-                                head_branch)
+            created_pr = git_utils.create_pr(args.github_org,
+                                             repo["name"],
+                                             args.pat,
+                                             args.commit_msg,
+                                             args.pr_msg,
+                                             args.branch,
+                                             head_branch)
+
+            print("--->Requesting PR Review")
+            git_utils.request_pr_review(args.github_org,
+                                        repo["name"],
+                                        args.pat,
+                                        created_pr["number"],
+                                        inputs.parse_arg_list(args.reviewers),
+                                        inputs.parse_arg_list(args.team_reviewers))
 
             print("---------------------------" + "Finished " + repo["name"])
         except Exception as exc:# pylint: disable=broad-except
