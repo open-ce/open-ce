@@ -14,14 +14,11 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
-import os
 import pathlib
 import errno
 import pytest
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-
 
 import open_ce.inputs as inputs
 import open_ce.utils as utils

@@ -15,7 +15,7 @@
 # *****************************************************************
 
 import os
-import sys
+
 import pathlib
 import yaml
 import pytest

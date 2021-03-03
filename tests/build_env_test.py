@@ -14,7 +14,6 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 import pytest
@@ -284,7 +283,6 @@ def test_build_env(mocker, capsys):
 
     env_file = 'https://test.com/test-env2.yaml'
     opence._main(["build", build_env.COMMAND, env_file])
-
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
                              build_types=utils.DEFAULT_BUILD_TYPES,
