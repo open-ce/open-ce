@@ -22,9 +22,9 @@ from collections import Counter
 test_dir = pathlib.Path(__file__).parent.absolute()
 sys.path.append(os.path.join(test_dir, '..'))
 
-import build_tree
-import conda_env_file_generator
-import utils
+import open_ce.build_tree as build_tree
+import open_ce.conda_env_file_generator as conda_env_file_generator
+import open_ce.utils as utils
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",

@@ -21,10 +21,10 @@ import pathlib
 import pytest
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
-import build_tree
-import utils
-import env_config
+sys.path.append(os.path.join(test_dir, '..'))
+import open_ce.build_tree as build_tree
+import open_ce.utils as utils
+import open_ce.env_config as env_config
 from open_ce.errors import OpenCEError
 import helpers
 

@@ -20,7 +20,6 @@ $ conda install pytest pytest-cov pytest-mock
 To execute the tests use the following command:
 
 ```shell
-$ export PYTHONPATH=$PYTHONPATH:./open_ce
 $ pytest tests/
 ================================================================================ test session starts =================================================================================
 platform linux -- Python 3.7.7, pytest-6.0.1, py-1.9.0, pluggy-0.13.1

@@ -18,15 +18,19 @@ import sys
 import os
 import pathlib
 import pytest
-import imp
 import shutil
 
+from importlib.util import spec_from_loader, module_from_spec
+from importlib.machinery import SourceFileLoader
+
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
-import open_ce
-opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
-import test_feedstock
-import utils
+sys.path.append(os.path.join(test_dir, '..'))
+spec = spec_from_loader("opence", SourceFileLoader("opence", os.path.join(test_dir, '..', 'open_ce', 'open-ce')))
+opence = module_from_spec(spec)
+spec.loader.exec_module(opence)
+
+import open_ce.test_feedstock as test_feedstock
+import open_ce.utils as utils
 from open_ce.errors import OpenCEError
 
 orig_load_test_file = test_feedstock.load_test_file

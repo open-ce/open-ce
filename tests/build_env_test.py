@@ -18,19 +18,21 @@ import sys
 import os
 import pathlib
 import pytest
-import imp
+from importlib.util import spec_from_loader, module_from_spec
+from importlib.machinery import SourceFileLoader
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open_ce'))
-#sys.path.append(os.path.join(test_dir, '.'))
+sys.path.append(os.path.join(test_dir, '..'))
+spec = spec_from_loader("opence", SourceFileLoader("opence", os.path.join(test_dir, '..', 'open_ce', 'open-ce')))
+opence = module_from_spec(spec)
+spec.loader.exec_module(opence)
+
 import helpers
-import build_env
-#import docker_build
-opence = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open_ce', 'open-ce'))
-import utils
+import open_ce.build_env as build_env
+import open_ce.utils as utils
 from open_ce.errors import OpenCEError
 from build_tree_test import TestBuildTree
-import test_feedstock
+import open_ce.test_feedstock as test_feedstock
 
 class PackageBuildTracker(object):
     def __init__(self):
@@ -325,7 +327,7 @@ def test_env_validate(mocker):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock',
+        'open_ce.build_feedstock.build_feedstock',
         side_effect=buildTracker.validate_build_feedstock
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
