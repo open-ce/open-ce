@@ -89,7 +89,7 @@ positional arguments:
                         >$ open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/opence-env.yaml
 
                         For complete documentation on Open-CE environment files see:
-                        https://github.com/open-ce/open-ce/blob/master/doc/README.yaml.md
+                        https://github.com/open-ce/open-ce/blob/main/doc/README.yaml.md
 
 optional arguments:
   -h, --help            show this help message and exit
