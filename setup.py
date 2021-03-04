@@ -25,10 +25,6 @@ def get_readme():
         return f.read()
 
 
-CONSOLE_SCRIPTS = [
-    "open-ce = open_ce.opence:main",
-]
-
 REQUIRED_PACKAGES = [
     "pyyaml",
 ]
