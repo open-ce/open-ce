@@ -37,7 +37,6 @@ def test_get_licenses(capsys):
 
     captured = capsys.readouterr()
     assert "Unable to clone source for libopus-1.3.1" in captured.out
-    assert "Unable to download source for icu-58.2" in captured.out
 
     output_file = os.path.join(output_folder, utils.DEFAULT_LICENSES_FILE)
     assert os.path.exists(output_file)
@@ -130,3 +129,8 @@ def test_no_info_file():
     assert license_contents == ""
 
     shutil.rmtree(output_folder)
+
+def test_clean_copyright_string():
+    assert get_licenses._clean_copyright_string("// Not a Copyright 2020    ") == "Copyright 2020"
+    assert get_licenses._clean_copyright_string("// Not a Copyright 2020    ", primary=False) == "Not a Copyright 2020"
+    assert get_licenses._clean_copyright_string("// -------------") == ""

@@ -24,6 +24,7 @@ import tarfile
 import zipfile
 import shutil
 from enum import Enum, unique, auto
+import urllib.parse
 
 import requests
 import yaml
@@ -32,6 +33,7 @@ import conda_build.source
 import utils
 from errors import OpenCEError, Error
 from inputs import Argument
+import conda_utils
 
 COMMAND = 'licenses'
 
@@ -150,8 +152,6 @@ class LicenseGenerator():
                 os.makedirs(source_folder)
 
                 urls = package[Key.license_url.name] if Key.license_url.name in package else package[Key.url.name]
-                if not isinstance(urls, list):
-                    urls = [urls]
 
                 # Download the source from each URL
                 for url in urls:
@@ -230,8 +230,8 @@ class LicenseGenerator():
                                                 _get_copyrights_from_conda_package(meta_data["extracted_package_dir"]))
             self._licenses.add(info)
 
-        if os.path.exists(utils.TMP_LICENSE_DIR):
-            shutil.rmtree(utils.TMP_LICENSE_DIR)
+        #if os.path.exists(utils.TMP_LICENSE_DIR):
+        #    shutil.rmtree(utils.TMP_LICENSE_DIR)
 
 def _get_copyrights_from_conda_package(pkg_dir):
     """
@@ -288,10 +288,23 @@ def _get_source_from_conda_package(pkg_dir):
                 except RuntimeError:
                     print("Unable to download source for " + os.path.basename(pkg_dir))
             elif source.get("git_url"):
+                git_url = source["git_url"]
                 try:
-                    utils.git_clone(source["git_url"], source.get("git_rev"), source_folder)
-                except OpenCEError:
-                    print("Unable to clone source for " + os.path.basename(pkg_dir))
+                    utils.git_clone(git_url, source.get("git_rev"), source_folder)
+                except OpenCEError as e:
+                    try:
+                        # If the URL is from a private GIT server, try and use an equivalent URL on GitHub
+                        parsed_url = urllib.parse.urlsplit(git_url)
+                        netloc = parsed_url.netloc.split(".")
+                        if netloc[0] == "git":
+                            parsed_url = parsed_url._replace(netloc="github.com")
+                            parsed_url = parsed_url._replace(path=os.path.join(netloc[1], os.path.basename(parsed_url.path)))
+                            git_url = urllib.parse.urlunsplit(parsed_url)
+                            utils.git_clone(git_url, source.get("git_rev"), source_folder)
+                        else:
+                            raise e
+                    except OpenCEError:
+                        print("Unable to clone source for " + os.path.basename(pkg_dir))
 
     return source_folder
 
@@ -345,11 +358,7 @@ def _get_copyrights_from_files(license_files):
                 # Look for lines that come just after a copyright notification
                 elif just_found and (any(copyright in line for copyright in SECONDARY_COPYRIGHT_STRINGS) or
                                      any(copyright_notices[-1].endswith(connector) for connector in CONNECTOR_STRINGS)):
-                    next_string = _clean_copyright_string(line, primary=False)
-                    if not next_string:
-                        just_found = False
-                    else:
-                        copyright_notices[-1] = copyright_notices[-1] + " " + _clean_copyright_string(line, primary=False)
+                    copyright_notices[-1] = copyright_notices[-1] + " " + _clean_copyright_string(line, primary=False)
                 else:
                     just_found = False
 
@@ -386,7 +395,7 @@ def _clean_copyright_string(copyright_str, primary=True):
     copyright_str = copyright_str.strip()
     copyright_index = -1
     for index, char in enumerate(copyright_str):
-        if char.isalnum:
+        if char.isalnum():
             copyright_index = index
             break
     if copyright_index < 0:
