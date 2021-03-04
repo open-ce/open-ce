@@ -20,7 +20,6 @@ from collections import Counter
 
 test_dir = pathlib.Path(__file__).parent.absolute()
 
-
 import open_ce.build_tree as build_tree
 import open_ce.conda_env_file_generator as conda_env_file_generator
 import open_ce.utils as utils
@@ -58,7 +57,6 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     mpi_type="system",
                                     cudatoolkit="10.2",
                                     run_dependencies=["pack1==1.0", "pack2 <=2.0", "pack3-suffix 3.0"])]
-
 
 external_deps = ["external_pac1    1.2", "external_pack2", "external_pack3=1.2.3"]
 

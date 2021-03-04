@@ -188,7 +188,6 @@ def test_get_repo_git_tag_options(mocker, capsys):
                 _ = mock_build_tree._get_repo(env_config_data, package)
                 validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
 
-
         # Setting git_tag_for_env in BuildTree back to Default and no git tags
         # specified in the config file too.
         mocker.patch(
@@ -277,7 +276,6 @@ def test_get_repo_for_nonexisting_patch(mocker):
                     with pytest.raises(OpenCEError) as exc:
                         _ = mock_build_tree._get_repo(env_config_data, package)
                     assert "Failed to apply patch " in str(exc.value)
-
 
 def validate_git_tags(git_tag_for_env, env_config_data, package, capsys):
     '''
