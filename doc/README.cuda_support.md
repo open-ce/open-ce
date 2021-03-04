@@ -88,7 +88,7 @@ packages:
   - feedstock : torchvision
 ```
 
-The tag can also be used per line shown in this example for the xgboost [meta.yaml](https://github.com/open-ce/xgboost-feedstock/blob/master/recipe/meta.yaml)
+The tag can also be used per line shown in this example for the xgboost [meta.yaml](https://github.com/open-ce/xgboost-feedstock/blob/main/recipe/meta.yaml)
 
 ```shell
     - cudatoolkit {{ cudatoolkit }}            #[build_type == 'cuda']

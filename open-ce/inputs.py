@@ -71,7 +71,7 @@ will be automatically discovered in the same remote directory. E.g.:
 >$ open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/opence-env.yaml
 
 For complete documentation on Open-CE environment files see:
-https://github.com/open-ce/open-ce/blob/master/doc/README.yaml.md"""))
+https://github.com/open-ce/open-ce/blob/main/doc/README.yaml.md"""))
 
     REPOSITORY_FOLDER = (lambda parser: parser.add_argument(
                                         '--repository_folder',
