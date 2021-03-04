@@ -14,7 +14,6 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 from collections import Counter

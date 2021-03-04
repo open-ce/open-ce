@@ -14,7 +14,6 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 from importlib.util import spec_from_loader, module_from_spec

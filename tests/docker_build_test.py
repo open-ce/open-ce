@@ -15,7 +15,6 @@
 # *****************************************************************
 
 import os
-import sys
 import pathlib
 import pytest
 from argparse import Namespace

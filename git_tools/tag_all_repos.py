@@ -38,8 +38,8 @@ import sys
 import pathlib
 import git_utils
 
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open_ce'))
-import open_ce.inputs as inputs # pylint: disable=wrong-import-position
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..'))
+from open_ce import inputs # pylint: disable=wrong-import-position
 
 def _make_parser():
     ''' Parser input arguments '''

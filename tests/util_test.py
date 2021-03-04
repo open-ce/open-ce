@@ -14,8 +14,6 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
-import os
 import pathlib
 import errno
 import pytest
