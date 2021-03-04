@@ -117,20 +117,6 @@ def create_release(github_org, repo, token, tag_name, name, body, draft):# pylin
         raise Exception("Error creating github release.")
     return yaml.safe_load(result.content)
 
-def rename_branch(github_org, repo, token, old_name, new_name):# pylint: disable=too-many-arguments
-    '''
-    Use the github API to rename a branch
-    https://docs.github.com/en/rest/reference/repos#rename-a-branch
-    '''
-    result = requests.post("{}/repos/{}/{}/branches/{}/rename".format(GITHUB_API, github_org, repo, old_name),
-                            headers={'Authorization' : 'token {}'.format(token)},
-                            json={
-                            "new_name": new_name
-                            })
-    if result.status_code != 201:
-        raise Exception("Error renaming github release.")
-    return yaml.safe_load(result.content)
-
 def create_pr(github_org, repo, token, title, body, head, base):# pylint: disable=too-many-arguments
     '''
     Create a PR in the given Repo.
