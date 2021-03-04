@@ -323,3 +323,9 @@ optional arguments:
 
 ==============================================================================
 ```
+
+### Further details of the OpenCE runtime image
+
+The Dockerfile for this runtime image is located in [`images/opence-runtime/Dockerfile`](https://github.com/open-ce/open-ce/blob/main/images/opence-runtime/Dockerfile).
+This file can also be built and run manually and supports GPUs if the system is set up with `nvidia-container-runtime`. The file does require a few arguents to build, check the Dockefile directly for details.
+
