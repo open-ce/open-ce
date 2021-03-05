@@ -11,20 +11,20 @@ a build is achieved by executing the script `open-ce build env`. This will extra
 and build all of the individual required components within the various Open-CE
 feedstock repository trees required for the requested package environment.
 In other words, if you simply want to build a package such as tensorflow or
-pytorch (or any other; see the `open-ce/envs` subdirectory), with dependencies
+pytorch (or any other; see the `open-ce-environments/envs` subdirectory), with dependencies
 automatically handled, you can do so using a single `open-ce build env` command.
 
 For example:
 In the simplest case, a build for tensorflow may look like this:
 
 ```shell
-    ./open-ce/open-ce build env envs/tensorflow-env.yaml
+    ./open-ce/open_ce/open-ce build env open-ce-environments/envs/tensorflow-env.yaml
 ```
 
 while a similar build for pytorch may look like this:
 
 ```shell
-    ./open-ce/open-ce build env envs/pytorch-env.yaml
+    ./open-ce/open_ce/open-ce build env open-ce-environments/envs/pytorch-env.yaml
 ```
 
 Other environment files for other packages can also be found in the `envs`
@@ -47,15 +47,15 @@ to set docker build options like environment variables or other settings
 like cpusets.
 
 ```shell
-    ./open-ce/open-ce build env --docker_build --docker_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" envs/pytorch-env.yaml
+    ./open-ce/open_ce/open-ce build env --docker_build --docker_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" open-ce-environments/envs/pytorch-env.yaml
 ```
 
 As part of this process of docker build, it will copy a local_files directory that is in the
 current working directory into the container, if the directory exists.
 
 The paths to the `env_config_file`s and `--conda_build_config` must point to
-files within the `open-ce` directory and be relative to the directory
-containing the `open-ce` directory.
+files within the `open-ce-environments` directory and be relative to the directory
+containing the root level `open-ce` directory.
 
 > Note: The `--docker_build` option does not currently work with `podman`.
 
@@ -167,7 +167,7 @@ optional arguments:
  the packages listed in `tensorflow-env.yaml` installed in it.
 
 ```shell
-    ./open-ce/open-ce build env --python_versions=3.7 --build_type=cuda --mpi_type=openmpi
+    ./open-ce/open_ce/open-ce build env --python_versions=3.7 --build_type=cuda --mpi_type=openmpi
     envs/tensorflow-env.yaml
 ```
 
@@ -282,7 +282,7 @@ script.
 For example,
 
 ```shell
-    open-ce/open-ce/open-ce build image --local_conda_channel=./condabuild
+    open-ce/open_ce/open-ce build image --local_conda_channel=./condabuild
            --conda_env_file=open-ce-conda-env-py3.7-cuda-openmpi.yaml
 ```
 
