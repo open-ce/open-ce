@@ -28,7 +28,7 @@ the following command can be used:
                              --tag-msg "Open-CE Release Version 1.0.0" \\
                              --pat ${YOUR_PUBLIC_ACCESS_TOKEN} \\
                              --repo-dir ./repos \\
-                             --branch master \\
+                             --branch main \\
                              --skipped_repos open-ce
 *******************************************************************************
 """

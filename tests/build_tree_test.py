@@ -77,7 +77,7 @@ def test_create_commands(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    build_commands = build_tree._create_commands("/test/my_repo", "True", "my_recipe_path", None, "master", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [])
+    build_commands = build_tree._create_commands("/test/my_repo", "True", "my_recipe_path", None, "main", {'python' : '3.6', 'build_type' : 'cuda', 'mpi_type' : 'openmpi', 'cudatoolkit' : '10.2'}, [])
     assert build_commands[0].packages == ['horovod']
     assert build_commands[0].recipe_path == "my_recipe_path"
     for dep in {'build_req1', 'build_req2            1.2'}:
@@ -125,7 +125,7 @@ def test_clone_repo(mocker):
     '''
     git_location = utils.DEFAULT_GIT_LOCATION
 
-    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2", git_tag_for_env="master")
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2", git_tag_for_env="main")
 
     dir_tracker= helpers.DirTracker()
     mocker.patch(
@@ -141,7 +141,7 @@ def test_clone_repo(mocker):
         return_value=0,
         side_effect=(lambda x: helpers.validate_cli(x, possible_expect=["git clone",
                                                                git_location + "/my_repo.git",
-                                                               "/test/my_repo", "git checkout master"]))
+                                                               "/test/my_repo", "git checkout main"]))
     )
 
     mock_build_tree._clone_repo(git_location + "/my_repo.git", "/test/my_repo", None, None)
