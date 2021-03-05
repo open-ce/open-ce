@@ -81,7 +81,10 @@ def build_runtime_docker_image(args):
     _validate_input_paths(local_conda_channel, conda_env_file)
 
     # Copy the conda environment file into the local conda channel to modify it
-    shutil.copy(conda_env_file, local_conda_channel)
+    try:
+        shutil.copy(conda_env_file, local_conda_channel)
+    except shutil.SameFileError:
+        print("Info: Environment file already in local conda channel.")
     conda_env_file = os.path.join(local_conda_channel, os.path.basename(conda_env_file))
     utils.replace_conda_env_channels(conda_env_file, r'file:.*', "file:/{}".format(TARGET_DIR))
 
