@@ -228,8 +228,8 @@ class LicenseGenerator():
                                                 _get_copyrights_from_conda_package(meta_data["extracted_package_dir"]))
             self._licenses.add(info)
 
-        #if os.path.exists(utils.TMP_LICENSE_DIR):
-        #    shutil.rmtree(utils.TMP_LICENSE_DIR)
+        if os.path.exists(utils.TMP_LICENSE_DIR):
+            shutil.rmtree(utils.TMP_LICENSE_DIR)
 
 def _get_copyrights_from_conda_package(pkg_dir):
     """
