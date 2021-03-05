@@ -38,7 +38,7 @@ a [`README.md` file](#readmemd-file) in the root of the git repo.
 
 The contents of the `LICENSE` file should be exactly the same as the contents
 of every other feedstocks' `LICENSE` file. For example, the
-[Spacy `LICENSE` file](https://github.com/open-ce/spacy-feedstock/blob/master/LICENSE)
+[Spacy `LICENSE` file](https://github.com/open-ce/spacy-feedstock/blob/main/LICENSE)
 can be copied directly.
 
 ### `README.md` File
@@ -47,7 +47,7 @@ The `README.md` files in each feedstock are designed to point people who
 land on the feedstock repo back to the main Open-CE repo. The `README.md`
 file should be the same, except for the title, which should reflect the name
 of the feedstock. The
-[Spacy `README.md` file](https://github.com/open-ce/spacy-feedstock/blob/master/README.md)
+[Spacy `README.md` file](https://github.com/open-ce/spacy-feedstock/blob/main/README.md)
 can be copied, and the title changed.
 
 ## Github Settings
