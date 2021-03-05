@@ -168,7 +168,7 @@ optional arguments:
 
 ```shell
     ./open-ce/open_ce/open-ce build env --python_versions=3.7 --build_type=cuda --mpi_type=openmpi
-    envs/tensorflow-env.yaml
+    open-ce-environments/envs/tensorflow-env.yaml
 ```
 
  The above command will output `open-ce-conda-env-py3.7-cuda-openmpi.yaml` in the specified
