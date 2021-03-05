@@ -80,20 +80,22 @@ def build_runtime_docker_image(args):
     conda_env_file = os.path.abspath(args.conda_env_file)
     _validate_input_paths(local_conda_channel, conda_env_file)
 
-    # Copy the conda environment file into the local conda channel to modify it
+    # Copy the conda environment file into the local conda channel with a new name and modify it
+    conda_env_runtime_filename = os.path.splitext(os.path.basename(args.conda_env_file))[0]+'-runtime.yaml'
+    conda_env_runtime_file = os.path.join(local_conda_channel, os.path.basename(conda_env_runtime_filename))
+
     try:
-        shutil.copy(conda_env_file, local_conda_channel)
+        shutil.copy(conda_env_file, conda_env_runtime_file)
     except shutil.SameFileError:
         print("Info: Environment file already in local conda channel.")
-    conda_env_file = os.path.join(local_conda_channel, os.path.basename(conda_env_file))
-    utils.replace_conda_env_channels(conda_env_file, r'file:.*', "file:/{}".format(TARGET_DIR))
+    utils.replace_conda_env_channels(conda_env_runtime_file, r'file:.*', "file:/{}".format(TARGET_DIR))
 
     # Check if input local conda channel path is absolute
     if os.path.isabs(args.local_conda_channel):
         # make it relative to BUILD CONTEXT
         args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
 
-    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file))
+    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_runtime_file))
 
     print("Docker image with name {} is built successfully.".format(image_name))
 
