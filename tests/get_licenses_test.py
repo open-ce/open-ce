@@ -36,7 +36,7 @@ def test_get_licenses(capsys):
     open_ce._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
 
     captured = capsys.readouterr()
-    assert "Unable to clone source for libopus-1.3.1" in captured.out
+    assert "Unable to download source for icu-58.2" in captured.out
 
     output_file = os.path.join(output_folder, utils.DEFAULT_LICENSES_FILE)
     assert os.path.exists(output_file)
@@ -45,6 +45,7 @@ def test_get_licenses(capsys):
 
     print(license_contents)
     assert "pytest	6.2.2	https://github.com/pytest-dev/pytest/	MIT" in license_contents
+    assert "libopus	1.3.1	http://opus-codec.org/development/	3-clause BSD	Copyright 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry, CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo" in license_contents
 
     shutil.rmtree(output_folder)
 

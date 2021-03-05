@@ -28,12 +28,10 @@ import urllib.parse
 
 import requests
 import yaml
-import conda_build.source
 
 import utils
 from errors import OpenCEError, Error
 from inputs import Argument
-import conda_utils
 
 COMMAND = 'licenses'
 
@@ -151,7 +149,7 @@ class LicenseGenerator():
             if not os.path.exists(source_folder):
                 os.makedirs(source_folder)
 
-                urls = package[Key.license_url.name] if Key.license_url.name in package else package[Key.url.name]
+                urls = [package[Key.license_url.name]] if Key.license_url.name in package else package[Key.url.name]
 
                 # Download the source from each URL
                 for url in urls:
@@ -264,6 +262,8 @@ def _get_source_from_conda_package(pkg_dir):
     """
     Download the source for a conda package
     """
+    #pylint: disable=import-outside-toplevel
+    import conda_build.source
     source_folder = os.path.join(utils.TMP_LICENSE_DIR, os.path.basename(pkg_dir))
     if not os.path.exists(source_folder):
         os.makedirs(source_folder)
@@ -291,7 +291,7 @@ def _get_source_from_conda_package(pkg_dir):
                 git_url = source["git_url"]
                 try:
                     utils.git_clone(git_url, source.get("git_rev"), source_folder)
-                except OpenCEError as e:
+                except OpenCEError as error:
                     try:
                         # If the URL is from a private GIT server, try and use an equivalent URL on GitHub
                         parsed_url = urllib.parse.urlsplit(git_url)
@@ -302,7 +302,7 @@ def _get_source_from_conda_package(pkg_dir):
                             git_url = urllib.parse.urlunsplit(parsed_url)
                             utils.git_clone(git_url, source.get("git_rev"), source_folder)
                         else:
-                            raise e
+                            raise error
                     except OpenCEError:
                         print("Unable to clone source for " + os.path.basename(pkg_dir))
 
