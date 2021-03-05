@@ -44,8 +44,7 @@ def test_build_image_positive_case(mocker):
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
-    opence._main(arg_strings)
-    os.remove("tests/testcondabuild/test-conda-env.yaml")
+    open_ce._main(arg_strings)
 
 def test_not_existing_local_conda_channel():
     '''
@@ -99,8 +98,7 @@ def test_local_conda_channel_with_absolute_path(mocker):
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
-    opence._main(arg_strings)
-    os.remove("tests/testcondabuild/test-conda-env.yaml")
+    open_ce._main(arg_strings)
 
 def get_channel_being_modified(conda_env_file):
     with open(conda_env_file, 'r') as file_handle:
@@ -141,9 +139,6 @@ def test_channel_update_in_conda_env(mocker):
     assert channel_modified == "file:/{}".format(build_image.TARGET_DIR)
     assert channel_index_before == channel_index_after
 
-    # Cleanup
-    os.remove("tests/testcondabuild/test-conda-env.yaml") 
-
 def test_for_failed_docker_build_cmd(mocker):
     '''
     Simple test for build_runtime_image being failed due to some error in building the image
@@ -154,5 +149,3 @@ def test_for_failed_docker_build_cmd(mocker):
     with pytest.raises(OpenCEError) as exc:
         opence._main(arg_strings)
     assert "Failure building image" in str(exc.value)
-
-    os.remove("tests/testcondabuild/test-conda-env.yaml")
