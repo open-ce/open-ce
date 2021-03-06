@@ -100,7 +100,7 @@ def build_runtime_docker_image(args):
     try:
         os.remove(conda_env_runtime_file)
     except OSError:
-        print("Info: Temporary environment cannot be removed.")
+        print("Info: Temporary environment file cannot be removed.")
 
     print("Docker image with name {} is built successfully.".format(image_name))
 
