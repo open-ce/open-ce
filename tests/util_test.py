@@ -14,16 +14,15 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
-import os
 import pathlib
 import errno
 import pytest
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
 
-import inputs
-import utils
-from errors import OpenCEError
+test_dir = pathlib.Path(__file__).parent.absolute()
+
+import open_ce.inputs as inputs
+import open_ce.utils as utils
+from open_ce.errors import OpenCEError
 
 def test_parse_arg_list_list_input():
     '''
@@ -54,12 +53,12 @@ def test_cuda_level_supported(mocker):
     '''
     #expected cuda version supported by the system
     cuda_version="10.2"
-    mocker.patch('utils.get_driver_cuda_level',return_value="10.2")
+    mocker.patch('open_ce.utils.get_driver_cuda_level',return_value="10.2")
     assert utils.cuda_level_supported(cuda_version) == True
 
     #expected cuda version not supported by the system
     cuda_version="11.0"
-    mocker.patch('utils.get_driver_cuda_level',return_value="10.2")
+    mocker.patch('open_ce.utils.get_driver_cuda_level',return_value="10.2")
     assert utils.cuda_level_supported(cuda_version) == False
 
 def test_get_driver_cuda_level(mocker):

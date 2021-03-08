@@ -19,15 +19,15 @@
 
 import os
 import shutil
-import utils
-from inputs import Argument
-from errors import OpenCEError, Error
+from open_ce import utils
+from open_ce.inputs import Argument
+from open_ce.errors import OpenCEError, Error
 
 COMMAND = 'image'
 DESCRIPTION = 'Run Open-CE tools within a container'
 ARGUMENTS = [Argument.LOCAL_CONDA_CHANNEL, Argument.CONDA_ENV_FILE, Argument.CONTAINER_TOOL]
 
-OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 RUNTIME_IMAGE_NAME = "opence-runtime"
 RUNTIME_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", RUNTIME_IMAGE_NAME)
 REPO_NAME = "open-ce"

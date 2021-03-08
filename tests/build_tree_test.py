@@ -14,18 +14,17 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 from collections import Counter
 import pathlib
 import pytest
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-import build_tree
-import utils
-import env_config
-from errors import OpenCEError
+
+import open_ce.build_tree as build_tree
+import open_ce.utils as utils
+import open_ce.env_config as env_config
+from open_ce.errors import OpenCEError
 import helpers
 
 class TestBuildTree(build_tree.BuildTree):
@@ -189,7 +188,6 @@ def test_get_repo_git_tag_options(mocker, capsys):
                 _ = mock_build_tree._get_repo(env_config_data, package)
                 validate_git_tags(mock_build_tree._git_tag_for_env, env_config_data, package, capsys)
 
-
         # Setting git_tag_for_env in BuildTree back to Default and no git tags
         # specified in the config file too.
         mocker.patch(
@@ -278,7 +276,6 @@ def test_get_repo_for_nonexisting_patch(mocker):
                     with pytest.raises(OpenCEError) as exc:
                         _ = mock_build_tree._get_repo(env_config_data, package)
                     assert "Failed to apply patch " in str(exc.value)
-
 
 def validate_git_tags(git_tag_for_env, env_config_data, package, capsys):
     '''

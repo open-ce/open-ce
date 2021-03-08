@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 # *****************************************************************
 # (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
@@ -18,27 +16,16 @@
 # *****************************************************************
 """
 
-import env_config
-import utils
-from inputs import Argument
-from errors import OpenCEError, Error
+from open_ce import build_env
 
 COMMAND = 'env'
+DESCRIPTION = 'Test Open-CE Environment'
+ARGUMENTS = build_env.ARGUMENTS
 
-DESCRIPTION = 'Lint Environment Files'
-
-ARGUMENTS = [Argument.ENV_FILE, Argument.PYTHON_VERSIONS,
-             Argument.BUILD_TYPES, Argument.MPI_TYPES, Argument.CUDA_VERSIONS]
-
-def validate_env(args):
+def test_env(args):
     '''Entry Function'''
-    variants = utils.make_variants(args.python_versions, args.build_types,
-                                   args.mpi_types, args.cuda_versions)
+    args.skip_build_packages = True
+    args.run_tests = True
+    build_env.build_env(args)
 
-    for variant in variants:
-        try:
-            env_config.load_env_config_files(args.env_config_file, variant)
-        except OpenCEError as exc:
-            raise OpenCEError(Error.VALIDATE_ENV, args.env_config_file, str(variant), exc.msg) from exc
-
-ENTRY_FUNCTION = validate_env
+ENTRY_FUNCTION = test_env

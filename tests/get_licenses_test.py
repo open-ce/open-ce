@@ -14,29 +14,31 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 import pytest
-import imp
 import shutil
+from importlib.util import spec_from_loader, module_from_spec
+from importlib.machinery import SourceFileLoader
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
-import get_licenses
-import utils
-from errors import OpenCEError
+
+spec = spec_from_loader("opence", SourceFileLoader("opence", os.path.join(test_dir, '..', 'open_ce', 'open-ce')))
+opence = module_from_spec(spec)
+spec.loader.exec_module(opence)
+
+import open_ce.get_licenses as get_licenses
+import open_ce.utils as utils
+from open_ce.errors import OpenCEError
 
 def test_get_licenses(capsys):
     '''
     This is a complete test of `get_licenses`.
     '''
     output_folder = "get_licenses_output"
-    open_ce._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
+    opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
 
     captured = capsys.readouterr()
-    assert "Unable to clone source for libopus-1.3.1" in captured.out
     assert "Unable to download source for icu-58.2" in captured.out
 
     output_file = os.path.join(output_folder, utils.DEFAULT_LICENSES_FILE)
@@ -46,6 +48,7 @@ def test_get_licenses(capsys):
 
     print(license_contents)
     assert "pytest	6.2.2	https://github.com/pytest-dev/pytest/	MIT" in license_contents
+    assert "libopus	1.3.1	http://opus-codec.org/development/	3-clause BSD	Copyright 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry, CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo" in license_contents
 
     shutil.rmtree(output_folder)
 
@@ -54,10 +57,10 @@ def test_get_licenses_failed_conda_create(mocker):
     This tests that an exception is thrown when `conda env create` fails.
     '''
     output_folder = "get_licenses_output"
-    mocker.patch('utils.run_command_capture', side_effect=[(False, "", "")])
+    mocker.patch('open_ce.utils.run_command_capture', side_effect=[(False, "", "")])
 
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
+        opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
 
     assert "Error generating licenses file." in str(err.value)
 
@@ -66,11 +69,11 @@ def test_get_licenses_failed_conda_remove(mocker):
     This tests that an exception is thrown when `conda env remove` is called.
     '''
     output_folder = "get_licenses_output"
-    mocker.patch('utils.run_command_capture', side_effect=[(True, "", ""), (False, "", "")])
-    mocker.patch('get_licenses.LicenseGenerator._add_licenses_from_environment', return_value=[])
+    mocker.patch('open_ce.utils.run_command_capture', side_effect=[(True, "", ""), (False, "", "")])
+    mocker.patch('open_ce.get_licenses.LicenseGenerator._add_licenses_from_environment', return_value=[])
 
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
+        opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
 
     assert "Error generating licenses file." in str(err.value)
 
@@ -79,7 +82,7 @@ def test_get_licenses_no_conda_env():
     This test ensures that an exception is thrown when no conda environment is provided.
     '''
     with pytest.raises(OpenCEError) as err:
-        open_ce._main(["get", get_licenses.COMMAND])
+        opence._main(["get", get_licenses.COMMAND])
 
     assert "The \'--conda_env_file\' argument is required." in str(err.value)
 
@@ -130,3 +133,8 @@ def test_no_info_file():
     assert license_contents == ""
 
     shutil.rmtree(output_folder)
+
+def test_clean_copyright_string():
+    assert get_licenses._clean_copyright_string("// Not a Copyright 2020    ") == "Copyright 2020"
+    assert get_licenses._clean_copyright_string("// Not a Copyright 2020    ", primary=False) == "Not a Copyright 2020"
+    assert get_licenses._clean_copyright_string("// -------------") == ""

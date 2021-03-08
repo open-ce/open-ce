@@ -18,16 +18,16 @@
 """
 
 import sys
-import inputs
-from errors import OpenCEError
-import build_env
-import build_feedstock
-import test_feedstock
-import test_env
-import validate_config
-import validate_env
-import build_image
-import get_licenses
+from open_ce import inputs
+from open_ce.errors import OpenCEError
+from open_ce import build_env
+from open_ce import build_feedstock
+from open_ce import test_feedstock
+from open_ce import test_env
+from open_ce import validate_config
+from open_ce import validate_env
+from open_ce import build_image
+from open_ce import get_licenses
 
 #pylint: disable=too-many-locals
 def make_parser():

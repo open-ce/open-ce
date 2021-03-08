@@ -14,16 +14,18 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
-import imp
+from importlib.util import spec_from_loader, module_from_spec
+from importlib.machinery import SourceFileLoader
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
-import test_env
+spec = spec_from_loader("opence", SourceFileLoader("opence", os.path.join(test_dir, '..', 'open_ce', 'open-ce')))
+opence = module_from_spec(spec)
+spec.loader.exec_module(opence)
+
+import open_ce.test_env as test_env
 
 def test_test_env(mocker):
     '''
@@ -34,6 +36,6 @@ def test_test_env(mocker):
         assert args.skip_build_packages == True
         assert args.run_tests == True
 
-    mocker.patch('build_env.build_env', side_effect=validate_build_env)
+    mocker.patch('open_ce.build_env.build_env', side_effect=validate_build_env)
 
-    open_ce._main(["test", test_env.COMMAND, "some_env_file.yaml"])
+    opence._main(["test", test_env.COMMAND, "some_env_file.yaml"])

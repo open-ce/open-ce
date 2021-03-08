@@ -1,6 +1,6 @@
 """
 # *****************************************************************
-# (C) Copyright IBM Corp. 2020, 2021. All Rights Reserved.
+# (C) Copyright IBM Corp. 2021. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,17 +15,4 @@
 # limitations under the License.
 # *****************************************************************
 """
-
-import build_env
-
-COMMAND = 'env'
-DESCRIPTION = 'Test Open-CE Environment'
-ARGUMENTS = build_env.ARGUMENTS
-
-def test_env(args):
-    '''Entry Function'''
-    args.skip_build_packages = True
-    args.run_tests = True
-    build_env.build_env(args)
-
-ENTRY_FUNCTION = test_env
+__version__ = "1.1.3"

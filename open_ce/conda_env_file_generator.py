@@ -18,7 +18,7 @@
 
 import os
 
-import utils
+from open_ce import utils
 
 #pylint: disable=too-few-public-methods
 class CondaEnvFileGenerator():

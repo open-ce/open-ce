@@ -15,17 +15,16 @@
 # *****************************************************************
 
 import os
-import sys
 import pathlib
 import pytest
 from argparse import Namespace
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+
 import helpers
-import container_build
-import utils
-from errors import OpenCEError
+import open_ce.container_build as container_build
+import open_ce.utils as utils
+from open_ce.errors import OpenCEError
 
 def test_build_image(mocker):
     '''
@@ -167,7 +166,7 @@ def test_container_build_failures(mocker):
     assert "Error creating" in str(exc.value)
 
     # Failed first copy
-    mocker.patch('container_build._create_container', return_value=None)
+    mocker.patch('open_ce.container_build._create_container', return_value=None)
 
     with pytest.raises(OpenCEError) as exc:
         container_build.build_in_container(image, args, cmd)
@@ -191,7 +190,7 @@ def test_container_build_failures(mocker):
     assert "local_files" in str(exc.value)
 
     # Failed start
-    mocker.patch('container_build._copy_to_container', return_value=None)
+    mocker.patch('open_ce.container_build._copy_to_container', return_value=None)
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
@@ -199,7 +198,7 @@ def test_container_build_failures(mocker):
     assert "Error starting" in str(exc.value)
 
     # Failed execute
-    mocker.patch('container_build._start_container', return_value=None)
+    mocker.patch('open_ce.container_build._start_container', return_value=None)
     mocker.patch('os.system', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
@@ -214,10 +213,12 @@ def test_build_with_container_tool(mocker):
     arg_strings = ["path/to/open-ce", "build", "env", "--container_build", "my-env.yaml",
                    "--cuda_versions", "10.2", "--build_types", "cuda"]
     args = make_args()
-    mocker.patch('container_build.build_image', return_value=(0, image_name))
 
-    mocker.patch('container_build.build_in_container', return_value=0)
+    mocker.patch('open_ce.container_build.build_image', return_value=(0, image_name))
 
+    mocker.patch('open_ce.container_build.build_in_container', return_value=0)
+
+    mocker.patch('os.system', return_value=0)
     container_build.build_with_container_tool(args, arg_strings)
 
 def test_build_with_container_tool_failures(mocker):
@@ -261,17 +262,18 @@ def test_capable_of_cuda_containers(mocker):
     Simple test for _capable_of_cuda_containers
     '''
     cuda_version = "10.2"
-    mocker.patch('utils.cuda_driver_installed', return_value=0)
+
+    mocker.patch('open_ce.utils.cuda_driver_installed', return_value=0)
     ret = container_build._capable_of_cuda_containers(cuda_version)
     assert ret == True
 
-    mocker.patch('utils.cuda_driver_installed', return_value=1)
-    mocker.patch('utils.cuda_level_supported', return_value=0)
+    mocker.patch('open_ce.utils.cuda_driver_installed', return_value=1)
+    mocker.patch('open_ce.utils.cuda_level_supported', return_value=0)
     ret = container_build._capable_of_cuda_containers(cuda_version)
     assert ret == False
 
-    mocker.patch('utils.cuda_driver_installed', return_value=1)
-    mocker.patch('utils.cuda_level_supported', return_value=1)
+    mocker.patch('open_ce.utils.cuda_driver_installed', return_value=1)
+    mocker.patch('open_ce.utils.cuda_level_supported', return_value=1)
     ret = container_build._capable_of_cuda_containers(cuda_version)
     assert ret == True
 
@@ -279,8 +281,8 @@ def test_build_with_container_tool_incompatible_cuda_versions(mocker):
     '''
     Tests that passing incompatible value in --cuda_versions argument fails.
     '''
-    mocker.patch('container_build._capable_of_cuda_containers', return_value=0)
-    mocker.patch('utils.get_driver_level',return_value="abc")
+    mocker.patch('open_ce.container_build._capable_of_cuda_containers', return_value=0)
+    mocker.patch('open_ce.utils.get_driver_level',return_value="abc")
 
     #with docker_build argument
     arg_strings = ["path/to/open-ce", "build", "env", "--docker_build", "my-env.yaml",
@@ -294,6 +296,9 @@ def test_build_with_container_tool_incompatible_cuda_versions(mocker):
     arg_strings = ["path/to/open-ce", "build", "env", "--container_build", "my-env.yaml",
                    "--cuda_versions", "10.2", "--build_types", "cuda"]
     args = make_args()
+    mocker.patch('open_ce.container_build._capable_of_cuda_containers', return_value=0)
+    mocker.patch('open_ce.utils.get_driver_level',return_value="abc")
+
     with pytest.raises(OpenCEError) as exc:
         container_build.build_with_container_tool(args, arg_strings)
     assert "Driver level" in str(exc.value)

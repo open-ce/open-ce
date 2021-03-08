@@ -24,14 +24,14 @@ import tarfile
 import zipfile
 import shutil
 from enum import Enum, unique, auto
+import urllib.parse
 
 import requests
 import yaml
-import conda_build.source
 
-import utils
-from errors import OpenCEError, Error
-from inputs import Argument
+from open_ce import utils
+from open_ce.errors import OpenCEError, Error
+from open_ce.inputs import Argument
 
 COMMAND = 'licenses'
 
@@ -39,12 +39,15 @@ DESCRIPTION = 'Gather license information for a group of packages'
 
 ARGUMENTS = [Argument.OUTPUT_FOLDER, Argument.CONDA_ENV_FILE]
 
-COPYRIGHT_STRINGS = ["Copyright", "copyright (C)"]
+COPYRIGHT_STRINGS = ["Copyright", "copyright (C)", "copyright (c)"]
 SECONDARY_COPYRIGHT_STRINGS = ["All rights reserved"]
 EXCLUDE_STRINGS = ["Grant of Copyright License", "Copyright [y", "Copyright {y",
                    "Copyright (C) <y", "\"Copyright", "Copyright (C) year",
                    "Copyright Notice", "the Copyright", "Our Copyright",
-                   "Copyright (c) <y", "our Copyright", "Copyright and", "Copyright remains"]
+                   "Copyright (c) <y", "our Copyright", "Copyright and", "Copyright remains",
+                   "Copyright (C) ____", "Copyright laws", "Copyright Treaty",
+                   "Copyright to"]
+CONNECTOR_STRINGS = [",", "and", "by"]
 
 @unique
 class Key(Enum):
@@ -146,9 +149,7 @@ class LicenseGenerator():
             if not os.path.exists(source_folder):
                 os.makedirs(source_folder)
 
-                urls = package[Key.license_url.name] if Key.license_url.name in package else package[Key.url.name]
-                if not isinstance(urls, list):
-                    urls = [urls]
+                urls = [package[Key.license_url.name]] if Key.license_url.name in package else package[Key.url.name]
 
                 # Download the source from each URL
                 for url in urls:
@@ -241,9 +242,14 @@ def _get_copyrights_from_conda_package(pkg_dir):
         for file in files:
             license_files.add(os.path.join(root,file))
 
-    # Get every file within the package directory with LICENSE in its name
-    license_files.update(glob.glob(os.path.join(pkg_dir, "info", "*LICENSE*")))
-    license_files.update(glob.glob(os.path.join(pkg_dir, "info", "*COPYING*")))
+    # Get every file within the package directory that might be a license file
+    search_dirs = [os.path.join(pkg_dir, "info"),
+                   os.path.join(pkg_dir, "site-packages", "*-info"),
+                   os.path.join(pkg_dir, "lib", "python*", "site-packages", "*-info")]
+    potential_files = ["*LICENSE*", "*COPYING*"]
+    for search_dir in search_dirs:
+        for potential_file in potential_files:
+            license_files.update(glob.glob(os.path.join(search_dir, potential_file)))
 
     if not license_files:
         # Find license files within source code of package
@@ -256,6 +262,8 @@ def _get_source_from_conda_package(pkg_dir):
     """
     Download the source for a conda package
     """
+    #pylint: disable=import-outside-toplevel
+    import conda_build.source
     source_folder = os.path.join(utils.TMP_LICENSE_DIR, os.path.basename(pkg_dir))
     if not os.path.exists(source_folder):
         os.makedirs(source_folder)
@@ -280,10 +288,23 @@ def _get_source_from_conda_package(pkg_dir):
                 except RuntimeError:
                     print("Unable to download source for " + os.path.basename(pkg_dir))
             elif source.get("git_url"):
+                git_url = source["git_url"]
                 try:
-                    utils.git_clone(source["git_url"], source.get("git_rev"), source_folder)
-                except OpenCEError:
-                    print("Unable to clone source for " + os.path.basename(pkg_dir))
+                    utils.git_clone(git_url, source.get("git_rev"), source_folder)
+                except OpenCEError as error:
+                    try:
+                        # If the URL is from a private GIT server, try and use an equivalent URL on GitHub
+                        parsed_url = urllib.parse.urlsplit(git_url)
+                        netloc = parsed_url.netloc.split(".")
+                        if netloc[0] == "git":
+                            parsed_url = parsed_url._replace(netloc="github.com")
+                            parsed_url = parsed_url._replace(path=os.path.join(netloc[1], os.path.basename(parsed_url.path)))
+                            git_url = urllib.parse.urlunsplit(parsed_url)
+                            utils.git_clone(git_url, source.get("git_rev"), source_folder)
+                        else:
+                            raise error
+                    except OpenCEError:
+                        print("Unable to clone source for " + os.path.basename(pkg_dir))
 
     return source_folder
 
@@ -335,12 +356,14 @@ def _get_copyrights_from_files(license_files):
                     copyright_notices.append(cleaned_line)
                     just_found = True
                 # Look for lines that come just after a copyright notification
-                elif just_found and any(copyright in line for copyright in SECONDARY_COPYRIGHT_STRINGS):
+                elif just_found and (any(copyright in line for copyright in SECONDARY_COPYRIGHT_STRINGS) or
+                                     any(copyright_notices[-1].endswith(connector) for connector in CONNECTOR_STRINGS)):
                     copyright_notices[-1] = copyright_notices[-1] + " " + _clean_copyright_string(line, primary=False)
                 else:
                     just_found = False
 
-    return copyright_notices
+    # Remove duplicates
+    return list(dict.fromkeys(copyright_notices))
 
 def _get_copyrights_from_ts(ts_file):
     """
@@ -370,7 +393,13 @@ def _clean_copyright_string(copyright_str, primary=True):
     Clean a copyright string.
     """
     copyright_str = copyright_str.strip()
-    copyright_index = copyright_str.find(next(filter(str.isalpha, copyright_str)))
+    copyright_index = -1
+    for index, char in enumerate(copyright_str):
+        if char.isalnum():
+            copyright_index = index
+            break
+    if copyright_index < 0:
+        return ""
     copyright_str = copyright_str[copyright_index:]
 
     if primary:

@@ -32,11 +32,11 @@ import shutil
 import pathlib
 import git_utils
 
-sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..', 'open-ce'))
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..'))
 # pylint: disable=wrong-import-position
-import inputs
-import conda_utils
-import build_feedstock
+from open_ce import inputs
+from open_ce import conda_utils
+from open_ce import build_feedstock
 
 def _make_parser():
     ''' Parser input arguments '''
