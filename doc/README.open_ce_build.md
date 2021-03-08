@@ -279,15 +279,20 @@ optional arguments:
 ## `open-ce build image` sub command
 
 This `open-ce build image` script is used to create a runtime container image with Open-CE
-packages (generated from `open-ce build env`) installed in it. This script takes two arguments
+packages (generated from `open-ce build env`) installed in it. This script takes two main arguments
 as an input - local conda channel and conda environment file which are the output of `open-ce build env`
 script.
+
+The `--container_tool` option can be passed to specify container tool to be used. Additionally 
+`--container_build_args` can be passed to set container build options like environment variables
+ or other settings like cpusets.
 
 For example,
 
 ```shell
     open-ce/open_ce/open-ce build image --local_conda_channel=./condabuild
            --conda_env_file=open-ce-conda-env-py3.7-cuda-openmpi.yaml
+           --container_tool podman --container_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1"
 ```
 
 `local_conda_channel` is the output folder that has all of the conda packages built within it. It has to
@@ -314,6 +319,8 @@ So, the ideal sequence of getting Open-CE packages built and installed in a cont
 ==============================================================================
 usage: open-ce build image [-h] [--local_conda_channel LOCAL_CONDA_CHANNEL]
                       [--conda_env_file CONDA_ENV_FILE]
+                      [--container_build_args CONTAINER_BUILD_ARGS]
+                      [--container_tool CONTAINER_TOOL]
 
 Run Open-CE tools within a container
 
@@ -324,6 +331,11 @@ optional arguments:
                         condabuild)
   --conda_env_file CONDA_ENV_FILE
                         Location of conda environment file. (default: None)
+  --container_build_args CONTAINER_BUILD_ARGS
+                        Container build arguments like environment variables to
+                        be set in the container or cpus or gpus to be used
+                        such as "--build-arg ENV1=test1 --cpuset-cpus 0,1".
+                        (default: )
   --container_tool CONTAINER_TOOL
                         Container tool to be used. (default: docker)
 

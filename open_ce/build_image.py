@@ -25,7 +25,10 @@ from open_ce.errors import OpenCEError, Error
 
 COMMAND = 'image'
 DESCRIPTION = 'Run Open-CE tools within a container'
-ARGUMENTS = [Argument.LOCAL_CONDA_CHANNEL, Argument.CONDA_ENV_FILE, Argument.CONTAINER_TOOL]
+ARGUMENTS = [Argument.LOCAL_CONDA_CHANNEL,
+             Argument.CONDA_ENV_FILE,
+             Argument.CONTAINER_BUILD_ARGS,
+             Argument.CONTAINER_TOOL]
 
 OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 RUNTIME_IMAGE_NAME = "opence-runtime"
@@ -38,7 +41,7 @@ OPENCE_USER = "opence"
 LOCAL_CONDA_CHANNEL_IN_IMG = "opence-local-conda-channel"
 TARGET_DIR = "/home/{}/{}".format(OPENCE_USER, LOCAL_CONDA_CHANNEL_IN_IMG)
 
-def build_image(local_conda_channel, conda_env_file, container_tool):
+def build_image(local_conda_channel, conda_env_file, container_tool, container_build_args=""):
     """
     Build a container image from the Dockerfile in RUNTIME_IMAGE_PATH.
     Returns a result code and the name of the new image.
@@ -51,6 +54,7 @@ def build_image(local_conda_channel, conda_env_file, container_tool):
     build_cmd += "--build-arg LOCAL_CONDA_CHANNEL=" + local_conda_channel + " "
     build_cmd += "--build-arg CONDA_ENV_FILE=" + conda_env_file + " "
     build_cmd += "--build-arg TARGET_DIR=" + TARGET_DIR + " "
+    build_cmd += container_build_args + " "
     build_cmd += BUILD_CONTEXT
 
     print("Container build command: ", build_cmd)
@@ -89,7 +93,8 @@ def build_runtime_container_image(args):
         # make it relative to BUILD CONTEXT
         args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
 
-    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file), args.container_tool)
+    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file),
+                             args.container_tool, args.container_build_args)
 
     print("Container image with name {} is built successfully.".format(image_name))
 

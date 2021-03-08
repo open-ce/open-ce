@@ -167,3 +167,15 @@ def test_build_image_with_container_tool(mocker):
     opence._main(arg_strings)
 
     os.remove("tests/testcondabuild/test-conda-env.yaml")
+
+def test_build_image_with_container_build_args(mocker):
+    '''
+    Tests that container_build_args argument is parsed and passed to build image.
+    '''
+    mocker.patch('os.system', return_value=0)
+
+    build_args = "--build-arg ENV1=test1 --build-arg ENV2=test2 same_setting 0,1"
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml", "--container_tool", "podman", "--container_build_args", build_args]
+    opence._main(arg_strings)
+
+    os.remove("tests/testcondabuild/test-conda-env.yaml")
