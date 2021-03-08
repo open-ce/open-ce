@@ -385,6 +385,12 @@ def test_build_env_container_build_with_build_args(mocker):
     )
     mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
 
+    # with docker_build 
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--container_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
+    opence._main(arg_strings)
+
+    # with container_build
     arg_strings = ["build", build_env.COMMAND, "--container_build",
                    "--container_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
     opence._main(arg_strings)
