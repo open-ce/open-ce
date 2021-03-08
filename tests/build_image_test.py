@@ -43,7 +43,7 @@ def test_build_image_positive_case(mocker):
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
 
 def test_not_existing_local_conda_channel():
     '''
@@ -97,7 +97,7 @@ def test_local_conda_channel_with_absolute_path(mocker):
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
 
 def test_for_failed_docker_build_cmd(mocker):
     '''
@@ -107,7 +107,7 @@ def test_for_failed_docker_build_cmd(mocker):
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(arg_strings)
+        opence._main(arg_strings)
     assert "Failure building image" in str(exc.value)
 
 def test_modified_file_removed(mocker):
@@ -123,6 +123,6 @@ def test_modified_file_removed(mocker):
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
 
     assert not os.path.exists("tests/testcondabuild/test-conda-env-runtime.yaml")
