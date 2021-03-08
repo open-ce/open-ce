@@ -26,6 +26,7 @@ jobs:
       - name: Ensure open-ce can load without conda-build
         shell: bash -l {0}
         run: |
+          pip install -e .
           conda install -y pyyaml requests
           ./open_ce/open-ce -h
       - name: Install dependencies
