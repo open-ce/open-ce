@@ -18,7 +18,7 @@ $ conda install pytest pytest-cov pytest-mock
 Before running the tests, install the Open-CE pip package using 
 following command - 
 ```shell
-$ python setup.py install
+$ pip install -e .
 ...
 ```
 
