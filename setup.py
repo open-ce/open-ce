@@ -27,6 +27,7 @@ def get_readme():
 
 REQUIRED_PACKAGES = [
     "pyyaml",
+    "requests",
 ]
 
 setup(
