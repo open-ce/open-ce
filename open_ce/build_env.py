@@ -69,8 +69,8 @@ def _run_tests(build_tree, test_labels, conda_env_files):
         raise OpenCEError(Error.FAILED_TESTS, len(failed_tests))
 
 def _all_outputs_exist(output_folder, output_files):
-    return all([os.path.exists(os.path.join(os.path.abspath(output_folder), package))
-                    for package in output_files])
+    return all((os.path.exists(os.path.join(os.path.abspath(output_folder), package))
+                    for package in output_files))
 
 def build_env(args):
     '''Entry Function'''
