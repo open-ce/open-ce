@@ -234,72 +234,6 @@ def _get_package_dependencies(path, variant_config_files, variants):
 
     return packages, versions, run_deps, host_deps, build_deps, test_deps, output_files
 
-def _get_remote_package_dependencies(package):
-    return {}
-
-def _traverse_remote_dependencies(dependencies, internal_packages)
-    unseen_dependencies = dependencies
-    while unseen_dependencies:
-        new_dependencies = set()
-        for dependency in unseen_dependencies:
-            if not dependency in internal_packages:
-                new_dependencies.update(_get_remote_package_dependencies(dependency))
-
-        unseen_dependencies = new_dependencies.difference(dependencies)
-        dependencies.update(unseen_dependencies)
-
-    return dependencies.intersection(internal_packages)
-
-def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
-    """
-    Create a dependency tree for a list of build commands.
-
-    Each build_command will contain a `build_command_dependencies` key which contains a list of integers.
-    Each integer in the list represents the index of the dependencies build_commands within the
-    list.
-
-    The start_index indicates the value that the dependency indices should start
-    counting from.
-    """
-
-    # Create a packages dictionary that uses all of a recipe's packages as key, with
-    # the recipes index as values.
-    packages = dict()
-    index = 0
-
-    #save indices of build commands which are already present in build_commands
-    duplicates = []
-    for var_index, build_command in enumerate(variant_build_commands):
-        if build_command in build_commands:
-            alt_index = build_commands.index(build_command)
-            duplicates.append(var_index)
-            for package in build_command.packages:
-                packages.update({ package : [alt_index] + packages.get(package, []) })
-        else:
-            for package in build_command.packages:
-                packages.update({ package : [start_index + index] + packages.get(package, []) })
-            index +=1
-
-    # remove build commands that are already added to build_commands
-    variant_build_commands = [i for j, i in enumerate(variant_build_commands) if j not in duplicates]
-
-    # Add a list of indices for dependency to a BuildCommand's `build_command_dependencies` value
-    # Note: This will filter out all dependencies that aren't in the recipes list.
-    for index, build_command in enumerate(variant_build_commands):
-        deps = []
-        dependencies = set()
-        dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
-        dependencies.update({utils.remove_version(dep) for dep in build_command.build_dependencies})
-        dependencies.update({utils.remove_version(dep) for dep in build_command.host_dependencies})
-        dependencies.update({utils.remove_version(dep) for dep in build_command.test_dependencies})
-        dependencies.update(_traverse_remote_dependencies(dependencies, packages))
-        for dep in dependencies:
-            if dep in packages:
-                deps += filter(lambda x: x != start_index + index, packages[dep])
-        build_command.build_command_dependencies = deps
-
-    return variant_build_commands, packages
-
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
     An interable container of BuildCommands.
@@ -340,6 +274,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._conda_env_files = dict()
         self._test_feedstocks = dict()
         self._initial_package_indices = []
+        self.dep_graph_cache = None
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
@@ -356,8 +291,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
             # Add dependency tree information to the packages list and
             # remove build commands from build_commands that are already in self.build_commands
-            build_commands, package_indices = _add_build_command_dependencies(build_commands, self.build_commands,
-                                                                              len(self.build_commands))
+            build_commands, package_indices = self._add_build_command_dependencies(build_commands, self.build_commands,
+                                                                                   len(self.build_commands))
             self.build_commands += build_commands
             self._detect_cycle()
 
@@ -544,6 +479,78 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             if len(cycles) > max_cycles:
                 cycle_print += "\nCycles truncated after {}...".format(max_cycles)
             raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
+
+    def _find_indirect_internal_dependencies(self, dependencies, internal_packages, channels):
+        #pylint: disable=import-outside-toplevel
+        from open_ce import conda_utils
+        remote_dependencies = {dep for dep in dependencies if not utils.remove_version(dep) in internal_packages}
+        all_dependencies, self.dep_graph_cache = conda_utils.get_remote_package_dependencies(channels, remote_dependencies, internal_packages, self.dep_graph_cache)
+
+        return {utils.remove_version(dep) for dep in all_dependencies if utils.remove_version(dep) in internal_packages}
+
+    def _add_build_command_dependencies(self, variant_build_commands, build_commands, start_index=0):
+        """
+        Create a dependency tree for a list of build commands.
+
+        Each build_command will contain a `build_command_dependencies` key which contains a list of integers.
+        Each integer in the list represents the index of the dependencies build_commands within the
+        list.
+
+        The start_index indicates the value that the dependency indices should start
+        counting from.
+        """
+
+        # Create a packages dictionary that uses all of a recipe's packages as key, with
+        # the recipes index as values.
+        packages = dict()
+        index = 0
+
+        #save indices of build commands which are already present in build_commands
+        duplicates = []
+        for var_index, build_command in enumerate(variant_build_commands):
+            if build_command in build_commands:
+                alt_index = build_commands.index(build_command)
+                duplicates.append(var_index)
+                for package in build_command.packages:
+                    packages.update({ package : [alt_index] + packages.get(package, []) })
+            else:
+                for package in build_command.packages:
+                    packages.update({ package : [start_index + index] + packages.get(package, []) })
+                index +=1
+
+        # remove build commands that are already added to build_commands
+        variant_build_commands = [i for j, i in enumerate(variant_build_commands) if j not in duplicates]
+
+        # Add a list of indices for dependency to a BuildCommand's `build_command_dependencies` value
+        # Note: This will filter out all dependencies that aren't in the recipes list.
+        for index, build_command in enumerate(variant_build_commands):
+            deps = []
+            dependencies = set()
+            dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
+            dependencies.update(self._find_indirect_internal_dependencies(set(build_command.run_dependencies),
+                                                                    packages,
+                                                                    build_command.channels))
+
+            dependencies.update({utils.remove_version(dep) for dep in build_command.build_dependencies})
+            dependencies.update(self._find_indirect_internal_dependencies(set(build_command.build_dependencies),
+                                                                    packages,
+                                                                    build_command.channels))
+
+            dependencies.update({utils.remove_version(dep) for dep in build_command.host_dependencies})
+            dependencies.update(self._find_indirect_internal_dependencies(set(build_command.host_dependencies),
+                                                                    packages,
+                                                                    build_command.channels))
+
+            dependencies.update({utils.remove_version(dep) for dep in build_command.test_dependencies})
+            dependencies.update(self._find_indirect_internal_dependencies(set(build_command.test_dependencies),
+                                                                    packages,
+                                                                    build_command.channels))
+            for dep in dependencies:
+                if dep in packages:
+                    deps += filter(lambda x: x != start_index + index, packages[dep])
+            build_command.build_command_dependencies = deps
+
+        return variant_build_commands, packages
 
 
 def find_all_cycles(tree, current=0, seen=None):
