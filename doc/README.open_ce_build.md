@@ -309,7 +309,7 @@ So, the ideal sequence of getting Open-CE packages built and installed in a cont
 ```shell
 ==============================================================================
 usage: open-ce build image [-h] [--local_conda_channel LOCAL_CONDA_CHANNEL]
-                      [--conda_env_file CONDA_ENV_FILE]
+                           [--conda_env_files CONDA_ENV_FILES]
 
 Run Open-CE tools within a container
 
@@ -318,8 +318,9 @@ optional arguments:
   --local_conda_channel LOCAL_CONDA_CHANNEL
                         Path where built conda packages are present. (default:
                         condabuild)
-  --conda_env_file CONDA_ENV_FILE
-                        Location of conda environment file. (default: None)
+  --conda_env_files CONDA_ENV_FILES
+                        Comma delimited list of paths to conda environment
+                        files. (default: None)
 
 ==============================================================================
 ```

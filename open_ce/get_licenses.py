@@ -31,7 +31,7 @@ import yaml
 
 from open_ce import utils
 from open_ce.errors import OpenCEError, Error
-from open_ce.inputs import Argument
+from open_ce.inputs import Argument, parse_arg_list
 
 COMMAND = 'licenses'
 
@@ -414,11 +414,14 @@ def get_licenses(args):
     """
     Entry point for `get licenses`.
     """
-    if not args.conda_env_file:
+    if not args.conda_env_files:
         raise OpenCEError(Error.CONDA_ENV_FILE_REQUIRED)
 
     gen = LicenseGenerator()
-    gen.add_licenses(args.conda_env_file)
+
+    for conda_env_file in parse_arg_list(args.conda_env_files):
+        gen.add_licenses(conda_env_file)
+
     gen.write_licenses_file(args.output_folder)
 
 ENTRY_FUNCTION = get_licenses

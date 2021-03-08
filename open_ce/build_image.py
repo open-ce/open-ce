@@ -20,7 +20,7 @@
 import os
 import shutil
 from open_ce import utils
-from open_ce.inputs import Argument
+from open_ce.inputs import Argument, parse_arg_list
 from open_ce.errors import OpenCEError, Error
 
 COMMAND = 'image'
@@ -77,21 +77,22 @@ def build_runtime_docker_image(args):
     using locally built conda packages and environment file.
     """
     local_conda_channel = os.path.abspath(args.local_conda_channel)
-    conda_env_file = os.path.abspath(args.conda_env_file)
-    _validate_input_paths(local_conda_channel, conda_env_file)
+    for conda_env_file in parse_arg_list(args.conda_env_files):
+        conda_env_file = os.path.abspath(conda_env_file)
+        _validate_input_paths(local_conda_channel, conda_env_file)
 
-    # Copy the conda environment file into the local conda channel to modify it
-    shutil.copy(conda_env_file, local_conda_channel)
-    conda_env_file = os.path.join(local_conda_channel, os.path.basename(conda_env_file))
-    utils.replace_conda_env_channels(conda_env_file, r'file:.*', "file:/{}".format(TARGET_DIR))
+        # Copy the conda environment file into the local conda channel to modify it
+        shutil.copy(conda_env_file, local_conda_channel)
+        conda_env_file = os.path.join(local_conda_channel, os.path.basename(conda_env_file))
+        utils.replace_conda_env_channels(conda_env_file, r'file:.*', "file:/{}".format(TARGET_DIR))
 
-    # Check if input local conda channel path is absolute
-    if os.path.isabs(args.local_conda_channel):
-        # make it relative to BUILD CONTEXT
-        args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
+        # Check if input local conda channel path is absolute
+        if os.path.isabs(args.local_conda_channel):
+            # make it relative to BUILD CONTEXT
+            args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
 
-    image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file))
+        image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file))
 
-    print("Docker image with name {} is built successfully.".format(image_name))
+        print("Docker image with name {} is built successfully.".format(image_name))
 
 ENTRY_FUNCTION = build_runtime_docker_image
