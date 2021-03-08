@@ -48,7 +48,7 @@ to set container build options like environment variables or other settings
 like cpusets.
 
 ```shell
-    ./open-ce/open_ce/open-ce build env --container_build --container_tool podman --docker_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" open-ce-environments/envs/pytorch-env.yaml
+    ./open-ce/open_ce/open-ce build env --container_build --container_tool podman --container_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" open-ce-environments/envs/pytorch-env.yaml
 ```
 
 As part of this process of container build, it will copy a local_files directory that is in the
