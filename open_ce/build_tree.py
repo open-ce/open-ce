@@ -234,6 +234,22 @@ def _get_package_dependencies(path, variant_config_files, variants):
 
     return packages, versions, run_deps, host_deps, build_deps, test_deps, output_files
 
+def _get_remote_package_dependencies(package):
+    return {}
+
+def _traverse_remote_dependencies(dependencies, internal_packages)
+    unseen_dependencies = dependencies
+    while unseen_dependencies:
+        new_dependencies = set()
+        for dependency in unseen_dependencies:
+            if not dependency in internal_packages:
+                new_dependencies.update(_get_remote_package_dependencies(dependency))
+
+        unseen_dependencies = new_dependencies.difference(dependencies)
+        dependencies.update(unseen_dependencies)
+
+    return dependencies.intersection(internal_packages)
+
 def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
     """
     Create a dependency tree for a list of build commands.
@@ -276,6 +292,7 @@ def _add_build_command_dependencies(variant_build_commands, build_commands, star
         dependencies.update({utils.remove_version(dep) for dep in build_command.build_dependencies})
         dependencies.update({utils.remove_version(dep) for dep in build_command.host_dependencies})
         dependencies.update({utils.remove_version(dep) for dep in build_command.test_dependencies})
+        dependencies.update(_traverse_remote_dependencies(dependencies, packages))
         for dep in dependencies:
             if dep in packages:
                 deps += filter(lambda x: x != start_index + index, packages[dep])
