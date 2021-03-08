@@ -14,24 +14,27 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 import pytest
-import imp
+from importlib.util import spec_from_loader, module_from_spec
+from importlib.machinery import SourceFileLoader
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
-import validate_env
-from errors import OpenCEError
+
+spec = spec_from_loader("opence", SourceFileLoader("opence", os.path.join(test_dir, '..', 'open_ce', 'open-ce')))
+opence = module_from_spec(spec)
+spec.loader.exec_module(opence)
+
+import open_ce.validate_env as validate_env
+from open_ce.errors import OpenCEError
 
 def test_validate_env():
     '''
     Positive test for validate_env.
     '''
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["validate", validate_env.COMMAND, env_file])
+    opence._main(["validate", validate_env.COMMAND, env_file])
 
 def test_validate_env_negative():
     '''
@@ -39,7 +42,7 @@ def test_validate_env_negative():
     '''
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(["validate", validate_env.COMMAND, env_file])
+        opence._main(["validate", validate_env.COMMAND, env_file])
     assert "Unexpected key chnnels was found in " in str(exc.value)
 
 def test_validate_env_wrong_external_deps(mocker,):
@@ -51,7 +54,7 @@ def test_validate_env_wrong_external_deps(mocker,):
     mocker.patch('conda_build.metadata.MetaData.get_rendered_recipe_text', return_value=env_file)
 
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])
+        opence._main(["validate", validate_env.COMMAND, unused_env_for_arg])
     assert "ext_dep is not of expected type <class 'list'>" in str(exc.value)
 
 def test_validate_env_dict_for_external_deps(mocker,):
@@ -63,5 +66,5 @@ def test_validate_env_dict_for_external_deps(mocker,):
     mocker.patch('conda_build.metadata.MetaData.get_rendered_recipe_text', return_value=env_file)
 
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(["validate", validate_env.COMMAND, unused_env_for_arg])
+        opence._main(["validate", validate_env.COMMAND, unused_env_for_arg])
     assert "{'feedstock': 'ext_dep'} is not of expected type <class 'str'>" in str(exc.value)

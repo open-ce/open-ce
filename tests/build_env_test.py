@@ -14,21 +14,24 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 import pytest
-import imp
+from importlib.util import spec_from_loader, module_from_spec
+from importlib.machinery import SourceFileLoader
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+
+spec = spec_from_loader("opence", SourceFileLoader("opence", os.path.join(test_dir, '..', 'open_ce', 'open-ce')))
+opence = module_from_spec(spec)
+spec.loader.exec_module(opence)
+
 import helpers
-import build_env
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
-import utils
-from errors import OpenCEError
+import open_ce.build_env as build_env
+import open_ce.utils as utils
+from open_ce.errors import OpenCEError
 from build_tree_test import TestBuildTree
-import test_feedstock
+import open_ce.test_feedstock as test_feedstock
 
 class PackageBuildTracker(object):
     def __init__(self):
@@ -67,7 +70,7 @@ def test_build_env(mocker, capsys):
         side_effect=dirTracker.validate_chdir
     )
     mocker.patch(
-        'validate_config.validate_build_tree'
+        'open_ce.validate_config.validate_build_tree'
     )
     #            +-------+
     #     +------+   15  +-----+
@@ -109,14 +112,14 @@ def test_build_env(mocker, capsys):
     py_version = "2.0"
     buildTracker = PackageBuildTracker()
     mocker.patch( # This ensures that 'package21' is not built when the python version is 2.0.
-        'build_feedstock.build_feedstock_from_command',
+        'open_ce.build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
                      conditions=[(lambda command: command.python == py_version),
                                  (lambda command: command.recipe != "package21-feedstock")]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--run_tests"])
+    opence._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--run_tests"])
     validate_conda_env_files(py_version)
 
     #---The second test specifies a python version that is supported in the env file by package21.
@@ -136,38 +139,38 @@ def test_build_env(mocker, capsys):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock_from_command',
+        'open_ce.build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
                      conditions=[(lambda command: command.python == py_version and channel in command.channels)]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--channels", channel])
+    opence._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--channels", channel])
     validate_conda_env_files(py_version)
 
     #---The third test verifies that the repository_folder argument is working properly.
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock_from_command',
+        'open_ce.build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
                      conditions=[(lambda command: command.repository.startswith("repo_folder"))]))
     )
     py_version = "2.1"
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["build", build_env.COMMAND, env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
+    opence._main(["build", build_env.COMMAND, env_file, "--repository_folder", "repo_folder", "--python_versions", py_version])
     validate_conda_env_files(py_version)
 
     #---The fourth test verifies that builds are skipped properly if they already exist.
     mocker.patch(
-        'build_env._all_outputs_exist',
+        'open_ce.build_env._all_outputs_exist',
         return_value=True)
 
     captured = capsys.readouterr()
-    open_ce._main(["build", build_env.COMMAND, env_file])
+    opence._main(["build", build_env.COMMAND, env_file])
     captured = capsys.readouterr()
     assert "Skipping build of" in captured.out
     mocker.patch(
-        'build_env._all_outputs_exist',
+        'open_ce.build_env._all_outputs_exist',
         return_value=False)
 
     #---The fifth test specifies a cuda version that isn't supported in the env file by package21.
@@ -191,13 +194,13 @@ def test_build_env(mocker, capsys):
                     "package22": ["package15"]}
     buildTracker = PackageBuildTracker()
     mocker.patch( # This ensures that 'package21' is not built when the cuda version is 9.1
-        'build_feedstock.build_feedstock_from_command',
+        'open_ce.build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
                      conditions=[(lambda command: command.recipe != "package21-feedstock")]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version, "--run_tests"])
+    opence._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version, "--run_tests"])
     validate_conda_env_files(cuda_versions=cuda_version)
 
     #---The sixth test specifies a cuda version that is supported in the env file by package21.
@@ -216,13 +219,13 @@ def test_build_env(mocker, capsys):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock_from_command',
+        'open_ce.build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
                      conditions=[(lambda command: command.cudatoolkit == cuda_version)]))
     )
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
-    open_ce._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version])
+    opence._main(["build", build_env.COMMAND, env_file, "--cuda_versions", cuda_version])
     validate_conda_env_files(cuda_versions=cuda_version)
 
     #---The seventh test specifies specific packages that should be built (plus their dependencies)
@@ -240,7 +243,7 @@ def test_build_env(mocker, capsys):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock_from_command',
+        'open_ce.build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps,
                      conditions=[(lambda command: not command.recipe in ["package11-feedstock",
                                                                          "package12-feedstock",
@@ -251,7 +254,7 @@ def test_build_env(mocker, capsys):
 
     env_file = os.path.join(test_dir, 'test-env2.yaml')
     captured = capsys.readouterr()
-    open_ce._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--packages", "package14,package35"])
+    opence._main(["build", build_env.COMMAND, env_file, "--python_versions", py_version, "--packages", "package14,package35"])
     captured = capsys.readouterr()
     assert "No recipes were found for package35" in captured.out
 
@@ -270,7 +273,7 @@ def test_build_env(mocker, capsys):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock_from_command',
+        'open_ce.build_feedstock.build_feedstock_from_command',
         side_effect=(lambda x, *args, **kwargs: buildTracker.validate_build_feedstock(x, package_deps))
     )
     mocker.patch(
@@ -279,8 +282,7 @@ def test_build_env(mocker, capsys):
     )
 
     env_file = 'https://test.com/test-env2.yaml'
-    open_ce._main(["build", build_env.COMMAND, env_file])
-
+    opence._main(["build", build_env.COMMAND, env_file])
 
 def validate_conda_env_files(py_versions=utils.DEFAULT_PYTHON_VERS,
                              build_types=utils.DEFAULT_BUILD_TYPES,
@@ -323,12 +325,12 @@ def test_env_validate(mocker):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock',
+        'open_ce.build_feedstock.build_feedstock',
         side_effect=buildTracker.validate_build_feedstock
     )
     env_file = os.path.join(test_dir, 'test-env-invalid1.yaml')
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(["build", build_env.COMMAND, env_file])
+        opence._main(["build", build_env.COMMAND, env_file])
     assert "Unexpected key chnnels was found in " in str(exc.value)
 
 def test_build_env_docker_build(mocker):
@@ -337,13 +339,13 @@ def test_build_env_docker_build(mocker):
     '''
     arg_strings = ["build", build_env.COMMAND, "--docker_build", "my-env.yaml"]
 
-    mocker.patch('docker_build.build_with_docker', return_value=0)
+    mocker.patch('open_ce.docker_build.build_with_docker', return_value=0)
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
 
-def test_build_env_docker_build_multiple_cuda_versions():
+def test_build_env_docker_build_multiple_cuda_versions(mocker):
     '''
     Tests that passing mutiple values in --cuda_versions argument with docker_build fails.
     '''
@@ -351,8 +353,10 @@ def test_build_env_docker_build_multiple_cuda_versions():
     arg_strings = ["build", build_env.COMMAND, "--docker_build",
                    "--cuda_versions", "10.2,11.0", "my-env.yaml"]
 
+    mocker.patch('open_ce.docker_build.build_with_docker', return_value=1)
+
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(arg_strings)
+        opence._main(arg_strings)
     assert "Only one cuda version" in str(exc.value)
 
 def test_build_env_docker_build_cuda_versions(mocker):
@@ -364,12 +368,12 @@ def test_build_env_docker_build_cuda_versions(mocker):
         'os.getcwd',
         side_effect=dirTracker.mocked_getcwd
     )
-    mocker.patch('docker_build.build_with_docker', return_value=0)
+    mocker.patch('open_ce.docker_build.build_with_docker', return_value=0)
 
     cuda_version = "10.2"
     arg_strings = ["build", build_env.COMMAND, "--docker_build",
                    "--cuda_versions", cuda_version, "my-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
     validate_conda_env_files(cuda_versions=cuda_version)
 
 def test_build_env_docker_build_with_build_args(mocker):
@@ -381,11 +385,11 @@ def test_build_env_docker_build_with_build_args(mocker):
         'os.getcwd',
         side_effect=dirTracker.mocked_getcwd
     )
-    mocker.patch('docker_build.build_with_docker', return_value=0)
+    mocker.patch('open_ce.docker_build.build_with_docker', return_value=0)
 
     arg_strings = ["build", build_env.COMMAND, "--docker_build",
                    "--docker_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
-    open_ce._main(arg_strings)
+    opence._main(arg_strings)
 
 def test_build_env_if_no_conda_build(mocker):
     '''
@@ -395,7 +399,7 @@ def test_build_env_if_no_conda_build(mocker):
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
     with pytest.raises(OpenCEError):
-        open_ce._main(arg_strings)
+        opence._main(arg_strings)
 
 def test_run_tests(mocker):
     '''
@@ -410,7 +414,7 @@ def test_run_tests(mocker):
                                                       conda_env="test-conda-env2.yaml",
                                                       bash_command="[ 1 -eq 2 ]")]
 
-    mocker.patch("test_feedstock.gen_test_commands", return_value=mock_test_commands)
+    mocker.patch("open_ce.test_feedstock.gen_test_commands", return_value=mock_test_commands)
     mocker.patch(
         'os.chdir',
         side_effect=dirTracker.validate_chdir
@@ -456,7 +460,7 @@ def test_build_env_url(mocker):
     )
     buildTracker = PackageBuildTracker()
     mocker.patch(
-        'build_feedstock.build_feedstock',
+        'open_ce.build_feedstock.build_feedstock',
         side_effect=buildTracker.validate_build_feedstock
     )
     mocker.patch(
@@ -466,5 +470,5 @@ def test_build_env_url(mocker):
 
     env_file = 'https://test.com/test-env-invalid1.yaml'
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(["build", build_env.COMMAND, env_file])
+        opence._main(["build", build_env.COMMAND, env_file])
     assert "Unexpected key chnnels was found in " in str(exc.value)

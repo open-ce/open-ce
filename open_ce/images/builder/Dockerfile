@@ -43,4 +43,5 @@ RUN export PATH="${PATH}" && \
     sudo rm -f /run/nologin && \
     yes | ssh-keygen -f $HOME/.ssh/id_rsa -q -t rsa -N '' && cp $HOME/.ssh/id_rsa.pub $HOME/.ssh/authorized_keys && \
     echo ". $CONDA_HOME/etc/profile.d/conda.sh" >> ${HOME}/.bashrc && \
+    echo "export PYTHONPATH=${PYTHONPATH}:$HOME/open_ce" >> ${HOME}/.bashrc && \
     echo "conda activate base" >> ${HOME}/.bashrc

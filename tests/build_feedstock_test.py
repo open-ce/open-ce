@@ -14,19 +14,22 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 import pytest
-import imp
+from importlib.util import spec_from_loader, module_from_spec
+from importlib.machinery import SourceFileLoader
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
+
+spec = spec_from_loader("opence", SourceFileLoader("opence", os.path.join(test_dir, '..', 'open_ce', 'open-ce')))
+opence = module_from_spec(spec)
+spec.loader.exec_module(opence)
+
 import helpers
-import utils
-from errors import OpenCEError
-open_ce = imp.load_source('open_ce', os.path.join(test_dir, '..', 'open-ce', 'open-ce'))
-import build_feedstock
+import open_ce.utils as utils
+from open_ce.errors import OpenCEError
+import open_ce.build_feedstock as build_feedstock
 
 def test_build_feedstock_default(mocker):
     """
@@ -48,7 +51,7 @@ def test_build_feedstock_default(mocker):
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, expect_config=expect_config, **kwargs))
     )
 
-    open_ce._main(["build", build_feedstock.COMMAND])
+    opence._main(["build", build_feedstock.COMMAND])
 
 def test_build_feedstock_failure(mocker):
     """
@@ -68,7 +71,7 @@ def test_build_feedstock_failure(mocker):
     )
 
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(["build", build_feedstock.COMMAND])
+        opence._main(["build", build_feedstock.COMMAND])
     assert "Unable to build recipe: test_recipe" in str(exc.value)
 
 def test_build_feedstock_working_dir(mocker):
@@ -95,7 +98,7 @@ def test_build_feedstock_working_dir(mocker):
                                                                            "/test/starting_dir"])) # And then changed back to the starting directory.
     )
 
-    open_ce._main(["build", build_feedstock.COMMAND, "--working_directory", working_dir])
+    opence._main(["build", build_feedstock.COMMAND, "--working_directory", working_dir])
 
 def test_build_feedstock_config_file(mocker):
     """
@@ -107,7 +110,7 @@ def test_build_feedstock_config_file(mocker):
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
     )
 
-    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--build_type", "cuda"])
+    opence._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--build_type", "cuda"])
 
 def test_build_feedstock_default_config_file(mocker):
     """
@@ -129,9 +132,9 @@ def test_build_feedstock_default_config_file(mocker):
 
     test_recipe_config = {'recipes' : [{'name' : 'my_variant', 'path' : 'variants_from_default_config'}]}
 
-    mocker.patch('conda_utils.render_yaml', return_value=test_recipe_config)
+    mocker.patch('open_ce.conda_utils.render_yaml', return_value=test_recipe_config)
 
-    open_ce._main(["build", build_feedstock.COMMAND])
+    opence._main(["build", build_feedstock.COMMAND])
 
 def test_build_feedstock_nonexist_config_file(mocker):
     """
@@ -147,7 +150,7 @@ def test_build_feedstock_nonexist_config_file(mocker):
     )
 
     with pytest.raises(OpenCEError) as exc:
-        open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
+        opence._main(["build", build_feedstock.COMMAND, "--recipe-config-file", "my_config.yml"])
     assert "Unable to open provided config file: my_config.yml" in str(exc.value)
 
 def test_recipe_config_file_for_inapplicable_configuration(mocker, capsys):
@@ -161,7 +164,7 @@ def test_recipe_config_file_for_inapplicable_configuration(mocker, capsys):
         side_effect=(lambda x, **kwargs: helpers.validate_conda_build_args(x, expect_recipe=expect_recipe, **kwargs))
     )
     
-    open_ce._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--python_versions", "4.1"])
+    opence._main(["build", build_feedstock.COMMAND, "--recipe-config-file", os.path.join(test_dir, "my_config.yaml"), "--python_versions", "4.1"])
     captured = capsys.readouterr()
     assert "INFO: No recipe to build for given configuration." in captured.out
 
@@ -228,7 +231,7 @@ def test_build_feedstock_extra_args(mocker):
                                         { 'name' : 'test_recipe_extra', 'path' : 'extra'}],
                            'channels' : ['test_channel_from_config']}
 
-    mocker.patch('conda_utils.render_yaml', return_value=test_recipe_config)
+    mocker.patch('open_ce.conda_utils.render_yaml', return_value=test_recipe_config)
 
     arg_input = ["build", build_feedstock.COMMAND,
                  "--channels", "test_channel",
@@ -238,7 +241,7 @@ def test_build_feedstock_extra_args(mocker):
                  "--build_types", "cpu",
                  "--mpi_types", "openmpi",
                  "--cuda_versions", "10.2"]
-    open_ce._main(arg_input)
+    opence._main(arg_input)
 
 def test_build_feedstock_if_no_conda_build(mocker):
     '''
@@ -247,5 +250,5 @@ def test_build_feedstock_if_no_conda_build(mocker):
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     with pytest.raises(OpenCEError):
-        assert open_ce._main(["build", build_feedstock.COMMAND]) == 1
+        assert opence._main(["build", build_feedstock.COMMAND]) == 1
 

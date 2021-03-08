@@ -20,10 +20,10 @@
 import os
 import traceback
 
-import utils
-import inputs
-from inputs import Argument
-from errors import OpenCEError, Error
+from open_ce import utils
+from open_ce import inputs
+from open_ce.inputs import Argument
+from open_ce.errors import OpenCEError, Error
 
 COMMAND = 'feedstock'
 
@@ -51,7 +51,7 @@ def load_package_config(config_file=None, variants=None, recipe_path=None):
     recipe to build, and it is in the directory called 'recipe'.
     '''
     # pylint: disable=import-outside-toplevel
-    import conda_utils
+    from open_ce import conda_utils
 
     if recipe_path:
         recipe_name = os.path.basename(os.getcwd())
@@ -157,7 +157,7 @@ def build_feedstock(args):
     '''Entry Function'''
     # Here, importing BuildCommand is intentionally done here to avoid circular import.
 
-    from build_tree import BuildCommand   # pylint: disable=import-outside-toplevel
+    from open_ce.build_tree import BuildCommand   # pylint: disable=import-outside-toplevel
     command = BuildCommand(recipe=inputs.parse_arg_list(args.recipe_list),
                            repository=args.working_directory,
                            packages=[],

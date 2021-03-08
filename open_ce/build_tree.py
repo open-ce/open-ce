@@ -17,12 +17,12 @@
 """
 
 import os
-import utils
-import env_config
-import validate_config
-import build_feedstock
-from errors import OpenCEError, Error
-from conda_env_file_generator import CondaEnvFileGenerator
+from open_ce import utils
+from open_ce import env_config
+from open_ce import validate_config
+from open_ce import build_feedstock
+from open_ce.errors import OpenCEError, Error
+from open_ce.conda_env_file_generator import CondaEnvFileGenerator
 
 
 class BuildCommand():
@@ -204,7 +204,7 @@ def _get_package_dependencies(path, variant_config_files, variants):
     for the recipe at a given path. Uses conda-render to determine this information.
     """
     #pylint: disable=import-outside-toplevel
-    import conda_utils
+    from open_ce import conda_utils
 
     metas = conda_utils.render_yaml(path, variants, variant_config_files)
 
@@ -459,7 +459,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                     else:
                         # Look for patch relative to where the Open-CE environment file is
                         patch_file = os.path.join(os.path.dirname(env_config_data.get(
-                                                  env_config.Key.opence_env_file_path)), patch)
+                                                  env_config.Key.opence_env_file_path.name)), patch)
                     patch_apply_cmd = "git apply {}".format(patch_file)
                     print("Patch apply command: ", patch_apply_cmd)
                     patch_apply_res = os.system(patch_apply_cmd)

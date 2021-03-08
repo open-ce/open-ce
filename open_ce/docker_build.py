@@ -21,11 +21,11 @@ import datetime
 import platform
 import argparse
 
-import utils
-from errors import OpenCEError, Error
-from inputs import Argument
+from open_ce import utils
+from open_ce.errors import OpenCEError, Error
+from open_ce.inputs import Argument
 
-OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 BUILD_IMAGE_NAME = "builder"
 BUILD_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", BUILD_IMAGE_NAME)
 BUILD_CUDA_IMAGE_NAME = "builder-cuda-" + platform.machine()
@@ -130,7 +130,6 @@ def _execute_in_container(container_name, command):
     docker_cmd = DOCKER_TOOL + " exec " + container_name + " "
     # Change to home directory
     docker_cmd += "bash -c 'cd " + HOME_PATH + "; " + command + "'"
-
     if os.system(docker_cmd):
         raise OpenCEError(Error.BUILD_IN_CONTAINER, container_name)
 
@@ -178,7 +177,7 @@ def build_in_container(image_name, args, arg_strings):
     _start_container(container_name)
 
     # Execute build command
-    cmd = "python {} {} {} {}".format(os.path.join(HOME_PATH, "open-ce", "open-ce", "open-ce"),
+    cmd = "source $HOME/.bashrc; python {} {} {} {}".format(os.path.join(HOME_PATH, "open_ce", "open-ce"),
                                       args.command,
                                       args.sub_command,
                                       ' '.join(arg_strings[0:]))

@@ -29,9 +29,9 @@ import urllib.parse
 import requests
 import yaml
 
-import utils
-from errors import OpenCEError, Error
-from inputs import Argument
+from open_ce import utils
+from open_ce.errors import OpenCEError, Error
+from open_ce.inputs import Argument
 
 COMMAND = 'licenses'
 

@@ -14,17 +14,15 @@
 # limitations under the License.
 # *****************************************************************
 
-import sys
 import os
 import pathlib
 from collections import Counter
 
 test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', 'open-ce'))
 
-import build_tree
-import conda_env_file_generator
-import utils
+import open_ce.build_tree as build_tree
+import open_ce.conda_env_file_generator as conda_env_file_generator
+import open_ce.utils as utils
 
 sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     "repo1",
@@ -59,7 +57,6 @@ sample_build_commands = [build_tree.BuildCommand("recipe1",
                                     mpi_type="system",
                                     cudatoolkit="10.2",
                                     run_dependencies=["pack1==1.0", "pack2 <=2.0", "pack3-suffix 3.0"])]
-
 
 external_deps = ["external_pac1    1.2", "external_pack2", "external_pack3=1.2.3"]
 

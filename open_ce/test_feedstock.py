@@ -23,11 +23,11 @@ import tempfile
 import subprocess
 from enum import Enum, unique, auto
 
-import utils
-import conda_env_file_generator
-import inputs
-from inputs import Argument
-from errors import OpenCEError, Error
+from open_ce import utils
+from open_ce import conda_env_file_generator
+from open_ce import inputs
+from open_ce.inputs import Argument
+from open_ce.errors import OpenCEError, Error
 
 COMMAND = 'feedstock'
 DESCRIPTION = 'Test a feedstock as part of Open-CE'
@@ -171,7 +171,7 @@ def load_test_file(test_file, variants):
         test_file (str): Path to the test file to load.
     """
     #pylint: disable=import-outside-toplevel
-    import conda_utils
+    from open_ce import conda_utils
 
     if not os.path.exists(test_file):
         return None

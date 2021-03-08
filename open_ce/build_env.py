@@ -21,13 +21,13 @@ import os
 import sys
 import glob
 
-import build_feedstock
-import docker_build
-import utils
-import inputs
-from inputs import Argument
-import test_feedstock
-from errors import OpenCEError, Error
+from open_ce import build_feedstock
+from open_ce import docker_build
+from open_ce import utils
+from open_ce import inputs
+from open_ce.inputs import Argument
+from open_ce import test_feedstock
+from open_ce.errors import OpenCEError, Error
 
 COMMAND = "env"
 
@@ -92,7 +92,7 @@ def build_env(args):
 
     # Here, importing BuildTree is intentionally done after checking
     # existence of conda-build as BuildTree uses conda_build APIs.
-    from build_tree import BuildTree  # pylint: disable=import-outside-toplevel
+    from open_ce.build_tree import BuildTree  # pylint: disable=import-outside-toplevel
 
     # If repository_folder doesn't exist, create it
     if args.repository_folder and not os.path.exists(args.repository_folder):

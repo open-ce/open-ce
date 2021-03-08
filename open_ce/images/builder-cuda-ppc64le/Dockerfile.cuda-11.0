@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.2-devel-ubi7
+FROM nvidia/cuda-ppc64le:11.0.3-devel-ubi8
 
 ENV CONDA_HOME=${CONDA_HOME:-/opt/conda}
 ENV PATH=$CONDA_HOME/bin:$PATH
@@ -19,6 +19,7 @@ RUN export ARCH="$(uname -m)" && \
     yum repolist && yum install -y \
     sudo \
     bzip2 \
+    rsync \
     git \
     patch && \
     # Create CICD Group
@@ -42,10 +43,11 @@ RUN export PATH="${PATH}" && \
     $CONDA_HOME/bin/conda config --system --set always_yes true && \
     $CONDA_HOME/bin/conda config --system --set auto_update_conda false && \
     $CONDA_HOME/bin/conda config --system --set notify_outdated_conda false && \
-    $CONDA_HOME/bin/conda --version && \
     mkdir -p $CONDA_HOME/conda-bld && \
     mkdir -p $HOME/.cache && \
+    $CONDA_HOME/bin/conda --version && \
     sudo rm -f /run/nologin && \
     yes | ssh-keygen -f $HOME/.ssh/id_rsa -q -t rsa -N '' && cp $HOME/.ssh/id_rsa.pub $HOME/.ssh/authorized_keys && \
     echo ". $CONDA_HOME/etc/profile.d/conda.sh" >> ${HOME}/.bashrc && \
+    echo "export PYTHONPATH=${PYTHONPATH}:$HOME/open_ce" >> ${HOME}/.bashrc && \
     echo "conda activate base" >> ${HOME}/.bashrc
