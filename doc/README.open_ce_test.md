@@ -72,7 +72,7 @@ usage: open-ce test env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                         [--repository_folder REPOSITORY_FOLDER]
                         [--python_versions PYTHON_VERSIONS]
                         [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
-                        [--cuda_versions CUDA_VERSIONS] [--docker_build]
+                        [--cuda_versions CUDA_VERSIONS] [--container_build]
                         [--git_location GIT_LOCATION]
                         [--git_tag_for_env GIT_TAG_FOR_ENV]
                         [--test_labels TEST_LABELS]
@@ -121,8 +121,9 @@ optional arguments:
   --cuda_versions CUDA_VERSIONS
                         CUDA version to build for , such as "10.2" or "11.0".
                         (default: 10.2)
-  --docker_build        Perform a build within a docker container. NOTE: When
-                        the --docker_build flag is used, all arguments with
+  --container_build, --docker_build
+                        Perform a build within a container. NOTE: When
+                        the --container_build flag is used, all arguments with
                         paths should be relative to the directory containing
                         root level open-ce directory. Only files within the
                         root level open-ce directory and local_files will be

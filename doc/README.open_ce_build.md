@@ -37,27 +37,26 @@ directory; simply specify the file for whichever package environment you want.
 > you may do so if you wish to perform an individual build of your own
 > for any given Open-CE feedstock repository.
 
-### Docker build
+### Container build
 
-The `--docker_build` option will build an image and run the build command
-inside of a container based on the new image.
+The `--container_build` option will build an image and run the build command
+inside of a container based on the new image. The `--container_tool` option can
+be passed to specify container tool to be used. 
 
-Along with `--docker_build` option, `--docker_build_args` can be passed
-to set docker build options like environment variables or other settings
+Along with `--container_build` option, `--container_build_args` can be passed
+to set container build options like environment variables or other settings
 like cpusets.
 
 ```shell
-    ./open-ce/open_ce/open-ce build env --docker_build --docker_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" open-ce-environments/envs/pytorch-env.yaml
+    ./open-ce/open_ce/open-ce build env --container_build --container_tool podman --container_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" open-ce-environments/envs/pytorch-env.yaml
 ```
 
-As part of this process of docker build, it will copy a local_files directory that is in the
+As part of this process of container build, it will copy a local_files directory that is in the
 current working directory into the container, if the directory exists.
 
 The paths to the `env_config_file`s and `--conda_build_config` must point to
 files within the `open-ce-environments` directory and be relative to the directory
 containing the root level `open-ce` directory.
-
-> Note: The `--docker_build` option does not currently work with `podman`.
 
 ### Use System MPI
 
@@ -81,10 +80,11 @@ usage: open-ce build env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                          [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
                          [--cuda_versions CUDA_VERSIONS]
                          [--skip_build_packages] [--run_tests]
-                         [--docker_build] [--git_location GIT_LOCATION]
+                         [--container_build] [--git_location GIT_LOCATION]
                          [--git_tag_for_env GIT_TAG_FOR_ENV]
                          [--test_labels TEST_LABELS]
-                         [--docker_build_args DOCKER_BUILD_ARGS]
+                         [--container_build_args CONTAINER_BUILD_ARGS]
+                         [--container_tool CONTAINER_TOOL]
                          env_config_file [env_config_file ...]
 
 positional arguments:
@@ -134,8 +134,9 @@ optional arguments:
                         Do not perform builds of packages. (default: False)
   --run_tests           Run Open-CE tests for each potential conda environment
                         (default: False)
-  --docker_build        Perform a build within a docker container. NOTE: When
-                        the --docker_build flag is used, all arguments with
+  --container_build, --docker_build
+                        Perform a build within a container. NOTE: When the
+                        --container_build flag is used, all arguments with
                         paths should be relative to the directory containing
                         root level open-ce directory. Only files within the
                         root level open-ce directory and local_files will be
@@ -149,11 +150,14 @@ optional arguments:
   --test_labels TEST_LABELS
                         Comma delimited list of labels indicating what tests
                         to run. (default: )
-  --docker_build_args DOCKER_BUILD_ARGS
-                        Docker build arguments like environment variables to
+  --container_build_args CONTAINER_BUILD_ARGS
+                        Container build arguments like environment variables to
                         be set in the container or cpus or gpus to be used
                         such as "--build-arg ENV1=test1 --cpuset-cpus 0,1".
                         (default: )
+  --container_tool CONTAINER_TOOL
+                        Container tool to be used. (default: docker)
+
 ==============================================================================
 ```
 
@@ -274,23 +278,28 @@ optional arguments:
 
 ## `open-ce build image` sub command
 
-This `open-ce build image` script is used to create a runtime docker image with Open-CE
-packages (generated from `open-ce build env`) installed in it. This script takes two arguments
+This `open-ce build image` script is used to create a runtime container image with Open-CE
+packages (generated from `open-ce build env`) installed in it. This script takes two main arguments
 as an input - local conda channel and conda environment file which are the output of `open-ce build env`
 script.
+
+The `--container_tool` option can be passed to specify container tool to be used. Additionally 
+`--container_build_args` can be passed to set container build options like environment variables
+ or other settings like cpusets.
 
 For example,
 
 ```shell
     open-ce/open_ce/open-ce build image --local_conda_channel=./condabuild
            --conda_env_file=open-ce-conda-env-py3.7-cuda-openmpi.yaml
+           --container_tool podman --container_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1"
 ```
 
 `local_conda_channel` is the output folder that has all of the conda packages built within it. It has to
 be present in the directory from where this `open-ce build image` script is run.
 `conda_env_file` is the conda environment file generated from `open-ce build env`.
 
-A docker image created has a conda environment that has all the packages mentioned in the
+A container image created has a conda environment that has all the packages mentioned in the
 conda environment file, installed in it. The local conda channel being passed is also copied into the
 image to enable users to create their custom environments.
 
@@ -302,14 +311,16 @@ For more information on how conda environment files are generated and their cont
 So, the ideal sequence of getting Open-CE packages built and installed in a container should be
 
 1. Build packages and target conda environment files using `open-ce build env`
-2. Create Docker image using `open-ce build image`
+2. Create container image using `open-ce build image`
 
 ### Command usage for `open-ce build image`
 
 ```shell
 ==============================================================================
 usage: open-ce build image [-h] [--local_conda_channel LOCAL_CONDA_CHANNEL]
-                           [--conda_env_files CONDA_ENV_FILES]
+                      [--conda_env_files CONDA_ENV_FILES]
+                      [--container_build_args CONTAINER_BUILD_ARGS]
+                      [--container_tool CONTAINER_TOOL]
 
 Run Open-CE tools within a container
 
@@ -321,6 +332,13 @@ optional arguments:
   --conda_env_files CONDA_ENV_FILES
                         Comma delimited list of paths to conda environment
                         files. (default: None)
+  --container_build_args CONTAINER_BUILD_ARGS
+                        Container build arguments like environment variables to
+                        be set in the container or cpus or gpus to be used
+                        such as "--build-arg ENV1=test1 --cpuset-cpus 0,1".
+                        (default: )
+  --container_tool CONTAINER_TOOL
+                        Container tool to be used. (default: docker)
 
 ==============================================================================
 ```

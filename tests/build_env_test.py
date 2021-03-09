@@ -333,67 +333,92 @@ def test_env_validate(mocker):
         opence._main(["build", build_env.COMMAND, env_file])
     assert "Unexpected key chnnels was found in " in str(exc.value)
 
-def test_build_env_docker_build(mocker):
+def test_build_env_container_build(mocker):
     '''
-    Test that passing the --docker_build argument calls docker_build.build_with_docker
+    Test that passing the --container_build argument calls container_build.build_with_container_tool
     '''
-    arg_strings = ["build", build_env.COMMAND, "--docker_build", "my-env.yaml"]
+    arg_strings = ["build", build_env.COMMAND, "--container_build", "my-env.yaml"]
 
-    mocker.patch('open_ce.docker_build.build_with_docker', return_value=0)
+    mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     opence._main(arg_strings)
 
-def test_build_env_docker_build_multiple_cuda_versions(mocker):
+def test_build_env_container_build_multiple_cuda_versions():
     '''
-    Tests that passing mutiple values in --cuda_versions argument with docker_build fails.
+    Tests that passing mutiple values in --cuda_versions argument with container_build fails.
     '''
 
-    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+    arg_strings = ["build", build_env.COMMAND, "--container_build",
                    "--cuda_versions", "10.2,11.0", "my-env.yaml"]
-
-    mocker.patch('open_ce.docker_build.build_with_docker', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
         opence._main(arg_strings)
     assert "Only one cuda version" in str(exc.value)
 
-def test_build_env_docker_build_cuda_versions(mocker):
+def test_build_env_container_build_cuda_versions(mocker):
     '''
-    Tests that passing --cuda_versions argument with docker_build argument works correctly.
+    Tests that passing --cuda_versions argument with container_build argument works correctly.
     '''
     dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.getcwd',
         side_effect=dirTracker.mocked_getcwd
     )
-    mocker.patch('open_ce.docker_build.build_with_docker', return_value=0)
+    mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
 
     cuda_version = "10.2"
-    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+    arg_strings = ["build", build_env.COMMAND, "--container_build",
                    "--cuda_versions", cuda_version, "my-env.yaml"]
     opence._main(arg_strings)
     validate_conda_env_files(cuda_versions=cuda_version)
 
-def test_build_env_docker_build_with_build_args(mocker):
+def test_build_env_container_build_with_build_args(mocker):
     '''
-    Tests that passing --docker_build_args argument with docker_build argument works correctly.
+    Tests that passing --container_build_args argument with container_build argument works correctly.
     '''
     dirTracker = helpers.DirTracker()
     mocker.patch(
         'os.getcwd',
         side_effect=dirTracker.mocked_getcwd
     )
-    mocker.patch('open_ce.docker_build.build_with_docker', return_value=0)
+    mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
 
+    # with docker_build 
     arg_strings = ["build", build_env.COMMAND, "--docker_build",
-                   "--docker_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
+                   "--container_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
+    opence._main(arg_strings)
+
+    # with container_build
+    arg_strings = ["build", build_env.COMMAND, "--container_build",
+                   "--container_build_args", "--build-args ENV1=test1 some_setting=1", "my-env.yaml"]
+    opence._main(arg_strings)
+
+def test_build_env_container_build_with_container_tool(mocker):
+    '''
+    Tests that passing --container_tool argument works correctly.
+    '''
+    dirTracker = helpers.DirTracker()
+    mocker.patch(
+        'os.getcwd',
+        side_effect=dirTracker.mocked_getcwd
+    )
+    mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
+
+    #with docker_build argument
+    arg_strings = ["build", build_env.COMMAND, "--docker_build",
+                   "--container_tool", "podman", "my-env.yaml"]
+    opence._main(arg_strings)
+
+    #with container_build argument
+    arg_strings = ["build", build_env.COMMAND, "--container_build",
+                   "--container_tool", "podman", "my-env.yaml"]
     opence._main(arg_strings)
 
 def test_build_env_if_no_conda_build(mocker):
     '''
-    Test that build_env should fail if conda_build isn't present and no --docker_build
+    Test that build_env should fail if conda_build isn't present and no --container_build
     '''
     arg_strings = ["build", build_env.COMMAND, "my-env.yaml"]
 

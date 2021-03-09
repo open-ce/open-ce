@@ -22,7 +22,7 @@ import sys
 import glob
 
 from open_ce import build_feedstock
-from open_ce import docker_build
+from open_ce import container_build
 from open_ce import utils
 from open_ce import inputs
 from open_ce.inputs import Argument
@@ -33,15 +33,24 @@ COMMAND = "env"
 
 DESCRIPTION = 'Build conda environment as part of Open-CE'
 
-ARGUMENTS = [Argument.CONDA_BUILD_CONFIG, Argument.OUTPUT_FOLDER,
-             Argument.CHANNELS, Argument.ENV_FILE,
+ARGUMENTS = [Argument.CONDA_BUILD_CONFIG,
+             Argument.OUTPUT_FOLDER,
+             Argument.CHANNELS,
+             Argument.ENV_FILE,
              Argument.PACKAGES,
-             Argument.REPOSITORY_FOLDER, Argument.PYTHON_VERSIONS,
-             Argument.BUILD_TYPES, Argument.MPI_TYPES,
-             Argument.CUDA_VERSIONS, Argument.SKIP_BUILD_PACKAGES,
-             Argument.RUN_TESTS, Argument.DOCKER_BUILD,
-             Argument.GIT_LOCATION, Argument.GIT_TAG_FOR_ENV,
-             Argument.TEST_LABELS, Argument.DOCKER_BUILD_ARGS]
+             Argument.REPOSITORY_FOLDER,
+             Argument.PYTHON_VERSIONS,
+             Argument.BUILD_TYPES,
+             Argument.MPI_TYPES,
+             Argument.CUDA_VERSIONS,
+             Argument.SKIP_BUILD_PACKAGES,
+             Argument.RUN_TESTS,
+             Argument.CONTAINER_BUILD,
+             Argument.GIT_LOCATION,
+             Argument.GIT_TAG_FOR_ENV,
+             Argument.TEST_LABELS,
+             Argument.CONTAINER_BUILD_ARGS,
+             Argument.CONTAINER_TOOL]
 
 def _run_tests(build_tree, test_labels, conda_env_files):
     """
@@ -69,25 +78,26 @@ def _run_tests(build_tree, test_labels, conda_env_files):
         raise OpenCEError(Error.FAILED_TESTS, len(failed_tests))
 
 def _all_outputs_exist(output_folder, output_files):
-    return all([os.path.exists(os.path.join(os.path.abspath(output_folder), package))
-                    for package in output_files])
+    return all((os.path.exists(os.path.join(os.path.abspath(output_folder), package))
+                    for package in output_files))
 
 def build_env(args):
     '''Entry Function'''
-    if args.docker_build:
+
+    if args.container_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
         try:
-            docker_build.build_with_docker(args, sys.argv)
+            container_build.build_with_container_tool(args, sys.argv)
         finally:
             for conda_env_file in glob.glob(os.path.join(args.output_folder, "*.yaml")):
                 utils.replace_conda_env_channels(conda_env_file,
-                                                 os.path.abspath(os.path.join(docker_build.HOME_PATH,
+                                                 os.path.abspath(os.path.join(container_build.HOME_PATH,
                                                                               utils.DEFAULT_OUTPUT_FOLDER)),
                                                  os.path.abspath(args.output_folder))
         return
 
-    # Checking conda-build existence if --docker_build is not specified
+    # Checking conda-build existence if --container_build is not specified
     utils.check_if_conda_build_exists()
 
     # Here, importing BuildTree is intentionally done after checking
