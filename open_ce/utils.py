@@ -231,7 +231,7 @@ def check_cuda_version_match(command):
     '''
 
     # Version is recorded in $CUDA_HOME/version.txt; make sure $CUDA_HOME is set first.
-    check_cuda_home():
+    check_cuda_home()
     cudavers_file = os.environ['CUDA_HOME'] + '/version.txt'
     try:
         cudafile = open(cudavers_file,'r')
