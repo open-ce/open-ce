@@ -236,7 +236,7 @@ def check_cuda_version_match(command):
     try:
         cudafile = open(cudavers_file,'r')
         cuda_home_version = cudafile.readline()
-        close(cudafile)
+        cudafile.close()
     except OSError as err:
         if err.errno == errno.ENOENT:
             raise OpenCEError(Error.ERROR, "Could not read version from $CUDA_HOME/version.txt") from err
