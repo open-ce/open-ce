@@ -146,18 +146,22 @@ The `open-ce test feedstock` command can be used to run tests for a specific fee
 
 ```shell
 ==============================================================================
-usage: open-ce test feedstock [-h] [--conda_env_file CONDA_ENV_FILE]
+usage: open-ce test feedstock [-h] [--conda_env_files CONDA_ENV_FILES]
                               [--test_working_dir TEST_WORKING_DIR]
                               [--test_labels TEST_LABELS]
+                              [--working_directory WORKING_DIRECTORY]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --conda_env_file CONDA_ENV_FILE
-                        Location of conda environment file. (default: None)
+  --conda_env_files CONDA_ENV_FILES
+                        Comma delimited list of paths to conda environment
+                        files. (default: None)
   --test_working_dir TEST_WORKING_DIR
                         Directory where tests will be executed. (default: ./)
   --test_labels TEST_LABELS
                         Comma delimited list of labels indicating what tests
                         to run. (default: )
+  --working_directory WORKING_DIRECTORY
+                        Directory to run the script in. (default: None)
 ==============================================================================
 ```
