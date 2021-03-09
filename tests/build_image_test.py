@@ -144,7 +144,7 @@ def test_channel_update_in_conda_env(mocker):
     # Cleanup
     os.remove("tests/testcondabuild/test-conda-env.yaml") 
 
-def test_for_failed_docker_build_cmd(mocker):
+def test_for_failed_container_build_cmd(mocker):
     '''
     Simple test for build_runtime_image being failed due to some error in building the image
     '''
@@ -154,5 +154,28 @@ def test_for_failed_docker_build_cmd(mocker):
     with pytest.raises(OpenCEError) as exc:
         opence._main(arg_strings)
     assert "Failure building image" in str(exc.value)
+
+    os.remove("tests/testcondabuild/test-conda-env.yaml")
+
+def test_build_image_with_container_tool(mocker):
+    '''
+    Tests that container_tool argument is parsed and passed to build image.
+    '''
+    mocker.patch('os.system', return_value=0)
+
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml", "--container_tool", "podman"]
+    opence._main(arg_strings)
+
+    os.remove("tests/testcondabuild/test-conda-env.yaml")
+
+def test_build_image_with_container_build_args(mocker):
+    '''
+    Tests that container_build_args argument is parsed and passed to build image.
+    '''
+    mocker.patch('os.system', return_value=0)
+
+    build_args = "--build-arg ENV1=test1 --build-arg ENV2=test2 same_setting 0,1"
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml", "--container_tool", "podman", "--container_build_args", build_args]
+    opence._main(arg_strings)
 
     os.remove("tests/testcondabuild/test-conda-env.yaml")

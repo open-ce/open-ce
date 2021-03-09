@@ -46,8 +46,8 @@ test/
 * `conda-build` == 3.20.5 (Other versions >=3.20 may work, but issues have been encountered with some versions.)
   * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
 * `python` >= 3.6
-* `docker` >= 1.13
-  * Docker is only required when using the `--docker_build` option (see below).
+* `docker` >= 1.13 or `podman` >= 2.0.5
+  * docker or podman required only when building within a container (see below).
 
 ### CUDA Requirements
 
@@ -115,9 +115,9 @@ git clone https://github.com/open-ce/open-ce.git
 ./open-ce/open_ce/open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/opence-env.yaml
 ```
 
-#### Building within a docker container
+#### Building within a container
 
-Passing the `--docker_build` argument to the `open-ce build env` command will create a docker image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. The `--docker_build` command does not currently work with `podman`. For more information on the `--docker_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
+Passing the `--container_build` argument to the `open-ce build env` command will create a container image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--container_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
 
 ### Building a Single Feedstock
 
@@ -156,9 +156,9 @@ conda env create -f <conda_environment_file>
 
 After performing the build using the `open-ce build env` tool, the `open-ce test` tool can be used to either test a package or a collection of packages. For more details on `open-ce test`, please see [`doc/README.open_ce_test.md`](doc/README.open_ce_test.md).
 
-### Creating Docker Image with Open-CE Packages installed
+### Creating Container Image with Open-CE Packages installed
 
-After performing the build using `open-ce build env`, the `open-ce build image` command can be used to create a runtime docker image containing the newly created conda channel, as well as a conda environment with the newly build Open-CE packages. For more details on `open-ce build image`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-image-sub-command).
+After performing the build using `open-ce build env`, the `open-ce build image` command can be used to create a runtime container image containing the newly created conda channel, as well as a conda environment with the newly build Open-CE packages. For more details on `open-ce build image`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-image-sub-command).
 
 ### Contributions
 
