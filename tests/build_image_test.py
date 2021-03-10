@@ -134,7 +134,7 @@ def test_channel_update_in_conda_env(mocker):
 
     channel_index_before, _ = get_channel_being_modified("tests/test-conda-env.yaml")
 
-    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env-runtime.yaml"]
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
     opence._main(arg_strings)
 
     # We copy conda environment file to the passed local conda channel before updating it
