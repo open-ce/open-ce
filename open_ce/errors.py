@@ -22,9 +22,9 @@ from enum import Enum, unique
 class Error(Enum):
     '''Enum for Arguments'''
     ERROR = (0, "Unexpected Error: {}")
-    CREATE_CONTAINER = (1, "Error creating docker container: \"{}\"")
+    CREATE_CONTAINER = (1, "Error creating container: \"{}\"")
     COPY_DIR_TO_CONTAINER = (2, "Error copying \"{}\" directory into container: \"{}\"")
-    START_CONTAINER = (3, "Error starting docker container: \"{}\"")
+    START_CONTAINER = (3, "Error starting container: \"{}\"")
     BUILD_IN_CONTAINER = (4, "Error executing build in container: \"{}\"")
     BUILD_IMAGE = (5, "Failure building image: \"{}\"")
     VALIDATE_ENV = (6, "Error validating \"{}\" for variant {}\n{}")
@@ -46,13 +46,14 @@ class Error(Enum):
               " which contains local conda channel directory.")
     VALIDATE_BUILD_TREE = (17, "Dependencies are not compatible.\nCommand:\n{}\nOutput:\n{}\nError:\n{}")
     INCOMPAT_CUDA = (18, "Driver level \"{}\" is not new enough to support cuda \"{}\"")
-    UNSUPPORTED_CUDA = (19, "Cannot build using docker image for cuda \"{}\" no Dockerfile currently exists")
-    TOO_MANY_CUDA = (20, "Only one cuda version allowed to be built with docker at a time")
+    UNSUPPORTED_CUDA = (19, "Cannot build using container image for cuda \"{}\" no Dockerfile currently exists")
+    TOO_MANY_CUDA = (20, "Only one cuda version allowed to be built with container build at a time")
     FAILED_TESTS = (21, "There were {} test failures")
     CONDA_ENV_FILE_REQUIRED = (22, "The '--conda_env_file' argument is required.")
     PATCH_APPLICATION = (23, "Failed to apply patch {} on feedstock {}")
     GET_LICENSES = (24, "Error generating licenses file.\nCommand:\n{}\nOUTPUT:\n{}Errpr:\n{}")
     FILE_DOWNLOAD = (25, "Failed to download {} with error:\n{}")
+    CONDA_BUILD_CONFIG_FILE_NOT_FOUND = (26, "Failed to locate conda_build_config.yaml.")
 
 class OpenCEError(Exception):
     """

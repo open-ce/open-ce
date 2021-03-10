@@ -118,7 +118,7 @@ class BuildCommand():
     def __eq__(self, other):
         if not isinstance(other, BuildCommand):
             return False
-        return self.__key() == other.__key()  # pylint: disable=protected-access 
+        return self.__key() == other.__key()  # pylint: disable=protected-access
 
 def traverse_build_commands(commands, deps):
     """

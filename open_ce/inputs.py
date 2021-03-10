@@ -108,11 +108,12 @@ https://github.com/open-ce/open-ce/blob/main/doc/README.yaml.md"""))
                                         help='CUDA version to build for '
                                              ', such as "10.2" or "11.0".'))
 
-    DOCKER_BUILD = (lambda parser: parser.add_argument(
+    CONTAINER_BUILD = (lambda parser: parser.add_argument(
+                                        '--container_build',
                                         '--docker_build',
                                         action='store_true',
-                                        help="Perform a build within a docker container. "
-                                             "NOTE: When the --docker_build flag is used, all arguments with paths "
+                                        help="Perform a build within a container. "
+                                             "NOTE: When the --container_build flag is used, all arguments with paths "
                                              "should be relative to the directory containing root level open-ce "
                                              "directory. Only files within the root level open-ce directory and "
                                              "local_files will be visible at build time."))
@@ -128,9 +129,9 @@ https://github.com/open-ce/open-ce/blob/main/doc/README.yaml.md"""))
                                         help="Run Open-CE tests for each potential conda environment"))
 
     CONDA_ENV_FILE = (lambda parser: parser.add_argument(
-                                        '--conda_env_file',
+                                        '--conda_env_files',
                                         type=str,
-                                        help='Location of conda environment file.' ))
+                                        help='Comma delimited list of paths to conda environment files.' ))
 
     LOCAL_CONDA_CHANNEL = (lambda parser: parser.add_argument(
                                         '--local_conda_channel',
@@ -202,11 +203,11 @@ path of \"recipe\"."""))
                                         default="",
                                         help="Comma delimited list of labels indicating what tests to run."))
 
-    DOCKER_BUILD_ARGS = (lambda parser: parser.add_argument(
-                                        '--docker_build_args',
+    CONTAINER_BUILD_ARGS = (lambda parser: parser.add_argument(
+                                        '--container_build_args',
                                         type=str,
                                         default="",
-                                        help="Docker build arguments like environment variables "
+                                        help="Container build arguments like environment variables "
                                              " to be set in the container or cpus or gpus to be used "
                                              " such as \"--build-arg ENV1=test1 --cpuset-cpus 0,1\"."))
 
@@ -216,6 +217,11 @@ path of \"recipe\"."""))
                                default=None,
                                help="Only build this list of comma delimited packages (plus their dependencies)."))
 
+    CONTAINER_TOOL = (lambda parser: parser.add_argument(
+                                        '--container_tool',
+                                        type=str,
+                                        default=utils.DEFAULT_CONTAINER_TOOL,
+                                        help="Container tool to be used."))
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
@@ -255,8 +261,10 @@ def parse_args(parser, arg_strings=None):
         if utils.is_url(args.conda_build_config):
             args.conda_build_config = utils.download_file(args.conda_build_config,
                                                           filename=utils.CONDA_BUILD_CONFIG_FILE)
-        else:
+        elif os.path.exists(args.conda_build_config):
             args.conda_build_config = os.path.abspath(args.conda_build_config)
+        else:
+            print("WARNING: No valid conda_build_config.yaml file was found. Some recipes may fail to build.")
 
     return args
 

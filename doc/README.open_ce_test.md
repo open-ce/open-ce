@@ -72,7 +72,7 @@ usage: open-ce test env [-h] [--conda_build_config CONDA_BUILD_CONFIG]
                         [--repository_folder REPOSITORY_FOLDER]
                         [--python_versions PYTHON_VERSIONS]
                         [--build_types BUILD_TYPES] [--mpi_types MPI_TYPES]
-                        [--cuda_versions CUDA_VERSIONS] [--docker_build]
+                        [--cuda_versions CUDA_VERSIONS] [--container_build]
                         [--git_location GIT_LOCATION]
                         [--git_tag_for_env GIT_TAG_FOR_ENV]
                         [--test_labels TEST_LABELS]
@@ -121,8 +121,9 @@ optional arguments:
   --cuda_versions CUDA_VERSIONS
                         CUDA version to build for , such as "10.2" or "11.0".
                         (default: 10.2)
-  --docker_build        Perform a build within a docker container. NOTE: When
-                        the --docker_build flag is used, all arguments with
+  --container_build, --docker_build
+                        Perform a build within a container. NOTE: When
+                        the --container_build flag is used, all arguments with
                         paths should be relative to the directory containing
                         root level open-ce directory. Only files within the
                         root level open-ce directory and local_files will be
@@ -145,18 +146,22 @@ The `open-ce test feedstock` command can be used to run tests for a specific fee
 
 ```shell
 ==============================================================================
-usage: open-ce test feedstock [-h] [--conda_env_file CONDA_ENV_FILE]
+usage: open-ce test feedstock [-h] [--conda_env_files CONDA_ENV_FILES]
                               [--test_working_dir TEST_WORKING_DIR]
                               [--test_labels TEST_LABELS]
+                              [--working_directory WORKING_DIRECTORY]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --conda_env_file CONDA_ENV_FILE
-                        Location of conda environment file. (default: None)
+  --conda_env_files CONDA_ENV_FILES
+                        Comma delimited list of paths to conda environment
+                        files. (default: None)
   --test_working_dir TEST_WORKING_DIR
                         Directory where tests will be executed. (default: ./)
   --test_labels TEST_LABELS
                         Comma delimited list of labels indicating what tests
                         to run. (default: )
+  --working_directory WORKING_DIRECTORY
+                        Directory to run the script in. (default: None)
 ==============================================================================
 ```

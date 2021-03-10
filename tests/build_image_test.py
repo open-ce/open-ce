@@ -122,7 +122,27 @@ def test_modified_file_removed(mocker):
         return_value=0,
         side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
                                                                "-t " + intended_image_name])))
+
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
     opence._main(arg_strings)
 
     assert not os.path.exists("tests/testcondabuild/test-conda-env-runtime.yaml")
+
+def test_build_image_with_container_tool(mocker):
+    '''
+    Tests that container_tool argument is parsed and passed to build image.
+    '''
+    mocker.patch('os.system', return_value=0)
+
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml", "--container_tool", "podman"]
+    opence._main(arg_strings)
+
+def test_build_image_with_container_build_args(mocker):
+    '''
+    Tests that container_build_args argument is parsed and passed to build image.
+    '''
+    mocker.patch('os.system', return_value=0)
+
+    build_args = "--build-arg ENV1=test1 --build-arg ENV2=test2 same_setting 0,1"
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml", "--container_tool", "podman", "--container_build_args", build_args]
+    opence._main(arg_strings)

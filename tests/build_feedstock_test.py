@@ -44,7 +44,7 @@ def test_build_feedstock_default(mocker):
         return_value=False
     )
     expect_recipe = os.path.join(os.getcwd(),'recipe')
-    expect_config = {'variant_config_files' : [utils.DEFAULT_CONDA_BUILD_CONFIG],
+    expect_config = {'variant_config_files' : [],
                 'output_folder' : utils.DEFAULT_OUTPUT_FOLDER}
     mocker.patch(
         'conda_build.api.build',

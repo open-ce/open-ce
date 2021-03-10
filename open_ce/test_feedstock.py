@@ -274,12 +274,16 @@ def test_feedstock(conda_env_file, test_labels=None,
 
 def test_feedstock_entry(args):
     '''Entry Function'''
-    if not args.conda_env_file:
+    if not args.conda_env_files:
         raise OpenCEError(Error.CONDA_ENV_FILE_REQUIRED)
-    test_failures = test_feedstock(args.conda_env_file,
-                                   args.test_labels,
-                                   args.test_working_dir,
-                                   args.working_directory)
+
+    test_failures = []
+    for conda_env_file in inputs.parse_arg_list(args.conda_env_files):
+        test_failures += test_feedstock(conda_env_file,
+                                       args.test_labels,
+                                       args.test_working_dir,
+                                       args.working_directory)
+
     if test_failures:
         display_failed_tests(test_failures)
         raise OpenCEError(Error.FAILED_TESTS, len(test_failures))
