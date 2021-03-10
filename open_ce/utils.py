@@ -233,15 +233,19 @@ def check_cuda_version_match(command):
     # Version is recorded in $CUDA_HOME/version.txt; make sure $CUDA_HOME is set first.
     check_cuda_home()
     cudavers_file = os.environ['CUDA_HOME'] + '/version.txt'
+    print("DBG: cudavers_file:" + cudavers_file)
+    print("DBG: cudatoolkit vers:" + str(command.cudatoolkit))
     try:
         cudafile = open(cudavers_file,'r')
         cuda_home_version = cudafile.readline()
+        print("DBG: cuda_home_version:  " + cuda_home_version)
         cudafile.close()
     except OSError as err:
         if err.errno == errno.ENOENT:
             raise OpenCEError(Error.ERROR, "Could not read version from $CUDA_HOME/version.txt") from err
 
     version_match = cuda_home_version.find(str(command.cudatoolkit))
+    print("DBG: version_match:" + str(version_match))
 
     if version_match > 0:
         return True
