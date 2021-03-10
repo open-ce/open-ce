@@ -98,7 +98,8 @@ def build_runtime_container_image(args):
             # make it relative to BUILD CONTEXT
             args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
 
-        image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_runtime_file))
+        image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file),
+                                 args.container_tool, args.container_build_args)
 
         # Remove the copied environment file
         try:
