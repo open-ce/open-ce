@@ -261,8 +261,10 @@ def parse_args(parser, arg_strings=None):
         if utils.is_url(args.conda_build_config):
             args.conda_build_config = utils.download_file(args.conda_build_config,
                                                           filename=utils.CONDA_BUILD_CONFIG_FILE)
-        else:
+        elif os.path.exists(args.conda_build_config):
             args.conda_build_config = os.path.abspath(args.conda_build_config)
+        else:
+            print("WARNING: Some recipes expect conda_build_config.yaml to be specified to build.")
 
     return args
 

@@ -84,6 +84,11 @@ def _all_outputs_exist(output_folder, output_files):
 def build_env(args):
     '''Entry Function'''
 
+    # pylint: disable=too-many-branches
+    if not utils.is_url(args.conda_build_config) and not os.path.exists(args.conda_build_config):
+        raise OpenCEError(Error.CONDA_BUILD_CONFIG_FILE_NOT_FOUND, args.conda_build_config)
+    # pylint: enable=too-many-branches
+
     if args.container_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)
