@@ -130,10 +130,10 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, 
             config.skip_existing = True
             config.prefix_length = 225
             config.output_folder = output_folder
-            config.variant_config_files = [conda_build_config]
+            config.variant_config_files = [conda_build_config] if os.path.exists(conda_build_config) else []
 
-            recipe_conda_build_config = os.path.join(os.getcwd(), "config", "conda_build_config.yaml")
-            if os.path.exists(recipe_conda_build_config):
+            recipe_conda_build_config = get_conda_build_config()
+            if recipe_conda_build_config:
                 config.variant_config_files.append(recipe_conda_build_config)
 
             config.channel_urls = [os.path.abspath(output_folder)]

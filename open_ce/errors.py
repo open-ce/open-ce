@@ -53,7 +53,8 @@ class Error(Enum):
     PATCH_APPLICATION = (23, "Failed to apply patch {} on feedstock {}")
     GET_LICENSES = (24, "Error generating licenses file.\nCommand:\n{}\nOUTPUT:\n{}Errpr:\n{}")
     FILE_DOWNLOAD = (25, "Failed to download {} with error:\n{}")
-    NO_CONTAINER_TOOL_FOUND = (26, "No container tool found on the system.")
+    CONDA_BUILD_CONFIG_FILE_NOT_FOUND = (26, "Failed to locate conda_build_config.yaml.")
+    NO_CONTAINER_TOOL_FOUND = (27, "No container tool found on the system.")
 
 class OpenCEError(Exception):
     """
