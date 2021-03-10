@@ -264,7 +264,7 @@ def parse_args(parser, arg_strings=None):
         elif os.path.exists(args.conda_build_config):
             args.conda_build_config = os.path.abspath(args.conda_build_config)
         else:
-            print("WARNING: Some recipes expect conda_build_config.yaml to be specified to build.")
+            print("WARNING: No valid conda_build_config.yaml file was found. Some recipes may fail to build.")
 
     return args
 
