@@ -85,7 +85,7 @@ def build_runtime_container_image(args):
         _validate_input_paths(local_conda_channel, conda_env_file)
 
         # Copy the conda environment file into the local conda channel with a new name and modify it
-        conda_env_runtime_filename = os.path.splitext(os.path.basename(args.conda_env_file))[0]+'-runtime.yaml'
+        conda_env_runtime_filename = os.path.splitext(os.path.basename(conda_env_file))[0]+'-runtime.yaml'
         conda_env_runtime_file = os.path.join(local_conda_channel, os.path.basename(conda_env_runtime_filename))
         try:
             shutil.copy(conda_env_file, conda_env_runtime_file)

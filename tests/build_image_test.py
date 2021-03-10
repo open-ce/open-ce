@@ -99,7 +99,50 @@ def test_local_conda_channel_with_absolute_path(mocker):
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
     opence._main(arg_strings)
 
-def test_for_failed_docker_build_cmd(mocker):
+def get_channel_being_modified(conda_env_file):
+    with open(conda_env_file, 'r') as file_handle:
+        env_info = yaml.safe_load(file_handle)
+
+    channels = env_info['channels']
+    channel_index = 0
+    channel_being_modified = ""
+    for channel in channels:
+        if channel.startswith("file:"):
+            channel_index = channels.index(channel)
+            channel_being_modified = channel
+            break
+
+    return channel_index, channel_being_modified
+
+def test_channel_update_in_conda_env(mocker):
+    '''
+    Test to see if channel is being updated in the conda env file before passing to build_runtime_image
+    '''
+
+    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
+
+    mocker.patch(
+        'os.system',
+        return_value=0,
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
+                                                               "-t " + intended_image_name])))
+    mocker.patch(
+        'os.remove',
+        return_value=0
+    )
+
+    channel_index_before, _ = get_channel_being_modified("tests/test-conda-env.yaml")
+
+    arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env-runtime.yaml"]
+    opence._main(arg_strings)
+
+    # We copy conda environment file to the passed local conda channel before updating it
+    channel_index_after, channel_modified = get_channel_being_modified("tests/testcondabuild/test-conda-env-runtime.yaml")
+
+    assert channel_modified == "file:/{}".format(build_image.TARGET_DIR)
+    assert channel_index_before == channel_index_after
+
+def test_for_failed_container_build_cmd(mocker):
     '''
     Simple test for build_runtime_image being failed due to some error in building the image
     '''
