@@ -235,6 +235,7 @@ def check_cuda_version_match(command):
     cudavers_file = os.environ['CUDA_HOME'] + '/version.txt'
     print("DBG: cudavers_file:" + cudavers_file)
     print("DBG: cudatoolkit vers:" + str(command.cudatoolkit))
+    os.system("/bin/ls -l $CUDA_HOME $CUDA_HOME/ && cat $CUDA_HOME/version.txt || true")
     try:
         cudafile = open(cudavers_file,'r')
         cuda_home_version = cudafile.readline()
@@ -262,6 +263,7 @@ def check_cuda_home():
     if 'CUDA_HOME' not in os.environ:
         # CUDA_HOME is not set, so set it to the default location
         os.environ['CUDA_HOME'] = "/usr/local/cuda"
+        print("DBG: CUDA_HOME was not set; we set it to default")
 
 def is_subdir(child_path, parent_path):
     """ Checks if given child path is sub-directory of parent_path. """
