@@ -4,6 +4,10 @@
 * [`open-ce build feedstock`](#open-ce-build-feedstock-sub-command)
 * [`open-ce build image`](#open-ce-build-image-sub-command)
 
+## Installing these tools
+
+Installation information can be found in the main [README](https://github.com/open-ce/open-ce#installing-the-open-ce-build-tools). The examples in this document assume installation via pip.
+
 ## `open-ce build env` sub command
 
 For a general build to generate desired images for a specific package,
@@ -18,13 +22,13 @@ For example:
 In the simplest case, a build for tensorflow may look like this:
 
 ```shell
-    ./open-ce/open_ce/open-ce build env open-ce-environments/envs/tensorflow-env.yaml
+    open-ce build env open-ce-environments/envs/tensorflow-env.yaml
 ```
 
 while a similar build for pytorch may look like this:
 
 ```shell
-    ./open-ce/open_ce/open-ce build env open-ce-environments/envs/pytorch-env.yaml
+    open-ce build env open-ce-environments/envs/pytorch-env.yaml
 ```
 
 Other environment files for other packages can also be found in the `envs`
@@ -48,7 +52,7 @@ to set container build options like environment variables or other settings
 like cpusets.
 
 ```shell
-    ./open-ce/open_ce/open-ce build env --container_build --container_tool podman --container_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" open-ce-environments/envs/pytorch-env.yaml
+    open-ce build env --container_build --container_tool podman --container_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1" open-ce-environments/envs/pytorch-env.yaml
 ```
 
 As part of this process of container build, it will copy a local_files directory that is in the
@@ -172,7 +176,7 @@ optional arguments:
  the packages listed in `tensorflow-env.yaml` installed in it.
 
 ```shell
-    ./open-ce/open_ce/open-ce build env --python_versions=3.7 --build_type=cuda --mpi_type=openmpi
+    open-ce build env --python_versions=3.7 --build_type=cuda --mpi_type=openmpi
     open-ce-environments/envs/tensorflow-env.yaml
 ```
 
@@ -205,10 +209,13 @@ However, in some cases you may want to just build a selected individual package
 from its own feedstock repo.  In that case, you can run `open-ce build feedstock`
 directly.
 
-Note that you will need to have a local clone of the feedstock repository that
-you wish to build, as well as the Open-CE `open-ce` repository (in which this
-script is found).  By contrast, if you were to use `open-ce build env`, the script
-will clone any necessary dependency repositories for you.
+Note that a local clone of the desired feedstock repository will need to be present
+in addition to the Open-CE `open-ce` repository (in which this script is found).  
+By contrast, if you were to use `open-ce build env`, the script will clone any necessary 
+dependency repositories for you.
+
+In addition, note that the `open-ce build feedstock` command should be run from
+within the base directory checked out code of the feedstock.
 
 Command usage for the `open-ce build feedstock` command:
 
@@ -277,6 +284,14 @@ optional arguments:
 ==============================================================================
 ```
 
+For example,
+
+```shell
+    git clone http://github.com/open-ce/spacy-feedstock
+    cd spacy-feedstock
+    open-ce build feedstock --output_folder=/home/builder/condabuild
+```
+
 ## `open-ce build image` sub command
 
 This `open-ce build image` script is used to create a runtime container image with Open-CE
@@ -291,7 +306,7 @@ The `--container_tool` option can be passed to specify container tool to be used
 For example,
 
 ```shell
-    open-ce/open_ce/open-ce build image --local_conda_channel=./condabuild
+    open-ce build image --local_conda_channel=./condabuild
            --conda_env_file=open-ce-conda-env-py3.7-cuda-openmpi.yaml
            --container_tool podman --container_build_args="--build-arg ENV1=test1 --cpuset-cpus 0,1"
 ```
