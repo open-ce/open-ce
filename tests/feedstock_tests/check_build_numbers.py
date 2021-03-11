@@ -24,11 +24,10 @@ import pathlib
 import conda_build.api
 from conda_build.config import get_or_merge_config
 
-test_dir = pathlib.Path(__file__).parent.absolute()
-sys.path.append(os.path.join(test_dir, '..', '..', 'open-ce'))
-import build_feedstock # pylint: disable=wrong-import-position
-import utils # pylint: disable=wrong-import-position
-import inputs # pylint: disable=wrong-import-position
+sys.path.append(os.path.join(pathlib.Path(__file__).parent.absolute(), '..'))
+import open_ce.build_feedstock as build_feedstock  # pylint: disable=wrong-import-position
+import open_ce.utils as utils # pylint: disable=wrong-import-position
+import open_ce.inputs as inputs # pylint: disable=wrong-import-position
 
 def make_parser():
     ''' Parser for input arguments '''
