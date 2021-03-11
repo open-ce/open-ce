@@ -205,10 +205,13 @@ However, in some cases you may want to just build a selected individual package
 from its own feedstock repo.  In that case, you can run `open-ce build feedstock`
 directly.
 
-Note that you will need to have a local clone of the feedstock repository that
-you wish to build, as well as the Open-CE `open-ce` repository (in which this
-script is found).  By contrast, if you were to use `open-ce build env`, the script
-will clone any necessary dependency repositories for you.
+Note that a local clone of the desired feedstock repository will need to be present
+in addition to the Open-CE `open-ce` repository (in which this script is found).  
+By contrast, if you were to use `open-ce build env`, the script will clone any necessary 
+dependency repositories for you.
+
+In addition, note that the `open-ce build feedstock` command should be run from
+within the base directory checked out code of the feedstock.
 
 Command usage for the `open-ce build feedstock` command:
 
@@ -275,6 +278,15 @@ optional arguments:
                         Path where package source is downloaded in the form of
                         RPM/Debians/Tar. (default: None)
 ==============================================================================
+```
+
+For example,
+
+```shell
+    git clone http://github.com/open-ce/open-ce
+    git clone http://github.com/open-ce/spacy-feedstock
+    cd spacy-feedstock
+    ../open-ce/open_ce/open-ce build feedstock --output_folder=/home/builder/condabuild
 ```
 
 ## `open-ce build image` sub command
