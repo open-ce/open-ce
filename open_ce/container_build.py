@@ -219,6 +219,9 @@ def build_with_container_tool(args, arg_strings):
     Create a build image and run a build inside of container based on that image.
     """
 
+    if not args.container_tool:
+        raise OpenCEError(Error.NO_CONTAINER_TOOL_FOUND)
+
     # env_config_file being positional argument cause problem while parsing known
     # arguments. Hence removing it from arg_strings, as it is anyway being read
     # from args ahead.

@@ -30,17 +30,19 @@ spec.loader.exec_module(opence)
 import helpers
 import open_ce.build_image as build_image
 from open_ce.errors import OpenCEError, Error
+from open_ce import utils
 
 def test_build_image_positive_case(mocker):
     '''
     Simple test for build_runtime_image
     '''
     intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
+    container_tool = utils.DEFAULT_CONTAINER_TOOL
 
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["{} build".format(container_tool),
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
@@ -91,11 +93,11 @@ def test_local_conda_channel_with_absolute_path(mocker):
     Test for build_runtime_image with local conda channel with its absolute path
     '''
     intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
-
+    container_tool = utils.DEFAULT_CONTAINER_TOOL
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["{} build".format(container_tool),
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", os.path.join(test_dir, "testcondabuild"), "--conda_env_file", "tests/test-conda-env.yaml"]
@@ -123,11 +125,11 @@ def test_channel_update_in_conda_env(mocker):
     '''
 
     intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
-
+    container_tool = utils.DEFAULT_CONTAINER_TOOL
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["{} build".format(container_tool),
                                                                "-t " + intended_image_name])))
 
     channel_index_before, _ = get_channel_being_modified("tests/test-conda-env.yaml")

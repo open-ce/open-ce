@@ -79,6 +79,9 @@ def build_runtime_container_image(args):
     using locally built conda packages and environment file.
     """
 
+    if not args.container_tool:
+        raise OpenCEError(Error.NO_CONTAINER_TOOL_FOUND)
+
     local_conda_channel = os.path.abspath(args.local_conda_channel)
     for conda_env_file in parse_arg_list(args.conda_env_files):
         conda_env_file = os.path.abspath(conda_env_file)

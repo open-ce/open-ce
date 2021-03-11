@@ -221,7 +221,9 @@ path of \"recipe\"."""))
                                         '--container_tool',
                                         type=str,
                                         default=utils.DEFAULT_CONTAINER_TOOL,
-                                        help="Container tool to be used."))
+                                        help="Container tool to be used. Default is taken from the "
+                                             " system, podman has preference over docker. "))
+
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''

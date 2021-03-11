@@ -156,7 +156,8 @@ optional arguments:
                         such as "--build-arg ENV1=test1 --cpuset-cpus 0,1".
                         (default: )
   --container_tool CONTAINER_TOOL
-                        Container tool to be used. (default: docker)
+                        Container tool to be used. Default is taken from the
+                        system, podman has preference over docker. (default: )
 
 ==============================================================================
 ```
@@ -338,7 +339,8 @@ optional arguments:
                         such as "--build-arg ENV1=test1 --cpuset-cpus 0,1".
                         (default: )
   --container_tool CONTAINER_TOOL
-                        Container tool to be used. (default: docker)
+                        Container tool to be used. Default is taken from the
+                        system, podman has preference over docker. (default: )
 
 ==============================================================================
 ```
