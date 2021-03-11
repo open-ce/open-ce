@@ -19,11 +19,10 @@ import os
 import pathlib
 import subprocess
 import yaml
-import networkx
 
 # Disabling pylint warning "cyclic-import" locally here doesn't work. So, added it in .pylintrc
 # according to https://github.com/PyCQA/pylint/issues/59
-from open_ce.utils import validate_dict_schema, check_if_conda_build_exists, run_command_capture, generalize_version, remove_version # pylint: disable=cyclic-import
+from open_ce.utils import validate_dict_schema, check_if_conda_build_exists, run_command_capture, generalize_version # pylint: disable=cyclic-import
 from open_ce.errors import OpenCEError, Error
 
 check_if_conda_build_exists()
@@ -91,56 +90,15 @@ def conda_package_info(channels, package):
     return std_out
 
 def get_latest_package_info(channels, package):
+    '''
+    Get the conda package info for the most recent search result.
+    '''
     results = yaml.safe_load(conda_package_info(channels, package))
     retval = results[list(results.keys())[0]][0]
     for result in results[list(results.keys())[0]]:
         if result["timestamp"] > retval["timestamp"]:
             retval = result
     return retval
-
-def get_remote_package_dependencies(channels, packages, internal_packages=None, dep_graph=None):
-    """
-    Get all remote dependencies for packages.
-    """
-    if not internal_packages:
-        internal_packages = []
-    if not dep_graph:
-        dep_graph = networkx.DiGraph()
-    dependencies = set()
-    try:
-        while packages:
-            package = packages.pop()
-            package_name = remove_version(package)
-            dependencies.add(package_name)
-            if package_name not in dep_graph.nodes:
-                if package_name not in internal_packages:
-                    package_info = get_latest_package_info(channels, package)
-                    dep_graph.add_node(package_name, internal=False, version=package_info["version"])
-                    for dep in package_info['depends']:
-                        dep_name = remove_version(dep)
-                        dep_version = dep.split(' ')[1:]
-                        dep_graph.add_edge(package_name, dep_name, version=dep_version)
-                        packages.add(dep)
-                else:
-                    dep_graph.add_node(package_name, internal=True, version=package.split(' ')[1:])
-        for package in set(dependencies):
-            dependencies.update(networkx.algorithms.dag.descendants(dep_graph, package))
-        return dependencies, dep_graph
-    except OpenCEError as err:
-        raise OpenCEError(Error.REMOTE_PACKAGE_DEPENDENCIES, packages, err.msg) from err
-
-# def get_remote_package_dependencies(channels, packages):
-#     """
-#     Get all remote dependencies for a set of packages that can be installed together.
-#     """
-#     try:
-#         dependencies = set()
-#         if packages:
-#             result = yaml.safe_load(conda_dry_run(channels, packages))
-#             dependencies = {"{} {}".format(dep["name"], dep["version"]) for dep in result["actions"]["LINK"]}
-#         return dependencies
-#     except OpenCEError as err:
-#         raise OpenCEError(Error.REMOTE_PACKAGE_DEPENDENCIES, packages, err.msg) from err
 
 def conda_dry_run(channels, packages):
     '''
