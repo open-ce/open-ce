@@ -162,11 +162,11 @@ def test_modified_file_removed(mocker):
     '''
 
     intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
-
+    container_tool = utils.DEFAULT_CONTAINER_TOOL
     mocker.patch(
         'os.system',
         return_value=0,
-        side_effect=(lambda x: helpers.validate_cli(x, expect=["docker build",
+        side_effect=(lambda x: helpers.validate_cli(x, expect=["{} build".format(container_tool),
                                                                "-t " + intended_image_name])))
 
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml"]
