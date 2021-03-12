@@ -20,6 +20,7 @@ runs:
       shell: bash -l {0}
       run: |
         test_path="$GITHUB_ACTION_PATH/../../../tests"
+        pip install -e ./open-ce
         python $test_path/feedstock_tests/check_build_numbers.py \
                --conda_build_config \
                      "./open-ce-environments/envs/conda_build_config.yaml"
