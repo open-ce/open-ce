@@ -25,9 +25,11 @@ import zipfile
 import shutil
 from enum import Enum, unique, auto
 import urllib.parse
+from collections import defaultdict
 
 import requests
 import yaml
+from jinja2 import Environment, FileSystemLoader
 
 from open_ce import utils
 from open_ce.errors import OpenCEError, Error
@@ -37,7 +39,7 @@ COMMAND = 'licenses'
 
 DESCRIPTION = 'Gather license information for a group of packages'
 
-ARGUMENTS = [Argument.OUTPUT_FOLDER, Argument.CONDA_ENV_FILE]
+ARGUMENTS = [Argument.OUTPUT_FOLDER, Argument.CONDA_ENV_FILE, Argument.TEMPLATE_FILES]
 
 COPYRIGHT_STRINGS = ["Copyright", "copyright (C)", "copyright (c)"]
 SECONDARY_COPYRIGHT_STRINGS = ["All rights reserved"]
@@ -86,15 +88,15 @@ class LicenseGenerator():
         def __init__(self, name, version, url, license_type, copyrights):
             self.name = name
             self.version = version
-            self.url = url
-            self.license_type = license_type
+            self.url = url if isinstance(url, list) else [url]
+            self.license_type = _clean_license_type(license_type)
             self.copyrights = copyrights
 
         def __str__(self):
             return "{}\t{}\t{}\t{}\t{}".format(self.name,
                                                self.version,
-                                               ", ".join(self.url) if isinstance(self.url, list) else self.url,
-                                               self.license_type,
+                                               ", ".join(self.url),
+                                               ", ".join(self.license_type),
                                                ", ".join(self.copyrights))
 
         def __lt__(self, other):
@@ -203,6 +205,26 @@ class LicenseGenerator():
             file_stream.write(result)
 
         print("INFO: Licenses file generated: " + licenses_file)
+
+    def gen_file_from_template(self, template, output_folder):
+        """
+        Fill in a jinja template file with license information and
+        write the new file into the provided output_folder.
+        """
+        # Create dictionary with license_type as key
+        license_dict = defaultdict(list)
+        for info in self._licenses:
+            for license_type in info.license_type:
+                license_dict[license_type].append(info)
+
+        file_loader = FileSystemLoader(os.path.dirname(template))
+        env = Environment(loader=file_loader)
+        jinja_template = env.get_template(os.path.basename(template))
+        output = jinja_template.render(licenseInfo=license_dict)
+
+        output_name = os.path.splitext(os.path.basename(template))[0] + ".txt"
+        with open(os.path.join(output_folder, output_name), 'w') as stream:
+            stream.write(output)
 
     def _add_licenses_from_environment(self, conda_env):
         # For each meta-pkg within an environment, find its about.json file.
@@ -410,6 +432,49 @@ def _clean_copyright_string(copyright_str, primary=True):
 
     return copyright_str
 
+def _clean_license_type(license_str):
+    license_types =[("BSD-3-Clause", ["3-clause BSD", "BSD 3-Clause", "BSD-3-Clause", "BSD-3-clause",
+                                      "BSD 3-clause", "BSD 3 Clause", "BSD3", "modified 3-clause BSD",
+                                      "Google"]),
+                    ("BSD-2-Clause", ["3-clause BSD", "BSD 2-Clause", "BSD-2-Clause", "BSD-2-clause",
+                                      "BSD 2-clause", "BSD 2 Clause", "BSD2", "New BSD License"]),
+                    ("BSD", ["BSD", "BSD Like"]),
+                    ("Boost", ["BSL", "Boost", "BSL (Boost)"]),
+                    ("Apache-2.0", ["Apache 2.0", "Apache License 2.0", "Apache-2", "apache-2", "Apache-2.0"]),
+                    ("Curl", ["curl", "Curl", "MIT/X derivate (http://curl.haxx.se/docs/copyright.html)"]),
+                    ("Eclipse", ["EPL", "Eclipse", "EPL (eclipse)"]),
+                    ("FreeType", ["LicenseRef-FreeType", "FreeType"]),
+                    ("MIT", ["MIT", "MIT License", "Free software (MIT-like)"]),
+                    ("MPL-1.1", ["MPL-1.1", "MPL 1.1", "MPLv1.1", "Mozilla 1.1"]),
+                    ("MPL-2.0", ["MPL", "MPL-2.0", "MPL 2.0", "MPLv2.0", "Mozilla", "Mozilla 2.0"]),
+                    ("OpenLDAP", ["OpenLDAP", "OpenLDAP Public License"]),
+                    ("PIL", ["PIL", "LicenseRef-PIL"]),
+                    ("PSF-2.0", ["PSF", "PSF-2.0", "Python-2.0", "LicenseRef-PSF-based"]),
+                    ("ZLIB", ["ZLIB", "zlib", "zlib/libpng"]),
+                    ("GPL-2.0", ["GPL-2.0", "GPL-2.0-only", "GPL-2.0-or-later", "GPLv2", "GPL 2"]),
+                    ("GPL-3.0", ["GPL-3.0", "GPL-3.0-only", "GPL-3.0-or-later", "GPLv3", "GPL 3"]),
+                    ("LGPL-2.1", ["LGPL-2.1", "LGPL 2.1", "LGPL2", "LGPLv2", "LGPLv2.1", "LGPL-2.1-or-later"]),
+                    ("LGPL-3.0", ["LGPL-3.0", "LGPL 3.0", "LGPL3", "LGPLv3", "LGPLv3.0", "LGPL-3.0-or-later"])]
+    separators = [",", " AND ", " and ", " OR ", " or "]
+
+    # Split up license types within a string if there are multiple license types provided.
+    for separator in separators:
+        licenses = license_str.split(separator)
+        if len(licenses) > 1:
+            result = []
+            for lic_type in licenses:
+                result += _clean_license_type(lic_type)
+            return result
+
+    # Convert variant names of different license types to a single value,
+    # based on the table within license_types.
+    license_str = license_str.strip()
+    for license_type, potentials in license_types:
+        if license_str in potentials:
+            return [license_type]
+
+    return [license_str]
+
 def get_licenses(args):
     """
     Entry point for `get licenses`.
@@ -423,5 +488,9 @@ def get_licenses(args):
         gen.add_licenses(conda_env_file)
 
     gen.write_licenses_file(args.output_folder)
+
+    if args.template_files:
+        for template_file in parse_arg_list(args.template_files):
+            gen.gen_file_from_template(template_file, args.output_folder)
 
 ENTRY_FUNCTION = get_licenses
