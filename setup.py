@@ -28,6 +28,7 @@ def get_readme():
 REQUIRED_PACKAGES = [
     "pyyaml",
     "requests",
+    "jinja2",
 ]
 
 setup(
