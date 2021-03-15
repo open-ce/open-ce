@@ -18,5 +18,6 @@ runs:
         echo "one, a new branch will be created for the previous version"
         echo "from the last commit."
         open_ce_path="$GITHUB_ACTION_PATH/../../../"
+        pip install -e ${open_ce_path}
         python ${open_ce_path}/git_tools/create_version_branch.py \
                   --branch_if_changed
