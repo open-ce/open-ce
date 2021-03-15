@@ -10,13 +10,17 @@ source:
 
 build:
   number: 1
-  script: python -m pip install -e .
+  script: python setup.py install --single-version-externally-managed --record record.txt
   noarch: python
 
 requirements:
+  build:
+    - python
+    - setuptools
   run:
     - pyyaml
     - requests
+    - python
 
 test:
   imports:

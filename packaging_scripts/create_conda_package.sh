@@ -15,4 +15,8 @@
 # limitations under the License.
 # *****************************************************************
 
-conda build conda/recipe
+set -ex
+OUTPUT_FOLDER=$(pwd)/open-ce-conda-pkg
+
+mkdir -p ${OUTPUT_FOLDER}
+conda build --output-folder ${OUTPUT_FOLDER} conda/recipe
