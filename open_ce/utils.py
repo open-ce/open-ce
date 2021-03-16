@@ -227,32 +227,27 @@ def cuda_driver_installed():
 def check_cuda_version_match(command):
     '''
     Check whether cudatoolkit matches the system CUDA version (as per CUDA_HOME).
-    If not, it's a fatal error as far as the build is concerned.
+    If not, print a warning.  Returns True/False based on match.
     '''
 
     # Version is recorded in $CUDA_HOME/version.txt; make sure $CUDA_HOME is set first.
+    # (If $CUDA_HOME doesn't exist, read will fail so we return False).
     check_cuda_home()
     cudavers_file = os.environ['CUDA_HOME'] + '/version.txt'
-    print("DBG: cudavers_file:" + cudavers_file)
-    print("DBG: cudatoolkit vers:" + str(command.cudatoolkit))
-    os.system("/bin/ls -l $CUDA_HOME $CUDA_HOME/ && cat $CUDA_HOME/version.txt || true")
     try:
         cudafile = open(cudavers_file,'r')
         cuda_home_version = cudafile.readline()
-        print("DBG: cuda_home_version:  " + cuda_home_version)
+        version_match = cuda_home_version.find(str(command.cudatoolkit))
+        if version_match > 0:
+            return True
+
         cudafile.close()
-    except OSError as err:
-        if err.errno == errno.ENOENT:
-            raise OpenCEError(Error.ERROR, "Could not read version from $CUDA_HOME/version.txt") from err
+    except:
+        # Treating as a warning rather than a fatal error
+        print("WARNING: Could not read version from " + cudavers_file)
 
-    version_match = cuda_home_version.find(str(command.cudatoolkit))
-    print("DBG: version_match:" + str(version_match))
-
-    if version_match > 0:
-        return True
-
-    # Versions do not match.  Raise an error
-    raise OpenCEError(Error.ERROR, "cudatoolkit version does not match $CUDA_HOME version")
+    # Versions do not match.  Return False.
+    return(False)
 
 def check_cuda_home():
     '''
@@ -263,7 +258,6 @@ def check_cuda_home():
     if 'CUDA_HOME' not in os.environ:
         # CUDA_HOME is not set, so set it to the default location
         os.environ['CUDA_HOME'] = "/usr/local/cuda"
-        print("DBG: CUDA_HOME was not set; we set it to default")
 
 def is_subdir(child_path, parent_path):
     """ Checks if given child path is sub-directory of parent_path. """
