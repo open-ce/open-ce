@@ -241,7 +241,7 @@ def check_cuda_version_match(command):
         cudafile.close()
         if version_match > 0:
             return True
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         # Treating as a warning rather than a fatal error
         print("WARNING: Could not read version from " + cudavers_file)
 
