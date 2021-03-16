@@ -10,9 +10,15 @@ ARG LOCAL_CONDA_CHANNEL
 ARG CONDA_ENV_FILE
 ARG TARGET_DIR
 
-ENV OPENCE_GROUP=OPENCE_USER
+ENV OPENCE_GROUP=${OPENCE_USER}
 ARG GROUP_ID=1500
 ARG USER_ID=1084
+
+# GPUs
+# nvidia-container-runtime
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+ENV NVIDIA_REQUIRE_CUDA "cuda>=10.2"
 
 # Install basic requirements.
 RUN export ARCH="$(uname -m)" && \
@@ -48,6 +54,6 @@ RUN mkdir -p ${TARGET_DIR}
 
 COPY ${LOCAL_CONDA_CHANNEL} ${TARGET_DIR}
 
-RUN sudo chown -R ${OPENCE_USER}:${OPENCE_GROUP} ${TARGET_DIR} && \
-    $CONDA_HOME/bin/conda env create -f ${TARGET_DIR}/${CONDA_ENV_FILE}
+RUN sudo chown -R ${OPENCE_USER}:${OPENCE_GROUP} ${TARGET_DIR}
 
+RUN if [ -n "$CONDA_ENV_FILE" ]; then $CONDA_HOME/bin/conda env create -f ${TARGET_DIR}/${CONDA_ENV_FILE}; fi

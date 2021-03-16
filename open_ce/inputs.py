@@ -221,7 +221,9 @@ path of \"recipe\"."""))
                                         '--container_tool',
                                         type=str,
                                         default=utils.DEFAULT_CONTAINER_TOOL,
-                                        help="Container tool to be used."))
+                                        help="Container tool to be used. Default is taken from the "
+                                             " system, podman has preference over docker. "))
+
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''
@@ -261,8 +263,10 @@ def parse_args(parser, arg_strings=None):
         if utils.is_url(args.conda_build_config):
             args.conda_build_config = utils.download_file(args.conda_build_config,
                                                           filename=utils.CONDA_BUILD_CONFIG_FILE)
-        else:
+        elif os.path.exists(args.conda_build_config):
             args.conda_build_config = os.path.abspath(args.conda_build_config)
+        else:
+            print("WARNING: No valid conda_build_config.yaml file was found. Some recipes may fail to build.")
 
     return args
 

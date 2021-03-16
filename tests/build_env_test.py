@@ -340,18 +340,20 @@ def test_build_env_container_build(mocker):
     arg_strings = ["build", build_env.COMMAND, "--container_build", "my-env.yaml"]
 
     mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
+    mocker.patch('os.path.exists', return_value=1)
 
     mocker.patch('pkg_resources.get_distribution', return_value=None)
 
     opence._main(arg_strings)
 
-def test_build_env_container_build_multiple_cuda_versions():
+def test_build_env_container_build_multiple_cuda_versions(mocker):
     '''
     Tests that passing mutiple values in --cuda_versions argument with container_build fails.
     '''
 
     arg_strings = ["build", build_env.COMMAND, "--container_build",
                    "--cuda_versions", "10.2,11.0", "my-env.yaml"]
+    mocker.patch('os.path.exists', return_value=1)
 
     with pytest.raises(OpenCEError) as exc:
         opence._main(arg_strings)
@@ -367,6 +369,7 @@ def test_build_env_container_build_cuda_versions(mocker):
         side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
+    mocker.patch('os.path.exists', return_value=1)
 
     cuda_version = "10.2"
     arg_strings = ["build", build_env.COMMAND, "--container_build",
@@ -384,6 +387,7 @@ def test_build_env_container_build_with_build_args(mocker):
         side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
+    mocker.patch('os.path.exists', return_value=1)
 
     # with docker_build 
     arg_strings = ["build", build_env.COMMAND, "--docker_build",
@@ -405,6 +409,7 @@ def test_build_env_container_build_with_container_tool(mocker):
         side_effect=dirTracker.mocked_getcwd
     )
     mocker.patch('open_ce.container_build.build_with_container_tool', return_value=0)
+    mocker.patch('os.path.exists', return_value=1)
 
     #with docker_build argument
     arg_strings = ["build", build_env.COMMAND, "--docker_build",

@@ -58,9 +58,9 @@ Open-CE expects the `CUDA_HOME` environment variable to be set to the location o
 
 When building packages that use CUDA, a tar package of TensorRT for the intended CUDA version will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`. The [cuda README](doc/README.cuda_support.md) has more information.
 
-### Open-CE tools
+### Installing the Open-CE Build Tools
 
-To get Open-CE build tools, one can either clone the source code from [github](https://github.com/open-ce/open-ce) or install it via `pip` as below - 
+To get the Open-CE build tools, one can either clone the source code from [github](https://github.com/open-ce/open-ce) or install it via `pip` as below - 
 
 ```bash
 # Clone Open-CE from GitHub
