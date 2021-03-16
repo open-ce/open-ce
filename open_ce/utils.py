@@ -238,10 +238,9 @@ def check_cuda_version_match(command):
         cudafile = open(cudavers_file,'r')
         cuda_home_version = cudafile.readline()
         version_match = cuda_home_version.find(str(command.cudatoolkit))
+        cudafile.close()
         if version_match > 0:
             return True
-
-        cudafile.close()
     except:
         # Treating as a warning rather than a fatal error
         print("WARNING: Could not read version from " + cudavers_file)
