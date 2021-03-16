@@ -241,12 +241,12 @@ def check_cuda_version_match(command):
         cudafile.close()
         if version_match > 0:
             return True
-    except:
+    except cudavers_file:
         # Treating as a warning rather than a fatal error
         print("WARNING: Could not read version from " + cudavers_file)
 
     # Versions do not match.  Return False.
-    return(False)
+    return False
 
 def check_cuda_home():
     '''
