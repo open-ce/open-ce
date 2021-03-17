@@ -77,6 +77,7 @@ def main(arg_strings=None):
     utils.run_and_log("git remote set-head origin -a")
     default_branch = utils.get_output("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
 
+    print("Arguments passed: ", arg_strings)
     if args.recipe_config_file:
         args.recipe_config_file =  os.path.abspath(args.recipe_config_file)
 
