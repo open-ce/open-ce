@@ -15,4 +15,8 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.7"
+      - name: Set the recipe config file value
+        id: set_env
+        run: |
+            echo "OPENCE_RECIPE_CONFIG_FILE=open-ce/conda/config/build-config.yaml" >> $GITHUB_ENV
       - uses: open-ce/open-ce/.github/actions/feedstock-optional-pr@main

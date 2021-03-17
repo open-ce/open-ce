@@ -21,6 +21,11 @@ runs:
       run: |
         test_path="$GITHUB_ACTION_PATH/../../../tests"
         pip install -e "$GITHUB_ACTION_PATH/../../../"
-        python $test_path/feedstock_tests/check_build_numbers.py \
-               --conda_build_config \
-                     "./open-ce-environments/envs/conda_build_config.yaml"
+        if [ -z "${{env.OPENCE_RECIPE_CONFIG_FILE}}" ]; then
+            python $test_path/feedstock_tests/check_build_numbers.py \
+               --conda_build_config "./open-ce-environments/envs/conda_build_config.yaml" \
+               --recipe_config_file ${OPENCE_RECIPE_CONFIG_FILE}
+        else
+            python $test_path/feedstock_tests/check_build_numbers.py \
+               --conda_build_config "./open-ce-environments/envs/conda_build_config.yaml"
+        fi
