@@ -23,6 +23,11 @@ requirements:
     - python
 
 test:
+  commands:
+    - open-ce -h
+    - open-ce build env -h
+    - open-ce build feedstock -h
+    - open-ce build image -h
   imports:
     - open_ce
     - open_ce.build_env
