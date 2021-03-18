@@ -47,7 +47,8 @@ def build_image(local_conda_channel, conda_env_file, container_tool, container_b
     Build a container image from the Dockerfile in RUNTIME_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
-    variant =  os.path.splitext(conda_env_file)[0].replace(utils.CONDA_ENV_FILENAME_PREFIX,"",1)
+    variant = os.path.splitext(conda_env_file)[0].replace(utils.CONDA_ENV_FILENAME_PREFIX, "", 1)
+    variant = variant.replace("-runtime", "")
     image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + variant
     build_cmd = container_tool + " build "
     build_cmd += "-f " + os.path.join(RUNTIME_IMAGE_PATH, "Dockerfile") + " "

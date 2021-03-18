@@ -36,7 +36,7 @@ def test_build_image_positive_case(mocker):
     '''
     Simple test for build_runtime_image
     '''
-    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
+    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME + "-" + "test-conda-env"
     container_tool = utils.DEFAULT_CONTAINER_TOOL
 
     mocker.patch(
@@ -91,7 +91,7 @@ def test_local_conda_channel_with_absolute_path(mocker):
     '''
     Test for build_runtime_image with local conda channel with its absolute path
     '''
-    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
+    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME + "-" + "test-conda-env"
     container_tool = utils.DEFAULT_CONTAINER_TOOL
     mocker.patch(
         'os.system',
@@ -122,7 +122,7 @@ def test_channel_update_in_conda_env(mocker):
     Test to see if channel is being updated in the conda env file before passing to build_runtime_image
     '''
 
-    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
+    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME + "-" + "test-conda-env"
     container_tool = utils.DEFAULT_CONTAINER_TOOL
     mocker.patch(
         'os.system',
@@ -161,7 +161,7 @@ def test_modified_file_removed(mocker):
     Make sure the copied conda env file was deleted afterwards
     '''
 
-    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME
+    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME + "-" + "test-conda-env"
     container_tool = utils.DEFAULT_CONTAINER_TOOL
     mocker.patch(
         'os.system',
@@ -193,3 +193,13 @@ def test_build_image_with_container_build_args(mocker):
     arg_strings = ["build", build_image.COMMAND, "--local_conda_channel", "tests/testcondabuild", "--conda_env_file", "tests/test-conda-env.yaml", "--container_tool", "podman", "--container_build_args", build_args]
     opence._main(arg_strings)
 
+def test_build_image_name(mocker):
+    '''
+    Tests that runtime image gets its name based on the env file passed.
+    '''
+    intended_image_name = build_image.REPO_NAME + ":" + build_image.IMAGE_NAME + "-" + "test-conda-env"
+    container_tool = utils.DEFAULT_CONTAINER_TOOL
+
+    mocker.patch('os.system', return_value=0)
+    image_name = build_image.build_image("tests/testcondabuild", os.path.basename("tests/test-conda-env.yaml"), utils.DEFAULT_CONTAINER_TOOL)
+    assert image_name == intended_image_name
