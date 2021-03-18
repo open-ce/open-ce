@@ -201,5 +201,5 @@ def test_build_image_name(mocker):
     container_tool = utils.DEFAULT_CONTAINER_TOOL
 
     mocker.patch('os.system', return_value=0)
-    image_name = build_image.build_image("tests/testcondabuild", os.path.basename("tests/test-conda-env.yaml"), utils.DEFAULT_CONTAINER_TOOL)
+    image_name = build_image.build_image("tests/testcondabuild", os.path.basename("tests/test-conda-env.yaml"), container_tool)
     assert image_name == intended_image_name
