@@ -15,7 +15,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.7"
-      - uses: 
+      - uses:
           open-ce/open-ce/.github/actions/opence-conda-package-required-pr@main
 
   optional_tests:
