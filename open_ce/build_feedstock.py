@@ -158,6 +158,7 @@ def build_feedstock(args):
     # Here, importing BuildCommand is intentionally done here to avoid circular import.
 
     from open_ce.build_tree import BuildCommand   # pylint: disable=import-outside-toplevel
+    utils.detect_mkl_feature()
     command = BuildCommand(recipe=inputs.parse_arg_list(args.recipe_list),
                            repository=args.working_directory,
                            packages=[],

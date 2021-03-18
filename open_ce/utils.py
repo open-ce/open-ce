@@ -295,3 +295,12 @@ def git_clone(git_url, git_tag, location):
         raise OpenCEError(Error.CLONE_REPO, git_url)
 
     return clone_successful
+
+def detect_mkl_feature():
+    '''
+    This method detects if MKL_FEATURE flag is set in the environment to ON.
+    If it is not set at all, the method sets it to OFF.
+    '''
+    if not 'MKL_FEATURE' in os.environ:
+        print("MKL_FEATURE isn't set. So, setting it to OFF explicitly.")
+        os.environ['MKL_FEATURE'] = "OFF"

@@ -317,6 +317,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._conda_env_files = dict()
         self._test_feedstocks = dict()
         self._initial_package_indices = []
+        utils.detect_mkl_feature()
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
