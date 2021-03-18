@@ -15,12 +15,8 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.7"
-      - name: Build and install the conda package
-        id: build_install
-        run: |
-            sh open-ce/open-ce/packaging_scripts/create_conda_package.sh
-            conda list open-ce
-
+      - uses: 
+          open-ce/open-ce/.github/actions/opence-conda-package-required-pr@main
 
   optional_tests:
     runs-on: ubuntu-latest
