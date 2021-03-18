@@ -18,7 +18,7 @@ jobs:
       - name: Build and install the conda package
         id: build_install
         run: |
-            sh open-ce/packaging_scripts/create_conda_package.sh
+            sh open-ce/open-ce/packaging_scripts/create_conda_package.sh
             conda list open-ce
 
 
