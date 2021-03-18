@@ -302,5 +302,5 @@ def detect_mkl_feature():
     If it is not set at all, the method sets it to OFF.
     '''
     if not 'MKL_FEATURE' in os.environ:
-        print("MKL_FEATURE isn't set. So, setting it to OFF explicitly.")
+        print("INFO: MKL_FEATURE isn't set in the environment. So, setting it to OFF explicitly.")
         os.environ['MKL_FEATURE'] = "OFF"
