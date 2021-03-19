@@ -18,13 +18,8 @@ jobs:
       - name: Build and install the conda package
         id: build_install
         run: |
-          open_ce_path="$GITHUB_ACTION_PATH/../../../"
-          CURDIR=$(pwd)
-          echo "Current Dir: $(pwd)"
-          LS_OUTPUT=$(ls -l)
-          echo "LS: $LS_OUTPUT"
-          sh ${open_ce_path}/packaging_scripts/create_conda_package.sh
-          conda install -y open-ce -c file://${open_ce_path}/open-ce-conda-pkg
+          sh ./packaging_scripts/create_conda_package.sh
+          conda install -y open-ce -c file://$(pwd)/open-ce-conda-pkg
           conda list open-ce
 
   optional_tests:
