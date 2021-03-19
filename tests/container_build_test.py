@@ -36,7 +36,7 @@ def test_build_image(mocker):
     #CUDA build
     cuda_version="11.0"
     container_tool = "docker"
-    intended_image_name = container_build.REPO_NAME + ":" + container_build.IMAGE_NAME + "-cuda" + cuda_version + "-1234"
+    intended_image_name = container_build.REPO_NAME + ":" + container_build.IMAGE_NAME + "-cuda" + cuda_version
 
     mocker.patch(
         'os.system',
@@ -47,7 +47,7 @@ def test_build_image(mocker):
     assert container_build.build_image("test", "test", container_tool, cuda_version) == intended_image_name
 
     #CPU build  
-    intended_image_name = container_build.REPO_NAME + ":" + container_build.IMAGE_NAME + "-cpu" + "-1234"
+    intended_image_name = container_build.REPO_NAME + ":" + container_build.IMAGE_NAME + "-cpu"
 
     mocker.patch(
         'os.system',
