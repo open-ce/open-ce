@@ -57,9 +57,9 @@ def build_image(build_image_path, dockerfile, container_tool, cuda_version=None,
     Returns a result code and the name of the new image.
     """
     if cuda_version:
-        image_name = REPO_NAME + ":" + IMAGE_NAME + "-cuda" + cuda_version + "-" + str(os.getuid())
+        image_name = REPO_NAME + ":" + IMAGE_NAME + "-cuda" + cuda_version
     else:
-        image_name = REPO_NAME + ":" + IMAGE_NAME + "-cpu-" + str(os.getuid())
+        image_name = REPO_NAME + ":" + IMAGE_NAME + "-cpu"
     build_cmd = container_tool + " build "
     build_cmd += "-f " + dockerfile + " "
     build_cmd += "-t " + image_name + " "
