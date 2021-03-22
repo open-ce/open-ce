@@ -48,8 +48,7 @@ class BuildCommand():
                  host_dependencies=None,
                  build_dependencies=None,
                  test_dependencies=None,
-                 channels=None,
-                 build_command_dependencies=None):
+                 channels=None):
         self.recipe = recipe
         self.repository = repository
         self.packages = packages
@@ -57,6 +56,8 @@ class BuildCommand():
         self.recipe_path = recipe_path
         self.runtime_package = runtime_package
         self.output_files = output_files
+        if not self.output_files:
+            self.output_files = []
         self.python = python
         self.build_type = build_type
         self.mpi_type = mpi_type
@@ -66,9 +67,6 @@ class BuildCommand():
         self.build_dependencies = build_dependencies
         self.test_dependencies = test_dependencies
         self.channels = channels
-        self.build_command_dependencies = build_command_dependencies
-        if self.build_command_dependencies is None:
-            self.build_command_dependencies = []
 
     def feedstock_args(self):
         """
@@ -166,16 +164,20 @@ class DependencyNode():
             return self.packages == other.packages and self.build_command == other.build_command
         return self.packages == other.packages
 
-def traverse_build_commands(commands, deps, return_node=False):
+def traverse_build_commands(commands, deps=None, return_node=False):
     """
     Generator function that goes through a list of BuildCommand's dependency tree.
     """
-    false_start_node = "Starting Node"
-    new_graph = commands.copy()
-    new_graph.add_node(false_start_node)
-    for dep in deps:
-        new_graph.add_edge(false_start_node, dep)
-    for current in networkx.dfs_postorder_nodes(new_graph, false_start_node):
+    if deps is not None:
+        false_start_node = "Starting Node"
+        new_graph = commands.copy()
+        new_graph.add_node(false_start_node)
+        for dep in deps:
+            new_graph.add_edge(false_start_node, dep)
+        generator = networkx.dfs_postorder_nodes(new_graph, false_start_node)
+    else:
+        generator = networkx.dfs_postorder_nodes(commands)
+    for current in generator:
         if isinstance(current, DependencyNode):
             if current.build_command is not None:
                 if return_node:
@@ -195,7 +197,7 @@ def get_independent_runtime_deps(tree, node):
         for run_dep in run_deps:
             run_dep_node = {x for x in tree.successors(node)
                                     if utils.remove_version(run_dep) in map(utils.remove_version, x.packages)}.pop()
-            if len({x for x in networkx.descendants(tree, run_dep_node) if x.build_command is not None}) > 0:
+            if len({x for x in networkx.descendants(tree, run_dep_node) if x.build_command is not None}) == 0:
                 deps.add(run_dep)
     return deps
 
@@ -281,7 +283,6 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._conda_env_files = dict()
         self._test_feedstocks = dict()
         self._initial_package_indices = []
-        self.dep_graph_cache = None
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
@@ -306,6 +307,9 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # If the packages argument is provided, find the indices into the build_commands for all
             # of the packages that were requested.
             if packages:
+                for package in packages:
+                    if len({n for n in variant_start_nodes if package in n.packages}) == 0:
+                        print("INFO: No recipes were found for " + package + " for variant " + variant_string)
                 variant_start_nodes = {n for n in variant_start_nodes if n.packages.intersection(packages)}
 
             self._initial_package_indices += variant_start_nodes
@@ -464,7 +468,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         return self._tree[key]
 
     def __len__(self):
-        return len({x for x in self._tree if x.build_command is not None})
+        return len({x for x in self._tree.nodes() if x.build_command is not None})
 
     def get_external_dependencies(self, variant):
         '''Return the list of external dependencies for the given variant.'''
@@ -512,7 +516,9 @@ def _create_edges(tree):
                     if node != dest_node:
                         tree.add_edge(node, dest_node)
                 else:
-                    tree.add_edge(node, DependencyNode({dependency}))
+                    new_node = DependencyNode({dependency})
+                    tree.add_node(new_node)
+                    tree.add_edge(node, new_node)
     return tree
 
 #pylint: disable=too-many-locals,too-many-arguments
@@ -520,8 +526,7 @@ def _create_commands(repository, runtime_package, recipe_path,
                     recipes, variant_config_files, variants, channels):
     """
     Returns:
-        A list of BuildCommands for each recipe within a repository.
-        A list of TestCommands for an entire repository.
+        A tree of nodes containing BuildCommands for each recipe within a repository.
     """
     retval = networkx.DiGraph()
     saved_working_directory = os.getcwd()

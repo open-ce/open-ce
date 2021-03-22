@@ -48,6 +48,11 @@ def test_validate_config(mocker):
                                                        retval=[True, "", ""]))
     )
     mocker.patch(
+        'open_ce.conda_utils.get_latest_package_info',
+        side_effect=(lambda channels, package: {"name": package,
+                                                "depends": []})
+    )
+    mocker.patch(
         'os.getcwd',
         side_effect=dirTracker.mocked_getcwd
     )
@@ -97,6 +102,11 @@ def test_validate_negative(mocker):
                                                                "external_dep3=5.6.*"], # Checks that the external dependencies were used.
                                                        reject=["package"],
                                                        retval=[False, "", ""]))
+    )
+    mocker.patch(
+        'open_ce.conda_utils.get_latest_package_info',
+        side_effect=(lambda channels, package: {"name": package,
+                                                "depends": []})
     )
     mocker.patch(
         'os.getcwd',
