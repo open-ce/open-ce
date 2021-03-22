@@ -77,10 +77,6 @@ def _run_tests(build_tree, test_labels, conda_env_files):
     if failed_tests:
         raise OpenCEError(Error.FAILED_TESTS, len(failed_tests))
 
-def _all_outputs_exist(output_folder, output_files):
-    return all((os.path.exists(os.path.join(os.path.abspath(output_folder), package))
-                    for package in output_files))
-
 def build_env(args):
     '''Entry Function'''
 
@@ -136,7 +132,7 @@ def build_env(args):
     if not args.skip_build_packages:
         # Build each package in the packages list
         for build_command in build_tree:
-            if not _all_outputs_exist(args.output_folder, build_command.output_files):
+            if not build_command.all_outputs_exist(args.output_folder):
                 try:
                     print("Building " + build_command.recipe)
                     build_feedstock.build_feedstock_from_command(build_command,
