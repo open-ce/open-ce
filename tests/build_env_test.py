@@ -162,7 +162,7 @@ def test_build_env(mocker, capsys):
 
     #---The fourth test verifies that builds are skipped properly if they already exist.
     mocker.patch(
-        'open_ce.build_env._all_outputs_exist',
+        'open_ce.build_tree.BuildCommand.all_outputs_exist',
         return_value=True)
 
     captured = capsys.readouterr()
@@ -170,7 +170,7 @@ def test_build_env(mocker, capsys):
     captured = capsys.readouterr()
     assert "Skipping build of" in captured.out
     mocker.patch(
-        'open_ce.build_env._all_outputs_exist',
+        'open_ce.build_tree.BuildCommand.all_outputs_exist',
         return_value=False)
 
     #---The fifth test specifies a cuda version that isn't supported in the env file by package21.
