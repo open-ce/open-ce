@@ -89,6 +89,8 @@ def build_env(args):
         raise OpenCEError(Error.CONDA_BUILD_CONFIG_FILE_NOT_FOUND, args.conda_build_config)
     # pylint: enable=too-many-branches
 
+    utils.detect_mkl_feature()
+
     if args.container_build:
         if len(args.cuda_versions.split(',')) > 1:
             raise OpenCEError(Error.TOO_MANY_CUDA)

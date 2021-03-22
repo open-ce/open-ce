@@ -67,12 +67,17 @@ def build_image(build_image_path, dockerfile, container_tool, cuda_version=None,
     build_cmd += "--build-arg GROUP_ID=" + str(os.getgid()) + " "
 
     build_cmd += container_build_args + " "
+    build_cmd = _add_env_vars(build_cmd, utils.env_vars_for_build_container())
     build_cmd += build_image_path
-
     if os.system(build_cmd):
         raise OpenCEError(Error.BUILD_IMAGE, image_name)
 
     return image_name
+
+def _add_env_vars(build_cmd, env_vars):
+    for var in env_vars:
+        build_cmd += "--build-arg {}={} ".format(var, os.environ[var])
+    return build_cmd
 
 def _add_volume(local_path, container_path):
     """

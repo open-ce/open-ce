@@ -301,6 +301,13 @@ def detect_mkl_feature():
     This method detects if MKL_FEATURE flag is set in the environment to ON.
     If it is not set at all, the method sets it to OFF.
     '''
-    if not 'MKL_FEATURE' in os.environ:
+    if "MKL_FEATURE" not in os.environ:
         print("INFO: MKL_FEATURE isn't set in the environment. So, setting it to OFF explicitly.")
-        os.environ['MKL_FEATURE'] = "OFF"
+        os.environ["MKL_FEATURE"] = "OFF"
+
+def env_vars_for_build_container():
+    '''
+    This method returns the list of environment variables that are to be passed
+    to build container.
+    '''
+    return ["MKL_FEATURE"]
