@@ -399,46 +399,53 @@ def test_build_tree_len():
 
     assert len(mock_build_tree) == 3
 
-# def test_build_tree_cycle_fail():
-#     '''
-#     Tests that a cycle is detected in a build_tree.
-#     '''
-#     cycle_build_commands = [build_tree.BuildCommand("recipe1",
-#                                                     "repo1",
-#                                                     ["package1a", "package1b"],
-#                                                     python="2.6",
-#                                                     build_type="cuda",
-#                                                     mpi_type="openmpi",
-#                                                     cudatoolkit="10.2",
-#                                                     build_command_dependencies=[1,2]),
-#                             build_tree.BuildCommand("recipe2",
-#                                                     "repo2",
-#                                                     ["package2a"],
-#                                                     python="2.6",
-#                                                     build_type="cpu",
-#                                                     mpi_type="openmpi",
-#                                                     cudatoolkit="10.2",
-#                                                     build_command_dependencies=[0]),
-#                             build_tree.BuildCommand("recipe3",
-#                                                     "repo3",
-#                                                     ["package3a", "package3b"],
-#                                                     build_command_dependencies=[1])]
+def test_build_tree_cycle_fail():
+    '''
+    Tests that a cycle is detected in a build_tree.
+    '''
+    cycle_build_commands = networkx.DiGraph()
+    node1 = build_tree.DependencyNode(packages=["package1a", "package1b"], build_command=build_tree.BuildCommand("recipe1",
+                                                                                                                 "repo1",
+                                                                                                                 ["package1a", "package1b"],
+                                                                                                                 python="2.6",
+                                                                                                                 build_type="cuda",
+                                                                                                                 mpi_type="openmpi",
+                                                                                                                 cudatoolkit="10.2"))
+    node2 = build_tree.DependencyNode(packages=["package2a"], build_command=build_tree.BuildCommand("recipe2",
+                                                                                                    "repo2",
+                                                                                                    ["package2a"],
+                                                                                                    python="2.6",
+                                                                                                    build_type="cpu",
+                                                                                                    mpi_type="openmpi",
+                                                                                                    cudatoolkit="10.2"))
+    node3 = build_tree.DependencyNode(packages=["package3a", "package3b"], build_command=build_tree.BuildCommand("recipe3",
+                                                                                                                 "repo3",
+                                                                                                                 ["package3a", "package3b"]))
 
-#     mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2")
-#     mock_build_tree.build_commands = sample_build_commands
+    cycle_build_commands.add_node(node1)
+    cycle_build_commands.add_node(node2)
+    cycle_build_commands.add_node(node3)
+    cycle_build_commands.add_edge(node1, node2)
+    cycle_build_commands.add_edge(node1, node3)
+    cycle_build_commands.add_edge(node2, node1)
+    cycle_build_commands.add_edge(node3, node2)
 
-#     mock_build_tree._detect_cycle() #Make sure there isn't a false positive.
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2")
+    mock_build_tree._tree = sample_build_commands()
 
-#     mock_build_tree.build_commands = cycle_build_commands
+    mock_build_tree._detect_cycle() #Make sure there isn't a false positive.
 
-#     with pytest.raises(OpenCEError) as exc:
-#         mock_build_tree._detect_cycle()
+    mock_build_tree._tree = cycle_build_commands
 
-#     assert "Build dependencies should form a Directed Acyclic Graph." in str(exc.value)
-#     assert "recipe1 -> recipe2 -> recipe1" in str(exc.value)
-#     assert "recipe1 -> recipe3 -> recipe2 -> recipe1" in str(exc.value)
-#     assert "recipe2 -> recipe1 -> recipe3 -> recipe2" in str(exc.value)
-#     assert "recipe3 -> recipe2 -> recipe1 -> recipe2" in str(exc.value)
+    with pytest.raises(OpenCEError) as exc:
+        mock_build_tree._detect_cycle()
+
+    assert "Build dependencies should form a Directed Acyclic Graph." in str(exc.value)
+    assert any(["recipe1 -> recipe2 -> recipe1" in str(exc.value),
+                "recipe2 -> recipe1 -> recipe2" in str(exc.value),
+                "recipe1 -> recipe3 -> recipe2 -> recipe1" in str(exc.value),
+                "recipe2 -> recipe1 -> recipe3 -> recipe2" in str(exc.value),
+                "recipe3 -> recipe2 -> recipe1 -> recipe2" in str(exc.value)])
 
 # def test_build_tree_duplicates():
 #     '''

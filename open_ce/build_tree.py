@@ -190,7 +190,7 @@ def get_independent_runtime_deps(tree, node):
     any internal build commands.
     """
     deps = set()
-    if node.build_command is not None:
+    if node.build_command:
         run_deps = {x for x in node.build_command.run_dependencies
                                 if utils.remove_version(x) not in map(utils.remove_version, node.packages)}
         for run_dep in run_deps:
@@ -299,7 +299,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                   variant["mpi_type"], variant["cudatoolkit"])
             self._external_dependencies[variant_string] = external_deps
 
-            #self._detect_cycle()
+            self._detect_cycle()
 
             variant_start_nodes = {n for n,d in variant_tree.in_degree() if d==0}
 
@@ -497,11 +497,14 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
     def _detect_cycle(self):
         cycle_print = ""
-        try:
-            cycle_print = str(networkx.find_cycle(self._tree, orientation="original"))
-        except networkx.NetworkXNoCycle:
-            return
-        raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
+        cycles = networkx.simple_cycles(self._tree)
+
+        for cycle in cycles:
+            if any(node.build_command for node in cycle):
+                cycle_print += " -> ".join(node.build_command.recipe if node.build_command else str(node.packages)
+                                                        for node in cycle + [cycle[0]]) + "\n"
+        if cycle_print:
+            raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
 
 def _create_edges(tree):
     # Use set() to create a copy of the nodes since they change during the loop.
