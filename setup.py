@@ -26,6 +26,7 @@ def get_readme():
 
 
 REQUIRED_PACKAGES = [
+    "conda-build",
     "pyyaml",
     "requests",
 ]
