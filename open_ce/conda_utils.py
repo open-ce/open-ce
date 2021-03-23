@@ -83,7 +83,7 @@ def conda_package_info(channels, package):
     pkg_args = "\"{}\"".format(generalize_version(package))
     channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
 
-    cli = "conda search --use-index-cache --json {} {} --info".format(channel_args, pkg_args)
+    cli = "conda search --json {} {} --info".format(channel_args, pkg_args)
     ret_code, std_out, _ = run_command_capture(cli, stderr=subprocess.STDOUT)
     if not ret_code:
         raise OpenCEError(Error.CONDA_DRY_RUN, cli, std_out)
