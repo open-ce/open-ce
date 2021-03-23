@@ -164,19 +164,19 @@ class DependencyNode():
             return self.packages == other.packages and self.build_command == other.build_command
         return self.packages == other.packages
 
-def traverse_build_commands(commands, deps=None, return_node=False):
+def traverse_build_commands(build_tree, starting_nodes=None, return_node=False):
     """
     Generator function that goes through a list of BuildCommand's dependency tree.
     """
-    if deps is not None:
+    if starting_nodes is not None:
         false_start_node = "Starting Node"
-        new_graph = commands.copy()
+        new_graph = build_tree.copy()
         new_graph.add_node(false_start_node)
-        for dep in deps:
+        for dep in starting_nodes:
             new_graph.add_edge(false_start_node, dep)
         generator = networkx.dfs_postorder_nodes(new_graph, false_start_node)
     else:
-        generator = networkx.dfs_postorder_nodes(commands)
+        generator = networkx.dfs_postorder_nodes(build_tree)
     for current in generator:
         if isinstance(current, DependencyNode):
             if current.build_command is not None:
@@ -282,7 +282,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._external_dependencies = dict()
         self._conda_env_files = dict()
         self._test_feedstocks = dict()
-        self._initial_package_indices = []
+        self._initial_nodes = []
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
@@ -312,7 +312,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                         print("INFO: No recipes were found for " + package + " for variant " + variant_string)
                 variant_start_nodes = {n for n in variant_start_nodes if n.packages.intersection(packages)}
 
-            self._initial_package_indices += variant_start_nodes
+            self._initial_nodes += variant_start_nodes
 
             validate_config.validate_build_tree(self._tree, external_deps, variant_start_nodes)
             installable_packages = get_installable_packages(self._tree, external_deps, variant_start_nodes)
@@ -462,7 +462,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         If a recipe has dependencies, those recipes will be returned
         first.
         """
-        yield from traverse_build_commands(self._tree, self._initial_package_indices)
+        yield from traverse_build_commands(self._tree, self._initial_nodes)
 
     def __getitem__(self, key):
         return self._tree[key]
@@ -571,7 +571,7 @@ def _create_commands(repository, runtime_package, recipe_path,
     os.chdir(saved_working_directory)
     return retval
 
-def get_installable_packages(build_commands, external_deps, package_indices=None, independent=False):
+def get_installable_packages(build_commands, external_deps, starting_nodes=None, independent=False):
     '''
     This function retrieves the list of unique dependencies that are needed at runtime, from the
     build commands and external dependencies that are passed to it.
@@ -619,7 +619,7 @@ def get_installable_packages(build_commands, external_deps, package_indices=None
 
         return parent_set
 
-    for node in traverse_build_commands(build_commands, package_indices, True):
+    for node in traverse_build_commands(build_commands, starting_nodes, True):
         build_command = node.build_command
         if build_command.runtime_package:
             if independent:
