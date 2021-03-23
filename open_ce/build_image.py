@@ -20,6 +20,7 @@
 import os
 import shutil
 from open_ce import utils
+from open_ce import __version__ as open_ce_version
 from open_ce.inputs import Argument, parse_arg_list
 from open_ce.errors import OpenCEError, Error
 
@@ -34,7 +35,7 @@ OPEN_CE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 RUNTIME_IMAGE_NAME = "opence-runtime"
 RUNTIME_IMAGE_PATH = os.path.join(OPEN_CE_PATH, "images", RUNTIME_IMAGE_NAME)
 REPO_NAME = "open-ce"
-IMAGE_NAME = "open-ce-runtime"
+IMAGE_NAME = "open-ce-" + open_ce_version
 BUILD_CONTEXT = "."
 
 OPENCE_USER = "opence"
@@ -46,7 +47,8 @@ def build_image(local_conda_channel, conda_env_file, container_tool, container_b
     Build a container image from the Dockerfile in RUNTIME_IMAGE_PATH.
     Returns a result code and the name of the new image.
     """
-    image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + str(os.getuid())
+    variant =  os.path.splitext(conda_env_file)[0].replace(utils.CONDA_ENV_FILENAME_PREFIX,"",1)
+    image_name = REPO_NAME + ":" + IMAGE_NAME + "-" + variant
     build_cmd = container_tool + " build "
     build_cmd += "-f " + os.path.join(RUNTIME_IMAGE_PATH, "Dockerfile") + " "
     build_cmd += "-t " + image_name + " "
@@ -101,7 +103,7 @@ def build_runtime_container_image(args):
             # make it relative to BUILD CONTEXT
             args.local_conda_channel = os.path.relpath(args.local_conda_channel, start=BUILD_CONTEXT)
 
-        image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_file),
+        image_name = build_image(args.local_conda_channel, os.path.basename(conda_env_runtime_file),
                                  args.container_tool, args.container_build_args)
 
         # Remove the copied environment file

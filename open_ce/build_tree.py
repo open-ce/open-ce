@@ -108,6 +108,12 @@ class BuildCommand():
         result = result.replace("_", "-")
         return result
 
+    def all_outputs_exist(self, output_folder):
+        """
+        Returns true if all of the output_files already exist.
+        """
+        return all((os.path.exists(os.path.join(os.path.abspath(output_folder), package))
+                    for package in self.output_files))
 
     def __key(self):
         return (self.recipe, self.output_files)
