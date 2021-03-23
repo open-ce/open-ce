@@ -104,9 +104,6 @@ def build_feedstock_from_command(command, # pylint: disable=too-many-arguments, 
     '''
     utils.check_if_conda_build_exists()
 
-    if 'cuda' in command.build_type:
-        utils.check_cuda_version_match(command)
-
     # pylint: disable=import-outside-toplevel
     import conda_build.api
     from conda_build.config import get_or_merge_config
@@ -169,6 +166,10 @@ def build_feedstock(args):
                            mpi_type=args.mpi_types,
                            cudatoolkit=args.cuda_versions,
                            channels=args.channels_list)
+
+    # Before we build, ensure CUDA_HOME is set and warn if there is a version mismatch
+    if 'cuda' in command.build_type:
+        utils.check_cuda_version_match(command)
 
     build_feedstock_from_command(command,
                                  recipe_config_file=args.recipe_config_file,
