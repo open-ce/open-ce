@@ -239,14 +239,13 @@ def check_cuda_version_match(command):
     try:
         cudafile = open(cudavers_file,'r')
         cuda_home_version = cudafile.readline()
+        cudafile.close()
         version_match = cuda_home_version.find(str(command.cudatoolkit))
         if version_match > 0:
             return True
     except Exception:  # pylint: disable=broad-except
         # Treating as a warning rather than a fatal error
         print("WARNING: Could not read version from " + cudavers_file)
-    finally:
-        cudafile.close()
 
     # Versions do not match.  Return False.
     return False
