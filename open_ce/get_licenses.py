@@ -60,6 +60,7 @@ class Key(Enum):
     license = auto()
     url = auto()
     license_url = auto()
+    license_files = auto()
     copyright_string = auto()
 
 _THIRD_PARTY_PACKAGE_SCHEMA ={
@@ -68,6 +69,7 @@ _THIRD_PARTY_PACKAGE_SCHEMA ={
     Key.license.name: utils.make_schema_type(str, True),
     Key.url.name: utils.make_schema_type([str], True),
     Key.license_url.name: utils.make_schema_type(str),
+    Key.license_files.name: utils.make_schema_type([str]),
     Key.copyright_string.name: utils.make_schema_type(str),
 }
 
@@ -85,11 +87,12 @@ class LicenseGenerator():
         The LicenseInfo class holds license information for a single package.
         """
         #pylint: disable=too-many-arguments
-        def __init__(self, name, version, url, license_type, copyrights):
+        def __init__(self, name, version, url, license_type, copyrights, license_files):
             self.name = name
             self.version = version
             self.url = url if isinstance(url, list) else [url]
             self.license_type = _clean_license_type(license_type)
+            self.license_files = license_files
             self.copyrights = copyrights
 
         def __str__(self):
@@ -173,7 +176,7 @@ class LicenseGenerator():
                             print("Unable to download source for " + package[Key.name.name])
 
             # Find every license file within the downloaded source
-            license_files = _find_license_files(source_folder)
+            license_files = _find_license_files(source_folder, package.get(Key.license_files.name))
 
             # Get copyright information from the downloaded source (unless the copyright string is provided)
             if Key.copyright_string.name in package:
@@ -185,7 +188,8 @@ class LicenseGenerator():
                                                 package[Key.version.name],
                                                 package[Key.url.name],
                                                 package[Key.license.name],
-                                                copyright_string)
+                                                copyright_string,
+                                                license_files)
             self._licenses.add(info)
 
     def write_licenses_file(self, output_folder):
@@ -217,7 +221,7 @@ class LicenseGenerator():
             for license_type in info.license_type:
                 license_dict[license_type].append(info)
 
-        file_loader = FileSystemLoader(os.path.dirname(template))
+        file_loader = FileSystemLoader([os.path.dirname(template), os.getcwd()])
         env = Environment(loader=file_loader)
         jinja_template = env.get_template(os.path.basename(template))
         output = jinja_template.render(licenseInfo=license_dict)
@@ -225,6 +229,8 @@ class LicenseGenerator():
         output_name = os.path.splitext(os.path.basename(template))[0] + ".txt"
         with open(os.path.join(output_folder, output_name), 'w') as stream:
             stream.write(output)
+
+        print("INFO: {} generated from {}".format(os.path.join(output_folder, output_name), template))
 
     def _add_licenses_from_environment(self, conda_env):
         # For each meta-pkg within an environment, find its about.json file.
@@ -243,11 +249,14 @@ class LicenseGenerator():
             open_ce_info = os.path.join(package_info_dir, "recipe", utils.OPEN_CE_INFO_FILE)
             self.add_licenses_from_info_file(open_ce_info)
 
+            copyright_strings, license_files = _get_copyrights_from_conda_package(meta_data["extracted_package_dir"])
+
             info = LicenseGenerator.LicenseInfo(meta_data["name"],
                                                 meta_data["version"],
                                                 about_data.get("dev_url", about_data.get("home", "none")),
                                                 about_data.get("license", "none"),
-                                                _get_copyrights_from_conda_package(meta_data["extracted_package_dir"]))
+                                                copyright_strings,
+                                                license_files)
             self._licenses.add(info)
 
         if os.path.exists(utils.TMP_LICENSE_DIR):
@@ -278,7 +287,7 @@ def _get_copyrights_from_conda_package(pkg_dir):
         source_folder = _get_source_from_conda_package(pkg_dir)
         license_files.update(_find_license_files(source_folder))
 
-    return _get_copyrights_from_files(license_files)
+    return _get_copyrights_from_files(license_files), list(license_files)
 
 def _get_source_from_conda_package(pkg_dir):
     """
@@ -342,17 +351,21 @@ def _extract(archive, destination):
         with zipfile.ZipFile(archive, 'r') as zip_stream:
             zip_stream.extractall(destination)
 
-def _find_license_files(directory):
+def _find_license_files(directory, known_license_files=None):
     """
     Find all of the possible license files within a directory.
     """
     license_files = []
 
-    license_files += glob.glob(os.path.join(directory, "**", "*LICENSE*"), recursive=True)
-    license_files += glob.glob(os.path.join(directory, "**", "*LICENCE*"), recursive=True)
-    license_files += glob.glob(os.path.join(directory, "**", "*COPYING*"), recursive=True)
-    license_files += glob.glob(os.path.join(directory, "**", "*CopyrightNotice*"), recursive=True)
-    license_files += glob.glob(os.path.join(directory, "**", "*d.ts"), recursive=True)
+    if known_license_files:
+        for known_license_file in known_license_files:
+            license_files += glob.glob(os.path.join(directory, known_license_file))
+    else:
+        license_files += glob.glob(os.path.join(directory, "**", "*LICENSE*"), recursive=True)
+        license_files += glob.glob(os.path.join(directory, "**", "*LICENCE*"), recursive=True)
+        license_files += glob.glob(os.path.join(directory, "**", "*COPYING*"), recursive=True)
+        license_files += glob.glob(os.path.join(directory, "**", "*CopyrightNotice*"), recursive=True)
+        license_files += glob.glob(os.path.join(directory, "**", "*d.ts"), recursive=True)
 
     return license_files
 
@@ -433,28 +446,28 @@ def _clean_copyright_string(copyright_str, primary=True):
     return copyright_str
 
 def _clean_license_type(license_str):
-    license_types =[("BSD-3-Clause", ["3-clause BSD", "BSD 3-Clause", "BSD-3-Clause", "BSD-3-clause",
-                                      "BSD 3-clause", "BSD 3 Clause", "BSD3", "modified 3-clause BSD",
-                                      "Google"]),
+    license_types =[("Apache-2.0", ["Apache 2.0", "Apache License 2.0", "Apache-2", "apache-2", "Apache-2.0"]),
+                    ("Boost", ["BSL", "Boost", "BSL (Boost)"]),
+                    ("BSD", ["BSD", "BSD Like"]),
                     ("BSD-2-Clause", ["3-clause BSD", "BSD 2-Clause", "BSD-2-Clause", "BSD-2-clause",
                                       "BSD 2-clause", "BSD 2 Clause", "BSD2", "New BSD License"]),
-                    ("BSD", ["BSD", "BSD Like"]),
-                    ("Boost", ["BSL", "Boost", "BSL (Boost)"]),
-                    ("Apache-2.0", ["Apache 2.0", "Apache License 2.0", "Apache-2", "apache-2", "Apache-2.0"]),
+                    ("BSD-3-Clause", ["3-clause BSD", "BSD 3-Clause", "BSD-3-Clause", "BSD-3-clause",
+                                      "BSD 3-clause", "BSD 3 Clause", "BSD3", "modified 3-clause BSD",
+                                      "Google"]),
                     ("Curl", ["curl", "Curl", "MIT/X derivate (http://curl.haxx.se/docs/copyright.html)"]),
                     ("Eclipse", ["EPL", "Eclipse", "EPL (eclipse)"]),
                     ("FreeType", ["LicenseRef-FreeType", "FreeType"]),
+                    ("GPL-2.0", ["GPL-2.0", "GPL-2.0-only", "GPL-2.0-or-later", "GPLv2", "GPL 2"]),
+                    ("GPL-3.0", ["GPL-3.0", "GPL-3.0-only", "GPL-3.0-or-later", "GPLv3", "GPL 3"]),
+                    ("LGPL-2.1", ["LGPL-2.1", "LGPL 2.1", "LGPL2", "LGPLv2", "LGPLv2.1", "LGPL-2.1-or-later"]),
+                    ("LGPL-3.0", ["LGPL-3.0", "LGPL 3.0", "LGPL3", "LGPLv3", "LGPLv3.0", "LGPL-3.0-or-later"]),
                     ("MIT", ["MIT", "MIT License", "Free software (MIT-like)"]),
                     ("MPL-1.1", ["MPL-1.1", "MPL 1.1", "MPLv1.1", "Mozilla 1.1"]),
                     ("MPL-2.0", ["MPL", "MPL-2.0", "MPL 2.0", "MPLv2.0", "Mozilla", "Mozilla 2.0"]),
                     ("OpenLDAP", ["OpenLDAP", "OpenLDAP Public License"]),
                     ("PIL", ["PIL", "LicenseRef-PIL"]),
                     ("PSF-2.0", ["PSF", "PSF-2.0", "Python-2.0", "LicenseRef-PSF-based"]),
-                    ("ZLIB", ["ZLIB", "zlib", "zlib/libpng"]),
-                    ("GPL-2.0", ["GPL-2.0", "GPL-2.0-only", "GPL-2.0-or-later", "GPLv2", "GPL 2"]),
-                    ("GPL-3.0", ["GPL-3.0", "GPL-3.0-only", "GPL-3.0-or-later", "GPLv3", "GPL 3"]),
-                    ("LGPL-2.1", ["LGPL-2.1", "LGPL 2.1", "LGPL2", "LGPLv2", "LGPLv2.1", "LGPL-2.1-or-later"]),
-                    ("LGPL-3.0", ["LGPL-3.0", "LGPL 3.0", "LGPL3", "LGPLv3", "LGPLv3.0", "LGPL-3.0-or-later"])]
+                    ("ZLIB", ["ZLIB", "zlib", "zlib/libpng"])]
     separators = [",", " AND ", " and ", " OR ", " or "]
 
     # Split up license types within a string if there are multiple license types provided.
