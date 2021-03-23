@@ -349,12 +349,12 @@ def test_check_recipe_path_package_field():
 def sample_build_commands() :
     retval = networkx.DiGraph()
     node1 = build_tree.DependencyNode(packages=["package1a", "package1b"], build_command=build_tree.BuildCommand("recipe1",
-                                                                                                                "repo1",
-                                                                                                                ["package1a", "package1b"],
-                                                                                                                python="2.6",
-                                                                                                                build_type="cuda",
-                                                                                                                mpi_type="openmpi",
-                                                                                                                cudatoolkit="10.2"))
+                                                                                                                 "repo1",
+                                                                                                                 ["package1a", "package1b"],
+                                                                                                                 python="2.6",
+                                                                                                                 build_type="cuda",
+                                                                                                                 mpi_type="openmpi",
+                                                                                                                 cudatoolkit="10.2"))
     node2 = build_tree.DependencyNode(packages=["package2a"], build_command=build_tree.BuildCommand("recipe2",
                                                                                                     "repo2",
                                                                                                     ["package2a"],
@@ -363,8 +363,8 @@ def sample_build_commands() :
                                                                                                     mpi_type="openmpi",
                                                                                                     cudatoolkit="10.2"))
     node3 = build_tree.DependencyNode(packages=["package3a", "package3b"], build_command=build_tree.BuildCommand("recipe3",
-                                                                                                                "repo3",
-                                                                                                                ["package3a", "package3b"]))
+                                                                                                                 "repo3",
+                                                                                                                 ["package3a", "package3b"]))
 
     retval.add_node(node1)
     retval.add_node(node2)

@@ -18,7 +18,7 @@
 import os
 import pathlib
 import subprocess
-import yaml
+import json
 
 # Disabling pylint warning "cyclic-import" locally here doesn't work. So, added it in .pylintrc
 # according to https://github.com/PyCQA/pylint/issues/59
@@ -93,9 +93,11 @@ def get_latest_package_info(channels, package):
     '''
     Get the conda package info for the most recent search result.
     '''
-    results = yaml.safe_load(conda_package_info(channels, package))
-    retval = results[list(results.keys())[0]][0]
-    for result in results[list(results.keys())[0]]:
-        if result["timestamp"] > retval["timestamp"]:
-            retval = result
+    results = json.loads(conda_package_info(channels, package))
+    # Get all the package infos for the first package, there should only be one anyway.
+    package_infos = results[list(results.keys())[0]]
+    retval = package_infos[0]
+    for package_info in package_infos:
+        if package_info["timestamp"] > retval["timestamp"]:
+            retval = package_info
     return retval

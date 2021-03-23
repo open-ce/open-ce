@@ -141,7 +141,6 @@ class DependencyNode():
     """
     Contains information for the dependency tree.
     """
-    #pylint: disable=too-many-instance-attributes,too-many-arguments,too-many-locals
     def __init__(self,
                  packages=None,
                  build_command=None):
@@ -195,9 +194,9 @@ def get_independent_runtime_deps(tree, node):
         run_deps = {x for x in node.build_command.run_dependencies
                                 if utils.remove_version(x) not in map(utils.remove_version, node.packages)}
         for run_dep in run_deps:
-            run_dep_node = {x for x in tree.successors(node)
-                                    if utils.remove_version(run_dep) in map(utils.remove_version, x.packages)}.pop()
-            if len({x for x in networkx.descendants(tree, run_dep_node) if x.build_command is not None}) == 0:
+            run_dep_node = next(x for x in tree.successors(node)
+                                    if utils.remove_version(run_dep) in map(utils.remove_version, x.packages))
+            if not {x for x in networkx.descendants(tree, run_dep_node) if x.build_command is not None}:
                 deps.add(run_dep)
     return deps
 
@@ -308,7 +307,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # of the packages that were requested.
             if packages:
                 for package in packages:
-                    if len({n for n in variant_start_nodes if package in n.packages}) == 0:
+                    if not {n for n in variant_start_nodes if package in n.packages}:
                         print("INFO: No recipes were found for " + package + " for variant " + variant_string)
                 variant_start_nodes = {n for n in variant_start_nodes if n.packages.intersection(packages)}
 
@@ -408,7 +407,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                         dep_name = utils.remove_version(dep)
                         local_dest = {dest_node for dest_node in dep_graph.nodes()
                                                 if dep_name in map(utils.remove_version, dest_node.packages)}
-                        if len(local_dest) > 0:
+                        if local_dest:
                             dep_graph.add_edge(node, local_dest.pop())
                         else:
                             new_dep = DependencyNode({dep})
@@ -505,13 +504,14 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
 
 def _create_edges(tree):
+    # Use set() to create a copy of the nodes since they change during the loop.
     for node in set(tree.nodes()):
         if node.build_command is not None:
             for dependency in node.build_command.get_all_dependencies():
                 local_dest = {dest_node for dest_node in tree.nodes()
                                         if utils.remove_version(dependency)
                                             in map(utils.remove_version, dest_node.packages)}
-                if len(local_dest) > 0:
+                if local_dest:
                     dest_node = local_dest.pop()
                     if node != dest_node:
                         tree.add_edge(node, dest_node)
