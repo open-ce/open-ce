@@ -86,7 +86,7 @@ def conda_package_info(channels, package):
     cli = "conda search --json {} {} --info".format(channel_args, pkg_args)
     ret_code, std_out, _ = run_command_capture(cli, stderr=subprocess.STDOUT)
     if not ret_code:
-        raise OpenCEError(Error.CONDA_DRY_RUN, cli, std_out)
+        raise OpenCEError(Error.CONDA_PACKAGE_INFO, cli, std_out)
     return std_out
 
 def get_latest_package_info(channels, package):
@@ -99,16 +99,3 @@ def get_latest_package_info(channels, package):
         if result["timestamp"] > retval["timestamp"]:
             retval = result
     return retval
-
-def conda_dry_run(channels, packages):
-    '''
-    Perform a conda dry-run
-    '''
-    pkg_args = " ".join(["\"{}\"".format(generalize_version(dep)) for dep in packages])
-    channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
-
-    cli = "conda create --dry-run --json -n test_conda_dependencies {} {}".format(channel_args, pkg_args)
-    ret_code, std_out, _ = run_command_capture(cli, stderr=subprocess.STDOUT)
-    if not ret_code:
-        raise OpenCEError(Error.CONDA_DRY_RUN, cli, std_out)
-    return std_out

@@ -55,7 +55,7 @@ class Error(Enum):
     FILE_DOWNLOAD = (25, "Failed to download {} with error:\n{}")
     CONDA_BUILD_CONFIG_FILE_NOT_FOUND = (26, "Failed to locate conda_build_config.yaml.")
     NO_CONTAINER_TOOL_FOUND = (27, "No container tool found on the system.")
-    CONDA_DRY_RUN = (28, "Dry-Run Failed.\nCommand:\n{}\nOutput:\n{}")
+    CONDA_PACKAGE_INFO = (28, "Conda Package Info Failed.\nCommand:\n{}\nOutput:\n{}")
     REMOTE_PACKAGE_DEPENDENCIES = (29, "Failure getting remote dependencies for the following packages:\n{}\nError:\n{}")
 
 class OpenCEError(Exception):
