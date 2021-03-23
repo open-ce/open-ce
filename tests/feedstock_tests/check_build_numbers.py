@@ -32,8 +32,7 @@ import open_ce.inputs as inputs # pylint: disable=wrong-import-position
 def make_parser():
     ''' Parser for input arguments '''
     arguments = [inputs.Argument.PYTHON_VERSIONS, inputs.Argument.BUILD_TYPES, inputs.Argument.MPI_TYPES,
-                 inputs.Argument.CUDA_VERSIONS, inputs.Argument.CONDA_BUILD_CONFIG,
-                 inputs.Argument.RECIPE_CONFIG_FILE]
+                 inputs.Argument.CUDA_VERSIONS, inputs.Argument.CONDA_BUILD_CONFIG]
     parser = argparse.ArgumentParser(arguments)
     for argument in arguments:
         argument(parser)
@@ -52,11 +51,8 @@ def _get_build_numbers(build_config_data, config, variant):
                                                            "number" : meta.meta['build']['number']}
     return build_numbers
 
-def _get_configs(variant, conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
-                 recipe_config_file=None):
-    build_config_data, _ = build_feedstock.load_package_config(config_file=recipe_config_file,
-                                                               variants=variant)
-    print("build_config_data: ", build_config_data)
+def _get_configs(variant, conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
+    build_config_data, _ = build_feedstock.load_package_config(variants=variant)
     config = get_or_merge_config(None)
     config.variant_config_files = [conda_build_config]
     config.verbose = False
@@ -77,27 +73,19 @@ def main(arg_strings=None):
     utils.run_and_log("git remote set-head origin -a")
     default_branch = utils.get_output("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
 
-    print("Arguments passed: ", arg_strings)
-    if args.recipe_config_file:
-        args.recipe_config_file =  os.path.abspath(args.recipe_config_file)
-
     variant_build_results = dict()
     for variant in variants:
         utils.run_and_log("git checkout {}".format(default_branch))
-        master_build_config_data, master_config = _get_configs(variant,
-                                                               args.conda_build_config,
-                                                               args.recipe_config_file)
+        master_build_config_data, master_config = _get_configs(variant, args.conda_build_config)
         master_build_numbers = _get_build_numbers(master_build_config_data, master_config, variant)
 
         utils.run_and_log("git checkout {}".format(pr_branch))
-        pr_build_config_data, pr_config = _get_configs(variant,
-                                                       args.conda_build_config,
-                                                       args.recipe_config_file)
+        pr_build_config_data, pr_config = _get_configs(variant, args.conda_build_config)
         current_pr_build_numbers = _get_build_numbers(pr_build_config_data, pr_config, variant)
 
         print("Build Info for Variant:   {}".format(variant))
         print("Current PR Build Info:    {}".format(current_pr_build_numbers))
-        print("Main Branch Build Info: {}".format(master_build_numbers))
+        print("Master Branch Build Info: {}".format(master_build_numbers))
 
         #No build numbers can go backwards without a version change.
         for package in master_build_numbers:
