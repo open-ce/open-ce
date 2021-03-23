@@ -48,7 +48,7 @@ def validate_cli(cli_string, expect=None, reject=None, ignore=None, possible_exp
         if len(expect) == 0:
             assert any ({term in cli_string for term in possible_expect})
         return retval
-    return retval
+    return 0
 
 def validate_conda_build_args(recipe, expect_recipe=None, expect_config=None, expect_variants=None, reject_recipe=None, **kwargs):
     """
