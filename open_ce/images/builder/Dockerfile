@@ -26,7 +26,7 @@ RUN export ARCH="$(uname -m)" && \
     chmod +x /tmp/anaconda.sh && \
     /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda && \
     rm -f /tmp/anaconda.sh && \
-    $CONDA_HOME/bin/conda install -y conda-build=${OPEN_CE_CONDA_BUILD} && \
+    $CONDA_HOME/bin/conda install -y conda-build=${OPEN_CE_CONDA_BUILD} networkx && \
     chown -R ${BUILD_USER}:${CICD_GROUP} ${CONDA_HOME}
 
 USER ${BUILD_USER}
