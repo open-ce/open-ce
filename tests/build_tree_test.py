@@ -440,120 +440,123 @@ def test_build_tree_len():
 #     assert "recipe2 -> recipe1 -> recipe3 -> recipe2" in str(exc.value)
 #     assert "recipe3 -> recipe2 -> recipe1 -> recipe2" in str(exc.value)
 
-def test_build_tree_duplicates():
-    '''
-    Tests that `build_tree._add_build_command_dependencies` removes duplicate build_commands
-    and sets the `build_command_dependencies` accordingly.
-    '''
+# def test_build_tree_duplicates():
+#     '''
+#     Tests that `build_tree._add_build_command_dependencies` removes duplicate build_commands
+#     and sets the `build_command_dependencies` accordingly.
+#     '''
 
-    initial_build_commands = [build_tree.BuildCommand("recipe1",
-                                                    "repo1",
-                                                    ["package1a"],
-                                                    output_files=["linux/package1a.tar.gz"],
-                                                    python="2.6",
-                                                    build_type="cuda",
-                                                    mpi_type="openmpi",
-                                                    build_command_dependencies=[],
-                                                    run_dependencies=[],
-                                                    build_dependencies=[],
-                                                    host_dependencies=[],
-                                                    test_dependencies=[]),
-                              build_tree.BuildCommand("recipe2",
-                                                    "repo2",
-                                                    ["package2a"],
-                                                    output_files=["linux/package2a.tar.gz"],
-                                                    python="2.6",
-                                                    build_type="cuda",
-                                                    mpi_type="openmpi",
-                                                    build_command_dependencies=[0],
-                                                    run_dependencies=[],
-                                                    build_dependencies=[],
-                                                    host_dependencies=[],
-                                                    test_dependencies=[])]
+#     initial_build_commands = [build_tree.BuildCommand("recipe1",
+#                                                     "repo1",
+#                                                     ["package1a"],
+#                                                     output_files=["linux/package1a.tar.gz"],
+#                                                     python="2.6",
+#                                                     build_type="cuda",
+#                                                     mpi_type="openmpi",
+#                                                     build_command_dependencies=[],
+#                                                     run_dependencies=[],
+#                                                     build_dependencies=[],
+#                                                     host_dependencies=[],
+#                                                     test_dependencies=[]),
+#                               build_tree.BuildCommand("recipe2",
+#                                                     "repo2",
+#                                                     ["package2a"],
+#                                                     output_files=["linux/package2a.tar.gz"],
+#                                                     python="2.6",
+#                                                     build_type="cuda",
+#                                                     mpi_type="openmpi",
+#                                                     build_command_dependencies=[0],
+#                                                     run_dependencies=[],
+#                                                     build_dependencies=[],
+#                                                     host_dependencies=[],
+#                                                     test_dependencies=[])]
 
-    duplicate_build_commands = [build_tree.BuildCommand("recipe2",
-                                                    "repo2",
-                                                    ["package2a"],
-                                                    output_files=["linux/package2a.tar.gz"],
-                                                    python="2.6",
-                                                    build_type="cuda",
-                                                    mpi_type="openmpi",
-                                                    build_command_dependencies=[],
-                                                    run_dependencies=[],
-                                                    build_dependencies=[],
-                                                    host_dependencies=[],
-                                                    test_dependencies=[]),
+#     duplicate_build_commands = [build_tree.BuildCommand("recipe2",
+#                                                     "repo2",
+#                                                     ["package2a"],
+#                                                     output_files=["linux/package2a.tar.gz"],
+#                                                     python="2.6",
+#                                                     build_type="cuda",
+#                                                     mpi_type="openmpi",
+#                                                     build_command_dependencies=[],
+#                                                     run_dependencies=[],
+#                                                     build_dependencies=[],
+#                                                     host_dependencies=[],
+#                                                     test_dependencies=[]),
 
-                                build_tree.BuildCommand("recipe1",
-                                                    "repo1",
-                                                    ["package1a"],
-                                                    output_files=["linux/package1a.tar.gz"],
-                                                    python="2.6",
-                                                    build_type="cuda",
-                                                    mpi_type="openmpi",
-                                                    build_command_dependencies=[],
-                                                    run_dependencies=[],
-                                                    build_dependencies=[],
-                                                    host_dependencies=[],
-                                                    test_dependencies=[]),
+#                                 build_tree.BuildCommand("recipe1",
+#                                                     "repo1",
+#                                                     ["package1a"],
+#                                                     output_files=["linux/package1a.tar.gz"],
+#                                                     python="2.6",
+#                                                     build_type="cuda",
+#                                                     mpi_type="openmpi",
+#                                                     build_command_dependencies=[],
+#                                                     run_dependencies=[],
+#                                                     build_dependencies=[],
+#                                                     host_dependencies=[],
+#                                                     test_dependencies=[]),
 
-                                build_tree.BuildCommand("recipe3",
-                                                    "repo3",
-                                                    ["package3a"],
-                                                    output_files=["linux/package3a.tar.gz"],
-                                                    python="2.6",
-                                                    build_type="cpu",
-                                                    mpi_type="openmpi",
-                                                    build_command_dependencies=[1],
-                                                    run_dependencies=[],
-                                                    build_dependencies=["package1a"],
-                                                    host_dependencies=[],
-                                                    test_dependencies=[])]
-    additional_build_commands = [build_tree.BuildCommand("recipe4",
-                                                    "repo4",
-                                                    ["package4a"],
-                                                    output_files=["linux/package4a.tar.gz"],
-                                                    python="2.6",
-                                                    build_type="cpu",
-                                                    mpi_type="openmpi",
-                                                    build_command_dependencies=[],
-                                                    run_dependencies=[],
-                                                    build_dependencies=[],
-                                                    host_dependencies=[],
-                                                    test_dependencies=[])]
+#                                 build_tree.BuildCommand("recipe3",
+#                                                     "repo3",
+#                                                     ["package3a"],
+#                                                     output_files=["linux/package3a.tar.gz"],
+#                                                     python="2.6",
+#                                                     build_type="cpu",
+#                                                     mpi_type="openmpi",
+#                                                     build_command_dependencies=[1],
+#                                                     run_dependencies=[],
+#                                                     build_dependencies=["package1a"],
+#                                                     host_dependencies=[],
+#                                                     test_dependencies=[])]
+#     additional_build_commands = [build_tree.BuildCommand("recipe4",
+#                                                     "repo4",
+#                                                     ["package4a"],
+#                                                     output_files=["linux/package4a.tar.gz"],
+#                                                     python="2.6",
+#                                                     build_type="cpu",
+#                                                     mpi_type="openmpi",
+#                                                     build_command_dependencies=[],
+#                                                     run_dependencies=[],
+#                                                     build_dependencies=[],
+#                                                     host_dependencies=[],
+#                                                     test_dependencies=[])]
 
-    out_commands, _ = build_tree._add_build_command_dependencies(additional_build_commands,initial_build_commands,len(initial_build_commands))
-    assert len(out_commands)==1  # Make sure the non-duplicates are not removed
+#     out_commands, _ = build_tree._add_build_command_dependencies(additional_build_commands,initial_build_commands,len(initial_build_commands))
+#     assert len(out_commands)==1  # Make sure the non-duplicates are not removed
 
-    out_commands, _ = build_tree._add_build_command_dependencies(duplicate_build_commands, initial_build_commands, len(initial_build_commands))
-    assert len(out_commands)==1
+#     out_commands, _ = build_tree._add_build_command_dependencies(duplicate_build_commands, initial_build_commands, len(initial_build_commands))
+#     assert len(out_commands)==1
 
-    for build_command in out_commands:
-        assert build_command.build_command_dependencies == [0]
+#     for build_command in out_commands:
+#         assert build_command.build_command_dependencies == [0]
 
 def test_get_installable_package_for_non_runtime_package():
     '''
     Tests that `get_installable_package` doesn't return the packages marked as
     non-runtime i.e. build command with runtime_package=False.
     '''
+    build_commands = networkx.DiGraph()
+    node1 = build_tree.DependencyNode(packages=["package1a"], build_command=build_tree.BuildCommand("recipe1",
+                                                                                                                "repo1",
+                                                                                                                ["package1a"],
+                                                                                                                runtime_package=False,
+                                                                                                                python="2.6",
+                                                                                                                build_type="cuda",
+                                                                                                                mpi_type="openmpi",
+                                                                                                                cudatoolkit="10.2"))
+    node2 = build_tree.DependencyNode(packages=["package2a"], build_command=build_tree.BuildCommand("recipe2",
+                                                                                                    "repo2",
+                                                                                                    ["package2a"],
+                                                                                                    python="2.6",
+                                                                                                    build_type="cpu",
+                                                                                                    mpi_type="openmpi",
+                                                                                                    cudatoolkit="10.2"))
 
-    build_commands = [build_tree.BuildCommand("recipe1",
-                                    "repo1",
-                                    ["package1a"],
-                                    runtime_package=False,
-                                    python="2.6",
-                                    build_type="cuda",
-                                    mpi_type="openmpi",
-                                    cudatoolkit="10.2",
-                                    build_command_dependencies=[1]),
-                         build_tree.BuildCommand("recipe2",
-                                    "repo2",
-                                    ["package2a"],
-                                    python="2.6",
-                                    build_type="cpu",
-                                    mpi_type="openmpi",
-                                    cudatoolkit="10.2",
-                                    build_command_dependencies=[])]
+    build_commands.add_node(node1)
+    build_commands.add_node(node2)
+    build_commands.add_edge(node1, node2)
+
     external_deps = ["external_pac1    1.2", "external_pack2", "external_pack3=1.2.3"]
     packages = build_tree.get_installable_packages(build_commands, external_deps)
     assert not "package1a" in packages
@@ -562,21 +565,27 @@ def test_get_installable_package_with_no_duplicates():
     '''
     This test verifies that get_installable_package doesn't return duplicate dependencies.
     '''
-    build_commands = [build_tree.BuildCommand("recipe1",
-                                    "repo1",
-                                    ["package1a"],
-                                    runtime_package=False,
-                                    run_dependencies=["python 3.7", "pack1a==1.0"]),
-                         build_tree.BuildCommand("recipe2",
-                                    "repo2",
-                                    ["package2a"],
-                                    run_dependencies=["python 3.7", "pack1 ==1.0", "pack1", "pack2 <=2.0",
-                                    "pack2 2.0", "pack3   3.0.*", "pack2"]),
-                         build_tree.BuildCommand("recipe3",
-                                    "repo3",
-                                    ["package3a", "package3b"],
-                                    run_dependencies=["pack1 >=1.0", "pack1", "pack4 <=2.0",
-                                    "pack2 2.0", "pack3   3.0.*", "pack4"])]
+    build_commands = networkx.DiGraph()
+    node1 = build_tree.DependencyNode(packages=["package1a"], build_command=build_tree.BuildCommand("recipe1",
+                                                                                                    "repo1",
+                                                                                                    ["package1a"],
+                                                                                                    runtime_package=False,
+                                                                                                    run_dependencies=["python 3.7", "pack1a==1.0"]))
+    node2 = build_tree.DependencyNode(packages=["package2a"], build_command=build_tree.BuildCommand("recipe2",
+                                                                                                    "repo2",
+                                                                                                    ["package2a"],
+                                                                                                    run_dependencies=["python 3.7", "pack1 ==1.0", "pack1", "pack2 <=2.0",
+                                                                                                    "pack2 2.0", "pack3   3.0.*", "pack2"]))
+    node3 = build_tree.DependencyNode(packages=["package3a", "package3b"], build_command=build_tree.BuildCommand("recipe3",
+                                                                                                                "repo3",
+                                                                                                                ["package3a", "package3b"],
+                                                                                                                run_dependencies=["pack1 >=1.0", "pack1", "pack4 <=2.0",
+                                                                                                                "pack2 2.0", "pack3   3.0.*", "pack4"]))
+
+    build_commands.add_node(node1)
+    build_commands.add_node(node2)
+    build_commands.add_node(node3)
+
     external_deps = ["external_pac1    1.2"]
     packages = build_tree.get_installable_packages(build_commands, external_deps)
     assert not "package1a" in packages
