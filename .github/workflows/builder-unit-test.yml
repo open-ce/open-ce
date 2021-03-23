@@ -34,6 +34,7 @@ jobs:
         run: |
           conda install -y pylint=2.7 \
                            conda-build \
+                           networkx \
                            pytest=6.0.1 \
                            pytest-cov=2.10.1 \
                            pytest-mock=3.2.0
