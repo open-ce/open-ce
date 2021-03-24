@@ -19,6 +19,7 @@ requirements:
     - setuptools
   run:
     - conda-build
+    - networkx
     - pyyaml
     - requests
     - python
