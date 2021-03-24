@@ -1,0 +1,28 @@
+name: Open-CE PR Tests for Conda recipe
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  required_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          auto-update-conda: true
+          python-version: "3.7"
+      - name: Build and install the conda package
+        id: build_install
+        run: |
+          conda install -y conda-build
+          sh ./packaging_scripts/create_conda_package.sh
+          conda create -y -n test_opence python=3.7
+          source /home/runner/.profile
+          conda activate test_opence
+          conda install -y open-ce -c file://$(pwd)/open-ce-conda-pkg
+          conda list open-ce
+          open-ce build env -h
