@@ -273,7 +273,19 @@ def replace_conda_env_channels(conda_env_file, original_channel, new_channel):
     with open(conda_env_file, 'w') as file_handle:
         yaml.safe_dump(env_info, file_handle)
 
-def git_clone(git_url, git_tag, location):
+def _get_up_to_date_branch(git_tag):
+    branch_command = "git branch -a --contains " + git_tag
+    ret_code, output, _ = run_command_capture(branch_command)
+    if not ret_code or not output:
+        return git_tag
+    possible_branches = output.splitlines()
+    # Clean branches
+    possible_branches = filter(lambda x: not "->" in x, possible_branches)
+    possible_branches = [possible_branch.replace('*','').strip() for possible_branch in possible_branches]
+
+    return possible_branches[-1]
+
+def git_clone(git_url, git_tag, location, up_to_date=False):
     '''
     Clone a git repository and checkout a certain branch.
     '''
@@ -284,8 +296,10 @@ def git_clone(git_url, git_tag, location):
     cur_dir = os.getcwd()
     clone_successful = clone_result == 0
     if clone_successful:
-        if not git_tag is None:
+        if git_tag:
             os.chdir(location)
+            if up_to_date:
+                git_tag = _get_up_to_date_branch(git_tag)
             checkout_cmd = "git checkout " + git_tag
             print("Checkout branch/tag command: ", checkout_cmd)
             checkout_res = os.system(checkout_cmd)

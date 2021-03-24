@@ -197,6 +197,11 @@ path of \"recipe\"."""))
                                         default=None,
                                         help='Git tag to be checked out for all of the packages in an environment.'))
 
+    GIT_UP_TO_DATE = (lambda parser: parser.add_argument(
+                                        '--git_up_to_date',
+                                        action='store_true',
+                                        help='Use the most recent commits from the branch that the provided tag is in.'))
+
     TEST_LABELS = (lambda parser: parser.add_argument(
                                         '--test_labels',
                                         type=str,

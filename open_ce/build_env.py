@@ -48,6 +48,7 @@ ARGUMENTS = [Argument.CONDA_BUILD_CONFIG,
              Argument.CONTAINER_BUILD,
              Argument.GIT_LOCATION,
              Argument.GIT_TAG_FOR_ENV,
+             Argument.GIT_UP_TO_DATE,
              Argument.TEST_LABELS,
              Argument.CONTAINER_BUILD_ARGS,
              Argument.CONTAINER_TOOL]
@@ -119,6 +120,7 @@ def build_env(args):
                                channels=args.channels_list,
                                git_location=args.git_location,
                                git_tag_for_env=args.git_tag_for_env,
+                               git_up_to_date=args.git_up_to_date,
                                conda_build_config=args.conda_build_config,
                                packages=inputs.parse_arg_list(args.packages))
 
