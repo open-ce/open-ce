@@ -449,7 +449,7 @@ def _clean_license_type(license_str):
     license_types =[("Apache-2.0", ["Apache 2.0", "Apache License 2.0", "Apache-2", "apache-2", "Apache-2.0"]),
                     ("Boost", ["BSL", "Boost", "BSL (Boost)"]),
                     ("BSD", ["BSD", "BSD Like"]),
-                    ("BSD-2-Clause", ["3-clause BSD", "BSD 2-Clause", "BSD-2-Clause", "BSD-2-clause",
+                    ("BSD-2-Clause", ["2-clause BSD", "BSD 2-Clause", "BSD-2-Clause", "BSD-2-clause",
                                       "BSD 2-clause", "BSD 2 Clause", "BSD2", "New BSD License"]),
                     ("BSD-3-Clause", ["3-clause BSD", "BSD 3-Clause", "BSD-3-Clause", "BSD-3-clause",
                                       "BSD 3-clause", "BSD 3 Clause", "BSD3", "modified 3-clause BSD",
