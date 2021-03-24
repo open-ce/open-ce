@@ -463,6 +463,14 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         """
         yield from traverse_build_commands(self._tree, self._initial_nodes)
 
+    def BuildNodes(self):
+        """
+        Generator function that goes through every node in a list.
+        If a node has dependencies, those nodes will be returned
+        first.
+        """
+        yield from traverse_build_commands(self._tree, self._initial_nodes, return_node=True)
+
     def __getitem__(self, key):
         return self._tree[key]
 
@@ -505,6 +513,12 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                                                         for node in cycle + [cycle[0]]) + "\n"
         if cycle_print:
             raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
+
+    def build_command_dependencies(self, node):
+        '''
+        Can be used to get the name of all a node's dependencies.
+        '''
+        return ", ".join("'{}'".format(dep.build_command.name()) for dep in networkx.descendants(self._tree, node) if dep.build_command)
 
 def _create_edges(tree):
     # Use set() to create a copy of the nodes since they change during the loop.

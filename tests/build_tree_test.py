@@ -512,3 +512,13 @@ def test_get_installable_package_with_no_duplicates():
     expected_packages = ["package2a", "python 3.7.*", "pack1 ==1.0.*", "pack2 <=2.0", "pack3 3.0.*",
                          "package3a", "package3b", "pack4 <=2.0", "external_pac1 1.2.*"]
     assert Counter(packages) == Counter(expected_packages)
+
+def test_get_build_copmmand_dependencies():
+    mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2")
+    mock_build_tree._initial_nodes = []
+    mock_build_tree._tree = sample_build_commands()
+    outputs = ["'recipe2-py2-6-cpu-openmpi-10-2', 'recipe3'",
+               "",
+               "'recipe2-py2-6-cpu-openmpi-10-2'"]
+    for i, node in enumerate(mock_build_tree.BuildNodes()):
+        assert outputs[i] == mock_build_tree.build_command_dependencies(node)
