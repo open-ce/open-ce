@@ -518,7 +518,8 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         '''
         Can be used to get the name of all a node's dependencies.
         '''
-        return ", ".join("'{}'".format(dep.build_command.name()) for dep in networkx.descendants(self._tree, node) if dep.build_command)
+        return ", ".join("'{}'".format(dep.build_command.name()) for dep in networkx.descendants(self._tree, node)
+                                                                    if dep.build_command)
 
 def _create_edges(tree):
     # Use set() to create a copy of the nodes since they change during the loop.
