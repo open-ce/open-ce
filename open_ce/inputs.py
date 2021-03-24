@@ -224,6 +224,13 @@ path of \"recipe\"."""))
                                         help="Container tool to be used. Default is taken from the "
                                              " system, podman has preference over docker. "))
 
+    TEMPLATE_FILES = (lambda parser: parser.add_argument(
+                                     '--template_files',
+                                     type=str,
+                                     default=None,
+                                     help="Comma delimited list of template files to initialize with Open-CE "
+                                          " information."))
+
 
 def make_parser(arguments, *args, formatter_class=OpenCEFormatter, **kwargs):
     '''

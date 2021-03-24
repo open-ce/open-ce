@@ -21,6 +21,7 @@ requirements:
     - conda-build
     - pyyaml
     - requests
+    - jinja2
     - python
 
 test:
