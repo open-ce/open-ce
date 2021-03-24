@@ -36,7 +36,8 @@ def test_get_licenses(capsys):
     This is a complete test of `get_licenses`.
     '''
     output_folder = "get_licenses_output"
-    opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder])
+    template_file = "tests/open-ce-licenses.template"
+    opence._main(["get", get_licenses.COMMAND, "--conda_env_file", "tests/test-conda-env3.yaml", "--output_folder", output_folder, "--template_files", template_file])
 
     captured = capsys.readouterr()
     assert "Unable to download source for icu-58.2" in captured.out
@@ -48,7 +49,15 @@ def test_get_licenses(capsys):
 
     print(license_contents)
     assert "pytest	6.2.2	https://github.com/pytest-dev/pytest/	MIT" in license_contents
-    assert "libopus	1.3.1	http://opus-codec.org/development/	3-clause BSD	Copyright 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry, CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo" in license_contents
+    assert "libopus	1.3.1	http://opus-codec.org/development/	BSD-3-Clause	Copyright 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry, CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo" in license_contents
+
+    template_output_file = os.path.join(output_folder, os.path.splitext(os.path.basename(template_file))[0] + ".txt")
+    assert os.path.exists(template_output_file)
+    with open(template_output_file) as file_stream:
+        template_contents = file_stream.read()
+
+    print(template_contents)
+    assert "libopus" in template_contents
 
     shutil.rmtree(output_folder)
 

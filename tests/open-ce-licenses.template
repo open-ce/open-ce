@@ -1,0 +1,2 @@
+First BSD License is:
+{{ licenseInfo["BSD-3-Clause"][0].name }}
