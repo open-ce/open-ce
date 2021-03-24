@@ -307,9 +307,9 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             # of the packages that were requested.
             if packages:
                 for package in packages:
-                    if not {n for n in variant_start_nodes if package in n.packages}:
+                    if not {n for n in traverse_build_commands(variant_tree, return_node=True) if package in n.packages}:
                         print("INFO: No recipes were found for " + package + " for variant " + variant_string)
-                variant_start_nodes = {n for n in variant_start_nodes if n.packages.intersection(packages)}
+                variant_start_nodes = {n for n in traverse_build_commands(variant_tree, return_node=True) if n.packages.intersection(packages)}
 
             self._initial_nodes += variant_start_nodes
 
