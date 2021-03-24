@@ -517,8 +517,7 @@ def test_get_build_copmmand_dependencies():
     mock_build_tree = TestBuildTree([], "3.6", "cpu", "openmpi", "10.2")
     mock_build_tree._initial_nodes = []
     mock_build_tree._tree = sample_build_commands()
-    outputs = ["'recipe2-py2-6-cpu-openmpi-10-2', 'recipe3'",
-               "",
-               "'recipe2-py2-6-cpu-openmpi-10-2'"]
-    for i, node in enumerate(mock_build_tree.BuildNodes()):
-        assert outputs[i] == mock_build_tree.build_command_dependencies(node)
+    results = [mock_build_tree.build_command_dependencies(node) for node in mock_build_tree.BuildNodes()]
+    assert "" in results
+    assert "'recipe2-py2-6-cpu-openmpi-10-2'" in results
+    assert "'recipe2-py2-6-cpu-openmpi-10-2', 'recipe3'" in results or "'recipe3', 'recipe2-py2-6-cpu-openmpi-10-2'" in results

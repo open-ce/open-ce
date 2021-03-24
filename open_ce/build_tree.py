@@ -167,7 +167,7 @@ def traverse_build_commands(build_tree, starting_nodes=None, return_node=False):
     """
     Generator function that goes through a list of BuildCommand's dependency tree.
     """
-    if starting_nodes is not None:
+    if starting_nodes:
         false_start_node = "Starting Node"
         new_graph = build_tree.copy()
         new_graph.add_node(false_start_node)
