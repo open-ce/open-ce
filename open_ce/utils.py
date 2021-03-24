@@ -236,18 +236,22 @@ def check_cuda_version_match(command):
     # (If $CUDA_HOME doesn't exist, read will fail so we return False).
     check_cuda_home()
     cudavers_file = os.environ['CUDA_HOME'] + '/version.txt'
+    cudafile = None
     try:
         cudafile = open(cudavers_file,'r')
         cuda_home_version = cudafile.readline()
-        cudafile.close()
         version_match = cuda_home_version.find(str(command.cudatoolkit))
         if version_match > 0:
             return True
     except Exception:  # pylint: disable=broad-except
         # Treating as a warning rather than a fatal error
         print("WARNING: Could not read version from " + cudavers_file)
+    finally:
+        if cudafile:
+            cudafile.close()
 
-    # Versions do not match.  Return False.
+    # If we are here, versions did not match.  Print warning; return False.
+    print("WARNING: Version of cudatoolkit does not match system $CUDA_HOME")
     return False
 
 def check_cuda_home():
