@@ -122,17 +122,6 @@ def build_env(args):
                                conda_build_config=args.conda_build_config,
                                packages=inputs.parse_arg_list(args.packages))
 
-    #import matplotlib.pyplot as plt
-    #import networkx
-    #plt.figure(figsize=(200,200))
-    #networkx.draw_circular(build_tree._tree, with_labels=True)
-    #plt.savefig(os.path.join(os.path.abspath(args.output_folder), 'output.png'))
-    #print("Cycles: ", list(networkx.simple_cycles(build_tree._tree)))
-    #print("Build order:")
-    #print(list(build_tree))
-    #for x in self:
-    #    print("Build", x)
-
     # Generate conda environment files
     conda_env_files = build_tree.write_conda_env_files(output_folder=os.path.abspath(args.output_folder),
                                                        path=os.path.abspath(args.output_folder))
