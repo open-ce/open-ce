@@ -29,6 +29,7 @@ REQUIRED_PACKAGES = [
     "pyyaml",
     "requests",
     "jinja2",
+    "networkx",
 ]
 
 setup(
