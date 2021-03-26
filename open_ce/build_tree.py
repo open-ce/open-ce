@@ -269,6 +269,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  channels=None,
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env=utils.DEFAULT_GIT_TAG,
+                 git_up_to_date=False,
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
                  packages=None):
 
@@ -277,6 +278,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._channels = channels if channels else []
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
+        self._git_up_to_date = git_up_to_date
         self._conda_build_config = conda_build_config
         self._external_dependencies = dict()
         self._conda_env_files = dict()
@@ -428,6 +430,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         # at all specified then fall back to default branch of the repo.
 
         git_tag = self._git_tag_for_env
+        git_tag_for_package = None
         if git_tag is None:
             git_tag_for_package = package.get(env_config.Key.git_tag.name, None) if package else None
             if git_tag_for_package:
@@ -435,7 +438,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             else:
                 git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None) if env_config_data else None
 
-        clone_successful = utils.git_clone(git_url, git_tag, repo_dir)
+        clone_successful = utils.git_clone(git_url, git_tag, repo_dir, self._git_up_to_date and not git_tag_for_package)
 
         if clone_successful:
             patches = package.get(env_config.Key.patches.name, []) if package else []

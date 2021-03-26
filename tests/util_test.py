@@ -122,4 +122,16 @@ def test_cuda_driver_installed_failures(mocker):
     mocker.patch('subprocess.check_output',side_effect=OSError(errno.EPERM,"" ))
     with pytest.raises(OpenCEError) as exc:
         utils.cuda_driver_installed()
-    assert "lsmod command unexpectedly failed" in str(exc.value)    
+    assert "lsmod command unexpectedly failed" in str(exc.value)
+
+def test_get_branch_of_tag(mocker):
+    '''
+    Simple tests for the get_up_to_date_branch
+    '''
+    sample_output = "main\n  remotes/origin/main\n* remotes/origin/r2.4.1   \n"
+    mocker.patch('open_ce.utils.run_command_capture', side_effect=[(True, sample_output, ""), (False, sample_output, "")])
+
+    assert utils._get_branch_of_tag("mytag") == "remotes/origin/r2.4.1"
+
+    assert utils._get_branch_of_tag("mytag") == "mytag"
+

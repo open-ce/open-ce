@@ -39,11 +39,13 @@ class TestBuildTree(build_tree.BuildTree):
                  repository_folder="./",
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env=utils.DEFAULT_GIT_TAG,
+                 git_up_to_date = False,
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG):
         self._env_config_files = env_config_files
         self._repository_folder = repository_folder
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
+        self._git_up_to_date = git_up_to_date
         self._conda_build_config = conda_build_config
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
         self._test_feedstocks = dict()
