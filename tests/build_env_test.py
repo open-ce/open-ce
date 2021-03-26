@@ -108,6 +108,10 @@ def test_build_env(mocker, capsys):
         'conda_build.api.get_output_file_paths',
         side_effect=(lambda meta, *args, **kwargs: helpers.mock_get_output_file_paths(meta))
     )
+    mocker.patch(
+        'open_ce.build_tree.BuildTree._create_remote_deps',
+        side_effect=(lambda x: x)
+    )
 
     py_version = "2.0"
     buildTracker = PackageBuildTracker()

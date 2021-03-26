@@ -26,6 +26,23 @@ opence = imp.load_source('opence', os.path.join(test_dir, '..', 'open_ce', 'open
 import open_ce.validate_config as validate_config
 from open_ce.errors import OpenCEError
 
+def conda_search_json(package):
+    retval = '{\n'
+    retval += '  "{}": ['.format(package)
+    retval += '''
+    {
+      "arch": null,
+      "build": "py36habc2bb6_0",
+      "build_number": 0,
+      "channel": "https://repo.anaconda.com/pkgs/main/linux-ppc64le",
+      "constrains": [],
+      "depends": [],
+      "timestamp": 1580920230562
+    }
+  ]
+}'''
+    return retval
+
 def test_validate_config(mocker):
     '''
     This is a complete test of `validate_config`.
@@ -46,6 +63,10 @@ def test_validate_config(mocker):
                                                                "upstreamdep2 2.*"],
                                                        reject=["package"], #No packages from the env files should show up in the create command.
                                                        retval=[True, "", ""]))
+    )
+    mocker.patch(
+        'open_ce.conda_utils.conda_package_info',
+        side_effect=(lambda channels, package: conda_search_json(package))
     )
     mocker.patch(
         'os.getcwd',
@@ -97,6 +118,10 @@ def test_validate_negative(mocker):
                                                                "external_dep3=5.6.*"], # Checks that the external dependencies were used.
                                                        reject=["package"],
                                                        retval=[False, "", ""]))
+    )
+    mocker.patch(
+        'open_ce.conda_utils.conda_package_info',
+        side_effect=(lambda channels, package: conda_search_json(package))
     )
     mocker.patch(
         'os.getcwd',
