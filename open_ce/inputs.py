@@ -256,6 +256,29 @@ def add_subparser(subparsers, command, arguments, *args, formatter_class=OpenCEF
         argument(subparser)
     return subparser
 
+def _create_env_config_paths(args):
+    if "env_config_file" in vars(args).keys():
+        for index, config_file in enumerate(args.env_config_file):
+            if not os.path.exists(config_file) and not utils.is_url(config_file):
+                # Determine the organization name from the git_location argument
+                organization = os.path.basename(args.git_location)
+
+                # Grab the branch name from the git_tag_for_env argument
+                if "git_tag_for_env" in vars(args).keys() and args.git_tag_for_env:
+                    branch = args.git_tag_for_env
+                else:
+                    branch = "main"
+
+                # Determine the file name
+                file_name, extension = os.path.splitext(config_file)
+                if not extension:
+                    file_name = file_name + ".yaml"
+                else:
+                    file_name = file_name + "." + extension
+
+                args.env_config_file[index] = "https://raw.githubusercontent.com/{}/{}/{}/envs/{}".format(
+                                                  organization, utils.DEFAULT_ENVS_REPO, branch, file_name)
+
 def parse_args(parser, arg_strings=None):
     '''
     Parses input arguments and handles more complex defaults.
@@ -264,6 +287,8 @@ def parse_args(parser, arg_strings=None):
                           the local path.
     '''
     args = parser.parse_args(arg_strings)
+
+    _create_env_config_paths(args)
 
     if "conda_build_config" in vars(args).keys():
         if args.conda_build_config is None:
