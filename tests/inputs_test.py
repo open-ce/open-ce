@@ -17,7 +17,6 @@
 
 import os
 import pathlib
-import pytest
 from importlib.util import spec_from_loader, module_from_spec
 from importlib.machinery import SourceFileLoader
 
