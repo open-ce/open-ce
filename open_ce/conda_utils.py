@@ -17,10 +17,13 @@
 """
 import os
 import pathlib
+import subprocess
+import json
 
 # Disabling pylint warning "cyclic-import" locally here doesn't work. So, added it in .pylintrc
 # according to https://github.com/PyCQA/pylint/issues/59
-from open_ce.utils import validate_dict_schema, check_if_conda_build_exists # pylint: disable=cyclic-import
+from open_ce.utils import validate_dict_schema, check_if_conda_build_exists, run_command_capture, generalize_version # pylint: disable=cyclic-import
+from open_ce.errors import OpenCEError, Error
 
 check_if_conda_build_exists()
 
@@ -72,3 +75,29 @@ def get_output_file_paths(meta, variants):
         result.append(os.path.join(path.parent.name, path.name))
 
     return result
+
+def conda_package_info(channels, package):
+    '''
+    Get conda package info.
+    '''
+    pkg_args = "\"{}\"".format(generalize_version(package))
+    channel_args = " ".join({"-c \"{}\"".format(channel) for channel in channels})
+
+    cli = "conda search --json {} {} --info".format(channel_args, pkg_args)
+    ret_code, std_out, _ = run_command_capture(cli, stderr=subprocess.STDOUT)
+    if not ret_code:
+        raise OpenCEError(Error.CONDA_PACKAGE_INFO, cli, std_out)
+    return std_out
+
+def get_latest_package_info(channels, package):
+    '''
+    Get the conda package info for the most recent search result.
+    '''
+    results = json.loads(conda_package_info(channels, package))
+    # Get all the package infos for the first package, there should only be one anyway.
+    package_infos = results[list(results.keys())[0]]
+    retval = package_infos[0]
+    for package_info in package_infos:
+        if package_info["timestamp"] > retval["timestamp"]:
+            retval = package_info
+    return retval

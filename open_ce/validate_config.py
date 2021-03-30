@@ -57,14 +57,14 @@ def validate_env_config(conda_build_config, env_config_files, variants, reposito
                 raise OpenCEError(Error.VALIDATE_CONFIG, conda_build_config, env_file, variant, err.msg) from err
             print('Successfully validated {} for {} : {}'.format(conda_build_config, env_file, variant))
 
-def validate_build_tree(build_commands, external_deps, package_indices=None):
+def validate_build_tree(tree, external_deps, start_nodes=None):
     '''
     Check a build tree for dependency compatability.
     '''
-    packages = [package for recipe in build_tree.traverse_build_commands(build_commands, package_indices)
+    packages = [package for recipe in build_tree.traverse_build_commands(tree, start_nodes)
                             for package in recipe.packages]
-    channels = {channel for recipe in build_commands for channel in recipe.channels}
-    deps = build_tree.get_installable_packages(build_commands, external_deps, package_indices)
+    channels = {channel for recipe in build_tree.traverse_build_commands(tree, start_nodes) for channel in recipe.channels}
+    deps = build_tree.get_installable_packages(tree, external_deps, start_nodes, True)
 
     pkg_args = " ".join(["\"{}\"".format(utils.generalize_version(dep)) for dep in deps
                                                                     if not utils.remove_version(dep) in packages])

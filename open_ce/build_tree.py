@@ -17,184 +17,81 @@
 """
 
 import os
+import networkx
 from open_ce import utils
 from open_ce import env_config
 from open_ce import validate_config
 from open_ce import build_feedstock
 from open_ce.errors import OpenCEError, Error
 from open_ce.conda_env_file_generator import CondaEnvFileGenerator
+from open_ce.build_command import BuildCommand
 
-
-class BuildCommand():
+class DependencyNode():
     """
-    The BuildCommand class holds all of the information needed to call the build_feedstock
-    function a single time.
+    Contains information for the dependency tree.
     """
-    #pylint: disable=too-many-instance-attributes,too-many-arguments,too-many-locals
     def __init__(self,
-                 recipe,
-                 repository,
-                 packages,
-                 version=None,
-                 recipe_path=None,
-                 runtime_package=True,
-                 output_files=None,
-                 python=None,
-                 build_type=None,
-                 mpi_type=None,
-                 cudatoolkit=None,
-                 run_dependencies=None,
-                 host_dependencies=None,
-                 build_dependencies=None,
-                 test_dependencies=None,
-                 channels=None,
-                 build_command_dependencies=None):
-        self.recipe = recipe
-        self.repository = repository
+                 packages=None,
+                 build_command=None):
         self.packages = packages
-        self.version = version
-        self.recipe_path = recipe_path
-        self.runtime_package = runtime_package
-        self.output_files = output_files
-        self.python = python
-        self.build_type = build_type
-        self.mpi_type = mpi_type
-        self.cudatoolkit = cudatoolkit
-        self.run_dependencies = run_dependencies
-        self.host_dependencies = host_dependencies
-        self.build_dependencies = build_dependencies
-        self.test_dependencies = test_dependencies
-        self.channels = channels
-        self.build_command_dependencies = build_command_dependencies
-        if self.build_command_dependencies is None:
-            self.build_command_dependencies = []
+        self.build_command = build_command
 
-    def feedstock_args(self):
-        """
-        Returns a list of strings that can be provided to the build_feedstock function to
-        perform a build.
-        """
-        build_args = ["--working_directory", self.repository]
+    def __repr__(self):
+        return str(self)
 
-        if self.channels:
-            for channel in self.channels:
-                build_args += ["--channels", channel]
-
-        if self.python:
-            build_args += ["--python_versions", self.python]
-        if self.build_type:
-            build_args += ["--build_types", self.build_type]
-        if self.mpi_type:
-            build_args += ["--mpi_types", self.mpi_type]
-        if self.cudatoolkit:
-            build_args += ["--cuda_versions", self.cudatoolkit]
-
-
-        if self.recipe:
-            build_args += ["--recipes", self.recipe]
-
-        return build_args
-
-    def name(self):
-        """
-        Returns a name representing the Build Command
-        """
-        result = self.recipe
-        variant_string = utils.variant_string(self.python, self.build_type, self.mpi_type, self.cudatoolkit)
-        if variant_string:
-            result += "-" + variant_string
-
-        result = result.replace(".", "-")
-        result = result.replace("_", "-")
-        return result
-
-    def all_outputs_exist(self, output_folder):
-        """
-        Returns true if all of the output_files already exist.
-        """
-        return all((os.path.exists(os.path.join(os.path.abspath(output_folder), package))
-                    for package in self.output_files))
-
-    def __key(self):
-        return (self.recipe, self.output_files)
+    def __str__(self):
+        return "({} : {})".format(self.packages, self.build_command)
 
     def __hash__(self):
-        return hash(self.__key())
+        return hash(self.__repr__())
 
     def __eq__(self, other):
-        if not isinstance(other, BuildCommand):
+        if not isinstance(other, DependencyNode):
             return False
-        return self.__key() == other.__key()  # pylint: disable=protected-access
+        if self.build_command is not None and other.build_command is not None:
+            return self.packages == other.packages and self.build_command == other.build_command
+        return self.packages == other.packages
 
-def traverse_build_commands(commands, deps):
+def traverse_build_commands(build_tree, starting_nodes=None, return_node=False):
     """
     Generator function that goes through a list of BuildCommand's dependency tree.
     """
-    if not deps:
-        deps = range(len(commands))
-    is_seen = [False for i in range(len(commands))]
-    yield from _traverse_build_commands(commands, is_seen, deps)
+    if starting_nodes:
+        false_start_node = "Starting Node"
+        new_graph = build_tree.copy()
+        new_graph.add_node(false_start_node)
+        for dep in starting_nodes:
+            new_graph.add_edge(false_start_node, dep)
+        generator = networkx.dfs_postorder_nodes(new_graph, false_start_node)
+    else:
+        generator = networkx.dfs_postorder_nodes(build_tree)
+    for current in generator:
+        if isinstance(current, DependencyNode):
+            if current.build_command is not None:
+                if return_node:
+                    yield current
+                else:
+                    yield current.build_command
 
-def _traverse_build_commands(commands, is_seen, deps):
-    for dep in deps:
-        if is_seen[dep]:
-            continue
-        yield from _traverse_build_commands(commands, is_seen, commands[dep].build_command_dependencies)
-        yield commands[dep]
-        is_seen[dep] = True
+def get_independent_runtime_deps(tree, node):
+    """
+    This function gets all run dependencies of a node that don't depend on
+    any internal build commands.
+    """
+    deps = set()
+    if node.build_command:
+        run_deps = {x for x in node.build_command.run_dependencies
+                                if utils.remove_version(x) not in map(utils.remove_version, node.packages)}
+        for run_dep in run_deps:
+            run_dep_node = next(x for x in tree.successors(node)
+                                    if utils.remove_version(run_dep) in map(utils.remove_version, x.packages))
+            if not {x for x in networkx.descendants(tree, run_dep_node) if x.build_command is not None}:
+                deps.add(run_dep)
+    return deps
 
 def _make_hash(to_hash):
     '''Generic hash function.'''
     return hash(str(to_hash))
-
-#pylint: disable=too-many-locals,too-many-arguments
-def _create_commands(repository, runtime_package, recipe_path,
-                     recipes, variant_config_files, variants, channels):
-    """
-    Returns:
-        A list of BuildCommands for each recipe within a repository.
-        A list of TestCommands for an entire repository.
-    """
-    saved_working_directory = os.getcwd()
-    os.chdir(repository)
-
-    config_data, _ = build_feedstock.load_package_config(variants=variants, recipe_path=recipe_path)
-    combined_config_files = variant_config_files
-
-    feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
-    if feedstock_conda_build_config_file:
-        combined_config_files.append(feedstock_conda_build_config_file)
-    build_commands = []
-    recipes_from_config = config_data.get('recipes', [])
-    if recipes_from_config is None:
-        recipes_from_config = []
-    for recipe in recipes_from_config:
-        if recipes and not recipe.get('name') in recipes:
-            continue
-        packages, version, run_deps, host_deps, build_deps, test_deps, output_files = _get_package_dependencies(
-                                                                                         recipe.get('path'),
-                                                                                         combined_config_files,
-                                                                                         variants)
-
-        build_commands.append(BuildCommand(recipe=recipe.get('name', None),
-                                    repository=repository,
-                                    packages=packages,
-                                    version=version,
-                                    recipe_path=recipe_path,
-                                    runtime_package=runtime_package,
-                                    output_files=output_files,
-                                    python=variants['python'],
-                                    build_type=variants['build_type'],
-                                    mpi_type=variants['mpi_type'],
-                                    cudatoolkit=variants['cudatoolkit'],
-                                    run_dependencies=run_deps,
-                                    host_dependencies=host_deps,
-                                    build_dependencies=build_deps,
-                                    test_dependencies=test_deps,
-                                    channels=channels))
-
-    os.chdir(saved_working_directory)
-    return build_commands
 
 def _clean_dep(dep):
     return dep.lower()
@@ -234,55 +131,6 @@ def _get_package_dependencies(path, variant_config_files, variants):
 
     return packages, versions, run_deps, host_deps, build_deps, test_deps, output_files
 
-def _add_build_command_dependencies(variant_build_commands, build_commands, start_index=0):
-    """
-    Create a dependency tree for a list of build commands.
-
-    Each build_command will contain a `build_command_dependencies` key which contains a list of integers.
-    Each integer in the list represents the index of the dependencies build_commands within the
-    list.
-
-    The start_index indicates the value that the dependency indices should start
-    counting from.
-    """
-
-    # Create a packages dictionary that uses all of a recipe's packages as key, with
-    # the recipes index as values.
-    packages = dict()
-    index = 0
-
-    #save indices of build commands which are already present in build_commands
-    duplicates = []
-    for var_index, build_command in enumerate(variant_build_commands):
-        if build_command in build_commands:
-            alt_index = build_commands.index(build_command)
-            duplicates.append(var_index)
-            for package in build_command.packages:
-                packages.update({ package : [alt_index] + packages.get(package, []) })
-        else:
-            for package in build_command.packages:
-                packages.update({ package : [start_index + index] + packages.get(package, []) })
-            index +=1
-
-    # remove build commands that are already added to build_commands
-    variant_build_commands = [i for j, i in enumerate(variant_build_commands) if j not in duplicates]
-
-    # Add a list of indices for dependency to a BuildCommand's `build_command_dependencies` value
-    # Note: This will filter out all dependencies that aren't in the recipes list.
-    for index, build_command in enumerate(variant_build_commands):
-        deps = []
-        dependencies = set()
-        dependencies.update({utils.remove_version(dep) for dep in build_command.run_dependencies})
-        dependencies.update({utils.remove_version(dep) for dep in build_command.build_dependencies})
-        dependencies.update({utils.remove_version(dep) for dep in build_command.host_dependencies})
-        dependencies.update({utils.remove_version(dep) for dep in build_command.test_dependencies})
-        for dep in dependencies:
-            if dep in packages:
-                deps += filter(lambda x: x != start_index + index, packages[dep])
-        build_command.build_command_dependencies = deps
-
-    return variant_build_commands, packages
-
 class BuildTree(): #pylint: disable=too-many-instance-attributes
     """
     An interable container of BuildCommands.
@@ -310,6 +158,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
                  channels=None,
                  git_location=utils.DEFAULT_GIT_LOCATION,
                  git_tag_for_env=utils.DEFAULT_GIT_TAG,
+                 git_up_to_date=False,
                  conda_build_config=utils.DEFAULT_CONDA_BUILD_CONFIG,
                  packages=None):
 
@@ -318,56 +167,55 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         self._channels = channels if channels else []
         self._git_location = git_location
         self._git_tag_for_env = git_tag_for_env
+        self._git_up_to_date = git_up_to_date
         self._conda_build_config = conda_build_config
         self._external_dependencies = dict()
         self._conda_env_files = dict()
         self._test_feedstocks = dict()
-        self._initial_package_indices = []
+        self._initial_nodes = []
 
         # Create a dependency tree that includes recipes for every combination
         # of variants.
         self._possible_variants = utils.make_variants(python_versions, build_types, mpi_types, cuda_versions)
-        self.build_commands = []
+        self._tree = networkx.DiGraph()
         for variant in self._possible_variants:
             try:
-                build_commands, external_deps = self._create_all_commands(variant)
+                variant_tree, external_deps = self._create_nodes(variant)
+                variant_tree = _create_edges(variant_tree)
+                variant_tree = self._create_remote_deps(variant_tree)
+                self._tree = networkx.compose(self._tree, variant_tree)
             except OpenCEError as exc:
                 raise OpenCEError(Error.CREATE_BUILD_TREE, exc.msg) from exc
             variant_string = utils.variant_string(variant["python"], variant["build_type"],
                                                   variant["mpi_type"], variant["cudatoolkit"])
             self._external_dependencies[variant_string] = external_deps
 
-            # Add dependency tree information to the packages list and
-            # remove build commands from build_commands that are already in self.build_commands
-            build_commands, package_indices = _add_build_command_dependencies(build_commands, self.build_commands,
-                                                                              len(self.build_commands))
-            self.build_commands += build_commands
             self._detect_cycle()
+
+            variant_start_nodes = {n for n,d in variant_tree.in_degree() if d==0}
 
             # If the packages argument is provided, find the indices into the build_commands for all
             # of the packages that were requested.
-            variant_package_indices = []
             if packages:
                 for package in packages:
-                    if package in package_indices:
-                        variant_package_indices += package_indices[package]
-                    else:
+                    if not {n for n in traverse_build_commands(variant_tree, return_node=True) if package in n.packages}:
                         print("INFO: No recipes were found for " + package + " for variant " + variant_string)
-            else:
-                for package in package_indices:
-                    variant_package_indices += package_indices[package]
-            self._initial_package_indices += variant_package_indices
+                variant_start_nodes = {n for n in traverse_build_commands(variant_tree, return_node=True)
+                                            if n.packages.intersection(packages)}
 
-            validate_config.validate_build_tree(self.build_commands, external_deps, variant_package_indices)
-            installable_packages = get_installable_packages(self.build_commands, external_deps, variant_package_indices)
+            self._initial_nodes += variant_start_nodes
+
+            validate_config.validate_build_tree(self._tree, external_deps, variant_start_nodes)
+            installable_packages = get_installable_packages(self._tree, external_deps, variant_start_nodes)
 
             filtered_packages = [package for package in installable_packages
-                                     if utils.remove_version(package) in package_indices or
+                                     if utils.remove_version(package) in {x for node in variant_start_nodes
+                                                                            for x in node.build_command.packages} or
                                         utils.remove_version(package) in utils.KNOWN_VARIANT_PACKAGES]
-            self._conda_env_files[variant_string] = CondaEnvFileGenerator(filtered_packages)
 
+            self._conda_env_files[variant_string] = CondaEnvFileGenerator(filtered_packages)
             self._test_feedstocks[variant_string] = []
-            for build_command in traverse_build_commands(self.build_commands, variant_package_indices):
+            for build_command in traverse_build_commands(self._tree, variant_start_nodes):
                 self._test_feedstocks[variant_string].append(build_command.repository)
 
     def _get_repo(self, env_config_data, package):
@@ -396,44 +244,70 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
 
         return repo_dir
 
-    def _create_all_commands(self, variants):
+    def _create_nodes(self, variants):
         '''
         Create a recipe dictionary for each recipe needed for a given environment file.
         '''
-
         env_config_data_list = env_config.load_env_config_files(self._env_config_files, variants)
-        packages_seen = set()
-        build_commands = []
+        feedstocks_seen = set()
         external_deps = []
+        retval = networkx.DiGraph()
         # Create recipe dictionaries for each repository in the environment file
         for env_config_data in env_config_data_list:
             channels = self._channels + env_config_data.get(env_config.Key.channels.name, [])
-            packages = env_config_data.get(env_config.Key.packages.name, [])
-            if not packages:
-                packages = []
-            for package in packages:
-                if _make_hash(package) in packages_seen:
+            feedstocks = env_config_data.get(env_config.Key.packages.name, [])
+            if not feedstocks:
+                feedstocks = []
+            for feedstock in feedstocks:
+                if _make_hash(feedstock) in feedstocks_seen:
                     continue
 
-                repo_dir = self._get_repo(env_config_data, package)
-                runtime_package = package.get(env_config.Key.runtime_package.name, True)
-                repo_build_commands = _create_commands(repo_dir,
-                                                       runtime_package,
-                                                       package.get(env_config.Key.recipe_path.name),
-                                                       package.get(env_config.Key.recipes.name),
-                                                       [os.path.abspath(self._conda_build_config)],
-                                                       variants,
-                                                       channels)
+                repo_dir = self._get_repo(env_config_data, feedstock)
+                runtime_package = feedstock.get(env_config.Key.runtime_package.name, True)
+                retval = networkx.compose(retval,
+                                          _create_commands(repo_dir,
+                                                            runtime_package,
+                                                            feedstock.get(env_config.Key.recipe_path.name),
+                                                            feedstock.get(env_config.Key.recipes.name),
+                                                            [os.path.abspath(self._conda_build_config)],
+                                                            variants,
+                                                            channels))
 
-                build_commands += repo_build_commands
-
-                packages_seen.add(_make_hash(package))
+                feedstocks_seen.add(_make_hash(feedstock))
 
             current_deps = env_config_data.get(env_config.Key.external_dependencies.name, [])
             if current_deps:
                 external_deps += current_deps
+        return retval, external_deps
 
-        return build_commands, external_deps
+    def _create_remote_deps(self, dep_graph):
+        #pylint: disable=import-outside-toplevel
+        from open_ce import conda_utils
+        deps = {dep for dep in dep_graph.nodes() if dep.build_command is None}
+        seen = set()
+        try:
+            while deps:
+                node = deps.pop()
+                for package in node.packages:
+                    package_name = utils.remove_version(package)
+                    if package_name in seen:
+                        continue
+                    seen.add(package_name)
+                    package_info = conda_utils.get_latest_package_info(self._channels, package)
+                    dep_graph.add_node(DependencyNode({package}))
+                    for dep in package_info['depends']:
+                        dep_name = utils.remove_version(dep)
+                        local_dest = {dest_node for dest_node in dep_graph.nodes()
+                                                if dep_name in map(utils.remove_version, dest_node.packages)}
+                        if local_dest:
+                            dep_graph.add_edge(node, local_dest.pop())
+                        else:
+                            new_dep = DependencyNode({dep})
+                            dep_graph.add_edge(node, new_dep)
+                            deps.add(new_dep)
+            return dep_graph
+        except OpenCEError as err:
+            raise OpenCEError(Error.REMOTE_PACKAGE_DEPENDENCIES, deps, err.msg) from err
 
     def _clone_repo(self, git_url, repo_dir, env_config_data, package):
         """
@@ -445,6 +319,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         # at all specified then fall back to default branch of the repo.
 
         git_tag = self._git_tag_for_env
+        git_tag_for_package = None
         if git_tag is None:
             git_tag_for_package = package.get(env_config.Key.git_tag.name, None) if package else None
             if git_tag_for_package:
@@ -452,7 +327,7 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
             else:
                 git_tag = env_config_data.get(env_config.Key.git_tag_for_env.name, None) if env_config_data else None
 
-        clone_successful = utils.git_clone(git_url, git_tag, repo_dir)
+        clone_successful = utils.git_clone(git_url, git_tag, repo_dir, self._git_up_to_date and not git_tag_for_package)
 
         if clone_successful:
             patches = package.get(env_config.Key.patches.name, []) if package else []
@@ -479,13 +354,21 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         If a recipe has dependencies, those recipes will be returned
         first.
         """
-        yield from traverse_build_commands(self.build_commands, self._initial_package_indices)
+        yield from traverse_build_commands(self._tree, self._initial_nodes)
+
+    def BuildNodes(self):
+        """
+        Generator function that goes through every node in a list.
+        If a node has dependencies, those nodes will be returned
+        first.
+        """
+        yield from traverse_build_commands(self._tree, self._initial_nodes, return_node=True)
 
     def __getitem__(self, key):
-        return self.build_commands[key]
+        return self._tree[key]
 
     def __len__(self):
-        return len(self.build_commands)
+        return len({x for x in self._tree.nodes() if x.build_command is not None})
 
     def get_external_dependencies(self, variant):
         '''Return the list of external dependencies for the given variant.'''
@@ -513,45 +396,98 @@ class BuildTree(): #pylint: disable=too-many-instance-attributes
         """
         return self._test_feedstocks[variant_string]
 
-    def _detect_cycle(self, max_cycles=10):
-        extract_build_tree = [x.build_command_dependencies for x in self.build_commands]
-        cycles = []
-        for start in range(len(self.build_commands)): # Check to see if there are any cycles that start anywhere in the tree.
-            cycles += find_all_cycles(extract_build_tree, start)
-            if len(cycles) >= max_cycles:
-                break
-        if cycles:
-            cycle_print = "\n".join([" -> ".join([self.build_commands[i].recipe
-                                                                    for i in cycle])
-                                                                    for cycle in cycles[:min(max_cycles, len(cycles))]])
-            if len(cycles) > max_cycles:
-                cycle_print += "\nCycles truncated after {}...".format(max_cycles)
+    def _detect_cycle(self):
+        cycle_print = ""
+        cycles = networkx.simple_cycles(self._tree)
+
+        for cycle in cycles:
+            if any(node.build_command for node in cycle):
+                cycle_print += " -> ".join(node.build_command.recipe if node.build_command else str(node.packages)
+                                                        for node in cycle + [cycle[0]]) + "\n"
+        if cycle_print:
             raise OpenCEError(Error.BUILD_TREE_CYCLE, cycle_print)
 
+    def build_command_dependencies(self, node):
+        '''
+        Can be used to get the name of all a node's dependencies.
+        '''
+        return ", ".join("'{}'".format(dep.build_command.name()) for dep in networkx.descendants(self._tree, node)
+                                                                    if dep.build_command)
 
-def find_all_cycles(tree, current=0, seen=None):
-    '''
-    This function performs a depth first search of a tree from current, returning all cycles
-    starting at current.
-    '''
-    if not seen:
-        seen = []
-    current_branch = seen + [current]
-    if len(current_branch) != len(set(current_branch)):
-        return [current_branch]
-    result = []
-    for dependency in tree[current]:
-        next_step = find_all_cycles(tree, dependency, current_branch)
-        if next_step:
-            result += next_step
-    return result
+def _create_edges(tree):
+    # Use set() to create a copy of the nodes since they change during the loop.
+    for node in set(tree.nodes()):
+        if node.build_command is not None:
+            for dependency in node.build_command.get_all_dependencies():
+                local_dest = {dest_node for dest_node in tree.nodes()
+                                        if utils.remove_version(dependency)
+                                            in map(utils.remove_version, dest_node.packages)}
+                if local_dest:
+                    dest_node = local_dest.pop()
+                    if node != dest_node:
+                        tree.add_edge(node, dest_node)
+                else:
+                    new_node = DependencyNode({dependency})
+                    tree.add_node(new_node)
+                    tree.add_edge(node, new_node)
+    return tree
 
-def get_installable_packages(build_commands, external_deps, package_indices=None):
+#pylint: disable=too-many-locals,too-many-arguments
+def _create_commands(repository, runtime_package, recipe_path,
+                    recipes, variant_config_files, variants, channels):
+    """
+    Returns:
+        A tree of nodes containing BuildCommands for each recipe within a repository.
+    """
+    retval = networkx.DiGraph()
+    saved_working_directory = os.getcwd()
+    os.chdir(repository)
+
+    config_data, _ = build_feedstock.load_package_config(variants=variants, recipe_path=recipe_path)
+    combined_config_files = variant_config_files
+
+    feedstock_conda_build_config_file = build_feedstock.get_conda_build_config()
+    if feedstock_conda_build_config_file:
+        combined_config_files.append(feedstock_conda_build_config_file)
+
+    recipes_from_config = config_data.get('recipes', [])
+    if recipes_from_config is None:
+        recipes_from_config = []
+    for recipe in recipes_from_config:
+        if recipes and not recipe.get('name') in recipes:
+            continue
+        packages, version, run_deps, host_deps, build_deps, test_deps, output_files = _get_package_dependencies(
+                                                                                        recipe.get('path'),
+                                                                                        combined_config_files,
+                                                                                        variants)
+        build_command = BuildCommand(recipe=recipe.get('name', None),
+                                    repository=repository,
+                                    packages=packages,
+                                    version=version,
+                                    recipe_path=recipe_path,
+                                    runtime_package=runtime_package,
+                                    output_files=output_files,
+                                    python=variants['python'],
+                                    build_type=variants['build_type'],
+                                    mpi_type=variants['mpi_type'],
+                                    cudatoolkit=variants['cudatoolkit'],
+                                    run_dependencies=run_deps,
+                                    host_dependencies=host_deps,
+                                    build_dependencies=build_deps,
+                                    test_dependencies=test_deps,
+                                    channels=channels)
+        package_node = DependencyNode(set(packages), build_command)
+        retval.add_node(package_node)
+
+    os.chdir(saved_working_directory)
+    return retval
+
+def get_installable_packages(build_commands, external_deps, starting_nodes=None, independent=False):
     '''
     This function retrieves the list of unique dependencies that are needed at runtime, from the
     build commands and external dependencies that are passed to it.
     '''
-    installable_packages =  set()
+    retval =  set()
 
     def check_matching(deps_set, dep_to_be_added):
         # If exact match already present in the set, no need to add again
@@ -594,12 +530,18 @@ def get_installable_packages(build_commands, external_deps, package_indices=None
 
         return parent_set
 
-    for build_command in traverse_build_commands(build_commands, package_indices):
+    for node in traverse_build_commands(build_commands, starting_nodes, True):
+        build_command = node.build_command
         if build_command.runtime_package:
-            installable_packages = check_and_add(build_command.run_dependencies, installable_packages)
-            installable_packages = check_and_add([package + (" " + build_command.version[i] if build_command.version else "")
-                                                      for i, package in enumerate(build_command.packages)],
-                                                 installable_packages)
+            if independent:
+                run_deps = get_independent_runtime_deps(build_commands, node)
+            else:
+                run_deps = build_command.run_dependencies
+            retval = check_and_add(run_deps, retval)
+            if not independent:
+                retval = check_and_add([package + (" " + build_command.version[i] if build_command.version else "")
+                                                        for i, package in enumerate(build_command.packages)],
+                                                    retval)
 
-    installable_packages = check_and_add(external_deps, installable_packages)
-    return sorted(installable_packages, key=len)
+    retval = check_and_add(external_deps, retval)
+    return sorted(retval, key=len)
