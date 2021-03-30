@@ -116,7 +116,7 @@ def test_execute_in_container(mocker):
 def make_args(command="build",
               sub_command="env",
               output_folder="condabuild",
-              env_config_file="open-ce.yaml",
+              env_config_file=["open-ce.yaml"],
               conda_build_config="conda_build_config.yaml",
               build_types="cuda",
               cuda_versions="10.2",
