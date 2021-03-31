@@ -27,7 +27,7 @@ in the [Open-CE/.github repo](https://github.com/open-ce/.github)
 should be copied to the new feedstock repo at `.github/workflows/feedstock-pr.yml`
 
 On [line 5 of `feedstock-pr.yml`](https://github.com/open-ce/.github/blob/0958304e21dd7733e57dcaf3cbcf362dee877fbb/workflow-templates/feedstock-pr.yml#L5)
-the branch should be changed to the default branch. On new repos this may be `main` instead of `master`.
+the branch should be set to the default branch. In Open-CE the default branch is `main`.
 
 ## Non-Functional Contents
 
@@ -62,7 +62,7 @@ Under `Options->Merge button`, only `Allow squash merging` should be checked.
 
 ### Branch Protection
 
-The default branch (historically `master`, but now `main` in new repos) should
+The default branch (named `main` in all Open-CE repos) should
 have the following protections added:
 
 - `Require pull request reviews before merging`

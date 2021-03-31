@@ -76,8 +76,8 @@ def main(arg_strings=None):
     variant_build_results = dict()
     for variant in variants:
         utils.run_and_log("git checkout {}".format(default_branch))
-        master_build_config_data, master_config = _get_configs(variant, args.conda_build_config)
-        master_build_numbers = _get_build_numbers(master_build_config_data, master_config, variant)
+        main_build_config_data, main_config = _get_configs(variant, args.conda_build_config)
+        main_build_numbers = _get_build_numbers(main_build_config_data, main_config, variant)
 
         utils.run_and_log("git checkout {}".format(pr_branch))
         pr_build_config_data, pr_config = _get_configs(variant, args.conda_build_config)
@@ -85,21 +85,21 @@ def main(arg_strings=None):
 
         print("Build Info for Variant:   {}".format(variant))
         print("Current PR Build Info:    {}".format(current_pr_build_numbers))
-        print("Master Branch Build Info: {}".format(master_build_numbers))
+        print("Main Branch Build Info:   {}".format(main_build_numbers))
 
         #No build numbers can go backwards without a version change.
-        for package in master_build_numbers:
-            if package in current_pr_build_numbers and current_pr_build_numbers[package]["version"] == master_build_numbers[package]["version"]:
-                assert int(current_pr_build_numbers[package]["number"]) >= int(master_build_numbers[package]["number"]), "If the version doesn't change, the build number can't be reduced."
+        for package in main_build_numbers:
+            if package in current_pr_build_numbers and current_pr_build_numbers[package]["version"] == main_build_numbers[package]["version"]:
+                assert int(current_pr_build_numbers[package]["number"]) >= int(main_build_numbers[package]["number"]), "If the version doesn't change, the build number can't be reduced."
 
         #If packages are added or removed, don't require a version change
-        if set(master_build_numbers.keys()) != set(current_pr_build_numbers.keys()):
+        if set(main_build_numbers.keys()) != set(current_pr_build_numbers.keys()):
             return
 
         #At least one package needs to increase the build number or change the version.
-        checks = [current_pr_build_numbers[package]["version"] != master_build_numbers[package]["version"] or
-                int(current_pr_build_numbers[package]["number"]) > int(master_build_numbers[package]["number"])
-                    for package in master_build_numbers]
+        checks = [current_pr_build_numbers[package]["version"] != main_build_numbers[package]["version"] or
+                int(current_pr_build_numbers[package]["number"]) > int(main_build_numbers[package]["number"])
+                    for package in main_build_numbers]
         variant_build_results[utils.variant_string(variant["python"], variant["build_type"], variant["mpi_type"], variant["cudatoolkit"])] = any(checks)
     assert any(variant_build_results.values()), "At least one package needs to increase the build number or change the version in at least one variant."
 
