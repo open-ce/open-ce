@@ -46,6 +46,7 @@ def make_parser():
     parser = argparse.ArgumentParser(arguments)
     parser.add_argument('command_placeholder', nargs=1, type=str)
     parser.add_argument('sub_command_placeholder', nargs=1, type=str)
+
     for argument in arguments:
         argument(parser)
 
@@ -225,7 +226,7 @@ def build_with_container_tool(args, arg_strings):
     # env_config_file being positional argument cause problem while parsing known
     # arguments. Hence removing it from arg_strings, as it is anyway being read
     # from args ahead.
-    for env_file in args.env_config_file:
+    for env_file in args.provided_env_files:
         if env_file in arg_strings:
             arg_strings.remove(env_file)
 
