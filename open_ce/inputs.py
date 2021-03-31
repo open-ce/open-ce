@@ -267,7 +267,11 @@ def _create_env_config_paths(args):
     URLs pointing to the GitHub repository for environemnt files.
     '''
     if "env_config_file" in vars(args).keys():
+        if not "provided_env_files" in vars(args).keys():
+            args.__dict__["provided_env_files"] = []
+
         for index, config_file in enumerate(args.env_config_file):
+            args.provided_env_files.append(config_file)
             if not os.path.exists(config_file) and not utils.is_url(config_file):
                 # Determine the organization name from the git_location argument
                 organization = os.path.basename(args.git_location)

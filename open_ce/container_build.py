@@ -36,7 +36,7 @@ HOME_PATH = "/home/builder"
 REPO_NAME = "open-ce"
 IMAGE_NAME = "open-ce-builder"
 
-def make_parser(num_env_files):
+def make_parser():
     ''' Parser for input arguments '''
     arguments = [Argument.CONTAINER_BUILD,
                  Argument.OUTPUT_FOLDER,
@@ -44,9 +44,9 @@ def make_parser(num_env_files):
                  Argument.CONTAINER_BUILD_ARGS,
                  Argument.CONTAINER_TOOL]
     parser = argparse.ArgumentParser(arguments)
-    # Need place holders for the command, subcommand and each env file
-    for index in range(num_env_files + 2):
-        parser.add_argument('command_placeholder'+str(index), nargs=1, type=str)
+    parser.add_argument('command_placeholder', nargs=1, type=str)
+    parser.add_argument('sub_command_placeholder', nargs=1, type=str)
+
     for argument in arguments:
         argument(parser)
 
@@ -223,7 +223,14 @@ def build_with_container_tool(args, arg_strings):
     if not args.container_tool:
         raise OpenCEError(Error.NO_CONTAINER_TOOL_FOUND)
 
-    parser = make_parser(len(args.env_config_file))
+    # env_config_file being positional argument cause problem while parsing known
+    # arguments. Hence removing it from arg_strings, as it is anyway being read
+    # from args ahead.
+    for env_file in args.provided_env_files:
+        if env_file in arg_strings:
+            arg_strings.remove(env_file)
+
+    parser = make_parser()
     _, unused_args = parser.parse_known_args(arg_strings[1:])
 
     build_image_path, dockerfile = _generate_dockerfile_name(args.build_types, args.cuda_versions)
