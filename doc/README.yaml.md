@@ -91,7 +91,7 @@ include `git_tag`, `recipe_path`, `patches`, `channels`, `runtime_package` and
 
 #### git_tag
 
-By default, the git tag will be the current (i.e. main or master) branch of the specified
+By default, the git tag will be the current (i.e. `main`) branch of the specified
 source tree, such that you don't need to include this keyword unless you want to explicitly
 override it to fetch a different version. To do this, you will simply specify the version
 value or the hexadecimal git tag value that you want to obtain during the build.
