@@ -10,4 +10,4 @@ packages:
 {% endif %}
 {% endif %}
 
-git_tag_for_env: open-ce-v1.1.3
+git_tag_for_env: open-ce-v1.1.4
