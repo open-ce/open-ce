@@ -1,0 +1,3 @@
+packages:
+  - feedstock : LightGBM
+  - feedstock : openmpi          #[mpi_type == 'openmpi']

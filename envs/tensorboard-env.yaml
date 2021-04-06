@@ -1,0 +1,6 @@
+imported_envs:
+  - bazel-env.yaml
+
+packages:
+  - feedstock : tensorboard
+  - feedstock : protobuf          #[ppc64le and python == '3.8']

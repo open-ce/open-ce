@@ -1,8 +1,0 @@
-#open-ce-variant:py3.6-cuda-openmpi-10.2
-channels:
-- defaults
-dependencies:
-- pytest 6.2.2
-- libopus 1.3.1
-- icu 58.2
-name: opence-conda-env-py3.6-cuda-openmpi

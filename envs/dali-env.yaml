@@ -1,0 +1,14 @@
+imported_envs:
+{% if build_type == 'cuda' %}
+  - tensorflow-env.yaml
+{% endif %}
+
+packages:
+{% if build_type == 'cuda' %}
+  - feedstock : opencv
+  - feedstock : DALI
+  - feedstock : jpeg-turbo
+  - feedstock : libflac
+  - feedstock : libsndfile
+  - feedstock : protobuf          #[ppc64le and python == '3.8']
+{% endif %}

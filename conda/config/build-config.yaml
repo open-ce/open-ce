@@ -1,3 +1,0 @@
-recipes:
-  - name: open-ce
-    path: conda/recipe

@@ -1,0 +1,19 @@
+{% if build_type == 'cuda' %}
+imported_envs:
+  - tensorrt-env.yaml
+{% endif %}
+
+packages:
+  - feedstock : pytorch
+  - feedstock : numactl
+{% if build_type == 'cuda' %}
+  - feedstock : nccl
+  - feedstock : magma
+  - feedstock : cudnn
+{% endif %}
+  - feedstock : sentencepiece
+  - feedstock : torchtext
+  - feedstock : onnx
+  - feedstock : av
+  - feedstock : torchvision
+  - feedstock : protobuf          #[ppc64le and python == '3.8']

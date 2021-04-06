@@ -4,38 +4,32 @@
   <img src="https://avatars0.githubusercontent.com/u/68873540?s=400&u=a02dc4156e50cdffb23172aba7133e44381885d4&v=4" alt="Open-CE Logo" width="30%">
 </p>
 
-[![Builder Unit Tests](https://github.com/open-ce/open-ce/workflows/Open-CE%20Builder%20Unit%20Tests/badge.svg)](https://github.com/open-ce/open-ce/actions?query=workflow%3A%22Open-CE+Builder+Unit+Tests%22+branch%3Amain)
-[![Builder Unit Test Coverage](https://codecov.io/gh/open-ce/open-ce/branch/main/graph/badge.svg)](https://codecov.io/gh/open-ce/open-ce)
 [![Python Support](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)](#requirements)
 [![Cuda Support](https://img.shields.io/badge/cuda-10.2%20%7C%2011.0-blue)](doc/README.cuda_support.md)
 [![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
 ---
 
-This is the Open-CE repo for feedstock collection, environment data, and build scripts
+This is the Open-CE project for feedstock collection, environment data, and build scripts
 
-Welcome to the **open-ce** repository for Open-CE. This repository
-represents the common controlling collection of configuration and
-build scripts which are foundational to building the underlying
-software component packages (feedstocks) which comprise the greater Open-CE
-package ecosystem.  This is a general infrastructure repository; each of the
-feedstock components has its own separate repository as well.
+Welcome to the **open-ce** project. The project contains everything that is needed to build conda packages for
+a collection of machine learning and deep learning frameworks. All packages created for a specific version of
+Open-CE have been designed to be installed within a single conda environment. For more information on `conda`,
+please look at conda's official [documentation](https://docs.conda.io/).
 
-This repository provides all that you will need in order to build your own copy
-of the Open-CE environment, including (for example) Tensorflow, Pytorch,
-XGBoost, and other related packages and dependencies. These packages are built
-to run in a conda environment.
+This repository contains a collection of Open-CE files that can be used to create a conda channel. The conda channel
+will contain packages for every feedstock listed within the Open-CE files. Different variants of Python and CUDA can
+be specified at build time. Open-CE currently supports the following:
 
-Within this **open-ce** repository, you will find:
+| | Supported Versions |
+| --- | --- |
+| Architecture | Power, x86 |
+| Python | 3.6, 3.7, 3.8 |
+| CUDA | 10.2, 11.0 |
 
-```text
-open_ce/
-    This directory contains the build and validation tool `open-ce`.
-    For more information run `./open_ce/open-ce -h`
-doc/
-    Documentation files
-test/
-    Test scripts and files
-```
+Oregon State University hosts pre-built versions of the Open-CE conda channels [here](https://osuosl.org/services/powerdev/opence/).
+
+The `open-ce` tool can also be used to build all or some of the packages provided by Open-CE. For more information on the `open-ce` tool,
+please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-builder).
 
 ## GETTING STARTED
 
@@ -43,129 +37,34 @@ test/
 
 * `conda` >= 3.8.3
   * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
-* `conda-build` == 3.20.5 (Other versions >=3.20 may work, but issues have been encountered with some versions.)
-  * Once `conda` is installed, `conda-build` can be installed with the command: `conda install conda-build`
-* `networkx` >= 2.5
-* `python` >= 3.6
-* `docker` >= 1.13 or `podman` >= 2.0.5
-  * docker or podman required only when building within a container (see below).
 
-### CUDA Requirements
+### Community Builds
 
-Currently CUDA 10.2 and 11.0 are supported by the recipes in Open-CE. Please see [`doc/README.cuda_support.md`](doc/README.cuda_support.md) for details on setting
-up a proper build enviornment for CUDA support.
+Oregon State University hosts pre-built versions of the Open-CE conda channels [here](https://osuosl.org/services/powerdev/opence/). These
+channels provide packages for both Power and x86 architectures. The latest version of Open-CE can be pulled down using the channel:
+https://ftp.osuosl.org/pub/open-ce/current/.
 
-Open-CE expects the `CUDA_HOME` environment variable to be set to the location of the CUDA installation. Note that not all recipes work when `CUDA_HOME` references a non-standard CUDA installation location. Reference the [cuda README](doc/README.cuda_support.md) for more information.
-
-When building packages that use CUDA, a tar package of TensorRT for the intended CUDA version will need to be [downloaded](https://developer.nvidia.com/nvidia-tensorrt-7x-download) ahead of time. The downloaded file should be placed in a new local directory called `local_files`. The [cuda README](doc/README.cuda_support.md) has more information.
-
-### Installing the Open-CE Build Tools
-
-To get the Open-CE build tools, one can either clone the source code from [github](https://github.com/open-ce/open-ce) or install it via `pip` as below - 
-
-```bash
-# Clone Open-CE from GitHub
-git clone https://github.com/open-ce/open-ce.git
-```
-OR 
-```bash
-# Pip install
-pip install git+https://github.com/open-ce/open-ce.git@main
-```
-where `main` is the branch from where pip package of Open-CE tools should be created. It can be changed to a different branch name if needed.
-
-
-### Building a Collection of Packages
-To build an entire integrated and functional conda channel using Open-CE, start by installing the needed tools in the [Requirements](#requirements) section above.
-The `open-ce build env` command can then be used to build a collection of Open-CE packages. An Open-CE environment file needs to be passed in as input. A selection of environment files are provided within the [`open-ce-environments` repo](https://github.com/open-ce/open-ce-environments) for different frameworks such as TensorFlow and PyTorch. The output from running `open-ce build env` will be a local conda channel (by default called `condabuild`) and one or more conda environment file(s) in the output folder depending on the selected build configuration. For more details on `open-ce build env`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
-
-The following commands will use the `opence-env.yaml` Open-CE environment file to build all of the Open-CE packages for Python 3.7 (the default), including CUDA builds and cpu-only builds (also the default). The commands should be run from within the same directory that contains `local_files`.
-
-```bash
-# Clone Open-CE from GitHub
-git clone https://github.com/open-ce/open-ce.git
-# Clone Open-CE Environments from GitHub
-git clone https://github.com/open-ce/open-ce-environments.git
-# Build packages
-./open-ce/open_ce/open-ce build env ./open-ce-environments/envs/opence-env.yaml
-```
-
-If Open-CE tools are installed via pip instead of cloning from github, `open-ce build env` should be changed as below -
-```bash
-# Build packages
-open-ce build env ./open-ce-environments/envs/opence-env.yaml
-```
-
-The following commands will use the `opence-env.yaml` Open-CE environment file from a specific Open-CE release to build all of the Open-CE packages for Python 3.6, 3.7 and 3.8, including only CUDA builds. The commands should be run from within the same directory that contains `local_files`.
-
-```bash
-# Clone a specific Open-CE release from GitHub
-git clone https://github.com/open-ce/open-ce.git --branch open-ce-v1.0.0
-# Clone Open-CE Environments from GitHub
-git clone https://github.com/open-ce/open-ce-environments.git --branch open-ce-v2021.1.0
-# Build packages
-./open-ce/open_ce/open-ce build env --python_versions 3.6,3.7,3.8 --build_types cuda ./open-ce-environments/envs/opence-env.yaml
-```
-
-Builds can also be performed without cloning the environments repo, by specifying the URL of an environment file. For example:
-
-```bash
-# Clone Open-CE from GitHub
-git clone https://github.com/open-ce/open-ce.git
-# Build packages
-./open-ce/open_ce/open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/opence-env.yaml
-```
-
-#### Building within a container
-
-Passing the `--container_build` argument to the `open-ce build env` command will create a container image and perform the actual build inside of a container based on that image. This will provide a "clean" environment for the builds and make builds more system independent. It is recommended to build with this option as opposed to running on a bare metal machine. For more information on the `--container_build` option, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-env-sub-command).
-
-### Building a Single Feedstock
-
-The `open-ce build feedstock` command can be used to build a single feedstock (which could produce one or more conda packages). The output from running `open-ce build feedstock` will be a local conda channel (by default called `condabuild`). For more details on `open-ce build feedstock`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-feedstock-sub-command).
-
-The following commands will build all of the packages within a feedstock named `MY_FEEDSTOCK`.
-
-```bash
-# Clone Open-CE from GitHub
-git clone https://github.com/open-ce/open-ce.git
-# Clone Open-CE Environments from GitHub
-git clone https://github.com/open-ce/open-ce-environments.git
-# Clone MY_FEEDSTOCK from GitHub
-git clone https://github.com/open-ce/MY_FEEDSTOCK-feedstock.git
-# Build packages
-./open-ce/open_ce/open-ce build feedstock --conda_build_config ./open-ce-environments/envs/conda_build_config.yaml --working_directory ./MY_FEEDSTOCK-feedstock
-```
+MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple versions of Open-CE are hosted within this single channel: https://opence.mit.edu/.
 
 ### Installing Packages
 
-After performing a build, a local conda channel will be created. By default, this will be within a folder called `condabuild` (it can be changed using the `--output_folder` argument). After the build, packages can be installed within a conda environment from this local channel. If the packages are built using `open-ce build env` script, then a conda environment file will also be generated which can be used to generate a conda environment with the built packages installed in it. See conda's [documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for more information on conda environments.
+Open-CE packages can be installed from one of the community [builds](#community-builds). To install packages from one of the community channels, pass the channel's URL to the `conda` tool using the `-c` option.
 
-The following command will install a package named `PACKAGE` from the local conda channel `condabuild` into the currently active conda environment.
-
-```bash
-conda install -c ./condabuild PACKAGE
-```
-
-The following command can be used to create a conda environment using a conda environment file.
+The following command will install the tensorflow package from the most recent version of Open-CE hosted in within the OSU channel:
 
 ```bash
-conda env create -f <conda_environment_file>
+conda install -c https://ftp.osuosl.org/pub/open-ce/current/ tensorflow
 ```
 
-### Testing Packages
+For more information on installing conda packages, please see the official conda [documentation](https://docs.conda.io/).
 
-After performing the build using the `open-ce build env` tool, the `open-ce test` tool can be used to either test a package or a collection of packages. For more details on `open-ce test`, please see [`doc/README.open_ce_test.md`](doc/README.open_ce_test.md).
+For more information on installing conda packages created from using the `open-ce` tools locally, please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-builder).
 
-### Creating Container Image with Open-CE Packages installed
-
-After performing the build using `open-ce build env`, the `open-ce build image` command can be used to create a runtime container image containing the newly created conda channel, as well as a conda environment with the newly build Open-CE packages. For more details on `open-ce build image`, please see [`doc/README.open_ce_build.md`](doc/README.open_ce_build.md#open-ce-build-image-sub-command).
-
-### Contributions
+## Contributions
 
 For contribution information, please see the [CONTRIBUTING.md](CONTRIBUTING.md) page.
 
-### Slack Community
+## Slack Community
 
 Join us on [Slack!](http://open-ce.slack.com/) Use [this link](https://join.slack.com/t/open-ce/shared_invite/zt-o27t9db6-oUklancQvdGO8FIwftDwgw) or ping the [@open-ce/open-ce-dev-team](https://github.com/orgs/open-ce/teams/open-ce-dev-team) for an invite.
 
