@@ -70,6 +70,11 @@ This argument can be a URL, in which case imported_envs and the conda_build_conf
 will be automatically discovered in the same remote directory. E.g.:
 >$ open-ce build env https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs/opence-env.yaml
 
+If the provided file doesn't exist locally, a URL will be generated to pull down from
+https://raw.githubusercontent.com/open-ce/open-ce-environments/main/envs. If the --git_tag_for_env argument
+is provided, it will pull down from the provided tag instead of main. E.g:
+>$ open-ce build env opence-env
+
 For complete documentation on Open-CE environment files see:
 https://github.com/open-ce/open-ce/blob/main/doc/README.yaml.md"""))
 
@@ -256,6 +261,40 @@ def add_subparser(subparsers, command, arguments, *args, formatter_class=OpenCEF
         argument(subparser)
     return subparser
 
+def _create_env_config_paths(args):
+    '''
+    If the provided env_config_file's don't exist locally, convert the paths to
+    URLs pointing to the GitHub repository for environemnt files.
+    '''
+    if "env_config_file" in vars(args).keys():
+        if not "provided_env_files" in vars(args).keys():
+            args.__dict__["provided_env_files"] = []
+
+        for index, config_file in enumerate(args.env_config_file):
+            args.provided_env_files.append(config_file)
+            if not os.path.exists(config_file) and not utils.is_url(config_file):
+                # Determine the organization name from the git_location argument
+                organization = os.path.basename(args.git_location)
+
+                # Grab the branch name from the git_tag_for_env argument
+                if "git_tag_for_env" in vars(args).keys() and args.git_tag_for_env:
+                    branch = args.git_tag_for_env
+                else:
+                    branch = "main"
+
+                # Determine the file name
+                file_name, extension = os.path.splitext(config_file)
+                if not extension:
+                    file_name = file_name + ".yaml"
+                else:
+                    file_name = file_name + extension
+
+                new_url = "https://raw.githubusercontent.com/{}/{}/{}/envs/{}".format(
+                                                  organization, utils.DEFAULT_ENVS_REPO, branch, file_name)
+
+                print("INFO: Unable to find " + config_file + " locally. Attempting to use " + new_url)
+                args.env_config_file[index] = new_url
+
 def parse_args(parser, arg_strings=None):
     '''
     Parses input arguments and handles more complex defaults.
@@ -264,6 +303,8 @@ def parse_args(parser, arg_strings=None):
                           the local path.
     '''
     args = parser.parse_args(arg_strings)
+
+    _create_env_config_paths(args)
 
     if "conda_build_config" in vars(args).keys():
         if args.conda_build_config is None:

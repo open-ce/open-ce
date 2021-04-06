@@ -36,6 +36,7 @@ DEFAULT_CUDA_VERS = "10.2"
 CONDA_BUILD_CONFIG_FILE = "conda_build_config.yaml"
 DEFAULT_CONDA_BUILD_CONFIG = os.path.abspath(os.path.join(os.getcwd(), CONDA_BUILD_CONFIG_FILE))
 DEFAULT_GIT_LOCATION = "https://github.com/open-ce"
+DEFAULT_ENVS_REPO = "open-ce-environments"
 SUPPORTED_GIT_PROTOCOLS = ["https:", "http:", "git@"]
 DEFAULT_RECIPE_CONFIG_FILE = "config/build-config.yaml"
 CONDA_ENV_FILENAME_PREFIX = "opence-conda-env-"
