@@ -11,13 +11,17 @@ runs:
       shell: bash -l {0}
       run: |
         conda install -y conda-build
+    - name: Clone build tools
+      shell: bash -l {0}
+      run: |
+        git clone https://github.com/open-ce/open-ce-builder.git \
+                  ./open-ce-builder
     - name: Create Version Branch
       shell: bash -l {0}
       run: |
         echo "If the package version changed from the last commit to this"
         echo "one, a new branch will be created for the previous version"
         echo "from the last commit."
-        open_ce_path="$GITHUB_ACTION_PATH/../../../"
-        pip install -e ${open_ce_path}
-        python ${open_ce_path}/git_tools/create_version_branch.py \
+        pip install -e open-ce-builder/open_ce
+        python open-ce-builder/git_tools/create_version_branch.py \
                   --branch_if_changed

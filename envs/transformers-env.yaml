@@ -1,0 +1,8 @@
+packages:
+  - feedstock : rust-nightly
+  - feedstock : semantic
+  - feedstock : tokenizers
+  - feedstock : protobuf          #[ppc64le and python == '3.8']
+  - feedstock : sentencepiece
+  - feedstock : sacremoses
+  - feedstock : transformers

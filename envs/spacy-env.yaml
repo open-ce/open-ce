@@ -1,0 +1,4 @@
+packages:
+  - feedstock : srsly
+  - feedstock : thinc
+  - feedstock : spacy
