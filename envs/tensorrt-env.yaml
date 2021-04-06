@@ -6,6 +6,5 @@ packages:
   - feedstock : cudnn
   - feedstock : tensorrt
   - feedstock : onnx
-  - feedstock : protobuf          #[ppc64le and python == '3.8']
 {% endif %}
 {% endif %}
