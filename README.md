@@ -13,13 +13,15 @@ This is the Open-CE project for feedstock collection, environment data, and buil
 
 Welcome to the **open-ce** project. The project contains everything that is needed to build conda packages for
 a collection of machine learning and deep learning frameworks. All packages created for a specific version of
-Open-CE have been desigined to be installed within a single conda environment. For more information on conda,
+Open-CE have been designed to be installed within a single conda environment. For more information on `conda`,
 please look at conda's official [documentation](https://docs.conda.io/).
 
 This repository contains a collection of Open-CE files that can be used to create a conda channel. The conda channel
 will contain packages for every feedstock listed within the Open-CE files. Different variants of Python and CUDA can
 be specified at build time. Open-CE currently supports the following:
 
+| | Supported Versions |
+| --- | --- |
 | Architecture | Power, x86 |
 | Python | 3.6, 3.7, 3.8 |
 | CUDA | 10.2, 11.0 |
@@ -42,7 +44,7 @@ Open-CE packages can be installed from Oregon State University's conda [channels
 
 To install a package from the latest version of Open-CE, use the https://ftp.osuosl.org/pub/open-ce/current/ channel.
 
-The following command will install the tensorflow package from the more recent version of Open-CE:
+The following command will install the tensorflow package from the most recent version of Open-CE:
 
 ```bash
 conda install -c https://ftp.osuosl.org/pub/open-ce/current/ tensorflow
