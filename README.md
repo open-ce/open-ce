@@ -38,13 +38,19 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 * `conda` >= 3.8.3
   * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
+### Community Builds
+
+Oregon State University hosts pre-built versions of the Open-CE conda channels [here](https://osuosl.org/services/powerdev/opence/). These
+channels provide packages for both Power and x86 architectures. The latest version of Open-CE can be pulled down using the channel:
+https://ftp.osuosl.org/pub/open-ce/current/.
+
+MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple versions of Open-CE are hosted within this single channel: https://opence.mit.edu/.
+
 ### Installing Packages
 
-Open-CE packages can be installed from Oregon State University's conda [channels](https://osuosl.org/services/powerdev/opence/).
+Open-CE packages can be installed from one of the community [builds](#community-builds). To install packages from one of the community channels, pass the channel's URL to the `conda` tool using the `-c` option.
 
-To install a package from the latest version of Open-CE, use the https://ftp.osuosl.org/pub/open-ce/current/ channel.
-
-The following command will install the tensorflow package from the most recent version of Open-CE:
+The following command will install the tensorflow package from the most recent version of Open-CE hosted in within the OSU channel:
 
 ```bash
 conda install -c https://ftp.osuosl.org/pub/open-ce/current/ tensorflow

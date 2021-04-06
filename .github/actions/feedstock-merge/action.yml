@@ -22,6 +22,6 @@ runs:
         echo "If the package version changed from the last commit to this"
         echo "one, a new branch will be created for the previous version"
         echo "from the last commit."
-        pip install -e open-ce-builder/open_ce
+        pip install -e open-ce-builder
         python open-ce-builder/git_tools/create_version_branch.py \
                   --branch_if_changed
