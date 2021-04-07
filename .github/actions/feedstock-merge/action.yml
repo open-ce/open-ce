@@ -14,7 +14,7 @@ runs:
     - name: Clone build tools
       shell: bash -l {0}
       run: |
-        git clone --branch issue_8 https://github.com/bethune-bryant/open-ce-builder.git \
+        git clone https://github.com/open-ce/open-ce-builder.git \
                   ./open-ce-builder
     - name: Create Version Branch
       shell: bash -l {0}
@@ -26,4 +26,5 @@ runs:
         pip install -e open-ce-builder
         python open-ce-builder/git_tools/create_version_branch.py \
                   --branch_if_changed \
-                  --conda_build_config "${open_ce_path}/envs/conda_build_config.yaml"
+                  --conda_build_config \
+                        "${open_ce_path}/envs/conda_build_config.yaml"
