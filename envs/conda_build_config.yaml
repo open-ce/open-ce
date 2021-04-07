@@ -176,9 +176,9 @@ python:
   - 3.6
   - 3.7
 pytorch:
-  - 1.7.*
+  - 1.8.*
 pytorch_lightning:
-  - 1.1.*
+  - 1.2.*
 pyyaml:
   - 5.*
 requests:
@@ -219,9 +219,9 @@ thinc:
 tokenizers:
   - 0.9.3
 torchtext:
-  - 0.8.*
+  - 0.9.*
 torchvision:
-  - 0.8.*
+  - 0.9.*
 tqdm:
   - 4.*
 typing_extensions:
