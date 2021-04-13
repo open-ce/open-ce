@@ -3,4 +3,3 @@ imported_envs:
 
 packages:
   - feedstock : tensorboard
-  - feedstock : protobuf          #[ppc64le and python == '3.8']

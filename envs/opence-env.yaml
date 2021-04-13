@@ -8,3 +8,4 @@ imported_envs:
   - transformers-env.yaml
   - horovod-env.yaml
   - lightgbm-env.yaml
+  - arrow-env.yaml
