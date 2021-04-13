@@ -1,0 +1,10 @@
+imported envs:
+  - bazel-env.yaml
+{% if build_type == 'cuda' %}
+  - tensorrt-env.yaml
+{% endif %}
+
+packages:
+  - feedstock: libevent
+  - feedstock: tensorflow-serving
+  - feedstock: protobuf   #[ppc64le and python == '3.8']
