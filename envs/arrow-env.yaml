@@ -1,2 +1,2 @@
 packages:
-  - feedstock : arrow-cpp
+  - feedstock : pyarrow
