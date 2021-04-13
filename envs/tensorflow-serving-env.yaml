@@ -1,4 +1,4 @@
-imported envs:
+imported_envs:
   - bazel-env.yaml
 {% if build_type == 'cuda' %}
   - tensorrt-env.yaml
