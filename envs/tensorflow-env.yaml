@@ -14,7 +14,6 @@ packages:
   - feedstock : tensorflow-probability
   - feedstock : tensorflow-estimator
   - feedstock : tensorboard
-  - feedstock : tensorboard-plugin-wit
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
   - feedstock : tensorflow-datasets
