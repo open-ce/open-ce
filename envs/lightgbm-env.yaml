@@ -1,11 +1,5 @@
 packages:
   - feedstock : LightGBM
   - feedstock : openmpi          #[mpi_type == 'openmpi']
-  - feedstock : https://github.com/conda-forge/cmake-feedstock
-    git_tag : 26e3ecb4156c14d90a66fd1433d52a1d7e27946d
-    patches :
-      - ../feedstock-patches/cmake/0001-Fix-test.patch
-      - ../feedstock-patches/cmake/0002-set-rhash-version.patch
-    runtime_package : False
 
 git_tag_for_env: open-ce-v1.1.4
