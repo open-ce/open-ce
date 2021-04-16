@@ -1,3 +1,5 @@
 packages:
   - feedstock : nccl              #[build_type == 'cuda']
   - feedstock : xgboost
+
+git_tag_for_env: open-ce-v1.2.0

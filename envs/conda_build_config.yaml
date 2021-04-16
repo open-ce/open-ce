@@ -245,3 +245,5 @@ wrapt:
   - 1.12.*
 zlib:
   - 1.2.11
+
+git_tag_for_env: open-ce-v1.2.0
