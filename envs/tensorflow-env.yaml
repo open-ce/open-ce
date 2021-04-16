@@ -9,19 +9,14 @@ packages:
   - feedstock : nccl
   - feedstock : cudnn
 {% endif %}
-  - feedstock : python-flatbuffers
   - feedstock : tensorflow
-  - feedstock : libevent
-  - feedstock : tensorflow-serving
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
   - feedstock : tensorflow-estimator
   - feedstock : tensorboard
-  - feedstock : tensorboard-plugin-wit
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
   - feedstock : tensorflow-datasets
-  - feedstock : protobuf          #[ppc64le and python == '3.8']
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
   - feedstock : tensorflow-addons

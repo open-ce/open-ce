@@ -26,9 +26,6 @@ To enable CI tests, the [`feedstock-pr.yml` file](https://github.com/open-ce/.gi
 in the [Open-CE/.github repo](https://github.com/open-ce/.github)
 should be copied to the new feedstock repo at `.github/workflows/feedstock-pr.yml`
 
-On [line 5 of `feedstock-pr.yml`](https://github.com/open-ce/.github/blob/0958304e21dd7733e57dcaf3cbcf362dee877fbb/workflow-templates/feedstock-pr.yml#L5)
-the branch should be set to the default branch. In Open-CE the default branch is `main`.
-
 ## Non-Functional Contents
 
 All feedstocks should contain a [`LICENSE` file](#license-file) and
