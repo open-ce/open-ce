@@ -5,7 +5,8 @@
 </p>
 
 [![Python Support](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)](#requirements)
-[![Cuda Support](https://img.shields.io/badge/cuda-10.2%20%7C%2011.0-blue)](doc/README.cuda_support.md)
+[![Cuda Support](https://img.shields.io/badge/cuda-10.2%20%7C%2011.0-blue)](#)
+[![Architecture Support](https://img.shields.io/badge/architecture-x86%20%7C%20ppc64le-blue)](#)
 [![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
 ---
 

@@ -16,4 +16,3 @@ packages:
   - feedstock : onnx
   - feedstock : av
   - feedstock : torchvision
-  - feedstock : protobuf          #[ppc64le and python == '3.8']

@@ -1,5 +1,7 @@
 absl_py:
   - 0.10.*
+arrow:
+  - 3.0.0
 astunparse:
   - 1.6
 attrs:
@@ -77,6 +79,8 @@ googleapis_common_protos:
 graphsurgeon:
   - 0.4.1                     # [cudatoolkit == '10.2']
   - 0.4.5                     # [cudatoolkit == '11.0']
+grpc_cpp:
+  - 1.26.*
 grpcio:
   - 1.31.*
 harfbuzz:
@@ -167,7 +171,7 @@ plac:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.9.*
+  - 3.11.2
 psutil:
   - 5
 pytest:

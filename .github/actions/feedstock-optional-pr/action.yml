@@ -19,7 +19,8 @@ runs:
     - name: Run PR Tests
       shell: bash -l {0}
       run: |
-        pip install -e open-ce-builer
+        pip install -e open-ce-builder
+        open_ce_path="$GITHUB_ACTION_PATH/../../../"
         python open-ce-builder/tests/feedstock_tests/check_build_numbers.py \
                --conda_build_config \
-               "$root_path/envs/conda_build_config.yaml"
+               "${open_ce_path}/envs/conda_build_config.yaml"
