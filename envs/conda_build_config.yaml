@@ -1,3 +1,5 @@
+abseil_cpp:
+  - 20200225
 absl_py:
   - 0.10.*
 arrow:
@@ -80,7 +82,7 @@ graphsurgeon:
   - 0.4.1                     # [cudatoolkit == '10.2']
   - 0.4.5                     # [cudatoolkit == '11.0']
 grpc_cpp:
-  - 1.26.*
+  - 1.29.*
 grpcio:
   - 1.31.*
 harfbuzz:
