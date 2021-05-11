@@ -1,0 +1,21 @@
+builder_version: ">=4.0.0"
+
+imported_envs:
+  - bazel-env.yaml
+{% if build_type == 'cuda' %}
+  - tensorrt-env.yaml
+{% endif %}
+
+conda_build_configs:
+  - tensorflow_serving_conda_build_config.yaml
+
+packages:
+{% if build_type == 'cuda' %}
+  - feedstock: nccl
+  - feedstock: cudnn
+{% endif %}
+  - feedstock: libevent
+  - feedstock: tensorflow-serving
+  - feedstock: protobuf   #[ppc64le and python == '3.8']
+
+git_tag_for_env: open-ce-v1.2.0
