@@ -1,2 +1,3 @@
 packages:
+  - feedstock : grpc-cpp
   - feedstock : pyarrow
