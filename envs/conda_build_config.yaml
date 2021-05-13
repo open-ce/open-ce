@@ -26,7 +26,7 @@ catalogue:
 cffi:
   - 1.14.*
 click:
-  - 7.0.*
+  - 7.*
 cloudpickle:
   - 1.3.*
 cmake:
@@ -163,7 +163,7 @@ openmpi:
 opt_einsum:
   - 3.1.0
 pillow:
-  - 8.1.*
+  - 8.*
 pip:
   - 19*
 pkg_config:
@@ -247,3 +247,5 @@ wrapt:
   - 1.12.*
 zlib:
   - 1.2.11
+zstd:
+  - 1.4.*

@@ -2,9 +2,13 @@ name: Open-CE Environment Tests
 
 on:
   push:
-    branches: [main]
+    branches:
+      - 'main'        # matches the main branch
+      - 'open-ce-r*'  # matches every release branch
   pull_request:
-    branches: [main]
+    branches:
+      - 'main'        # matches the main branch
+      - 'open-ce-r*'  # matches every release branch
 
 jobs:
   test:
