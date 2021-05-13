@@ -26,7 +26,7 @@ catalogue:
 cffi:
   - 1.14.*
 click:
-  - 7.1.*
+  - 7.*
 cloudpickle:
   - 1.3.*
 cmake:
@@ -261,3 +261,5 @@ wrapt:
   - 1.12.*
 zlib:
   - 1.2.11
+zstd:
+  - 1.4.*
