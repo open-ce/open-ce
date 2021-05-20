@@ -7,7 +7,7 @@ description: "Required global PR tests for Open-CE feedstocks."
 runs:
   using: "composite"
   steps:
-    - name: Install dependencies and set envrionment 
+    - name: Install dependencies and set envrionment
       shell: bash -l {0}
       run: |
         conda install -y conda-build
