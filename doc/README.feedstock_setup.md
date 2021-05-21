@@ -26,9 +26,6 @@ To enable CI tests, the [`feedstock-pr.yml` file](https://github.com/open-ce/.gi
 in the [Open-CE/.github repo](https://github.com/open-ce/.github)
 should be copied to the new feedstock repo at `.github/workflows/feedstock-pr.yml`
 
-On [line 5 of `feedstock-pr.yml`](https://github.com/open-ce/.github/blob/0958304e21dd7733e57dcaf3cbcf362dee877fbb/workflow-templates/feedstock-pr.yml#L5)
-the branch should be changed to the default branch. On new repos this may be `main` instead of `master`.
-
 ## Non-Functional Contents
 
 All feedstocks should contain a [`LICENSE` file](#license-file) and
@@ -38,7 +35,7 @@ a [`README.md` file](#readmemd-file) in the root of the git repo.
 
 The contents of the `LICENSE` file should be exactly the same as the contents
 of every other feedstocks' `LICENSE` file. For example, the
-[Spacy `LICENSE` file](https://github.com/open-ce/spacy-feedstock/blob/master/LICENSE)
+[Spacy `LICENSE` file](https://github.com/open-ce/spacy-feedstock/blob/main/LICENSE)
 can be copied directly.
 
 ### `README.md` File
@@ -47,7 +44,7 @@ The `README.md` files in each feedstock are designed to point people who
 land on the feedstock repo back to the main Open-CE repo. The `README.md`
 file should be the same, except for the title, which should reflect the name
 of the feedstock. The
-[Spacy `README.md` file](https://github.com/open-ce/spacy-feedstock/blob/master/README.md)
+[Spacy `README.md` file](https://github.com/open-ce/spacy-feedstock/blob/main/README.md)
 can be copied, and the title changed.
 
 ## Github Settings
@@ -62,7 +59,7 @@ Under `Options->Merge button`, only `Allow squash merging` should be checked.
 
 ### Branch Protection
 
-The default branch (historically `master`, but now `main` in new repos) should
+The default branch (named `main` in all Open-CE repos) should
 have the following protections added:
 
 - `Require pull request reviews before merging`

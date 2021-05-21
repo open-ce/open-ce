@@ -11,8 +11,16 @@ runs:
       shell: bash -l {0}
       run: |
         conda install -y conda-build
+    - name: Clone build tools
+      shell: bash -l {0}
+      run: |
+        git clone https://github.com/open-ce/open-ce-builder.git \
+                  ./open-ce-builder
     - name: Run PR Tests
       shell: bash -l {0}
       run: |
-        test_path="$GITHUB_ACTION_PATH/../../../tests"
-        python $test_path/feedstock_tests/check_build_numbers.py
+        pip install -e open-ce-builder
+        open_ce_path="$GITHUB_ACTION_PATH/../../../"
+        python open-ce-builder/tests/feedstock_tests/check_build_numbers.py \
+               --conda_build_config \
+               "${open_ce_path}/envs/conda_build_config.yaml"
