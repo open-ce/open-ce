@@ -14,10 +14,11 @@ runs:
     - name: Check Dependencies
       shell: bash -l {0}
       run: |
-        # Validate all env files with the new feedstock.
-        open_ce_path="$GITHUB_ACTION_PATH/../../../open-ce"
+        # Validate the open-ce env file
         env_path="$GITHUB_ACTION_PATH/../../../envs"
-        python ${open_ce_path}/open-ce validate config \
-                                       ${env_path}/*-env.yaml \
-                                       --build_types cuda,cpu \
-                                       --repository_folder ../
+        pip install git+https://github.com/open-ce/open-ce-builder.git@main
+        open-ce validate config \
+                         ${env_path}/*-env.yaml \
+                         --build_types cuda,cpu \
+                         --python_versions 3.6,3.7,3.8 \
+                         --repository_folder ../

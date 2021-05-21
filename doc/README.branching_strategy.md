@@ -25,10 +25,10 @@ The following branching strategy will be used for feedstocks.
 
 ## Working Branch
 
-We want to ensure that the default branch (`master` or `main` depending on the
-repo) always builds in total and take reasonable precautions to keep the
-default branch functional. However, this becomes difficult when integrating
-new versions of frameworks that may not be compatible or fully integrated yet.
+We want to ensure that the default branch (`main` for the open-ce feedstocks)
+always builds in total and take reasonable precautions to keep the default
+branch functional. However, this becomes difficult when integrating new
+versions of frameworks that may not be compatible or fully integrated yet.
 
 The following branching strategy is to be used under these circumstances.
 
