@@ -84,7 +84,7 @@ graphsurgeon:
 grpc_cpp:
   - 1.29.*
 grpcio:
-  - 1.31.*
+  - 1.34.*
 harfbuzz:
   - 1.8
 # Note: hdf5 version must be compatible with h5py
