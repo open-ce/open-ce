@@ -151,7 +151,7 @@ numpy:
 onnx:
   - 1.6.*
 onnx_graphsurgeon:
-  - 0.2.*                  # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
+  - 0.2.*               # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
 openblas:
   - 0.3.6.*
 opencv:
