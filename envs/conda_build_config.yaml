@@ -151,7 +151,7 @@ numpy:
 onnx:
   - 1.6.*
 onnx_graphsurgeon:
-  - 0.2.*                      # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
+  - 0.2.*                  # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
 openblas:
   - 0.3.6.*
 opencv:
@@ -236,8 +236,8 @@ tqdm:
 typing_extensions:
   - 3.7.4.*
 uff:
-  - 0.6.5                    # [cudatoolkit == '10.2']
-  - 0.6.9                    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
+  - 0.6.5                # [cudatoolkit == '10.2']
+  - 0.6.9                # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
 unzip:
   - 6.0
 wasabi:
