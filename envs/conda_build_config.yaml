@@ -78,7 +78,7 @@ graphsurgeon:
   - 0.4.1                     # [cudatoolkit == '10.2']
   - 0.4.5                     # [cudatoolkit == '11.0']
 grpcio:
-  - 1.31.*
+  - 1.35.*
 harfbuzz:
   - 1.8
 # Note: hdf5 version must be compatible with h5py
