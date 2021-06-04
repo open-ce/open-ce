@@ -3,7 +3,7 @@ builder_version: ">=4.0.0"
 imported_envs:
   - bazel-env.yaml
 {% if build_type == 'cuda' %}
-  - tensorrt-env.yaml
+  - tensorrt-env.yaml       #[x86_64]
 {% endif %}
 
 conda_build_configs:
@@ -16,4 +16,8 @@ packages:
 {% endif %}
   - feedstock: libevent
   - feedstock: tensorflow-serving
-  - feedstock: protobuf   #[ppc64le and python == '3.8']
+
+{% set py_ver = python | float %}
+{% if py_ver >= 3.8 %}
+  - feedstock: protobuf   #[ppc64le]
+{% endif %}

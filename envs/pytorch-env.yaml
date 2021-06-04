@@ -1,6 +1,6 @@
 {% if build_type == 'cuda' %}
 imported_envs:
-  - tensorrt-env.yaml
+  - tensorrt-env.yaml        #[x86_64]
 {% endif %}
 
 packages:
