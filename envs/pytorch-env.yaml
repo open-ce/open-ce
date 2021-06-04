@@ -10,6 +10,7 @@ packages:
   - feedstock : nccl
   - feedstock : magma
   - feedstock : cudnn
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
 {% endif %}
   - feedstock : sentencepiece
   - feedstock : torchtext
