@@ -34,9 +34,6 @@ jobs:
       - name: Validate config files
         shell: bash -l {0}
         run: |
-          # Use yamllint to check the actual yaml files.
-          yamllint .github/actions/*/*.yml .github/workflows/*.yml
-          yamllint ./envs/conda_build_config.yaml
           pip install git+https://github.com/bethune-bryant/open-ce-builder.git@use_recipe_channels_remote
           # Use the conda_build api to lint the env files since they use jinja.
           open-ce validate env envs/*-env.yaml
