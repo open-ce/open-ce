@@ -117,7 +117,7 @@ libgcc:
   - 8.2.*                      # [ppc64le]
 libstdcxx:
   - 9.1.*                      # [x86_64]
-  - 8.2.*                      # [ppx64le]
+  - 8.2.*                      # [ppc64le]
 libgfortran:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
