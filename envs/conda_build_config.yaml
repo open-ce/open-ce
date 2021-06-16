@@ -200,7 +200,7 @@ rust_nightly:
 scikit_image:
   - 0.17
 scipy:
-  - 1.4.*
+  - 1.*
 sentencepiece:
   - 0.1.91
 setuptools:
