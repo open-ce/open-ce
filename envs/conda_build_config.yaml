@@ -200,7 +200,7 @@ regex:
 rust_nightly:
   - 1.50.0
 scipy:
-  - 1.4.*
+  - 1.*
 sentencepiece:
   - 0.1.91
 setuptools:
