@@ -227,7 +227,7 @@ termcolor:
 thinc:
   - 7.4.1
 tokenizers:
-  - 0.10.1 
+  - 0.10.1
 torchtext:
   - 0.8.*
 torchvision:
