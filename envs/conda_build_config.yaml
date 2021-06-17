@@ -144,7 +144,7 @@ murmurhash:
 nasm:                          # [x86_64]
   - 2.13.03                    # [x86_64]
 networkx:
-  - 2.3.*
+  - 2.*
 ninja:
   - 1.9.*
 nccl:
@@ -194,13 +194,13 @@ pytorch_lightning:
 pyyaml:
   - 5.*
 requests:
-  - 2.22
+  - 2.*
 regex:
   - 2020.6.*
 rust_nightly:
   - 1.53.0
 scipy:
-  - 1.4.*
+  - 1.*
 sentencepiece:
   - 0.1.91
 setuptools:
@@ -246,7 +246,7 @@ unzip:
 wasabi:
   - 0.6.0
 werkzeug:
-  - 0.16.0
+  - 1.*
 wheel:
   - 0.35*
 wrapt:
