@@ -200,7 +200,7 @@ pyyaml:
 requests:
   - 2.*
 regex:
-  - 2020.6.*
+  - 2020.11.*
 rust_nightly:
   - 1.50.0
 scipy:
