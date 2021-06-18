@@ -148,7 +148,7 @@ nasm:                          # [x86_64]
 networkx:
   - 2.*
 ninja:
-  - 1.9.*
+  - 1.10.*
 nccl:
   - 2.7.*
 numactl:
