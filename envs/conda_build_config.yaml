@@ -215,6 +215,8 @@ tabulate:
   - 0.8.*
 tensorboard:
   - 2.5.*
+tensorboard_data_server:
+  - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
