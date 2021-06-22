@@ -202,7 +202,7 @@ requests:
 regex:
   - 2020.11.*
 rust_nightly:
-  - 1.50.0
+  - 1.53.0
 scipy:
   - 1.*
 sentencepiece:
@@ -237,7 +237,7 @@ termcolor:
 thinc:
   - 8.0.3
 tokenizers:
-  - 0.9.3
+  - 0.10.1
 torchtext:
   - 0.8.*
 torchvision:
