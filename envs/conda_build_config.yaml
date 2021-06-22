@@ -114,6 +114,12 @@ leveldb:
   - 1.20.*
 libevent:
   - 2.1.*
+libgcc:
+  - 9.1.*                      # [x86_64]
+  - 8.2.*                      # [ppc64le]
+libstdcxx:
+  - 9.1.*                      # [x86_64]
+  - 8.2.*                      # [ppc64le]
 libgfortran:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
@@ -140,7 +146,7 @@ murmurhash:
 nasm:                          # [x86_64]
   - 2.13.03                    # [x86_64]
 networkx:
-  - 2.3.*
+  - 2.*
 ninja:
   - 1.9.*
 nccl:
@@ -194,13 +200,13 @@ pytorch_lightning:
 pyyaml:
   - 5.*
 requests:
-  - 2.22
+  - 2.*
 regex:
   - 2020.6.*
 rust_nightly:
   - 1.53.0
 scipy:
-  - 1.4.*
+  - 1.*
 sentencepiece:
   - 0.1.91
 setuptools:
@@ -254,7 +260,7 @@ unzip:
 wasabi:
   - 0.8.1
 werkzeug:
-  - 0.16.0
+  - 1.*
 wheel:
   - 0.35*
 wrapt:
