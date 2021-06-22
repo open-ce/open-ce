@@ -34,8 +34,8 @@ cmake:
 coverage:
   - 4.*
 cudnn:
-  - 8.1.1.*                    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
-  - 8.0.5.*                    # [cudatoolkit == '10.2'] 
+  - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
+  - 8.0.5.*    # [cudatoolkit == '10.2'] 
 cxx_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
@@ -219,8 +219,8 @@ tensorflow:
 tensorflow_hub:
   - 0.10
 tensorrt:
-  - 7.2.3.*                    # [x86_64 and ((cudatoolkit == '11.0') or (cudatoolkit == '11.2'))] 
-  - 7.2.2.*                    # [x86_64 and (cudatoolkit == '10.2')]
+  - 7.2.3.*    # [x86_64 and ((cudatoolkit == '11.0') or (cudatoolkit == '11.2'))] 
+  - 7.2.2.*    # [x86_64 and (cudatoolkit == '10.2')]
 termcolor:
   - 1.1.0
 thinc:
