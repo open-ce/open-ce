@@ -181,7 +181,7 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.14.0
+  - 3.11.2
 psutil:
   - 5
 pydantic:
