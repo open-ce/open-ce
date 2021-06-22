@@ -171,11 +171,9 @@ opt_einsum:
 pillow:
   - 8.*
 pip:
-  - 19*
+  - 20*
 pkg_config:
   - 0.29.2
-plac:
-  - 0.9.6
 preshed:
   - 3.0.*
 protobuf:
@@ -196,15 +194,15 @@ pyyaml:
 requests:
   - 2.*
 regex:
-  - 2020.6.*
+  - 2020.11.*
 rust_nightly:
-  - 1.50.0
+  - 1.53.0
 scipy:
   - 1.*
 sentencepiece:
   - 0.1.91
 setuptools:
-  - 41.*
+  - 50.3.*
 setuptools_rust:
   - 0.11.3
 six:
@@ -229,7 +227,7 @@ termcolor:
 thinc:
   - 7.4.1
 tokenizers:
-  - 0.9.3
+  - 0.10.1
 torchtext:
   - 0.8.*
 torchvision:
