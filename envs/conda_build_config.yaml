@@ -22,7 +22,7 @@ c_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
 catalogue:
-  - 2.* 
+  - 2.*
 cffi:
   - 1.14.*
 click:
@@ -218,7 +218,7 @@ smart_open:
 spacy_legacy:
   - 3.0.5
 srsly:
-  - 2.* 
+  - 2.*
 tabulate:
   - 0.8.*
 tensorboard:
