@@ -4,7 +4,9 @@ packages:
   - feedstock: libc_wrappers     #[x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
 {% if py_ver < 3.8 %}
   - feedstock : cudnn
-  - feedstock : tensorrt
+    # Disable TensorRT temporarily.
+    # Uncomment this when TRT gets updated to newer versions.
+    #  - feedstock : tensorrt
   - feedstock : onnx
 {% endif %}
 {% endif %}
