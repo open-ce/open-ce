@@ -13,6 +13,7 @@ packages:
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
   - feedstock : tensorflow-estimator
+  - feedstock : tensorboard-data-server
   - feedstock : tensorboard
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
