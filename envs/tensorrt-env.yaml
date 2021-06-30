@@ -1,7 +1,7 @@
 packages:
 {% set py_ver = python | float %}
 {% if build_type == 'cuda' %}
-  - feedstock: libc_wrappers     #[x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+  - feedstock: libc_wrappers     #[x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2' or (py_ver < 3.8 and cudatoolkit == "10.2" ))]
 {% if py_ver < 3.8 %}
   - feedstock : cudnn
     # Disable TensorRT temporarily.
