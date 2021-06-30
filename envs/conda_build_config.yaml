@@ -148,7 +148,7 @@ networkx:
 ninja:
   - 1.9.*
 nccl:
-  - 2.7.*
+  - 2.8.*
 numactl:
   - 2.0.*
 numpy:
