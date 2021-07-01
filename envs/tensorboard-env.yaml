@@ -2,4 +2,5 @@ imported_envs:
   - bazel-env.yaml
 
 packages:
+  - feedstock : tensorboard-data-server
   - feedstock : tensorboard
