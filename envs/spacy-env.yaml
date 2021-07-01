@@ -1,4 +1,4 @@
 packages:
-  - feedstock : srsly
   - feedstock : thinc
+  - feedstock : spacy-legacy
   - feedstock : spacy
