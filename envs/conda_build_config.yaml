@@ -1,6 +1,5 @@
 abseil_cpp:
-  - 20200225 # [not s390x]
-  - 20200923 # [s390x]
+  - 20200923
 absl_py:
   - 0.12.*
 arrow:
@@ -89,7 +88,7 @@ graphsurgeon:
   - 0.4.5                     # [cudatoolkit == '11.0']
 grpc_cpp:
   - 1.29.*  # [not s390x]
-  - 1.37.*  # [s390x]
+  - 1.36.*  # [s390x]
 grpcio:
   - 1.35.*
 harfbuzz:
@@ -188,8 +187,7 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.11.2 # [not s390x]
-  - 3.14.* # [s390x]
+  - 3.14.*
 psutil:
   - 5
 pydantic:

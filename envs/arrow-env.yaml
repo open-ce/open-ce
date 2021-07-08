@@ -13,7 +13,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/abseil-cpp-feedstock
     git_tag: 54375be823fd7e84d8a4bfc8cc1f2718624d0d6e
   - feedstock : https://github.com/AnacondaRecipes/grpc-cpp-feedstock
-    git_tag: e0e787b0ffbddd7e1faeba6157a8d90f2499d567
+    git_tag: ecfe5f093c394f877f4b4975097a2ab8af8f9acf
     patches:
       - ../feedstock-patches/grpc_cpp/s390x-fix1.patch
   - feedstock : https://github.com/AnacondaRecipes/gflags-feedstock
@@ -22,8 +22,6 @@ packages:
     git_tag: 4169d3a5f6238537cfcd96fb7b278e1f322fbae7
     patches:
       - ../feedstock-patches/glog/s390x-fix1.patch
-  - feedstock : https://github.com/conda-forge/double-conversion-feedstock
-    git_tag: 4b8aebe28cdb4d7215bccbf4c0e76f21fc0123f0
   - feedstock : https://github.com/AnacondaRecipes/boost-cpp-feedstock
     git_tag: 95c6649b96a11fb439d04fe36cc645720d156afb
     patches:
