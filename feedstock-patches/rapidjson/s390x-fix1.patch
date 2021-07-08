@@ -1,0 +1,13 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index fae1c74..fe98f1b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -19,6 +19,8 @@ requirements:
+     - cmake
+     - {{ compiler('cxx') }}
+     - make  # [unix]
++    - libgcc-ng  {{ libgcc }}
++    - libstdcxx-ng {{ libstdcxx }}
+ 
+ test:
+   commands:
