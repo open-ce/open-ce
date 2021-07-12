@@ -187,7 +187,8 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.14.*
+  - 3.11.2 # [not s390x]
+  - 3.14.* # [s390x]
 psutil:
   - 5
 pydantic:
