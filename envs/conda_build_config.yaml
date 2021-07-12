@@ -1,5 +1,5 @@
 abseil_cpp:
-  - 20200225
+  - 20200923
 absl_py:
   - 0.12.*
 arrow:
@@ -84,7 +84,7 @@ graphsurgeon:
   - 0.4.1                     # [cudatoolkit == '10.2']
   - 0.4.5                     # [cudatoolkit == '11.0']
 grpc_cpp:
-  - 1.29.*
+  - 1.36.*
 grpcio:
   - 1.35.*
 harfbuzz:
@@ -181,7 +181,7 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.11.2
+  - 3.14.*
 psutil:
   - 5
 pydantic:
