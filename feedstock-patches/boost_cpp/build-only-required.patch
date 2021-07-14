@@ -1,0 +1,154 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 6f6b558..2ea54f2 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,14 +1,14 @@
+ {% set version = "1.65.1" %}
+ {% set win_vstr = "1_65_1" %}
+-{% set filename = "boost_%s.tar.bz2" % version.replace(".", "_") %}
++{% set filename = "boost_%s.tar.gz" % version.replace(".", "_") %}
+ 
+ package:
+   name: libboost_multiple_outputs
+   version: {{ version }}
+ 
+ source:
+-  url: https://dl.bintray.com/boostorg/release/{{ version }}/source/{{ filename }}
+-  sha256: 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81
++  url: https://boostorg.jfrog.io/artifactory/main/release/{{ version }}/source/{{ filename }}
++  sha256: a13de2c8fbad635e6ba9c8f8714a0e6b4264b60a29b964b940a22554705b6b60
+   patches:
+     # https://svn.boost.org/trac10/attachment/ticket/11120/python_jam.patch
+     - python_jam.patch
+@@ -108,57 +108,57 @@ outputs:
+         - conda inspect linkages -p $PREFIX libboost  # [not win]
+         - conda inspect objects -p $PREFIX libboost   # [osx]
+ 
+-  - name: py-boost
+-    script: install-py-boost.sh   # [unix]
+-    script: install-py-boost.bat  # [win]
+-    requirements:
+-      build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
+-      host:
+-        - {{ pin_subpackage('libboost', exact=True) }}
+-        - python
+-        - numpy
+-      run:
+-        - {{ pin_subpackage('libboost', exact=True) }}
+-        - python
+-        - {{ pin_compatible('numpy') }}
+-    test:
+-      source_files: libs/python/example/*
+-      requires:
+-        - {{ compiler('c') }}    # [not win]
+-        - {{ compiler('cxx') }}  # [not win]
+-      commands:
+-        - pushd libs/python/example/tutorial                                                                # [not win]
+-        -   bjam --debug --debug-configuration                                                              # [not win]
+-        -   python -c 'from __future__ import print_function; import hello_ext; print(hello_ext.greet())'   # [not win]
+-        - popd                                                                                              # [not win]
+-
+-        # verify Python headers
+-        - test -f $PREFIX/include/boost/python.hpp                # [unix]
+-        - test -d $PREFIX/include/boost/python                    # [unix]
+-        - if not exist %LIBRARY_INC%\\boost\\python.hpp exit 1    # [win]
+-        - if not exist %LIBRARY_INC%\\boost\\python exit 1        # [win]
+-
+-        # Verify libraries.
+-        {% set py_boost_libs = [
+-                "python",
+-                "numpy"
+-        ] %}
+-        {% for each_py_boost_lib in py_boost_libs %}
+-        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}.a                                                  # [unix and py27]
+-        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}3.a                                                 # [unix and py >= 35]
+-        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}.dylib                                              # [osx]
+-        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}3.dylib                                             # [osx and py >=35]
+-        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}.so                                                 # [linux]
+-        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}3.so                                                # [linux and py >= 35]
+-        - if not exist %PREFIX%\\Library\\bin\\boost_{{ each_py_boost_lib }}-vc90-mt-{{ win_vstr }}.dll exit 1    # [win and py27]
+-        - if not exist %PREFIX%\\Library\\bin\\boost_{{ each_py_boost_lib }}3-vc140-mt-{{ win_vstr }}.dll exit 1  # [win and py >= 35]
+-        - if not exist %PREFIX%\\Library\\lib\\boost_{{ each_py_boost_lib }}-vc90-mt-{{ win_vstr }}.lib exit 1    # [win and py27]
+-        - if not exist %PREFIX%\\Library\\lib\\boost_{{ each_py_boost_lib }}3-vc140-mt-{{ win_vstr }}.lib exit 1  # [win and py >= 35]
+-        {% endfor %}
+-        - conda inspect linkages -p $PREFIX py-boost  # [not win]
+-        - conda inspect objects -p $PREFIX py-boost   # [osx]
++#  - name: py-boost
++#    script: install-py-boost.sh   # [unix]
++#    script: install-py-boost.bat  # [win]
++#    requirements:
++#      build:
++#        - {{ compiler('c') }}
++#        - {{ compiler('cxx') }}
++#      host:
++#        - {{ pin_subpackage('libboost', exact=True) }}
++#        - python
++#        - numpy
++#      run:
++#        - {{ pin_subpackage('libboost', exact=True) }}
++#        - python
++#        - {{ pin_compatible('numpy') }}
++#    test:
++#      source_files: libs/python/example/*
++#      requires:
++#        - {{ compiler('c') }}    # [not win]
++#        - {{ compiler('cxx') }}  # [not win]
++#      commands:
++#        - pushd libs/python/example/tutorial                                                                # [not win]
++#        -   bjam --debug --debug-configuration                                                              # [not win]
++#        -   python -c 'from __future__ import print_function; import hello_ext; print(hello_ext.greet())'   # [not win]
++#        - popd                                                                                              # [not win]
++#
++#        # verify Python headers
++#        - test -f $PREFIX/include/boost/python.hpp                # [unix]
++#        - test -d $PREFIX/include/boost/python                    # [unix]
++#        - if not exist %LIBRARY_INC%\\boost\\python.hpp exit 1    # [win]
++#        - if not exist %LIBRARY_INC%\\boost\\python exit 1        # [win]
++#
++#        # Verify libraries.
++#        {% set py_boost_libs = [
++#                "python",
++#                "numpy"
++#        ] %}
++#        {% for each_py_boost_lib in py_boost_libs %}
++#        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}.a                                                  # [unix and py27]
++#        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}3.a                                                 # [unix and py >= 35]
++#        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}.dylib                                              # [osx]
++#        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}3.dylib                                             # [osx and py >=35]
++#        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}.so                                                 # [linux]
++#        - test -f $PREFIX/lib/libboost_{{ each_py_boost_lib }}3.so                                                # [linux and py >= 35]
++#        - if not exist %PREFIX%\\Library\\bin\\boost_{{ each_py_boost_lib }}-vc90-mt-{{ win_vstr }}.dll exit 1    # [win and py27]
++#        - if not exist %PREFIX%\\Library\\bin\\boost_{{ each_py_boost_lib }}3-vc140-mt-{{ win_vstr }}.dll exit 1  # [win and py >= 35]
++#        - if not exist %PREFIX%\\Library\\lib\\boost_{{ each_py_boost_lib }}-vc90-mt-{{ win_vstr }}.lib exit 1    # [win and py27]
++#        - if not exist %PREFIX%\\Library\\lib\\boost_{{ each_py_boost_lib }}3-vc140-mt-{{ win_vstr }}.lib exit 1  # [win and py >= 35]
++#        {% endfor %}
++#        - conda inspect linkages -p $PREFIX py-boost  # [not win]
++#        - conda inspect objects -p $PREFIX py-boost   # [osx]
+ 
+ 
+   # Metapackages to mirror conda-forge's name. It is my goal to deprecate
+@@ -171,14 +171,14 @@ outputs:
+       run:
+         - {{ pin_subpackage('libboost', exact=True) }}
+ 
+-  - name: boost
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - {{ pin_subpackage('libboost', exact=True) }}
+-        - {{ pin_subpackage('py-boost', exact=True) }}
+-        - python
++#  - name: boost
++#    requirements:
++#      host:
++#        - python
++#      run:
++#        - {{ pin_subpackage('libboost', exact=True) }}
++#        - {{ pin_subpackage('py-boost', exact=True) }}
++#        - python
+ 
+ about:
+   home: http://www.boost.org/
