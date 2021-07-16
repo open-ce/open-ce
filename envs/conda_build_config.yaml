@@ -255,5 +255,3 @@ zlib:
   - 1.2.11
 zstd:
   - 1.4.*
-
-git_tag_for_env: open-ce-v1.2.2
