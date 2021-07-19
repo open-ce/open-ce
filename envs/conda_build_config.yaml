@@ -110,7 +110,7 @@ joblib:
 jpeg:
   - 9b
 jpegturbo:
-  - 2.0.5
+  - 2.1.0
 keras_applications:
   - 1.0.8
 keras_preprocessing:
@@ -139,7 +139,7 @@ libtiff:
 libtool:
   - 2.4.6
 lmdb:
-  - 0.9.22.*
+  - 0.9.29.*
 magma:
   - 2.5.4.*
 make:
@@ -163,13 +163,13 @@ numactl:
 numpy:
   - 1.19.*
 onnx:
-  - 1.6.*
+  - 1.7.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
   - 0.3.6.*
 opencv:
-  - 3.4.10.*
+  - 3.4.14.*
 openjdk:
   - 8.0.152                    # [x86_64]
   - 1.8.0                      # [ppc64le]
