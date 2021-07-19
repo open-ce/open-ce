@@ -1,3 +1,6 @@
 packages:
+{% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+{% endif %}
   - feedstock : LightGBM
   - feedstock : openmpi          #[mpi_type == 'openmpi']

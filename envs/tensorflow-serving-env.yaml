@@ -11,6 +11,7 @@ conda_build_configs:
 
 packages:
 {% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
   - feedstock: nccl
   - feedstock: cudnn
 {% endif %}

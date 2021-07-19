@@ -35,4 +35,7 @@ packages:
 {% else %}
   - feedstock : grpc-cpp
 {% endif %}
+{% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+{% endif %}
   - feedstock : pyarrow
