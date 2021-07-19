@@ -1,5 +1,6 @@
 abseil_cpp:
-  - 20200225
+  - 20200225     # [not s390x]
+  - 20200923     # [s390x]
 absl_py:
   - 0.12.*
 arrow:
@@ -15,12 +16,14 @@ automake:
 av:
   - 8.*
 bazel:
-  - 3.*
+  - 3.7.*
 boost:
-  - 1.67.0
+  - 1.67.0  # [not s390x]
+  - 1.65.*  # [s390x]
 c_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
+  - 7.5.*                      # [s390x]
 catalogue:
   - 2.*
 cffi:
@@ -30,7 +33,8 @@ click:
 cloudpickle:
   - 1.3.*
 cmake:
-  - 3.14.*
+  - 3.14.* # [not s390x]
+  - 3.18.* # [s390x]
 contextvars:
   - 2.4
 coverage:
@@ -69,7 +73,7 @@ fsspec:
 future:
   - 0.18.*
 gast:
-  - 0.3.3
+  - 0.4.0
 git:
   - 2.15
 google_auth:
@@ -83,7 +87,8 @@ googleapis_common_protos:
 graphsurgeon:
   - 0.4.5                     # [x86_64]
 grpc_cpp:
-  - 1.29.*
+  - 1.29.*  # [not s390x]
+  - 1.36.*  # [s390x]
 grpcio:
   - 1.35.*
 harfbuzz:
@@ -116,9 +121,11 @@ libevent:
 libgcc:
   - 9.1.*                      # [x86_64]
   - 8.2.*                      # [ppc64le]
+  - 8.4.*                      # [s390x]
 libstdcxx:
   - 9.1.*                      # [x86_64]
   - 8.2.*                      # [ppc64le]
+  - 8.4.*                      # [s390x]
 libgfortran:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
@@ -168,7 +175,7 @@ openjdk:
 openmpi:
   - 3.1.3
 opt_einsum:
-  - 3.1.0
+  - 3.3.0
 pathy:
   - 0.5.*
 pillow:
@@ -180,7 +187,8 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.11.2
+  - 3.11.2 # [not s390x]
+  - 3.14.* # [s390x]
 psutil:
   - 5
 pydantic:
@@ -188,12 +196,12 @@ pydantic:
 pytest:
   - 5.*
 python:
-  - 3.6
+  - 3.6 # [not s390x]
   - 3.7
 pytorch:
-  - 1.7.*
+  - 1.8.*
 pytorch_lightning:
-  - 1.1.*
+  - 1.2.*
 pyyaml:
   - 5.*
 requests:
@@ -207,7 +215,8 @@ scipy:
 sentencepiece:
   - 0.1.91
 setuptools:
-  - 50.3.*
+  - 50.3.* # [not s390x]
+  - 51.*   # [s390x]
 setuptools_rust:
   - 0.11.3
 six:
@@ -221,13 +230,15 @@ srsly:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.4.*
+  - 2.5.*
+tensorboard_data_server:
+  - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.4.*
+  - 2.5.*
 tensorflow_hub:
-  - 0.10
+  - 0.12
 tensorrt:
   - 7.2.3.*  # [x86_64 and ((cudatoolkit == '11.0') or (cudatoolkit == '11.2'))]
   - 7.2.2.*  # [x86_64 and (cudatoolkit == '10.2')]
@@ -237,10 +248,12 @@ thinc:
   - 8.0.3
 tokenizers:
   - 0.10.1
+torchmetrics:
+  - 0.3.*
 torchtext:
-  - 0.8.*
+  - 0.9.*
 torchvision:
-  - 0.8.*
+  - 0.9.*
 tqdm:
   - 4.*
 typer:
