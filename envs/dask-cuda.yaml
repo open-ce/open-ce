@@ -1,0 +1,8 @@
+packages:
+{% set py_ver = python | float %}
+{% if build_type == 'cuda' %}
+{% if py_ver > 3.6 %}
+  - feedstock : pynvml
+  - feedstock : dask-cuda
+{% endif %}
+{% endif %}
