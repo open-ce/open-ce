@@ -141,7 +141,7 @@ libtool:
 libvorbis:
   - 1.3.7
 lmdb:
-  - 0.9.29.*
+  - 0.9..*
 magma:
   - 2.5.4.*
 make:
