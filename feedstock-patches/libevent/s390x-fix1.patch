@@ -1,0 +1,13 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 5435534..eb4aa60 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -39,7 +39,7 @@ requirements:
+ test:
+   requires:
+     - python 2.7  # [win and vc<14]
+-    - python 3.6  # [not (win and vc<14)]
++    - python {{ python }}  # [not (win and vc<14)]
+ 
+   source_files:
+     - event_rpcgen.py

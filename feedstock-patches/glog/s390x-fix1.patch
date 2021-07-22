@@ -1,0 +1,13 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8c3a938..29e19de 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,7 +16,7 @@ source:
+     - 0003-Remove-non-existent-USAGE-level-from-tests.patch
+     - 0004-Ignore-unmangled-cxx11-symbols.patch
+     # https://github.com/google/glog/pull/447
+-    - 447.patch
++    #- 447.patch
+ 
+ build:
+   number: 0
