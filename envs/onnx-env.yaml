@@ -1,0 +1,10 @@
+packages:
+  - feedstock : safeint
+  - feedstock : gtest
+  - feedstock : libdate
+  - feedstock : onnx
+  - feedstock : optional-lite
+  - feedstock : boost_mp11
+  - feedstock : nlohmann_json
+  - feedstock : onnxruntime
+
