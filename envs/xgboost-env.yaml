@@ -1,3 +1,8 @@
+imported_envs:
+{% if build_type == 'cuda' %}
+  - dask-cuda-env.yaml
+{% endif %}
+
 packages:
   - feedstock : nccl              #[build_type == 'cuda']
   - feedstock : xgboost
