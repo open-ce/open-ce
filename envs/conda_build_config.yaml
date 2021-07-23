@@ -169,7 +169,7 @@ numactl:
 numpy:
   - 1.19.*
 onnx:
-  - 1.6.*
+  - 1.7.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
