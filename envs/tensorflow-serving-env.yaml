@@ -2,9 +2,6 @@ builder_version: ">=4.0.0"
 
 imported_envs:
   - bazel-env.yaml
-{% if build_type == 'cuda' %}
-  - tensorrt-env.yaml       #[x86_64]
-{% endif %}
 
 conda_build_configs:
   - tensorflow_serving_conda_build_config.yaml

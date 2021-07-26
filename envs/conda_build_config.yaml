@@ -240,8 +240,6 @@ tensorflow:
   - 2.5.*
 tensorflow_hub:
   - 0.12
-tensorrt:
-  - 7.2.3.*  # [x86_64 and ((cudatoolkit == '11.0') or (cudatoolkit == '11.2'))]
 termcolor:
   - 1.1.0
 thinc:

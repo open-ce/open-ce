@@ -1,8 +1,5 @@
 imported_envs:
   - bazel-env.yaml
-{% if build_type == 'cuda' %}
-  - tensorrt-env.yaml         #[x86_64]
-{% endif %}
 
 packages:
 {% if build_type == 'cuda' %}
