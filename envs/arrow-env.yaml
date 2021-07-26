@@ -12,16 +12,10 @@ packages:
     git_tag: 428e7197734e4b3ca835474e31ada8c8c129adee
   - feedstock : https://github.com/AnacondaRecipes/abseil-cpp-feedstock
     git_tag: 54375be823fd7e84d8a4bfc8cc1f2718624d0d6e
-  - feedstock : https://github.com/AnacondaRecipes/grpc-cpp-feedstock
-    git_tag: ecfe5f093c394f877f4b4975097a2ab8af8f9acf
-    patches:
-      - ../feedstock-patches/grpc_cpp/s390x-fix1.patch
   - feedstock : https://github.com/AnacondaRecipes/gflags-feedstock
     git_tag: 8bfee448e77492920c23780385dddc5982947e58
   - feedstock : https://github.com/AnacondaRecipes/glog-feedstock
-    git_tag: 4169d3a5f6238537cfcd96fb7b278e1f322fbae7
-    patches:
-      - ../feedstock-patches/glog/s390x-fix1.patch
+    git_tag: b6c2a87be675b6bf46a8b158372610926a74857b
   - feedstock : https://github.com/AnacondaRecipes/boost-cpp-feedstock
     git_tag: 95c6649b96a11fb439d04fe36cc645720d156afb
     patches:
@@ -32,10 +26,9 @@ packages:
       - ../feedstock-patches/libevent/s390x-fix1.patch
   - feedstock : https://github.com/AnacondaRecipes/thrift-cpp-feedstock
     git_tag: 09e3838f8caaa3ab9728b111620422dd524459e1
-{% else %}
-  - feedstock : grpc-cpp
 {% endif %}
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
 {% endif %}
+  - feedstock : grpc-cpp
   - feedstock : pyarrow
