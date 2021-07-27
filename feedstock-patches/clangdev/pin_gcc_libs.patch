@@ -1,0 +1,158 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 946e808..cfdf803 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,6 +29,9 @@ build:
+ requirements:
+   build:
+     - {{ compiler('cxx') }}
++    # Use pins to control cos6/cos7 match
++    - libgcc-ng  {{ libgcc }}
++    - libstdcxx-ng  {{ libstdcxx }}
+     - cmake >=3.4.3
+     # Needed to unpack the source tarball
+     - m2w64-xz  # [win]
+@@ -40,6 +43,9 @@ requirements:
+   host:
+     - libcxx {{ cxx_compiler_version }}  # [osx]
+     - llvmdev =={{ version }}
++    # Use pins to control cos6/cos7 match
++    - libgcc-ng  {{ libgcc }}
++    - libstdcxx-ng  {{ libstdcxx }}
+ 
+ test:
+   requires:
+@@ -71,10 +77,16 @@ outputs:
+     requirements:
+       build:
+         - {{ compiler('cxx') }}
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+       host:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - {{ pin_subpackage("clang", exact=True) }}
+         - {{ pin_subpackage("clangxx", exact=True) }}
+         - {{ pin_subpackage("clang-tools", exact=True) }}
+@@ -109,10 +121,16 @@ outputs:
+     requirements:
+       build:
+         - {{ compiler('cxx') }}
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+       host:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+@@ -138,10 +156,16 @@ outputs:
+     requirements:
+       build:
+         - {{ compiler('cxx') }}
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+       host:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+@@ -165,10 +189,16 @@ outputs:
+     requirements:
+       build:
+         - {{ compiler('cxx') }}
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+       host:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+@@ -192,11 +222,17 @@ outputs:
+     requirements:
+       build:
+         - {{ compiler('cxx') }}
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - libcxx                   # [osx]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+       host:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+@@ -230,7 +266,14 @@ outputs:
+         - hcc          # [variant=="hcc"]
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
++      build:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+       host:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - {{ pin_subpackage("clang", exact=True) }}
+       run:
+         - {{ pin_subpackage("clang", exact=True) }}
+@@ -255,10 +298,16 @@ outputs:
+         # "compiling .pyc files" fails without this
+         - python >3
+         - {{ compiler('cxx') }}
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+       host:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+         - {{ pin_subpackage("clang", exact=True) }}
+         - {{ pin_subpackage("clangxx", exact=True) }}
+         - {{ pin_subpackage("libclang", exact=True) }}
+@@ -287,8 +336,15 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     script: build_python_bindings.sh
+     requirements:
++      build:
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+       host:
+         - python
++        # Use pins to control cos6/cos7 match
++        - libgcc-ng  {{ libgcc }}
++        - libstdcxx-ng  {{ libstdcxx }}
+       run:
+         - python
+         - libclang =={{ version }}
