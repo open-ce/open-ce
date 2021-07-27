@@ -83,8 +83,6 @@ google_pasta:
   - 0.2
 googleapis_common_protos:
   - 1.52.*
-graphsurgeon:
-  - 0.4.5                     # [x86_64]
 grpc_cpp:
   - 1.36.*
 grpcio:
@@ -165,8 +163,6 @@ numpy:
   - 1.19.*
 onnx:
   - 1.7.*
-onnx_graphsurgeon:
-  - 0.2.*                      # [x86_64]
 openblas:
   - 0.3.6.*
 opencv:
@@ -258,8 +254,6 @@ typer:
   - 0.3.2
 typing_extensions:
   - 3.7.4.*
-uff:
-  - 0.6.9                      # [x86_64]
 unzip:
   - 6.0
 wasabi:
