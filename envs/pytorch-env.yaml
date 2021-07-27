@@ -2,6 +2,7 @@ packages:
   - feedstock : pytorch
   - feedstock : numactl
 {% if build_type == 'cuda' %}
+  - feedstock: libc_wrappers     #[x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
   - feedstock : nccl
   - feedstock : magma
   - feedstock : cudnn
