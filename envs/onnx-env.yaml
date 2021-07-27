@@ -1,0 +1,19 @@
+imported_envs:
+  - tensorflow-env.yaml
+
+packages:
+  - feedstock : safeint
+  - feedstock : gtest
+  - feedstock : libdate
+  - feedstock : onnx
+  - feedstock : optional-lite
+  - feedstock : boost_mp11
+  - feedstock : nlohmann_json
+  - feedstock : https://github.com/conda-forge/fire-feedstock
+    git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
+  - feedstock : onnxruntime
+  - feedstock : onnxconverter-common
+  - feedstock : keras2onnx
+  - feedstock : skl2onnx
+  - feedstock : onnxmltools
+  - feedstock : tf2onnx

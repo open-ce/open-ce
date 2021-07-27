@@ -19,6 +19,8 @@ bazel:
 boost:
   - 1.67.0  # [not s390x]
   - 1.65.*  # [s390x]
+boost_mp11:
+  - 1.76.*
 c_compiler_version:
   - 7.2.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
@@ -87,6 +89,8 @@ google_pasta:
   - 0.2
 googleapis_common_protos:
   - 1.52.*
+gmock:
+  - 1.10.0
 graphsurgeon:
   - 0.4.1                     # [cudatoolkit == '10.2']
   - 0.4.5                     # [cudatoolkit == '11.0']
@@ -119,6 +123,8 @@ keras_preprocessing:
   - 1.1.*
 leveldb:
   - 1.20.*
+libdate:
+  - 3.*
 libevent:
   - 2.1.*
 libgcc:
@@ -164,6 +170,8 @@ ninja:
   - 1.10.*
 nccl:
   - 2.8.*
+nlohmann_json:
+  - 3.*
 numactl:
   - 2.0.*
 numba:
@@ -172,6 +180,8 @@ numpy:
   - 1.19.*
 onnx:
   - 1.7.*
+onnxconverter_common:
+  - 1.8.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
@@ -182,7 +192,9 @@ openjdk:
   - 8.0.152                    # [x86_64]
   - 1.8.0                      # [ppc64le]
 openmpi:
-  - 3.1.3
+  - 4.1.1
+optional_lite:
+  - 3.4.*
 opt_einsum:
   - 3.3.0
 pathy:
@@ -220,6 +232,8 @@ regex:
   - 2020.11.*
 rust_nightly:
   - 1.53.0
+safeint:
+  - 3.0
 scipy:
   - 1.*
 sentencepiece:
