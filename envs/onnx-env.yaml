@@ -10,6 +10,7 @@ packages:
   - feedstock : boost_mp11
   - feedstock : nlohmann_json
   - feedstock : https://github.com/conda-forge/fire-feedstock
+    git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : keras2onnx
