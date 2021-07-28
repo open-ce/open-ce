@@ -1,13 +1,11 @@
 imported_envs:
   - bazel-env.yaml
-{% if build_type == 'cuda' %}
-  - tensorrt-env.yaml
-{% endif %}
 
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : cudnn
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
 {% endif %}
   - feedstock : tensorflow
   - feedstock : dm-tree

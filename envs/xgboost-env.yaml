@@ -4,5 +4,8 @@ imported_envs:
 {% endif %}
 
 packages:
-  - feedstock : nccl              #[build_type == 'cuda']
+{% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+  - feedstock : nccl
+{% endif %}
   - feedstock : xgboost
