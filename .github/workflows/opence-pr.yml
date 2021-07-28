@@ -1,0 +1,35 @@
+name: Open-CE PR Job
+
+on:
+  pull_request:
+    branches:
+      - 'main'        # matches the main branch
+      - 'open-ce-r*'  # matches every release branch
+
+jobs:
+  release_dry_run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          auto-update-conda: true
+          python-version: "3.7"
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          conda install -y conda-build
+      - name: Clone build tools
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/bethune-bryant/open-ce-builder.git \
+                    --branch issue_443 \
+                    ./open-ce-builder
+          pip install ./open-ce-builder
+      - name: Perform Release Dry-Run
+        shell: bash -l {0}
+        run: |
+          python open-ce-builder/git_tools/create_opence_release.py \
+                     --pat TEST_WITH_INVALID
