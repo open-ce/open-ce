@@ -209,6 +209,8 @@ pytest:
 python:
   - 3.6 # [not s390x]
   - 3.7
+python-clang:
+  - 10.0.*
 pytorch:
   - 1.8.*
 pytorch_lightning:
