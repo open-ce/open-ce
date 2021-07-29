@@ -33,4 +33,5 @@ jobs:
         run: |
           python open-ce-builder/git_tools/create_opence_release.py \
                      --pat TEST_WITH_INVALID \
+                     --branch "HEAD~" \
                      -- no_dry_run

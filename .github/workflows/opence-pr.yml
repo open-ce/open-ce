@@ -32,4 +32,5 @@ jobs:
         shell: bash -l {0}
         run: |
           python open-ce-builder/git_tools/create_opence_release.py \
-                     --pat TEST_WITH_INVALID
+                     --pat TEST_WITH_INVALID \
+                     --branch "${{ github.base_ref }}"
