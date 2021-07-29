@@ -29,6 +29,8 @@ catalogue:
   - 2.*
 cffi:
   - 1.14.*
+clang:
+  - 10.0.*
 click:
   - 7.*
 cloudpickle:
