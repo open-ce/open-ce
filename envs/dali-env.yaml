@@ -1,9 +1,12 @@
 imported_envs:
+{% if x86_64 %}
 {% if build_type == 'cuda' %}
   - tensorflow-env.yaml
 {% endif %}
+{% endif %}
 
 packages:
+{% if x86_64 %}
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
   - feedstock : opencv
@@ -15,4 +18,5 @@ packages:
   - feedstock : jpeg-turbo
   - feedstock : libflac
   - feedstock : libsndfile
+{% endif %}
 {% endif %}
