@@ -1,13 +1,10 @@
 imported_envs:
-{% if x86_64 %}
-{% if build_type == 'cuda' %}
+{% if x86_64 and build_type == 'cuda' %}
   - tensorflow-env.yaml
-{% endif %}
 {% endif %}
 
 packages:
-{% if x86_64 %}
-{% if build_type == 'cuda' %}
+{% if x86_64 and build_type == 'cuda' %}
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
   - feedstock : opencv
   - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
@@ -18,5 +15,4 @@ packages:
   - feedstock : jpeg-turbo
   - feedstock : libflac
   - feedstock : libsndfile
-{% endif %}
 {% endif %}
