@@ -29,6 +29,8 @@ catalogue:
   - 2.*
 cffi:
   - 1.14.*
+clang:
+  - 10.0.*
 click:
   - 7.*
 cloudpickle:
@@ -209,8 +211,6 @@ pytest:
 python:
   - 3.6 # [not s390x]
   - 3.7
-python-clang:
-  - 10.0.*
 pytorch:
   - 1.8.*
 pytorch_lightning:
