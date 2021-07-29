@@ -5,9 +5,8 @@ Subject: [PATCH] some open-ce changes
 
 ---
  recipe/build.sh  |  2 +-
- recipe/meta.yaml | 12 +++++++++---
- 2 files changed, 10 insertions(+), 4 deletions(-)
-
+ recipe/meta.yaml | 14 ++++++++++----
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 diff --git a/recipe/build.sh b/recipe/build.sh
 index cc88e64..aa719f1 100644
 --- a/recipe/build.sh
@@ -22,7 +21,7 @@ index cc88e64..aa719f1 100644
  
  UWSGI_EMBED_PLUGINS=stats_pusher_statsd ${PYTHON} -m pip install . --no-deps -vv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index cf36a13..3016dc1 100644
+index cf36a13..485d321 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -18,17 +18,23 @@ requirements:
@@ -35,7 +34,8 @@ index cf36a13..3016dc1 100644
    host:
      - icu
      - jansson
-     - libpython-static  # [py>=38]
+-    - libpython-static  # [py>=38]
++    - libpython-static  {{ python }} # [py>=39]
      - libxml2  # [not win]
      - openssl
 -    - pcre
