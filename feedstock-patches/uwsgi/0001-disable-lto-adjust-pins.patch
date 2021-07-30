@@ -1,0 +1,57 @@
+From 7beb2d378f45e83308a5765ff0bf5e73c6beb09f Mon Sep 17 00:00:00 2001
+From: Jason Furmanek <furmanek@us.ibm.com>
+Date: Wed, 28 Jul 2021 09:45:23 -0400
+Subject: [PATCH] some open-ce changes
+
+---
+ recipe/build.sh  |  2 +-
+ recipe/meta.yaml | 14 ++++++++++----
+ 2 files changed, 11 insertions(+), 5 deletions(-)
+diff --git a/recipe/build.sh b/recipe/build.sh
+index cc88e64..aa719f1 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -3,7 +3,7 @@ export UWSGI_INCLUDES="${PREFIX}/include,${PREFIX}/include/openssl"
+ export LDFLAGS="-L${PREFIX}/lib ${LDFLAGS}"
+ 
+ if [[ $(uname) == Linux ]]; then
+-  export LDFLAGS="${LDFLAGS} -Wl,--no-as-needed"
++  export LDFLAGS="${LDFLAGS} -fno-lto -Wl,--no-as-needed"
+ fi
+ 
+ UWSGI_EMBED_PLUGINS=stats_pusher_statsd ${PYTHON} -m pip install . --no-deps -vv
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index cf36a13..485d321 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -18,17 +18,23 @@ requirements:
+   build:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
++    # Use pins to control cos6/cos7 match
++    - libgcc-ng  {{ libgcc }}
++    - libstdcxx-ng  {{ libstdcxx }}
+   host:
+     - icu
+     - jansson
+-    - libpython-static  # [py>=38]
++    - libpython-static  {{ python }} # [py>=39]
+     - libxml2  # [not win]
+     - openssl
+-    - pcre
++    - pcre 8.44
+     - pip
+-    - python
++    - python {{ python }}
+     - yaml
+-    - zlib
++    - zlib {{zlib }}
++    # Use pins to control cos6/cos7 match
++    - libgcc-ng  {{ libgcc }}
++    - libstdcxx-ng  {{ libstdcxx }}
+   run:
+     - jansson
+     - python
+-- 
+2.23.0
+
