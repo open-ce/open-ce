@@ -27,7 +27,6 @@ be specified at build time. Open-CE currently supports the following:
 | Python | 3.7, 3.8, 3.9 |
 | CUDA | 10.2, 11.0, 11.2 |
 
-Oregon State University hosts pre-built versions of the Open-CE conda channels [here](https://osuosl.org/services/powerdev/opence/).
 
 The `open-ce` tool can also be used to build all or some of the packages provided by Open-CE. For more information on the `open-ce` tool,
 please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-builder).
