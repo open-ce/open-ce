@@ -23,9 +23,9 @@ be specified at build time. Open-CE currently supports the following:
 
 | | Supported Versions |
 | --- | --- |
-| Architecture | Power, x86 |
-| Python | 3.6, 3.7, 3.8 |
-| CUDA | 10.2, 11.0 |
+| Architecture | Power, x86, s390x (experimental) |
+| Python | 3.7, 3.8, 3.9 |
+| CUDA | 10.2, 11.0, 11.2 |
 
 Oregon State University hosts pre-built versions of the Open-CE conda channels [here](https://osuosl.org/services/powerdev/opence/).
 
