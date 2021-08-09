@@ -97,7 +97,8 @@ harfbuzz:
   - 1.8
 # Note: hdf5 version must be compatible with h5py
 hdf5:
-  - 1.10.4
+  - 1.10.4    # [ppc64le and py<39]
+  - 1.10.6    # [x86_64 or (ppc64le and py39)]
 hypothesis:
   - 5.*
 h5py:
