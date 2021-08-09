@@ -13,4 +13,7 @@ imported_envs:
   - arrow-env.yaml
   - uwsgi-env.yaml
 
+packages:
+  - feedstock : opencv
+
 git_tag_for_env: open-ce-v1.3.0
