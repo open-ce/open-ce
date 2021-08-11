@@ -10,7 +10,7 @@ packages:
   - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
     git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c
     patches:
-      - ../feedstock-patches/clangdev/pin_gcc_libs.patch
+      - feedstock-patches/clangdev/pin_gcc_libs.patch
   - feedstock : DALI  # [x86_64]
   - feedstock : jpeg-turbo
   - feedstock : libflac
