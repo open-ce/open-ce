@@ -9,4 +9,4 @@ imported_envs:
   - horovod-env.yaml
   - lightgbm-env.yaml
 
-git_tag_for_env: open-ce-v1.1.7
+git_tag_for_env: open-ce-v1.1.8
