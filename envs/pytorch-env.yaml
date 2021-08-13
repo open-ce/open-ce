@@ -17,4 +17,4 @@ packages:
   - feedstock : av
   - feedstock : torchvision
 
-git_tag_for_env: open-ce-v1.2.3
+git_tag_for_env: open-ce-v1.2.4

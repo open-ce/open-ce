@@ -11,4 +11,4 @@ imported_envs:
   - arrow-env.yaml
   - uwsgi-env.yaml
 
-git_tag_for_env: open-ce-v1.2.3
+git_tag_for_env: open-ce-v1.2.4
