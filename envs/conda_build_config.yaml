@@ -103,6 +103,8 @@ hypothesis:
   - 5.*
 h5py:
   - 2.10.0
+icu:
+  - 58.*
 importlib_resources:
   - 3.3.0
 jasper:
