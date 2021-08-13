@@ -21,4 +21,4 @@ packages:
   - feedstock: protobuf   #[ppc64le]
 {% endif %}
 
-git_tag_for_env: open-ce-v1.3.0
+git_tag_for_env: open-ce-v1.3.1
