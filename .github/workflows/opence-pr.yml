@@ -31,10 +31,10 @@ jobs:
       - name: Perform Release Dry-Run
         shell: bash -l {0}
         env:
-          API_TOKEN: ${{ secrets.API_TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
           git config --global user.name "Github Action"
           git config --global user.email "bryantstutoringservice@gmail.com"
           python open-ce-builder/git_tools/create_opence_release.py \
-                     --pat ${API_TOKEN} \
+                     --pat ${API_KEY} \
                      --branch "${{ github.base_ref }}"
