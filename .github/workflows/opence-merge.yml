@@ -30,6 +30,8 @@ jobs:
           pip install ./open-ce-builder
       - name: Perform Release Creation
         shell: bash -l {0}
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
         run: |
           git config --global user.name "Github Action"
           git config --global user.email "bryantstutoringservice@gmail.com"

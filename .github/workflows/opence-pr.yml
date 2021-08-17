@@ -30,9 +30,11 @@ jobs:
           pip install ./open-ce-builder
       - name: Perform Release Dry-Run
         shell: bash -l {0}
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
         run: |
           git config --global user.name "Github Action"
           git config --global user.email "bryantstutoringservice@gmail.com"
           python open-ce-builder/git_tools/create_opence_release.py \
-                     --pat TEST_WITH_INVALID \
+                     --pat ${API_TOKEN} \
                      --branch "${{ github.base_ref }}"
