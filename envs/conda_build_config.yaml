@@ -97,12 +97,11 @@ harfbuzz:
   - 1.8
 # Note: hdf5 version must be compatible with h5py
 hdf5:
-  - 1.10.4    # [ppc64le and py<39]
-  - 1.10.6    # [x86_64 or (ppc64le and py==39)]
+  - 1.10.6
 hypothesis:
   - 5.*
 h5py:
-  - 2.10.0
+  - 3.2.*
 icu:
   - 58.*
 importlib_resources:
@@ -119,6 +118,8 @@ keras_applications:
   - 1.0.8
 keras_preprocessing:
   - 1.1.*
+keras:
+  - 2.6.*
 leveldb:
   - 1.20.*
 libdate:
@@ -248,13 +249,13 @@ srsly:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.5.*
+  - 2.6.*
 tensorboard_data_server:
   - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.5.*
+  - 2.6.*
 tensorflow_hub:
   - 0.12
 termcolor:

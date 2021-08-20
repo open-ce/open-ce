@@ -7,6 +7,18 @@ packages:
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
 {% endif %}
+  - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
+    git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c
+    patches:
+      - feedstock-patches/clangdev/pin_gcc_libs.patch
+
+{% set py_ver = python | float %}
+{% if py_ver >= 3.9 %}
+  - feedstock : https://github.com/conda-forge/pydot-feedstock
+    git_tag : f45b9fa8d1055b806ed2ba330a302a2244c454ec
+{% endif %}
+
+  - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
