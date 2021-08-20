@@ -1,3 +1,6 @@
+imported_envs:
+  - openblas-env.yaml
+
 packages:
   - feedstock : pytorch
   - feedstock : numactl
