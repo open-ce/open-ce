@@ -296,7 +296,7 @@ cpu_opt_tune:
   - haswell                 #[x86_64]
   - power9                  #[ppc64le]
 vector_settings:
-  - avx, sse4_1, sse4_2     #[x86_64]
+  - avx, sse4.1, sse4.2     #[x86_64]
   - vsx                     #[ppc64le]
 cuda_levels:
   - 3.7;5.2;6.0;7.0;7.5     #[x86_64]
