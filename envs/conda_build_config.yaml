@@ -289,3 +289,22 @@ zlib:
   - 1.2.11
 zstd:
   - 1.4.*
+cpu_opt_arch:
+  - sandybridge             #[x86_64]
+  - power8                  #[ppc64le]
+cpu_opt_tune:
+  - haswell                 #[x86_64]
+  - power9                  #[ppc64le]
+vector_settings:
+  - avx, sse4_1, sse4_2     #[x86_64]
+  - vsx                     #[ppc64le]
+cuda_levels:
+  - 3.7;5.2;6.0;7.0;7.5     #[x86_64]
+  - 3.7;6.0;7.0;7.5         #[ppc64le]
+cuda_levels_details:
+  - sm_37,sm_52,sm_60,sm_61,sm_70,compute_75  #[x86_64]
+  - sm_37,sm_60,sm_70,compute_75              #[ppc64le]
+cuda11_levels:
+  - 8.0
+cuda11_levels_details:
+  - compute_80
