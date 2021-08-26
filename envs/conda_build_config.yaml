@@ -289,6 +289,15 @@ zlib:
   - 1.2.11
 zstd:
   - 1.4.*
+
+##
+## ARCHITECTURE SPECIFIC OPTIMIZATION SETTINGS
+##
+## CPU and vector instruction enablement
+## =====================================
+## These are settings and arguments to pass to GCC for
+## optimization settings specific to the target CPU architecture
+##
 cpu_opt_arch:
   - sandybridge             #[x86_64]
   - power8                  #[ppc64le]
@@ -298,6 +307,28 @@ cpu_opt_tune:
 vector_settings:
   - avx, sse4.1, sse4.2     #[x86_64]
   - vsx                     #[ppc64le]
+
+## GPU/CUDA Specifics
+## =====================================
+##
+## CUDA Capability Level
+## More information on Capability Levels found at: 
+##  https://developer.nvidia.com/cuda-gpus
+##
+## In TensorFlow 2.3 and later, we can now designate which 
+## architectures to include PTX code for:
+##     - compute_<cuda_arch> : include PTX
+##     - sm_<cuda_arch> : do not include PTX
+## These are passed in to the build via the
+## `cuda_level_details` and `cuda11_level_details` defines
+##
+## Since CUBINs are compatible within the same major architecture, 
+## this allows us to ship PTX for only the latest supported level to
+## enable PTX JIT for future architectures.
+##
+## Other packages just take in base cuda capability levels as listed
+## in the `cuda_levels` and `cuda11_levels` defines.
+##
 cuda_levels:
   - 3.7;5.2;6.0;7.0;7.5     #[x86_64]
   - 3.7;6.0;7.0;7.5         #[ppc64le]
