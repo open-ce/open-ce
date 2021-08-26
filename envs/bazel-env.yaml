@@ -3,3 +3,5 @@ packages:
     runtime_package : False
   - feedstock : bazel
     runtime_package : False
+
+git_tag_for_env: open-ce-v2.0.0
