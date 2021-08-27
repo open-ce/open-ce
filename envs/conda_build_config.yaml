@@ -22,9 +22,8 @@ boost:
 boost_mp11:
   - 1.76.*
 c_compiler_version:
-  - 7.2.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
-  - 7.5.*                      # [s390x]
+  - 8.*                      # [x86_64 or ppc64le]
+  - 7.5.*                    # [s390x]
 catalogue:
   - 2.*
 cffi:
@@ -46,8 +45,7 @@ cudnn:
   - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
   - 8.0.5.*    # [cudatoolkit == '10.2']
 cxx_compiler_version:
-  - 7.2.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
+  - 8.*                      # [x86_64 and ppc64le]
 cxxfilt:
   - 0.2.*
 cymem:
