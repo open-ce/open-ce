@@ -10,9 +10,9 @@
 [![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
 ---
 
-This is the Open-CE project for feedstock collection, environment data, and build scripts
+This is the Open-CE project for feedstock collection, environment data, and build scripts.
 
-Welcome to the **open-ce** project. The project contains everything that is needed to build conda packages for
+Welcome to the **open-ce** project. The project contains everything needed to build conda packages for
 a collection of machine learning and deep learning frameworks. All packages created for a specific version of
 Open-CE have been designed to be installed within a single conda environment. For more information on `conda`,
 please look at conda's official [documentation](https://docs.conda.io/).
@@ -48,9 +48,9 @@ MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple
 
 ### Installing Packages
 
-Open-CE packages can be installed from one of the community [builds](#community-builds). To install packages from one of the community channels, pass the channel's URL to the `conda` tool using the `-c` option.
+Open-CE packages can be installed from one of the community [builds](#community-builds). To install packages from a community channel, pass the URL to the `conda` tool using the `-c` option.
 
-The following command will install the tensorflow package from the most recent version of Open-CE hosted in within the OSU channel:
+The following command will install the TensorFlow package from the most recent version of Open-CE hosted within the OSU channel:
 
 ```bash
 conda install -c https://ftp.osuosl.org/pub/open-ce/current/ tensorflow
@@ -67,4 +67,3 @@ For contribution information, please see the [CONTRIBUTING.md](CONTRIBUTING.md) 
 ## Slack Community
 
 Join us on [Slack!](http://open-ce.slack.com/) Use [this link](https://join.slack.com/t/open-ce/shared_invite/zt-o27t9db6-oUklancQvdGO8FIwftDwgw) or ping the [@open-ce/open-ce-dev-team](https://github.com/orgs/open-ce/teams/open-ce-dev-team) for an invite.
-
