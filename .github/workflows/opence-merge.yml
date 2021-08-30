@@ -39,4 +39,4 @@ jobs:
           python open-ce-builder/git_tools/create_opence_release.py \
                      --pat ${API_TOKEN} \
                      --branch "HEAD~" \
-                     --no_dry_run
+                     --not_dry_run
