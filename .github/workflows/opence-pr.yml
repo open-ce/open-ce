@@ -5,6 +5,7 @@ on:
     branches:
       - 'main'        # matches the main branch
       - 'open-ce-r*'  # matches every release branch
+      - 'test_main'
 
 jobs:
   release_dry_run:
