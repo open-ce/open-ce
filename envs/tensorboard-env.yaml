@@ -4,5 +4,3 @@ imported_envs:
 packages:
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
-
-git_tag_for_env: open-ce-v2.0.0

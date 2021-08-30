@@ -17,5 +17,3 @@ packages:
   - feedstock : skl2onnx
   - feedstock : onnxmltools
   - feedstock : tf2onnx
-
-git_tag_for_env: open-ce-v2.0.0
