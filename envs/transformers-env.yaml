@@ -1,5 +1,6 @@
 packages:
   - feedstock : rust-nightly
   - feedstock : tokenizers
+  - feedstock : huggingface_hub
   - feedstock : sacremoses
   - feedstock : transformers
