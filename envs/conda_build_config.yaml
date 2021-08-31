@@ -329,6 +329,7 @@ vector_settings:
 ## Other packages just take in base cuda capability levels as listed
 ## in the `cuda_levels` define.
 ##
+# yamllint disable rule:line-length
 cuda_levels:
   - 3.7;5.2;6.0;7.0;7.5         # [x86_64 and cudatoolkit == '10.2']
   - 3.7;5.2;6.0;7.0;7.5;8.0     # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
