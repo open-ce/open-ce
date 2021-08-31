@@ -35,8 +35,8 @@ click:
 cloudpickle:
   - 1.3.*
 cmake:
-  - 3.14.* # [not s390x]
-  - 3.18.* # [s390x]
+  - 3.14.*   # [not s390x]
+  - 3.18.*   # [s390x]
 contextvars:
   - 2.4
 coverage:
@@ -67,8 +67,7 @@ flatbuffers:
 freetype:
   - 2
 fortran_compiler_version:
-  - 7.2.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
+  - 8.*
 fsspec:
   - 0.8.*
 future:
@@ -133,8 +132,8 @@ libstdcxx:
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libgfortran:
-  - 7.2.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
+  - 9.3.*                      # [x86_64]
+  - 8.2.*                      # [ppc64le]
 libogg:
   - 1.3.*
 libopus:
@@ -211,7 +210,7 @@ pydantic:
 pytest:
   - 5.*
 python:
-  - 3.6 # [not s390x]
+  - 3.6   # [not s390x]
   - 3.7
 pytorch:
   - 1.8.*
@@ -232,8 +231,8 @@ scipy:
 sentencepiece:
   - 0.1.91
 setuptools:
-  - 50.3.* # [not s390x]
-  - 51.*   # [s390x]
+  - 50.3.*   # [not s390x]
+  - 51.*     # [s390x]
 setuptools_rust:
   - 0.11.3
 six:
@@ -288,3 +287,53 @@ zlib:
   - 1.2.11
 zstd:
   - 1.4.*
+
+##
+## ARCHITECTURE SPECIFIC OPTIMIZATION SETTINGS
+##
+## CPU and vector instruction enablement
+## =====================================
+## These are settings and arguments to pass to GCC for
+## optimization settings specific to the target CPU architecture
+##
+cpu_opt_arch:
+  - sandybridge             # [x86_64]
+  - power8                  # [ppc64le]
+cpu_opt_tune:
+  - haswell                 # [x86_64]
+  - power9                  # [ppc64le]
+vector_settings:
+  - avx, sse4.1, sse4.2     # [x86_64]
+  - vsx                     # [ppc64le]
+
+## GPU/CUDA Specifics
+## =====================================
+##
+## CUDA Capability Level
+## More information on Capability Levels found at:
+##  https://developer.nvidia.com/cuda-gpus
+##
+## In TensorFlow 2.3 and later, we can now designate which
+## architectures to include PTX code for:
+##     - compute_<cuda_arch> : include PTX
+##     - sm_<cuda_arch> : do not include PTX
+## These are passed in to the build via the
+## `cuda_level_details` and `cuda11_level_details` defines
+##
+## Since CUBINs are compatible within the same major architecture,
+## this allows us to ship PTX for only the latest supported level to
+## enable PTX JIT for future architectures.
+##
+## Other packages just take in base cuda capability levels as listed
+## in the `cuda_levels` and `cuda11_levels` defines.
+##
+cuda_levels:
+  - 3.7;5.2;6.0;7.0;7.5     # [x86_64]
+  - 3.7;6.0;7.0;7.5         # [ppc64le]
+cuda_levels_details:
+  - sm_37,sm_52,sm_60,sm_61,sm_70,compute_75  # [x86_64]
+  - sm_37,sm_60,sm_70,compute_75              # [ppc64le]
+cuda11_levels:
+  - 8.0
+cuda11_levels_details:
+  - compute_80
