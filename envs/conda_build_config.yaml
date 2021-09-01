@@ -22,7 +22,8 @@ boost:
 boost_mp11:
   - 1.76.*
 c_compiler_version:
-  - 8.*                      # [x86_64 or ppc64le]
+  - 7.5.*                      # [x86_64]
+  - 7.3.*                      # [ppc64le]
   - 7.5.*                    # [s390x]
 catalogue:
   - 2.*
@@ -45,7 +46,8 @@ cudnn:
   - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
   - 8.0.5.*    # [cudatoolkit == '10.2']
 cxx_compiler_version:
-  - 8.*                      # [x86_64 and ppc64le]
+  - 7.5.*                      # [x86_64]
+  - 7.3.*                      # [ppc64le]
 cxxfilt:
   - 0.2.*
 cymem:
@@ -67,8 +69,8 @@ flatbuffers:
 freetype:
   - 2
 fortran_compiler_version:
-  - 7.2.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
+  - 7.5.*                      # [x86_64]
+  - 7.5.*                      # [ppc64le]
 fsspec:
   - 0.8.*
 future:
@@ -125,15 +127,15 @@ libdate:
 libevent:
   - 2.1.*
 libgcc:
-  - 9.1.*                      # [x86_64]
+  - 9.3.*                      # [x86_64]
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libstdcxx:
-  - 9.1.*                      # [x86_64]
+  - 9.3.*                      # [x86_64]
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libgfortran:
-  - 7.2.*                      # [x86_64]
+  - 7.5.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
 libogg:
   - 1.3.*
