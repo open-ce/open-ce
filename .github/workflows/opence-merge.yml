@@ -1,0 +1,41 @@
+name: Open-CE Merge Job
+
+on:
+  push:
+    branches:
+      - 'main'        # matches the main branch
+      - 'open-ce-r*'  # matches every release branch
+
+jobs:
+  release_creation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          auto-update-conda: true
+          python-version: "3.8"
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          conda install -y conda-build
+      - name: Clone build tools
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/bethune-bryant/open-ce-builder.git \
+                    --branch issue_443_notes \
+                    ./open-ce-builder
+          pip install ./open-ce-builder
+      - name: Perform Release Creation
+        shell: bash -l {0}
+        env:
+          API_TOKEN: ${{ secrets.API_KEY }}
+        run: |
+          git config --global user.name "Github Action"
+          git config --global user.email "pwraiciw@us.ibm.com"
+          python open-ce-builder/git_tools/create_opence_release.py \
+                     --pat ${API_TOKEN} \
+                     --branch "HEAD~" \
+                     --not_dry_run
