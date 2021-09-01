@@ -5,4 +5,4 @@ packages:
   - feedstock : LightGBM
   - feedstock : openmpi          #[mpi_type == 'openmpi']
 
-git_tag_for_env: open-ce-v1.3.1
+git_tag_for_env: open-ce-v1.3.2
