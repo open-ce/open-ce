@@ -34,4 +34,5 @@ jobs:
           git config --global user.name "Github Action"
           git config --global user.email "pwraiciw@us.ibm.com"
           python open-ce-builder/git_tools/create_opence_release.py \
+                     --conda_build_config "./envs/conda_build_config.yaml" \
                      --branch "${{ github.base_ref }}"
