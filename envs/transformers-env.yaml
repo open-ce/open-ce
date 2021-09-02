@@ -1,6 +1,8 @@
+imported_envs:
+  - arrow-env.yaml
 packages:
-  - feedstock : rust-nightly
   - feedstock : tokenizers
   - feedstock : huggingface_hub
   - feedstock : sacremoses
+  - feedstock : sentencepiece
   - feedstock : transformers
