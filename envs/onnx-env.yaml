@@ -1,5 +1,5 @@
 imported_envs:
-  - bazel-env.yaml
+  - tensorflow-env.yaml
 
 packages:
   - feedstock : safeint
