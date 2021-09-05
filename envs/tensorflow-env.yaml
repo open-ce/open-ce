@@ -11,7 +11,6 @@ packages:
     git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c                 # [ppc64le]
     patches:                                                          # [ppc64le]
       - feedstock-patches/clangdev/pin_gcc_libs.patch                 # [ppc64le]
-      - feedstock-patches/clangdev/0001-Added-conda_build_config-which-customizes-compiler-v.patch #[ppc64le]
 
 #{% set py_ver = python | float %}
 #{% if py_ver >= 3.9 %}
