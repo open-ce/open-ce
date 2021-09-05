@@ -321,22 +321,23 @@ vector_settings:
 ##     - compute_<cuda_arch> : include PTX
 ##     - sm_<cuda_arch> : do not include PTX
 ## These are passed in to the build via the
-## `cuda_level_details` and `cuda11_level_details` defines
+## `cuda_level_details` define.
 ##
 ## Since CUBINs are compatible within the same major architecture,
 ## this allows us to ship PTX for only the latest supported level to
 ## enable PTX JIT for future architectures.
 ##
 ## Other packages just take in base cuda capability levels as listed
-## in the `cuda_levels` and `cuda11_levels` defines.
+## in the `cuda_levels` define.
 ##
+# yamllint disable rule:line-length
 cuda_levels:
-  - 3.7;5.2;6.0;7.0;7.5     # [x86_64]
-  - 3.7;6.0;7.0;7.5         # [ppc64le]
+  - 3.7,5.2,6.0,7.0,7.5         # [x86_64 and cudatoolkit == '10.2']
+  - 3.7,5.2,6.0,7.0,7.5,8.0     # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+  - 3.7,6.0,7.0,7.5             # [ppc64le and cudatoolkit == '10.2']
+  - 3.7,6.0,7.0,7.5,8.0         # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
 cuda_levels_details:
-  - sm_37,sm_52,sm_60,sm_61,sm_70,compute_75  # [x86_64]
-  - sm_37,sm_60,sm_70,compute_75              # [ppc64le]
-cuda11_levels:
-  - 8.0
-cuda11_levels_details:
-  - compute_80
+  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,compute_75        # [x86_64 and cudatoolkit == '10.2']
+  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80  # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+  - sm_37,sm_60,sm_70,sm_75,compute_75                    # [ppc64le and cudatoolkit == '10.2']
+  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80              # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
