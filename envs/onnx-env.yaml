@@ -19,7 +19,6 @@ packages:
 {% endif %}
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
-  - feedstock : keras2onnx
   - feedstock : skl2onnx
   - feedstock : onnxmltools
   - feedstock : tf2onnx
