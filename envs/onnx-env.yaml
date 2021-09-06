@@ -1,5 +1,5 @@
 imported_envs:
-  - bazel-env.yaml
+  - tensorflow-env.yaml
 
 packages:
   - feedstock : safeint
@@ -17,7 +17,6 @@ packages:
   - feedstock : cudnn
   - feedstock : nccl
 {% endif %}
-  - feedstock : tensorflow
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : keras2onnx
