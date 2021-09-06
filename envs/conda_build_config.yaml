@@ -238,7 +238,7 @@ setuptools:
   - 50.3.*   # [not s390x]
   - 51.*     # [s390x]
 setuptools_rust:
-  - 0.11.3
+  - 0.12.*
 six:
   - 1.15.0
 smart_open:
