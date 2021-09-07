@@ -228,7 +228,7 @@ regex:
 rust:
   - 1.54.0
 rust_compiler_version:
-- '1.46'
+  - '1.46'
 safeint:
   - 3.0
 scipy:
