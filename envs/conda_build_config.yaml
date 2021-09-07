@@ -225,6 +225,8 @@ requests:
   - 2.*
 regex:
   - 2020.11.*
+rust:
+  - 1.56.0
 rust_compiler_version:
 - '1.46'
 safeint:
