@@ -24,8 +24,7 @@ jobs:
       - name: Clone build tools
         shell: bash -l {0}
         run: |
-          git clone https://github.com/bethune-bryant/open-ce-builder.git \
-                    --branch issue_443_notes \
+          git clone https://github.com/open-ce/open-ce-builder.git \
                     ./open-ce-builder
           pip install ./open-ce-builder
       - name: Perform Release Dry-Run

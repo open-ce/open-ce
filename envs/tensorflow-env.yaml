@@ -21,4 +21,4 @@ packages:
   - feedstock : typeguard
   - feedstock : tensorflow-addons
 
-git_tag_for_env: open-ce-v1.3.2
+git_tag_for_env: open-ce-v1.3.1
