@@ -48,7 +48,7 @@ index cf36a13..835b173 100644
 +    - python {{ python }}
      - yaml
 -    - zlib
-+    - zlib {{zlib }}
++    - zlib {{ zlib }}
    run:
      - jansson
      - python
