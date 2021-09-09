@@ -36,7 +36,8 @@ click:
 cloudpickle:
   - 1.6.*
 cmake:
-  - 3.18.*
+  - 3.19.*   # [not s390x]
+  - 3.18.*   # [s390x]
 contextvars:
   - 2.4
 coverage:
