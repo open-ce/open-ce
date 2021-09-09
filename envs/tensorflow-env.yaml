@@ -9,7 +9,6 @@ packages:
 {% endif %}
   - feedstock : tensorflow
   - feedstock : dm-tree
-  - feedstock : tensorflow-probability
   - feedstock : tensorflow-estimator
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
