@@ -127,15 +127,15 @@ libdate:
 libevent:
   - 2.1.*
 libgcc:
-  - 9.3.*                      # [x86_64]
+  - 9.1.*                      # [x86_64 and c_compiler_version == "7.2.*"]
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libstdcxx:
-  - 9.3.*                      # [x86_64]
+  - 9.1.*                      # [x86_64 and c_compiler_version == "7.2.*"]
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libgfortran:
-  - 7.5.*                      # [x86_64]
+  - 7.2.*                      # [x86_64 and c_compiler_version == "7.2.*"]
   - 7.3.*                      # [ppc64le]
 libogg:
   - 1.3.*
