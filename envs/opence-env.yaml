@@ -4,8 +4,7 @@ imported_envs:
   - pytorch-extras-env.yaml
   - tensorflow-env.yaml
   - xgboost-env.yaml
-  # Disabling DALI for now
-  #- dali-env.yaml    #[x86_64]
+  - dali-env.yaml    #[x86_64]
   - spacy-env.yaml
   - transformers-env.yaml
   - horovod-env.yaml
