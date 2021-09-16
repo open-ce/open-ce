@@ -55,7 +55,7 @@ cymem:
 cython:
   - 0.29
 cython_blis:
-  - 0.4.*
+  - 0.7.*
 dataclasses:
   - 0.7
 dm_tree:
@@ -206,8 +206,9 @@ protobuf:
   - 3.14.*
 psutil:
   - 5
+#forbid version 1.8.1 due to security vulnerability
 pydantic:
-  - 1.7.*
+  - 1.8.2
 pytest:
   - 5.*
 python:
@@ -223,8 +224,10 @@ requests:
   - 2.*
 regex:
   - 2020.11.*
-rust_nightly:
-  - 1.53.0
+rust:
+  - 1.54.0
+rust_compiler_version:
+  - '1.46'
 safeint:
   - 3.0
 scipy:
@@ -235,13 +238,13 @@ setuptools:
   - 50.3.*   # [not s390x]
   - 51.*     # [s390x]
 setuptools_rust:
-  - 0.11.3
+  - 0.12.*
 six:
   - 1.15.0
 smart_open:
   - 2.2.*
 spacy_legacy:
-  - 3.0.5
+  - 3.0.8
 srsly:
   - 2.*
 tabulate:
@@ -259,9 +262,9 @@ tensorflow_hub:
 termcolor:
   - 1.1.0
 thinc:
-  - 8.0.3
+  - 8.0.8
 tokenizers:
-  - 0.10.1
+  - 0.10.3
 torchmetrics:
   - 0.3.*
 torchtext:
@@ -277,7 +280,7 @@ typing_extensions:
 unzip:
   - 6.0
 wasabi:
-  - 0.8.1
+  - 0.8.*
 werkzeug:
   - 1.*
 wheel:
@@ -319,22 +322,23 @@ vector_settings:
 ##     - compute_<cuda_arch> : include PTX
 ##     - sm_<cuda_arch> : do not include PTX
 ## These are passed in to the build via the
-## `cuda_level_details` and `cuda11_level_details` defines
+## `cuda_level_details` define.
 ##
 ## Since CUBINs are compatible within the same major architecture,
 ## this allows us to ship PTX for only the latest supported level to
 ## enable PTX JIT for future architectures.
 ##
 ## Other packages just take in base cuda capability levels as listed
-## in the `cuda_levels` and `cuda11_levels` defines.
+## in the `cuda_levels` define.
 ##
+# yamllint disable rule:line-length
 cuda_levels:
-  - 3.7;5.2;6.0;7.0;7.5     # [x86_64]
-  - 3.7;6.0;7.0;7.5         # [ppc64le]
+  - 3.7,5.2,6.0,7.0,7.5         # [x86_64 and cudatoolkit == '10.2']
+  - 3.7,5.2,6.0,7.0,7.5,8.0     # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+  - 3.7,6.0,7.0,7.5             # [ppc64le and cudatoolkit == '10.2']
+  - 3.7,6.0,7.0,7.5,8.0         # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
 cuda_levels_details:
-  - sm_37,sm_52,sm_60,sm_61,sm_70,compute_75  # [x86_64]
-  - sm_37,sm_60,sm_70,compute_75              # [ppc64le]
-cuda11_levels:
-  - 8.0
-cuda11_levels_details:
-  - compute_80
+  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,compute_75        # [x86_64 and cudatoolkit == '10.2']
+  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80  # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+  - sm_37,sm_60,sm_70,sm_75,compute_75                    # [ppc64le and cudatoolkit == '10.2']
+  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80              # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
