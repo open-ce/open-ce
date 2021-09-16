@@ -1,17 +1,7 @@
-imported_envs:
-  - onnx-env.yaml
-  - pytorch-env.yaml
-  - pytorch-extras-env.yaml
-  - tensorflow-env.yaml
-  - xgboost-env.yaml
-  # Disabling DALI for 1.3 on ppc64le
-  - dali-env.yaml    #[x86_64]
-  - spacy-env.yaml
-  - transformers-env.yaml
-  - horovod-env.yaml
-  - lightgbm-env.yaml
-  - arrow-env.yaml
-  - uwsgi-env.yaml
-
 packages:
-  - feedstock : opencv
+{% if build_type == 'cuda' %}
+  - feedstock : horovod
+  - feedstock : openmpi #[mpi_type == 'openmpi']
+{% endif %}
+
+git_tag_for_env: open-ce-v2.0.0
