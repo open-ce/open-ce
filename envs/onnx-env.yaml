@@ -1,5 +1,5 @@
 imported_envs:
-  - tensorflow-env.yaml
+  - bazel-env.yaml
 
 packages:
   - feedstock : safeint
@@ -11,6 +11,13 @@ packages:
   - feedstock : nlohmann_json
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
+{% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+  - feedstock : libc_wrappers     #[x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2' or (py_ver < 3.8 and cudatoolkit == "10.2" ))]
+  - feedstock : cudnn
+  - feedstock : nccl
+{% endif %}
+  - feedstock : tensorflow
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : keras2onnx
