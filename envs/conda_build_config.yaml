@@ -24,7 +24,7 @@ boost_mp11:
 c_compiler_version:
   - 7.5.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
-  - 7.5.*                    # [s390x]
+  - 7.5.*                      # [s390x]
 catalogue:
   - 2.*
 cffi:
@@ -55,7 +55,7 @@ cymem:
 cython:
   - 0.29
 cython_blis:
-  - 0.4.*
+  - 0.7.*
 dataclasses:
   - 0.7
 dm_tree:
@@ -208,25 +208,28 @@ protobuf:
   - 3.14.*
 psutil:
   - 5
+#forbid version 1.8.1 due to security vulnerability
 pydantic:
-  - 1.7.*
+  - 1.8.2
 pytest:
   - 5.*
 python:
   - 3.6   # [not s390x]
   - 3.7
 pytorch:
-  - 1.8.*
+  - 1.9.*
 pytorch_lightning:
-  - 1.2.*
+  - 1.4.*
 pyyaml:
   - 5.*
 requests:
   - 2.*
 regex:
   - 2020.11.*
-rust_nightly:
-  - 1.53.0
+rust:
+  - 1.54.0
+rust_compiler_version:
+  - '1.46'
 safeint:
   - 3.0
 scipy:
@@ -237,13 +240,13 @@ setuptools:
   - 50.3.*   # [not s390x]
   - 51.*     # [s390x]
 setuptools_rust:
-  - 0.11.3
+  - 0.12.*
 six:
   - 1.15.0
 smart_open:
   - 2.2.*
 spacy_legacy:
-  - 3.0.5
+  - 3.0.8
 srsly:
   - 2.*
 tabulate:
@@ -261,15 +264,15 @@ tensorflow_hub:
 termcolor:
   - 1.1.0
 thinc:
-  - 8.0.3
+  - 8.0.8
 tokenizers:
-  - 0.10.1
+  - 0.10.3
 torchmetrics:
-  - 0.3.*
+  - 0.5.*
 torchtext:
-  - 0.9.*
+  - 0.10.*
 torchvision:
-  - 0.9.*
+  - 0.10.*
 tqdm:
   - 4.*
 typer:
@@ -279,7 +282,7 @@ typing_extensions:
 unzip:
   - 6.0
 wasabi:
-  - 0.8.1
+  - 0.8.*
 werkzeug:
   - 1.*
 wheel:
