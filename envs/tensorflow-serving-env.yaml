@@ -9,7 +9,7 @@ conda_build_configs:
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
-  - feedstock: libc_wrappers     #[x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2' or (py_ver < 3.8 and cudatoolkit == "10.2" ))]
+  - feedstock: libc_wrappers     #[x86_64 and c_compiler_version == "7.2.*" and ((cudatoolkit == '11.0' or cudatoolkit == '11.2') or (py_ver < 3.8 and cudatoolkit == "10.2" ))]
   - feedstock: nccl
   - feedstock: cudnn
 {% endif %}
@@ -18,5 +18,5 @@ packages:
 
 {% set py_ver = python | float %}
 {% if py_ver >= 3.8 %}
-  - feedstock: protobuf   #[ppc64le]
+  - feedstock: protobuf
 {% endif %}
