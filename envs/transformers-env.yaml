@@ -6,3 +6,5 @@ packages:
   - feedstock : sacremoses
   - feedstock : sentencepiece
   - feedstock : transformers
+
+git_tag_for_env: open-ce-v1.4.0
