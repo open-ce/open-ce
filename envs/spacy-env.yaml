@@ -2,3 +2,5 @@ packages:
   - feedstock : thinc
   - feedstock : spacy-legacy
   - feedstock : spacy
+
+git_tag_for_env: open-ce-v1.4.0
