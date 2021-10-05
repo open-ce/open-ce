@@ -1,5 +1,5 @@
 abseil_cpp:
-  - 20200923
+  - 20210324
 absl_py:
   - 0.12.*
 arrow:
@@ -90,7 +90,7 @@ googleapis_common_protos:
 gmock:
   - 1.10.0
 grpc_cpp:
-  - 1.36.*
+  - 1.41.*
 grpcio:
   - 1.35.*
 harfbuzz:
