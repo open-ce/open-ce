@@ -162,7 +162,7 @@ onnx_graphsurgeon:
 openblas:
   - 0.3.6.*
 opencv:
-  - 3.4.10.*
+  - 3.4.14.*
 openjdk:
   - 8.0.152                    # [x86_64]
   - 1.8.0                      # [ppc64le]
