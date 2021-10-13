@@ -199,8 +199,10 @@ requests:
   - 2.*
 regex:
   - 2020.6.*
-rust_nightly:
-  - 1.50.0
+rust:
+  - 1.54.0
+rust_compiler_version:
+  - '1.46'
 scipy:
   - 1.*
 sentencepiece:
@@ -208,11 +210,11 @@ sentencepiece:
 setuptools:
   - 41.*
 setuptools_rust:
-  - 0.11.3
+  - 0.12.*
 six:
   - 1.15.0
 srsly:
-  - 1.0.4
+  - 1.0.*
 tabulate:
   - 0.8.*
 tensorboard:
@@ -229,9 +231,9 @@ tensorrt:
 termcolor:
   - 1.1.0
 thinc:
-  - 7.4.1
+  - 7.4.*
 tokenizers:
-  - 0.9.3
+  - 0.9.*
 torchtext:
   - 0.8.*
 torchvision:

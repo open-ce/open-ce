@@ -1,9 +1,6 @@
 packages:
-  - feedstock : rust-nightly
-  - feedstock : semantic
   - feedstock : tokenizers
   - feedstock : sentencepiece
-  - feedstock : sacremoses
   - feedstock : transformers
 
 git_tag_for_env: open-ce-v1.2.4
