@@ -3,4 +3,4 @@ packages:
   - feedstock : sentencepiece
   - feedstock : transformers
 
-git_tag_for_env: open-ce-v1.2.4
+git_tag_for_env: open-ce-v1.2.5
