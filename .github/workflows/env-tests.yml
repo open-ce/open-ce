@@ -27,12 +27,15 @@ jobs:
           conda install -y pylint=2.6.0 \
                            conda-build
           pip install yamllint==1.24.2
+          git branch
+          echo $(pwd)
       - name: Validate config files
         shell: bash -l {0}
         run: |
           # Use yamllint to check the actual yaml files.
           yamllint .github/actions/*/*.yml .github/workflows/*.yml
           yamllint ./envs/conda_build_config.yaml
+          git branch
           pip install git+https://github.com/open-ce/open-ce-builder.git@main
           # Use the conda_build api to lint the env files since they use jinja.
           open-ce validate env envs/*-env.yaml
