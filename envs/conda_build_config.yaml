@@ -217,7 +217,7 @@ python:
   - 3.6   # [not s390x]
   - 3.7
 pytorch:
-  - 1.9.*
+  - 1.10.*
 pytorch_lightning:
   - 1.4.*
 pyyaml:
@@ -270,9 +270,9 @@ tokenizers:
 torchmetrics:
   - 0.5.*
 torchtext:
-  - 0.10.*
+  - 0.11.*
 torchvision:
-  - 0.10.*
+  - 0.11.*
 tqdm:
   - 4.*
 typer:
