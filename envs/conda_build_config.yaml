@@ -252,15 +252,17 @@ srsly:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.6.*
+  - 2.7.*
 tensorboard_data_server:
   - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.6.*
+  - 2.7.*
 tensorflow_hub:
   - 0.12
+tensorflow_io_gcs_filesystem:
+  - 0.21
 termcolor:
   - 1.1.0
 thinc:
