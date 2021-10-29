@@ -7,7 +7,7 @@ arrow:
 astunparse:
   - 1.6
 attrs:
-  - 19
+  - 21
 autoconf:
   - 2.69
 automake:
@@ -22,7 +22,7 @@ boost:
 boost_mp11:
   - 1.76.*
 c_compiler_version:
-  - 7.2.*                      # [x86_64]
+  - 7.5.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
   - 7.5.*                      # [s390x]
 catalogue:
@@ -34,19 +34,19 @@ clang:
 click:
   - 7.*
 cloudpickle:
-  - 1.3.*
+  - 1.6.*
 cmake:
-  - 3.14.* # [not s390x]
-  - 3.18.* # [s390x]
+  - 3.19.*   # [not s390x]
+  - 3.18.*   # [s390x]
 contextvars:
   - 2.4
 coverage:
-  - 4.*
+  - 5.*
 cudnn:
   - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
   - 8.0.5.*    # [cudatoolkit == '10.2']
 cxx_compiler_version:
-  - 7.2.*                      # [x86_64]
+  - 7.5.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
 cxxfilt:
   - 0.2.*
@@ -55,7 +55,7 @@ cymem:
 cython:
   - 0.29
 cython_blis:
-  - 0.4.*
+  - 0.7.*
 dataclasses:
   - 0.7
 dm_tree:
@@ -69,7 +69,7 @@ flatbuffers:
 freetype:
   - 2
 fortran_compiler_version:
-  - 7.2.*                      # [x86_64]
+  - 7.5.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
 fsspec:
   - 0.8.*
@@ -97,14 +97,15 @@ harfbuzz:
   - 1.8
 # Note: hdf5 version must be compatible with h5py
 hdf5:
-  - 1.10.4    # [ppc64le and py<39]
-  - 1.10.6    # [x86_64 or (ppc64le and py39)]
+  - 1.10.6
 hypothesis:
   - 5.*
 h5py:
-  - 2.10.0
+  - 3.2.*
+icu:
+  - 58.*
 importlib_resources:
-  - 3.3.0
+  - 5.*
 jasper:
   - 2.0.14
 joblib:
@@ -117,6 +118,8 @@ keras_applications:
   - 1.0.8
 keras_preprocessing:
   - 1.1.*
+keras:
+  - 2.6.*
 leveldb:
   - 1.20.*
 libdate:
@@ -124,15 +127,15 @@ libdate:
 libevent:
   - 2.1.*
 libgcc:
-  - 9.1.*                      # [x86_64]
+  - 9.1.*                      # [x86_64 and c_compiler_version == "7.2.*"]
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libstdcxx:
-  - 9.1.*                      # [x86_64]
+  - 9.1.*                      # [x86_64 and c_compiler_version == "7.2.*"]
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libgfortran:
-  - 7.2.*                      # [x86_64]
+  - 7.2.*                      # [x86_64 and c_compiler_version == "7.2.*"]
   - 7.3.*                      # [ppc64le]
 libogg:
   - 1.3.*
@@ -179,7 +182,7 @@ onnxconverter_common:
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.6.*
+  - 0.3.13.*
 opencv:
   - 3.4.14.*
 openjdk:
@@ -196,7 +199,7 @@ pathy:
 pillow:
   - 8.*
 pip:
-  - 20*
+  - 21.*
 pkg_config:
   - 0.29.2
 preshed:
@@ -205,25 +208,28 @@ protobuf:
   - 3.14.*
 psutil:
   - 5
+#forbid version 1.8.1 due to security vulnerability
 pydantic:
-  - 1.7.*
+  - 1.8.2
 pytest:
   - 5.*
 python:
-  - 3.6 # [not s390x]
+  - 3.6   # [not s390x]
   - 3.7
 pytorch:
-  - 1.8.*
+  - 1.9.*
 pytorch_lightning:
-  - 1.2.*
+  - 1.4.*
 pyyaml:
   - 5.*
 requests:
   - 2.*
 regex:
   - 2020.11.*
-rust_nightly:
-  - 1.53.0
+rust:
+  - 1.54.0
+rust_compiler_version:
+  - '1.46'
 safeint:
   - 3.0
 scipy:
@@ -231,42 +237,42 @@ scipy:
 sentencepiece:
   - 0.1.91
 setuptools:
-  - 50.3.* # [not s390x]
-  - 51.*   # [s390x]
+  - 50.3.*   # [not s390x]
+  - 51.*     # [s390x]
 setuptools_rust:
-  - 0.11.3
+  - 0.12.*
 six:
   - 1.15.0
 smart_open:
   - 2.2.*
 spacy_legacy:
-  - 3.0.5
+  - 3.0.8
 srsly:
   - 2.*
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.5.*
+  - 2.6.*
 tensorboard_data_server:
   - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.5.*
+  - 2.6.*
 tensorflow_hub:
   - 0.12
 termcolor:
   - 1.1.0
 thinc:
-  - 8.0.3
+  - 8.0.8
 tokenizers:
-  - 0.10.1
+  - 0.10.3
 torchmetrics:
-  - 0.3.*
+  - 0.5.*
 torchtext:
-  - 0.9.*
+  - 0.10.*
 torchvision:
-  - 0.9.*
+  - 0.10.*
 tqdm:
   - 4.*
 typer:
@@ -276,14 +282,65 @@ typing_extensions:
 unzip:
   - 6.0
 wasabi:
-  - 0.8.1
+  - 0.8.*
 werkzeug:
   - 1.*
 wheel:
-  - 0.35*
+  - 0.37*
 wrapt:
   - 1.12.*
 zlib:
   - 1.2.11
 zstd:
   - 1.4.*
+
+##
+## ARCHITECTURE SPECIFIC OPTIMIZATION SETTINGS
+##
+## CPU and vector instruction enablement
+## =====================================
+## These are settings and arguments to pass to GCC for
+## optimization settings specific to the target CPU architecture
+##
+cpu_opt_arch:
+  - sandybridge             # [x86_64]
+  - power8                  # [ppc64le]
+cpu_opt_tune:
+  - haswell                 # [x86_64]
+  - power9                  # [ppc64le]
+vector_settings:
+  - avx, sse4.1, sse4.2     # [x86_64]
+  - vsx                     # [ppc64le]
+
+## GPU/CUDA Specifics
+## =====================================
+##
+## CUDA Capability Level
+## More information on Capability Levels found at:
+##  https://developer.nvidia.com/cuda-gpus
+##
+## In TensorFlow 2.3 and later, we can now designate which
+## architectures to include PTX code for:
+##     - compute_<cuda_arch> : include PTX
+##     - sm_<cuda_arch> : do not include PTX
+## These are passed in to the build via the
+## `cuda_level_details` define.
+##
+## Since CUBINs are compatible within the same major architecture,
+## this allows us to ship PTX for only the latest supported level to
+## enable PTX JIT for future architectures.
+##
+## Other packages just take in base cuda capability levels as listed
+## in the `cuda_levels` define.
+##
+# yamllint disable rule:line-length
+cuda_levels:
+  - 3.7,5.2,6.0,7.0,7.5         # [x86_64 and cudatoolkit == '10.2']
+  - 3.7,5.2,6.0,7.0,7.5,8.0     # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+  - 3.7,6.0,7.0,7.5             # [ppc64le and cudatoolkit == '10.2']
+  - 3.7,6.0,7.0,7.5,8.0         # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+cuda_levels_details:
+  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,compute_75        # [x86_64 and cudatoolkit == '10.2']
+  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80  # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]
+  - sm_37,sm_60,sm_70,sm_75,compute_75                    # [ppc64le and cudatoolkit == '10.2']
+  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80              # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.2')]

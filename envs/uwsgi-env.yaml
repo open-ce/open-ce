@@ -6,5 +6,5 @@ packages:
   - feedstock: http://github.com/conda-forge/uwsgi-feedstock
     git_tag: 810642a204a7332afc1376aaceb357fa59938b02  #2.0.20
     patches:
-      - ../feedstock-patches/uwsgi/0001-disable-lto-adjust-pins.patch 
+      - feedstock-patches/uwsgi/0001-disable-lto-adjust-pins.patch
 {% endif %}
