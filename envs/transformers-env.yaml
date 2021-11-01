@@ -1,5 +1,3 @@
-imported_envs:
-  - arrow-env.yaml
 packages:
   - feedstock : tokenizers
   - feedstock : huggingface_hub
