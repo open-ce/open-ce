@@ -9,6 +9,7 @@ packages:
 {% endif %}
   - feedstock : sentencepiece
   - feedstock : torchtext
-  - feedstock : onnx
   - feedstock : av
   - feedstock : torchvision
+
+git_tag_for_env: open-ce-v1.4.0

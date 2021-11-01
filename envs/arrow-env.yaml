@@ -32,3 +32,5 @@ packages:
 {% endif %}
   - feedstock : grpc-cpp
   - feedstock : pyarrow
+
+git_tag_for_env: open-ce-v1.4.0

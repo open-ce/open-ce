@@ -4,7 +4,7 @@ imported_envs:
   - pytorch-extras-env.yaml
   - tensorflow-env.yaml
   - xgboost-env.yaml
-  - dali-env.yaml    #[x86_64]
+  - dali-env.yaml
   - spacy-env.yaml
   - transformers-env.yaml
   - horovod-env.yaml
@@ -14,3 +14,5 @@ imported_envs:
 
 packages:
   - feedstock : opencv
+
+git_tag_for_env: open-ce-v1.4.0
