@@ -169,7 +169,7 @@ networkx:
 ninja:
   - 1.10.*
 nccl:
-  - 2.8.*
+  - 2.11.*
 nlohmann_json:
   - 3.*
 numactl:
