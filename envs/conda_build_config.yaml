@@ -120,7 +120,7 @@ keras_applications:
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.6.*
+  - 2.7.*
 leveldb:
   - 1.20.*
 libdate:
@@ -185,7 +185,7 @@ onnx_graphsurgeon:
 openblas:
   - 0.3.13.*
 opencv:
-  - 3.4.16.*
+  - 4.5.*
 openjdk:
   - 8.0.152                    # [x86_64]
   - 1.8.0                      # [ppc64le]
