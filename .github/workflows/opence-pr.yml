@@ -24,7 +24,7 @@ jobs:
       - name: Clone build tools
         shell: bash -l {0}
         run: |
-          git clone -b tag-auto-fix https://github.com/open-ce/open-ce-builder.git \
+          git clone -b tag-auto-fix https://github.com/ketank-new/open-ce-builder.git \
                     ./open-ce-builder
           pip install ./open-ce-builder
       - name: Perform Release Dry-Run
