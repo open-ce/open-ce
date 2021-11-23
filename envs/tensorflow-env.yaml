@@ -22,4 +22,4 @@ packages:
   - feedstock : typeguard
   - feedstock : tensorflow-addons
 
-git_tag_for_env: open-ce-v1.2.6
+git_tag_for_env: open-ce-v1.2.7
