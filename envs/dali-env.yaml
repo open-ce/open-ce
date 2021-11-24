@@ -13,4 +13,5 @@ packages:
   - feedstock : jpeg-turbo
   - feedstock : libflac
   - feedstock : libsndfile
+  - feedstock : https://github.com/conda-forge/libtar-feedstock
 {% endif %}
