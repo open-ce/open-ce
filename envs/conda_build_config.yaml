@@ -32,7 +32,7 @@ cffi:
 clang:
   - 10.0.*
 click:
-  - 7.*
+  - 8.*
 cloudpickle:
   - 1.6.*
 cmake:
@@ -238,7 +238,7 @@ safeint:
 scipy:
   - 1.*
 sentencepiece:
-  - 0.1.91
+  - 0.1.96
 setuptools:
   - 50.3.*   # [not s390x]
   - 51.*     # [s390x]
@@ -281,7 +281,7 @@ torchvision:
 tqdm:
   - 4.*
 typer:
-  - 0.3.2
+  - 0.4.0
 typing_extensions:
   - 3.7.4.*
 unzip:
