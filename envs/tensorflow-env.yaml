@@ -23,3 +23,5 @@ packages:
   - feedstock : tensorflow-model-optimization
   - feedstock : typeguard
   - feedstock : tensorflow-addons
+
+git_tag_for_env: open-ce-v1.5.1
