@@ -20,3 +20,5 @@ packages:
 {% if py_ver >= 3.8 %}
   - feedstock: protobuf
 {% endif %}
+
+git_tag_for_env: open-ce-v1.5.0
