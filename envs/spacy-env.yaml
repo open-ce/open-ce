@@ -1,4 +1,4 @@
 packages:
-  - feedstock : thinc
+  - feedstock : langcodes
   - feedstock : spacy-legacy
   - feedstock : spacy
