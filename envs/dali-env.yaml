@@ -9,10 +9,11 @@ packages:
   - feedstock : opencv
   - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
     git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c                 # [ppc64le]
-  - feedstock : DALI  # [x86_64]
+  - feedstock : DALI
   - feedstock : jpeg-turbo
   - feedstock : libflac
   - feedstock : libsndfile
+  - feedstock : https://github.com/conda-forge/libtar-feedstock
 {% endif %}
 
 git_tag_for_env: open-ce-v1.5.0
