@@ -32,4 +32,3 @@ packages:
 {% endif %}
   - feedstock : grpc-cpp
   - feedstock : pyarrow
-
