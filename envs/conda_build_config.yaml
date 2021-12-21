@@ -289,7 +289,7 @@ unzip:
 wasabi:
   - 0.8.*
 werkzeug:
-  - 1.*
+  - 2.*
 wheel:
   - 0.37*
 wrapt:
