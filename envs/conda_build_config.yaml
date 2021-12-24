@@ -56,8 +56,6 @@ cython:
   - 0.29
 cython_blis:
   - 0.7.*
-dataclasses:
-  - 0.7
 dm_tree:
   - 0.1.*
 eigen:
