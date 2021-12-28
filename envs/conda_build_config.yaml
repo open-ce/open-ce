@@ -3,7 +3,7 @@ abseil_cpp:
 absl_py:
   - 0.12.*
 arrow:
-  - 6.0.1
+  - 5.0.0
 astunparse:
   - 1.6
 attrs:
@@ -88,7 +88,7 @@ googleapis_common_protos:
 gmock:
   - 1.10.0
 grpc_cpp:
-  - 1.42.*
+  - 1.41.*
 grpcio:
   - 1.42.*
 harfbuzz:
