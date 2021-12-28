@@ -238,8 +238,7 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
-  - 58.*     # [not s390x]
-  - 58.*     # [s390x]
+  - 58.*
 setuptools_rust:
   - 0.12.*
 six:
