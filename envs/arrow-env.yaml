@@ -31,5 +31,3 @@ packages:
   - feedstock : grpc-cpp
   - feedstock : orc
   - feedstock : pyarrow
-
-git_tag_for_env: open-ce-v1.5.0

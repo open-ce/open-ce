@@ -5,5 +5,5 @@ imported_envs:
 packages:
   - feedstock : pytorch-lightning
   - feedstock : pytorch-lightning-bolts
-
-git_tag_for_env: open-ce-v1.5.0
+  - feedstock : libflac
+  - feedstock : libsndfile
