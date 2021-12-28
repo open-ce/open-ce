@@ -56,8 +56,6 @@ cython:
   - 0.29
 cython_blis:
   - 0.7.*
-dataclasses:
-  - 0.7
 dm_tree:
   - 0.1.*
 eigen:
@@ -72,7 +70,7 @@ fortran_compiler_version:
   - 7.5.*                      # [x86_64]
   - 7.3.*                      # [ppc64le]
 fsspec:
-  - 0.8.*
+  - 2021.*
 future:
   - 0.18.*
 gast:
@@ -240,7 +238,7 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
-  - 50.3.*   # [not s390x]
+  - 58.*     # [not s390x]
   - 51.*     # [s390x]
 setuptools_rust:
   - 0.12.*
