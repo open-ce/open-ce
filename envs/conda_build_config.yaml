@@ -104,7 +104,8 @@ hypothesis:
 h5py:
   - 2.10.0
 icu:
-  - 58.*
+  - 58.*     # [not s390x]
+  - 68.*     # [s390x]
 importlib_resources:
   - 3.3.0
 jasper:
