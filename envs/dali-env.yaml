@@ -16,4 +16,4 @@ packages:
   - feedstock : https://github.com/conda-forge/libtar-feedstock
 {% endif %}
 
-git_tag_for_env: open-ce-v1.5.0
+git_tag_for_env: open-ce-v1.5.1
