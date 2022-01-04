@@ -5,4 +5,4 @@ packages:
   - feedstock : sentencepiece
   - feedstock : transformers
 
-git_tag_for_env: open-ce-v1.5.0
+git_tag_for_env: open-ce-v1.5.1
