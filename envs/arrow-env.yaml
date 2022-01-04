@@ -6,6 +6,8 @@ packages:
       - feedstock-patches/rapidjson/s390x-fix1.patch
   - feedstock : https://github.com/AnacondaRecipes/orc-feedstock
     git_tag: 47b595ae87b7bd10b16e08aef41e1b9e9d257848
+    patches:
+      - feedstock-patches/orc/0001-Pin-protobuf-to-3.14.patch
   - feedstock : https://github.com/conda-forge/libutf8proc-feedstock
     git_tag: d2a2366dc3c02405b1b54b991758b5bb57b75e6d
   - feedstock : https://github.com/AnacondaRecipes/re2-feedstock
