@@ -1,0 +1,31 @@
+From 8dbdb28766946ddd90ba4490984a797759b25666 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 3 Jan 2022 13:59:25 +0000
+Subject: [PATCH] Pin protobuf to 3.14
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index f4dd818..1b649f9 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,12 +28,12 @@ requirements:
+     - patch  # [not win]
+     - ninja       # [unix]
+     # `protoc` is also used for building
+-    - libprotobuf
++    - libprotobuf {{ protobuf }}
+     - cmake
+   host:
+     - zlib
+     - snappy
+-    - libprotobuf
++    - libprotobuf {{ protobuf }}
+     - lz4-c
+     - zstd
+ 
+-- 
+2.23.0
+
