@@ -1,6 +1,7 @@
 packages:
   - feedstock : langcodes
   - feedstock : spacy-legacy
+  - feedstock : spacy-loggers
   - feedstock : spacy
 
 git_tag_for_env: open-ce-v1.5.1
