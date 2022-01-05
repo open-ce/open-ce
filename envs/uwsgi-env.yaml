@@ -1,12 +1,9 @@
 packages:
-{% set py_ver = python | float %}
-{% if py_ver < 3.9 %}
   - feedstock: https://github.com/conda-forge/jansson-feedstock
     git_tag: 5c2760222698c28ecf9d5608f94d9cdcaa2d9cb8  #2.13.1
   - feedstock: http://github.com/conda-forge/uwsgi-feedstock
     git_tag: 810642a204a7332afc1376aaceb357fa59938b02  #2.0.20
     patches:
       - feedstock-patches/uwsgi/0001-disable-lto-adjust-pins.patch
-{% endif %}
 
 git_tag_for_env: open-ce-v1.5.0
