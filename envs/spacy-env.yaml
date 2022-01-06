@@ -1,4 +1,5 @@
 packages:
   - feedstock : langcodes
   - feedstock : spacy-legacy
+  - feedstock : spacy-loggers
   - feedstock : spacy
