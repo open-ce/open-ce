@@ -248,6 +248,8 @@ smart_open:
   - 2.2.*
 spacy_legacy:
   - 3.0.8
+spacy_loggers:
+  - 1.0.1
 srsly:
   - 2.*
 tabulate:
