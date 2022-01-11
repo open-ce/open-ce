@@ -30,6 +30,10 @@ packages:
 {% endif %}
   - feedstock : grpc-cpp
   - feedstock : pyarrow
+{% if s390x %}
+    patches:
+      - feedstock-patches/pyarrow/s390x_11686_11687.patch
+{% endif %}
   - feedstock : orc
 
 git_tag_for_env: open-ce-v1.5.1

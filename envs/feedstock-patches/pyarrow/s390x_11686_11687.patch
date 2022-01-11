@@ -1,0 +1,64 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 20fe865..78ce013 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -11,9 +11,11 @@ package:
+ source:
+   url: https://github.com/apache/arrow/archive/refs/tags/apache-arrow-{{ version }}.tar.gz
+   sha256: {{ checksum }}
++  patches:
++    - s390x_arrow_11686_11687.patch
+ 
+ build:
+-  number: 2
++  number: 3
+   run_exports:
+     - {{ pin_subpackage("arrow-cpp", max_pin="x.x.x") }}
+ 
+diff --git a/recipe/s390x_arrow_11686_11687.patch b/recipe/s390x_arrow_11686_11687.patch
+new file mode 100644
+index 0000000..06f0a90
+--- /dev/null
++++ b/recipe/s390x_arrow_11686_11687.patch
+@@ -0,0 +1,41 @@
++diff --git a/python/pyarrow/tests/test_pandas.py b/python/pyarrow/tests/test_pandas.py
++index b6557875c..5f9dd1226 100644
++--- a/python/pyarrow/tests/test_pandas.py
+++++ b/python/pyarrow/tests/test_pandas.py
++@@ -4326,8 +4326,8 @@ def make_df_with_timestamps():
++     # Not part of what we're testing, just ensuring that the inputs are what we
++     # expect.
++     assert (df.dateTimeMs.dtype, df.dateTimeNs.dtype) == (
++-        # O == object, <M8[ns] == timestamp64[ns]
++-        np.dtype("O"), np.dtype("<M8[ns]")
+++        # O == object, M8[ns] == timestamp64[ns]
+++        np.dtype("O"), np.dtype("M8[ns]")
++     )
++     return df
++ 
++diff --git a/cpp/src/arrow/python/numpy_to_arrow.cc b/cpp/src/arrow/python/numpy_to_arrow.cc
++index a382f7663..a2fa27eef 100644
++--- a/cpp/src/arrow/python/numpy_to_arrow.cc
+++++ b/cpp/src/arrow/python/numpy_to_arrow.cc
++@@ -40,6 +40,7 @@
++ #include "arrow/util/bitmap_generate.h"
++ #include "arrow/util/bitmap_ops.h"
++ #include "arrow/util/checked_cast.h"
+++#include "arrow/util/endian.h"
++ #include "arrow/util/logging.h"
++ #include "arrow/util/macros.h"
++ #include "arrow/util/string.h"
++@@ -659,7 +660,13 @@ Status NumPyConverter::Visit(const StringType& type) {
++   char numpy_byteorder = dtype_->byteorder;
++ 
++   // For Python C API, -1 is little-endian, 1 is big-endian
+++#if ARROW_LITTLE_ENDIAN
+++  // Yield little-endian from both '|' (native) and '<'
++   int byteorder = numpy_byteorder == '>' ? 1 : -1;
+++#else
+++  // Yield big-endian from both '|' (native) and '>'
+++  int byteorder = numpy_byteorder == '<' ? -1 : 1;
+++#endif
++ 
++   PyAcquireGIL gil_lock;
++ 
