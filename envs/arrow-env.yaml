@@ -32,3 +32,5 @@ packages:
 {% endif %}
   - feedstock : grpc-cpp
   - feedstock : pyarrow
+    patches:
+      - feedstock-patches/pyarrow/s390x_11686_11687.patch
