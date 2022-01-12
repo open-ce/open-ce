@@ -265,7 +265,7 @@ tensorflow:
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.21
+  - 0.23.*
 termcolor:
   - 1.1.0
 thinc:
