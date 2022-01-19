@@ -1,3 +1,5 @@
+ppc_arch:
+  - p10
 cpu_opt_arch:
   - power8                 # [ppc64le]
 cpu_opt_tune:
