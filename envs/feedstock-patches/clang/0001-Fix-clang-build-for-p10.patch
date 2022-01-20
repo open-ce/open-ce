@@ -1,0 +1,116 @@
+From 5ac1ef2105f73b5881d0d986829efc74185f447d Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 20 Jan 2022 02:57:29 -0600
+Subject: [PATCH] Fix clang build for p10
+
+---
+ recipe/build.sh  |  5 +++++
+ recipe/meta.yaml | 20 ++++++++++----------
+ 2 files changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 0df298f..67f8245 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -13,6 +13,11 @@ if [[ "$variant" == "hcc" ]]; then
+   EXTRA_ARGS="$EXTRA_ARGS -DKALMAR_SDK_COMMIT=24e69cd8 -DKALMAR_FRONTEND_COMMIT=24e69cd8 -DKALMAR_BACKEND_COMMIT=24e69cd8"
+ fi
+ 
++if [[ $ppc_arch == "p10" ]]
++then
++    AR=/opt/rh/gcc-toolset-10/root/usr/bin/ar
++fi
++
+ cmake \
+   -DCMAKE_INSTALL_PREFIX=$PREFIX \
+   -DCMAKE_PREFIX_PATH=$PREFIX \
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 18bd745..e71a150 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,7 +28,7 @@ build:
+ 
+ requirements:
+   build:
+-    - {{ compiler('cxx') }}    #[arch != "p10"]
++    - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+     - cmake >=3.4.3
+     # Needed to unpack the source tarball
+     - m2w64-xz  # [win]
+@@ -43,7 +43,7 @@ requirements:
+ 
+ test:
+   requires:
+-    - {{ compiler('cxx') }}      #[arch != "p10"]
++    - {{ compiler('cxx') }}      # [ ppc_arch != "p10"]
+     - cmake >=3.4.3
+   files:
+     - mytest.c
+@@ -70,7 +70,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}    #[arch != "p10"]
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -108,7 +108,7 @@ outputs:
+       skip: true  # [win]
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}    #[arch != "p10"]
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -137,7 +137,7 @@ outputs:
+       {% endif %}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}     #[arch != "p10"]
++        - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -164,7 +164,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}    #[arch != "p10"]
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -191,7 +191,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}    #[arch != "p10"]
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - libcxx                   # [osx]
+         - cmake >=3.4.3
+         - ninja  # [win]
+@@ -235,8 +235,8 @@ outputs:
+       run:
+         - {{ pin_subpackage("clang", exact=True) }}
+     test:
+-      requires:
+-        - {{ compiler("cxx") }}    #[arch != "p10"]
++      requires:                    # [ ppc_arch != "p10"]
++        - {{ compiler("cxx") }}    # [ ppc_arch != "p10"]
+       files:
+         - mytest.cxx
+       commands:
+@@ -254,7 +254,7 @@ outputs:
+       build:
+         # "compiling .pyc files" fails without this
+         - python >3
+-        - {{ compiler('cxx') }}      #[arch != "p10"]
++        - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+-- 
+2.27.0
+
