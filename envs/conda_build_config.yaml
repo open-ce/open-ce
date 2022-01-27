@@ -33,6 +33,8 @@ clang:
   - 10.0.*
 click:
   - 8.*
+cli11:
+  - 2.1.2
 cloudpickle:
   - 1.6.*
 cmake:
@@ -42,6 +44,8 @@ contextvars:
   - 2.4
 coverage:
   - 5.*
+cpp_filesystem:
+  - 1.5.8
 cudnn:
   - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
   - 8.0.5.*    # [cudatoolkit == '10.2']
@@ -147,6 +151,8 @@ libtiff:
   - 4.2
 libtool:
   - 2.4.6
+libsolv:
+  - 0.7.*
 libvorbis:
   - 1.3.7
 lmdb:
@@ -206,6 +212,8 @@ protobuf:
   - 3.14.*
 psutil:
   - 5
+pybind11:
+  - 2.9.*
 #forbid version 1.8.1 due to security vulnerability
 pydantic:
   - 1.8.2
@@ -224,6 +232,8 @@ requests:
   - 2.*
 regex:
   - 2020.11.*
+reproc_cpp:
+  - 14.2.*
 rust:
   - 1.54.0
 rust_compiler_version:
@@ -265,6 +275,8 @@ tensorflow_io_gcs_filesystem:
   - 0.23.*
 termcolor:
   - 1.1.0
+termcolor_cpp:
+  - 2.0.0
 thinc:
   - 8.0.*
 tokenizers:
@@ -291,6 +303,8 @@ wheel:
   - 0.37*
 wrapt:
   - 1.12.*
+yaml_cpp:
+  - 0.6.3
 zlib:
   - 1.2.11
 zstd:
