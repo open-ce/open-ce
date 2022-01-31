@@ -1,31 +1,37 @@
-From 5ac1ef2105f73b5881d0d986829efc74185f447d Mon Sep 17 00:00:00 2001
+From 3900b833331944bdd530066ecaa1edb42e43cad8 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 20 Jan 2022 02:57:29 -0600
+Date: Mon, 31 Jan 2022 00:11:51 -0600
 Subject: [PATCH] Fix clang build for p10
 
 ---
- recipe/build.sh  |  5 +++++
+ recipe/build.sh  | 11 +++++++++++
  recipe/meta.yaml | 20 ++++++++++----------
- 2 files changed, 15 insertions(+), 10 deletions(-)
+ 2 files changed, 21 insertions(+), 10 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 0df298f..67f8245 100644
+index 0df298f..ee68108 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
-@@ -13,6 +13,11 @@ if [[ "$variant" == "hcc" ]]; then
+@@ -13,6 +13,17 @@ if [[ "$variant" == "hcc" ]]; then
    EXTRA_ARGS="$EXTRA_ARGS -DKALMAR_SDK_COMMIT=24e69cd8 -DKALMAR_FRONTEND_COMMIT=24e69cd8 -DKALMAR_BACKEND_COMMIT=24e69cd8"
  fi
  
 +if [[ $ppc_arch == "p10" ]]
 +then
-+    AR=/opt/rh/gcc-toolset-10/root/usr/bin/ar
++    if [[ -z "${GCC_10_HOME}" ]];
++    then
++        echo "Please set GCC_10_HOME to the install path of gcc-toolset-10"
++        exit 1
++    else
++        AR=$GCC_10_HOME/bin/ar
++    fi
 +fi
 +
  cmake \
    -DCMAKE_INSTALL_PREFIX=$PREFIX \
    -DCMAKE_PREFIX_PATH=$PREFIX \
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 18bd745..e71a150 100644
+index 946e808..e71a150 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -28,7 +28,7 @@ build:
@@ -112,5 +118,5 @@ index 18bd745..e71a150 100644
          - ninja  # [win]
          - make   # [unix]
 -- 
-2.27.0
+2.34.1
 
