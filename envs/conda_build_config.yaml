@@ -215,8 +215,9 @@ pydantic:
 pytest:
   - 5.*
 python:
-  - 3.6   # [not s390x]
   - 3.7
+  - 3.8
+  - 3.9
 pytorch:
   - 1.10.*
 pytorch_lightning:
@@ -307,12 +308,14 @@ zstd:
 ## These are settings and arguments to pass to GCC for
 ## optimization settings specific to the target CPU architecture
 ##
+ppc_arch:
+  - p9
 cpu_opt_arch:
   - sandybridge             # [x86_64]
   - power8                  # [ppc64le]
 cpu_opt_tune:
   - haswell                 # [x86_64]
-  - power9                  # [ppc64le]
+  - power10                  # [ppc64le]
 vector_settings:
   - avx, sse4.1, sse4.2     # [x86_64]
   - vsx                     # [ppc64le]
