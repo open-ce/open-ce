@@ -175,8 +175,7 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
-  - 1.21.*|1.22.*       #[x86_64]
-  - 1.20.*|1.22.*       #[ppc64le]
+  - 1.20.*|1.22.*
 onnx:
   - 1.10.*
 onnxconverter_common:
