@@ -3,6 +3,7 @@ packages:
   - feedstock : pybind11
   - feedstock : spdlog
   - feedstock : libsolv
+  - feedstock : libiconv    # [ppc64le]
   - feedstock : reproc
   - feedstock : nlohmann_json
   - feedstock : cpp-filesystem
