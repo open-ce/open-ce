@@ -125,6 +125,8 @@ keras:
   - 2.7.*
 leveldb:
   - 1.20.*
+libiconv:
+  - 1.16
 libdate:
   - 3.*
 libevent:
@@ -260,6 +262,8 @@ spacy_legacy:
   - 3.0.8
 spacy_loggers:
   - 1.0.1
+spdlog:
+  - 1.9.2
 srsly:
   - 2.*
 tabulate:
