@@ -14,4 +14,6 @@ packages:
   - feedstock : libflac
   - feedstock : libsndfile
   - feedstock : https://github.com/conda-forge/libtar-feedstock
+    patches :
+      - feedstock-patches/libtar/0001-Changed-libtar-source-url-as-older-one-is-not-availa.patch
 {% endif %}
