@@ -11,6 +11,7 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
+  - mamba-env.yaml
 
 packages:
   - feedstock : opencv

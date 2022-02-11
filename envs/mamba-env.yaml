@@ -1,0 +1,12 @@
+packages:
+  - feedstock : yaml-cpp
+  - feedstock : pybind11
+  - feedstock : spdlog
+  - feedstock : libsolv
+  - feedstock : libiconv    
+  - feedstock : reproc
+  - feedstock : nlohmann_json
+  - feedstock : cpp-filesystem
+  - feedstock : cli11
+  - feedstock : termcolor-cpp
+  - feedstock : mamba

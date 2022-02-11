@@ -1,0 +1,27 @@
+From 231aeb33f1a4d736f73eddf2ed3f84d28e6c2194 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 10 Feb 2022 08:56:00 +0000
+Subject: [PATCH] Changed libtar source url as older one is not available
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3223733..046711e 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -6,8 +6,8 @@ package:
+   version: {{ version }}
+ 
+ source:
+-  url: https://repo.or.cz/libtar.git/snapshot/6d0ab4c78e7a8305c36a0c3d63fd25cd1493de65.tar.gz
+-  sha256: f48c2d7b3e9780beaca14c9cd39582458c43b202c46cf2067bfc67bb152e140b
++  url: https://github.com/tklauser/libtar/archive/6d0ab4c78e7a8305c36a0c3d63fd25cd1493de65.zip
++  sha256: 020c5f7612d55c6b5ce25befb2f0417c325cff555dfd0c51b7bc20fb95565dc6
+ 
+ build:
+   number: 1004
+-- 
+2.34.1
+
