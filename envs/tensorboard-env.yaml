@@ -5,4 +5,4 @@ packages:
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
 
-git_tag_for_env: open-ce-v1.5.1
+git_tag_for_env: open-ce-v1.5.2
