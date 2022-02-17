@@ -82,7 +82,7 @@ gast:
 git:
   - 2.15
 google_auth:
-  - 1.23.*
+  - 1.*
 google_auth_oauthlib:
   - 0.4.*
 google_pasta:
