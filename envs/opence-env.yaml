@@ -11,8 +11,9 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
+  - mamba-env.yaml
 
 packages:
   - feedstock : opencv
 
-git_tag_for_env: open-ce-v1.5.1
+git_tag_for_env: open-ce-v1.5.2

@@ -33,6 +33,8 @@ clang:
   - 10.0.*
 click:
   - 8.*
+cli11:
+  - 2.1.2
 cloudpickle:
   - 1.6.*
 cmake:
@@ -42,6 +44,8 @@ contextvars:
   - 2.4
 coverage:
   - 5.*
+cpp_filesystem:
+  - 1.5.8
 cudnn:
   - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
   - 8.0.5.*    # [cudatoolkit == '10.2']
@@ -63,7 +67,7 @@ eigen:
 ffmpeg:
   - 4.2.*
 flatbuffers:
-  - 1.12.*
+  - 2.0
 freetype:
   - 2
 fortran_compiler_version:
@@ -78,7 +82,7 @@ gast:
 git:
   - 2.15
 google_auth:
-  - 1.23.*
+  - 1.*
 google_auth_oauthlib:
   - 0.4.*
 google_pasta:
@@ -101,8 +105,8 @@ hypothesis:
 h5py:
   - 3.2.*
 icu:
-  - 58.*     # [not s390x]
-  - 68.*     # [s390x]
+  - 58.*   #[not s390x]
+  - 68.*   #[s390x]
 importlib_resources:
   - 5.*
 jasper:
@@ -121,6 +125,8 @@ keras:
   - 2.7.*
 leveldb:
   - 1.20.*
+libiconv:
+  - 1.16
 libdate:
   - 3.*
 libevent:
@@ -148,6 +154,8 @@ libtiff:
   - 4.2
 libtool:
   - 2.4.6
+libsolv:
+  - 0.7.*
 libvorbis:
   - 1.3.7
 lmdb:
@@ -175,7 +183,7 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
-  - 1.20.*
+  - 1.20.*|1.22.*
 onnx:
   - 1.10.*
 onnxconverter_common:
@@ -197,8 +205,6 @@ opt_einsum:
   - 3.3.0
 pathy:
   - 0.5.*
-pillow:
-  - 8.*
 pip:
   - 21.*
 pkg_config:
@@ -206,9 +212,11 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.14.*
+  - 3.19.*
 psutil:
   - 5
+pybind11:
+  - 2.9.*
 #forbid version 1.8.1 due to security vulnerability
 pydantic:
   - 1.8.2
@@ -228,6 +236,8 @@ requests:
   - 2.*
 regex:
   - 2020.11.*
+reproc_cpp:
+  - 14.2.*
 rust:
   - 1.54.0
 rust_compiler_version:
@@ -251,6 +261,8 @@ spacy_legacy:
   - 3.0.8
 spacy_loggers:
   - 1.0.1
+spdlog:
+  - 1.9.2
 srsly:
   - 2.*
 tabulate:
@@ -269,6 +281,8 @@ tensorflow_io_gcs_filesystem:
   - 0.23.*
 termcolor:
   - 1.1.0
+termcolor_cpp:
+  - 2.0.0
 thinc:
   - 8.0.*
 tokenizers:
@@ -295,6 +309,8 @@ wheel:
   - 0.37*
 wrapt:
   - 1.12.*
+yaml_cpp:
+  - 0.6.3
 zlib:
   - 1.2.11
 zstd:

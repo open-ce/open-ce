@@ -17,10 +17,11 @@ packages:
   - feedstock : cudnn
   - feedstock : nccl
 {% endif %}
+  - feedstock : pybind11
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : skl2onnx
   - feedstock : onnxmltools
   - feedstock : tf2onnx
 
-git_tag_for_env: open-ce-v1.5.1
+git_tag_for_env: open-ce-v1.5.2
