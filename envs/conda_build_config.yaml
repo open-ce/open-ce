@@ -315,7 +315,7 @@ cpu_opt_arch:
   - power8                  # [ppc64le]
 cpu_opt_tune:
   - haswell                 # [x86_64]
-  - power10                  # [ppc64le]
+  - power9                  # [ppc64le]
 vector_settings:
   - avx, sse4.1, sse4.2     # [x86_64]
   - vsx                     # [ppc64le]
