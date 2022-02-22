@@ -4,16 +4,17 @@ imported_envs:
   - pytorch-extras-env.yaml
   - tensorflow-env.yaml
   - xgboost-env.yaml
-  - dali-env.yaml
-  - spacy-env.yaml
-  - transformers-env.yaml
-  - horovod-env.yaml
+  - dali-env.yaml      #[ppc_arch != p10]
+  - spacy-env.yaml     #[ppc_arch != p10]
+  - transformers-env.yaml    #[ppc_arch != p10]
+  - horovod-env.yaml   #[ppc_arch != p10]
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
   - mamba-env.yaml
 
 packages:
+  - feedstock : openblas
   - feedstock : opencv
 
 git_tag_for_env: open-ce-v1.5.2
