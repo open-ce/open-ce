@@ -1,12 +1,12 @@
-From d9829e0df39ddeeb4f7dc03cdf74098ca636e624 Mon Sep 17 00:00:00 2001
+From 4c49ecfd4f80e81273716eb11079873f29c1b13a Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 31 Jan 2022 02:31:23 -0600
-Subject: [PATCH]  Fix clang build for p10
+Date: Wed, 23 Feb 2022 11:03:17 +0000
+Subject: [PATCH] Fix clang build for p10
 
 ---
  recipe/build.sh  | 11 +++++++++++
- recipe/meta.yaml | 22 ++++++++++++----------
- 2 files changed, 23 insertions(+), 10 deletions(-)
+ recipe/meta.yaml | 25 ++++++++++++++-----------
+ 2 files changed, 25 insertions(+), 11 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 0df298f..ee68108 100644
@@ -31,7 +31,7 @@ index 0df298f..ee68108 100644
    -DCMAKE_INSTALL_PREFIX=$PREFIX \
    -DCMAKE_PREFIX_PATH=$PREFIX \
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 946e808..7778ef1 100644
+index 946e808..6ea3721 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -25,10 +25,12 @@ source:
@@ -102,7 +102,7 @@ index 946e808..7778ef1 100644
          - libcxx                   # [osx]
          - cmake >=3.4.3
          - ninja  # [win]
-@@ -235,8 +237,8 @@ outputs:
+@@ -235,13 +237,14 @@ outputs:
        run:
          - {{ pin_subpackage("clang", exact=True) }}
      test:
@@ -113,7 +113,14 @@ index 946e808..7778ef1 100644
        files:
          - mytest.cxx
        commands:
-@@ -254,7 +256,7 @@ outputs:
+         - clang++ --version
+-        - clang++ -v -c mytest.cxx
++        - clang++ --gcc-toolchain=$GCC_10_HOME -v -c mytest.cxx  # [ ppc_arch == "p10"]
++        - clang++ -v -c mytest.cxx  # [ ppc_arch != "p10"]
+ 
+   - name: clang-tools
+     script: install_clang_tools.sh  # [unix]
+@@ -254,7 +257,7 @@ outputs:
        build:
          # "compiling .pyc files" fails without this
          - python >3
