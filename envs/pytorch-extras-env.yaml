@@ -8,4 +8,4 @@ packages:
   - feedstock : libflac
   - feedstock : libsndfile
 
-git_tag_for_env: open-ce-v1.5.2
+git_tag_for_env: open-ce-v1.5.3
