@@ -1,6 +1,8 @@
 packages:
   - feedstock: https://github.com/conda-forge/jansson-feedstock
     git_tag: 5c2760222698c28ecf9d5608f94d9cdcaa2d9cb8  #2.13.1
+    patches:
+      - feedstock-patches/jansson/0001-Open-CE-changes.patch
   - feedstock: http://github.com/conda-forge/uwsgi-feedstock
     git_tag: 810642a204a7332afc1376aaceb357fa59938b02  #2.0.20
     patches:
