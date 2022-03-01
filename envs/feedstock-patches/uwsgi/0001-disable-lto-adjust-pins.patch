@@ -1,25 +1,13 @@
-From 1b0285d50ecdc176d076b5b1598be5e0c701ccd8 Mon Sep 17 00:00:00 2001
+From d63a888f621fbb9e8a3ac0d25bed0c2b1aa102f3 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Tue, 7 Sep 2021 06:29:52 -0400
-Subject: [PATCH] Some opence changes
+Date: Fri, 18 Feb 2022 15:19:50 +0000
+Subject: [PATCH] Open-CE changes
 
 ---
- config/conda_build_config.yaml | 4 ++++
- recipe/build.sh                | 2 +-
- recipe/meta.yaml               | 6 +++---
- 3 files changed, 8 insertions(+), 4 deletions(-)
- create mode 100644 config/conda_build_config.yaml
+ recipe/build.sh  |  2 +-
+ recipe/meta.yaml | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
-new file mode 100644
-index 0000000..d9c5e20
---- /dev/null
-+++ b/config/conda_build_config.yaml
-@@ -0,0 +1,4 @@
-+c_compiler_version:
-+  - 8
-+cxx_compiler_version:
-+  - 8
 diff --git a/recipe/build.sh b/recipe/build.sh
 index cc88e64..aa719f1 100644
 --- a/recipe/build.sh
@@ -34,10 +22,20 @@ index cc88e64..aa719f1 100644
  
  UWSGI_EMBED_PLUGINS=stats_pusher_statsd ${PYTHON} -m pip install . --no-deps -vv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index cf36a13..835b173 100644
+index aef49e9..bd34355 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -24,11 +24,11 @@ requirements:
+@@ -16,19 +16,19 @@ build:
+ 
+ requirements:
+   build:
+-    - {{ compiler('c') }}
+-    - {{ compiler('cxx') }}
++    - {{ compiler('c') }}        # [ppc_arch != "p10"]
++    - {{ compiler('cxx') }}      # [ppc_arch != "p10"]
+   host:
+     - icu
+     - jansson
      - libpython-static  # [py>=38]
      - libxml2  # [not win]
      - openssl
@@ -53,4 +51,5 @@ index cf36a13..835b173 100644
      - jansson
      - python
 -- 
-2.32.0
+2.34.1
+
