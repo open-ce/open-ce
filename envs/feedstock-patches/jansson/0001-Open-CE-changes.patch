@@ -1,0 +1,25 @@
+From fb2ee2ffc48261d0c2c2fa32bda3c519ff5e5517 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Fri, 18 Feb 2022 15:21:17 +0000
+Subject: [PATCH] Open-CE changes
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3e7ec9b..26e5808 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -21,7 +21,7 @@ requirements:
+     - make      # [not win]
+     - cmake     # [win]
+     - ninja     # [win]
+-    - {{ compiler('c') }}
++    - {{ compiler('c') }}    # [ppc_arch != "p10"]
+   host:
+ 
+ test:
+-- 
+2.34.1
+

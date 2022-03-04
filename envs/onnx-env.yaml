@@ -17,6 +17,7 @@ packages:
   - feedstock : cudnn
   - feedstock : nccl
 {% endif %}
+  - feedstock : pybind11
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : skl2onnx
