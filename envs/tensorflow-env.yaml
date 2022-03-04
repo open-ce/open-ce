@@ -14,7 +14,6 @@ packages:
   - feedstock : keras
   - feedstock : https://github.com/cdeepali/tensorflow-feedstock
     git_tag: 63a9c31911d98261978aa3ad8daa9cb3798ddfee
-  - feedstock : tensorflow
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
   - feedstock : tensorflow-estimator
