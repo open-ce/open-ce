@@ -92,7 +92,7 @@ googleapis_common_protos:
 gmock:
   - 1.10.0
 grpc_cpp:
-  - 1.44.*
+  - 1.41.*
 grpcio:
   - 1.42.*
 harfbuzz:
