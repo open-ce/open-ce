@@ -23,7 +23,7 @@ be specified at build time. Open-CE currently supports the following:
 
 | | Supported Versions |
 | --- | --- |
-| Architecture | Power, x86, s390x (experimental) |
+| Architecture | Power, x86, s390x |
 | Python | 3.7, 3.8, 3.9 |
 | CUDA | 10.2, 11.0, 11.2 |
 
