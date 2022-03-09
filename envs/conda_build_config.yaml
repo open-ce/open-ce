@@ -16,6 +16,8 @@ av:
   - 8.*
 bazel:
   - 3.7.*
+bsddb3:
+  - 6.2.9
 boost:
   - 1.67.0  # [not s390x]
   - 1.65.*  # [s390x]
@@ -89,6 +91,8 @@ google_pasta:
   - 0.2
 googleapis_common_protos:
   - 1.52.*
+googledrivedownloader:
+  - 0.4
 gmock:
   - 1.10.0
 grpc_cpp:
@@ -230,8 +234,14 @@ pytorch:
   - 1.10.*
 pytorch_lightning:
   - 1.5.*
+pytorch_scatter:
+  - 2.0.8
+pytorch_sparse:
+  - 0.6.10
 pyyaml:
   - 5.*
+rdflib:
+  - 6.1.1
 requests:
   - 2.*
 regex:
