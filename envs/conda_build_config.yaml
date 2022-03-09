@@ -15,7 +15,7 @@ automake:
 av:
   - 8.*
 bazel:
-  - 3.7.*
+  - 4.*
 boost:
   - 1.67.0  # [not s390x]
   - 1.65.*  # [s390x]
