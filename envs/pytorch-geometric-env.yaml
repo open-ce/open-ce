@@ -1,0 +1,10 @@
+imported_envs:
+  - pytorch-env.yaml
+packages:
+  - feedstock : pytorch_geometric
+  - feedstock : pytorch_sparse
+  - feedstock : pytorch_scatter
+  - feedstock : bsddb3
+  - feedstock : rdflib
+  - feedstock : googledrivedownloader
+
