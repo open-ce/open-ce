@@ -14,5 +14,7 @@ imported_envs:
   - mamba-env.yaml              #[ppc_arch != p10]
 
 packages:
+{% if not s390x %}
   - feedstock : openblas
   - feedstock : opencv
+{% endif %}

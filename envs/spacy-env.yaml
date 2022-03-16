@@ -1,5 +1,7 @@
 packages:
+{% if not s390x %}
   - feedstock : langcodes
   - feedstock : spacy-legacy
   - feedstock : spacy-loggers
   - feedstock : spacy
+{% endif %}

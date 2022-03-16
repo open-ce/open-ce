@@ -1,6 +1,8 @@
 packages:
+{% if not s390x %}
   - feedstock : tokenizers
   - feedstock : huggingface_hub
   - feedstock : sacremoses
   - feedstock : sentencepiece
   - feedstock : transformers
+{% endif %}

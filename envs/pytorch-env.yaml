@@ -1,14 +1,16 @@
 packages:
+{% if not s390x %}
   - feedstock : pytorch
   - feedstock : numactl
-{% if build_type == 'cuda' %}
+  {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : magma
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
-{% endif %}
+  {% endif %}
   - feedstock : openblas
   - feedstock : sentencepiece
   - feedstock : torchtext
   - feedstock : av
   - feedstock : torchvision
+{% endif %}
