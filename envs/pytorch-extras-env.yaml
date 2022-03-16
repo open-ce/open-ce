@@ -1,4 +1,5 @@
 imported_envs:
+{% if not s390x %}
   - tensorboard-env.yaml
   - pytorch-env.yaml
 
@@ -7,5 +8,6 @@ packages:
   - feedstock : pytorch-lightning-bolts
   - feedstock : libflac
   - feedstock : libsndfile
+{% endif %}
 
 git_tag_for_env: open-ce-v1.5.3

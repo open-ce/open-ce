@@ -1,6 +1,7 @@
 builder_version: ">=4.0.0"
 
 imported_envs:
+{% if not s390x %}
   - bazel-env.yaml
 
 conda_build_configs:
@@ -21,4 +22,5 @@ packages:
   - feedstock: protobuf
 {% endif %}
 
+{% endif %}
 git_tag_for_env: open-ce-v1.5.3

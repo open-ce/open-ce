@@ -1,7 +1,9 @@
 packages:
+{% if not s390x %}
   - feedstock : cdts
     runtime_package : False
   - feedstock : bazel
     runtime_package : False
+{% endif %}
 
 git_tag_for_env: open-ce-v1.5.3

@@ -1,4 +1,6 @@
 imported_envs:
+{% if not s390x %}
+
 {% if build_type == 'cuda' %}
   - pytorch-env.yaml
   - tensorflow-env.yaml
@@ -9,5 +11,5 @@ packages:
   - feedstock : horovod
   - feedstock : openmpi #[mpi_type == 'openmpi']
 {% endif %}
-
+{% endif %}
 git_tag_for_env: open-ce-v1.5.3

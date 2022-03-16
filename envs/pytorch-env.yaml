@@ -1,4 +1,5 @@
 packages:
+{% if not s390x %}
   - feedstock : pytorch
   - feedstock : numactl
 {% if build_type == 'cuda' %}
@@ -12,5 +13,5 @@ packages:
   - feedstock : torchtext
   - feedstock : av
   - feedstock : torchvision
-
+{% endif %}
 git_tag_for_env: open-ce-v1.5.3

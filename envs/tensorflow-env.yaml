@@ -1,4 +1,5 @@
 imported_envs:
+{% if not s390x %}
   - bazel-env.yaml
 
 packages:
@@ -26,5 +27,6 @@ packages:
   - feedstock : typeguard
   - feedstock : tensorflow-addons
   - feedstock : tensorflow-io-gcs-filesystem
+{% endif %}
   
 git_tag_for_env: open-ce-v1.5.3

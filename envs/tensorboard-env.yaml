@@ -1,8 +1,9 @@
 imported_envs:
+{% if not s390x %}
   - bazel-env.yaml
 
 packages:
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
-
+{% endif %}
 git_tag_for_env: open-ce-v1.5.3

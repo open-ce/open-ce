@@ -1,4 +1,5 @@
 imported_envs:
+{% if not s390x %}
   - tensorflow-env.yaml
 
 packages:
@@ -23,5 +24,5 @@ packages:
   - feedstock : skl2onnx
   - feedstock : onnxmltools
   - feedstock : tf2onnx
-
+{% endif %}
 git_tag_for_env: open-ce-v1.5.3
