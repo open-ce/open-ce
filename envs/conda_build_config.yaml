@@ -161,7 +161,7 @@ libvorbis:
 lmdb:
   - 0.9.*
 magma:
-  - 2.5.4.*
+  - 2.6.*
 make:
   - 4.2.1
 markdown:
@@ -177,7 +177,7 @@ networkx:
 ninja:
   - 1.10.*
 nccl:
-  - 2.11.*
+  - 2.12.*
 nlohmann_json:
   - 3.*
 numactl:
