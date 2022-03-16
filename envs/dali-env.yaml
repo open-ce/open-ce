@@ -1,10 +1,10 @@
 imported_envs:
-{% if not s390x %}
-  {% if build_type == 'cuda' %}
-    - tensorflow-env.yaml
-  {% endif %}
+{% if build_type == 'cuda' %}
+  - tensorflow-env.yaml
+{% endif %}
 
-  packages:
+packages:
+{% if not s390x %}
   {% if build_type == 'cuda' %}
     - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
     - feedstock : opencv
