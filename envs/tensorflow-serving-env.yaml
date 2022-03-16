@@ -7,18 +7,21 @@ conda_build_configs:
   - tensorflow_serving_conda_build_config.yaml
 
 packages:
-{% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
-  - feedstock: libc_wrappers     #[x86_64 and c_compiler_version == "7.2.*" and ((cudatoolkit == '11.0' or cudatoolkit == '11.2') or (py_ver < 3.8 and cudatoolkit == "10.2" ))]
-  - feedstock: nccl
-  - feedstock: cudnn
-{% endif %}
-  - feedstock: libevent
-  - feedstock: tensorflow-serving
+{% if not s390x %}
 
-{% set py_ver = python | float %}
-{% if py_ver >= 3.8 %}
-  - feedstock: protobuf
-{% endif %}
+  {% if build_type == 'cuda' %}
+    - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+    - feedstock: libc_wrappers     #[x86_64 and c_compiler_version == "7.2.*" and ((cudatoolkit == '11.0' or cudatoolkit == '11.2') or (py_ver < 3.8 and cudatoolkit == "10.2" ))]
+    - feedstock: nccl
+    - feedstock: cudnn
+  {% endif %}
+    - feedstock: libevent
+    - feedstock: tensorflow-serving
 
+  {% set py_ver = python | float %}
+  {% if py_ver >= 3.8 %}
+    - feedstock: protobuf
+  {% endif %}
+
+{% endif %}
 git_tag_for_env: open-ce-v1.5.3

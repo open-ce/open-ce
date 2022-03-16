@@ -1,8 +1,9 @@
 packages:
+{% if not s390x %}
   - feedstock : tokenizers
   - feedstock : huggingface_hub
   - feedstock : sacremoses
   - feedstock : sentencepiece
   - feedstock : transformers
-
+{% endif %}
 git_tag_for_env: open-ce-v1.5.3
