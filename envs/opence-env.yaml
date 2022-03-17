@@ -1,4 +1,5 @@
 imported_envs:
+  - common-feedstocks-env.yaml
   - onnx-env.yaml
   - pytorch-env.yaml
   - pytorch-extras-env.yaml
@@ -12,11 +13,5 @@ imported_envs:
   - arrow-env.yaml
   - uwsgi-env.yaml
   - mamba-env.yaml
-
-packages:
-{% if not s390x %}
-  - feedstock : openblas
-  - feedstock : opencv
-{% endif %}
 
 git_tag_for_env: open-ce-v1.5.3

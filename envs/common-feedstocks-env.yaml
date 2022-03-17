@@ -1,0 +1,7 @@
+packages:
+{% if not s390x %}
+  - feedstock : openblas
+  - feedstock : opencv
+{% endif %}
+
+git_tag_for_env: open-ce-v1.5.3
