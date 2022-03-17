@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         shell: bash -l {0}
         run: |
-          conda install -y conda-build
+          conda install -y conda-build=3.21.7
       - name: Clone build tools
         shell: bash -l {0}
         run: |
