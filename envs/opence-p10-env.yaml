@@ -4,14 +4,9 @@ imported_envs:
   - pytorch-extras-env.yaml
   - tensorflow-env.yaml
   - xgboost-env.yaml
-  - dali-env.yaml
-  - spacy-env.yaml
-  - transformers-env.yaml
-  - horovod-env.yaml
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
-  - mamba-env.yaml
 
 packages:
 {% if not s390x %}
