@@ -25,7 +25,7 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install -y pylint=2.6.0 \
-                           conda-build
+                           conda-build=3.21.7
           pip install yamllint==1.24.2
       - name: Validate config files
         shell: bash -l {0}

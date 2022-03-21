@@ -10,7 +10,7 @@ runs:
     - name: Install dependencies and set envrionment
       shell: bash -l {0}
       run: |
-        conda install -y conda-build
+        conda install -y conda-build=3.21.7
         echo "env_path=$GITHUB_ACTION_PATH/../../../envs" >> $GITHUB_ENV
         git clone https://github.com/open-ce/open-ce-builder.git \
                   ./open-ce-builder
