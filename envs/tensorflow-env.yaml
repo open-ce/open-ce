@@ -2,11 +2,12 @@ imported_envs:
   - bazel-env.yaml
 
 packages:
-{% if build_type == 'cuda' %}
+{% if not s390x %}
+  {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
-{% endif %}
+  {% endif %}
   - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
     git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c                 # [ppc64le]
     patches:                                                          # [ppc64le]
@@ -26,3 +27,4 @@ packages:
   - feedstock : typeguard
   - feedstock : tensorflow-addons
   - feedstock : tensorflow-io-gcs-filesystem
+{% endif %}
