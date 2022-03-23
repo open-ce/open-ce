@@ -7,6 +7,7 @@ packages:
 {% if not s390x %}
   {% if build_type == 'cuda' %}
     - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+    - feedstock : openblas
     - feedstock : opencv
     - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
       git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c                 # [ppc64le]
