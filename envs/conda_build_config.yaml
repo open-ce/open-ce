@@ -265,6 +265,8 @@ spdlog:
   - 1.9.2
 srsly:
   - 2.*
+starlette:
+  - 0.17.*
 tabulate:
   - 0.8.*
 tensorboard:
