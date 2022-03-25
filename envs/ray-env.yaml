@@ -1,16 +1,14 @@
 imported_envs:
   - arrow-env.yaml
   - bazel-env.yaml
+  - tensorflow-env.yaml
 
 packages:
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag: 1affc7a9146e771582508b1b7311c4f635579211
-    patches:
-      - feedstock-patches/rapidjson/s390x-fix1.patch
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
   - feedstock : https://github.com/conda-forge/gym-feedstock
     patches:
-      - feedstock-patches/gym/remove-extra-packages.patch
+      - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
   - feedstock : dm-tree
-  - feedstock : tensorflow
