@@ -12,3 +12,4 @@ packages:
       - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
   - feedstock : dm-tree
+  - feedstock : ray-packages
