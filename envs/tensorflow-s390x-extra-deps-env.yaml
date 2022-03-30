@@ -1,0 +1,5 @@
+packages:
+{% if s390x %}
+  - feedstock : https://github.com/AnacondaRecipes/flatbuffers-feedstock.git
+    git_tag: c7bd7770705d34151e80cae10b7b4a4cc960094f
+{% endif %}
