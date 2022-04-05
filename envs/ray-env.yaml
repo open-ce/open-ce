@@ -1,9 +1,11 @@
 imported_envs:
+{% if build_type == 'cpu' %}
   - arrow-env.yaml
-  - bazel-env.yaml
   - tensorflow-env.yaml
+{% endif %}
 
 packages:
+{% if build_type == 'cpu' %}
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag: 1affc7a9146e771582508b1b7311c4f635579211
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
@@ -13,3 +15,4 @@ packages:
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
   - feedstock : dm-tree
   - feedstock : ray-packages
+{% endif %}
