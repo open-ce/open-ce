@@ -13,3 +13,4 @@ imported_envs:
   - arrow-env.yaml
   - uwsgi-env.yaml
   - mamba-env.yaml
+  - ray-env.yaml
