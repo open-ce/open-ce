@@ -1,6 +1,8 @@
 packages:
-{% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+{% if not s390x %}
+  {% if build_type == 'cuda' %}
+    - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+  {% endif %}
+    - feedstock : LightGBM
+    - feedstock : openmpi          #[mpi_type == 'openmpi']
 {% endif %}
-  - feedstock : LightGBM
-  - feedstock : openmpi          #[mpi_type == 'openmpi']

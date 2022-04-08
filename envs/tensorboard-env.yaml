@@ -2,5 +2,7 @@ imported_envs:
   - bazel-env.yaml
 
 packages:
+{% if not s390x %}
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
+{% endif %}

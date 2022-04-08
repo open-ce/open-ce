@@ -1,14 +1,22 @@
 packages:
-  - feedstock : yaml-cpp
-  - feedstock : pybind11
-  - feedstock : spdlog
-  - feedstock : libsolv
-  - feedstock : libiconv    
-  - feedstock : reproc
-  - feedstock : nlohmann_json
-  - feedstock : cpp-filesystem
-  - feedstock : cli11
-  - feedstock : termcolor-cpp
+  - feedstock : https://github.com/conda-forge/cli11-feedstock
+    git_tag : a8e959fcae876db93c92918e57914f632feac574
+  - feedstock : https://github.com/conda-forge/pybind11-feedstock
+    git_tag : 3d3cbe7e8422e78a1c315004ed14480e00f30b59	
+  - feedstock : https://github.com/conda-forge/cpp-filesystem-feedstock
+    git_tag : 8eb554c81192737f0bdf4369649fd3a36a64d69b	
+  - feedstock : https://github.com/conda-forge/nlohmann_json-feedstock.git
+    git_tag : 2890d321829957c5064dc34fd26ab552e52ed84f
+  - feedstock : https://github.com/conda-forge/reproc-feedstock.git
+    git_tag : 84330a3a928f0be8bfe360e28529111ddba89aa1
+  - feedstock : https://github.com/conda-forge/libiconv-feedstock.git
+    git_tag : bf7f533fe3ffb939f133fa1f57bf0b0f6c16707d
+  - feedstock : https://github.com/conda-forge/libsolv-feedstock.git
+    git_tag : a4377e7bb252838fe3b2595a976a4f1b9a60341b
+  - feedstock : https://github.com/conda-forge/spdlog-feedstock.git
+    git_tag: 6f6a8b720f06142b20e03fe7236a79ea5b594728
+  - feedstock : https://github.com/conda-forge/termcolor-cpp-feedstock.git
+    git_tag : f35835967df63a49285fb70ea08edd704ab0aa79	
+  - feedstock : https://github.com/conda-forge/yaml-cpp-feedstock.git
+    git_tag : dc95b85b3054205c1f2cd168dbbb5ee87a81ef99
   - feedstock : mamba
-
-git_tag_for_env: open-ce-v1.5.3
