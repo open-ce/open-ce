@@ -1,4 +1,5 @@
 imported_envs:
+{% if not s390x %}
 {% if build_type == 'cpu' %}
   - arrow-env.yaml
   - tensorflow-env.yaml
@@ -16,3 +17,5 @@ packages:
   - feedstock : dm-tree
   - feedstock : ray-packages
 {% endif %}
+{% endif %}
+
