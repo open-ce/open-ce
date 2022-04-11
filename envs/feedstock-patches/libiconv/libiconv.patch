@@ -1,0 +1,13 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index dd7d6e1..d68ffb7 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -30,6 +30,8 @@ requirements:
+     - make      # [unix]
+ 
+ test:
++  requires:
++    - conda-build
+   commands:
+     - iconv --help  # [not win]
+     - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]

@@ -11,6 +11,8 @@ packages:
     git_tag : 84330a3a928f0be8bfe360e28529111ddba89aa1
   - feedstock : https://github.com/conda-forge/libiconv-feedstock.git
     git_tag : 0b738dfd8cfa3b5072b00a62a7cb41b21e018be5
+    patches :
+          - feedstock-patches/libiconv/libiconv.patch
   - feedstock : https://github.com/conda-forge/libsolv-feedstock.git
     git_tag : a4377e7bb252838fe3b2595a976a4f1b9a60341b
   - feedstock : https://github.com/conda-forge/spdlog-feedstock.git
