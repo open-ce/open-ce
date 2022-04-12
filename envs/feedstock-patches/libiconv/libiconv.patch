@@ -1,8 +1,45 @@
+From a41fa64d9c8bddd10aa1d645daef3892144333b9 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 12 Apr 2022 05:59:05 +0000
+Subject: [PATCH] Fix libiconv build
+
+---
+ recipe/build.sh  | 9 ---------
+ recipe/meta.yaml | 4 +++-
+ 2 files changed, 3 insertions(+), 10 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 557d911..0355fe6 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -10,14 +10,5 @@ make -j${CPU_COUNT} ${VERBOSE_AT}
+ make check
+ make install
+ 
+-# TODO :: Only provide a static iconv executable for GNU/Linux.
+-# TODO :: glibc has iconv built-in. I am only providing it here
+-# TODO :: for legacy packages (and through gritted teeth).
+-if [[ ${HOST} =~ .*linux.* ]]; then
+-  chmod 755 ${PREFIX}/lib/libiconv.so.2.6.0
+-  chmod 755 ${PREFIX}/lib/libcharset.so.1.0.0
+-  chmod 755 ${PREFIX}/lib/preloadable_libiconv.so
+-fi
+-
+ # remove libtool files
+ find $PREFIX -name '*.la' -delete
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index dd7d6e1..d68ffb7 100644
+index 5a55d4d..dc99396 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -30,6 +30,8 @@ requirements:
+@@ -22,13 +22,15 @@ build:
+ 
+ requirements:
+   build:
+-    - {{ compiler('c') }}
++    - {{ compiler('c') }}    #[ppc_arch != 'p10']
+     - cmake     # [win]
+     - ninja     # [win]
+     - m2-patch  # [win]
      - make      # [unix]
  
  test:
@@ -11,3 +48,6 @@ index dd7d6e1..d68ffb7 100644
    commands:
      - iconv --help  # [not win]
      - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
+-- 
+2.34.1
+
