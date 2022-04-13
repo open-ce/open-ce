@@ -8,6 +8,7 @@ packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : cudnn
+<<<<<<< HEAD
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
 {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
@@ -37,6 +38,16 @@ packages:
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
+=======
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+{% endif %}
+  - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [not x86]
+    git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c                 # [not x86]
+    patches:                                                          # [not x86]
+      - feedstock-patches/clang/0001-Fix-clang-build-for-p10.patch                            # [ppc64le]
+      - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
+{% if not s390x %}
+>>>>>>> 8cad79d (clangdev fix and more s390x deps (#606))
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
@@ -52,4 +63,11 @@ packages:
   - feedstock : tensorflow-model-optimization
   - feedstock : typeguard
   - feedstock : tensorflow-addons
+<<<<<<< HEAD
   - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
+=======
+  - feedstock : tensorflow-io-gcs-filesystem # [not s390x]
+{% endif %}
+  
+git_tag_for_env: open-ce-v1.5.3
+>>>>>>> 8cad79d (clangdev fix and more s390x deps (#606))
