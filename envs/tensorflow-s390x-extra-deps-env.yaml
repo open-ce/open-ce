@@ -2,4 +2,12 @@ packages:
 {% if s390x %}
   - feedstock : https://github.com/AnacondaRecipes/flatbuffers-feedstock.git
     git_tag: c7bd7770705d34151e80cae10b7b4a4cc960094f
+  - feedstock : https://github.com/conda-forge/llvmdev-feedstock
+    git_tag: ddce3b23502e4a4c97650062c709014c22144183
+  - feedstock : https://github.com/conda-forge/portpicker-feedstock
+    git_tag: b21a22eb2c31f135b8e2966b0e53c269e9a12a18
+  - feedstock : https://github.com/AnacondaRecipes/googleapis-common-protos-feedstock
+    git_tag: d8c73a73f29e835eb5dfc5e071b9564ea665e7fd
+  - feedstock : https://github.com/AnacondaRecipes/promise-feedstock
+    git_tag: a1855c8a4e3e2e597f612e4edd504bf1da81d91d
 {% endif %}
