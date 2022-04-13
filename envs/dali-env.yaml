@@ -20,3 +20,5 @@ packages:
         - feedstock-patches/libtar/0001-Changed-libtar-source-url-as-older-one-is-not-availa.patch
   {% endif %}
 {% endif %}
+
+git_tag_for_env: open-ce-v1.6.0

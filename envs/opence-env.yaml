@@ -14,3 +14,5 @@ imported_envs:
   - uwsgi-env.yaml
   - mamba-env.yaml
   - ray-env.yaml
+
+git_tag_for_env: open-ce-v1.6.0

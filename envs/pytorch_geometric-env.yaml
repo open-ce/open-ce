@@ -12,3 +12,5 @@ packages:
   - feedstock : https://github.com/conda-forge/pytorch_scatter-feedstock.git
     git_tag : 025cae51f15dbef351aa55d251bf9f4eb0b3ee38
   - feedstock : pytorch_geometric
+
+git_tag_for_env: open-ce-v1.6.0
