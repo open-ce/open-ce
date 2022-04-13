@@ -13,4 +13,3 @@ packages:
 {% endif %}
 
 git_tag_for_env: open-ce-v1.6.0
-
