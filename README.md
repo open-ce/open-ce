@@ -4,7 +4,7 @@
   <img src="https://avatars0.githubusercontent.com/u/68873540?s=400&u=a02dc4156e50cdffb23172aba7133e44381885d4&v=4" alt="Open-CE Logo" width="30%">
 </p>
 
-[![Python Support](https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9-blue.svg)](#requirements)
+[![Python Support](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue.svg)](#requirements)
 [![Cuda Support](https://img.shields.io/badge/cuda-10.2%20%7C%2011.0%20%7C%2011.2-blue)](#)
 [![Architecture Support](https://img.shields.io/badge/architecture-x86%20%7C%20ppc64le%20%7C%20s390x-blue)](#)
 [![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
@@ -24,7 +24,7 @@ be specified at build time. Open-CE currently supports the following:
 | | Supported Versions |
 | --- | --- |
 | Architecture | Power, x86, s390x (experimental) |
-| Python | 3.7, 3.8, 3.9 |
+| Python | 3.8, 3.9 |
 | CUDA | 10.2, 11.0, 11.2 |
 
 
