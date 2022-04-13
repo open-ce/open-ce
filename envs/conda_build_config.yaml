@@ -90,7 +90,7 @@ google_auth_oauthlib:
 google_pasta:
   - 0.2
 googleapis_common_protos:
-  - 1.52.*
+  - 1.*
 googledrivedownloader:
   - 0.4
 gmock:
