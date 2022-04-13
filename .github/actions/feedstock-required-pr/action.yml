@@ -28,5 +28,5 @@ runs:
         open-ce validate config \
                          ${env_path}/*-env.yaml \
                          --build_types cuda,cpu \
-                         --python_versions 3.7,3.8,3.9 \
+                         --python_versions 3.8,3.9 \
                          --repository_folder ../
