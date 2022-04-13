@@ -1,9 +1,9 @@
 abseil_cpp:
   - 20210324
 absl_py:
-  - 0.12.*
+  - 0.15.*
 arrow:
-  - 5.0.0
+  - 7.0.0
 astunparse:
   - 1.6
 attrs:
@@ -15,7 +15,9 @@ automake:
 av:
   - 8.*
 bazel:
-  - 3.7.*
+  - 4.*
+bsddb3:
+  - 6.2.9
 boost:
   - 1.67.0  # [not s390x]
   - 1.65.*  # [s390x]
@@ -88,7 +90,9 @@ google_auth_oauthlib:
 google_pasta:
   - 0.2
 googleapis_common_protos:
-  - 1.52.*
+  - 1.*
+googledrivedownloader:
+  - 0.4
 gmock:
   - 1.10.0
 grpc_cpp:
@@ -122,7 +126,7 @@ keras_applications:
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.7.*
+  - 2.8.*
 leveldb:
   - 1.20.*
 libiconv:
@@ -161,7 +165,7 @@ libvorbis:
 lmdb:
   - 0.9.*
 magma:
-  - 2.5.4.*
+  - 2.6.*
 make:
   - 4.2.1
 markdown:
@@ -177,7 +181,7 @@ networkx:
 ninja:
   - 1.10.*
 nccl:
-  - 2.11.*
+  - 2.12.*
 nlohmann_json:
   - 3.*
 numactl:
@@ -185,7 +189,7 @@ numactl:
 numpy:
   - 1.20.*|1.22.*
 onnx:
-  - 1.10.*
+  - 1.11.*
 onnxconverter_common:
   - 1.9.*
 onnx_graphsurgeon:
@@ -229,8 +233,14 @@ pytorch:
   - 1.10.*
 pytorch_lightning:
   - 1.5.*
+pytorch_scatter:
+  - 2.0.8
+pytorch_sparse:
+  - 0.6.10
 pyyaml:
   - 5.*
+rdflib:
+  - 6.1.1
 requests:
   - 2.*
 regex:
@@ -264,20 +274,22 @@ spdlog:
   - 1.9.2
 srsly:
   - 2.*
+starlette:
+  - 0.17.*
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.7.*
+  - 2.8.*
 tensorboard_data_server:
   - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.7.*
+  - 2.8.*
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.23.*
+  - 0.24.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
@@ -285,7 +297,7 @@ termcolor_cpp:
 thinc:
   - 8.0.*
 tokenizers:
-  - 0.10.3
+  - 0.11.4
 torchmetrics:
   - 0.6.*
 torchtext:

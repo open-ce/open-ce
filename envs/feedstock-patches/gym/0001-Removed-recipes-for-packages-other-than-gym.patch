@@ -1,0 +1,146 @@
+From 03e747d6172dfe81ab1487696a4c848239ff981b Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Fri, 25 Mar 2022 04:31:34 -0400
+Subject: [PATCH] Removed recipes for packages other than gym
+
+---
+ recipe/meta.yaml | 123 -----------------------------------------------
+ 1 file changed, 123 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 592648b..987ec2f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -46,129 +46,6 @@ outputs:
+       commands:
+         # TODO: run test suite
+ 
+-  - name: gym-all
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        # exclude gym-atari package because the Atari-Py dependency
+-        # has been replaced with ALE-py which has not yet been
+-        # packaged in conda-forge, see conda-forge/staged-recipes#16488
+-        # - {{ pin_subpackage('gym-atari', exact=True) }}
+-        - {{ pin_subpackage('gym-box2d', exact=True) }}
+-        - {{ pin_subpackage('gym-classic_control', exact=True) }}
+-        # exclude some packages because their dependency (mujoco) has
+-        # incompatible license, see below
+-        #- {{ pin_subpackage('gym-mujoco', exact=True) }}
+-        #- {{ pin_subpackage('gym-robotics', exact=True) }}
+-        - {{ pin_subpackage('gym-toy_text', exact=True) }}
+-        - {{ pin_subpackage('gym-other', exact=True) }}
+-    test:
+-      imports:
+-        - gym
+-
+-  - name: gym-atari
+-    build:
+-      # the Atari-Py dependency has been replaced with ALE-Py
+-      # which has not yet been packaged in conda-forge
+-      skip: true
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        - {{ pin_subpackage('gym', exact=True) }}
+-        - ale-py >=0.7.1,<0.8
+-    test:
+-      imports:
+-        - gym.envs.atari
+-
+-  - name: gym-box2d
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        - {{ pin_subpackage('gym', exact=True) }}
+-        - box2d-py ==2.3.8
+-        - pyglet >=1.4.0
+-    test:
+-      imports:
+-        - gym.envs.box2d
+-
+-  - name: gym-classic_control
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        - pyglet >=1.4.0
+-        - {{ pin_subpackage('gym', exact=True) }}
+-        # no extra dependencies for this combination
+-    test:
+-      imports:
+-        - gym.envs.classic_control
+-
+-  - name: gym-mujoco
+-    build:
+-      # mujoco-py cannot be packaged for license reasons, see
+-      # https://github.com/openai/mujoco-py#install-mujoco
+-      skip: true
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        - {{ pin_subpackage('gym', exact=True) }}
+-        - mujoco-py >=1.50,<2.0
+-        - imageio
+-    test:
+-      imports:
+-        - gym.envs.mujoco
+-
+-  - name: gym-robotics
+-    build:
+-      # mujoco-py cannot be packaged for license reasons, see
+-      # https://github.com/openai/mujoco-py#install-mujoco
+-      skip: true
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        - {{ pin_subpackage('gym', exact=True) }}
+-        - mujoco-py >=1.50,<2.0
+-        - imageio
+-    test:
+-      imports:
+-        - gym.envs.robotics
+-
+-  - name: gym-toy_text
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        - {{ pin_subpackage('gym', exact=True) }}
+-        - scipy >=1.4.1
+-    test:
+-      imports:
+-        - gym.envs.toy_text
+-
+-  - name: gym-other
+-    requirements:
+-      host:
+-        - python
+-      run:
+-        - python
+-        - {{ pin_subpackage('gym', exact=True) }}
+-        - lz4 >=3.1.0
+-        - opencv >=3.0
+-    test:
+-      imports:
+-        # There are no tests in the source code for gym-other
+-
+   # - name: gym-accept-rom-license
+   #   requirements:
+   #     host:
+-- 
+2.23.0
+

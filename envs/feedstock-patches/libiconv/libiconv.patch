@@ -1,0 +1,55 @@
+From 84b0729e4b34a3ea53c96471de1a546933d780f8 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 12 Apr 2022 10:32:12 +0000
+Subject: [PATCH] Fixed build on ppc64le
+
+---
+ recipe/build.sh  | 11 -----------
+ recipe/meta.yaml |  4 +++-
+ 2 files changed, 3 insertions(+), 12 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 3fe44b0..efdd355 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -16,16 +16,5 @@ make check
+ fi
+ make install
+ 
+-# TODO :: Only provide a static iconv executable for GNU/Linux.
+-# TODO :: glibc has iconv built-in. I am only providing it here
+-# TODO :: for legacy packages (and through gritted teeth).
+-if [[ ${HOST} =~ .*linux.* ]]; then
+-  chmod 755 ${PREFIX}/lib/libiconv.so.2.6.1
+-  chmod 755 ${PREFIX}/lib/libcharset.so.1.0.0
+-  if [ -f ${PREFIX}/lib/preloadable_libiconv.so ]; then
+-    chmod 755 ${PREFIX}/lib/preloadable_libiconv.so
+-  fi
+-fi
+-
+ # remove libtool files
+ find $PREFIX -name '*.la' -delete
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index dd7d6e1..abfecfd 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -23,13 +23,15 @@ build:
+ requirements:
+   build:
+     - libtool  # [unix]
+-    - {{ compiler('c') }}
++    - {{ compiler('c') }}    #[ppc_arch != 'p10']
+     - cmake     # [win]
+     - ninja     # [win]
+     - m2-patch  # [win]
+     - make      # [unix]
+ 
+ test:
++  requires:
++    - conda-build
+   commands:
+     - iconv --help  # [not win]
+     - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
+-- 
+2.34.1
+
