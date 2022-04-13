@@ -1,0 +1,28 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b5bc4b4..6f3e06c 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -38,9 +38,9 @@ outputs:
+       build:
+         - python                                 # [build_platform != target_platform]
+         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-        - cmake
++        - cmake {{ cmake }}
+         - make  # [unix]
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}   #[ppc_arch != 'p10']
+       host:
+         - python
+         - pip
+@@ -60,9 +60,9 @@ outputs:
+       build:
+         - python                                 # [build_platform != target_platform]
+         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-        - cmake
++        - cmake {{ cmake }}
+         - make  # [unix]
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}  #[ppc_arch != 'p10']
+       host:
+         - python
+         - pip
