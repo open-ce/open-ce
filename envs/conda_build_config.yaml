@@ -195,6 +195,7 @@ numactl:
   - 2.0.*
 numpy:
   - 1.22.*
+  - 1.21.*|1.22.* # [s390x]
 onnx:
   - 1.11.*
 onnxconverter_common:
