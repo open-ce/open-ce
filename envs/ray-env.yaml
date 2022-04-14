@@ -11,6 +11,7 @@ packages:
     git_tag: 1affc7a9146e771582508b1b7311c4f635579211
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
   - feedstock : https://github.com/conda-forge/gym-feedstock
+    git_tag: 2a7ffecb73b770d6889ec06e133bd3cfe8c02041
     patches:
       - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
