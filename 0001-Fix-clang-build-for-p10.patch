@@ -1,0 +1,142 @@
+From c6dcac983aada8581283f57b9b3b408029d4f2d0 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Thu, 14 Apr 2022 09:07:53 +0000
+Subject: [PATCH] Fix clang build for P10
+
+---
+ recipe/build.sh  | 11 +++++++++++
+ recipe/meta.yaml | 27 ++++++++++++++++-----------
+ 2 files changed, 27 insertions(+), 11 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 0df298f..ee68108 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -13,6 +13,17 @@ if [[ "$variant" == "hcc" ]]; then
+   EXTRA_ARGS="$EXTRA_ARGS -DKALMAR_SDK_COMMIT=24e69cd8 -DKALMAR_FRONTEND_COMMIT=24e69cd8 -DKALMAR_BACKEND_COMMIT=24e69cd8"
+ fi
+ 
++if [[ $ppc_arch == "p10" ]]
++then
++    if [[ -z "${GCC_10_HOME}" ]];
++    then
++        echo "Please set GCC_10_HOME to the install path of gcc-toolset-10"
++        exit 1
++    else
++        AR=$GCC_10_HOME/bin/ar
++    fi
++fi
++
+ cmake \
+   -DCMAKE_INSTALL_PREFIX=$PREFIX \
+   -DCMAKE_PREFIX_PATH=$PREFIX \
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 946e808..a84b92a 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -25,10 +25,12 @@ source:
+ build:
+   number: {{ build_number }}
+   skip: true  # [(win and vc<14) or variant=="hcc"]
++  script_env:                  # [ppc_arch == "p10"]
++    - GCC_10_HOME              # [ppc_arch == "p10"]
+ 
+ requirements:
+   build:
+-    - {{ compiler('cxx') }}
++    - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+     - cmake >=3.4.3
+     # Needed to unpack the source tarball
+     - m2w64-xz  # [win]
+@@ -37,13 +39,15 @@ requirements:
+     # Building with ninja on windows for parallel builds
+     - ninja  # [win]
+     - make   # [unix]
++    - zlib {{ zlib }}
+   host:
+     - libcxx {{ cxx_compiler_version }}  # [osx]
+     - llvmdev =={{ version }}
++    - zlib {{ zlib }}
+ 
+ test:
+   requires:
+-    - {{ compiler('cxx') }}
++    - {{ compiler('cxx') }}      # [ ppc_arch != "p10"]
+     - cmake >=3.4.3
+   files:
+     - mytest.c
+@@ -70,7 +74,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -108,7 +112,7 @@ outputs:
+       skip: true  # [win]
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -137,7 +141,7 @@ outputs:
+       {% endif %}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -164,7 +168,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -191,7 +195,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - libcxx                   # [osx]
+         - cmake >=3.4.3
+         - ninja  # [win]
+@@ -235,13 +239,14 @@ outputs:
+       run:
+         - {{ pin_subpackage("clang", exact=True) }}
+     test:
+-      requires:
+-        - {{ compiler("cxx") }}
++      requires:                    # [ ppc_arch != "p10"]
++        - {{ compiler("cxx") }}    # [ ppc_arch != "p10"]
+       files:
+         - mytest.cxx
+       commands:
+         - clang++ --version
+-        - clang++ -v -c mytest.cxx
++        - clang++ --gcc-toolchain=$GCC_10_HOME -v -c mytest.cxx  # [ ppc_arch == "p10"]
++        - clang++ -v -c mytest.cxx  # [ ppc_arch != "p10"]
+ 
+   - name: clang-tools
+     script: install_clang_tools.sh  # [unix]
+@@ -254,7 +259,7 @@ outputs:
+       build:
+         # "compiling .pyc files" fails without this
+         - python >3
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+-- 
+2.34.1
+
