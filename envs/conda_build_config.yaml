@@ -183,7 +183,8 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
-  - 1.20.*|1.22.*
+  - 1.20.*|1.22.*        # [not s390x]
+  - 1.20.*|1.21.*|1.22.* # [s390x]
 onnx:
   - 1.10.*
 onnxconverter_common:
