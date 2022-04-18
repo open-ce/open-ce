@@ -7,10 +7,15 @@ imported_envs:
 
 packages:
 {% if build_type == 'cpu' %}
+  - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
+    git_tag: 312dca71c6d5a752ad6a2ab7c0a65a55b71a3e81
+    patches:
+      -  feedstock-patches/unicorn/0001-remove-unicode-char-from-summary.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag: 1affc7a9146e771582508b1b7311c4f635579211
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
   - feedstock : https://github.com/conda-forge/gym-feedstock
+    git_tag: 2a7ffecb73b770d6889ec06e133bd3cfe8c02041
     patches:
       - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
@@ -19,3 +24,4 @@ packages:
 {% endif %}
 {% endif %}
 
+git_tag_for_env: open-ce-v1.6.0

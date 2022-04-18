@@ -1,12 +1,12 @@
-From 4c49ecfd4f80e81273716eb11079873f29c1b13a Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 23 Feb 2022 11:03:17 +0000
+From 38f664528bab99f155e50d3963cf7b5d436c710a Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Thu, 14 Apr 2022 12:10:12 +0000
 Subject: [PATCH] Fix clang build for p10
 
 ---
  recipe/build.sh  | 11 +++++++++++
- recipe/meta.yaml | 25 ++++++++++++++-----------
- 2 files changed, 25 insertions(+), 11 deletions(-)
+ recipe/meta.yaml | 27 ++++++++++++++++-----------
+ 2 files changed, 27 insertions(+), 11 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 0df298f..ee68108 100644
@@ -31,7 +31,7 @@ index 0df298f..ee68108 100644
    -DCMAKE_INSTALL_PREFIX=$PREFIX \
    -DCMAKE_PREFIX_PATH=$PREFIX \
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 946e808..6ea3721 100644
+index 946e808..a84b92a 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -25,10 +25,12 @@ source:
@@ -48,7 +48,15 @@ index 946e808..6ea3721 100644
      - cmake >=3.4.3
      # Needed to unpack the source tarball
      - m2w64-xz  # [win]
-@@ -43,7 +45,7 @@ requirements:
+@@ -37,13 +39,15 @@ requirements:
+     # Building with ninja on windows for parallel builds
+     - ninja  # [win]
+     - make   # [unix]
++    - zlib {{ zlib }}
+   host:
+     - libcxx {{ cxx_compiler_version }}  # [osx]
+     - llvmdev =={{ version }}
++    - zlib {{ zlib }}
  
  test:
    requires:
@@ -57,7 +65,7 @@ index 946e808..6ea3721 100644
      - cmake >=3.4.3
    files:
      - mytest.c
-@@ -70,7 +72,7 @@ outputs:
+@@ -70,7 +74,7 @@ outputs:
        string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
      requirements:
        build:
@@ -66,7 +74,7 @@ index 946e808..6ea3721 100644
          - cmake >=3.4.3
          - ninja  # [win]
          - make   # [unix]
-@@ -108,7 +110,7 @@ outputs:
+@@ -108,7 +112,7 @@ outputs:
        skip: true  # [win]
      requirements:
        build:
@@ -75,7 +83,7 @@ index 946e808..6ea3721 100644
          - cmake >=3.4.3
          - ninja  # [win]
          - make   # [unix]
-@@ -137,7 +139,7 @@ outputs:
+@@ -137,7 +141,7 @@ outputs:
        {% endif %}
      requirements:
        build:
@@ -84,7 +92,7 @@ index 946e808..6ea3721 100644
          - cmake >=3.4.3
          - ninja  # [win]
          - make   # [unix]
-@@ -164,7 +166,7 @@ outputs:
+@@ -164,7 +168,7 @@ outputs:
        string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
      requirements:
        build:
@@ -93,7 +101,7 @@ index 946e808..6ea3721 100644
          - cmake >=3.4.3
          - ninja  # [win]
          - make   # [unix]
-@@ -191,7 +193,7 @@ outputs:
+@@ -191,7 +195,7 @@ outputs:
        string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
      requirements:
        build:
@@ -102,7 +110,7 @@ index 946e808..6ea3721 100644
          - libcxx                   # [osx]
          - cmake >=3.4.3
          - ninja  # [win]
-@@ -235,13 +237,14 @@ outputs:
+@@ -235,13 +239,14 @@ outputs:
        run:
          - {{ pin_subpackage("clang", exact=True) }}
      test:
@@ -120,7 +128,7 @@ index 946e808..6ea3721 100644
  
    - name: clang-tools
      script: install_clang_tools.sh  # [unix]
-@@ -254,7 +257,7 @@ outputs:
+@@ -254,7 +259,7 @@ outputs:
        build:
          # "compiling .pyc files" fails without this
          - python >3

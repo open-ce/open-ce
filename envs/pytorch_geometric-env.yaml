@@ -1,6 +1,7 @@
 imported_envs:
   - pytorch-env.yaml
 packages:
+{% if not s390x %}
   - feedstock : https://github.com/conda-forge/bsddb3-feedstock.git
     git_tag : 0c5d0ddc5b97a019c19ff4ff70a686e0213ae0a3
   - feedstock : https://github.com/conda-forge/googledrivedownloader-feedstock.git
@@ -10,3 +11,6 @@ packages:
   - feedstock : pytorch_sparse
   - feedstock : pytorch_scatter
   - feedstock : pytorch_geometric
+{% endif %}
+
+git_tag_for_env: open-ce-v1.6.0

@@ -9,3 +9,5 @@ packages:
     patches:
       - feedstock-patches/uwsgi/0001-disable-lto-adjust-pins.patch
 {% endif %}
+
+git_tag_for_env: open-ce-v1.6.0
