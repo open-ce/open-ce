@@ -1,0 +1,25 @@
+From 89be1131258c99aed871a1ce3690a1f0cc84ce9c Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 18 Apr 2022 06:16:08 +0000
+Subject: [PATCH] remove unicode char from summary
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index c722092..66b7aa5 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -40,7 +40,7 @@ about:
+   license: BSD-3-Clause
+   license_family: BSD
+   license_file: LICENSE.md
+-  summary: The lightning-fast ASGI server. 🦄
++  summary: The lightning-fast ASGI server.
+   description: |
+     Uvicorn is a lightning-fast ASGI server implementation,
+     using [uvloop](https://github.com/MagicStack/uvloop) and
+-- 
+2.32.0
+
