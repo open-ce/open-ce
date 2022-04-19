@@ -8,9 +8,7 @@ packages:
     git_tag : e1bfb76befe32c961228ed653b1156062b0f0772
   - feedstock : https://github.com/conda-forge/rdflib-feedstock.git
     git_tag : 4b1e01b3cd92e1cdfa451139cb1f080601f4ba0e
-  - feedstock : https://github.com/conda-forge/pytorch_sparse-feedstock.git
-    git_tag : 3385d9cf69eeb859665ae6aff67e24f0c94362dd
-  - feedstock : https://github.com/conda-forge/pytorch_scatter-feedstock.git
-    git_tag : 025cae51f15dbef351aa55d251bf9f4eb0b3ee38
+  - feedstock : pytorch_sparse
+  - feedstock : pytorch_scatter
   - feedstock : pytorch_geometric
 {% endif %}
