@@ -4,7 +4,6 @@ packages:
   - feedstock : https://github.com/conda-forge/pybind11-feedstock
     git_tag : 3d3cbe7e8422e78a1c315004ed14480e00f30b59
     patches :
-           - feedstock-patches/pybind11/pybind11-abi_build.patch
            - feedstock-patches/pybind11/pybind11_p10.patch	
   - feedstock : https://github.com/conda-forge/cpp-filesystem-feedstock
     git_tag : 8eb554c81192737f0bdf4369649fd3a36a64d69b	
