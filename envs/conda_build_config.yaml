@@ -285,6 +285,8 @@ srsly:
   - 2.*
 starlette:
   - 0.19.*
+sqlite:
+  - 3.38.2   # [s390x]
 tabulate:
   - 0.8.*
 tensorboard:
@@ -351,12 +353,15 @@ ppc_arch:
 cpu_opt_arch:
   - sandybridge             # [x86_64]
   - power8                  # [ppc64le]
+  - z14                     # [s390x]
 cpu_opt_tune:
   - haswell                 # [x86_64]
   - power9                  # [ppc64le]
+  - z14                     # [s390x]
 vector_settings:
   - avx, sse4.1, sse4.2     # [x86_64]
   - vsx                     # [ppc64le]
+  - zvector                 # [s390x]
 
 ## GPU/CUDA Specifics
 ## =====================================
