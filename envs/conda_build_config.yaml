@@ -29,7 +29,8 @@ c_compiler_version:
 catalogue:
   - 2.*
 cffi:
-  - 1.14.*
+  - 1.14.*  # [not s390x]
+  - 1.15.*  # [s390x]
 clang:
   - 10.0.*
 click:
@@ -170,7 +171,8 @@ make:
 markdown:
   - 3.3.3
 mock:
-  - 3.*
+  - 3.*      # [not s390x]
+  - 4.*      # [s390x]
 murmurhash:
   - 1.0.*
 nasm:                          # [x86_64]
@@ -225,17 +227,19 @@ pybind11:
 pydantic:
   - 1.8.2
 pytest:
-  - 5.*
+  - 5.*   # [not s390x]
+  - 6.*   # [s390x]
 python:
-  - 3.7
-  - 3.8
+  - 3.7   # [not s390x]
+  - 3.8   # [not s390x]
   - 3.9
 pytorch:
   - 1.10.*
 pytorch_lightning:
   - 1.5.*
 pyyaml:
-  - 5.*
+  - 5.*   # [not s390x]
+  - 6.*   # [s390x]
 requests:
   - 2.*
 regex:
@@ -253,12 +257,12 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
-  - 58.*     # [not s390x]
-  - 51.*     # [s390x]
+  - 58.*
 setuptools_rust:
   - 0.12.*
 six:
-  - 1.15.0
+  - 1.15.0  # [not s390x]
+  - 1.16.0  # [s390x]
 smart_open:
   - 2.2.*
 spacy_legacy:
