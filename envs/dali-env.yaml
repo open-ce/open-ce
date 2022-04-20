@@ -7,6 +7,10 @@ packages:
 {% if not s390x %}
   {% if build_type == 'cuda' %}
     - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+    - feedstock : https://github.com/conda-forge/openmp-feedstock
+      git_tag: 1d18edb1476f4c7e88eef89a75d46c9ff487a662
+      patches:
+        - feedstock-patches/openmp/0001-remove-dependency-on-openmp_mutex.patch
     - feedstock : openblas
     - feedstock : opencv
     - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
