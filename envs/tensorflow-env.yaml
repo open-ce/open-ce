@@ -13,7 +13,6 @@ packages:
     patches:                                                          # [not x86]
       - feedstock-patches/clang/0001-Fix-clang-build-for-p10.patch                            # [ppc64le]
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
-{% if not s390x %}
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
@@ -29,6 +28,5 @@ packages:
   - feedstock : typeguard
   - feedstock : tensorflow-addons
   - feedstock : tensorflow-io-gcs-filesystem # [not s390x]
-{% endif %}
   
 git_tag_for_env: open-ce-v1.5.3
