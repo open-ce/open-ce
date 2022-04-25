@@ -1,8 +1,18 @@
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b5bc4b4..6f3e06c 100644
+index b5bc4b4..cd906a2 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -38,9 +38,9 @@ outputs:
+@@ -20,8 +20,7 @@ outputs:
+   - name: pybind11-abi
+     version: {{ abi_version }}
+     build:
+-      noarch: generic
+-      skip: true  # [not linux64]
++      noarch: generic  
+       run_exports:
+         - pybind11-abi =={{ abi_version }}
+     test:
+@@ -38,9 +37,9 @@ outputs:
        build:
          - python                                 # [build_platform != target_platform]
          - cross-python_{{ target_platform }}     # [build_platform != target_platform]
@@ -14,7 +24,7 @@ index b5bc4b4..6f3e06c 100644
        host:
          - python
          - pip
-@@ -60,9 +60,9 @@ outputs:
+@@ -60,9 +59,9 @@ outputs:
        build:
          - python                                 # [build_platform != target_platform]
          - cross-python_{{ target_platform }}     # [build_platform != target_platform]
