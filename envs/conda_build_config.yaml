@@ -223,9 +223,10 @@ pybind11:
   - 2.9.*
 #forbid version 1.8.1 due to security vulnerability
 pydantic:
-  - 1.9.*
+  - 1.8.2                     # [x86_64]
+  - 1.9.*                     # [ppc64le]
 pytest:
-  - 5.*
+  - 6.*
 python:
   - 3.8
   - 3.9
@@ -320,7 +321,7 @@ werkzeug:
 wheel:
   - 0.37*
 wrapt:
-  - 1.12.*
+  - 1.13.*
 yaml_cpp:
   - 0.6.3
 zlib:
