@@ -107,7 +107,7 @@ hdf5:
 hypothesis:
   - 5.*
 h5py:
-  - 3.2.*
+  - 3.6.*
 icu:
   - 58.*   #[not s390x]
   - 68.*   #[s390x]
@@ -187,7 +187,7 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
-  - 1.20.*|1.22.*
+  - 1.20.*|1.21.*|1.22.*
 onnx:
   - 1.11.*
 onnxconverter_common:
