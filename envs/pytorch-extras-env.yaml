@@ -10,4 +10,4 @@ packages:
   - feedstock : libsndfile
 {% endif %}
 
-git_tag_for_env: open-ce-v1.5.3
+git_tag_for_env: open-ce-v1.5.4
