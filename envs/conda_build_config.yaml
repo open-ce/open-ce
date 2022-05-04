@@ -15,7 +15,7 @@ automake:
 av:
   - 8.*
 bazel:
-  - 4.*
+  - 5.*
 bsddb3:
   - 6.2.9
 boost:
@@ -200,7 +200,7 @@ opencv:
   - 4.5.*
 openjdk:
   - 8.0.152                    # [x86_64]
-  - 1.8.0                      # [ppc64le]
+  - 11.0.*                      # [ppc64le]
 openmpi:
   - 4.1.1
 optional_lite:
