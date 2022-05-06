@@ -199,8 +199,7 @@ openblas:
 opencv:
   - 4.5.*
 openjdk:
-  - 11.0.*                      # [x86_64]
-  - 11.0.*                      # [ppc64le]
+  - 11.0.*
 openmpi:
   - 4.1.1
 optional_lite:
