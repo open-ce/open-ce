@@ -12,13 +12,14 @@ packages:
     patches:
       -  feedstock-patches/unicorn/0001-remove-unicode-char-from-summary.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag: 3dd6ec5df98797b241160bf354d88bb1c30e2258
+    git_tag : b8e09882d12c58fd3f4ebd3db4bc70fb7b7146ee
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
   - feedstock : https://github.com/conda-forge/gym-feedstock
     git_tag: 2a7ffecb73b770d6889ec06e133bd3cfe8c02041
     patches:
       - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
+    git_tag : 7e7e8d4a74719ba7ce134ecf7b317c44c1cf39a9
   - feedstock : dm-tree
   - feedstock : ray-packages
 {% endif %}

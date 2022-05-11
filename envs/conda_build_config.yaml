@@ -275,7 +275,7 @@ spdlog:
 srsly:
   - 2.*
 starlette:
-  - 0.18.*
+  - 0.19.*
 tabulate:
   - 0.8.*
 tensorboard:
