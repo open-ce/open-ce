@@ -1,0 +1,45 @@
+From 7f588cf44530ef7c36aa08f40675b1256388a26a Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 11 May 2022 03:52:02 -0400
+Subject: [PATCH] disable systemd tests
+
+---
+ recipe/0001-disable-systemd-tests.patch | Bin 0 -> 659 bytes
+ recipe/meta.yaml                        |   2 ++
+ 2 files changed, 2 insertions(+)
+ create mode 100644 recipe/0001-disable-systemd-tests.patch
+
+diff --git a/recipe/0001-disable-systemd-tests.patch b/recipe/0001-disable-systemd-tests.patch
+new file mode 100644
+index 0000000000000000000000000000000000000000..20496cf0034dc43b46def13afc98c8f302ca6191
+GIT binary patch
+literal 659
+zcmZ`$%Wm5+5WMp%_9(*^O-Ym$2}R*Tj@v_A8<mY7ib9~smBd;vSTv9T`S?;!(nHV?
+zJnYUahr{9a(zg(oet=x?l`NDDR)WWoj|C4yFP23V3s$OdB}xXnzJm-0@FHL=xoz+n
+z^T^i9B(OmoM57_C`|CxFTEHh|AzAyuT6a_zEtP%ynQVl?1b(7gfak$ZJXsOn2None
+zPW%X5#u+2owfKY5B=GC-<(Pi^4N8xqXb{Gy(O|2<;AlodT-PNp^)lUwGd^ewQ}bxx
+z8A7n^#CuR`dsNn<tEPKHP}rc+eK$Jpj1Z;E(#}@efLPvy--{Lhg^BJIK0;I?k75rg
+zErTGG0q5W`w&Hwp_kkjr&*$)g>Us_C-NJ@5zgw)pcGy{m&Wr#7-O1*v(4llGTl?PS
+z)#zrVw|W|IOY12ggglE1ox{0G`>xd0jJQ_eUz>0Dr|%mJf?dP8%4Lo6oVUHYHaI$O
+z88^CkE$!%=37hAL#>ozwhyB<5biB`wS)T1rKhpb*OnSHP$fv~f8k+$xR1U*?rs=Cn
+Qch!xuArYVY5oLt@1zGdSuK)l5
+
+literal 0
+HcmV?d00001
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3c3e2df..2963752 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -9,6 +9,8 @@ package:
+ source:
+   url: https://github.com/gabime/{{ name|lower }}/archive/v{{ version }}.tar.gz
+   sha256: {{ sha256 }}
++  patches:
++    - 0001-disable-systemd-tests.patch
+ 
+ build:
+   number: 1
+-- 
+2.27.0
+
