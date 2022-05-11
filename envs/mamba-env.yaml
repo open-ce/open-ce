@@ -19,6 +19,8 @@ packages:
     git_tag : a4377e7bb252838fe3b2595a976a4f1b9a60341b
   - feedstock : https://github.com/conda-forge/spdlog-feedstock.git
     git_tag: 6f6a8b720f06142b20e03fe7236a79ea5b594728
+    patches:
+          - feedstock-patches/spdlog/0001-disable-systemd-tests-to-fix-baremetal-build.patch
   - feedstock : https://github.com/conda-forge/termcolor-cpp-feedstock.git
     git_tag : f35835967df63a49285fb70ea08edd704ab0aa79	
   - feedstock : https://github.com/conda-forge/yaml-cpp-feedstock.git
