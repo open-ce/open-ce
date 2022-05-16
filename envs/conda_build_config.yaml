@@ -15,7 +15,7 @@ automake:
 av:
   - 8.*
 bazel:
-  - 4.*
+  - 5.*
 bsddb3:
   - 6.2.9
 boost:
@@ -199,8 +199,7 @@ openblas:
 opencv:
   - 4.5.*
 openjdk:
-  - 8.0.152                    # [x86_64]
-  - 1.8.0                      # [ppc64le]
+  - 11.0.*
 openmpi:
   - 4.1.1
 optional_lite:
@@ -232,7 +231,7 @@ python:
 pytorch:
   - 1.10.*
 pytorch_lightning:
-  - 1.5.*
+  - 1.6.*
 pytorch_scatter:
   - 2.0.8
 pytorch_sparse:
@@ -289,7 +288,7 @@ tensorflow:
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.24.*
+  - 0.25.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
@@ -299,7 +298,7 @@ thinc:
 tokenizers:
   - 0.11.4
 torchmetrics:
-  - 0.6.*
+  - 0.8.*
 torchtext:
   - 0.11.*
 torchvision:
