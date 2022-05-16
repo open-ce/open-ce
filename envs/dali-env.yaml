@@ -19,4 +19,4 @@ packages:
   {% endif %}
 {% endif %}
 
-git_tag_for_env: open-ce-v1.6.0
+git_tag_for_env: open-ce-v1.6.1
