@@ -11,4 +11,4 @@ packages:
     - feedstock : openmpi #[mpi_type == 'openmpi']
   {% endif %}
 {% endif %}
-git_tag_for_env: open-ce-v1.5.4
+git_tag_for_env: open-ce-v1.5.5
