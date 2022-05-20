@@ -1,3 +1,5 @@
+builder_version: ">=10.0.1"
+
 imported_envs:
 {% if not s390x %}
 {% if build_type == 'cpu' %}
