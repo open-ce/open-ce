@@ -1,3 +1,5 @@
+builder_version: ">=10.0.1"
+
 packages:
   - feedstock : https://github.com/conda-forge/cli11-feedstock
     git_tag : a8e959fcae876db93c92918e57914f632feac574
