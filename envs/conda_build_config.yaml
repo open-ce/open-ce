@@ -24,9 +24,7 @@ boost:
 boost_mp11:
   - 1.76.*
 c_compiler_version:
-  - 7.5.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
-  - 7.5.*                      # [s390x]
+  - 11.2.*
 catalogue:
   - 2.*
 cffi:
@@ -52,8 +50,7 @@ cudnn:
   - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.2')]
   - 8.0.5.*    # [cudatoolkit == '10.2']
 cxx_compiler_version:
-  - 7.5.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
+  - 11.2.*
 cxxfilt:
   - 0.2.*
 cymem:
@@ -73,8 +70,7 @@ flatbuffers:
 freetype:
   - 2
 fortran_compiler_version:
-  - 7.5.*                      # [x86_64]
-  - 7.3.*                      # [ppc64le]
+  - 11.2.*
 fsspec:
   - 2021.*
 future:
