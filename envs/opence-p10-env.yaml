@@ -1,5 +1,7 @@
+builder_version: ">=10.0.1"
+
 imported_envs:
-  - common-feedstocks-env.yaml
+  - openblas-env.yaml
   - onnx-env.yaml
   - pytorch-env.yaml
   - pytorch-extras-env.yaml
@@ -8,3 +10,6 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
+
+packages:
+  - feedstock : opencv

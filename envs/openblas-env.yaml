@@ -1,0 +1,15 @@
+builder_version: ">=10.0.1"
+
+packages:
+{% if not s390x %}
+  - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
+    git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c                 # [ppc64le]
+    patches:                                                          # [ppc64le]
+      - feedstock-patches/clang/0001-Fix-clang-build-for-p10.patch    # [ppc64le]
+  - feedstock : https://github.com/conda-forge/openmp-feedstock
+    git_tag: 1d18edb1476f4c7e88eef89a75d46c9ff487a662
+    patches:
+      - feedstock-patches/openmp/0001-remove-dependency-on-openmp_mutex-and-use-GCC11-for-p10.patch
+      - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
+  - feedstock : openblas
+{% endif %}
