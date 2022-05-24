@@ -17,6 +17,6 @@ imported_envs:
   - ray-env.yaml
 
 packages:
-  - feedstock : opencv
+  - feedstock : opencv   # [not s390x]
     
 git_tag_for_env: open-ce-v1.6.1
