@@ -193,7 +193,7 @@ onnxconverter_common:
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.18.*
+  - 0.3.20.*
 opencv:
   - 4.5.*
 openjdk:
