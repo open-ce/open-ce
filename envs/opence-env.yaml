@@ -1,3 +1,5 @@
+builder_version: ">=10.0.1"
+
 imported_envs:
   - openblas-env.yaml
   - onnx-env.yaml
@@ -17,4 +19,4 @@ imported_envs:
   - ray-env.yaml
 
 packages:
-  - feedstock : opencv
+  - feedstock : opencv   # [not s390x]
