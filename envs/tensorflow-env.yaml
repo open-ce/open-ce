@@ -10,10 +10,17 @@ packages:
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
   {% endif %}
+  - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
+    patches : 
+      - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
+  - feedstock : https://github.com/conda-forge/black-feedstock
+    git_tag : f79b7b86900ea2f04bc6ce3b462fa61adb5b0e95
+  - feedstock : https://github.com/conda-forge/llvmdev-feedstock
+    git_tag : 66ced78b8653ae9064e404386ac2c48285330774
   - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
-    git_tag: 98e30dba8b405a388d5b5d0fcca3834ee40b0b1c                 # [ppc64le]
-    patches:                                                          # [ppc64le]
-      - feedstock-patches/clang/0001-Fix-clang-build-for-p10.patch                            # [ppc64le]
+    git_tag : b741c7551b48482d08d2f65a791b7602c1f23c9d                 # [ppc64le]
+    patches :
+      - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch # [ppc64le]
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree

@@ -1,7 +1,7 @@
 abseil_cpp:
   - 20210324
 absl_py:
-  - 0.15.*
+  - 1.0.*
 arrow:
   - 7.0.0
 astunparse:
@@ -16,6 +16,8 @@ av:
   - 8.*
 bazel:
   - 5.*
+black:
+  - 22.3.0
 bsddb3:
   - 6.2.9
 boost:
@@ -30,7 +32,7 @@ catalogue:
 cffi:
   - 1.14.*
 clang:
-  - 10.0.*
+  - 13.0.*
 click:
   - 8.*
 cli11:
@@ -66,7 +68,7 @@ eigen:
 ffmpeg:
   - 4.2.*
 flatbuffers:
-  - 2.0
+  - 1.12
 freetype:
   - 2
 fortran_compiler_version:
@@ -274,17 +276,17 @@ starlette:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.8.*
+  - 2.9.*
 tensorboard_data_server:
   - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.8.*
+  - 2.9.*
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.25.*
+  - 0.27.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
