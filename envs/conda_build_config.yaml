@@ -285,7 +285,7 @@ tensorflow:
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.27.*
+  - 0.26.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
