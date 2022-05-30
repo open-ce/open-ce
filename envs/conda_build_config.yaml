@@ -28,7 +28,7 @@ boost_mp11:
 c_compiler_version:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [cudatoolkit == '11.4']
+  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
 catalogue:
   - 2.*
 cffi:
@@ -55,7 +55,7 @@ cudnn:
 cxx_compiler_version:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [cudatoolkit == '11.4']
+  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
 cxxfilt:
   - 0.2.*
 cymem:
@@ -77,7 +77,7 @@ freetype:
 fortran_compiler_version:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [cudatoolkit == '11.4']
+  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
 fsspec:
   - 2021.*
 future:
