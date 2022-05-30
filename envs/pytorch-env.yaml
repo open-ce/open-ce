@@ -5,10 +5,10 @@ imported_envs:
 
 packages:
 {% if not s390x %}
-  - feedstock : https://github.com/conda-forge/scipy-feedstock.git
-    git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e
-    patches :
-      - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch
+  - feedstock : https://github.com/conda-forge/scipy-feedstock.git     #[c_compiler_version == "11.2"]
+    git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e                 #[c_compiler_version == "11.2"]
+    patches :                                                          #[c_compiler_version == "11.2"]
+      - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    #[c_compiler_version == "11.2"]
   - feedstock : pytorch
   - feedstock : numactl
   {% if build_type == 'cuda' %}

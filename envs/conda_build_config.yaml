@@ -26,7 +26,9 @@ boost:
 boost_mp11:
   - 1.76.*
 c_compiler_version:
-  - 11.2.*
+  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
+  - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
+  - 11.2.*                     # [cudatoolkit == '11.4']
 catalogue:
   - 2.*
 cffi:
@@ -49,9 +51,11 @@ coverage:
 cpp_filesystem:
   - 1.5.8
 cudnn:
-  - 8.1.1.*    # [(cudatoolkit == '11.0') or (cudatoolkit == '11.4')]
+  - 8.1.1.*    # [(cudatoolkit == '11.2') or (cudatoolkit == '11.4')]
 cxx_compiler_version:
-  - 11.2.*
+  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
+  - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
+  - 11.2.*                     # [cudatoolkit == '11.4']
 cxxfilt:
   - 0.2.*
 cymem:
@@ -71,7 +75,9 @@ flatbuffers:
 freetype:
   - 2
 fortran_compiler_version:
-  - 11.2.*
+  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
+  - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
+  - 11.2.*                     # [cudatoolkit == '11.4']
 fsspec:
   - 2021.*
 future:
@@ -366,8 +372,8 @@ vector_settings:
 ##
 # yamllint disable rule:line-length
 cuda_levels:
-  - 3.7,5.2,6.0,7.0,7.5,8.0     # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.4')]
-  - 3.7,6.0,7.0,7.5,8.0         # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.4')]
+  - 3.7,5.2,6.0,7.0,7.5,8.0     # [x86_64 and (cudatoolkit == '11.2' or cudatoolkit == '11.4')]
+  - 3.7,6.0,7.0,7.5,8.0         # [ppc64le and (cudatoolkit == '11.2' or cudatoolkit == '11.4')]
 cuda_levels_details:
-  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80  # [x86_64 and (cudatoolkit == '11.0' or cudatoolkit == '11.4')]
-  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80              # [ppc64le and (cudatoolkit == '11.0' or cudatoolkit == '11.4')]
+  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80  # [x86_64 and (cudatoolkit == '11.2' or cudatoolkit == '11.4')]
+  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80              # [ppc64le and (cudatoolkit == '11.2' or cudatoolkit == '11.4')]
