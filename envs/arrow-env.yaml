@@ -28,7 +28,7 @@ packages:
     git_tag: 09e3838f8caaa3ab9728b111620422dd524459e1
 {% endif %}
 {% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.4"]
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
 {% endif %}
   - feedstock : grpc-cpp
   - feedstock : pyarrow

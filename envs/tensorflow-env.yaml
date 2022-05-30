@@ -8,7 +8,7 @@ packages:
   {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : cudnn
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.4"]
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
   {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     patches : 

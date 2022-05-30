@@ -10,7 +10,7 @@ packages:
 {% if not s390x %}
 
   {% if build_type == 'cuda' %}
-    - feedstock : cudatoolkit    #[cudatoolkit == "11.4"]
+    - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
     - feedstock: nccl
     - feedstock: cudnn
   {% endif %}

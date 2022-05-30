@@ -15,7 +15,7 @@ packages:
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   {% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.4"]
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
   - feedstock : cudnn
   - feedstock : nccl
   {% endif %}
