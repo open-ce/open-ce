@@ -51,7 +51,7 @@ coverage:
 cpp_filesystem:
   - 1.5.8
 cudnn:
-  - 8.1.1.*    # [(cudatoolkit == '11.2') or (cudatoolkit == '11.4')]
+  - 8.3.0.*    # [build_type == 'cuda']
 cxx_compiler_version:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
