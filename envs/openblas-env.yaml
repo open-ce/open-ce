@@ -4,6 +4,8 @@ packages:
 {% if not s390x %}
   - feedstock : https://github.com/conda-forge/llvmdev-feedstock
     git_tag : 66ced78b8653ae9064e404386ac2c48285330774
+    patches:
+      - feedstock-patches/llvm/0001-LLVM-fixed-with-old-compiler.patch
   - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
     git_tag: b741c7551b48482d08d2f65a791b7602c1f23c9d                 # [ppc64le]
     patches :
