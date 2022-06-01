@@ -23,10 +23,11 @@ packages:
     git_tag : 66ced78b8653ae9064e404386ac2c48285330774
     patches:
       - feedstock-patches/llvm/0001-LLVM-fixed-with-old-compiler.patch
-  - feedstock : https://github.com/conda-forge/clangdev-feedstock     # [ppc64le]
-    git_tag : b741c7551b48482d08d2f65a791b7602c1f23c9d                 # [ppc64le]
+  - feedstock : https://github.com/conda-forge/clangdev-feedstock
+    git_tag : b741c7551b48482d08d2f65a791b7602c1f23c9d
     patches :
-      - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch # [ppc64le]
+      - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
+      - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
