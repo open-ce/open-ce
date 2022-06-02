@@ -14,7 +14,7 @@ packages:
   - feedstock : https://github.com/conda-forge/openmp-feedstock
     git_tag: 1d18edb1476f4c7e88eef89a75d46c9ff487a662
     patches:
-      - feedstock-patches/openmp/0001-remove-dependency-on-openmp_mutex-and-use-GCC11-for-p10.patch
+      - feedstock-patches/openmp/0001-remove-dep-on-openmp_mutex.patch
       - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
   - feedstock : openblas
 {% endif %}

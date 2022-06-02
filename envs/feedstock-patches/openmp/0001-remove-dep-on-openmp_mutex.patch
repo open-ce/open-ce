@@ -1,0 +1,29 @@
+From b766b3ab7cf613c2faf72439a47a562cb62dca2d Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 1 Jun 2022 10:56:09 +0000
+Subject: [PATCH] remove _openmp_mutex
+
+---
+ recipe/meta.yaml | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3ea7189..dd7e9cb 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -23,12 +23,9 @@ outputs:
+       ignore_run_exports:
+         - libgcc-ng
+         - libstdcxx-ng
+-        - _openmp_mutex
+       run_exports:
+         strong:
+           - {{ pin_subpackage("llvm-openmp", max_pin=None) }}
+-          - _openmp_mutex >={{ openmp_ver }}  # [linux]
+-          - _openmp_mutex * *_llvm            # [linux]
+     requirements:
+       build:
+         - {{ compiler('cxx') }}  # [unix]
+-- 
+2.34.1
+
