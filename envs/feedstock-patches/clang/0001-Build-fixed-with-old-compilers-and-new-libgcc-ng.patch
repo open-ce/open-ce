@@ -1,7 +1,7 @@
-From 7d4035b074c73dbc4844bab21ac065f3bcd16386 Mon Sep 17 00:00:00 2001
+From 8f8a388e8354c64e2b975a4cd4d99eb11137a45a Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 1 Jun 2022 05:04:51 -0400
-Subject: [PATCH] Build fixed with old compilers and new libgcc-ng
+Date: Thu, 2 Jun 2022 09:27:39 +0000
+Subject: [PATCH] M'
 
 ---
  recipe/install_clang_symlinks.sh |  1 +
@@ -19,7 +19,7 @@ index cd08358..1d84fc5 100644
  ln -s "${PREFIX}/bin/clang-${maj_version}" "${PREFIX}/bin/clang-cpp"
  ln -s "${PREFIX}/bin/clang-${maj_version}" "${PREFIX}/bin/clang"
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index bf5658a..b9b6d2b 100644
+index bf5658a..4bc43a4 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -48,7 +48,13 @@ requirements:
@@ -129,7 +129,7 @@ index bf5658a..b9b6d2b 100644
          - gcc_impl_{{ target_platform }}  # [linux]
          - {{ pin_subpackage("clang-" ~ major_version, exact=True) }}
      test:
-+      requires:
++      requires:                             #[cudatoolkit == "11.2"]
 +        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
 +        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
 +        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
@@ -204,5 +204,5 @@ index bf5658a..b9b6d2b 100644
          - {{ pin_subpackage("clangxx", exact=True) }}
          - {{ pin_subpackage("libclang", exact=True) }}
 -- 
-2.23.0
+2.34.1
 
