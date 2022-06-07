@@ -1,6 +1,6 @@
-From e3facc69d13672ffc4dd39fbccfaac790a2041c3 Mon Sep 17 00:00:00 2001
+From 9e92f103c71435c079901f58a4dc182283941fff Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 10 May 2022 05:20:04 -0400
+Date: Tue, 7 Jun 2022 11:56:05 +0000
 Subject: [PATCH] disable LIBOMPTARGET to fix build on baremetal
 
 ---
@@ -8,12 +8,12 @@ Subject: [PATCH] disable LIBOMPTARGET to fix build on baremetal
  1 file changed, 2 insertions(+)
 
 diff --git a/recipe/build-llvm-openmp.sh b/recipe/build-llvm-openmp.sh
-index 7ccd373..3c69b9d 100644
+index ede66f5..d34c75d 100644
 --- a/recipe/build-llvm-openmp.sh
 +++ b/recipe/build-llvm-openmp.sh
-@@ -17,6 +17,8 @@ fi
+@@ -16,6 +16,8 @@ fi
  
- cmake \
+ cmake ${CMAKE_ARGS} \
      -DCMAKE_INSTALL_PREFIX=$PREFIX \
 +    -DENABLE_LIBOMPTARGET=OFF \
 +    -DOPENMP_ENABLE_LIBOMPTARGET=OFF \
@@ -21,5 +21,5 @@ index 7ccd373..3c69b9d 100644
      -DCMAKE_PREFIX_PATH=$PREFIX \
      ..
 -- 
-2.23.0
+2.34.1
 

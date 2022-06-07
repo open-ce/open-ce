@@ -12,7 +12,7 @@ packages:
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
   - feedstock : https://github.com/conda-forge/openmp-feedstock
-    git_tag: 1d18edb1476f4c7e88eef89a75d46c9ff487a662
+    git_tag: dacfb2acd36a6453e20d71d11f1b85fa6122c649
     patches:
       - feedstock-patches/openmp/0001-remove-dep-on-openmp_mutex.patch
       - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
