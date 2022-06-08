@@ -1,12 +1,12 @@
-From 65637b3c0726afef73247884035f83f5ee242bd3 Mon Sep 17 00:00:00 2001
+From 9dfb28d0e1074b05ed71aa0db315f092e40047a2 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Mon, 6 Jun 2022 15:42:27 +0000
-Subject: [PATCH] fix to build with opence.patch
+Date: Wed, 8 Jun 2022 06:29:08 +0000
+Subject: [PATCH] fix build on opence
 
 ---
  recipe/build.sh  |  3 ++-
- recipe/meta.yaml | 11 +----------
- 2 files changed, 3 insertions(+), 11 deletions(-)
+ recipe/meta.yaml | 13 ++-----------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 733d8cf..515f6c8 100644
@@ -24,7 +24,7 @@ index 733d8cf..515f6c8 100644
  else
      $PYTHON -m pip install . -vv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 3197293..574c133 100644
+index 3197293..e5a0bdd 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -4,9 +4,6 @@ package:
@@ -59,6 +59,15 @@ index 3197293..574c133 100644
  
  test:
    requires:
+@@ -92,7 +83,7 @@ test:
+     # the tests ppc64le and aarch64 are currently run through emulation in QEMU;
+     # since this takes much longer, do not run the most heavy-weight tests, i.e. use
+     # label='fast'; same for PyPy due to huge runtime; otherwise set label='full'
+-    {% set label = "'fast'" if (aarch64 or ppc64le or python_impl == "pypy") else "'full'" %}
++    {% set label = "'fast'" if (aarch64 or ppc64le) else "'full'" %}
+     # for signature of scipy.test see below (note default: label='fast'):
+     # https://github.com/scipy/scipy/blob/v1.7.0/scipy/_lib/_testutils.py#L27
+     {% set param = "verbose=1, label=" + label + ", tests=None" %}
 -- 
 2.34.1
 
