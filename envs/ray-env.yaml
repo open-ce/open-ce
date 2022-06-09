@@ -16,6 +16,11 @@ packages:
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : b8e09882d12c58fd3f4ebd3db4bc70fb7b7146ee
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
+  - feedstock : https://github.com/conda-forge/scipy-feedstock.git     # [build_type == 'cpu' or cudatoolkit == '11.4']
+    git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e                 # [build_type == 'cpu' or cudatoolkit == '11.4']
+    patches :                                                          # [build_type == 'cpu' or cudatoolkit == '11.4']
+      - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
   - feedstock : https://github.com/conda-forge/gym-feedstock
     git_tag: 2a7ffecb73b770d6889ec06e133bd3cfe8c02041
     patches:

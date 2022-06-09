@@ -3,7 +3,7 @@ abseil_cpp:
 absl_py:
   - 1.0.*
 arrow:
-  - 7.0.0
+  - 8.0.0
 astunparse:
   - 1.6
 attrs:
