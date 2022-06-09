@@ -12,4 +12,6 @@ imported_envs:
   - uwsgi-env.yaml
 
 packages:
+  - feedstock : https://github.com/AnacondaRecipes/hdf5-feedstock
+    git_tag : 8fa864a5e7eb1d4c0e50df5c8d2d30522758dc73
   - feedstock : opencv
