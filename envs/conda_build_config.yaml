@@ -200,7 +200,7 @@ onnx_graphsurgeon:
 openblas:
   - 0.3.20.*
 opencv:
-  - 4.5.*
+  - 4.6.*
 openjdk:
   - 11.0.*
 openmpi:
