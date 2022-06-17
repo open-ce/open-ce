@@ -106,11 +106,11 @@ harfbuzz:
   - 1.8
 # Note: hdf5 version must be compatible with h5py
 hdf5:
-  - 1.10.6
+  - 1.12.1
 hypothesis:
   - 5.*
 h5py:
-  - 3.2.*
+  - 3.6.*
 icu:
   - 58.*   #[not s390x]
   - 68.*   #[s390x]
@@ -328,7 +328,7 @@ wrapt:
 yaml_cpp:
   - 0.6.3
 zlib:
-  - 1.2.11
+  - 1.2.12
 zstd:
   - 1.4.*
 
