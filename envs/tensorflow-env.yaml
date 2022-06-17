@@ -43,6 +43,7 @@ packages:
   - feedstock : tensorboard
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
+  - feedstock : etils
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
