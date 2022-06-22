@@ -71,7 +71,7 @@ eigen:
 ffmpeg:
   - 4.2.*
 flatbuffers:
-  - 1.12
+  - 2.0.*
 freetype:
   - 2
 fortran_compiler_version:
