@@ -233,7 +233,7 @@ python:
   - 3.9
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
-  - 1.11.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 pytorch_lightning:
   - 1.6.*
 pytorch_scatter:
@@ -305,10 +305,10 @@ torchmetrics:
   - 0.8.*
 torchtext:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 torchvision:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 tqdm:
   - 4.*
 typer:
