@@ -12,6 +12,8 @@ packages:
   {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock
     git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9
+    patches:
+      - feedstock-patches/h5py/0001-Fixed-h5py.patch
   - feedstock : https://github.com/conda-forge/scipy-feedstock.git     # [build_type == 'cpu' or cudatoolkit == '11.4']
     git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e                 # [build_type == 'cpu' or cudatoolkit == '11.4']
     patches :                                                          # [build_type == 'cpu' or cudatoolkit == '11.4']
