@@ -5,5 +5,4 @@ packages:
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
   - feedstock : nccl
 {% endif %}
-  - feedstock : https://github.com/ritumd/xgboost-feedstock
-    git_tag : 682b4311072fe58dee75faea933ab8504166c647
+  - feedstock : xgboost
