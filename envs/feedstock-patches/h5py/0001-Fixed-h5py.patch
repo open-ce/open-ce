@@ -1,0 +1,41 @@
+From 20caa76cd9ce3da68a9f924ffb93736a8b4640a3 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 27 Jun 2022 06:37:10 +0000
+Subject: [PATCH] Fixed h5py
+
+---
+ recipe/meta.yaml | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 07e297b..713a39f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,18 +29,16 @@ requirements:
+   host:
+     - python
+     - pip
+-    - numpy
+-    - hdf5
+-    - cython >=0.29.15
+-    - pkgconfig
++    - numpy {{ numpy }}
++    - hdf5 {{ hdf5 }}
++    - cython {{ cython }}
++    - pkgconfig 1.5.*
+     - setuptools
+     - wheel
+   run:
+-    - python >=3.7
+-    - cached-property  # [py<38]
++    - python
+     - {{ pin_compatible('numpy') }}
+-    # hdf5 >=1.10.4 has run_exports
+-    - hdf5
++    - hdf5 {{ hdf5 }}
+     - pyreadline  # [win]
+ 
+ test:
+-- 
+2.34.1
+

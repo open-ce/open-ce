@@ -1,0 +1,73 @@
+From 9dfb28d0e1074b05ed71aa0db315f092e40047a2 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 8 Jun 2022 06:29:08 +0000
+Subject: [PATCH] fix build on opence
+
+---
+ recipe/build.sh  |  3 ++-
+ recipe/meta.yaml | 13 ++-----------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 733d8cf..515f6c8 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -5,8 +5,9 @@ set -x
+ # Use the G77 ABI wrapper everywhere so that the underlying blas implementation
+ # can have a G77 ABI (currently only MKL)
+ export SCIPY_USE_G77_ABI_WRAPPER=1
++export SCIPY_USE_PYTHRAN=0
+ 
+-if [[ "$python_impl" == "pypy" && "$target_platform" == "linux-ppc64le" ]]; then
++if [[ "$target_platform" == "linux-ppc64le" ]]; then
+     $PYTHON setup.py install --single-version-externally-managed --record=record.txt
+ else
+     $PYTHON -m pip install . -vv
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3197293..e5a0bdd 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -4,9 +4,6 @@ package:
+   name: scipy
+   version: {{ version }}
+ 
+-# use 'python_impl' in meta.yaml so it gets picked up by rendering
+-# [python_impl == "pypy"]
+-
+ source:
+   # The sdist distributed by scipy contains pre-compiled pythran sources,
+   # as well as the relevant submodules; by taking the tarball from github
+@@ -51,9 +48,7 @@ requirements:
+     # https://pav.iki.fi/blog/2017-10-08/pywingfortran.html#building-python-wheels-with-fortran-for-windows
+     - {{ compiler('m2w64_fortran') }}        # [win]
+   host:
+-    - libblas
+-    - libcblas
+-    - liblapack
++    - libopenblas {{ openblas }}
+     - python
+     - setuptools <60
+     - cython
+@@ -75,10 +70,6 @@ requirements:
+ {% set tests_to_skip = tests_to_skip + " or (test__differential_evolution and test_parallel)" %}  # [aarch64 or ppc64le]
+ # on the slowest agents, these tests take more than 20min in emulation
+ {% set tests_to_skip = tests_to_skip + " or (test_lsq_linear and test_large_rank_deficient)" %}   # [aarch64 or ppc64le]
+-# needs one or two gc.collect()
+-{% set tests_to_skip = tests_to_skip + " or test_cdist_refcount" %}             # [python_impl == "pypy"]
+-# unclear why a warning isn't raised. Might be related to scipy/scipy#15121
+-{% set tests_to_skip = tests_to_skip + " or test_boost_eval_issue_14606" %}     # [python_impl == "pypy"]
+ 
+ test:
+   requires:
+@@ -92,7 +83,7 @@ test:
+     # the tests ppc64le and aarch64 are currently run through emulation in QEMU;
+     # since this takes much longer, do not run the most heavy-weight tests, i.e. use
+     # label='fast'; same for PyPy due to huge runtime; otherwise set label='full'
+-    {% set label = "'fast'" if (aarch64 or ppc64le or python_impl == "pypy") else "'full'" %}
++    {% set label = "'fast'" if (aarch64 or ppc64le) else "'full'" %}
+     # for signature of scipy.test see below (note default: label='fast'):
+     # https://github.com/scipy/scipy/blob/v1.7.0/scipy/_lib/_testutils.py#L27
+     {% set param = "verbose=1, label=" + label + ", tests=None" %}
+-- 
+2.34.1
+

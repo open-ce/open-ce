@@ -1,0 +1,113 @@
+From bd0b8d7e31fe87f439a1d7135187a8cf97df2da0 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 31 May 2022 10:16:48 -0400
+Subject: [PATCH] LLVM fixed with old compiler
+
+---
+ recipe/meta.yaml | 45 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 40 insertions(+), 5 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 929cab3..0c273a9 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,9 +28,15 @@ requirements:
+     - python    >=3
+     - make
+     - libcxx {{ cxx_compiler_version }}  # [osx]
++    - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++    - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++    - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+   host:
++    - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++    - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++    - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+     - libcxx {{ cxx_compiler_version }}  # [osx]
+-    - zlib
++    - zlib {{ zlib }}
+     - libxml2   # [win]
+ 
+ outputs:
+@@ -48,10 +54,16 @@ outputs:
+         - cmake
+         - ninja     # [win]
+         - python    >=3
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+       host:
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+         - {{ pin_subpackage("llvm-tools", exact=True) }}
+-        - zlib
++        - zlib {{ zlib }}
+       run:
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+         - {{ pin_subpackage("llvm-tools", exact=True) }}
+@@ -80,9 +92,15 @@ outputs:
+         - make                     # [not win]
+         - cmake                    # [not win]
+         - python    >=3            # [not win]
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+       host:
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+         - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
+-        - zlib
++        - zlib {{ zlib }}
+       run:
+         - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
+     test:
+@@ -98,14 +116,25 @@ outputs:
+         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+     requirements:
+       build:
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+       host:
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+-        - zlib
++        - zlib {{ zlib }}
+       run:   # [not win]
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+       run_constrained:   # [not win]
+         - llvmdev   {{ version }}                                  # [not win]
+     test:
++      requires:
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
++        - zlib {{ zlib }}
+       commands:
+         - echo "Hello World!"
+ 
+@@ -123,10 +152,16 @@ outputs:
+         - cmake
+         - ninja     # [win]
+         - python    >=3
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+       host:
++        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
++        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
++        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+         - libxml2  # [win]
+-        - zlib
++        - zlib {{ zlib }}
+       run:
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+       run_constrained:
+-- 
+2.23.0
+

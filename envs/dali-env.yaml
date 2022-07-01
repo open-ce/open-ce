@@ -9,7 +9,7 @@ imported_envs:
 packages:
 {% if not s390x %}
   {% if build_type == 'cuda' %}
-    - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
+    - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
     - feedstock : opencv
     - feedstock : DALI
     - feedstock : jpeg-turbo
@@ -18,5 +18,6 @@ packages:
     - feedstock : https://github.com/conda-forge/libtar-feedstock
       patches :
         - feedstock-patches/libtar/0001-Changed-libtar-source-url-as-older-one-is-not-availa.patch
+    - feedstock : https://github.com/AnacondaRecipes/nasm-feedstock       #[ppc64le]
   {% endif %}
 {% endif %}

@@ -1,4 +1,4 @@
-builder_version: ">=4.0.0"
+builder_version: ">=10.0.1"
 
 imported_envs:
   - bazel-env.yaml
@@ -10,8 +10,7 @@ packages:
 {% if not s390x %}
 
   {% if build_type == 'cuda' %}
-    - feedstock : cudatoolkit    #[cudatoolkit == "11.2"]
-    - feedstock: libc_wrappers     #[x86_64 and c_compiler_version == "7.2.*" and ((cudatoolkit == '11.0' or cudatoolkit == '11.2') or (py_ver < 3.8 and cudatoolkit == "10.2" ))]
+    - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
     - feedstock: nccl
     - feedstock: cudnn
   {% endif %}
