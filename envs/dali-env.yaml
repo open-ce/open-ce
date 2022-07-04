@@ -18,6 +18,6 @@ packages:
     - feedstock : https://github.com/conda-forge/libtar-feedstock
       patches :
         - feedstock-patches/libtar/0001-Changed-libtar-source-url-as-older-one-is-not-availa.patch
-    - feedstock : https://github.com/AnacondaRecipes/nasm-feedstock       #[ppc64le]
+    - feedstock : https://github.com/conda-forge/nasm-feedstock       #[ppc64le]
   {% endif %}
 {% endif %}
