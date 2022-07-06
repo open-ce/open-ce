@@ -1,20 +1,32 @@
-From a8dc8cb1c3e6b157c15ef4d453617fb6c35092d9 Mon Sep 17 00:00:00 2001
+From 047f2a24a76608d2ffe9c797d3414d3f822ad9b4 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 6 Jul 2022 03:16:07 -0400
+Date: Wed, 6 Jul 2022 05:49:42 -0400
 Subject: [PATCH] Build changes
 
 ---
- recipe/build.sh  |  4 ++--
+ recipe/build.sh  |  8 ++++----
  recipe/meta.yaml | 45 ++++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 42 insertions(+), 7 deletions(-)
+ 2 files changed, 44 insertions(+), 9 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 0a76618..0d39990 100644
+index 0a76618..985d460 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
-@@ -58,6 +58,6 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+@@ -41,7 +41,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+       -DLLVM_LINK_LLVM_DYLIB=yes \
+       ${CMAKE_ARGS} ..
  
-   make -j${CPU_COUNT} check-llvm
+-make -j${CPU_COUNT}
++make -j$((${CPU_COUNT}/2))
+ 
+ if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
+     export TEST_CPU_FLAG="-mcpu=haswell"
+@@ -56,8 +56,8 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+   fi
+ 
+-  make -j${CPU_COUNT} check-llvm
++  make -j$((${CPU_COUNT}/2)) check-llvm
  
 -  cd ../test
 -  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
