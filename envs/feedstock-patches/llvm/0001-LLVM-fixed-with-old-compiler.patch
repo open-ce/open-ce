@@ -1,17 +1,26 @@
-From 047f2a24a76608d2ffe9c797d3414d3f822ad9b4 Mon Sep 17 00:00:00 2001
+From 698f2ef784850b7371a15530bb6cd63f1028df08 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 6 Jul 2022 05:49:42 -0400
+Date: Wed, 6 Jul 2022 07:34:14 -0400
 Subject: [PATCH] Build changes
 
 ---
- recipe/build.sh  |  8 ++++----
+ recipe/build.sh  | 10 +++++-----
  recipe/meta.yaml | 45 ++++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 44 insertions(+), 9 deletions(-)
+ 2 files changed, 45 insertions(+), 10 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 0a76618..985d460 100644
+index 0a76618..32235c4 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
+@@ -25,7 +25,7 @@ fi
+ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DLLVM_ENABLE_RTTI=ON \
+-      -DLLVM_INCLUDE_TESTS=ON \
++      -DLLVM_INCLUDE_TESTS=OFF \
+       -DLLVM_INCLUDE_GO_TESTS=OFF \
+       -DLLVM_INCLUDE_UTILS=ON \
+       -DLLVM_INSTALL_UTILS=ON \
 @@ -41,7 +41,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
        -DLLVM_LINK_LLVM_DYLIB=yes \
        ${CMAKE_ARGS} ..
