@@ -1,15 +1,15 @@
-From 698f2ef784850b7371a15530bb6cd63f1028df08 Mon Sep 17 00:00:00 2001
+From 45d8ce75f2054ce785dc8f3972210aa48279386d Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 6 Jul 2022 07:34:14 -0400
-Subject: [PATCH] Build changes
+Date: Wed, 6 Jul 2022 08:41:15 -0400
+Subject: [PATCH] Build Changes
 
 ---
- recipe/build.sh  | 10 +++++-----
+ recipe/build.sh  | 20 ++++++++++----------
  recipe/meta.yaml | 45 ++++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 45 insertions(+), 10 deletions(-)
+ 2 files changed, 50 insertions(+), 15 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 0a76618..32235c4 100644
+index 0a76618..66651ec 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -25,7 +25,7 @@ fi
@@ -30,18 +30,30 @@ index 0a76618..32235c4 100644
  
  if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
      export TEST_CPU_FLAG="-mcpu=haswell"
-@@ -56,8 +56,8 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
-     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
-   fi
+@@ -49,15 +49,15 @@ else
+     export TEST_CPU_FLAG=""
+ fi
+ 
+-if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
++#if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
+ 
+-  if [[ "$target_platform" == linux* ]]; then
+-    ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+-  fi
++#  if [[ "$target_platform" == linux* ]]; then
++#    ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
++#  fi
  
 -  make -j${CPU_COUNT} check-llvm
-+  make -j$((${CPU_COUNT}/2)) check-llvm
++#  make -j$((${CPU_COUNT}/2)) check-llvm
  
 -  cd ../test
 -  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+-fi
 +#  cd ../test
 +#  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
- fi
++#fi
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 929cab3..0c273a9 100644
 --- a/recipe/meta.yaml
