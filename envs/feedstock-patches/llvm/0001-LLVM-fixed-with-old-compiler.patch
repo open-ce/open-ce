@@ -1,12 +1,26 @@
-From bd0b8d7e31fe87f439a1d7135187a8cf97df2da0 Mon Sep 17 00:00:00 2001
+From a8dc8cb1c3e6b157c15ef4d453617fb6c35092d9 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Tue, 31 May 2022 10:16:48 -0400
-Subject: [PATCH] LLVM fixed with old compiler
+Date: Wed, 6 Jul 2022 03:16:07 -0400
+Subject: [PATCH] Build changes
 
 ---
+ recipe/build.sh  |  4 ++--
  recipe/meta.yaml | 45 ++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 40 insertions(+), 5 deletions(-)
+ 2 files changed, 42 insertions(+), 7 deletions(-)
 
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 0a76618..0d39990 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -58,6 +58,6 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+ 
+   make -j${CPU_COUNT} check-llvm
+ 
+-  cd ../test
+-  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
++#  cd ../test
++#  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+ fi
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 929cab3..0c273a9 100644
 --- a/recipe/meta.yaml
