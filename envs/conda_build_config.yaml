@@ -148,7 +148,7 @@ libstdcxx:
   - 8.2.*                      # [ppc64le]
   - 8.4.*                      # [s390x]
 libgfortran:
-  - 7.2.*                      # [x86_64 and cudatoolkit == '11.2']
+  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le]
 libogg:
   - 1.3.*
