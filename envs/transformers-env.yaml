@@ -2,6 +2,10 @@ builder_version: ">=10.0.1"
 
 packages:
 {% if not s390x %}
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : 429557ee73ad0f98221df7260733506ac03d30ae
+    patches :
+            - feedstock-patches/transformer/0001-fix-to-build-with-rust.patch
   - feedstock : tokenizers
   - feedstock : huggingface_hub
   - feedstock : sacremoses
