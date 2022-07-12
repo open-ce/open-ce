@@ -321,7 +321,7 @@ typing_extensions:
 unzip:
   - 6.0
 wasabi:
-  - 0.8.*
+  - 0.9.*
 werkzeug:
   - 2.*
 wheel:
