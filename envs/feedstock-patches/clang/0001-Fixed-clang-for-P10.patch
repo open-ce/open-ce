@@ -1,0 +1,155 @@
+From ec25b696c12dce5dbd0e93679c791b3d1577dc6b Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 14 Jul 2022 09:51:26 +0000
+Subject: [PATCH] Fixed clang for P10
+
+---
+ recipe/build.sh  | 13 +++++++++++++
+ recipe/meta.yaml | 27 +++++++++++++++------------
+ 2 files changed, 28 insertions(+), 12 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 1ebb0d7..9eb30ed 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -4,6 +4,19 @@ IFS='.' read -r -a PKG_VER_ARRAY <<< "${PKG_VERSION}"
+ 
+ sed -i.bak "s/libLTO.dylib/libLTO.${PKG_VER_ARRAY[0]}.dylib/g" lib/Driver/ToolChains/Darwin.cpp
+ 
++if [[ $ppc_arch == "p10" ]]
++then
++    if [[ -z "${GCC_11_HOME}" ]];
++    then
++        echo "Please set GCC_11_HOME to the install path of gcc-toolset-11"
++        exit 1
++    else
++        AR=$GCC_11_HOME/bin/ar
++        rm ${PREFIX}/lib/libstdc++.so*
++        rm ${BUILD_PREFIX}/lib/libstdc++.so*
++    fi
++fi
++
+ if [[ "$variant" == "hcc" ]]; then
+   CMAKE_ARGS="$CMAKE_ARGS -DKALMAR_BACKEND=HCC_BACKEND_AMDGPU -DHCC_VERSION_STRING=2.7-19365-24e69cd8-24e69cd8-24e69cd8"
+   CMAKE_ARGS="$CMAKE_ARGS -DHCC_VERSION_MAJOR=2 -DHCC_VERSION_MINOR=7 -DHCC_VERSION_PATCH=19365"
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 4bc43a4..658aaec 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -35,10 +35,12 @@ source:
+ build:
+   number: {{ build_number }}
+   skip: true  # [(win and vc<14) or variant=="hcc"]
++  script_env:                  # [ppc_arch == "p10"]
++    - GCC_11_HOME              # [ppc_arch == "p10"]
+ 
+ requirements:
+   build:
+-    - {{ compiler('cxx') }}
++    - {{ compiler('cxx') }}      # [ ppc_arch != "p10"]
+     - cmake >=3.4.3
+     # Needed to unpack the source tarball
+     - m2w64-xz  # [win]
+@@ -61,7 +63,7 @@ requirements:
+ 
+ test:
+   requires:
+-    - {{ compiler('cxx') }}
++    - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+     - cmake >=3.4.3
+   files:
+     - mytest.c
+@@ -88,7 +90,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -134,7 +136,7 @@ outputs:
+       skip: true  # [win]
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -171,7 +173,7 @@ outputs:
+       {% endif %}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}   # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -208,7 +210,7 @@ outputs:
+         - libclang {{ minor_aware_ext }}.*
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja                      # [win]
+         - make                       # [unix]
+@@ -248,7 +250,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}      # [ ppc_arch != "p10"]
+         - libcxx                             # [osx]
+         - cmake >=3.4.3
+         - ninja                              # [win]
+@@ -340,7 +342,7 @@ outputs:
+         - {{ pin_subpackage("clang", exact=True) }}
+     test:
+       requires:
+-        - {{ compiler("cxx") }}
++        - {{ compiler("cxx") }}             # [ ppc_arch != "p10"]
+         - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
+         - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
+         - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+@@ -348,7 +350,8 @@ outputs:
+         - mytest.cxx
+       commands:
+         - clang++ --version
+-        - clang++ -v -c mytest.cxx
++        - clang++ --gcc-toolchain=$GCC_11_HOME -v -c mytest.cxx  # [ ppc_arch == "p10"]
++        - clang++ -v -c mytest.cxx  # [ ppc_arch != "p10"]
+ 
+   - name: clang-format-{{ major_version }}
+     script: install_clang_format.sh  # [unix]
+@@ -363,7 +366,7 @@ outputs:
+       build:
+         # "compiling .pyc files" fails without this
+         - python >3
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}     # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -406,7 +409,7 @@ outputs:
+       build:
+         # "compiling .pyc files" fails without this
+         - python >3
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}       # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+@@ -448,7 +451,7 @@ outputs:
+       build:
+         # "compiling .pyc files" fails without this
+         - python >3
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}      # [ ppc_arch != "p10"]
+         - cmake >=3.4.3
+         - ninja  # [win]
+         - make   # [unix]
+-- 
+2.34.1
+

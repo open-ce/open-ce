@@ -1,0 +1,31 @@
+From e71235117b1405a9dbf017273d6c52e568229ab4 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 14 Jul 2022 12:04:48 +0000
+Subject: [PATCH] Fix build for P10
+
+---
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 69b25be..fff0e1d 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -38,11 +38,11 @@ requirements:
+     - numpy                                  # [build_platform != target_platform]
+     - pybind11                               # [build_platform != target_platform]
+     - setuptools <60                         # [build_platform != target_platform]
+-    - {{ compiler('c') }}
+-    - {{ compiler('cxx') }}
++    - {{ compiler('c') }}                    # [ ppc_arch != "p10"]
++    - {{ compiler('cxx') }}                  # [ ppc_arch != "p10"]
+     # pythran code needs clang-cl on windows
+     - clang                                  # [win]
+-    - {{ compiler('fortran') }}              # [unix]
++    - {{ compiler('fortran') }}              # [unix and ppc_arch != "p10"]  
+     # WARNING: It's not recommended to use these MinGW compilers with python extensions
+     # numpy.distutils has a complex mechanism to facilitate mixing gfortran and MSVC
+     # https://pav.iki.fi/blog/2017-10-08/pywingfortran.html#building-python-wheels-with-fortran-for-windows
+-- 
+2.34.1
+
