@@ -1,0 +1,39 @@
+From 7c4d24d10c49e6c71bbeac370afc63575c5cf918 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 25 Apr 2022 17:34:29 +0100
+Subject: [PATCH] Fixed container build of llvmdev
+
+---
+ recipe/meta.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 99c275e..af7aa58 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -52,6 +52,7 @@ outputs:
+         - vs2017_{{ target_platform }}     # [win]
+         - clang_bootstrap_osx-64           # [osx]
+         - cmake
++        - make
+         - ninja     # [win]
+         - python    >=3
+       host:
+@@ -86,6 +87,7 @@ outputs:
+         - vs2017_{{ target_platform }}     # [win]
+         - clang_bootstrap_osx-64           # [osx]
+         - cmake                    # [not win]
++        - make
+         - python    >=3            # [not win]
+       host:
+         - libcxx >={{ cxx_compiler_version }}  # [osx]
+@@ -129,6 +131,7 @@ outputs:
+         - vs2017_{{ target_platform }}     # [win]
+         - clang_bootstrap_osx-64           # [osx]
+         - cmake
++        - make
+         - ninja     # [win]
+         - python    >=3
+       host:
+-- 
+2.27.0

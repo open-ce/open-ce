@@ -1,9 +1,7 @@
 builder_version: ">=10.0.1"
 
 packages:
-{% if not s390x %}
-  - feedstock : cdts               #[ppc64le]
-    runtime_package : False        #[ppc64le]
+  - feedstock : cdts               #[not x86_64]
+    runtime_package : False        #[not x86_64]
   - feedstock : bazel
     runtime_package : False
-{% endif %}
