@@ -1,18 +1,18 @@
-From ec25b696c12dce5dbd0e93679c791b3d1577dc6b Mon Sep 17 00:00:00 2001
+From 101c912ef183f4112f7aca98b3f30e038482fe4f Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 14 Jul 2022 09:51:26 +0000
-Subject: [PATCH] Fixed clang for P10
+Date: Thu, 14 Jul 2022 15:56:48 +0000
+Subject: [PATCH] Fixed build for P10
 
 ---
- recipe/build.sh  | 13 +++++++++++++
+ recipe/build.sh  | 11 +++++++++++
  recipe/meta.yaml | 27 +++++++++++++++------------
- 2 files changed, 28 insertions(+), 12 deletions(-)
+ 2 files changed, 26 insertions(+), 12 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 1ebb0d7..9eb30ed 100644
+index 1ebb0d7..3604aea 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
-@@ -4,6 +4,19 @@ IFS='.' read -r -a PKG_VER_ARRAY <<< "${PKG_VERSION}"
+@@ -4,6 +4,17 @@ IFS='.' read -r -a PKG_VER_ARRAY <<< "${PKG_VERSION}"
  
  sed -i.bak "s/libLTO.dylib/libLTO.${PKG_VER_ARRAY[0]}.dylib/g" lib/Driver/ToolChains/Darwin.cpp
  
@@ -24,8 +24,6 @@ index 1ebb0d7..9eb30ed 100644
 +        exit 1
 +    else
 +        AR=$GCC_11_HOME/bin/ar
-+        rm ${PREFIX}/lib/libstdc++.so*
-+        rm ${BUILD_PREFIX}/lib/libstdc++.so*
 +    fi
 +fi
 +
