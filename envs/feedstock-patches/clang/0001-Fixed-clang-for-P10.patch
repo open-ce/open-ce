@@ -1,15 +1,15 @@
-From 101c912ef183f4112f7aca98b3f30e038482fe4f Mon Sep 17 00:00:00 2001
+From 120d38531df74f6b3fb137c184616e94d90c2313 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 14 Jul 2022 15:56:48 +0000
-Subject: [PATCH] Fixed build for P10
+Date: Mon, 18 Jul 2022 08:36:11 +0000
+Subject: [PATCH] Fix clang for P10
 
 ---
- recipe/build.sh  | 11 +++++++++++
+ recipe/build.sh  | 12 ++++++++++++
  recipe/meta.yaml | 27 +++++++++++++++------------
- 2 files changed, 26 insertions(+), 12 deletions(-)
+ 2 files changed, 27 insertions(+), 12 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 1ebb0d7..3604aea 100644
+index 1ebb0d7..35a9a27 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -4,6 +4,17 @@ IFS='.' read -r -a PKG_VER_ARRAY <<< "${PKG_VERSION}"
@@ -30,6 +30,14 @@ index 1ebb0d7..3604aea 100644
  if [[ "$variant" == "hcc" ]]; then
    CMAKE_ARGS="$CMAKE_ARGS -DKALMAR_BACKEND=HCC_BACKEND_AMDGPU -DHCC_VERSION_STRING=2.7-19365-24e69cd8-24e69cd8-24e69cd8"
    CMAKE_ARGS="$CMAKE_ARGS -DHCC_VERSION_MAJOR=2 -DHCC_VERSION_MINOR=7 -DHCC_VERSION_PATCH=19365"
+@@ -26,6 +37,7 @@ cd build
+ 
+ export CXXFLAGS="${CXXFLAGS} -fplt"
+ export CFLAGS="${CFLAGS} -fplt"
++export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PREFIX}/lib
+ 
+ cmake \
+   -DCMAKE_INSTALL_PREFIX=$PREFIX \
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 4bc43a4..658aaec 100644
 --- a/recipe/meta.yaml
