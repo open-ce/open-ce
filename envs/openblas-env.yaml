@@ -18,5 +18,6 @@ packages:
     patches:
       - feedstock-patches/openmp/0001-remove-dep-on-openmp_mutex.patch
       - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
+      - feedstock-patches/openmp/0003-P10-changes.patch
   - feedstock : openblas
 {% endif %}
