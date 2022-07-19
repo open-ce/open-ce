@@ -36,6 +36,7 @@ packages:
     patches :
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
+      - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
@@ -51,4 +52,4 @@ packages:
   - feedstock : tensorflow-model-optimization
   - feedstock : typeguard
   - feedstock : tensorflow-addons
-  - feedstock : tensorflow-io-gcs-filesystem
+  - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
