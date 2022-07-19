@@ -2,7 +2,6 @@ abseil_cpp:
   - 20210324
 absl_py:
   - 1.0.*
-  - 0.15.*   #[s390x]
 arrow:
   - 8.0.0
 astunparse:
