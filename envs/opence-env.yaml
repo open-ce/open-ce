@@ -25,3 +25,4 @@ packages:
       - feedstock-patches/h5py/0001-Fixed-h5py.patch                   # [build_type == 'cpu' or cudatoolkit == '11.4']
       - feedstock-patches/h5py/0001-P10-changes.patch                  # [build_type == 'cpu' or cudatoolkit == '11.4']
   - feedstock : opencv   # [not s390x]
+  - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
