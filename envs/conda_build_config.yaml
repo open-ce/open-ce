@@ -209,8 +209,7 @@ openblas:
 opencv:
   - 4.6.*
 openjdk:
-  - 11.0.*       #[not s390x]
-  - 1.8.0        #[s390x]
+  - 11.0.*
 openmpi:
   - 4.1.1
 optional_lite:
