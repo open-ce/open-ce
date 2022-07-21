@@ -2,11 +2,6 @@ packages:
 {% if s390x %}
   - feedstock : https://github.com/AnacondaRecipes/flatbuffers-feedstock.git
     git_tag: c7bd7770705d34151e80cae10b7b4a4cc960094f
-<<<<<<< HEAD
-=======
-  - feedstock : https://github.com/conda-forge/llvmdev-feedstock
-    git_tag: ddce3b23502e4a4c97650062c709014c22144183
->>>>>>> 8cad79d (clangdev fix and more s390x deps (#606))
   - feedstock : https://github.com/conda-forge/portpicker-feedstock
     git_tag: b21a22eb2c31f135b8e2966b0e53c269e9a12a18
   - feedstock : https://github.com/AnacondaRecipes/googleapis-common-protos-feedstock
