@@ -1,0 +1,16 @@
+packages:
+  - feedstock : https://github.com/conda-forge/httplib2-feedstock.git
+    git_tag : 453d370425de5554976b4f603e30ea26efc3709a
+  - feedstock : https://github.com/conda-forge/orjson-feedstock.git
+    git_tag : 	982ae691930dde663d56e88a91747901569a83d4
+  - feedstock : https://github.com/conda-forge/maturin-feedstock.git
+    git_tag : e98953bd20e168decf25710bafdf48f3ef4a2fe2
+  - feedstock : https://github.com/conda-forge/openssl-feedstock.git
+    git_tag : 4474f213868116121252456d507de9b49b7c61f5
+  - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
+    git_tag : f51a98b1aa3b2591cebe3e0f42231b1f6c1d6fcc
+  - feedstock : https://github.com/conda-forge/cargo-bundle-licenses-feedstock.git
+    git_tag : 932b58eef20b055621ea007b1d828326e7238801
+  - feedstock : https://github.com/conda-forge/libgit2-feedstock.git
+    git_tag : e3ac3f9015bd82371a08f474aba078f158a12aa2
+  - feedstock : apache-beam
