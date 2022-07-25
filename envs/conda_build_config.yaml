@@ -236,7 +236,7 @@ python:
 pytorch:
   - 1.10.*
 pytorch_lightning:
-  - 1.5.*
+  - 1.6.*
 pyyaml:
   - 5.*   # [not s390x]
   - 6.*   # [s390x]
@@ -298,7 +298,7 @@ thinc:
 tokenizers:
   - 0.10.3
 torchmetrics:
-  - 0.6.*
+  - 0.8.*
 torchtext:
   - 0.11.*
 torchvision:
@@ -308,7 +308,7 @@ tqdm:
 typer:
   - 0.4.0
 typing_extensions:
-  - 3.7.4.*
+  - 4.1.*
 unzip:
   - 6.0
 wasabi:
