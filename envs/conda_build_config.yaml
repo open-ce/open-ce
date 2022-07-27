@@ -197,7 +197,6 @@ numactl:
   - 2.0.*
 numpy:
   - 1.22.*
-  - 1.21.*|1.22.* # [s390x]
 onnx:
   - 1.11.*
 onnxconverter_common:
@@ -309,6 +308,8 @@ termcolor:
   - 1.1.0
 termcolor_cpp:
   - 2.0.0
+tf_estimator:
+  - 2.9.*
 thinc:
   - 8.0.*
 tokenizers:
