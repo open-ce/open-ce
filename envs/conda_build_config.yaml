@@ -236,7 +236,6 @@ pytest:
   - 5.*   # [not s390x]
   - 6.*   # [s390x]
 python:
-  - 3.7   # [not s390x]
   - 3.8   # [not s390x]
   - 3.9
 pytorch:
