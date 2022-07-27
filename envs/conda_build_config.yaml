@@ -248,8 +248,7 @@ pytorch_scatter:
 pytorch_sparse:
   - 0.6.10
 pyyaml:
-  - 5.*   # [not s390x]
-  - 6.*   # [s390x]
+  - 5.*
 rdflib:
   - 6.1.1
 requests:
@@ -288,7 +287,7 @@ srsly:
 starlette:
   - 0.19.*
 sqlite:
-  - 3.38.2   # [s390x]
+  - 3.38.*   # [s390x]
 tabulate:
   - 0.8.*
 tensorboard:
