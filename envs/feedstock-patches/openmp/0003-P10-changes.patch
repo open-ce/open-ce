@@ -1,0 +1,44 @@
+From da5201e5076d38b467a7f7c69e6538dd0e337cd3 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 18 Jul 2022 13:22:20 +0000
+Subject: [PATCH] P10 changes
+
+---
+ recipe/meta.yaml | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 0d309e3..af5395a 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,7 +29,7 @@ outputs:
+           - {{ pin_subpackage("llvm-openmp", max_pin=None) }}
+     requirements:
+       build:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}      #[ppc_arch != 'p10']
+         - clang  # [win]
+         - cmake
+         - make   # [unix]
+@@ -45,7 +45,7 @@ outputs:
+     test:
+       requires:
+         - clangxx
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}      #[ppc_arch != 'p10']
+       commands:
+         - if not exist %LIBRARY_BIN%\\libomp.dll exit 1   # [win]
+         - test -f $PREFIX/lib/libomp.so                   # [linux]
+@@ -53,7 +53,8 @@ outputs:
+         - if not exist %LIBRARY_LIB%\\libomp.lib exit 1   # [win]
+         - if not exist %LIBRARY_INC%\\omp.h exit 1        # [win]
+         - test -f $PREFIX/include/omp.h                   # [unix]
+-        - $PREFIX/bin/clang -v -fopenmp -I$PREFIX/include -L$PREFIX/lib -Wl,-rpath,$PREFIX/lib omp_hello.c -o omp_hello  # [not win]
++        - $PREFIX/bin/clang --gcc-toolchain=$GCC_11_HOME -v -fopenmp -I$PREFIX/include -L$PREFIX/lib -Wl,-rpath,$PREFIX/lib omp_hello.c -o omp_hello  # [not win and ppc_arch == 'p10']
++        - $PREFIX/bin/clang -v -fopenmp -I$PREFIX/include -L$PREFIX/lib -Wl,-rpath,$PREFIX/lib omp_hello.c -o omp_hello  # [not win and ppc_arch != 'p10']
+         - '%LIBRARY_BIN%\clang -v -fopenmp -I%LIBRARY_INC% -L%LIBRARY_LIB% omp_hello.c -o omp_hello.exe'   # [win]
+         - ./omp_hello            # [unix]
+         - '%cd%\omp_hello.exe'   # [win]
+-- 
+2.34.1
+

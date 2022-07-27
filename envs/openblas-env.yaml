@@ -6,15 +6,18 @@ packages:
     git_tag : 66ced78b8653ae9064e404386ac2c48285330774
     patches:
       - feedstock-patches/llvm/0001-LLVM-fixed-with-old-compiler.patch
+      - feedstock-patches/llvm/0001-Fix-build-for-P10.patch
   - feedstock : https://github.com/conda-forge/clangdev-feedstock
     git_tag : b741c7551b48482d08d2f65a791b7602c1f23c9d
     patches :
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
+      - feedstock-patches/clang/0001-Fixed-clang-for-P10.patch
   - feedstock : https://github.com/conda-forge/openmp-feedstock
     git_tag: dacfb2acd36a6453e20d71d11f1b85fa6122c649
     patches:
       - feedstock-patches/openmp/0001-remove-dep-on-openmp_mutex.patch
       - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
+      - feedstock-patches/openmp/0003-P10-changes.patch
   - feedstock : openblas
 {% endif %}

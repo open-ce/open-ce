@@ -14,10 +14,12 @@ packages:
     git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
     patches:                                              # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-Fixed-h5py.patch      # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
+      - feedstock-patches/h5py/0001-P10-changes.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
   - feedstock : https://github.com/conda-forge/scipy-feedstock.git     # [build_type == 'cpu' or cudatoolkit == '11.4']
     git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e                 # [build_type == 'cpu' or cudatoolkit == '11.4']
     patches :                                                          # [build_type == 'cpu' or cudatoolkit == '11.4']
       - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
+      - feedstock-patches/scipy/0001-Fix-build-for-P10.patch           # [build_type == 'cpu' or cudatoolkit == '11.4']
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     patches : 
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
@@ -31,11 +33,13 @@ packages:
     git_tag : 66ced78b8653ae9064e404386ac2c48285330774
     patches:
       - feedstock-patches/llvm/0001-LLVM-fixed-with-old-compiler.patch
+      - feedstock-patches/llvm/0001-Fix-build-for-P10.patch
   - feedstock : https://github.com/conda-forge/clangdev-feedstock
     git_tag : b741c7551b48482d08d2f65a791b7602c1f23c9d
     patches :
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
+      - feedstock-patches/clang/0001-Fixed-clang-for-P10.patch
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
   - feedstock : keras
   - feedstock : tensorflow
