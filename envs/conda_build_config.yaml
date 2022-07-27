@@ -32,7 +32,8 @@ c_compiler_version:
 catalogue:
   - 2.*
 cffi:
-  - 1.14.*
+  - 1.14.*  # [not s390x]
+  - 1.15.*  # [s390x]
 clang:
   - 13.0.*
 click:
@@ -144,14 +145,15 @@ libevent:
 libgcc:
   - 9.1.*                      # [x86_64 and cudatoolkit == '11.2']
   - 8.2.*                      # [ppc64le]
-  - 8.4.*                      # [s390x]
+  - 9.3.*                      # [s390x]
 libstdcxx:
   - 9.1.*                      # [x86_64 and cudatoolkit == '11.2']
   - 8.2.*                      # [ppc64le]
-  - 8.4.*                      # [s390x]
+  - 9.3.*                      # [s390x]
 libgfortran:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le]
+  - 7.5.*                      # [s390x]
 libogg:
   - 1.3.*
 libopus:
@@ -177,7 +179,8 @@ make:
 markdown:
   - 3.3.3
 mock:
-  - 3.*
+  - 3.*      # [not s390x]
+  - 4.*      # [s390x]
 murmurhash:
   - 1.0.*
 nasm:                          # [x86_64]
@@ -230,9 +233,10 @@ pybind11:
 pydantic:
   - 1.8.2
 pytest:
-  - 5.*
+  - 5.*   # [not s390x]
+  - 6.*   # [s390x]
 python:
-  - 3.8
+  - 3.8   # [not s390x]
   - 3.9
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
@@ -264,12 +268,12 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
-  - 58.*     # [not s390x]
-  - 51.*     # [s390x]
+  - 58.*
 setuptools_rust:
   - 0.12.*
 six:
-  - 1.15.0
+  - 1.15.0  # [not s390x]
+  - 1.16.0  # [s390x]
 smart_open:
   - 2.2.*
 spacy_legacy:
@@ -282,6 +286,8 @@ srsly:
   - 2.*
 starlette:
   - 0.19.*
+sqlite:
+  - 3.38.*   # [s390x]
 tabulate:
   - 0.8.*
 tensorboard:
@@ -300,6 +306,8 @@ termcolor:
   - 1.1.0
 termcolor_cpp:
   - 2.0.0
+tf_estimator:
+  - 2.9.*
 thinc:
   - 8.0.*
 tokenizers:
@@ -348,12 +356,15 @@ ppc_arch:
 cpu_opt_arch:
   - sandybridge             # [x86_64]
   - power8                  # [ppc64le]
+  - z14                     # [s390x]
 cpu_opt_tune:
   - haswell                 # [x86_64]
   - power9                  # [ppc64le]
+  - z14                     # [s390x]
 vector_settings:
   - avx, sse4.1, sse4.2     # [x86_64]
   - vsx                     # [ppc64le]
+  - zvector                 # [s390x]
 
 ## GPU/CUDA Specifics
 ## =====================================

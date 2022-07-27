@@ -2,19 +2,19 @@ builder_version: ">=10.0.1"
 
 imported_envs:
   - bazel-env.yaml
+  - tensorflow-s390x-extra-deps-env.yaml
 
 packages:
-{% if not s390x %}
-  {% if build_type == 'cuda' %}
+{% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
-  {% endif %}
-  - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock      # [build_type == 'cpu' or cudatoolkit == "11.4"]
-    git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9                 # [build_type == 'cpu' or cudatoolkit == '11.4']
-    patches:                                                           # [build_type == 'cpu' or cudatoolkit == '11.4']
-      - feedstock-patches/h5py/0001-Fixed-h5py.patch                   # [build_type == 'cpu' or cudatoolkit == '11.4']
-      - feedstock-patches/h5py/0001-P10-changes.patch                  # [build_type == 'cpu' or cudatoolkit == '11.4']
+{% endif %}
+  - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
+    git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
+    patches:                                              # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
+      - feedstock-patches/h5py/0001-Fixed-h5py.patch      # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
+      - feedstock-patches/h5py/0001-P10-changes.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
   - feedstock : https://github.com/conda-forge/scipy-feedstock.git     # [build_type == 'cpu' or cudatoolkit == '11.4']
     git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e                 # [build_type == 'cpu' or cudatoolkit == '11.4']
     patches :                                                          # [build_type == 'cpu' or cudatoolkit == '11.4']
@@ -40,6 +40,7 @@ packages:
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
       - feedstock-patches/clang/0001-Fixed-clang-for-P10.patch
+      - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
@@ -55,5 +56,4 @@ packages:
   - feedstock : tensorflow-model-optimization
   - feedstock : typeguard
   - feedstock : tensorflow-addons
-  - feedstock : tensorflow-io-gcs-filesystem
-{% endif %}
+  - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
