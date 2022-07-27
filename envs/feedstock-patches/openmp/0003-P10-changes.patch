@@ -35,7 +35,7 @@ index 0d309e3..af5395a 100644
          - test -f $PREFIX/include/omp.h                   # [unix]
 -        - $PREFIX/bin/clang -v -fopenmp -I$PREFIX/include -L$PREFIX/lib -Wl,-rpath,$PREFIX/lib omp_hello.c -o omp_hello  # [not win]
 +        - $PREFIX/bin/clang --gcc-toolchain=$GCC_11_HOME -v -fopenmp -I$PREFIX/include -L$PREFIX/lib -Wl,-rpath,$PREFIX/lib omp_hello.c -o omp_hello  # [not win and ppc_arch == 'p10']
-+        - $PREFIX/bin/clang --gcc-toolchain=$GCC_11_HOME -v -fopenmp -I$PREFIX/include -L$PREFIX/lib -Wl,-rpath,$PREFIX/lib omp_hello.c -o omp_hello  # [not win and ppc_arch != 'p10']
++        - $PREFIX/bin/clang -v -fopenmp -I$PREFIX/include -L$PREFIX/lib -Wl,-rpath,$PREFIX/lib omp_hello.c -o omp_hello  # [not win and ppc_arch != 'p10']
          - '%LIBRARY_BIN%\clang -v -fopenmp -I%LIBRARY_INC% -L%LIBRARY_LIB% omp_hello.c -o omp_hello.exe'   # [win]
          - ./omp_hello            # [unix]
          - '%cd%\omp_hello.exe'   # [win]
