@@ -1,14 +1,14 @@
-From 2d60cbb9ad49daacd52cb23761e054b0cb196ec8 Mon Sep 17 00:00:00 2001
+From 44f6af878edb3ebdba4813cc46c5173db109811c Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Tue, 24 May 2022 06:28:14 -0400
-Subject: [PATCH] Updated to 1.0.0
+Date: Thu, 28 Jul 2022 10:19:29 +0000
+Subject: [PATCH] Update absl to 1.0.0
 
 ---
- recipe/meta.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index a634d2c..d0e9cd6 100644
+index a634d2c..83ab902 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,8 +1,8 @@
@@ -22,6 +22,14 @@ index a634d2c..d0e9cd6 100644
  
  package:
    name: {{ name|lower }}
+@@ -16,7 +16,6 @@ source:
+ build:
+   number: 0
+   # the package absl is not available in s390x
+-  skip: True  # [py<36 or s390x]
+   noarch: python
+   script: "{{ PYTHON }} -m pip install . --no-deps -vv"
+ 
 -- 
-2.23.0
+2.34.1
 
