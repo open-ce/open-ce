@@ -108,7 +108,7 @@ harfbuzz:
 # Note: hdf5 version must be compatible with h5py
 hdf5:
   - 1.12.1     # [build_type == 'cpu' or cudatoolkit == '11.4']
-  - 1.10.*     # [cudatoolkit == '11.2']
+  - 1.10.6     # [cudatoolkit == '11.2']
 hypothesis:
   - 5.*
 h5py:
