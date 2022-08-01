@@ -35,7 +35,7 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 
 ### Requirements
 
-* `conda` == 4.12 
+* `conda` == 4.12
   * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 ### Community Builds
