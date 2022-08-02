@@ -25,7 +25,7 @@ be specified at build time. Open-CE currently supports the following:
 | --- | --- |
 | Architecture | Power, x86, s390x |
 | Python | 3.8, 3.9 |
-| CUDA | 11.0, 11.2 |
+| CUDA | 11.2 11.4 |
 
 
 The `open-ce` tool can also be used to build all or some of the packages provided by Open-CE. For more information on the `open-ce` tool,
@@ -35,7 +35,7 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 
 ### Requirements
 
-* `conda` >= 3.8.3
+* `conda` == 4.12
   * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 ### Community Builds
