@@ -8,5 +8,3 @@ packages:
     - feedstock : LightGBM
     - feedstock : openmpi          #[mpi_type == 'openmpi']
 {% endif %}
-
-git_tag_for_env: open-ce-v1.7.0

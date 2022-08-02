@@ -11,5 +11,3 @@ packages:
   - feedstock : libflac
   - feedstock : libsndfile
 {% endif %}
-
-git_tag_for_env: open-ce-v1.7.0
