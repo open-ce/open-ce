@@ -9,3 +9,5 @@ packages:
     patches :
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
   - feedstock : tensorboard
+
+git_tag_for_env: open-ce-v1.7.0
