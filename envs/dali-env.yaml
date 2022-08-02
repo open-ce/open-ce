@@ -21,5 +21,3 @@ packages:
     - feedstock : https://github.com/conda-forge/nasm-feedstock       #[ppc64le]
   {% endif %}
 {% endif %}
-
-git_tag_for_env: open-ce-v1.7.0
