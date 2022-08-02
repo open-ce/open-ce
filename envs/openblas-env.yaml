@@ -21,3 +21,5 @@ packages:
       - feedstock-patches/openmp/0003-P10-changes.patch
   - feedstock : openblas
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.0
