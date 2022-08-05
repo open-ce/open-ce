@@ -1,6 +1,7 @@
 builder_version: ">=10.0.1"
 
 packages:
+{% if build_type == 'cpu' %}
   - feedstock : https://github.com/conda-forge/cli11-feedstock
     git_tag : a8e959fcae876db93c92918e57914f632feac574
   - feedstock : https://github.com/conda-forge/pybind11-feedstock
@@ -28,5 +29,6 @@ packages:
   - feedstock : https://github.com/conda-forge/yaml-cpp-feedstock.git
     git_tag : dc95b85b3054205c1f2cd168dbbb5ee87a81ef99
   - feedstock : mamba
+{% endif %}
 
 git_tag_for_env: open-ce-v1.7.0
