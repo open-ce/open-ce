@@ -216,7 +216,7 @@ optional_lite:
 opt_einsum:
   - 3.3.0
 pathy:
-  - 0.5.*
+  - 0.6.*
 pip:
   - 21.*
 pkg_config:
