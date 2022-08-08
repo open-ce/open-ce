@@ -32,7 +32,7 @@ c_compiler_version:
 catalogue:
   - 2.*
 cffi:
-  - 1.14.*  # [not s390x]
+  - 1.15.*  # [not s390x]
   - 1.15.*  # [s390x]
 clang:
   - 13.0.*
@@ -177,7 +177,7 @@ magma:
 make:
   - 4.2.1
 markdown:
-  - 3.3.3
+  - 3.3.*
 mock:
   - 3.*      # [not s390x]
   - 4.*      # [s390x]
@@ -229,15 +229,14 @@ psutil:
   - 5
 pybind11:
   - 2.9.*
-#forbid version 1.8.1 due to security vulnerability
 pydantic:
-  - 1.8.2
+  - 1.9.*
 pytest:
-  - 5.*   # [not s390x]
-  - 6.*   # [s390x]
+  - 6.*
 python:
   - 3.8   # [not s390x]
   - 3.9
+  - 3.10
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
   - 1.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
@@ -248,13 +247,13 @@ pytorch_scatter:
 pytorch_sparse:
   - 0.6.10
 pyyaml:
-  - 5.*
+  - 6.*
 rdflib:
   - 6.1.1
 requests:
   - 2.*
 regex:
-  - 2020.11.*
+  - 2022.3.*
 reproc_cpp:
   - 14.2.*
 rust:
@@ -335,7 +334,7 @@ werkzeug:
 wheel:
   - 0.37*
 wrapt:
-  - 1.12.*
+  - 1.13.*
 yaml_cpp:
   - 0.6.3
 zlib:
