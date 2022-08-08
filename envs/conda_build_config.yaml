@@ -196,7 +196,7 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
-  - 1.22.*
+  - 1.23.*
 onnx:
   - 1.12.*
 onnxconverter_common:
