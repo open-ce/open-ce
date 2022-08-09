@@ -13,7 +13,7 @@ autoconf:
 automake:
   - 1.16
 av:
-  - 8.*
+  - 9.*
 bazel:
   - 5.*
 black:
