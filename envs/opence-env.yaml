@@ -4,7 +4,19 @@ imported_envs:
   - openblas-env.yaml
 #  - onnx-env.yaml
   - pytorch-env.yaml
+  - pytorch-extras-env.yaml
+#  - pytorch_geometric-env.yaml
   - tensorflow-env.yaml
+#  - xgboost-env.yaml
+#  - dali-env.yaml
+  - spacy-env.yaml
+  - transformers-env.yaml
+  - horovod-env.yaml
+#  - lightgbm-env.yaml
+  - arrow-env.yaml
+  - uwsgi-env.yaml
+  - mamba-env.yaml
+  - ray-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
