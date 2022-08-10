@@ -121,7 +121,7 @@ importlib_resources:
 jasper:
   - 2.0.14
 joblib:
-  - 0.17
+  - 1.*
 jpeg:
   - 9b
 jpegturbo:
