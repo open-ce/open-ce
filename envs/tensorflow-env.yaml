@@ -14,6 +14,8 @@ packages:
     git_tag : e9360b2b6265e26f31dd70952772812dc0166f90                   #[python == '3.10']
   - feedstock : https://github.com/AnacondaRecipes/pyjwt-feedstock.git   #[python == '3.10']
     git_tag : f97b8626804f8ec7f2504e276d0c353a09fa9de6                   #[python == '3.10']
+    patches:                                                             #[python == '3.10']
+      - feedstock-patches/pyjwt/0001-relax-cryptography-pin.patch        #[python == '3.10']
   - feedstock : https://github.com/AnacondaRecipes/googleapis-common-protos-feedstock.git  #[python == '3.10']
     git_tag : 4d13a86a301dd9bf5915cd7e4c01d3a245fc37b1                                     #[python == '3.10']
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
