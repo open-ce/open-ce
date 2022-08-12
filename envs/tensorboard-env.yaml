@@ -6,6 +6,7 @@ imported_envs:
 packages:
   - feedstock : tensorboard-data-server
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
+    git_tag : 85fff27f50229187e7877c434590b01ac42ba772
     patches :
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
   - feedstock : tensorboard

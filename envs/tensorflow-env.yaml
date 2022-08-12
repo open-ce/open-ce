@@ -21,6 +21,7 @@ packages:
       - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
       - feedstock-patches/scipy/0001-Fix-build-for-P10.patch           # [build_type == 'cpu' or cudatoolkit == '11.4']
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
+    git_tag : 85fff27f50229187e7877c434590b01ac42ba772
     patches : 
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
   - feedstock : https://github.com/conda-forge/pathspec-feedstock

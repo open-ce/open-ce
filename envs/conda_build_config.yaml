@@ -258,7 +258,7 @@ regex:
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.54.0
+  - 1.62.0
 rust_compiler_version:
   - '1.46'
 safeint:
