@@ -23,5 +23,3 @@ packages:
       git_tag : 062e60e4ead5d7170758498dacb93ebab451e1bf              #[ppc64le]
   {% endif %}
 {% endif %}
-
-git_tag_for_env: open-ce-v1.7.0
