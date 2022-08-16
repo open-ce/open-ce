@@ -3,6 +3,7 @@ builder_version: ">=10.0.1"
 imported_envs:
   - bazel-env.yaml
   - tensorflow-s390x-extra-deps-env.yaml
+  - scipy-env.yaml
 
 packages:
 {% if build_type == 'cuda' %}
@@ -23,11 +24,6 @@ packages:
     patches:                                              # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-Fixed-h5py.patch      # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-P10-changes.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-  - feedstock : https://github.com/conda-forge/scipy-feedstock.git     # [build_type == 'cpu' or cudatoolkit == '11.4']
-    git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e                 # [build_type == 'cpu' or cudatoolkit == '11.4']
-    patches :                                                          # [build_type == 'cpu' or cudatoolkit == '11.4']
-      - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
-      - feedstock-patches/scipy/0001-Fix-build-for-P10.patch           # [build_type == 'cpu' or cudatoolkit == '11.4']
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     git_tag : 85fff27f50229187e7877c434590b01ac42ba772
     patches :
