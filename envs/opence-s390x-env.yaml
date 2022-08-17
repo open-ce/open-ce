@@ -1,6 +1,6 @@
 imported_envs:
 {% if build_type == 'cpu' %}
-    - tensorflow-env.yaml
+  - tensorflow-env.yaml
 {% endif %}
   - xgboost-env.yaml
   - arrow-env.yaml
