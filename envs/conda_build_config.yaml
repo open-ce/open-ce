@@ -267,7 +267,7 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
-  - 58.*
+  - 61.*
 setuptools_rust:
   - 0.12.*
 six:
@@ -334,7 +334,7 @@ werkzeug:
 wheel:
   - 0.37*
 wrapt:
-  - 1.13.*
+  - 1.14.*
 yaml_cpp:
   - 0.6.3
 zlib:
