@@ -14,12 +14,12 @@ packages:
       - feedstock-patches/clang/0001-Fix-clang-build-for-p10.patch                            # [ppc64le]
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
   - feedstock : keras
-  - feedstock : tensorflow
+  - feedstock : tensorflow                          #[build_type != 'nnpa']
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
-  - feedstock : tensorflow-estimator
-  - feedstock : tensorboard-data-server
-  - feedstock : tensorboard
+  - feedstock : tensorflow-estimator                #[build_type != 'nnpa']
+  - feedstock : tensorboard-data-server             #[build_type != 'nnpa']
+  - feedstock : tensorboard                         #[build_type != 'nnpa']
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
   - feedstock : tensorflow-datasets
