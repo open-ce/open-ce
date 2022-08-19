@@ -41,7 +41,7 @@ click:
 cli11:
   - 2.1.2
 cloudpickle:
-  - 1.6.*
+  - 2.*
 cmake:
   - 3.19.*   # [not s390x]
   - 3.18.*   # [s390x]
