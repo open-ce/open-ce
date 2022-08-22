@@ -1,7 +1,6 @@
 builder_version: ">=10.0.1"
 
 packages:
-{% if not s390x %}
   - feedstock : https://github.com/conda-forge/pybind11-feedstock
     git_tag : 3d3cbe7e8422e78a1c315004ed14480e00f30b59
     patches :
@@ -11,4 +10,3 @@ packages:
     patches :                                                          # [build_type == 'cpu' or cudatoolkit == '11.4']
       - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
       - feedstock-patches/scipy/0001-Fix-build-for-P10.patch           # [build_type == 'cpu' or cudatoolkit == '11.4']
-{% endif %}
