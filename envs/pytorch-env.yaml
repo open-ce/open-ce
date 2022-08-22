@@ -2,13 +2,10 @@ builder_version: ">=10.0.1"
 
 imported_envs:
   - openblas-env.yaml
+  - scipy-env.yaml
 
 packages:
 {% if not s390x %}
-  - feedstock : https://github.com/conda-forge/scipy-feedstock.git     # [build_type == 'cpu' or cudatoolkit == '11.4']
-    git_tag : fec6edcac1ba695a0b61a9de62104fabc267076e                 # [build_type == 'cpu' or cudatoolkit == '11.4']
-    patches :                                                          # [build_type == 'cpu' or cudatoolkit == '11.4']
-      - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
   - feedstock : pytorch
   - feedstock : numactl
   {% if build_type == 'cuda' %}

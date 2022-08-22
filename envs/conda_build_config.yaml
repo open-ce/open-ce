@@ -13,7 +13,7 @@ autoconf:
 automake:
   - 1.16
 av:
-  - 8.*
+  - 9.*
 bazel:
   - 5.*
 black:
@@ -32,7 +32,7 @@ c_compiler_version:
 catalogue:
   - 2.*
 cffi:
-  - 1.14.*  # [not s390x]
+  - 1.15.*  # [not s390x]
   - 1.15.*  # [s390x]
 clang:
   - 13.0.*
@@ -41,7 +41,7 @@ click:
 cli11:
   - 2.1.2
 cloudpickle:
-  - 1.6.*
+  - 2.*
 cmake:
   - 3.19.*   # [not s390x]
   - 3.18.*   # [s390x]
@@ -121,9 +121,9 @@ importlib_resources:
 jasper:
   - 2.0.14
 joblib:
-  - 0.17
+  - 1.*
 jpeg:
-  - 9b
+  - 9e
 jpegturbo:
   - 2.1.0
 keras_applications:
@@ -177,7 +177,7 @@ magma:
 make:
   - 4.2.1
 markdown:
-  - 3.3.3
+  - 3.3.*
 mock:
   - 3.*      # [not s390x]
   - 4.*      # [s390x]
@@ -196,7 +196,7 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
-  - 1.22.*
+  - 1.23.*
 onnx:
   - 1.12.*
 onnxconverter_common:
@@ -216,7 +216,7 @@ optional_lite:
 opt_einsum:
   - 3.3.0
 pathy:
-  - 0.5.*
+  - 0.6.*
 pip:
   - 21.*
 pkg_config:
@@ -229,15 +229,14 @@ psutil:
   - 5
 pybind11:
   - 2.9.*
-#forbid version 1.8.1 due to security vulnerability
 pydantic:
-  - 1.8.2
+  - 1.9.*
 pytest:
-  - 5.*   # [not s390x]
-  - 6.*   # [s390x]
+  - 6.*
 python:
   - 3.8   # [not s390x]
   - 3.9
+  - 3.10
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
   - 1.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
@@ -248,13 +247,13 @@ pytorch_scatter:
 pytorch_sparse:
   - 0.6.10
 pyyaml:
-  - 5.*
+  - 6.*
 rdflib:
   - 6.1.1
 requests:
   - 2.*
 regex:
-  - 2020.11.*
+  - 2022.3.*
 reproc_cpp:
   - 14.2.*
 rust:
@@ -268,7 +267,7 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
-  - 58.*
+  - 61.*
 setuptools_rust:
   - 0.12.*
 six:
@@ -335,7 +334,7 @@ werkzeug:
 wheel:
   - 0.37*
 wrapt:
-  - 1.12.*
+  - 1.14.*
 yaml_cpp:
   - 0.6.3
 zlib:
