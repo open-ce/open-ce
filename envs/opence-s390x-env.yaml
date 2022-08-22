@@ -1,9 +1,9 @@
 imported_envs:
-{% if build_type == 'cpu' %}
   - tensorflow-env.yaml
-{% endif %}
+{% if build_type == 'cpu' %}
   - xgboost-env.yaml
   - arrow-env.yaml
   - mamba-env.yaml
+{% endif %}
 
 git_tag_for_env: open-ce-v1.5.6
