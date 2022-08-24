@@ -196,6 +196,7 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
+  - 1.22.*   # [cudatoolkit == '11.2']
   - 1.23.*
 onnx:
   - 1.12.*
@@ -267,6 +268,7 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
+  - 58.*    # [cudatoolkit == '11.2']
   - 61.*
 setuptools_rust:
   - 0.12.*
