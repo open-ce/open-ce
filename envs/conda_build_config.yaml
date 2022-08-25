@@ -196,7 +196,8 @@ nlohmann_json:
 numactl:
   - 2.0.*
 numpy:
-  - 1.23.*
+  - 1.22.*   # [cudatoolkit == '11.2']
+  - 1.23.*   # [build_type == 'cpu' or cudatoolkit == '11.4']
 onnx:
   - 1.12.*
 onnxconverter_common:
@@ -267,7 +268,8 @@ scipy:
 sentencepiece:
   - 0.1.96
 setuptools:
-  - 61.*
+  - 58.*    # [cudatoolkit == '11.2']
+  - 61.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
 setuptools_rust:
   - 0.12.*
 six:
