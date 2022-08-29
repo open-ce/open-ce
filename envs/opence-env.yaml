@@ -9,6 +9,7 @@ imported_envs:
   - tensorflow-env.yaml
   - xgboost-env.yaml
   - dali-env.yaml
+  - spacy-env.yaml
   - transformers-env.yaml
   - horovod-env.yaml
   - lightgbm-env.yaml
