@@ -277,10 +277,6 @@ six:
   - 1.16.0  # [s390x]
 smart_open:
   - 2.2.*
-spacy_legacy:
-  - 3.0.9
-spacy_loggers:
-  - 1.0.2
 spdlog:
   - 1.9.2
 srsly:
