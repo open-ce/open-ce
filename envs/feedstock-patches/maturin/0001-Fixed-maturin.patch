@@ -1,0 +1,25 @@
+From 986f3d9ac7c742200382eb2a3ea1927ff865c801 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 30 Aug 2022 12:09:40 +0000
+Subject: [PATCH] Fixed maturin
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 0a97890..cf421b6 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -24,7 +24,7 @@ requirements:
+     - {{ compiler('rust') }}
+   host:
+     - pip
+-    - setuptools-rust
++    - setuptools-rust 1.5.*
+     - wheel
+     - python
+     - tomli >=1.1.0
+-- 
+2.34.1
+

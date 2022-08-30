@@ -11,18 +11,26 @@ packages:
     git_tag : a7ac51ae8db1305501bd7445a00b86f608a933f9
   - feedstock : https://github.com/conda-forge/maturin-feedstock.git
     git_tag : e50c2b63074fa3e90e553871c9ec4dc91a918a0e
+    patches :
+      - feedstock-patches/maturin/0001-Fixed-maturin.patch
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
   - feedstock : https://github.com/conda-forge/dill-feedstock
     git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : 97bf9eebc206d17594013dd0e89938f6536a783a     # 1.60
+    patches :
+      - feedstock-patches/rust/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
     git_tag : 75803486a2dbca1b39b2a0594b682afaabcb5b13
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
     git_tag : f51a98b1aa3b2591cebe3e0f42231b1f6c1d6fcc
   - feedstock : https://github.com/conda-forge/cargo-bundle-licenses-feedstock.git
     git_tag : 932b58eef20b055621ea007b1d828326e7238801
+    patches :
+      - feedstock-patches/cargo_bundle_licenses/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/cloudpickle-feedstock
     git_tag : 3e0ee6656ea16f597738b224001448bf0e332210    
   - feedstock : apache-beam
