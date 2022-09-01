@@ -21,6 +21,10 @@ packages:
     git_tag : 97bf9eebc206d17594013dd0e89938f6536a783a     # 1.60
     patches :
       - feedstock-patches/rust/0001-Fixed-build.patch
+{% if python == "3.9" and ppc64le %}
+  - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
+    git_tag : eb4d41c65c002e4367f5b3aa20d547a815fe9d58
+{% endif %}
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
     git_tag : 75803486a2dbca1b39b2a0594b682afaabcb5b13
     patches :
