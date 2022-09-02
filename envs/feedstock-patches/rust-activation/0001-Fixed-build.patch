@@ -1,0 +1,137 @@
+From 41a4f4e85aa699cb93c8acf19823f218db1706ab Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 1 Sep 2022 09:10:41 -0400
+Subject: [PATCH] Fixed build
+
+---
+ recipe/conda_build_config.yaml | 76 +++++-----------------------------
+ recipe/meta.yaml               |  7 +---
+ 2 files changed, 12 insertions(+), 71 deletions(-)
+
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index 0f15b38..9b37da2 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -1,82 +1,26 @@
+ cross_target_platform:
+-  - linux-64                            # [linux]
+-  - linux-aarch64                       # [linux]
+-  - linux-ppc64le                       # [linux]
+-  - osx-64                              # [linux64 or osx]
+-  - osx-arm64                           # [linux64 or osx]
+-  - win-64                              # [linux64 or (osx and x86_64) or win64]
++  - linux-64                            # [x86_64]
++  - linux-ppc64le                       # [ppc64le]
+ rust_arch:
+-  - x86_64-unknown-linux-gnu            # [linux]
+-  - aarch64-unknown-linux-gnu           # [linux]
+-  - powerpc64le-unknown-linux-gnu       # [linux]
+-  - x86_64-apple-darwin                 # [linux64 or osx]
+-  - aarch64-apple-darwin                # [linux64 or osx]
+-  - x86_64-pc-windows-msvc              # [linux64 or (osx and x86_64) or win64]
++  - x86_64-unknown-linux-gnu            # [x86_64]
++  - powerpc64le-unknown-linux-gnu       # [ppc64le]
+ rust_arch_env_build:
+-  - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
+-  - AARCH64_UNKNOWN_LINUX_GNU           # [aarch64]
++  - X86_64_UNKNOWN_LINUX_GNU            # [x86_64]
+   - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
+-  - X86_64_APPLE_DARWIN                 # [osx and x86_64]
+-  - AARCH64_APPLE_DARWIN                # [osx and arm64]
+-  - X86_64_PC_WINDOWS_MSVC              # [win64]
+ rust_arch_env:
+-  - X86_64_UNKNOWN_LINUX_GNU            # [linux]
+-  - AARCH64_UNKNOWN_LINUX_GNU           # [linux]
+-  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [linux]
+-  - X86_64_APPLE_DARWIN                 # [linux64 or osx]
+-  - AARCH64_APPLE_DARWIN                # [linux64 or osx]
+-  - X86_64_PC_WINDOWS_MSVC              # [linux64 or (osx and x86_64) or win64]
++  - X86_64_UNKNOWN_LINUX_GNU            # [x86_64]
++  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
+ rust_default_cc_build:
+-  - x86_64-conda-linux-gnu-cc           # [linux64]
+-  - aarch64-conda-linux-gnu-cc          # [aarch64]
++  - x86_64-conda-linux-gnu-cc           # [x86_64]
+   - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
+-  - x86_64-apple-darwin13.4.0-clang     # [osx and x86_64]
+-  - arm64-apple-darwin20.0.0-clang      # [osx and arm64]
+-  - clang-cl                            # [win64]
+ rust_default_cc:
+-  - x86_64-conda-linux-gnu-cc           # [linux]
+-  - aarch64-conda-linux-gnu-cc          # [linux]
+-  - powerpc64le-conda-linux-gnu-cc      # [linux]
+-  - x86_64-apple-darwin13.4.0-clang     # [linux64 or osx]
+-  - arm64-apple-darwin20.0.0-clang      # [linux64 or osx]
+-  - clang-cl                            # [linux64 or (osx and x86_64) or win64]
+-
+-# This should be max(build_platform_ver, cross_target_platform_ver)
+-MACOSX_SDK_VERSION:
+-  - 0                                   # [linux]
+-  - 0                                   # [linux]
+-  - 0                                   # [linux]
+-  - 10.9                                # [linux64 or osx]
+-  - 11.0                                # [linux64 or osx]
+-  - 0                                   # [linux64 or win64]
+-  # For osx-64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 10.9                                # [osx and x86_64]
+-# This should match cross_target_platform_ver
+-MACOSX_DEPLOYMENT_TARGET:
+-  - 0                                   # [linux]
+-  - 0                                   # [linux]
+-  - 0                                   # [linux]
+-  - 10.9                                # [linux64 or osx]
+-  - 11.0                                # [linux64 or osx]
+-  - 0                                   # [linux64 or win64]
+-  # For osx-64 -> win-64 cross-compiling, set deployment target for the build system
+-  - 10.9                                # [osx and x86_64]
++  - x86_64-conda-linux-gnu-cc           # [x86_64]
++  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
+ version:
+   - 1.60.0
+-  - 1.60.0
+-channel_sources:
+-  - conda-forge
+-  - conda-forge/label/rust_dev,conda-forge
+-channel_targets:
+-  - conda-forge main
+-  - conda-forge rust_dev
+ zip_keys:
+   - - cross_target_platform
+     - rust_arch
+     - rust_arch_env
+     - rust_default_cc
+-    - MACOSX_SDK_VERSION
+-    - MACOSX_DEPLOYMENT_TARGET
+   - - version
+-    - channel_sources
+-    - channel_targets
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index e8a8c79..7fa9536 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -37,10 +37,7 @@ outputs:
+ {% endif %}
+         - ld64_{{ target_platform }}  # [osx]
+     test:
+-      requires:
+-        - file  # [unix]
+       commands:
+-        - echo {{ MACOSX_DEPLOYMENT_TARGET }}-{{ rust_arch_env }}-{{ rust_default_cc }}-{{ rust_arch_env_build }}-{{ rust_default_cc_build }}
+         - set "REQUESTS_CA_BUNDLE="  # [win]
+         - set "SSL_CERT_FILE="       # [win]
+         - unset REQUESTS_CA_BUNDLE  # [unix]
+@@ -52,9 +49,9 @@ outputs:
+         - file $PREFIX/.cargo/bin/xsv  # [unix]
+         - file $PREFIX/.cargo/bin/xsv | grep "Mach-O 64-bit arm64 executable"  # [unix and cross_target_platform == "osx-arm64"]
+         - file $PREFIX/.cargo/bin/xsv | grep "Mach-O 64-bit x86_64 executable"  # [unix and cross_target_platform == "osx-64"]
+-        - file $PREFIX/.cargo/bin/xsv | grep "ELF 64-bit LSB pie executable, x86-64"  # [unix and cross_target_platform == "linux-64"]
++        - file $PREFIX/.cargo/bin/xsv | grep "ELF 64-bit LSB.*, x86-64 "  # [unix and cross_target_platform == "linux-64"]
+         - file $PREFIX/.cargo/bin/xsv | grep "ELF 64-bit LSB pie executable, ARM aarch64"  # [unix and cross_target_platform == "linux-aarch64"]
+-        - file $PREFIX/.cargo/bin/xsv | grep "ELF 64-bit LSB pie executable, 64-bit PowerPC"  # [unix and cross_target_platform == "linux-ppc64le"]
++        - file $PREFIX/.cargo/bin/xsv | grep "ELF 64-bit LSB.*, 64-bit PowerPC "  # [unix and cross_target_platform == "linux-ppc64le"]
+ 
+   - name: rust-gnu_{{ target_platform }}
+     script: bld.bat
+-- 
+2.23.0
+
