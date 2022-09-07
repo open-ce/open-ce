@@ -50,7 +50,7 @@ contextvars:
 coverage:
   - 5.*
 cpp_filesystem:
-  - 1.5.8
+  - 1.5.*
 cudnn:
   - 8.3.0.*    # [build_type == 'cuda']
 cxx_compiler_version:
@@ -336,7 +336,7 @@ wheel:
 wrapt:
   - 1.13.*
 yaml_cpp:
-  - 0.6.3
+  - 0.7.0
 zlib:
   - 1.2.12
 zstd:
