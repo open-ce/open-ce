@@ -273,8 +273,7 @@ setuptools:
 setuptools_rust:
   - 0.12.*
 six:
-  - 1.15.0  # [not s390x]
-  - 1.16.0  # [s390x]
+  - 1.16.0
 smart_open:
   - 2.2.*
 spacy_legacy:
