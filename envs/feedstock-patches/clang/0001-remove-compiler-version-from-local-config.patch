@@ -1,0 +1,33 @@
+From 34a53a7884457fd7ddfee49e76690645030a443d Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 12 Sep 2022 09:57:32 -0400
+Subject: [PATCH] remove compiler version from local config
+
+---
+ recipe/conda_build_config.yaml | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index ab4e91d..ddfe315 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -6,16 +6,6 @@ c_compiler:
+   - clang_bootstrap  # [osx]
+   - gcc              # [linux]
+ 
+-c_compiler_version:     # [osx]
+-  - "*"                 # [osx and x86_64]
+-  - 11                  # [osx and arm64]
+-
+-cxx_compiler_version:   # [osx or (linux and ppc64le)]
+-  - "*"                 # [osx and x86_64]
+-  - 11                  # [osx and arm64]
+-  # linking error with gcc 9
+-  - 8                   # [linux and ppc64le]
+-
+ variant:
+   - default
+   - hcc   # [linux]
+-- 
+2.23.0
+

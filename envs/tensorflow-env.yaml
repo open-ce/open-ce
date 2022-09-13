@@ -33,6 +33,7 @@ packages:
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
       - feedstock-patches/clang/0001-Fixed-clang-for-P10.patch
+      - feedstock-patches/clang/0001-remove-compiler-version-from-local-config.patch
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
   - feedstock : keras
   - feedstock : tensorflow
