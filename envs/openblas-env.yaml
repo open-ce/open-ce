@@ -3,11 +3,12 @@ builder_version: ">=10.0.1"
 packages:
 {% if not s390x %}
   - feedstock : https://github.com/conda-forge/openmp-feedstock
-    git_tag: dacfb2acd36a6453e20d71d11f1b85fa6122c649
+    git_tag: 0115cb8cc0ba8d65de222b78c148f75c179e645d
     patches:
       - feedstock-patches/openmp/0001-remove-dep-on-openmp_mutex.patch
       - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
       - feedstock-patches/openmp/0003-P10-changes.patch
+      - feedstock-patches/openmp/0004-Updated-openmp-to-14.0.6.patch
   - feedstock : openblas
 {% endif %}
 
