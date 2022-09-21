@@ -8,4 +8,4 @@ packages:
   - feedstock : spacy
 {% endif %}
 
-git_tag_for_env: open-ce-v1.7.1
+git_tag_for_env: open-ce-v1.7.2
