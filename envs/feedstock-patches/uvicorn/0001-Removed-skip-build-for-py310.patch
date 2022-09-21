@@ -1,0 +1,24 @@
+From e918cbc43deb6baa6e115911f7f8fa60d8f6ec11 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 21 Sep 2022 13:18:29 +0000
+Subject: [PATCH] Removed skip build for py310
+
+---
+ recipe/meta.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index c722092..b1e851b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -13,7 +13,6 @@ build:
+   script: {{ PYTHON }} -m pip install . -vv
+   entry_points:
+     - uvicorn = uvicorn.main:main
+-  skip: true # [py<=37]
+ 
+ requirements:
+   host:
+-- 
+2.34.1
+
