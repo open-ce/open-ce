@@ -17,7 +17,9 @@ imported_envs:
   - uwsgi-env.yaml
   - mamba-env.yaml
   - ray-env.yaml
-  - apache-beam-env.yaml
+
+  # Commenting apache-beam for time being.
+  #- apache-beam-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
