@@ -1,0 +1,25 @@
+From 283fbed89107059936954cf82929e4fc7eb3efeb Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 30 Aug 2022 12:07:22 +0000
+Subject: [PATCH] Fixed build
+
+---
+ recipe/build.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index a140eae..ffc2ec3 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -11,7 +11,7 @@ cargo install cargo-bundle-licenses
+ 
+ # Check that all downstream libraries licenses are present
+ export PATH=$PATH:$CARGO_HOME/bin
+-cargo bundle-licenses --format yaml --output CI.THIRDPARTY.yml --previous THIRDPARTY.yml --check-previous
++cargo bundle-licenses --format yaml --output CI.THIRDPARTY.yml --previous THIRDPARTY.yml
+ 
+ # build statically linked binary with Rust
+ cargo install --locked --root "$PREFIX" --path .
+-- 
+2.34.1
+
