@@ -2,14 +2,12 @@ builder_version: ">=10.0.1"
 
 imported_envs:
 {% if not s390x %}
-{% if build_type == 'cpu' %}
   - arrow-env.yaml
   - tensorflow-env.yaml
   - scipy-env.yaml
 {% endif %}
 
 packages:
-{% if build_type == 'cpu' %}
 {% set py = python | replace(".", "") | int %}
 {% if py >= 310 %}
   - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
@@ -32,7 +30,5 @@ packages:
     git_tag : 7e7e8d4a74719ba7ce134ecf7b317c44c1cf39a9
   - feedstock : dm-tree
   - feedstock : ray-packages
-{% endif %}
-{% endif %}
 
 git_tag_for_env: open-ce-v1.7.2
