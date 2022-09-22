@@ -13,7 +13,8 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
     git_tag: 312dca71c6d5a752ad6a2ab7c0a65a55b71a3e81
     patches:
-      -  feedstock-patches/unicorn/0001-remove-unicode-char-from-summary.patch
+      - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
+      - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
 {% endif %}
 
   - feedstock : https://github.com/conda-forge/starlette-feedstock
