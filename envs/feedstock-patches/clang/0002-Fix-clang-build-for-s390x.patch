@@ -1,0 +1,59 @@
+From 0c6c2743149b895d7d403fb01174828428490e10 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 22 Sep 2022 11:08:15 +0000
+Subject: [PATCH] Fixed build on s390x
+
+---
+ recipe/meta.yaml                              |   7 +++----
+ .../0001-Find-conda-gcc-installation.patch    | Bin 2301 -> 2221 bytes
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 2073816..9bd8db0 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -459,7 +459,6 @@ outputs:
+       noarch: python
+       # Building this output using this recipe is only supported on unix
+       # It can still be installed on Windows as it is marked as `noarch: python`
+-      skip: true  # [not linux64]
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     script: build_python_bindings.sh
+     requirements:
+@@ -475,9 +474,9 @@ outputs:
+       imports:
+         - clang
+         - clang.cindex
+-      commands:
+-        - cd clang/bindings/python
+-        - python -m unittest discover -v
++      commands:                             #[not s390x]
++        - cd clang/bindings/python          #[not s390x]
++        - python -m unittest discover -v    #[not s390x]
+ 
+ about:
+   home: http://llvm.org/
+diff --git a/recipe/patches/0001-Find-conda-gcc-installation.patch b/recipe/patches/0001-Find-conda-gcc-installation.patch
+index 999ce0fb7d51f08b36a6f03df0badd5125f01d20..a926d3c47d6e7834b3e74924a1e9a2e2eaeaf4c2 100644
+GIT binary patch
+delta 400
+zcmew>xK@xaB{MBeLDw&_v`8VpD1GuqMimx?-24<ELzP`uR~IIz!)at-WTb0grfX!R
+zU}$D#VrFGzqGtdD3fdqRm$tSxRI`c-RD&g0gMpQ)xs|D<o{^!knW2S=i8(~W<o}Ff
+zlP55%EUso^+Ps%Vk!iC6`*B852L}aRBSQ;g9iTEGZK7kL;NSpMC(9mOSzMBu8#TF_
+z$p+5e$0U|oY;0*zp_`MLS6ZQ)o>!`*qo4#4D$UEz%P-HvCY70#i!98gs{jU2jm4$K
+zsSs(nVUr)SOPWE9#UiU)l$w%}SOU|-rHyRd<XC1&R<PE|jvV4*TtK<f;>^5sh2oMF
+NE32f`^vpbKE&zfea5ew{
+
+delta 627
+zcmb`DPiqu07{*ye3prGJ@g}^&3N76klbt`A4I;blvbCa6s0TqrGRZq@%51V^W^E6G
+zpJC}o@FsZb=Mzk-2k#m}Uf!2HPkwoR9Q-`^y7X=hvZ-~I)g{NgD3K{$Fs-SoCXClq
+z>5La;tz=!m8)xAhH^4YhDsDH7DP<(u2srJwehW+VR$A@gnTdTfU9F{QQ{~pr$wKxh
+zqRj{@m~H&)AZHU`r5Fdl3=&#UO3t_S1*%@a`?J~G`Ac9=s}Ha=R)ca@OIRrd#&*4I
+zTiF|D2}zQK!0y5D)feD!9M<iCL1S73^-0<l>Jj8og+5BU!{eh7WT3Id-+gjKh&D|F
+zNwP9M$ld;vLA~1_rX)O!SHR_@;8d1X+2m=O6_qY@!Alva8Kq^OM~EmJ-X{S7qV^q`
+zP9Ygno{a+5pBhG=ozZZD7QIm)Pv&zW!g2c7j~3X60Gt<Mru70Fxo!J!<;-JauCP12
+wW_ypWH-o)z`QXlrf495I?>_z?J`wB2-}^pz7@{EKkW!kZmmxoQ*`<t-Uj;|JC;$Ke
+
+-- 
+2.34.1
+

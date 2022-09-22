@@ -8,6 +8,7 @@ imported_envs:
 {% endif %}
 
 packages:
+{% if not s390x %}
 {% set py = python | replace(".", "") | int %}
 {% if py >= 310 %}
   - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
@@ -32,4 +33,5 @@ packages:
   - feedstock : dm-tree
   - feedstock : ray-packages
 
+{% endif %}
 git_tag_for_env: open-ce-v1.7.2
