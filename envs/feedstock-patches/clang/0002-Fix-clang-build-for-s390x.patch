@@ -1,12 +1,12 @@
-From 0c6c2743149b895d7d403fb01174828428490e10 Mon Sep 17 00:00:00 2001
+From c28836418ea0e41062e652b4b949a6acd7b75bde Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 22 Sep 2022 11:08:15 +0000
+Date: Thu, 22 Sep 2022 11:14:10 +0000
 Subject: [PATCH] Fixed build on s390x
 
 ---
- recipe/meta.yaml                              |   7 +++----
- .../0001-Find-conda-gcc-installation.patch    | Bin 2301 -> 2221 bytes
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ recipe/meta.yaml                              |  7 ++--
+ .../0001-Find-conda-gcc-installation.patch    | 35 +++++++++----------
+ 2 files changed, 19 insertions(+), 23 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 2073816..9bd8db0 100644
@@ -34,26 +34,66 @@ index 2073816..9bd8db0 100644
  about:
    home: http://llvm.org/
 diff --git a/recipe/patches/0001-Find-conda-gcc-installation.patch b/recipe/patches/0001-Find-conda-gcc-installation.patch
-index 999ce0fb7d51f08b36a6f03df0badd5125f01d20..a926d3c47d6e7834b3e74924a1e9a2e2eaeaf4c2 100644
-GIT binary patch
-delta 400
-zcmew>xK@xaB{MBeLDw&_v`8VpD1GuqMimx?-24<ELzP`uR~IIz!)at-WTb0grfX!R
-zU}$D#VrFGzqGtdD3fdqRm$tSxRI`c-RD&g0gMpQ)xs|D<o{^!knW2S=i8(~W<o}Ff
-zlP55%EUso^+Ps%Vk!iC6`*B852L}aRBSQ;g9iTEGZK7kL;NSpMC(9mOSzMBu8#TF_
-z$p+5e$0U|oY;0*zp_`MLS6ZQ)o>!`*qo4#4D$UEz%P-HvCY70#i!98gs{jU2jm4$K
-zsSs(nVUr)SOPWE9#UiU)l$w%}SOU|-rHyRd<XC1&R<PE|jvV4*TtK<f;>^5sh2oMF
-NE32f`^vpbKE&zfea5ew{
-
-delta 627
-zcmb`DPiqu07{*ye3prGJ@g}^&3N76klbt`A4I;blvbCa6s0TqrGRZq@%51V^W^E6G
-zpJC}o@FsZb=Mzk-2k#m}Uf!2HPkwoR9Q-`^y7X=hvZ-~I)g{NgD3K{$Fs-SoCXClq
-z>5La;tz=!m8)xAhH^4YhDsDH7DP<(u2srJwehW+VR$A@gnTdTfU9F{QQ{~pr$wKxh
-zqRj{@m~H&)AZHU`r5Fdl3=&#UO3t_S1*%@a`?J~G`Ac9=s}Ha=R)ca@OIRrd#&*4I
-zTiF|D2}zQK!0y5D)feD!9M<iCL1S73^-0<l>Jj8og+5BU!{eh7WT3Id-+gjKh&D|F
-zNwP9M$ld;vLA~1_rX)O!SHR_@;8d1X+2m=O6_qY@!Alva8Kq^OM~EmJ-X{S7qV^q`
-zP9Ygno{a+5pBhG=ozZZD7QIm)Pv&zW!g2c7j~3X60Gt<Mru70Fxo!J!<;-JauCP12
-wW_ypWH-o)z`QXlrf495I?>_z?J`wB2-}^pz7@{EKkW!kZmmxoQ*`<t-Uj;|JC;$Ke
-
+index 999ce0f..a926d3c 100644
+--- a/recipe/patches/0001-Find-conda-gcc-installation.patch
++++ b/recipe/patches/0001-Find-conda-gcc-installation.patch
+@@ -1,17 +1,7 @@
+-From afbd83b67e456e1cd51dd0c8917b0cd3756bcab5 Mon Sep 17 00:00:00 2001
+-From: Isuru Fernando <isuruf@gmail.com>
+-Date: Mon, 8 Apr 2019 16:20:03 -0500
+-Subject: [PATCH 1/8] Find conda gcc installation
+-
+----
+- clang/lib/Driver/ToolChains/Gnu.cpp | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/Gnu.cpp
+-index 7a9570a686f4..358d5d576a03 100644
+---- a/clang/lib/Driver/ToolChains/Gnu.cpp
+-+++ b/clang/lib/Driver/ToolChains/Gnu.cpp
+-@@ -2073,7 +2073,7 @@ void Generic_GCC::GCCInstallationDetector::AddDefaultGCCPrefixes(
++diff -Naur org/clang/lib/Driver/ToolChains/Gnu.cpp mod/clang/lib/Driver/ToolChains/Gnu.cpp
++--- org/clang/lib/Driver/ToolChains/Gnu.cpp	2022-06-22 16:46:24.000000000 +0000
+++++ mod/clang/lib/Driver/ToolChains/Gnu.cpp	2022-09-22 10:57:59.213618447 +0000
++@@ -2073,7 +2073,7 @@
+    static const char *const AArch64LibDirs[] = {"/lib64", "/lib"};
+    static const char *const AArch64Triples[] = {
+        "aarch64-none-linux-gnu", "aarch64-linux-gnu", "aarch64-redhat-linux",
+@@ -20,7 +10,7 @@ index 7a9570a686f4..358d5d576a03 100644
+    static const char *const AArch64beLibDirs[] = {"/lib"};
+    static const char *const AArch64beTriples[] = {"aarch64_be-none-linux-gnu",
+                                                   "aarch64_be-linux-gnu"};
+-@@ -2099,7 +2099,8 @@ void Generic_GCC::GCCInstallationDetector::AddDefaultGCCPrefixes(
++@@ -2099,7 +2099,8 @@
+        "x86_64-redhat-linux",    "x86_64-suse-linux",
+        "x86_64-manbo-linux-gnu", "x86_64-linux-gnu",
+        "x86_64-slackware-linux", "x86_64-unknown-linux",
+@@ -30,7 +20,7 @@ index 7a9570a686f4..358d5d576a03 100644
+    static const char *const X32Triples[] = {"x86_64-linux-gnux32",
+                                             "x86_64-pc-linux-gnux32"};
+    static const char *const X32LibDirs[] = {"/libx32", "/lib"};
+-@@ -2162,7 +2163,7 @@ void Generic_GCC::GCCInstallationDetector::AddDefaultGCCPrefixes(
++@@ -2162,7 +2163,7 @@
+    static const char *const PPC64LETriples[] = {
+        "powerpc64le-linux-gnu", "powerpc64le-unknown-linux-gnu",
+        "powerpc64le-none-linux-gnu", "powerpc64le-suse-linux",
+@@ -39,6 +29,13 @@ index 7a9570a686f4..358d5d576a03 100644
+  
+    static const char *const RISCV32LibDirs[] = {"/lib32", "/lib"};
+    static const char *const RISCV32Triples[] = {"riscv32-unknown-linux-gnu",
+--- 
+-2.35.3.windows.1
+-
++@@ -2183,7 +2184,8 @@
++   static const char *const SystemZLibDirs[] = {"/lib64", "/lib"};
++   static const char *const SystemZTriples[] = {
++       "s390x-linux-gnu", "s390x-unknown-linux-gnu", "s390x-ibm-linux-gnu",
++-      "s390x-suse-linux", "s390x-redhat-linux"};
+++      "s390x-suse-linux", "s390x-redhat-linux",
+++      "s390x-conda_cos7-linux-gnu", "s390x-conda-linux-gnu"};
++ 
++ 
++   using std::begin;
 -- 
 2.34.1
 
