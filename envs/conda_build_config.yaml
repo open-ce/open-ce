@@ -258,9 +258,11 @@ regex:
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.60.*
+  - 1.62.*     # [cudatoolkit == '11.2']
+  - 1.60.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
 rust_compiler_version:
-  - '1.60.0'
+  - '1.46.0'   # [cudatoolkit == '11.2']
+  - '1.60.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
 safeint:
   - 3.0
 scipy:
@@ -271,7 +273,8 @@ setuptools:
   - 58.*    # [cudatoolkit == '11.2']
   - 63.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
 setuptools_rust:
-  - 1.5.*
+  - 0.12.*    # [cudatoolkit == '11.2']
+  - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
 six:
   - 1.16.0
 smart_open:
