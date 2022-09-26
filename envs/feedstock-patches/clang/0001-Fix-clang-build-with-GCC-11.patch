@@ -1,0 +1,152 @@
+From eb859850ddb7201cb783cef5701a7ff07406aaed Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 22 Sep 2022 10:46:46 +0000
+Subject: [PATCH] Fixed build
+
+---
+ recipe/build.sh                  |  3 +++
+ recipe/install_clang_symlinks.sh |  2 +-
+ recipe/meta.yaml                 | 24 ++++++++++++------------
+ 3 files changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 1267479..35938f8 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -45,6 +45,9 @@ fi
+ mkdir build
+ cd build
+ 
++export CXXFLAGS="${CXXFLAGS} -fplt"
++export CFLAGS="${CFLAGS} -fplt"
++
+ cmake \
+   -DCMAKE_INSTALL_PREFIX=$PREFIX \
+   -DCMAKE_PREFIX_PATH=$PREFIX \
+diff --git a/recipe/install_clang_symlinks.sh b/recipe/install_clang_symlinks.sh
+index 59a613f..62e594d 100644
+--- a/recipe/install_clang_symlinks.sh
++++ b/recipe/install_clang_symlinks.sh
+@@ -1,6 +1,6 @@
+ #!/bin/bash
+ set -ex
+-
++mkdir -p "${PREFIX}/bin"
+ maj_version="${PKG_VERSION%%.*}"
+ ln -s "${PREFIX}/bin/clang-${maj_version}" "${PREFIX}/bin/clang-cl"
+ ln -s "${PREFIX}/bin/clang-${maj_version}" "${PREFIX}/bin/clang-cpp"
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 7561bc7..2073816 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -55,7 +55,7 @@ requirements:
+   host:
+     - libcxx {{ cxx_compiler_version }}  # [osx]
+     - llvmdev =={{ version }}
+-    - zlib                               # [linux]
++    - zlib {{ zlib }}                    # [linux]
+ 
+ test:
+   requires:
+@@ -99,7 +99,7 @@ outputs:
+         - {{ pin_subpackage("libclang-cpp", exact=True) }}
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+-        - zlib                               # [linux]
++        - zlib {{ zlib }}                    # [linux]
+       run:
+         - {{ pin_subpackage("clang", exact=True) }}
+         - {{ pin_subpackage("clangxx", exact=True) }}
+@@ -135,7 +135,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib   # [linux]
++        - zlib {{ zlib }}   # [linux]
+       run:
+         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
+     test:
+@@ -165,7 +165,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib   # [linux]
++        - zlib {{ zlib }}   # [linux]
+         - {{ pin_subpackage("libclang-cpp" + minor_aware_ext, exact=True) }}  # [unix]
+       run:
+         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
+@@ -198,7 +198,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}             # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib                                          # [linux or win]
++        - zlib {{ zlib }}                                          # [linux or win]
+         - {{ pin_subpackage("clang", exact=True) }}
+       run:
+         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
+@@ -244,7 +244,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}                           # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib                                                        # [linux or win]
++        - zlib {{ zlib }}                                                        # [linux or win]
+         - {{ pin_subpackage("clang", exact=True) }}
+         - {{ pin_subpackage("libclang" + libclang_soversion, exact=True) }}
+       run:
+@@ -275,7 +275,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib                               # [linux or win]
++        - zlib {{ zlib }}                               # [linux or win]
+         - {{ pin_subpackage("libclang-cpp" + minor_aware_ext, exact=True) }}  # [unix]
+       run:
+         - {{ pin_compatible("libcxx", max_pin=None) }}                        # [osx]
+@@ -306,7 +306,7 @@ outputs:
+     script: install_clang_symlinks.bat  # [win]
+     requirements:
+       host:
+-        - zlib                            # [win]
++        - zlib {{ zlib }}                            # [win]
+         - gcc_impl_{{ target_platform }}  # [linux]
+         - {{ pin_subpackage("clang-" ~ major_version, exact=True) }}
+       run:
+@@ -327,7 +327,7 @@ outputs:
+       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
+     requirements:
+       host:
+-        - zlib  # [win]
++        - zlib {{ zlib }}  # [win]
+         - {{ pin_subpackage("clang", exact=True) }}
+       run:
+         - {{ pin_subpackage("clang", exact=True) }}
+@@ -366,7 +366,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib                            # [linux or win]
++        - zlib {{ zlib }}                 # [linux or win]
+         - libxml2                         # [win]
+       run:
+         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
+@@ -404,7 +404,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib                               # [linux or win]
++        - zlib {{ zlib }}                            # [linux or win]
+       run:
+         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
+         - {{ pin_subpackage("libclang-cpp" + minor_aware_ext, max_pin="x.x") }}   # [unix]
+@@ -440,7 +440,7 @@ outputs:
+         - libcxx {{ cxx_compiler_version }}  # [osx]
+         - llvmdev =={{ version }}
+         - llvm =={{ version }}
+-        - zlib                               # [linux or win]
++        - zlib {{ zlib }}                           # [linux or win]
+       run:
+         - ucrt                                          # [win]
+         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
+-- 
+2.34.1
+
