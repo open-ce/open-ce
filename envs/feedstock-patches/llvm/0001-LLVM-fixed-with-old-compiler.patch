@@ -1,91 +1,71 @@
-From 45d8ce75f2054ce785dc8f3972210aa48279386d Mon Sep 17 00:00:00 2001
+From d67a38ba9ec033eea44969b6845ee9598ce746e9 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 6 Jul 2022 08:41:15 -0400
-Subject: [PATCH] Build Changes
+Date: Thu, 22 Sep 2022 10:33:41 +0000
+Subject: [PATCH] Fixed build
 
 ---
- recipe/build.sh  | 20 ++++++++++----------
- recipe/meta.yaml | 45 ++++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 50 insertions(+), 15 deletions(-)
+ recipe/build.sh  | 15 ++++++++-------
+ recipe/meta.yaml | 10 +++++-----
+ 2 files changed, 13 insertions(+), 12 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 0a76618..66651ec 100644
+index e009aae..02e55df 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
-@@ -25,7 +25,7 @@ fi
- cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-       -DCMAKE_BUILD_TYPE=Release \
+@@ -28,6 +28,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+       -DLLVM_HAVE_LIBXAR=OFF \
+       -DLLVM_ENABLE_LIBXML2=OFF \
        -DLLVM_ENABLE_RTTI=ON \
--      -DLLVM_INCLUDE_TESTS=ON \
 +      -DLLVM_INCLUDE_TESTS=OFF \
-       -DLLVM_INCLUDE_GO_TESTS=OFF \
-       -DLLVM_INCLUDE_UTILS=ON \
-       -DLLVM_INSTALL_UTILS=ON \
-@@ -41,7 +41,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-       -DLLVM_LINK_LLVM_DYLIB=yes \
-       ${CMAKE_ARGS} ..
+       -DLLVM_ENABLE_TERMINFO=OFF \
+       -DLLVM_ENABLE_ZLIB=ON \
+       -DLLVM_INCLUDE_BENCHMARKS=OFF \
+@@ -45,7 +46,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+       -GNinja \
+       ../llvm
  
--make -j${CPU_COUNT}
-+make -j$((${CPU_COUNT}/2))
+-ninja -j${CPU_COUNT}
++ninja -j$((${CPU_COUNT}/2))
  
  if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
      export TEST_CPU_FLAG="-mcpu=haswell"
-@@ -49,15 +49,15 @@ else
+@@ -53,15 +54,15 @@ else
      export TEST_CPU_FLAG=""
  fi
  
 -if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+-  # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 +#if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
-   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
++#  # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
  
--  if [[ "$target_platform" == linux* ]]; then
--    ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
--  fi
-+#  if [[ "$target_platform" == linux* ]]; then
-+#    ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
-+#  fi
+   if [[ "$target_platform" == linux* ]]; then
+     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+   fi
  
--  make -j${CPU_COUNT} check-llvm
-+#  make -j$((${CPU_COUNT}/2)) check-llvm
+-  ninja -j${CPU_COUNT} check-llvm
++#  ninja -j${CPU_COUNT} check-llvm
  
--  cd ../test
--  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+-  cd ../llvm/test
+-  ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 -fi
-+#  cd ../test
-+#  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
++#  cd ../llvm/test
++#  ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 +#fi
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 929cab3..0c273a9 100644
+index d711b4b..759ba0f 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -28,9 +28,15 @@ requirements:
-     - python    >=3
-     - make
+@@ -27,7 +27,7 @@ requirements:
      - libcxx {{ cxx_compiler_version }}  # [osx]
-+    - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+    - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+    - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
    host:
-+    - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+    - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+    - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
      - libcxx {{ cxx_compiler_version }}  # [osx]
 -    - zlib
 +    - zlib {{ zlib }}
-     - libxml2   # [win]
+     - libxml2                            # [win]
  
  outputs:
-@@ -48,10 +54,16 @@ outputs:
-         - cmake
-         - ninja     # [win]
-         - python    >=3
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+@@ -47,7 +47,7 @@ outputs:
        host:
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
          - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
          - {{ pin_subpackage("llvm-tools", exact=True) }}
 -        - zlib
@@ -93,68 +73,33 @@ index 929cab3..0c273a9 100644
        run:
          - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
          - {{ pin_subpackage("llvm-tools", exact=True) }}
-@@ -80,9 +92,15 @@ outputs:
-         - make                     # [not win]
-         - cmake                    # [not win]
-         - python    >=3            # [not win]
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+@@ -78,7 +78,7 @@ outputs:
+         - python >=3               # [not win]
        host:
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
-         - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
+         - libcxx >={{ cxx_compiler_version }}  # [osx]
 -        - zlib
 +        - zlib {{ zlib }}
        run:
-         - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
+         - libcxx >={{ cxx_compiler_version }}  # [osx]
      test:
-@@ -98,14 +116,25 @@ outputs:
-         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
-     requirements:
+@@ -96,7 +96,7 @@ outputs:
        build:
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
        host:
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
-         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
 -        - zlib
 +        - zlib {{ zlib }}
        run:   # [not win]
-         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
        run_constrained:   # [not win]
-         - llvmdev   {{ version }}                                  # [not win]
-     test:
-+      requires:
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
-+        - zlib {{ zlib }}
-       commands:
-         - echo "Hello World!"
- 
-@@ -123,10 +152,16 @@ outputs:
-         - cmake
-         - ninja     # [win]
-         - python    >=3
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
+@@ -121,7 +121,7 @@ outputs:
        host:
-+        - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
-+        - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
-+        - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
          - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-         - libxml2  # [win]
+         - libxml2   # [win]
 -        - zlib
 +        - zlib {{ zlib }}
        run:
          - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
        run_constrained:
 -- 
-2.23.0
+2.34.1
 

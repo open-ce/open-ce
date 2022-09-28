@@ -1,0 +1,25 @@
+From a3292fd01095fef6d27c1941f77d5e4a5ec3e3c1 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 29 Aug 2022 08:35:12 +0000
+Subject: [PATCH] update version to 0.39.0
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 21b9480..9472d03 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,6 +1,6 @@
+ {% set name = "llvmlite" %}
+-{% set version = "0.38.0" %}
+-{% set sha256 = "a99d166ccf3b116f3b9ed23b9b70ba2415640a9c978f3aaa13fad49c58f4965c" %}
++{% set version = "0.39.0" %}
++{% set sha256 = "01098be54f1aa25e391cebba8ea71cd1533f8cd1f50e34c7dd7540c2560a93af" %}
+ 
+ package:
+   name: {{ name|lower }}
+-- 
+2.34.1
+

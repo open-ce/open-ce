@@ -2,18 +2,18 @@ builder_version: ">=10.0.1"
 
 imported_envs:
 {% if not s390x %}
-{% if build_type == 'cpu' %}
   - arrow-env.yaml
   - tensorflow-env.yaml
   - scipy-env.yaml
 {% endif %}
 
 packages:
-{% if build_type == 'cpu' %}
-  - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
+{% if not s390x %}
+  - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git 
     git_tag: 312dca71c6d5a752ad6a2ab7c0a65a55b71a3e81
     patches:
-      -  feedstock-patches/unicorn/0001-remove-unicode-char-from-summary.patch
+      - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
+      - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : b8e09882d12c58fd3f4ebd3db4bc70fb7b7146ee
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
@@ -28,5 +28,4 @@ packages:
     git_tag : 7e7e8d4a74719ba7ce134ecf7b317c44c1cf39a9
   - feedstock : dm-tree
   - feedstock : ray-packages
-{% endif %}
 {% endif %}
