@@ -28,24 +28,8 @@ packages:
     git_tag : 85fff27f50229187e7877c434590b01ac42ba772
     patches :
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
-  - feedstock : https://github.com/conda-forge/pathspec-feedstock
-    git_tag : e283922aec102901d323fa0b2b976059a3acb824
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
-  - feedstock : https://github.com/conda-forge/black-feedstock
-    git_tag : f79b7b86900ea2f04bc6ce3b462fa61adb5b0e95
-  - feedstock : https://github.com/conda-forge/llvmdev-feedstock
-    git_tag : 66ced78b8653ae9064e404386ac2c48285330774
-    patches:
-      - feedstock-patches/llvm/0001-LLVM-fixed-with-old-compiler.patch
-      - feedstock-patches/llvm/0001-Fix-build-for-P10.patch
-  - feedstock : https://github.com/conda-forge/clangdev-feedstock
-    git_tag : b741c7551b48482d08d2f65a791b7602c1f23c9d
-    patches :
-      - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
-      - feedstock-patches/clang/0001-Build-fixed-with-old-compilers-and-new-libgcc-ng.patch
-      - feedstock-patches/clang/0001-Fixed-clang-for-P10.patch
-      - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree

@@ -17,9 +17,11 @@ packages:
     - feedstock: libevent
     - feedstock: tensorflow-serving
 
-  {% set py_ver = python | float %}
-  {% if py_ver >= 3.8 %}
+  {% if python is string %}
+    {% set py = python | replace(".", "") | int %}
+    {% if py >= 38 %}
     - feedstock: protobuf
+    {% endif %}
   {% endif %}
 
 {% endif %}

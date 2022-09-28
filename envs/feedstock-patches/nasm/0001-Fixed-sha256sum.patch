@@ -1,0 +1,25 @@
+From d01f3591745ca5accf4f3cad335a434bc336aab7 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 20 Sep 2022 09:57:24 +0000
+Subject: [PATCH] Fixed sha256sum
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 6cfcba8..e817245 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -7,7 +7,7 @@ package:
+ source:
+   fn: nasm-{{ version }}.tar.gz
+   url: https://www.nasm.us/pub/nasm/releasebuilds/{{ version }}/nasm-{{ version }}.tar.gz
+-  sha256: e2b1c1cb0250fbf2a91c6fdbf42b3b9d568cbe0d7b90af64e02f128c67ae4f83
++  sha256: 9182a118244b058651c576baa9d0366ee05983c4d4ae1d9ddd3236a9f2304997
+ 
+ build:
+   number: 0
+-- 
+2.34.1
+

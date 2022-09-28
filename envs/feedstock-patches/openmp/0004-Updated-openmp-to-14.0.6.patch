@@ -1,0 +1,31 @@
+From f1d4ad666b65031fd1db4ef7d7f2f48e9f6e845a Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 13 Sep 2022 06:43:43 -0400
+Subject: [PATCH] Updated openmp to 14.0.6
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b22e1ee..81944d0 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,4 +1,4 @@
+-{% set version = "14.0.4" %}
++{% set version = "14.0.6" %}
+ # check https://clang.llvm.org/docs/OpenMPSupport.html
+ # occasionally to see last fully supported openmp ver.
+ {% set openmp_ver = "4.5" %}
+@@ -9,7 +9,7 @@ package:
+ 
+ source:
+   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
+-  sha256: f40c77ceff02ae3873d273a51b0f93cd8e6409576f771d860d75835335522052
++  sha256: 8b3cfd7bc695bd6cea0f37f53f0981f34f87496e79e2529874fd03a2f9dd3a8a
+   # name folder for easier deletion; we do the equivalent of downloading
+   # the subproject sources, so the work folder then has openmp in it;
+   # for details see build scripts
+-- 
+1.8.3.1
+
