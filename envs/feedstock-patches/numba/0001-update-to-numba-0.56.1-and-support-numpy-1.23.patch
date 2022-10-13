@@ -1,12 +1,12 @@
-From c0e16167951d45fb7d6fcde4e0256c50f88dcd1c Mon Sep 17 00:00:00 2001
+From c911df87a30617d63af8f5995f6a5cd9d86a28a5 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 7 Oct 2022 06:43:08 +0000
+Date: Thu, 13 Oct 2022 04:23:15 -0400
 Subject: [PATCH] update to numba 0.56.1 and support numpy 1.23
 
 ---
  recipe/0001-unpin-setuptools.patch | 12 ++++++++++++
- recipe/meta.yaml                   | 22 +++++++++++-----------
- 2 files changed, 23 insertions(+), 11 deletions(-)
+ recipe/meta.yaml                   | 23 ++++++++++++-----------
+ 2 files changed, 24 insertions(+), 11 deletions(-)
  create mode 100644 recipe/0001-unpin-setuptools.patch
 
 diff --git a/recipe/0001-unpin-setuptools.patch b/recipe/0001-unpin-setuptools.patch
@@ -28,7 +28,7 @@ index 0000000..bb6c9e3
 + ]
 + 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b051462..4e7f627 100644
+index b051462..dec7578 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,6 +1,6 @@
@@ -49,7 +49,7 @@ index b051462..4e7f627 100644
  
  build:
    number: 0
-@@ -41,14 +41,14 @@ requirements:
+@@ -41,16 +41,17 @@ requirements:
      - pip
      - setuptools
      - wheel
@@ -68,8 +68,11 @@ index b051462..4e7f627 100644
 +    - numpy {{ numpy }}
      # needed for pkg_resources
      - setuptools
++    - importlib_metadata # [py<39]
  
-@@ -60,16 +60,16 @@ requirements:
+   run_constrained:
+     - tbb  >=2021.0
+@@ -60,16 +61,16 @@ requirements:
      - cudatoolkit >=9.2   # [x86 and not osx]
      - cudatoolkit >=9.0   # [x86 and osx]
      # scipy 1.0 or later
@@ -90,5 +93,5 @@ index b051462..4e7f627 100644
      - setuptools
      - pip
 -- 
-2.34.1
+2.23.0
 
