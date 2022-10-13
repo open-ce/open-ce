@@ -11,4 +11,4 @@ packages:
       - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
       - feedstock-patches/scipy/0001-Fix-build-for-P10.patch           # [build_type == 'cpu' or cudatoolkit == '11.4']
 
-git_tag_for_env: open-ce-v1.7.2
+git_tag_for_env: open-ce-v1.7.3
