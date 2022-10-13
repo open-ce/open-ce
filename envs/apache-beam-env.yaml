@@ -1,10 +1,10 @@
 imported_envs:
-{% if build_type == 'cpu'%}
+{% if not s390x %}
   - arrow-env.yaml
 {% endif %}
 
 packages:
-{% if build_type == 'cpu'%}
+{% if not s390x %}
   - feedstock : https://github.com/conda-forge/httplib2-feedstock.git
     git_tag : 90f5bd5d0fd0c37bf66bf0167fd268df572033cb
   - feedstock : https://github.com/conda-forge/orjson-feedstock.git
