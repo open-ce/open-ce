@@ -304,13 +304,13 @@ tensorflow:
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.26.*
+  - 0.27.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
-  - 2.9.*
+  - 2.10.*
 thinc:
   - 8.0.*
 tokenizers:

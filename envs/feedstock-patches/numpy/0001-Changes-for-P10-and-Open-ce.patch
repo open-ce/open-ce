@@ -1,0 +1,82 @@
+From e2f7656ec8381cf56e6a3ad05450fc016fe082db Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 17 Oct 2022 06:03:51 +0000
+Subject: [PATCH] Changes for P10 and Open-ce
+
+---
+ recipe/conda_build_config.yaml |  2 ++
+ recipe/meta.yaml               | 21 +++++++++++----------
+ 2 files changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index 5a25b5e..e17d30d 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -3,3 +3,5 @@
+ # mkl_fft and mkl_random, and then numpy.
+ # If only_build_numpy_base: yes, build numpy-base only; otherwise build all the outputs.
+ only_build_numpy_base: no
++blas_impl:
++- openblas
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 7189901..dcdf649 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -41,15 +41,15 @@ outputs:
+         - $RPATH/ld64.so.1    # [s390x]
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}    # [ppc_arch != "p10"]
++        - {{ compiler('cxx') }}  # [ppc_arch != "p10"]
+         - armpl  # [aarch64]
+       host:
+         - python
+         - pip
+         - packaging  # [osx and arm64]
+         - cython >=0.29.30
+-        - setuptools <60.0.0
++        - setuptools {{ setuptools }}
+         - wheel >=0.37.0
+         - mkl-devel  {{ mkl }}  # [blas_impl == "mkl"]
+         - openblas-devel {{ openblas }}  # [blas_impl == "openblas"]
+@@ -74,14 +74,14 @@ outputs:
+     requirements:
+       build:
+         # for runtime alignment
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}    # [ppc_arch != "p10"]
++        - {{ compiler('cxx') }}  # [ppc_arch != "p10"]
+         - armpl  # [aarch64]
+       host:
+         - python
+         - packaging  # [osx and arm64]
+         - cython >=0.29.24
+-        - setuptools <60.0.0
++        - setuptools {{ setuptools }}
+         - wheel >=0.37.0
+         # these import blas metapackages to ensure consistency with downstream libs that also use blas
+         - mkl-devel  {{ mkl }}  # [blas_impl == 'mkl']
+@@ -131,12 +131,13 @@ outputs:
+     test:
+       requires:
+         - pip     # force installation or `test_api_importable` will fail
+-        - setuptools <60.0.0
++        - setuptools {{ setuptools }}
+         - pytest
++        - typing_extensions {{ typing_extensions }}
+         - hypothesis
+-        - {{ compiler('c') }}  # [not osx]
+-        - {{ compiler('cxx') }}  # [not osx]
+-        - {{ compiler('fortran') }}  # [not osx]
++        - {{ compiler('c') }}  # [ppc_arch != "p10"]
++        - {{ compiler('cxx') }}  # [ppc_arch != "p10"]
++        - {{ compiler('fortran') }}  # [ppc_arch != "p10"]
+         - nomkl  # [x86 and blas_impl != 'mkl']
+       commands:
+         - f2py -h
+-- 
+2.34.1
+
