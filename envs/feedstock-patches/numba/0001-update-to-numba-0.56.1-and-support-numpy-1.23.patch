@@ -1,14 +1,34 @@
-From d94ae897fd4428977b175e619f573f48af6619a2 Mon Sep 17 00:00:00 2001
+From c911df87a30617d63af8f5995f6a5cd9d86a28a5 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Thu, 22 Sep 2022 04:37:05 +0000
+Date: Thu, 13 Oct 2022 04:23:15 -0400
 Subject: [PATCH] update to numba 0.56.1 and support numpy 1.23
 
 ---
- recipe/meta.yaml | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ recipe/0001-unpin-setuptools.patch | 12 ++++++++++++
+ recipe/meta.yaml                   | 23 ++++++++++++-----------
+ 2 files changed, 24 insertions(+), 11 deletions(-)
+ create mode 100644 recipe/0001-unpin-setuptools.patch
 
+diff --git a/recipe/0001-unpin-setuptools.patch b/recipe/0001-unpin-setuptools.patch
+new file mode 100644
+index 0000000..bb6c9e3
+--- /dev/null
++++ b/recipe/0001-unpin-setuptools.patch
+@@ -0,0 +1,12 @@
++diff --git a/setup.py b/setup.py
++index 2a6d12277..20948975f 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -375,7 +375,6 @@ build_requires = ['numpy >={},<{}'.format(min_numpy_build_version,
++ install_requires = [
++     'llvmlite >={},<{}'.format(min_llvmlite_version, max_llvmlite_version),
++     'numpy >={},<{}'.format(min_numpy_run_version, max_numpy_run_version),
++-    'setuptools<60',
++     'importlib_metadata; python_version < "3.9"',
++ ]
++ 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b051462..a96fb64 100644
+index b051462..dec7578 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,6 +1,6 @@
@@ -20,24 +40,25 @@ index b051462..a96fb64 100644
  
  package:
    name: numba
-@@ -10,8 +10,6 @@ source:
-   # url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+@@ -11,7 +11,7 @@ source:
    url: https://github.com/numba/{{ name }}/archive/{{ version }}.tar.gz
    sha256: {{ sha256 }}
--  patches:
+   patches:
 -    - patch-parfor.patch
++    - 0001-unpin-setuptools.patch
  
  build:
    number: 0
-@@ -41,16 +39,17 @@ requirements:
+@@ -41,16 +41,17 @@ requirements:
      - pip
      - setuptools
      - wheel
 -    - llvmlite 0.38.*
 -    - numpy
+-    - tbb-devel 2021.*
 +    - llvmlite 0.39.*
 +    - numpy {{ numpy }}
-     - tbb-devel 2021.*
++    - tbb-devel 2021.*,<2021.6
      - _openmp_mutex            # [linux and not ppc64le]
    run:
      - python
@@ -47,11 +68,11 @@ index b051462..a96fb64 100644
 +    - numpy {{ numpy }}
      # needed for pkg_resources
      - setuptools
-+    - importlib_metadata       # [py<39]
++    - importlib_metadata # [py<39]
  
    run_constrained:
      - tbb  >=2021.0
-@@ -60,16 +59,16 @@ requirements:
+@@ -60,16 +61,16 @@ requirements:
      - cudatoolkit >=9.2   # [x86 and not osx]
      - cudatoolkit >=9.0   # [x86 and osx]
      # scipy 1.0 or later
@@ -72,5 +93,5 @@ index b051462..a96fb64 100644
      - setuptools
      - pip
 -- 
-2.34.1
+2.23.0
 
