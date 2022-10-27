@@ -80,7 +80,7 @@ fortran_compiler_version:
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
   - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
 fsspec:
-  - 2021.*
+  - 2022.7.*
 future:
   - 0.18.*
 gast:
@@ -205,7 +205,8 @@ onnxconverter_common:
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.20.*
+  - 0.3.20.*    # [cudatoolkit == '11.2']
+  - 0.3.21.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
 opencv:
   - 4.6.*
 openjdk:
@@ -240,9 +241,9 @@ python:
   - 3.10
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
-  - 1.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 pytorch_lightning:
-  - 1.6.*
+  - 1.7.*
 pytorch_scatter:
   - 2.0.8
 pytorch_sparse:
@@ -319,10 +320,10 @@ torchmetrics:
   - 0.8.*
 torchtext:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.14.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 torchvision:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.14.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 tqdm:
   - 4.*
 typer:
