@@ -3,7 +3,6 @@ builder_version: ">=10.0.1"
 imported_envs:
   - bazel-env.yaml
   - tensorflow-s390x-extra-deps-env.yaml
-  - scipy-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
 packages:

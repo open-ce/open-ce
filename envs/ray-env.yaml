@@ -4,7 +4,6 @@ imported_envs:
 {% if not s390x %}
   - arrow-env.yaml
   - tensorflow-env.yaml
-  - scipy-env.yaml
 {% endif %}
 
 packages:

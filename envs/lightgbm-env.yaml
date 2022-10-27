@@ -1,8 +1,5 @@
 builder_version: ">=10.0.1"
 
-imported_envs:
-  - scipy-env.yaml
-
 packages:
 {% if not s390x %}
   {% if build_type == 'cuda' %}
