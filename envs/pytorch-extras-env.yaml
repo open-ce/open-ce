@@ -6,26 +6,22 @@ imported_envs:
 
 packages:
 {% if not s390x %}
-  - feedstock : https://github.com/conda-forge/croniter-feedstock
-    git_tag : e2dc0fa0b913d440ffd8806e2b1c61206aefe660
+  - feedstock : pytorch-lightning
+  - feedstock : pytorch-lightning-bolts
+  - feedstock : libflac
+  - feedstock : libsndfile
+  - feedstock : https://github.com/conda-forge/fire-feedstock
+    git_tag : d1cc6e31600201a58c528ad549374e33d1599480
   - feedstock : https://github.com/conda-forge/deepdiff-feedstock
     git_tag : f7914a1d64cf029852de9d6a9c362c2a40374a4f
   - feedstock : https://github.com/conda-forge/ordered-set-feedstock
     git_tag : ffb018797625d7f932bdd2f608d4f0813e227065
-  - feedstock : https://github.com/conda-forge/starsessions-feedstock
-    git_tag : bfaa9dcec65958ea57cb839c00b7c4a496e2f033
-  - feedstock : https://github.com/conda-forge/aioredis-feedstock
-    git_tag : fbfc6b513846aff97772f21b90ad0d0555884186
-  - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : 9f89a90cec2f86dabb2bb24303cd994a3f936770
-  - feedstock : https://github.com/conda-forge/python-multipart-feedstock
-    git_tag : d40967f6afce79de33c3870798301aa797c490a7
-  - feedstock : https://github.com/conda-forge/traitlets-feedstock
-    git_tag : b1d94ddb21a4734160fb1116430f9b36ddc3beb5
-  - feedstock : https://github.com/conda-forge/fire-feedstock
-    git_tag : d1cc6e31600201a58c528ad549374e33d1599480
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 6c88fc1f9d47e348479edf4a7e28742b2cb49dcb
+  - feedstock : https://github.com/conda-forge/starlette-feedstock
+    git_tag : 3ea659dca911c759e6aeafc490f938754c66e42a
+  - feedstock : https://github.com/conda-forge/python-multipart-feedstock
+    git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/websockets-feedstock
     git_tag : 43e34faa25f0283617423c721ec9292b68a224c7
   - feedstock : https://github.com/conda-forge/websocket-client-feedstock
@@ -35,12 +31,20 @@ packages:
     patches:
       - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
       - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
+  - feedstock : https://github.com/conda-forge/croniter-feedstock
+    git_tag : e2dc0fa0b913d440ffd8806e2b1c61206aefe660
   - feedstock : https://github.com/conda-forge/s3fs-feedstock
     git_tag: 83caab226d52d2b2157ca8698dc2c09367667f28
+  - feedstock : https://github.com/conda-forge/starsessions-feedstock
+    git_tag : bfaa9dcec65958ea57cb839c00b7c4a496e2f033
+  - feedstock : https://github.com/conda-forge/traitlets-feedstock
+    git_tag : b1d94ddb21a4734160fb1116430f9b36ddc3beb5
+  - feedstock : https://github.com/conda-forge/aioredis-feedstock
+    git_tag : fbfc6b513846aff97772f21b90ad0d0555884186
   - feedstock : https://github.com/conda-forge/aiobotocore-feedstock
     git_tag : 053a4abc39ee530d9bea12a9b1541170b9be11bc
-  - feedstock : pytorch-lightning
-  - feedstock : pytorch-lightning-bolts
-  - feedstock : libflac
-  - feedstock : libsndfile
+  - feedstock : https://github.com/conda-forge/botocore-feedstock
+    git_tag : 5b03fa862526f072f2887a5535e945661c49e6d6
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.3
