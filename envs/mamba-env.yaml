@@ -1,6 +1,10 @@
 builder_version: ">=10.0.1"
 
 packages:
+  - feedstock : https://github.com/AnacondaRecipes/openssl-feedstock
+    git_tag : dc1ee81ec35a0a27a9d4e0347df15e91c5a324df
+    patches :
+      - feedstock-patches/openssl/0001-Enable-md2-in-openssl.patch
   - feedstock : https://github.com/conda-forge/cli11-feedstock
     git_tag : a8e959fcae876db93c92918e57914f632feac574
   - feedstock : https://github.com/conda-forge/pybind11-feedstock

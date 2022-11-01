@@ -1,0 +1,42 @@
+From 57484c2e3298e4dae3ddd1a1ae7c5c004bf90930 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 1 Nov 2022 09:27:25 +0000
+Subject: [PATCH] Build openssl with enable-md2
+
+---
+ recipe/build.sh  | 1 +
+ recipe/meta.yaml | 6 +++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 8f5f528..0a24b45 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -9,6 +9,7 @@ _CONFIG_OPTS+=(threads)
+ _CONFIG_OPTS+=(no-ssl2)     # broken, insecure protocol
+ _CONFIG_OPTS+=(no-ssl3)     # broken, insecure protocol
+ _CONFIG_OPTS+=(no-zlib)
++_CONFIG_OPTS+=(enable-md2)
+ 
+ _BASE_CC=$(basename "${CC}")
+ if [[ ${_BASE_CC} == *-* ]]; then
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 76fb7a0..45de9d7 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -42,9 +42,9 @@ requirements:
+ test:
+   requires:
+     - certifi  # [win]
+-    - python 3.7  # [not (osx and arm64)]
+-    - python 3.8  # [osx and arm64]
+-    - six
++    #- python 3.7  # [not (osx and arm64)]
++    #- python 3.8  # [osx and arm64]
++    #- six
+   commands:
+     - copy NUL checksum.txt        # [win]
+     - touch checksum.txt           # [unix]
+-- 
+2.34.1
+
