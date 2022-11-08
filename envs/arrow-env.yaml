@@ -28,6 +28,8 @@ packages:
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
 {% endif %}
+  - feedstock : https://github.com/conda-forge/xsimd-feedstock
+    git_tag: 22229f9a9fac80480b91c74316a19e14bbf90a6b
   - feedstock : grpc-cpp
   - feedstock : pyarrow
   - feedstock : orc
