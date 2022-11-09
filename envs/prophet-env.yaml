@@ -1,0 +1,11 @@
+builder_version: ">=10.0.1"
+
+packages:
+  - feedstock : https://github.com/conda-forge/holidays-feedstock
+    git_tag : 734de2f5ddff13d7834f0fa3f5968fcf9d438e2a
+  - feedstock : https://github.com/conda-forge/cmdstan-feedstock
+    git_tag : 52c0b44afc40e71dc1e628f3903d4776e1d99af0  
+  - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock
+    git_tag : b772ad91fdafb93af0ff5439cae588083493585e
+  - feedstock : https://github.com/conda-forge/prophet-feedstock
+    git_tag : b909af90ac383a085999dde242eac0390bf6fffd 

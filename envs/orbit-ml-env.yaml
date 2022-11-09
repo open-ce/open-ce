@@ -1,0 +1,14 @@
+builder_version: ">=10.0.1"
+
+imported_envs:
+  - pytorch-env.yaml
+
+packages:
+  - feedstock : https://github.com/conda-forge/pyro-api-feedstock
+    git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637 
+  - feedstock : https://github.com/conda-forge/opt_einsum-feedstock
+    git_tag : 861d394ac99f0e5460b7d9f271a6e7117c6498cc
+  - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
+    git_tag : 04df1300dea80a47f43934137ecdb3e71d5f142e   
+  - feedstock : orbit-ml
+
