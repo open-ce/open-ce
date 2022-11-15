@@ -10,5 +10,7 @@ packages:
     git_tag : 861d394ac99f0e5460b7d9f271a6e7117c6498cc
   - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
     git_tag : 04df1300dea80a47f43934137ecdb3e71d5f142e   
-  - feedstock : orbit-ml
-
+  - feedstock : https://github.com/conda-forge/orbit-ml-feedstock
+    git_tag : 7de16c99ec18e3474b11e458de69493d10b92eae
+    patches :
+      - feedstock-patches/orbit-ml/0001-add-orbit-ml-v1.1.1-feedstock.patch
