@@ -3,7 +3,7 @@ abseil_cpp:
 absl_py:
   - 1.0.*
 arrow:
-  - 8.0.0
+  - 10.0.0
 astunparse:
   - 1.6
 attrs:
@@ -243,7 +243,7 @@ pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
   - 1.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 pytorch_lightning:
-  - 1.7.*
+  - 1.8.*
 pytorch_scatter:
   - 2.0.8
 pytorch_sparse:
