@@ -5,10 +5,15 @@ imported_envs:
 
 packages:
   - feedstock : https://github.com/conda-forge/pyro-api-feedstock
-    git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637 
+    git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
   - feedstock : https://github.com/conda-forge/opt_einsum-feedstock
     git_tag : 861d394ac99f0e5460b7d9f271a6e7117c6498cc
   - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
-    git_tag : 04df1300dea80a47f43934137ecdb3e71d5f142e   
-  - feedstock : orbit-ml
+    git_tag : 04df1300dea80a47f43934137ecdb3e71d5f142e
+    patches :
+      - feedstock-patches/pyro_ppl/0001-use-pin-of-pytorch-base.patch
+  - feedstock : https://github.com/conda-forge/orbit-ml-feedstock.git
+    git_tag : 7de16c99ec18e3474b11e458de69493d10b92eae
+    patches :
+      - feedstock-patches/orbit-ml/0001-use-pin-of-pytorch-base-in-recipe.patch
 
