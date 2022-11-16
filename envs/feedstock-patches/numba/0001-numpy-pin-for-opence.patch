@@ -1,0 +1,42 @@
+From 7f8d8d475d15a1528be2c90fa699974b05b3986a Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 16 Nov 2022 13:46:04 +0000
+Subject: [PATCH] numpy pin for opence
+
+---
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 981547c..1c9fd12 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,6 +1,6 @@
+ {% set name = "numba" %}
+ {% set version = "0.56.3" %}
+-{% set sha256 = "8c8957219e0356cc82d366fcde13a797c329c0fc8ed4c13fdf748265922a28d5" %}
++{% set sha256 = "d6f7a23fc8abed9c12ca4daa9277e916a753a09d92405c10144762651cabe5d0" %}
+ {% set numpy_min_ver = "1.18" %}  # [py<39 and not (aarch64 or s390x or arm64)]
+ {% set numpy_min_ver = "1.19" %}  # [py<39 and (aarch64 or s390x or arm64)]
+ {% set numpy_min_ver = "1.19" %}  # [py==39 and not arm64]
+@@ -46,7 +46,7 @@ requirements:
+     - setuptools
+     - wheel
+     - llvmlite 0.39.*
+-    - numpy {{ numpy_min_ver }}
++    - numpy {{ numpy }}
+     - tbb-devel 2021.*,<2021.6
+     - _openmp_mutex            # [linux]
+     - importlib_metadata       # [py<39]
+@@ -60,7 +60,7 @@ requirements:
+     # xref: https://github.com/numba/numba/issues/7756
+     # NumPy >=1.23 breaks with CUDA test: test_reinterpret_array_type
+     # xref: https://github.com/numba/numba/issues/8529
+-    - numpy >={{ numpy_min_ver }},!=1.22.0,!=1.22.1,!=1.22.2,<1.23
++    - numpy {{ numpy }}
+     # needed for pkg_resources
+     - setuptools
+ 
+-- 
+2.34.1
+
