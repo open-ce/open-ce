@@ -45,6 +45,12 @@ packages:
     git_tag : 053a4abc39ee530d9bea12a9b1541170b9be11bc
   - feedstock : https://github.com/conda-forge/botocore-feedstock
     git_tag : 5b03fa862526f072f2887a5535e945661c49e6d6
+  - feedstock : https://github.com/conda-forge/inquirer-feedstock
+    git_tag : fc7287c59b302b2b01a1dd77a6bdb89020a732b2
+  - feedstock : https://github.com/conda-forge/blessed-feedstock
+    git_tag : 312e173f249e145e91a3883dd8b27374e6b95ecb
+  - feedstock : https://github.com/conda-forge/readchar-feedstock
+    git_tag : d003de7de0238b34da02a77b3e574a0495015987
 {% endif %}
 
 git_tag_for_env: open-ce-v1.7.3
