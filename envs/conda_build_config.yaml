@@ -201,7 +201,7 @@ numpy:
 onnx:
   - 1.12.*
 onnxconverter_common:
-  - 1.9.*
+  - 1.13.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
