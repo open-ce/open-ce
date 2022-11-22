@@ -212,7 +212,7 @@ opencv:
 openjdk:
   - 11.0.*
 openmpi:
-  - 4.1.1
+  - 4.1.4
 optional_lite:
   - 3.4.*
 opt_einsum:
