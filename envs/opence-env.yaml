@@ -18,15 +18,20 @@ imported_envs:
   - mamba-env.yaml
   - ray-env.yaml
   - apache-beam-env.yaml
-  - datasets-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
+
+
+  # Commenting apache-beam for time being.
+  #- apache-beam-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
     git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9   # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-    patches:                                             # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
+    patches:                                            # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-Fixed-h5py.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-P10-changes.patch    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]              
+  - feedstock : https://github.com/conda-forge/datasets-feedstock.git
+    git_tag : 270ff0d8249565f4c513b386cd372d0bd75ff9e4
   - feedstock : opencv   # [not s390x]
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
