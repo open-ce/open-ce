@@ -9,5 +9,7 @@ packages:
       - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
       - feedstock-patches/openmp/0003-P10-changes.patch
       - feedstock-patches/openmp/0004-Updated-openmp-to-14.0.6.patch
-  - feedstock : openblas
+  - feedstock : openblas                                  # [cudatoolkit == '11.2']
+    git_tag: 409baea3e2447df298a44102ac41bb53a9430bbc     # [cudatoolkit == '11.2']
+  - feedstock : openblas                             # [build_type == 'cpu' or cudatoolkit == '11.4']
 {% endif %}
