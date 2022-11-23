@@ -22,10 +22,6 @@ imported_envs:
   - prophet-env.yaml
   - orbit-ml-env.yaml
 
-  # Commenting apache-beam for time being.
-  #- apache-beam-env.yaml
-
-
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
     git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9   # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
