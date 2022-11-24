@@ -1,0 +1,25 @@
+From 5805215779907ae65964bf4647625510877b6bf0 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 24 Nov 2022 09:12:00 +0000
+Subject: [PATCH] Disable pip check:require dill v>=0.3.4
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index a171ed1..a812042 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -51,7 +51,7 @@ test:
+     - datasets.tasks
+     - datasets.utils
+   commands:
+-    - pip check
++#    - pip check
+     - datasets-cli --help
+   requires:
+     - pip
+-- 
+2.34.1
+
