@@ -280,10 +280,6 @@ six:
   - 1.16.0
 smart_open:
   - 2.2.*
-spacy_legacy:
-  - 3.0.9
-spacy_loggers:
-  - 1.0.2
 spdlog:
   - 1.9.2
 srsly:
@@ -312,10 +308,6 @@ termcolor_cpp:
   - 2.0.0
 tf_estimator:
   - 2.10.*
-thinc:
-  - 8.0.*
-tokenizers:
-  - 0.11.4
 torchmetrics:
   - 0.8.*
 torchtext:
