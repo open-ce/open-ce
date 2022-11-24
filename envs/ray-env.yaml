@@ -14,7 +14,7 @@ packages:
       - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
       - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : b8e09882d12c58fd3f4ebd3db4bc70fb7b7146ee
+    git_tag : af1e1b369a2327a4a4b7d52a9a8579454729dd07
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
