@@ -9,11 +9,11 @@ packages:
   - feedstock : https://github.com/conda-forge/opt_einsum-feedstock
     git_tag : 861d394ac99f0e5460b7d9f271a6e7117c6498cc
   - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
-    git_tag : 04df1300dea80a47f43934137ecdb3e71d5f142e
+    git_tag : a0c3ebcb2f652254da2f08f4b87b113d912ee7df
     patches :
-      - feedstock-patches/pyro_ppl/0001-use-pin-of-pytorch-base.patch
+      - feedstock-patches/pyro-ppl/0001-pin-pytorch-in-recipe.patch
   - feedstock : https://github.com/conda-forge/orbit-ml-feedstock.git
     git_tag : 7de16c99ec18e3474b11e458de69493d10b92eae
     patches :
-      - feedstock-patches/orbit-ml/0001-use-pin-of-pytorch-base-in-recipe.patch
+      - feedstock-patches/orbit-ml/0001-orbit-recipe.patch
 
