@@ -32,3 +32,5 @@ packages:
       - feedstock-patches/datasets/0001-Disable-pip-check-require-dill-v-0.3.4.patch
   - feedstock : opencv   # [not s390x]
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
+  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock/   # [cudatoolkit == '11.2']
+    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
