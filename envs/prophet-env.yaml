@@ -8,4 +8,6 @@ packages:
   - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock
     git_tag : b772ad91fdafb93af0ff5439cae588083493585e
   - feedstock : https://github.com/conda-forge/prophet-feedstock
-    git_tag : b909af90ac383a085999dde242eac0390bf6fffd 
+    git_tag : b909af90ac383a085999dde242eac0390bf6fffd
+    patches :
+      - feedstock-patches/prophet/0001-Pin-numpy-to-what-we-use-in-Open-CE.patch 
