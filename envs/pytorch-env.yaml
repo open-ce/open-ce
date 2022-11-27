@@ -12,7 +12,7 @@ packages:
   - feedstock : magma
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
-  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock/   # [cudatoolkit == '11.2']
+  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
   {% endif %}
   - feedstock : sentencepiece
