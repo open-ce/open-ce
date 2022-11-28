@@ -1,31 +1,33 @@
-From 03ae978a8e0a1e12a6097b3dedd9b6c506f20235 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Fri, 25 Nov 2022 11:53:33 +0000
+From 6b613c81eade2252e6648037582d3253d3596006 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 28 Nov 2022 05:18:22 +0000
 Subject: [PATCH] Fixed build by forcing to use open-ce's built llvm-openmp
 
 ---
- recipe/meta.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 995daf4..39f0a2d 100644
+index 995daf4..a4da19b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -33,7 +33,7 @@ requirements:
+@@ -33,7 +33,8 @@ requirements:
      - jom                        # [win]
      - make                       # [linux]
      - patch                      # [linux]
 -    - llvm-openmp
-+    - llvm-openmp 14.0.6 h525f08b_0
++    - llvm-openmp 14.0.6 h525f08b_0     #[x86_64]
++    - llvm-openmp 14.0.6 heda6af4_0     #[ppc64le]
      - libgcc-ng {{ libgcc }}            #[cudatoolkit == "11.2"]
      - libstdcxx-ng {{ libstdcxx }}      #[cudatoolkit == "11.2"]
      - libgfortran-ng {{ libgfortran }}  #[cudatoolkit == "11.2"]
-@@ -53,7 +53,7 @@ outputs:
+@@ -53,7 +54,8 @@ outputs:
        build:
          - {{ compiler("c") }}           #[ppc_arch != 'p10']
          - {{ compiler("fortran") }}     #[ppc_arch != 'p10']
 -        - llvm-openmp
-+        - llvm-openmp 14.0.6 h525f08b_0
++        - llvm-openmp 14.0.6 h525f08b_0     #[x86_64]
++        - llvm-openmp 14.0.6 heda6af4_0     #[ppc64le]
          - libgcc-ng {{ libgcc }}        #[cudatoolkit == "11.2"]
          - libstdcxx-ng {{ libstdcxx }}  #[cudatoolkit == "11.2"]
          - libgfortran-ng {{ libgfortran }}   #[cudatoolkit == "11.2"]
