@@ -5,6 +5,6 @@ imported_envs:
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/numpy-feedstock
-    git_tag : 1482df2ba362f4d7da45a1f59a4c545aec79cdee
+    git_tag : 80404fa151d7f160428e61dbf21d729fbac7ff22
     patches :
       - feedstock-patches/numpy/0001-Changes-for-P10-and-Open-ce.patch  
