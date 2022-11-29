@@ -12,4 +12,4 @@ packages:
   - feedstock : openblas
 {% endif %}
 
-git_tag_for_env: open-ce-v1.7.3
+git_tag_for_env: open-ce-v1.7.4
