@@ -21,6 +21,8 @@ packages:
 {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/libnetcdf-feedstock
     git_tag: 2e504dea87602cd3ea50fc54b7ed5f13dd705290
+    patches :
+      - feedstock-patches/libnetcdf/0001-remove-git-as-it-is-causing-conflicts.patch
   - feedstock : https://github.com/conda-forge/orbit-ml-feedstock.git
     git_tag : 7de16c99ec18e3474b11e458de69493d10b92eae
     patches :
