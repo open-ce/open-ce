@@ -1,5 +1,0 @@
-builder_version: ">=10.0.1"
-
-packages:
-  - feedstock : https://github.com/conda-forge/datasets-feedstock.git
-    git_tag : 270ff0d8249565f4c513b386cd372d0bd75ff9e4
