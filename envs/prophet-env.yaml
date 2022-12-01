@@ -11,3 +11,4 @@ packages:
     git_tag : b909af90ac383a085999dde242eac0390bf6fffd
     patches :
       - feedstock-patches/prophet/0001-Pin-numpy-to-what-we-use-in-Open-CE.patch 
+git_tag_for_env: open-ce-v1.8.0

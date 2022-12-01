@@ -23,3 +23,4 @@ packages:
     patches :
       - feedstock-patches/orbit-ml/0001-orbit-recipe.patch
 
+git_tag_for_env: open-ce-v1.8.0
