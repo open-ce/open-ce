@@ -9,8 +9,6 @@ imported_envs:
   - tensorflow-env.yaml
   - xgboost-env.yaml
   - dali-env.yaml
-  - spacy-env.yaml
-  - transformers-env.yaml
   - horovod-env.yaml
   - lightgbm-env.yaml
   - arrow-env.yaml
@@ -18,12 +16,21 @@ imported_envs:
   - mamba-env.yaml
   - ray-env.yaml
   - apache-beam-env.yaml
+  - prophet-env.yaml
+  - orbit-ml-env.yaml
+  - deepspeed-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
     git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9   # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-    patches:                                             # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
+    patches:                                            # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-Fixed-h5py.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-P10-changes.patch    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]              
+  - feedstock : https://github.com/conda-forge/datasets-feedstock.git
+    git_tag : 2a86f485c7d216fb0e280d069626859be866b3b1
+    patches:
+      - feedstock-patches/datasets/0001-Disable-pip-check-require-dill-v-0.3.4.patch
   - feedstock : opencv   # [not s390x]
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
+  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
+    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']

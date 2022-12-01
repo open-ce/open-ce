@@ -1,0 +1,24 @@
+From 59fc0491b4b1b80114e4d6994aa0d6d7cd17b3ae Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Tue, 29 Nov 2022 16:28:15 +0000
+Subject: [PATCH] remove git as it is causing conflicts
+
+---
+ recipe/meta.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index ed9b4c0..2785dbe 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -44,7 +44,6 @@ build:
+ requirements:
+   build:
+     - cmake
+-    - git
+     - patch  # [not win]
+     - m2-patch  # [win]
+     - make  # [unix]
+-- 
+2.34.1
+

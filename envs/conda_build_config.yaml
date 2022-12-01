@@ -3,7 +3,7 @@ abseil_cpp:
 absl_py:
   - 1.0.*
 arrow:
-  - 8.0.0
+  - 10.0.0
 astunparse:
   - 1.6
 attrs:
@@ -13,7 +13,7 @@ autoconf:
 automake:
   - 1.16
 av:
-  - 9.*
+  - 10.*
 bazel:
   - 5.*
 black:
@@ -80,7 +80,7 @@ fortran_compiler_version:
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
   - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
 fsspec:
-  - 2021.*
+  - 2022.7.*
 future:
   - 0.18.*
 gast:
@@ -125,13 +125,13 @@ joblib:
 jpeg:
   - 9e
 jpegturbo:
-  - 2.1.0
+  - 2.1.4
 keras_applications:
   - 1.0.8
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.9.*
+  - 2.10.*
 leveldb:
   - 1.20.*
 libarchive:
@@ -197,21 +197,22 @@ numactl:
   - 2.0.*
 numpy:
   - 1.22.*   # [cudatoolkit == '11.2']
-  - 1.23.*   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.23.4   # [build_type == 'cpu' or cudatoolkit == '11.4']
 onnx:
   - 1.12.*
 onnxconverter_common:
-  - 1.9.*
+  - 1.13.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.20.*
+  - 0.3.20.*    # [cudatoolkit == '11.2']
+  - 0.3.21.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
 opencv:
   - 4.6.*
 openjdk:
   - 11.0.*
 openmpi:
-  - 4.1.1
+  - 4.1.4
 optional_lite:
   - 3.4.*
 opt_einsum:
@@ -240,9 +241,9 @@ python:
   - 3.10
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
-  - 1.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 pytorch_lightning:
-  - 1.6.*
+  - 1.8.*
 pytorch_scatter:
   - 2.0.8
 pytorch_sparse:
@@ -279,50 +280,42 @@ six:
   - 1.16.0
 smart_open:
   - 2.2.*
-spacy_legacy:
-  - 3.0.9
-spacy_loggers:
-  - 1.0.2
 spdlog:
   - 1.9.2
 srsly:
   - 2.*
 starlette:
-  - 0.19.*
+  - 0.20.*
 sqlite:
   - 3.38.*   # [s390x]
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.9.*
+  - 2.10.*
 tensorboard_data_server:
   - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.9.*
+  - 2.10.*
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.26.*
+  - 0.27.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
-  - 2.9.*
-thinc:
-  - 8.0.*
-tokenizers:
-  - 0.11.4
+  - 2.10.*
 torchmetrics:
   - 0.8.*
 torchtext:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.14.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 torchvision:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.14.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 tqdm:
   - 4.*
 typer:
@@ -342,7 +335,7 @@ wrapt:
 yaml_cpp:
   - 0.7.0
 zlib:
-  - 1.2.12
+  - 1.2.13
 zstd:
   - 1.4.*
 
@@ -392,12 +385,12 @@ vector_settings:
 ##
 # yamllint disable rule:line-length
 cuda_levels:
-  - 3.7,5.2,6.0,7.0,7.5,8.0         # [x86_64 and cudatoolkit == '11.2']
-  - 3.7,5.2,6.0,7.0,7.5,8.0,8.6     # [x86_64 and cudatoolkit == '11.4']
-  - 3.7,6.0,7.0,7.5,8.0             # [ppc64le and cudatoolkit == '11.2']
-  - 3.7,6.0,7.0,7.5,8.0,8.6         # [ppc64le and cudatoolkit == '11.4']
+  - 5.2,6.0,7.0,7.5,8.0         # [x86_64 and cudatoolkit == '11.2']
+  - 5.2,6.0,7.0,7.5,8.0,8.6     # [x86_64 and cudatoolkit == '11.4']
+  - 6.0,7.0,7.5,8.0             # [ppc64le and cudatoolkit == '11.2']
+  - 6.0,7.0,7.5,8.0,8.6         # [ppc64le and cudatoolkit == '11.4']
 cuda_levels_details:
-  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80              # [x86_64 and cudatoolkit == '11.2']
-  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80,compute_86   # [x86_64 and cudatoolkit == '11.4']
-  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80                          # [ppc64le and cudatoolkit == '11.2']
-  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80,compute_86               # [ppc64le and cudatoolkit == '11.4']
+  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80              # [x86_64 and cudatoolkit == '11.2']
+  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80,compute_86   # [x86_64 and cudatoolkit == '11.4']
+  - sm_60,sm_70,sm_75,sm_80,compute_80                          # [ppc64le and cudatoolkit == '11.2']
+  - sm_60,sm_70,sm_75,sm_80,compute_80,compute_86               # [ppc64le and cudatoolkit == '11.4']

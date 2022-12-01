@@ -1,0 +1,16 @@
+builder_version: ">=10.0.1"
+
+imported_envs:
+{% if build_type == 'cuda' %}
+    - pytorch-env.yaml
+{% endif %}
+
+packages:
+{% if not s390x %}
+  {% if build_type == 'cuda' %}
+    - feedstock : https://github.com/conda-forge/hjson-py-feedstock
+      git_tag: d8a1feb4e5099836efafb19fe449511ef6e8d9a7
+    - feedstock : openmpi                  #[mpi_type == 'openmpi']
+    - feedstock : deepspeed 
+  {% endif %}
+{% endif %}

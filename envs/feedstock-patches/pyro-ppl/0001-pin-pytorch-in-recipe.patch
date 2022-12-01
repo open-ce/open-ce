@@ -1,0 +1,25 @@
+From e410583c0b48aa2b574512db0dba2c59503cb5c6 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 24 Nov 2022 11:01:49 +0000
+Subject: [PATCH] pin pytorch in recipe
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b65609f..d974ebb 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -23,7 +23,7 @@ requirements:
+     - opt_einsum >=2.3.2
+     - pyro-api >=0.1.1
+     - python >=3.7
+-    - pytorch >=1.11
++    - pytorch-base {{ pytorch }}
+     - tqdm >=4.36
+ 
+ test:
+-- 
+2.34.1
+

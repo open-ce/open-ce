@@ -1,0 +1,34 @@
+From df69486f2214e3a83223a15386101322bf9fb6d2 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 30 Nov 2022 14:25:26 +0000
+Subject: [PATCH] Disable pip check:require dill v>=0.3.4 and set numpy pin
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index a171ed1..96cd1d8 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,7 +28,7 @@ requirements:
+     - huggingface_hub >=0.2.0,<1.0.0
+     - importlib-metadata
+     - multiprocess
+-    - numpy >=1.17
++    - numpy {{ numpy }}
+     - packaging
+     - pandas
+     - pyarrow >=6.0.0
+@@ -51,7 +51,7 @@ test:
+     - datasets.tasks
+     - datasets.utils
+   commands:
+-    - pip check
++#    - pip check
+     - datasets-cli --help
+   requires:
+     - pip
+-- 
+2.34.1
+

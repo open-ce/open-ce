@@ -4,7 +4,6 @@ imported_envs:
 {% if not s390x %}
   - arrow-env.yaml
   - tensorflow-env.yaml
-  - scipy-env.yaml
 {% endif %}
 
 packages:
@@ -15,7 +14,7 @@ packages:
       - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
       - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : b8e09882d12c58fd3f4ebd3db4bc70fb7b7146ee
+    git_tag : af1e1b369a2327a4a4b7d52a9a8579454729dd07
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
@@ -25,7 +24,7 @@ packages:
     patches:
       - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
-    git_tag : 7e7e8d4a74719ba7ce134ecf7b317c44c1cf39a9
+    git_tag : 6c88fc1f9d47e348479edf4a7e28742b2cb49dcb
   - feedstock : dm-tree
   - feedstock : ray-packages
 {% endif %}
