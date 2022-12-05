@@ -11,8 +11,8 @@ packages:
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
 {% endif %}
-  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
-    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
+  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2' or s390x]
+    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2' or s390x]
   - feedstock : https://github.com/AnacondaRecipes/oauthlib-feedstock    #[python == '3.10']
     git_tag : e9360b2b6265e26f31dd70952772812dc0166f90                   #[python == '3.10']
   - feedstock : https://github.com/AnacondaRecipes/pyjwt-feedstock.git   #[python == '3.10']
