@@ -1,9 +1,12 @@
 builder_version: ">=10.0.1"
 
 imported_envs:
+{% if not s390x %}
   - pytorch-env.yaml
+{% endif %}
 
 packages:
+{% if not s390x %}
   - feedstock : https://github.com/conda-forge/pyro-api-feedstock
     git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
   - feedstock : https://github.com/conda-forge/opt_einsum-feedstock
@@ -22,5 +25,6 @@ packages:
     git_tag : 7de16c99ec18e3474b11e458de69493d10b92eae
     patches :
       - feedstock-patches/orbit-ml/0001-orbit-recipe.patch
+{% endif %}
 
 git_tag_for_env: open-ce-v1.8.0
