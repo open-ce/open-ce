@@ -1,0 +1,34 @@
+From 47850edbd433a44e1184673a6d105f7c4826a24e Mon Sep 17 00:00:00 2001
+From: Archanashinde1 <archana.shinde1@github.com>
+Date: Tue, 13 Dec 2022 05:38:49 +0000
+Subject: [PATCH] add runtime dependancy openblas
+
+---
+ recipe/meta.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 70be850..80e69ac 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -33,6 +33,9 @@ outputs:
+         - coin-or-clp
+         - coin-or-osi
+         - coin-or-utils
++        - openblas {{ openblas }}
++      run:
++        - openblas {{ openblas }}      
+       run_constrained:
+         - coincbc * *_metapackage
+ 
+@@ -69,6 +72,7 @@ outputs:
+     requirements:
+       run:
+         - coin-or-cbc {{ version }}
++        - openblas {{ openblas }}
+     test:
+       commands:
+         - test -f $PREFIX/lib/libCbc${SHLIB_EXT}
+-- 
+2.34.1
+

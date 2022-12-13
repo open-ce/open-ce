@@ -1,0 +1,30 @@
+From d9208eec8373651967f4feaa44a5d1d75ab7ca51 Mon Sep 17 00:00:00 2001
+From: Archanashinde1 <archana.shinde1@github.com>
+Date: Tue, 13 Dec 2022 04:58:25 +0000
+Subject: [PATCH] Configure openblas
+
+---
+ recipe/meta.yaml | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b97bee9..693ee9d 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -26,11 +26,9 @@ requirements:
+     - make  # [unix]
+   host:
+     - coin-or-utils
+-    - zlib
++    - zlib {{ zlib }}
+     - bzip2
+-    - libblas
+-    - libcblas
+-    - liblapack
++    - openblas
+   run_constrained:
+     - coincbc * *_metapackage
+ 
+-- 
+2.34.1
+

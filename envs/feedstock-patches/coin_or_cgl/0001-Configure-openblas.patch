@@ -1,0 +1,29 @@
+From cf526b5b11009537135886da2e72c79e0e5ff332 Mon Sep 17 00:00:00 2001
+From: Archanashinde1 <archana.shinde1@github.com>
+Date: Tue, 13 Dec 2022 05:36:18 +0000
+Subject: [PATCH] Configure openblas
+
+---
+ recipe/meta.yaml | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index c56f046..2b8773a 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,10 +28,8 @@ requirements:
+     - coin-or-utils
+     - coin-or-osi
+     - coin-or-clp
+-    - libblas
+-    - libcblas
+-    - liblapack
+-    - zlib
++    - openblas
++    - zlib {{ zlib }}
+     - bzip2
+     - ncurses
+     - readline
+-- 
+2.34.1
+

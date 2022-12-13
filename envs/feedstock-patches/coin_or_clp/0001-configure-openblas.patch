@@ -1,0 +1,69 @@
+From 2d41322be4614ea28e4fbadabba0a52ec8bda087 Mon Sep 17 00:00:00 2001
+From: Archanashinde1 <archana.shinde1@github.com>
+Date: Tue, 13 Dec 2022 05:02:40 +0000
+Subject: [PATCH] configure openblas
+
+---
+ ortools.log      | 3 +++
+ recipe/build.sh  | 6 +++---
+ recipe/meta.yaml | 7 +++----
+ 3 files changed, 9 insertions(+), 7 deletions(-)
+ create mode 100644 ortools.log
+
+diff --git a/ortools.log b/ortools.log
+new file mode 100644
+index 0000000..bb24248
+--- /dev/null
++++ b/ortools.log
+@@ -0,0 +1,3 @@
++[OPEN-CE-INFO]Unable to find './open-ce/envs/or-tools-env.yaml' locally. Attempting to use 'https://raw.githubusercontent.com/open-ce/open-ce/main/envs/./open-ce/envs/or-tools-env.yaml'.
++[OPEN-CE-ERROR]-25 Failed to download https://raw.githubusercontent.com/open-ce/open-ce/main/envs/./open-ce/envs/conda_build_config.yaml with error:
++HTTP Error 404: Not Found
+diff --git a/recipe/build.sh b/recipe/build.sh
+index b44859c..8b3cc80 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -19,8 +19,8 @@ fi
+ # value at run-time to get the expected amount of parallelism.
+ export OPENBLAS_NUM_THREADS=1
+ 
+-WITH_BLAS_LIB="-L${PREFIX}/lib -lblas"
+-WITH_LAPACK_LIB="-L${PREFIX}/lib -llapack"
++WITH_BLAS_LIB="-L${PREFIX}/lib -lopenblas"
++WITH_LAPACK_LIB="-L${PREFIX}/lib -lopenblas"
+ 
+ ./configure \
+     --prefix="${PREFIX}" \
+@@ -30,4 +30,4 @@ WITH_LAPACK_LIB="-L${PREFIX}/lib -llapack"
+     --enable-gnu-packages
+ 
+ make -j "${CPU_COUNT}"
+-make install
+\ No newline at end of file
++make install
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index d22b864..8495256 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,15 +29,14 @@ requirements:
+   host:
+     - coin-or-utils
+     - coin-or-osi
+-    - libblas
+-    - libcblas
+-    - liblapack
++    - openblas
+     - readline  # [unix]
+-    - zlib
++    - zlib {{ zlib }}
+     - bzip2
+     - ncurses
+   run:
+     - ncurses
++    - openblas {{ openblas }}
+   run_constrained:
+     - coincbc * *_metapackage
+ 
+-- 
+2.34.1
+
