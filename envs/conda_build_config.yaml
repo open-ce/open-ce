@@ -86,7 +86,7 @@ future:
 gast:
   - 0.4.0
 git:
-  - 2.15
+  - 2.34
 google_auth:
   - 1.*
 google_auth_oauthlib:
