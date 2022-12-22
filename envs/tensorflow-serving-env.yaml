@@ -5,6 +5,7 @@ imported_envs:
 
 conda_build_configs:
   - tensorflow_serving_conda_build_config.yaml
+  - conda_build_config_p10.yaml        #[ppc_arch == 'p10']
 
 packages:
 {% if not s390x %}
