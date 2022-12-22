@@ -6,6 +6,4 @@ cpu_opt_tune:
   - power10                 # [ppc64le]
 vector_settings:
   - no-pcrel                # [ppc64le]
-python:
-  - 3.9
 
