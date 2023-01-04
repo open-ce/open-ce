@@ -1,0 +1,18 @@
+imported_envs:
+  - xgboost-env.yaml
+  - lightgbm-env.yaml
+
+conda_build_configs:
+  - conda_build_config.yaml
+
+packages:
+  - feedstock : snapml
+  - feedstock : numactl
+  - feedstock : onnx
+  - feedstock : https://github.com/AnacondaRecipes/numba-feedstock.git
+    git_tag : 4bdade72837fb7e1e8c91da2aa3d55b787849f06
+    patches:
+      - feedstock-patches/numba/0001-numpy-pin-for-opence.patch
+  - feedstock : cdts
+    runtime_package : False
+
