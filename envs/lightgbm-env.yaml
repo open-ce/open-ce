@@ -1,9 +1,14 @@
 builder_version: ">=10.0.1"
 
+imported_envs:
+  - common-p10-deps.yaml      #[ppc_arch == "p10"]
+
 packages:
 {% if s390x %}
   - feedstock : https://github.com/AnacondaRecipes/mpi-feedstock
     git_tag: ec3ef9f3f74bdd8b4165af560d056b85df04ae4a
+    patches:
+      - feedstock-patches/mpi/0001-Build-mpi-for-only-openmpi-type-and-not-for-mpich.patch
 {% endif %}
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
