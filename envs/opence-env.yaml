@@ -19,6 +19,7 @@ imported_envs:
   - prophet-env.yaml
   - orbit-ml-env.yaml
   - deepspeed-env.yaml
+  - misc-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
