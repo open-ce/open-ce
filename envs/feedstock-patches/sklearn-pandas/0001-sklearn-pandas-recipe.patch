@@ -1,0 +1,22 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index fc916e2..6e3583b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -18,13 +18,13 @@ build:
+ requirements:
+   host:
+     - pip
+-    - python >=3.7
++    - python {{ python }}
+   run:
+-    - python >=3.7
++    - python {{ python }}
+     - scikit-learn >=0.23.0
+-    - scipy >=1.5.1
++    - scipy {{ scipy }}
+     - pandas >=1.1.4
+-    - numpy >=1.18.1
++    - numpy {{ numpy }}
+ 
+ test:
+   imports:

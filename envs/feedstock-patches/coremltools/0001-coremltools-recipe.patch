@@ -1,0 +1,26 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8e74dc1..fd9422e 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -25,17 +25,17 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+   host:
+-    - python
+-    - numpy
++    - python {{ python }}
++    - numpy {{ numpy }}
+     - pip
+   run:
+-    - python
++    - python {{ python }}
+     - {{ pin_compatible('numpy') }}
+     - protobuf >=3.1.0
+     - six >=1.1.0
+     - attrs
+     - sympy
+-    - scipy
++    - scipy {{ scipy }}
+     - tqdm
+     - packaging
+   run_constrained:
