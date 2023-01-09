@@ -28,7 +28,7 @@ packages:
       - feedstock-patches/h5py/0001-P10-changes.patch    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]              
   - feedstock : opencv   # [not s390x]
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
-  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2' or s390x]
-    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2' or s390x]
+  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
+    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
 
 git_tag_for_env: open-ce-v1.7.4
