@@ -269,7 +269,7 @@ safeint:
 scipy:
   - 1.*
 sentencepiece:
-  - 0.1.96
+  - 0.1.97
 setuptools:
   - 58.*    # [cudatoolkit == '11.2']
   - 63.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
