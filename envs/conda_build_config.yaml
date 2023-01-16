@@ -272,7 +272,7 @@ sentencepiece:
   - 0.1.97
 setuptools:
   - 58.*    # [cudatoolkit == '11.2']
-  - 63.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
 setuptools_rust:
   - 0.12.*    # [cudatoolkit == '11.2']
   - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
