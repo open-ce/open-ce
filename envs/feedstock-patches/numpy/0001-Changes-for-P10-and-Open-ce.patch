@@ -1,17 +1,17 @@
-From 326ffc7270925934db64b9bc00720c4bb961d3c8 Mon Sep 17 00:00:00 2001
+From 98008e17ac146afe9fa23bc005235994d777cab8 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 26 Dec 2022 07:15:11 -0500
-Subject: [PATCH] Changes for P10 and Open-ce.patch
+Date: Mon, 16 Jan 2023 11:28:12 +0000
+Subject: [PATCH] P10 changes
 
 ---
- recipe/meta.yaml | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+ recipe/meta.yaml | 27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b905ae6..721f989 100644
+index 82e24fb..fdc7841 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -31,17 +31,17 @@ requirements:
+@@ -31,17 +31,15 @@ requirements:
      - python                                 # [build_platform != target_platform]
      - cross-python_{{ target_platform }}     # [build_platform != target_platform]
      - cython                                 # [build_platform != target_platform]
@@ -31,12 +31,10 @@ index b905ae6..721f989 100644
 -    - libcblas
 -    - liblapack
 +    - libopenblas {{ openblas }}
-+      #- libcblas
-+      #    - liblapack
    run:
      - python
    run_constrained:
-@@ -52,7 +52,7 @@ requirements:
+@@ -52,7 +50,7 @@ requirements:
  # https://github.com/numpy/numpy/issues/15243
  {% set tests_to_skip = tests_to_skip + " or test_loss_of_precision[complex256]" %}  # [ppc64le]
  # Sometimes crashes on travis (needs too much memory); since 1.22.4 it fails for pypy
@@ -45,28 +43,30 @@ index b905ae6..721f989 100644
  # there are some tests that cannot really work in emulation, see e.g. numpy/numpy#20445
  {% set tests_to_skip = tests_to_skip + " or Test_ARM_Features" %}                   # [build_platform != target_platform]
  # test_new_policy reruns part of test suite; including a CPU feature test that fails in emulation
-@@ -65,27 +65,28 @@ test:
+@@ -64,8 +62,9 @@ requirements:
+ test:
    requires:
      - pytest
++    - libopenblas {{ openblas }}
      - pytest-timeout
 -    - pytest-xdist         # [CI != "travis"]
-+    - pytest-xdist 
++    - pytest-xdist
      # (mostly) optional test requirements (except wheel, python-cov, mypy), see
      # https://github.com/numpy/numpy/blob/main/test_requirements.txt
      - cffi                 # [py<=39 and python_impl != "pypy"]
-     - cython
-     - hypothesis
+@@ -74,20 +73,20 @@ test:
+     # workaround for python/cpython#98706
+     - importlib_metadata >=4.13  # [py==311]
      - pytz
 -    - setuptools <60.0.0
 +    - setuptools {{ setuptools }}
      - typing_extensions
-+    - libopenblas {{ openblas }}
      # some linux tests need a C compiler;
      # extra f2py tests need a fortran compiler
 -    - {{ compiler('c') }}        # [linux]
 -    - {{ compiler('fortran') }}  # [linux]
-+    - {{ compiler('c') }}      #[ppc_arch != 'p10']
-+    - {{ compiler('fortran') }}  #[ppc_arch != 'p10']
++    - {{ compiler('c') }}        #[ppc_arch != 'p10']
++    - {{ compiler('fortran') }}    #[ppc_arch != 'p10']
    commands:
      - f2py -h
      # numpy.test will show SIMD features of agent (in the past, there have been
@@ -81,5 +81,5 @@ index b905ae6..721f989 100644
      {% set extra = "extra_argv=['-k', 'not (" + tests_to_skip + ")', " + num_proc + "'--timeout=3000', '--durations=50']" %}
      - python -c "import numpy, sys; sys.exit(not numpy.test({{ param }}, {{ extra }}))"
 -- 
-2.23.0
+2.34.1
 
