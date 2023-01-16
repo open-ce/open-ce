@@ -6,5 +6,7 @@ cpu_opt_tune:
   - power10                 # [ppc64le]
 vector_settings:
   - no-pcrel                # [ppc64le]
+setuptools:
+  - 63.*
 
 git_tag_for_env: open-ce-v1.8.0
