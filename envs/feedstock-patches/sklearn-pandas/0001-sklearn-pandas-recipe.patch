@@ -1,5 +1,14 @@
+From 0f4e284b16ad19416229cad89e50b8e3d38f2a6f Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 18 Jan 2023 11:28:38 +0000
+Subject: [PATCH] Open-CE changes
+
+---
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index fc916e2..6e3583b 100644
+index fc916e2..447317e 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -18,13 +18,13 @@ build:
@@ -7,10 +16,10 @@ index fc916e2..6e3583b 100644
    host:
      - pip
 -    - python >=3.7
-+    - python {{ python }}
++    - python
    run:
 -    - python >=3.7
-+    - python {{ python }}
++    - python
      - scikit-learn >=0.23.0
 -    - scipy >=1.5.1
 +    - scipy {{ scipy }}
@@ -20,3 +29,6 @@ index fc916e2..6e3583b 100644
  
  test:
    imports:
+-- 
+2.34.1
+
