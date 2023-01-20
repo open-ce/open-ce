@@ -2,6 +2,8 @@ abseil_cpp:
   - 20210324
 absl_py:
   - 1.0.*
+arviz:
+  - 0.14.0
 arrow:
   - 10.0.1
 astunparse:
