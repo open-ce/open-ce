@@ -1,0 +1,27 @@
+From b81d0fe79a601d38222a63b5d205bd612e8c2308 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Mon, 23 Jan 2023 13:34:20 +0000
+Subject: [PATCH] p10 build change
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 70be850..b1e907a 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -24,8 +24,8 @@ outputs:
+     requirements:
+       build:
+         - gnuconfig  # [unix]
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}      #[ppc_arch == "p10"]
++        - {{ compiler('cxx') }}    #[ppc_arch == "p10"]
+         - pkg-config
+         - make  # [unix]
+       host:
+-- 
+2.34.1
+

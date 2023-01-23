@@ -1,0 +1,79 @@
+From ecde771f596790c533944f5fc4ab67e2a72d3aaf Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Mon, 23 Jan 2023 13:57:22 +0000
+Subject: [PATCH] pin dependencies
+
+---
+ recipe/meta.yaml | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 5c7572b..c00d528 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -37,17 +37,19 @@ outputs:
+         - make
+         - pkg-config
+       host:
+-        - abseil-cpp
+-        - libprotobuf
+-        - zlib 1.2.11
++        - abseil-cpp {{ abseil_cpp }}
++        - libprotobuf {{ protobuf }}
++        - zlib {{ zlib }}
+         # coin or deps
+         - coin-or-utils
+         - coin-or-osi
+-        - coin-or-clp =1.17.4
++        - coin-or-clp 
+         - coin-or-cgl
+         - coin-or-cbc
+         # Source: https://github.com/google/or-tools/blob/stable/cmake/dependencies/CMakeLists.txt
+         - python
++      run:
++        - openblas {{ openblas }}
+       run_constrained:
+         - scip =7.0.1
+ 
+@@ -92,28 +94,29 @@ outputs:
+         - setuptools
+         - swig >=4.0
+       host:
+-        - abseil-cpp
++        - abseil-cpp {{ abseil_cpp}}
+         - absl-py >=0.13
+-        - libprotobuf
+-        - numpy
++        - libprotobuf {{ protobuf }}
++        - numpy {{ numpy }}
+         - mypy-protobuf
+         - pip >=9.0.1
+-        - python >=3.6
++        - python 
+         - virtualenv
+         - wheel
+-        - zlib 1.2.11
++        - zlib {{ zlib }}
+         # coin or deps
+         - coin-or-utils
+         - coin-or-osi
+-        - coin-or-clp =1.17.4
++        - coin-or-clp
+         - coin-or-cgl
+         - coin-or-cbc
+       run:
+         - absl-py >=0.13
+         - mypy-protobuf
+-        - {{ pin_compatible('numpy') }}
+-        - protobuf
+-        - python >=3.6
++        - numpy{{ numpy }}
++        - protobuf {{ protobuf }}
++        - python 
++        - openblas {{ openblas }}
+         # Source: https://github.com/google/or-tools/blob/stable/ortools/python/setup.py.in#L44
+       run_constrained:
+         - scip =7.0.1
+-- 
+2.34.1
+
