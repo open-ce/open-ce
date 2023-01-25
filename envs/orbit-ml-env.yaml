@@ -12,7 +12,7 @@ packages:
   - feedstock : https://github.com/conda-forge/opt_einsum-feedstock
     git_tag : 861d394ac99f0e5460b7d9f271a6e7117c6498cc
   - feedstock : https://github.com/conda-forge/arviz-feedstock
-    git_tag : af966adfe0e0ea60edda8a496321bb4a96810d2e
+    git_tag : 8924a99c3b75101ca8378ed1cf13dbf6a44074e3
   - feedstock : https://github.com/conda-forge/xarray-einstats-feedstock
     git_tag : c9bc98ac6fee6f67d977fbb841cbae5fc1c22753
   - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
