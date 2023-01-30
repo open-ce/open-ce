@@ -1,14 +1,44 @@
-From e80c546ca1ad0f248a1071b4dd75ad25f2ef95ae Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 16 Jan 2023 15:28:12 +0000
-Subject: [PATCH] P10 changes
+From 320e81479f294f2420e339d0745d1b0a66d5d6a5 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 27 Jan 2023 11:15:58 +0000
+Subject: [PATCH] Fixed Open-CE build for P10
 
 ---
- recipe/meta.yaml | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+ recipe/build.sh  | 10 +++++-----
+ recipe/meta.yaml | 28 ++++++++++++++--------------
+ 2 files changed, 19 insertions(+), 19 deletions(-)
 
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 821a220..67a90c5 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -8,19 +8,19 @@ if [[ ! -f $BUILD_PREFIX/bin/ranlib ]]; then
+     ln -s $AR $BUILD_PREFIX/bin/ar
+ fi
+ 
++# compiler_compat/ld causes problem in finding openblas lib
++rm $PREFIX/compiler_compat/ld
++
+ cat > site.cfg <<EOF
+ [DEFAULT]
+ library_dirs = $PREFIX/lib
+ include_dirs = $PREFIX/include
+ 
+ [lapack]
+-libraries = lapack,blas
++libraries = openblas
+ 
+ [blas]
+-libraries = cblas,blas
++libraries = openblas
+ EOF
+ 
+-export NPY_LAPACK_ORDER=lapack
+-export NPY_BLAS_ORDER=blas
+-
+ $PYTHON -m pip install --no-deps --ignore-installed -v .
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 82e24fb..c3c9903 100644
+index 82e24fb..19c79b1 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -31,19 +31,18 @@ requirements:
@@ -55,7 +85,7 @@ index 82e24fb..c3c9903 100644
      # (mostly) optional test requirements (except wheel, python-cov, mypy), see
      # https://github.com/numpy/numpy/blob/main/test_requirements.txt
      - cffi                 # [py<=39 and python_impl != "pypy"]
-@@ -74,20 +73,20 @@ test:
+@@ -74,22 +73,23 @@ test:
      # workaround for python/cpython#98706
      - importlib_metadata >=4.13  # [py==311]
      - pytz
@@ -80,7 +110,10 @@ index 82e24fb..c3c9903 100644
 +    {% set num_proc = "" %}
      {% set param = "verbose=1, label=" + label + ", tests=None" %}
      {% set extra = "extra_argv=['-k', 'not (" + tests_to_skip + ")', " + num_proc + "'--timeout=3000', '--durations=50']" %}
++    - python -c "import numpy; numpy.show_config()"
      - python -c "import numpy, sys; sys.exit(not numpy.test({{ param }}, {{ extra }}))"
+   imports:
+     - numpy
 -- 
 2.34.1
 
