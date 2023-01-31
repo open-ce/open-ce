@@ -1,14 +1,14 @@
-From 47850edbd433a44e1184673a6d105f7c4826a24e Mon Sep 17 00:00:00 2001
-From: Archanashinde1 <archana.shinde1@github.com>
-Date: Tue, 13 Dec 2022 05:38:49 +0000
-Subject: [PATCH] add runtime dependancy openblas
+From 8a5c6f55822a4a25c94e7ace9fb40e1feace816c Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 31 Jan 2023 06:18:34 +0000
+Subject: [PATCH] Add runtime dependency openblas
 
 ---
  recipe/meta.yaml | 4 ++++
  1 file changed, 4 insertions(+)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 70be850..80e69ac 100644
+index 70be850..a371299 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -33,6 +33,9 @@ outputs:
@@ -17,7 +17,7 @@ index 70be850..80e69ac 100644
          - coin-or-utils
 +        - openblas {{ openblas }}
 +      run:
-+        - openblas {{ openblas }}      
++        - openblas {{ openblas }}
        run_constrained:
          - coincbc * *_metapackage
  
