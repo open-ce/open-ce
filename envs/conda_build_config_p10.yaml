@@ -9,4 +9,4 @@ vector_settings:
 setuptools:
   - 63.*
 
-git_tag_for_env: open-ce-v1.8.0
+git_tag_for_env: open-ce-v1.8.1

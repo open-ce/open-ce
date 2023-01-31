@@ -50,4 +50,4 @@ packages:
   - feedstock : https://github.com/conda-forge/aioredis-feedstock
     git_tag : fbfc6b513846aff97772f21b90ad0d0555884186
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0
+git_tag_for_env: open-ce-v1.8.1
