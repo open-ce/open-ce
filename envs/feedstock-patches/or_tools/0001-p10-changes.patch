@@ -1,0 +1,38 @@
+From fd31bcc39da8682a03c1ee62160ba2da7b9b8cf8 Mon Sep 17 00:00:00 2001
+From: Archanashinde1 <archana.shinde1@github.com>
+Date: Fri, 23 Dec 2022 11:15:45 +0000
+Subject: [PATCH] p10 changes
+
+---
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 25fc09f..0a62c8b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,8 +29,8 @@ outputs:
+ 
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}     #[ppc_arch != 'p10']
++        - {{ compiler('cxx') }}   #[ppc_arch != 'p10']
+         - cmake >=3.18
+         # Source: https://github.com/google/or-tools/blob/stable/cmake/python.cmake#L6
+         - git
+@@ -84,8 +84,8 @@ outputs:
+ 
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}      #[ppc_arch != 'p10']
++        - {{ compiler('cxx') }}    #[ppc_arch != 'p10']
+         - cmake >=3.18
+         - git
+         - make
+-- 
+2.34.1
+

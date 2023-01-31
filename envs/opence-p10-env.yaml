@@ -15,6 +15,7 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
+  - or-tools-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock      #[build_type == 'cpu' or cudatoolkit == "11.4"]
