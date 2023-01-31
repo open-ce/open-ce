@@ -31,4 +31,4 @@ packages:
       - feedstock-patches/orbit-ml/0001-orbit-recipe.patch
 {% endif %}
 
-git_tag_for_env: open-ce-v1.8.0
+git_tag_for_env: open-ce-v1.8.1

@@ -43,3 +43,5 @@ packages:
     patches :
       - feedstock-patches/or_tools/0001-update-pin-dependencies.patch
       - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
+
+git_tag_for_env: open-ce-v1.8.1
