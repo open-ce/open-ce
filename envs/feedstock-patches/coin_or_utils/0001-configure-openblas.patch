@@ -49,7 +49,7 @@ index a207bf5..93079a5 100644
 -    - libcblas
 -    - liblapack
 -    - liblapacke
-+    - openblas
++    - openblas {{ openblas }}
    run_constrained:
      - coincbc * *_metapackage
  

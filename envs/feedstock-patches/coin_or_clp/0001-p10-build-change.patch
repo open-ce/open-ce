@@ -18,9 +18,9 @@ index d22b864..17030b4 100644
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
 -    - {{ compiler('fortran') }}
-+    - {{ compiler('c') }}          #[ppc_arch == "p10"]
-+    - {{ compiler('cxx') }}        #[ppc_arch == "p10"]
-+    - {{ compiler('fortran') }}    #[ppc_arch == "p10"]
++    - {{ compiler('c') }}          #[ppc_arch != "p10"]
++    - {{ compiler('cxx') }}        #[ppc_arch != "p10"]
++    - {{ compiler('fortran') }}    #[ppc_arch != "p10"]
      - pkg-config
      - make  # [unix]
    host:

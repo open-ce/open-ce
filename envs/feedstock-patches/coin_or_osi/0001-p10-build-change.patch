@@ -17,8 +17,8 @@ index b97bee9..78eac16 100644
      - gnuconfig  # [unix]
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
-+    - {{ compiler('c') }}       #[ppc_arch == "p10"]
-+    - {{ compiler('cxx') }}     #[ppc_arch == "p10"]
++    - {{ compiler('c') }}       #[ppc_arch != "p10"]
++    - {{ compiler('cxx') }}     #[ppc_arch != "p10"]
      - pkg-config
      - make  # [unix]
    host:

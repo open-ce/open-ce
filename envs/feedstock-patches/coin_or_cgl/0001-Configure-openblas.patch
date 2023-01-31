@@ -19,7 +19,7 @@ index c56f046..2b8773a 100644
 -    - libcblas
 -    - liblapack
 -    - zlib
-+    - openblas
++    - openblas {{ openblas }}
 +    - zlib {{ zlib }}
      - bzip2
      - ncurses
