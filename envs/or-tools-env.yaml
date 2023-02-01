@@ -43,3 +43,4 @@ packages:
     patches :
       - feedstock-patches/or_tools/0001-update-pin-dependencies.patch
       - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
+      - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le and cudatoolkit == '11.2']
