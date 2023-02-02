@@ -12,7 +12,7 @@ packages:
     git_tag : b1aaa52731225e0f6cf27e98772ad9843899a2e9
     patches :
       - feedstock-patches/coin_or_utils/0001-configure-openblas.patch
-      - feedstock-patches/coin_or_utils/0001-p10-build_change.patch           #[ppc_arch == "p10"]
+      - feedstock-patches/coin_or_utils/0001-p10-build-change.patch     #[ppc_arch == "p10"]
   - feedstock : https://github.com/conda-forge/coin-or-osi-feedstock.git
     git_tag : 697a1fac1bba42eb7d4e7dce3bb23d3036ea6679
     patches :
