@@ -1,18 +1,15 @@
 builder_version: ">=10.0.1"
 
 imported_envs:
-{% if not s390x %}
   - openblas-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
-{% endif %}
 
 packages:
-{% if not s390x %}
   - feedstock : https://github.com/conda-forge/coin-or-utils-feedstock
     git_tag : b1aaa52731225e0f6cf27e98772ad9843899a2e9
     patches :
       - feedstock-patches/coin_or_utils/0001-configure-openblas.patch
-      - feedstock-patches/coin_or_utils/0001-p10-build-change.patch           #[ppc_arch == "p10"]
+      - feedstock-patches/coin_or_utils/0001-p10-change.patch           #[ppc_arch == "p10"]
   - feedstock : https://github.com/conda-forge/coin-or-osi-feedstock.git
     git_tag : 697a1fac1bba42eb7d4e7dce3bb23d3036ea6679
     patches :
@@ -46,4 +43,4 @@ packages:
     patches :
       - feedstock-patches/or_tools/0001-update-pin-dependencies.patch
       - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
-{% endif %}
+      - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le and cudatoolkit == '11.2']
