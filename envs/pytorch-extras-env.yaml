@@ -27,6 +27,9 @@ packages:
     git_tag : ffb018797625d7f932bdd2f608d4f0813e227065
   - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
     git_tag: 312dca71c6d5a752ad6a2ab7c0a65a55b71a3e81
+    patches:
+      - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
+      - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
   - feedstock : https://github.com/conda-forge/croniter-feedstock
     git_tag : e2dc0fa0b913d440ffd8806e2b1c61206aefe660
   - feedstock : https://github.com/conda-forge/s3fs-feedstock
