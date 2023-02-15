@@ -1,0 +1,16 @@
+builder_version: ">=10.0.1"
+
+packages:
+  - feedstock: openssl
+  - feedstock : https://github.com/conda-forge/rust-feedstock
+    git_tag : 97bf9eebc206d17594013dd0e89938f6536a783a     # 1.60
+    patches :
+      - feedstock-patches/rust/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 75803486a2dbca1b39b2a0594b682afaabcb5b13
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock 
+    git_tag : 2ea8f1f3704a07beda7ed68cfdbfba63c14fde7d
+    patches :
+      - feedstock-patches/cryptography/0001-opence-changes-for-crytography.patch
