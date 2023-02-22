@@ -8,4 +8,5 @@ vector_settings:
   - no-pcrel                # [ppc64le]
 python:
   - 3.9
-
+setuptools:
+  - 63.*
