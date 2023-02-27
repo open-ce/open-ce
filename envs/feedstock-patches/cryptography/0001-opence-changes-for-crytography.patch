@@ -1,21 +1,22 @@
-From 8d37dc5b89fd9b90457df7fa5f99c754de75ab27 Mon Sep 17 00:00:00 2001
+From 5bdc93f29379f388001a226d42f960bc06e52fd1 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Wed, 15 Feb 2023 14:25:20 +0000
-Subject: [PATCH] opence changes for crytography
+Date: Fri, 24 Feb 2023 09:07:26 +0000
+Subject: [PATCH] opence changes for fips enabled crytography
 
 ---
- recipe/meta.yaml | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ recipe/meta.yaml | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index fa620f6..8c4906d 100644
+index fa620f6..bf2acbc 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -11,18 +11,18 @@ source:
+@@ -11,18 +11,19 @@ source:
  build:
    number: 0
    skip: true  # [py<37 or win32]
 -  script: {{ PYTHON }} -m pip install . -vv
++  string: fips_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 +  script: CFLAGS="-I$CONDA_PREFIX/include" LDFLAGS="-L$CONDA_PREFIX/lib"  {{ PYTHON }} -m pip install . -vv
    missing_dso_whitelist:  # [s390x]
      - $RPATH/ld64.so.1    # [s390x]
