@@ -18,4 +18,3 @@ packages:
 
   - feedstock : openblas                             # [build_type == 'cpu' or cudatoolkit == '11.4']
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0

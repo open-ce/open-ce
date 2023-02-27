@@ -5,6 +5,7 @@ conda_build_configs:
   - conda_build_config_p10.yaml
 
 imported_envs:
+  - common-p10-deps.yaml
   - openblas-env.yaml
   - onnx-env.yaml
   - pytorch-env.yaml
@@ -14,6 +15,7 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
+  - or-tools-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock      #[build_type == 'cpu' or cudatoolkit == "11.4"]
@@ -22,4 +24,3 @@ packages:
       - feedstock-patches/h5py/0001-Fixed-h5py.patch                   # [build_type == 'cpu' or cudatoolkit == '11.4']
 
   - feedstock : opencv
-git_tag_for_env: open-ce-v1.8.0

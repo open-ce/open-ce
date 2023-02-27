@@ -28,4 +28,3 @@ packages:
   - feedstock : dm-tree
   - feedstock : ray-packages
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0

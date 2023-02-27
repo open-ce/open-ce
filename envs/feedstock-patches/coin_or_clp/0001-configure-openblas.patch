@@ -1,0 +1,58 @@
+From 80ca1a1a77a10bbf9341d9ba54a0620733200221 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 31 Jan 2023 06:11:23 +0000
+Subject: [PATCH] Configure openblas
+
+---
+ recipe/build.sh  | 6 +++---
+ recipe/meta.yaml | 7 +++----
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index b44859c..8b3cc80 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -19,8 +19,8 @@ fi
+ # value at run-time to get the expected amount of parallelism.
+ export OPENBLAS_NUM_THREADS=1
+ 
+-WITH_BLAS_LIB="-L${PREFIX}/lib -lblas"
+-WITH_LAPACK_LIB="-L${PREFIX}/lib -llapack"
++WITH_BLAS_LIB="-L${PREFIX}/lib -lopenblas"
++WITH_LAPACK_LIB="-L${PREFIX}/lib -lopenblas"
+ 
+ ./configure \
+     --prefix="${PREFIX}" \
+@@ -30,4 +30,4 @@ WITH_LAPACK_LIB="-L${PREFIX}/lib -llapack"
+     --enable-gnu-packages
+ 
+ make -j "${CPU_COUNT}"
+-make install
+\ No newline at end of file
++make install
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index d22b864..c81aa45 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,15 +29,14 @@ requirements:
+   host:
+     - coin-or-utils
+     - coin-or-osi
+-    - libblas
+-    - libcblas
+-    - liblapack
++    - openblas {{ openblas }}
+     - readline  # [unix]
+-    - zlib
++    - zlib {{ zlib }}
+     - bzip2
+     - ncurses
+   run:
+     - ncurses
++    - openblas {{ openblas }}
+   run_constrained:
+     - coincbc * *_metapackage
+ 
+-- 
+2.34.1
+

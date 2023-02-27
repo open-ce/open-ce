@@ -1,0 +1,58 @@
+From 855489a542292f8bb2d6dc944bd11855eb690352 Mon Sep 17 00:00:00 2001
+From: Archanashinde1 <archana.shinde1@github.com>
+Date: Mon, 12 Dec 2022 14:11:25 +0000
+Subject: [PATCH] configure openblas
+
+---
+ recipe/build.sh  | 6 +++---
+ recipe/meta.yaml | 9 +++------
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 88e404d..49ff12a 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -19,8 +19,8 @@ fi
+ # value at run-time to get the expected amount of parallelism.
+ export OPENBLAS_NUM_THREADS=1
+ 
+-WITH_BLAS_LIB="-L${PREFIX}/lib -lblas"
+-WITH_LAPACK_LIB="-L${PREFIX}/lib -llapack"
++WITH_BLAS_LIB="-L${PREFIX}/lib -lopenblas"
++WITH_LAPACK_LIB="-L${PREFIX}/lib -lopenblas"
+ 
+ ./configure \
+     --prefix="${PREFIX}" \
+@@ -29,4 +29,4 @@ WITH_LAPACK_LIB="-L${PREFIX}/lib -llapack"
+     --with-lapack-lib="${WITH_LAPACK_LIB}" \
+ 
+ make -j "${CPU_COUNT}"
+-make install
+\ No newline at end of file
++make install
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index a207bf5..93079a5 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -23,15 +23,12 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+     - {{ compiler('fortran') }}
+-    - pkg-config
++    - pkg-config {{ pkg_config }}
+     - make  # [unix]
+   host:
+-    - zlib
++    - zlib {{ zlib }}
+     - bzip2
+-    - libblas
+-    - libcblas
+-    - liblapack
+-    - liblapacke
++    - openblas {{ openblas }}
+   run_constrained:
+     - coincbc * *_metapackage
+ 
+-- 
+2.34.1
+

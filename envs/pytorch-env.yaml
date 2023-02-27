@@ -2,6 +2,7 @@ builder_version: ">=10.0.1"
 
 imported_envs:
   - openblas-env.yaml
+  - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
 packages:
 {% if not s390x %}
@@ -20,4 +21,3 @@ packages:
   - feedstock : av
   - feedstock : torchvision
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0

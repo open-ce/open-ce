@@ -2,8 +2,10 @@ abseil_cpp:
   - 20210324
 absl_py:
   - 1.0.*
+arviz:
+  - 0.14.0
 arrow:
-  - 10.0.0
+  - 10.0.1
 astunparse:
   - 1.6
 attrs:
@@ -73,6 +75,8 @@ ffmpeg:
   - 4.2.*
 flatbuffers:
   - 2.0.*
+fmt:
+  - 9.1.0
 freetype:
   - 2
 fortran_compiler_version:
@@ -86,7 +90,7 @@ future:
 gast:
   - 0.4.0
 git:
-  - 2.15
+  - 2.34
 google_auth:
   - 1.*
 google_auth_oauthlib:
@@ -197,7 +201,7 @@ numactl:
   - 2.0.*
 numpy:
   - 1.22.*   # [cudatoolkit == '11.2']
-  - 1.23.4   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.23.5   # [build_type == 'cpu' or cudatoolkit == '11.4']
 onnx:
   - 1.12.*
 onnxconverter_common:
@@ -269,10 +273,10 @@ safeint:
 scipy:
   - 1.*
 sentencepiece:
-  - 0.1.96
+  - 0.1.97
 setuptools:
   - 58.*    # [cudatoolkit == '11.2']
-  - 63.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
 setuptools_rust:
   - 0.12.*    # [cudatoolkit == '11.2']
   - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
@@ -281,7 +285,7 @@ six:
 smart_open:
   - 2.2.*
 spdlog:
-  - 1.9.2
+  - 1.11.0
 srsly:
   - 2.*
 starlette:
@@ -328,8 +332,6 @@ wasabi:
   - 0.9.*
 werkzeug:
   - 2.*
-wheel:
-  - 0.37*
 wrapt:
   - 1.14.*
 yaml_cpp:
@@ -394,4 +396,3 @@ cuda_levels_details:
   - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80,compute_86   # [x86_64 and cudatoolkit == '11.4']
   - sm_60,sm_70,sm_75,sm_80,compute_80                          # [ppc64le and cudatoolkit == '11.2']
   - sm_60,sm_70,sm_75,sm_80,compute_80,compute_86               # [ppc64le and cudatoolkit == '11.4']
-git_tag_for_env: open-ce-v1.8.0

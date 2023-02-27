@@ -21,7 +21,7 @@ packages:
   - feedstock : https://github.com/conda-forge/dill-feedstock
     git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : 97bf9eebc206d17594013dd0e89938f6536a783a     # 1.60
+    git_tag : 97bf9eebc206d17594013dd0e89938f6536a783a    
     patches :
       - feedstock-patches/rust/0001-Fixed-build.patch
   - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
@@ -37,8 +37,9 @@ packages:
     patches :
       - feedstock-patches/cargo_bundle_licenses/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/cloudpickle-feedstock
-    git_tag : 3e0ee6656ea16f597738b224001448bf0e332210    
+    git_tag : 96fdeea400960f3950fd685016ea1a0d8acd9e7b 
+  - feedstock : https://github.com/conda-forge/objsize-feedstock.git
+    git_tag : ab2783f2547e80b5ea7357d0cd7153fc8e94ac7b
   - feedstock : apache-beam
 {% endif %}
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0

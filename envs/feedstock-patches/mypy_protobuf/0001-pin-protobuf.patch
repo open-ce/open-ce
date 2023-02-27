@@ -1,0 +1,25 @@
+From 49f343f0564859d2e5b16c84332f113d5806e1e0 Mon Sep 17 00:00:00 2001
+From: Archanashinde1 <archana.shinde1@github.com>
+Date: Tue, 13 Dec 2022 08:35:04 +0000
+Subject: [PATCH] pin protobuf
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index e5307f3..e9faa6f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -24,7 +24,7 @@ requirements:
+     - python >=3.6
+   run:
+     - python >=3.6
+-    - protobuf >=3.18.1
++    - protobuf {{ protobuf }}
+     - types-protobuf >=3.17.4
+ 
+ test:
+-- 
+2.34.1
+

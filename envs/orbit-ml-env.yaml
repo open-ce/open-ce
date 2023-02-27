@@ -11,6 +11,10 @@ packages:
     git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
   - feedstock : https://github.com/conda-forge/opt_einsum-feedstock
     git_tag : 861d394ac99f0e5460b7d9f271a6e7117c6498cc
+  - feedstock : https://github.com/conda-forge/arviz-feedstock
+    git_tag : edbe33e75097a3ad894f863495a8653d26b10f27
+  - feedstock : https://github.com/conda-forge/xarray-einstats-feedstock
+    git_tag : c9bc98ac6fee6f67d977fbb841cbae5fc1c22753
   - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
     git_tag : a0c3ebcb2f652254da2f08f4b87b113d912ee7df
     patches :
@@ -26,5 +30,3 @@ packages:
     patches :
       - feedstock-patches/orbit-ml/0001-orbit-recipe.patch
 {% endif %}
-
-git_tag_for_env: open-ce-v1.8.0

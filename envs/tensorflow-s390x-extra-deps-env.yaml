@@ -8,14 +8,9 @@ packages:
     git_tag: d8c73a73f29e835eb5dfc5e071b9564ea665e7fd
   - feedstock : https://github.com/AnacondaRecipes/promise-feedstock
     git_tag: a1855c8a4e3e2e597f612e4edd504bf1da81d91d
-  - feedstock : https://github.com/conda-forge/llvmdev-feedstock
-    git_tag : c546c92e4ca06051bf48bda7e97138f348924293
-    patches:
-      - feedstock-patches/llvm/0001-LLVM-fixed-with-old-compiler.patch
   - feedstock : https://github.com/conda-forge/clangdev-feedstock
     git_tag : 28f7809e7f4286b203af212a154f5a8327bd6fd6
     patches :
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0

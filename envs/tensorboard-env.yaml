@@ -2,6 +2,7 @@ builder_version: ">=10.0.1"
 
 imported_envs:
   - bazel-env.yaml
+  - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
 packages:
   - feedstock : tensorboard-data-server
@@ -10,4 +11,3 @@ packages:
     patches :
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
   - feedstock : tensorboard
-git_tag_for_env: open-ce-v1.8.0

@@ -1,5 +1,8 @@
 builder_version: ">=10.0.1"
 
+imported_envs:
+  - common-p10-deps.yaml      #[ppc_arch == "p10"]
+
 packages:
 {% if s390x %}
   - feedstock : https://github.com/AnacondaRecipes/rapidjson-feedstock
@@ -33,4 +36,3 @@ packages:
   - feedstock : grpc-cpp
   - feedstock : pyarrow
   - feedstock : orc
-git_tag_for_env: open-ce-v1.8.0

@@ -2,9 +2,11 @@ builder_version: ">=10.0.1"
 
 imported_envs:
   - bazel-env.yaml
+  - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
 conda_build_configs:
   - tensorflow_serving_conda_build_config.yaml
+  - conda_build_config_p10.yaml        #[ppc_arch == 'p10']
 
 packages:
 {% if not s390x %}
@@ -25,4 +27,3 @@ packages:
   {% endif %}
 
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0

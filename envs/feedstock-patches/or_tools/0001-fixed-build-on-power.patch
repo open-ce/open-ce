@@ -1,0 +1,56 @@
+From f8b78d1e139f645ff759116a901c2ad24e9fcb89 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 1 Feb 2023 14:02:55 +0000
+Subject: [PATCH] fixed build on power
+
+---
+ config/conda_build_config.yaml | 5 +++++
+ recipe/build-cpp.sh            | 4 ++++
+ recipe/build-python.sh         | 4 ++++
+ 3 files changed, 13 insertions(+)
+ create mode 100644 config/conda_build_config.yaml
+
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..5cfedb6
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,5 @@
++c_compiler_version:
++  - 8.*                      # [ppc64le and cudatoolkit == '11.2']
++cxx_compiler_version:
++  - 8.*                      # [ppc64le and cudatoolkit == '11.2']
++
+diff --git a/recipe/build-cpp.sh b/recipe/build-cpp.sh
+index 8795ee5..e31adb8 100644
+--- a/recipe/build-cpp.sh
++++ b/recipe/build-cpp.sh
+@@ -3,6 +3,10 @@
+ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=$PREFIX \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_INSTALL_LIBDIR=lib \
++      -DSPM_BUILD_TEST=ON \
++      -DSPM_ENABLE_TCMALLOC=OFF \
++      -DSPM_USE_BUILTIN_PROTOBUF=OFF \
++      -DCMAKE_AR=$GCC_AR \
+       -DBUILD_SHARED_LIBS=ON \
+       -BUILD_DEPS=OFF \
+       -DUSE_SCIP=OFF \
+diff --git a/recipe/build-python.sh b/recipe/build-python.sh
+index db11530..b55e2e6 100644
+--- a/recipe/build-python.sh
++++ b/recipe/build-python.sh
+@@ -2,6 +2,10 @@
+ 
+ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=$PREFIX \
+       -DCMAKE_BUILD_TYPE=Release \
++      -DSPM_BUILD_TEST=ON \
++      -DSPM_ENABLE_TCMALLOC=OFF \
++      -DSPM_USE_BUILTIN_PROTOBUF=OFF \
++      -DCMAKE_AR=$GCC_AR \
+       -DCMAKE_INSTALL_LIBDIR=lib \
+       -DBUILD_SHARED_LIBS=ON \
+       -DBUILD_DEPS=OFF \
+-- 
+2.34.1
+

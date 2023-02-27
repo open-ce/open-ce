@@ -1,0 +1,27 @@
+From 59791788218a485e1b147ca7d043f2fc993447c1 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 31 Jan 2023 06:19:34 +0000
+Subject: [PATCH] P10 build changes
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index a371299..be09ac0 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -24,8 +24,8 @@ outputs:
+     requirements:
+       build:
+         - gnuconfig  # [unix]
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}      #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}    #[ppc_arch != "p10"]
+         - pkg-config
+         - make  # [unix]
+       host:
+-- 
+2.34.1
+
