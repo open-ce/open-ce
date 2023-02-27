@@ -13,5 +13,3 @@ packages:
     patches :
       - feedstock-patches/prophet/0001-Pin-numpy-to-what-we-use-in-Open-CE.patch
 {% endif %}
-
-git_tag_for_env: open-ce-v1.8.0

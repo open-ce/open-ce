@@ -34,5 +34,3 @@ packages:
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
   - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2' or s390x]
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2' or s390x]
-
-git_tag_for_env: open-ce-v1.8.0

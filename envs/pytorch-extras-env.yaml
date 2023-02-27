@@ -13,4 +13,3 @@ packages:
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
 {% endif %}
-git_tag_for_env: open-ce-v1.8.0

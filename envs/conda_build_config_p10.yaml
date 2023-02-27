@@ -9,4 +9,3 @@ vector_settings:
 python:
   - 3.9
 
-git_tag_for_env: open-ce-v1.8.0
