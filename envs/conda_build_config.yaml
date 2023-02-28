@@ -332,8 +332,6 @@ wasabi:
   - 0.9.*
 werkzeug:
   - 2.*
-wheel:
-  - 0.37*
 wrapt:
   - 1.14.*
 yaml_cpp:
