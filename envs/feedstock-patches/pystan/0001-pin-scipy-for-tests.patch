@@ -1,6 +1,6 @@
-From 55e0da520c257f818e9a2a9800d00419254cdd22 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Wed, 1 Mar 2023 07:10:33 +0000
+From 58336aee864988b0a772c41d31145ded2b4298ef Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 1 Mar 2023 08:11:27 +0000
 Subject: [PATCH] pin scipy for tests
 
 ---
