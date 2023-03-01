@@ -19,6 +19,8 @@ packages:
       - feedstock-patches/pyro-ppl/0001-pin-pytorch-in-recipe.patch
   - feedstock : https://github.com/conda-forge/pystan-feedstock          #[py >= 310]
     git_tag : daf41a0b355802b7d8dcd9df383e9d39d5090b80                   #[py >= 310]
+    patches :                                                            #[py >= 310]
+      - feedstock-patches/pystan/0001-pin-scipy-for-tests.patch          #[py >= 310]
   - feedstock : https://github.com/conda-forge/orbit-ml-feedstock.git
     git_tag : 7de16c99ec18e3474b11e458de69493d10b92eae
     patches :
