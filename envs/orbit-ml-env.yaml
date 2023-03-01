@@ -9,8 +9,6 @@ packages:
 {% if not s390x %}
   - feedstock : https://github.com/conda-forge/pyro-api-feedstock
     git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
-  - feedstock : https://github.com/conda-forge/opt_einsum-feedstock
-    git_tag : 861d394ac99f0e5460b7d9f271a6e7117c6498cc
   - feedstock : https://github.com/conda-forge/arviz-feedstock
     git_tag : edbe33e75097a3ad894f863495a8653d26b10f27
   - feedstock : https://github.com/conda-forge/xarray-einstats-feedstock
@@ -19,12 +17,8 @@ packages:
     git_tag : a0c3ebcb2f652254da2f08f4b87b113d912ee7df
     patches :
       - feedstock-patches/pyro-ppl/0001-pin-pytorch-in-recipe.patch
-  - feedstock : https://github.com/conda-forge/pystan-feedstock
-    git_tag : daf41a0b355802b7d8dcd9df383e9d39d5090b80
-  - feedstock : https://github.com/AnacondaRecipes/libnetcdf-feedstock
-    git_tag: 2e504dea87602cd3ea50fc54b7ed5f13dd705290
-    patches :
-      - feedstock-patches/libnetcdf/0001-remove-git-as-it-is-causing-conflicts.patch
+  - feedstock : https://github.com/conda-forge/pystan-feedstock          #[py >= 310]
+    git_tag : daf41a0b355802b7d8dcd9df383e9d39d5090b80                   #[py >= 310]
   - feedstock : https://github.com/conda-forge/orbit-ml-feedstock.git
     git_tag : 7de16c99ec18e3474b11e458de69493d10b92eae
     patches :
