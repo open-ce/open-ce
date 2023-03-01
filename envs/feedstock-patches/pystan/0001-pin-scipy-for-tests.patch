@@ -1,0 +1,25 @@
+From 55e0da520c257f818e9a2a9800d00419254cdd22 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Wed, 1 Mar 2023 07:10:33 +0000
+Subject: [PATCH] pin scipy for tests
+
+---
+ recipe/meta.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index d267944..f4d1556 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -47,6 +47,8 @@ requirements:
+     - libpython  # [win]
+ 
+ test:
++  requires:
++    - scipy 1.9.3
+   imports:
+     - pystan
+ 
+-- 
+2.34.1
+
