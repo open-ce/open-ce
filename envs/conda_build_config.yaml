@@ -124,6 +124,8 @@ importlib_resources:
   - 5.*
 jasper:
   - 2.0.14
+jax:
+  - 0.3.25
 joblib:
   - 1.*
 jpeg:
@@ -230,7 +232,7 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.19.*
+  - 3.20.3
 psutil:
   - 5
 pybind11:
@@ -295,23 +297,23 @@ sqlite:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.10.*
+  - 2.12.*
 tensorboard_data_server:
   - 0.6.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.10.*
+  - 2.12.*
 tensorflow_hub:
   - 0.12
 tensorflow_io_gcs_filesystem:
-  - 0.27.*
+  - 0.31.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
-  - 2.10.*
+  - 2.12.*
 torchmetrics:
   - 0.8.*
 torchtext:
