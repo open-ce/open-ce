@@ -247,7 +247,7 @@ python:
   - 3.10
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
-  - 1.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 pytorch_lightning:
   - 1.8.*
 pytorch_scatter:
@@ -318,10 +318,10 @@ torchmetrics:
   - 0.8.*
 torchtext:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.14.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 torchvision:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.14.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 tqdm:
   - 4.*
 typer:
@@ -341,7 +341,7 @@ yaml_cpp:
 zlib:
   - 1.2.13
 zstd:
-  - 1.4.*
+  - 1.5.*
 
 ##
 ## ARCHITECTURE SPECIFIC OPTIMIZATION SETTINGS
