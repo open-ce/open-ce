@@ -48,7 +48,9 @@ MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple
 
 ### Builds with Enterprise Production Support
 
-Rocket Software hosts pre-built versions of the Open-CE at conda channel [here](https://anaconda.org/rocketce). This channel provides packages for Power architecture(ppc64le). The latest version of Open-CE can be pulled down using the mentioned channel. In order to get notification you can register at https://community.rocketsoftware.com/forums/forum-home/community-members?communitykey=c7ece6e8-5a29-4a17-a2bc-68b65f89d29f. Please reach out to jadhavs@rocketsoftware.com for any questions and enquiries.
+Rocket Software hosts pre-built versions of the Open-CE at conda channel [here](https://anaconda.org/rocketce). This channel provides packages for Power architecture(ppc64le). The latest version of Open-CE can be pulled down using the mentioned channel.
+
+In order to get notification you can register at https://community.rocketsoftware.com/forums/forum-home/community-members?communitykey=c7ece6e8-5a29-4a17-a2bc-68b65f89d29f. Please reach out to jadhavs@rocketsoftware.com for any questions and enquiries.
 
 ### Installing Packages
 
