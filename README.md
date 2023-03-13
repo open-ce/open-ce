@@ -46,6 +46,12 @@ https://ftp.osuosl.org/pub/open-ce/current/.
 
 MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple versions of Open-CE are hosted within this single channel: https://opence.mit.edu/.
 
+### Builds with Enterprise Production Support
+
+Rocket Software hosts pre-built versions of the Open-CE at conda channel [here](https://anaconda.org/rocketce). This channel provides packages for Power architecture(ppc64le). The latest version of Open-CE can be pulled down using the mentioned channel.
+
+In order to get notification you can register at https://community.rocketsoftware.com/forums/forum-home/community-members?communitykey=c7ece6e8-5a29-4a17-a2bc-68b65f89d29f. Please reach out to jadhavs@rocketsoftware.com for any questions and enquiries.
+
 ### Installing Packages
 
 Open-CE packages can be installed from one of the community [builds](#community-builds). To install packages from one of the community channels, pass the channel's URL to the `conda` tool using the `-c` option.
