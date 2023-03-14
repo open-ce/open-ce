@@ -232,7 +232,7 @@ pkg_config:
 preshed:
   - 3.0.*
 protobuf:
-  - 3.20.3
+  - 3.21.12
 psutil:
   - 5
 pybind11:
