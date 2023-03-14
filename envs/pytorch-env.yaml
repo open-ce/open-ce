@@ -5,21 +5,21 @@ imported_envs:
   - scipy-env.yaml
 
 packages:
-{% if not s390x %}
   - feedstock : pytorch
   - feedstock : numactl
-  {% if build_type == 'cuda' %}
+  - feedstock : sentencepiece
+  - feedstock : torchtext
+{% if not s390x %}
+  - feedstock : av
+  - feedstock : torchvision
+{% endif %}
+{% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : magma
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
   - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
-  {% endif %}
-  - feedstock : sentencepiece
-  - feedstock : torchtext
-  - feedstock : av
-  - feedstock : torchvision
 {% endif %}
 
 git_tag_for_env: open-ce-v1.7.5
