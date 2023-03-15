@@ -22,6 +22,10 @@ packages:
     git_tag : 85fff27f50229187e7877c434590b01ac42ba772
     patches :
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
+  - feedstock : https://github.com/AnacondaRecipes/protobuf-feedstock
+    git_tag : 54310c61fecfabbc17b51b3bd53cd997c7c2686a
+  - feedstock : https://github.com/AnacondaRecipes/libprotobuf-feedstock
+    git_tag : eabbe33f7f0890723340fd73a18dc09d7ea5f467 
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : keras
@@ -39,4 +43,4 @@ packages:
   - feedstock : tensorflow-model-optimization
   - feedstock : typeguard
   - feedstock : tensorflow-addons
-  - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
+#  - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
