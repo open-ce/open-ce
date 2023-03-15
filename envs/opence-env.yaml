@@ -36,3 +36,11 @@ packages:
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
   - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
+  - feedstock : https://github.com/conda-forge/protobuf-feedstock.git
+    git_tag : bd7dc1e77a9284e8aad26c6f02753797499a764f
+    patches :
+      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
+  - feedstock : https://github.com/conda-forge/libprotobuf-feedstock.git
+    git_tag : a2b38e3077de05fe7b71e8d58a73935ecd0891ea 
+    patches :
+      - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch

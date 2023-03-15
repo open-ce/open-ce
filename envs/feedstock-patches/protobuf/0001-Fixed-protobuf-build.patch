@@ -1,0 +1,25 @@
+From 76b7c4eca030d3a00acca303a2e2bb30e0d11f21 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 15 Mar 2023 09:09:13 +0000
+Subject: [PATCH] Fixed build
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 5389f6a..94953e6 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -33,7 +33,7 @@ requirements:
+     - {{ compiler('cxx') }}
+   host:
+     - python
+-    - pip
++    - pip 23.*
+     - libprotobuf {{ lib_major + "." + version }}         # [unix]
+     - libprotobuf-static {{ lib_major + "." + version }}  # [win]
+   run:
+-- 
+2.34.1
+
