@@ -5,6 +5,7 @@ imported_envs:
   - openblas-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
 {% endif %}
+  - common-deps.yaml
 
 packages:
 {% if not s390x %}
@@ -49,5 +50,3 @@ packages:
       - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le and cudatoolkit == '11.2']
 
 {% endif %}
-
-git_tag_for_env: open-ce-v1.8.1
