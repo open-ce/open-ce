@@ -321,7 +321,7 @@ torchmetrics:
 torchtext:
   - 0.11.*               # [cudatoolkit == '11.2']
   - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
-torchvision:             # [not s390x]
+torchvision:
   - 0.11.*               # [cudatoolkit == '11.2']
   - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 tqdm:
