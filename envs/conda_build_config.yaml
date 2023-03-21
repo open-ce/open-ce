@@ -133,7 +133,8 @@ keras_preprocessing:
 keras:
   - 2.9.*
 leveldb:
-  - 1.20.*
+  - 1.20.*  # [not s390x]
+  - 1.22.*  # [s390x]
 libiconv:
   - 1.16
 libdate:
