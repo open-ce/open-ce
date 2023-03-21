@@ -135,8 +135,6 @@ keras:
 leveldb:
   - 1.20.*  # [not s390x]
   - 1.22.*  # [s390x]
-libarchive:
-  - 3.4.*
 libiconv:
   - 1.16
 libdate:
@@ -343,7 +341,7 @@ yaml_cpp:
 zlib:
   - 1.2.13
 zstd:
-  - 1.4.*
+  - 1.5.*
 
 ##
 ## ARCHITECTURE SPECIFIC OPTIMIZATION SETTINGS
