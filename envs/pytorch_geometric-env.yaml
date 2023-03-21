@@ -17,4 +17,4 @@ packages:
   - feedstock : pytorch_geometric
 {% endif %}
 
-git_tag_for_env: open-ce-v1.7.5
+git_tag_for_env: open-ce-v1.7.6

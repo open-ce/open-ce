@@ -22,3 +22,5 @@ packages:
       - feedstock-patches/h5py/0001-Fixed-h5py.patch                   # [build_type == 'cpu' or cudatoolkit == '11.4']
 
   - feedstock : opencv
+
+git_tag_for_env: open-ce-v1.7.6
