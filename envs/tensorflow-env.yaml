@@ -23,6 +23,10 @@ packages:
     patches:                                            # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-Fixed-h5py.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
       - feedstock-patches/h5py/0001-P10-changes.patch    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
+  - feedstock : https://github.com/conda-forge/grpcio-feedstock
+    git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+    patches :
+      - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree

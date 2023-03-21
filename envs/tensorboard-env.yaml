@@ -11,4 +11,8 @@ packages:
     git_tag : 85fff27f50229187e7877c434590b01ac42ba772
     patches :
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
+  - feedstock : https://github.com/conda-forge/grpcio-feedstock 
+    git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+    patches : 
+      - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
   - feedstock : tensorboard

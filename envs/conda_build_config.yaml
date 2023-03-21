@@ -102,11 +102,11 @@ googleapis_common_protos:
 googledrivedownloader:
   - 0.4
 gmock:
-  - 1.10.0
+  - 1.13
 grpc_cpp:
   - 1.41.*
 grpcio:
-  - 1.42.*
+  - 1.51.*
 harfbuzz:
   - 4.3.*
 # Note: hdf5 version must be compatible with h5py
