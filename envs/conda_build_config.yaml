@@ -140,8 +140,6 @@ keras:
   - 2.12.*
 leveldb:
   - 1.23.*
-libarchive:
-  - 3.4.*
 libiconv:
   - 1.16
 libdate:
