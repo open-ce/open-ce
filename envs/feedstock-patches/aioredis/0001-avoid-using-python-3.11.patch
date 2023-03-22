@@ -16,12 +16,12 @@ index 451f045..3ed54c8 100644
    host:
      - pip
 -    - python >=3.6
-+    - python >=3.10
++    - python <=3.10
    run:
      - async-timeout
      - typing-extensions
 -    - python >=3.6
-+    - python >=3.10
++    - python <=3.10
  
  test:
    imports:
