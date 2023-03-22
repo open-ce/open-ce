@@ -70,7 +70,7 @@ cython_blis:
 dm_tree:
   - 0.1.*
 eigen:
-  - 3.3.7
+  - 3.4.*
 ffmpeg:
   - 4.2.*
 flatbuffers:
