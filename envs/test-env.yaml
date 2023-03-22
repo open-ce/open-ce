@@ -1,9 +1,0 @@
-builder_version: ">=10.0.1"
-
-
-packages:
-{% if not s390x %}
-  - feedstock : protobuf
-  - feedstock : libprotobuf
-  - feedstock : sentencepiece
-{% endif %}
