@@ -42,11 +42,12 @@ packages:
     git_tag : 9f8e11bda4a6e61c391acfdc1d31d5c067d350ff
   - feedstock : https://github.com/conda-forge/types-futures-feedstock.git
     git_tag : 727ace026b68af15332f3d655cd2ef5306351932
+  - feedstock : https://github.com/conda-forge/eigen-feedstock.git
+    git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
   - feedstock : https://github.com/conda-forge/or-tools-feedstock.git
     git_tag : 818594b28dbf1ece51a07245d8d0c8fb879895a7
     patches :
       - feedstock-patches/or_tools/0001-update-pin-dependencies.patch
       - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
       - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le and cudatoolkit == '11.2']
-
 {% endif %}
