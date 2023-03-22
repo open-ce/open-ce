@@ -5,7 +5,7 @@ absl_py:
 arviz:
   - 0.14.0
 arrow:
-  - 10.0.1
+  - 11.0.0
 astunparse:
   - 1.6
 attrs:
@@ -84,7 +84,7 @@ fortran_compiler_version:
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
   - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
 fsspec:
-  - 2022.7.*
+  - 2022.11.*
 future:
   - 0.18.*
 gast:
@@ -92,7 +92,7 @@ gast:
 git:
   - 2.34
 google_auth:
-  - 1.*
+  - 2.*
 google_auth_oauthlib:
   - 0.4.*
 google_pasta:
@@ -251,7 +251,7 @@ pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
   - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
 pytorch_lightning:
-  - 1.8.*
+  - 2.0.*
 pytorch_scatter:
   - 2.0.8
 pytorch_sparse:
@@ -317,7 +317,7 @@ termcolor_cpp:
 tf_estimator:
   - 2.12.*
 torchmetrics:
-  - 0.8.*
+  - 0.11.*
 torchtext:
   - 0.11.*               # [cudatoolkit == '11.2']
   - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
