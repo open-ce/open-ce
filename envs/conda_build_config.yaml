@@ -139,7 +139,7 @@ keras_preprocessing:
 keras:
   - 2.10.*
 leveldb:
-  - 1.20.*
+  - 1.23.*
 libarchive:
   - 3.4.*
 libiconv:
