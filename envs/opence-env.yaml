@@ -9,19 +9,19 @@ imported_envs:
   - pytorch_geometric-env.yaml
   - tensorflow-env.yaml
   - xgboost-env.yaml
-  - dali-env.yaml
-  - horovod-env.yaml
+#  - dali-env.yaml
+#  - horovod-env.yaml
   - lightgbm-env.yaml
   - arrow-env.yaml
   - uwsgi-env.yaml
   - mamba-env.yaml
-  - ray-env.yaml
-  - apache-beam-env.yaml
-  - prophet-env.yaml
-  - orbit-ml-env.yaml
-  - deepspeed-env.yaml
+#  - ray-env.yaml
+#  - apache-beam-env.yaml
+#  - prophet-env.yaml
+#  - orbit-ml-env.yaml
+#  - deepspeed-env.yaml
   - misc-env.yaml
-  - or-tools-env.yaml
+#  - or-tools-env.yaml
 
 packages:
   - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
