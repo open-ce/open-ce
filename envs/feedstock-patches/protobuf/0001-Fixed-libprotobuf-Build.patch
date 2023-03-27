@@ -1,0 +1,43 @@
+From ebf5da76a5d9dd9d27b6884d3cd3f78c64b1f25b Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 15 Mar 2023 09:10:21 +0000
+Subject: [PATCH] Fixed libprotobuf Build
+
+---
+ recipe/build-lib.sh    | 4 ++--
+ recipe/build-shared.sh | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/build-lib.sh b/recipe/build-lib.sh
+index 6071cec..e8899ef 100644
+--- a/recipe/build-lib.sh
++++ b/recipe/build-lib.sh
+@@ -5,8 +5,8 @@ if [ "$(uname)" == "Linux" ];
+ then
+     # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
+     # unit test can fail if optmization above 0 are used.
+-    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
+-    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
++#    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
++#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
+     export PROTOBUF_OPT_FLAG="-O2"
+     # to improve performance, disable checks intended for debugging
+     CXXFLAGS="$CXXFLAGS -DNDEBUG"
+diff --git a/recipe/build-shared.sh b/recipe/build-shared.sh
+index ca7bc09..7aa2227 100644
+--- a/recipe/build-shared.sh
++++ b/recipe/build-shared.sh
+@@ -6,8 +6,8 @@ if [ "$(uname)" == "Linux" ];
+ then
+     # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
+     # unit test can fail if optmization above 0 are used.
+-    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
+-    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
++#    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
++#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
+     export PROTOBUF_OPT_FLAG="-O2"
+     # to improve performance, disable checks intended for debugging
+     CXXFLAGS="$CXXFLAGS -DNDEBUG"
+-- 
+2.34.1
+

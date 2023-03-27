@@ -19,8 +19,6 @@ packages:
     git_tag : 3ea659dca911c759e6aeafc490f938754c66e42a
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
-  - feedstock : https://github.com/conda-forge/websockets-feedstock
-    git_tag : 43e34faa25f0283617423c721ec9292b68a224c7
   - feedstock : https://github.com/conda-forge/deepdiff-feedstock
     git_tag : f7914a1d64cf029852de9d6a9c362c2a40374a4f
   - feedstock : https://github.com/conda-forge/ordered-set-feedstock
@@ -30,18 +28,8 @@ packages:
     patches:
       - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
       - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
-  - feedstock : https://github.com/conda-forge/croniter-feedstock
-    git_tag : e2dc0fa0b913d440ffd8806e2b1c61206aefe660
-  - feedstock : https://github.com/conda-forge/s3fs-feedstock
-    git_tag: 83caab226d52d2b2157ca8698dc2c09367667f28
   - feedstock : https://github.com/conda-forge/starsessions-feedstock
     git_tag : bfaa9dcec65958ea57cb839c00b7c4a496e2f033
-  - feedstock : https://github.com/conda-forge/traitlets-feedstock
-    git_tag : b1d94ddb21a4734160fb1116430f9b36ddc3beb5
-  - feedstock : https://github.com/conda-forge/aiobotocore-feedstock
-    git_tag : 053a4abc39ee530d9bea12a9b1541170b9be11bc
-  - feedstock : https://github.com/conda-forge/botocore-feedstock
-    git_tag : 5b03fa862526f072f2887a5535e945661c49e6d6
   - feedstock : https://github.com/conda-forge/inquirer-feedstock
     git_tag : fc7287c59b302b2b01a1dd77a6bdb89020a732b2
     patches:
@@ -52,4 +40,8 @@ packages:
     git_tag : d003de7de0238b34da02a77b3e574a0495015987
   - feedstock : https://github.com/conda-forge/aioredis-feedstock
     git_tag : fbfc6b513846aff97772f21b90ad0d0555884186
+    patches:
+      - feedstock-patches/aioredis/0001-avoid-using-python-3.11.patch
+  - feedstock : https://github.com/conda-forge/dateutils-feedstock
+    git_tag : 2723b1b582889ac1e5f10e8aaf0cb91ff6c41844
 {% endif %}
