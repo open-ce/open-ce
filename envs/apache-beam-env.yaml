@@ -40,6 +40,10 @@ packages:
     git_tag : 96fdeea400960f3950fd685016ea1a0d8acd9e7b 
   - feedstock : https://github.com/conda-forge/objsize-feedstock.git
     git_tag : ab2783f2547e80b5ea7357d0cd7153fc8e94ac7b
+  - feedstock : https://github.com/conda-forge/grpcio-feedstock
+    git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+    patches :
+      - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
   - feedstock : apache-beam
 {% endif %}
 {% endif %}
