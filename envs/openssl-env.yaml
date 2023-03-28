@@ -11,6 +11,6 @@ packages:
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock 
-    git_tag : 2ea8f1f3704a07beda7ed68cfdbfba63c14fde7d
+    git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1
     patches :
       - feedstock-patches/cryptography/0001-opence-changes-for-crytography.patch

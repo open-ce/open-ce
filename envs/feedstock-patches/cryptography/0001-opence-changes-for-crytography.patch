@@ -1,24 +1,24 @@
-From f6454986eef9969b165739b669e0bb9020a55e0d Mon Sep 17 00:00:00 2001
+From 468d3d3d0763a7126e1273e70a18044262be0f1a Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Thu, 16 Mar 2023 08:07:39 +0000
+Date: Tue, 28 Mar 2023 06:09:56 +0000
 Subject: [PATCH] opence changes for crytography
 
+1
 ---
  recipe/meta.yaml | 11 ++++++-----
  1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index fa620f6..1101879 100644
+index 1b76b0f..f279032 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -10,25 +10,26 @@ source:
- 
+@@ -11,24 +11,25 @@ source:
  build:
    number: 0
-+  string: fips_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
    skip: true  # [py<37 or win32]
--  script: {{ PYTHON }} -m pip install . -vv
-+  script: CFLAGS="-I$CONDA_PREFIX/include" LDFLAGS="-L$CONDA_PREFIX/lib"  {{ PYTHON }} -m pip install . -vv
+-  script: {{ PYTHON }} -m pip install . -vv --no-deps
++  string: fips_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
++  script: CFLAGS="-I$CONDA_PREFIX/include" LDFLAGS="-L$CONDA_PREFIX/lib"  {{ PYTHON }} -m pip install . -vv --no-deps
    missing_dso_whitelist:  # [s390x]
      - $RPATH/ld64.so.1    # [s390x]
  requirements:
@@ -30,8 +30,8 @@ index fa620f6..1101879 100644
      - python
      - cffi >=1.12
 -    - pip
--    - setuptools >=40.6.0
-+    - pip {{ pip}}
+-    - setuptools >=40.6.0,!=60.9.0
++    - pip  {{ pip }}
 +    - setuptools {{ setuptools }}
      - setuptools-rust >=0.11.4
      - wheel
