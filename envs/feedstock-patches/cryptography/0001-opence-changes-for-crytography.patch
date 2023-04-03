@@ -1,0 +1,50 @@
+From c9125495fe7f6eb6e795ec32a1c69688180c87cf Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Tue, 28 Mar 2023 11:35:51 +0000
+Subject: [PATCH] opence changes for cryptography
+
+---
+ recipe/meta.yaml | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 1b76b0f..5ad0d87 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -11,24 +11,25 @@ source:
+ build:
+   number: 0
+   skip: true  # [py<37 or win32]
+-  script: {{ PYTHON }} -m pip install . -vv --no-deps
++  string: fips_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
++  script: CFLAGS="-I$CONDA_PREFIX/include" LDFLAGS="-L$CONDA_PREFIX/lib"  {{ PYTHON }} -m pip install . -vv --no-deps
+   missing_dso_whitelist:  # [s390x]
+     - $RPATH/ld64.so.1    # [s390x]
+ requirements:
+   build:
+     - {{ compiler('rust') }}
+-    - vs2017_{{ target_platform }}    # [win]
++    - {{ compiler('c') }}
+   host:
+-    - python
++    - python {{ python }}
+     - cffi >=1.12
+-    - pip
+-    - setuptools >=40.6.0,!=60.9.0
+-    - setuptools-rust >=0.11.4
++    - pip  {{ pip }}
++    - setuptools {{ setuptools }}
++    - setuptools-rust {{ setuptools_rust }}
+     - wheel
+   run:
+-    - python
++    - python {{ python }}
+     - cffi >=1.12
+-    - openssl
++    - openssl 1.1.1zz
+     - libgcc-ng     # [linux]; needed by `_rust.abi3.so`
+ 
+ test:
+-- 
+2.34.1
+

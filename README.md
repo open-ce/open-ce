@@ -31,6 +31,19 @@ be specified at build time. Open-CE currently supports the following:
 The `open-ce` tool can also be used to build all or some of the packages provided by Open-CE. For more information on the `open-ce` tool,
 please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-builder).
 
+#### Open-CE Builder compatibility with various Open-CE releases
+| Open-CE version         | Open-CE Builder version |
+|-------------------------|-------------------------|
+| All releases upto 1.5.2 | <=9.0.0                 |
+| >= 1.5.3                | 9.0.0                   |
+| 1.6.0                   | 10.0.0                  |
+| 1.6.1                   | 10.0.2                  |
+| 1.7.0                   | 11.0.0                  |
+| 1.7.1-1.7.4             | >=11.0.2                |
+| 1.7.5                   | >=11.0.4                |
+| 1.8.0                   | 11.0.3                  |
+| 1.8.1                   | >=11.0.4                |
+
 ## GETTING STARTED
 
 ### Requirements
