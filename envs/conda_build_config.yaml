@@ -213,7 +213,7 @@ openblas:
   - 0.3.20.*    # [cudatoolkit == '11.2']
   - 0.3.21.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
 opencv:
-  - 4.6.*
+  - 4.7.*
 openjdk:
   - 11.0.*
 openmpi:
