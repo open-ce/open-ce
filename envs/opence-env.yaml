@@ -13,7 +13,6 @@ imported_envs:
 #  - horovod-env.yaml
   - lightgbm-env.yaml
   - arrow-env.yaml
-#  - uwsgi-env.yaml
   - mamba-env.yaml
 #  - ray-env.yaml
 #  - apache-beam-env.yaml

@@ -94,7 +94,7 @@ git:
 google_auth:
   - 2.*
 google_auth_oauthlib:
-  - 0.4.*
+  - 0.5.*
 google_pasta:
   - 0.2
 googleapis_common_protos:
@@ -308,7 +308,7 @@ tensorflow:
 tensorflow_hub:
   - 0.13
 tensorflow_io_gcs_filesystem:
-  - 0.31.*
+  - 0.32.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
