@@ -2,14 +2,12 @@ builder_version: ">=10.0.1"
 
 packages:
 {% if not s390x %}
-  - feedstock : https://github.com/conda-forge/holidays-feedstock
-    git_tag : 734de2f5ddff13d7834f0fa3f5968fcf9d438e2a
   - feedstock : https://github.com/conda-forge/cmdstan-feedstock
-    git_tag : 52c0b44afc40e71dc1e628f3903d4776e1d99af0  
+    git_tag : 52c0b44afc40e71dc1e628f3903d4776e1d99af0 
   - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock
-    git_tag : b772ad91fdafb93af0ff5439cae588083493585e
+    git_tag : 1cc20198a84a08ac28515bd601b39047ecedaef6 
   - feedstock : https://github.com/conda-forge/prophet-feedstock
-    git_tag : b909af90ac383a085999dde242eac0390bf6fffd
+    git_tag : 0b31e3221d7b7e640afeabcacf417a8085e8b8a2
     patches :
-      - feedstock-patches/prophet/0001-Pin-numpy-to-what-we-use-in-Open-CE.patch
+      - feedstock-patches/prophet/0001-Pin-dependencies.patch
 {% endif %}
