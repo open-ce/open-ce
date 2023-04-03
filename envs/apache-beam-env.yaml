@@ -1,13 +1,14 @@
 imported_envs:
 {% if not s390x %}
-{% if build_type == 'cpu' or cudatoolkit == '11.4' %}
+{% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
   - arrow-env.yaml
+  - common-deps.yaml
 {% endif %}
 {% endif %}
 
 packages:
 {% if not s390x %}
-{% if build_type == 'cpu' or cudatoolkit == '11.4' %}
+{% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
   - feedstock : https://github.com/conda-forge/httplib2-feedstock.git
     git_tag : 90f5bd5d0fd0c37bf66bf0167fd268df572033cb
   - feedstock : https://github.com/conda-forge/orjson-feedstock.git
@@ -36,10 +37,10 @@ packages:
     git_tag : 932b58eef20b055621ea007b1d828326e7238801
     patches :
       - feedstock-patches/cargo_bundle_licenses/0001-Fixed-build.patch
-  - feedstock : https://github.com/conda-forge/cloudpickle-feedstock
-    git_tag : 96fdeea400960f3950fd685016ea1a0d8acd9e7b 
+  - feedstock : https://github.com/conda-forge/cloudpickle-feedstock 
+    git_tag : 73f5d154a4aad63608ca5f483db5730f0b2f51f1
   - feedstock : https://github.com/conda-forge/objsize-feedstock.git
-    git_tag : ab2783f2547e80b5ea7357d0cd7153fc8e94ac7b
+    git_tag : 3345dbe50a983982838194e4224bb494d5247cc6   
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
