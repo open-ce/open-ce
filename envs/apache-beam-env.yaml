@@ -40,7 +40,7 @@ packages:
   - feedstock : https://github.com/conda-forge/cloudpickle-feedstock 
     git_tag : 73f5d154a4aad63608ca5f483db5730f0b2f51f1
   - feedstock : https://github.com/conda-forge/objsize-feedstock.git
-    git_tag : 3345dbe50a983982838194e4224bb494d5247cc6   
+    git_tag : 3345dbe50a983982838194e4224bb494d5247cc6
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
