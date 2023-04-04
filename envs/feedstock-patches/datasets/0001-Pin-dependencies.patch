@@ -1,0 +1,34 @@
+From b0d1b3f3203dfe0051687e2edb64916b2ff08cb7 Mon Sep 17 00:00:00 2001
+From: ArchanaSinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 4 Apr 2023 07:28:54 +0000
+Subject: [PATCH] Pin dependencies
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 2ad3847..9464321 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,7 +28,7 @@ requirements:
+     - huggingface_hub >=0.2.0,<1.0.0
+     - importlib-metadata
+     - multiprocess
+-    - numpy >=1.17
++    - numpy {{ numpy }}
+     - packaging
+     - pandas
+     - pyarrow >=6.0.0
+@@ -37,7 +37,7 @@ requirements:
+     - pyyaml >=5.1
+     - requests >=2.19.0
+     - responses <0.19
+-    - tqdm >=4.62.1
++    - tqdm {{ tqdm }}
+ 
+ test:
+   imports:
+-- 
+2.34.1
+
