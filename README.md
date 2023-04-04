@@ -5,7 +5,7 @@
 </p>
 
 [![Python Support](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-blue.svg)](#requirements)
-[![Cuda Support](https://img.shields.io/badge/cuda-11.2%20%7C%2011.4-blue)](#)
+[![Cuda Support](https://img.shields.io/badge/cuda-11.2%20%7C%2011.8%20-blue)](#)
 [![Architecture Support](https://img.shields.io/badge/architecture-x86%20%7C%20ppc64le%20%7C%20s390x-blue)](#)
 [![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
 ---
@@ -25,7 +25,7 @@ be specified at build time. Open-CE currently supports the following:
 | --- | --- |
 | Architecture | Power, x86, s390x |
 | Python | 3.8, 3.9, 3.10 |
-| CUDA | 11.2, 11.4 |
+| CUDA | 11.2, 11.8 |
 
 
 The `open-ce` tool can also be used to build all or some of the packages provided by Open-CE. For more information on the `open-ce` tool,
