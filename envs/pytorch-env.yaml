@@ -13,7 +13,7 @@ packages:
   - feedstock : nccl
   - feedstock : magma
   - feedstock : cudnn
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
   {% endif %}
   - feedstock : sentencepiece
   - feedstock : torchdata

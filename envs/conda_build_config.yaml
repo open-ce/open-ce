@@ -30,7 +30,7 @@ boost_mp11:
 c_compiler_version:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.8']
 catalogue:
   - 2.*
 cffi:
@@ -54,11 +54,11 @@ coverage:
 cpp_filesystem:
   - 1.5.*
 cudnn:
-  - 8.3.0.*    # [build_type == 'cuda']
+  - 8.8.*    # [build_type == 'cuda']
 cxx_compiler_version:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.8']
 cxxfilt:
   - 0.2.*
 cymem:
@@ -82,7 +82,7 @@ freetype:
 fortran_compiler_version:
   - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.8']
 fsspec:
   - 2022.11.*
 future:
@@ -94,7 +94,7 @@ git:
 google_auth:
   - 2.*
 google_auth_oauthlib:
-  - 0.4.*
+  - 0.5.*
 google_pasta:
   - 0.2
 googleapis_common_protos:
@@ -111,12 +111,11 @@ harfbuzz:
   - 4.3.*
 # Note: hdf5 version must be compatible with h5py
 hdf5:
-  - 1.12.1     # [build_type == 'cpu' or cudatoolkit == '11.4']
-  - 1.10.6     # [cudatoolkit == '11.2']
+  - 1.10.6
 hypothesis:
   - 5.*
 h5py:
-  - 3.6.*
+  - 3.7.*
 icu:
   - 58.*   #[not s390x]
   - 68.*   #[s390x]
@@ -196,14 +195,14 @@ networkx:
 ninja:
   - 1.10.*
 nccl:
-  - 2.12.*
+  - 2.17.*
 nlohmann_json:
   - 3.*
 numactl:
   - 2.0.*
 numpy:
   - 1.22.*   # [cudatoolkit == '11.2']
-  - 1.23.*   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.23.*   # [build_type == 'cpu' or cudatoolkit == '11.8']
 onnx:
   - 1.13.*
 onnxconverter_common:
@@ -212,9 +211,9 @@ onnx_graphsurgeon:
   - 0.2.*
 openblas:
   - 0.3.20.*    # [cudatoolkit == '11.2']
-  - 0.3.21.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.3.21.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
 opencv:
-  - 4.6.*
+  - 4.7.*
 openjdk:
   - 11.0.*
 openmpi:
@@ -247,13 +246,13 @@ python:
   - 3.10
 pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
-  - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
 pytorch_lightning:
   - 2.0.*
 pytorch_scatter:
-  - 2.0.8
+  - 2.1.1
 pytorch_sparse:
-  - 0.6.10
+  - 0.6.17
 pyyaml:
   - 6.*
 rdflib:
@@ -266,10 +265,10 @@ reproc_cpp:
   - 14.2.*
 rust:
   - 1.62.*     # [cudatoolkit == '11.2']
-  - 1.60.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.60.*     # [build_type == 'cpu' or cudatoolkit == '11.8']
 rust_compiler_version:
   - '1.46.0'   # [cudatoolkit == '11.2']
-  - '1.60.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - '1.60.0'   # [build_type == 'cpu' or cudatoolkit == '11.8']
 safeint:
   - 3.0
 scipy:
@@ -280,10 +279,10 @@ sentencepiece:
   - 0.1.97
 setuptools:
   - 58.*    # [cudatoolkit == '11.2']
-  - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
 setuptools_rust:
   - 0.12.*    # [cudatoolkit == '11.2']
-  - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.8']
 six:
   - 1.16.0
 smart_open:
@@ -309,7 +308,7 @@ tensorflow:
 tensorflow_hub:
   - 0.13
 tensorflow_io_gcs_filesystem:
-  - 0.31.*
+  - 0.32.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
@@ -320,10 +319,10 @@ torchmetrics:
   - 0.11.*
 torchtext:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
 torchvision:
   - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
 tqdm:
   - 4.*
 typer:
@@ -391,12 +390,12 @@ vector_settings:
 ##
 # yamllint disable rule:line-length
 cuda_levels:
-  - 5.2,6.0,7.0,7.5,8.0         # [x86_64 and cudatoolkit == '11.2']
-  - 5.2,6.0,7.0,7.5,8.0,8.6     # [x86_64 and cudatoolkit == '11.4']
-  - 6.0,7.0,7.5,8.0             # [ppc64le and cudatoolkit == '11.2']
-  - 6.0,7.0,7.5,8.0,8.6         # [ppc64le and cudatoolkit == '11.4']
+  - 5.2,6.0,7.0,7.5,8.0             # [x86_64 and cudatoolkit == '11.2']
+  - 5.2,6.0,7.0,7.5,8.0,8.6,9.0     # [x86_64 and cudatoolkit == '11.8']
+  - 6.0,7.0,7.5,8.0                 # [ppc64le and cudatoolkit == '11.2']
+  - 6.0,7.0,7.5,8.0,8.6,9.0         # [ppc64le and cudatoolkit == '11.8']
 cuda_levels_details:
-  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80              # [x86_64 and cudatoolkit == '11.2']
-  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80,compute_86   # [x86_64 and cudatoolkit == '11.4']
-  - sm_60,sm_70,sm_75,sm_80,compute_80                          # [ppc64le and cudatoolkit == '11.2']
-  - sm_60,sm_70,sm_75,sm_80,compute_80,compute_86               # [ppc64le and cudatoolkit == '11.4']
+  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80                         # [x86_64 and cudatoolkit == '11.2']
+  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64 and cudatoolkit == '11.8']
+  - sm_60,sm_70,sm_75,sm_80,compute_80                                     # [ppc64le and cudatoolkit == '11.2']
+  - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90               # [ppc64le and cudatoolkit == '11.8']

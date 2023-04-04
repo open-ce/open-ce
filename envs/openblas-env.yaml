@@ -17,5 +17,5 @@ packages:
     patches:                                              # [cudatoolkit == '11.2']
       - feedstock-patches/openblas/0001-Fixed-build-by-forcing-to-use-open-ce-s-built-llvm-o.patch # [cudatoolkit == '11.2']
 
-  - feedstock : openblas                             # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - feedstock : openblas                             # [build_type == 'cpu' or cudatoolkit == '11.8']
 {% endif %}

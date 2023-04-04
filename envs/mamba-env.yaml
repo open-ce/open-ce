@@ -1,10 +1,10 @@
 builder_version: ">=10.0.1"
 
 packages:
-  - feedstock : https://github.com/conda-forge/fmt-feedstock.git
-    git_tag : eeeff4b2f609793702925006d374aabc68398a89
-  - feedstock : https://github.com/conda-forge/spdlog-feedstock.git
-    git_tag : e0e5a3b6d90257a832b84d9f063cdfe1f999f9fa
+#  - feedstock : https://github.com/conda-forge/fmt-feedstock.git
+#    git_tag : eeeff4b2f609793702925006d374aabc68398a89
+#  - feedstock : https://github.com/conda-forge/spdlog-feedstock.git
+#    git_tag : e0e5a3b6d90257a832b84d9f063cdfe1f999f9fa
   - feedstock : https://github.com/conda-forge/cli11-feedstock
     git_tag : a8e959fcae876db93c92918e57914f632feac574
   - feedstock : https://github.com/conda-forge/pybind11-feedstock

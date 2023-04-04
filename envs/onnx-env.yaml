@@ -1,7 +1,7 @@
 builder_version: ">=10.0.1"
 
-{% if not s390x %}
 imported_envs:
+{% if not s390x %}
   - tensorflow-env.yaml
 {% endif %}
   - common-deps.yaml
@@ -19,7 +19,7 @@ packages:
   - feedstock : https://github.com/conda-forge/cmake-feedstock
     git_tag : 0a6e1b3981a240d0d80829fbfc6080aaf6d2a9f6
   {% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
   - feedstock : cudnn
   - feedstock : nccl
   {% endif %}
