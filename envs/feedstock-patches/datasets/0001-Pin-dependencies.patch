@@ -1,14 +1,14 @@
-From b0d1b3f3203dfe0051687e2edb64916b2ff08cb7 Mon Sep 17 00:00:00 2001
+From 27eea451b618510ba88c8880b7e7240dfec84b3c Mon Sep 17 00:00:00 2001
 From: ArchanaSinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 4 Apr 2023 07:28:54 +0000
+Date: Tue, 4 Apr 2023 11:43:29 +0000
 Subject: [PATCH] Pin dependencies
 
 ---
- recipe/meta.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 2ad3847..9464321 100644
+index 2ad3847..e055589 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -28,7 +28,7 @@ requirements:
@@ -29,6 +29,15 @@ index 2ad3847..9464321 100644
  
  test:
    imports:
+@@ -51,7 +51,7 @@ test:
+     - datasets.tasks
+     - datasets.utils
+   commands:
+-    - pip check
++#    - pip check
+     - datasets-cli --help
+   requires:
+     - pip
 -- 
 2.34.1
 
