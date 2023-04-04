@@ -9,16 +9,16 @@ imported_envs:
   - pytorch_geometric-env.yaml
   - tensorflow-env.yaml
   - xgboost-env.yaml
-#  - dali-env.yaml
+  - dali-env.yaml
   - horovod-env.yaml
   - lightgbm-env.yaml
   - arrow-env.yaml
   - mamba-env.yaml
 #  - ray-env.yaml
-#  - apache-beam-env.yaml
-#  - prophet-env.yaml
+  - apache-beam-env.yaml
+  - prophet-env.yaml
 #  - orbit-ml-env.yaml
-#  - deepspeed-env.yaml
+  - deepspeed-env.yaml
   - misc-env.yaml
 #  - or-tools-env.yaml
 
