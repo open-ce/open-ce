@@ -37,7 +37,7 @@ packages:
     git_tag : 932b58eef20b055621ea007b1d828326e7238801
     patches :
       - feedstock-patches/cargo_bundle_licenses/0001-Fixed-build.patch
-  - feedstock : https://github.com/conda-forge/cloudpickle-feedstock 
+  - feedstock : https://github.com/conda-forge/cloudpickle-feedstock
     git_tag : 73f5d154a4aad63608ca5f483db5730f0b2f51f1
   - feedstock : https://github.com/conda-forge/objsize-feedstock.git
     git_tag : 3345dbe50a983982838194e4224bb494d5247cc6
