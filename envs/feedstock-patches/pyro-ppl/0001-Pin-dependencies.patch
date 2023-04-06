@@ -1,0 +1,36 @@
+From a9de3af6831b83502573164e642b0777ffc24e9d Mon Sep 17 00:00:00 2001
+From: Archana Shinde <archana.shinde2504@gmail.com>
+Date: Thu, 6 Apr 2023 04:58:20 -0400
+Subject: [PATCH] Pin dependencies
+
+---
+ recipe/meta.yaml | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index f5eb8a8..657b826 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -17,14 +17,14 @@ build:
+ requirements:
+   host:
+     - pip
+-    - python >=3.7
++    - python 
+   run:
+-    - numpy >=1.7
++    - numpy {{ numpy }}
+     - opt_einsum >=2.3.2
+     - pyro-api >=0.1.1
+-    - python >=3.7
+-    - pytorch >=1.11
+-    - tqdm >=4.36
++    - python 
++    - pytorch-base {{ pytorch }}
++    - tqdm {{ tqdm }}
+ 
+ test:
+   imports:
+-- 
+2.34.1
+
