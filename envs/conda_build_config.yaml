@@ -1,7 +1,7 @@
 abseil_cpp:
   - 20210324
 absl_py:
-  - 1.0.*
+  - 1.2.*
 arviz:
   - 0.14.0
 arrow:

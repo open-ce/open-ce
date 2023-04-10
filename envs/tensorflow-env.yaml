@@ -13,7 +13,7 @@ packages:
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
 {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
-    git_tag : 85fff27f50229187e7877c434590b01ac42ba772
+    git_tag : 9a61954373232c03c85c64eb9ab4ad198ef64f5f
     patches :
       - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
