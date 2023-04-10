@@ -19,10 +19,6 @@ packages:
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
     git_tag : 1431680c5d1e8b842704ce40ced10377cade59e7
-  - feedstock : https://github.com/conda-forge/gym-feedstock
-    git_tag: 2a7ffecb73b770d6889ec06e133bd3cfe8c02041
-    patches:
-      - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 6c88fc1f9d47e348479edf4a7e28742b2cb49dcb
   - feedstock : dm-tree
