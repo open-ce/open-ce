@@ -13,9 +13,9 @@ packages:
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
 {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
-    git_tag : 9a61954373232c03c85c64eb9ab4ad198ef64f5f
+    git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
     patches :
-      - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
+      - feedstock-patches/absl-py/0001-Updated-to-absl-py-1.2.0.patch
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
@@ -32,6 +32,7 @@ packages:
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
   - feedstock : etils
+  - feedstock : array-record
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
