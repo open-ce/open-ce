@@ -1,5 +1,5 @@
 abseil_cpp:
-  - 20210324
+  - 20230125.0
 absl_py:
   - 1.2.*
 arviz:
