@@ -73,6 +73,8 @@ ffmpeg:
   - 4.2.*
 flatbuffers:
   - 2.0.*
+fmt:
+  - 9.1.0
 freetype:
   - 2
 fortran_compiler_version:
@@ -283,7 +285,7 @@ spacy_legacy:
 spacy_loggers:
   - 1.0.2
 spdlog:
-  - 1.9.2
+  - 1.11.0
 srsly:
   - 2.*
 starlette:
@@ -339,7 +341,7 @@ wrapt:
 yaml_cpp:
   - 0.7.0
 zlib:
-  - 1.2.13
+  - 1.2.*
 zstd:
   - 1.5.*
 
