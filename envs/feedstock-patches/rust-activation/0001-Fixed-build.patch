@@ -1,7 +1,7 @@
-From 41a4f4e85aa699cb93c8acf19823f218db1706ab Mon Sep 17 00:00:00 2001
+From ec5e897074e4f822fe4d0a31860879bff2d4b7eb Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 1 Sep 2022 09:10:41 -0400
-Subject: [PATCH] Fixed build
+Date: Fri, 14 Apr 2023 09:32:50 +0000
+Subject: [PATCH] Merged
 
 ---
  recipe/conda_build_config.yaml | 76 +++++-----------------------------
@@ -9,7 +9,7 @@ Subject: [PATCH] Fixed build
  2 files changed, 12 insertions(+), 71 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index 0f15b38..9b37da2 100644
+index 36c9601..4124840 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
 @@ -1,82 +1,26 @@
@@ -87,8 +87,8 @@ index 0f15b38..9b37da2 100644
 +  - x86_64-conda-linux-gnu-cc           # [x86_64]
 +  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
  version:
-   - 1.60.0
--  - 1.60.0
+   - 1.65.0
+-  - 1.67.0
 -channel_sources:
 -  - conda-forge
 -  - conda-forge/label/rust_dev,conda-forge
@@ -102,11 +102,11 @@ index 0f15b38..9b37da2 100644
      - rust_default_cc
 -    - MACOSX_SDK_VERSION
 -    - MACOSX_DEPLOYMENT_TARGET
-   - - version
--    - channel_sources
+-  - - channel_sources
 -    - channel_targets
+     - version
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index e8a8c79..7fa9536 100644
+index 0e6b86b..4b41d4c 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -37,10 +37,7 @@ outputs:
@@ -133,5 +133,5 @@ index e8a8c79..7fa9536 100644
    - name: rust-gnu_{{ target_platform }}
      script: bld.bat
 -- 
-2.23.0
+2.34.1
 

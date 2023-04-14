@@ -1,0 +1,25 @@
+builder_version: ">=10.0.1"
+
+packages:
+{% if not s390x %}
+  - feedstock : https://github.com/conda-forge/rust-feedstock     # [build_type == 'cpu' or cudatoolkit == '11.4']
+    git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f            # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock # [build_type == 'cpu' or cudatoolkit == '11.4']
+    git_tag : f025039f103f39e50829188fe020b09ec8374edd            # [build_type == 'cpu' or cudatoolkit == '11.4']
+    patches :                                                     # [build_type == 'cpu' or cudatoolkit == '11.4']
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch  # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock # [build_type == 'cpu' or cudatoolkit == '11.4']
+    git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774            # [build_type == 'cpu' or cudatoolkit == '11.4']
+
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git # [cudatoolkit == '11.2']
+    git_tag : 429557ee73ad0f98221df7260733506ac03d30ae            # [cudatoolkit == '11.2']
+    patches :                                                     # [cudatoolkit == '11.2']
+      - feedstock-patches/rust/0001-Fixed-build.patch                # [cudatoolkit == '11.2']
+  - feedstock : tokenizers
+  - feedstock : huggingface_hub
+  - feedstock : sacremoses
+  - feedstock : sentencepiece
+  - feedstock : transformers
+{% endif %}
+
+git_tag_for_env: open-ce-v1.7.7
