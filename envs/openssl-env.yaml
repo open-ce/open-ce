@@ -14,3 +14,5 @@ packages:
     git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1
     patches :
       - feedstock-patches/cryptography/0001-opence-changes-for-crytography.patch
+
+git_tag_for_env: open-ce-v1.7.7
