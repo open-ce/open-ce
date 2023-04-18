@@ -126,7 +126,7 @@ importlib_resources:
 jasper:
   - 2.0.14
 jax:
-  - 0.3.25
+  - 0.4.7
 joblib:
   - 1.*
 jpeg:
@@ -204,7 +204,7 @@ numactl:
   - 2.0.*
 numpy:
   - 1.22.*   # [cudatoolkit == '11.2']
-  - 1.23.*   # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 1.23.5   # [build_type == 'cpu' or cudatoolkit == '11.8']
 onnx:
   - 1.13.*
 onnxconverter_common:

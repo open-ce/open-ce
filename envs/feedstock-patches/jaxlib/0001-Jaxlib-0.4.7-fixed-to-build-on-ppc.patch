@@ -1,0 +1,99 @@
+From 6dc6f7da03bddc51d91e8410cf00910e314a6d73 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 18 Apr 2023 04:16:36 -0400
+Subject: [PATCH] Jaxlib 0.4.7 fixed to build on ppc
+
+---
+ recipe/build.sh                |  2 ++
+ recipe/conda_build_config.yaml |  5 +++++
+ recipe/meta.yaml               | 30 +++++++++++++++---------------
+ 3 files changed, 22 insertions(+), 15 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index f62d09b..7a554b2 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -19,6 +19,8 @@ build --toolchain_resolution_debug
+ build --define=PREFIX=${PREFIX}
+ build --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include
+ build --local_cpu_resources=${CPU_COUNT}"
++build --copt="-fplt"
++build --cxxopt="-fplt"
+ EOF
+ 
+ if [[ "${target_platform}" == "osx-arm64" ]]; then
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index a28f017..871eeca 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -2,3 +2,8 @@ MACOSX_SDK_VERSION:        # [osx and x86_64]
+   - "10.14"                # [osx and x86_64]
+ MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
+   - "10.14"                # [osx and x86_64]
++cuda_compiler_version:
++  - "None"                   # [build_type == 'cpu']
++  - "11.2"                   # [cudatoolkit == '11.2']
++  - "11.8"                   # [cudatoolkit == '11.8']
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 09aac1d..9b9555d 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -30,39 +30,39 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+     - {{ compiler('cuda') }}                 # [cuda_compiler_version != "None"]
+-    - python                                 # [build_platform != target_platform]
++    - python {{ python }}                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-    - numpy                                  # [build_platform != target_platform]
++    - numpy {{ numpy }}                                 # [build_platform != target_platform]
+     - unzip
+     # Keep bazel listed twice here to help the migrators track dependencies
+-    - bazel
+-    - bazel >=5.1.1,<6
++    - bazel {{ bazel }}
+     - bazel-toolchain
+     # need protoc
+-    - libprotobuf
++    - libprotobuf {{ libprotobuf }}
+     # needs protoc-gen-grpc
+-    - libgrpc
++    - grpc-cpp {{ grpc_cpp }}
+     # needs flatc
+-    - flatbuffers <2.0.6
++    - flatbuffers {{ flatbuffers }}
+     # list libabseil here to ensure pinning correctly
+-    - libabseil
++    - libabseil {{ abseil_cpp }}
+   host:
+-    - cudnn      # [cuda_compiler_version != "None"]
+-    - nccl       # [cuda_compiler_version != "None"]
+-    - python
++    - cudnn {{ cudnn }}      # [cuda_compiler_version != "None"]
++    - nccl {{ nccl }}       # [cuda_compiler_version != "None"]
++    - python {{ python }}
+     - pip
+-    - numpy
++    - numpy {{ numpy }}
+     - wheel
+     # list libabseil here to ensure pinning correctly
+-    - libabseil
++    - libabseil {{ abseil_cpp }}
+     - flatbuffers <2.0.6
+-    - libgrpc
++    - grpc-cpp {{ grpc_cpp }}
+     - openssl
+-    - zlib
++    - zlib {{ zlib }}
+   run:
+     - python
+     - {{ pin_compatible('numpy') }}
+     - scipy >=1.5
++    - re2
+     - ml_dtypes >=0.0.3
+     - __cuda  # [cuda_compiler_version != "None"]
+   run_constrained:
+-- 
+2.31.1
+

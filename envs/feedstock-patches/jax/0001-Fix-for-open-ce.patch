@@ -1,0 +1,33 @@
+From 7fc8cd2062156a6fda06d4769048e9f44b15aa97 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 18 Apr 2023 04:19:14 -0400
+Subject: [PATCH] Fix for open-ce
+
+---
+ recipe/meta.yaml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 74ef794..870c1bc 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -21,13 +21,14 @@ requirements:
+     - pip
+   run:
+     - python >=3.8
+-    - numpy >=1.20
++    - numpy {{ numpy }}
+     - opt_einsum
+     - scipy >=1.5
+     - ml_dtypes >=0.0.3
++    - re2
+     # Not declared in the metadata but essential to this package.
+     # update minimum from https://github.com/google/jax/blob/main/jax/version.py#L21
+-    - jaxlib >=0.4.6
++    - jaxlib {{ version }}
+ 
+ test:
+   imports:
+-- 
+2.31.1
+

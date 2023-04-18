@@ -1,0 +1,36 @@
+From f8baef7b12b06082353e96f05ffec1dbd44b71cd Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 17 Apr 2023 09:01:16 -0400
+Subject: [PATCH] Updated for open-ce
+
+---
+ recipe/meta.yaml | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 44d2abf..1ceb538 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -18,14 +18,14 @@ requirements:
+     - {{ compiler('cxx') }}
+     - {{ compiler('c') }}
+     - cross-python_{{ target_platform }}   # [build_platform != target_platform]
+-    - python                               # [build_platform != target_platform]
+-    - numpy                                # [build_platform != target_platform]
++    - python {{ python }}                  # [build_platform != target_platform]
++    - numpy {{ numpy }}                    # [build_platform != target_platform]
+     - pybind11 >=2.10.0,<2.11.dev0         # [build_platform != target_platform]
+   host:
+-    - python
+-    - numpy
++    - python {{ python }}
++    - numpy {{ numpy }}
+     - pybind11 >=2.10.0,<2.11.dev0
+-    - setuptools >=67.6.0,<67.7.dev0
++    - setuptools {{ setuptools }}
+     - pip
+   run:
+     - python
+-- 
+2.31.1
+
