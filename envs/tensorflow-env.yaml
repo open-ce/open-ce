@@ -33,7 +33,7 @@ packages:
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
   - feedstock : etils
-    #- feedstock : array-record
+  - feedstock : array-record
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization

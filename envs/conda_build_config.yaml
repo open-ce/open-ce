@@ -3,7 +3,7 @@ abseil_cpp:
 absl_py:
   - 1.2.*
 array_record:
-  - 0.1.*
+  - 0.2.*
 arviz:
   - 0.14.0
 arrow:
