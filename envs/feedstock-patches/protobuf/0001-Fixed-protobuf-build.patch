@@ -1,12 +1,24 @@
-From 76b7c4eca030d3a00acca303a2e2bb30e0d11f21 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 15 Mar 2023 09:09:13 +0000
-Subject: [PATCH] Fixed build
+From 3918b9c2893b64877c5571c9f9eead8496307882 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 19 Apr 2023 09:22:02 +0000
+Subject: [PATCH] Fixed protobuf Build
 
 ---
- recipe/meta.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ config/conda_build_config.yaml | 4 ++++
+ recipe/meta.yaml               | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+ create mode 100644 config/conda_build_config.yaml
 
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..c793a51
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,4 @@
++c_compiler_version:
++  - 8.2.0          # [ppc64le and cudatoolkit == "11.2"]
++cxx_compiler_version:
++  - 8.2.0          # [ppc64le and cudatoolkit == "11.2"]
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 5389f6a..94953e6 100644
 --- a/recipe/meta.yaml
