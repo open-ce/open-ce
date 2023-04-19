@@ -278,7 +278,7 @@ scipy:
 scikit_learn:
   - 1.1.*
 sentencepiece:
-  - 0.1.97
+  - 0.1.98
 setuptools:
   - 58.*    # [cudatoolkit == '11.2']
   - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
