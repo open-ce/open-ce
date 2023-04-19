@@ -16,7 +16,7 @@ packages:
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
   {% endif %}
   - feedstock : sentencepiece
-  - feedstock : torchdata
+  - feedstock : torchdata      # [build_type == 'cpu' or cudatoolkit == '11.8']
   - feedstock : torchtext
   - feedstock : av
   - feedstock : torchvision
