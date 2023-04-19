@@ -1,0 +1,172 @@
+From 81f715059ced63dad6c7a39064c17987f75b2110 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 19 Apr 2023 05:55:19 +0000
+Subject: [PATCH] Jaxlib changes for open-ce
+
+---
+ recipe/build.sh                               |   2 ++
+ recipe/conda_build_config.yaml                |   5 +++
+ recipe/meta.yaml                              |  32 ++++++++++--------
+ .../0003-Patched-openxla-for-tf_runtime.patch | Bin 0 -> 7917 bytes
+ 4 files changed, 24 insertions(+), 15 deletions(-)
+ create mode 100644 recipe/patches/0003-Patched-openxla-for-tf_runtime.patch
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index f62d09b..7a554b2 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -19,6 +19,8 @@ build --toolchain_resolution_debug
+ build --define=PREFIX=${PREFIX}
+ build --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include
+ build --local_cpu_resources=${CPU_COUNT}"
++build --copt="-fplt"
++build --cxxopt="-fplt"
+ EOF
+ 
+ if [[ "${target_platform}" == "osx-arm64" ]]; then
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index a28f017..871eeca 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -2,3 +2,8 @@ MACOSX_SDK_VERSION:        # [osx and x86_64]
+   - "10.14"                # [osx and x86_64]
+ MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
+   - "10.14"                # [osx and x86_64]
++cuda_compiler_version:
++  - "None"                   # [build_type == 'cpu']
++  - "11.2"                   # [cudatoolkit == '11.2']
++  - "11.8"                   # [cudatoolkit == '11.8']
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 09aac1d..e91a49a 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -17,6 +17,7 @@ source:
+   patches:
+     - patches/0001-custom-build.diff
+     - patches/0002-bazelrc-edit.diff  # [cuda_compiler_version == "11.2"]
++    - patches/0003-Patched-openxla-for-tf_runtime.patch      #[s390x]
+ 
+ build:
+   number: {{ number }}
+@@ -30,39 +31,40 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+     - {{ compiler('cuda') }}                 # [cuda_compiler_version != "None"]
+-    - python                                 # [build_platform != target_platform]
++    - python {{ python }}                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-    - numpy                                  # [build_platform != target_platform]
++    - numpy {{ numpy }}                                 # [build_platform != target_platform]
+     - unzip
+     # Keep bazel listed twice here to help the migrators track dependencies
+-    - bazel
+-    - bazel >=5.1.1,<6
++    - bazel {{ bazel }}
+     - bazel-toolchain
+     # need protoc
+-    - libprotobuf
++    - libprotobuf {{ libprotobuf }}
+     # needs protoc-gen-grpc
+-    - libgrpc
++    - grpc-cpp {{ grpc_cpp }}
+     # needs flatc
+-    - flatbuffers <2.0.6
++    - flatbuffers {{ flatbuffers }}
+     # list libabseil here to ensure pinning correctly
+-    - libabseil
++    - libabseil {{ abseil_cpp }}
+   host:
+-    - cudnn      # [cuda_compiler_version != "None"]
+-    - nccl       # [cuda_compiler_version != "None"]
+-    - python
++    - cudnn {{ cudnn }}      # [cuda_compiler_version != "None"]
++    - nccl {{ nccl }}       # [cuda_compiler_version != "None"]
++    - python {{ python }}
+     - pip
+-    - numpy
++    - numpy {{ numpy }}
+     - wheel
+     # list libabseil here to ensure pinning correctly
+-    - libabseil
++    - libabseil {{ abseil_cpp }}
+     - flatbuffers <2.0.6
+-    - libgrpc
++    - grpc-cpp {{ grpc_cpp }}
+     - openssl
+-    - zlib
++    - zlib {{ zlib }}
+   run:
+     - python
+     - {{ pin_compatible('numpy') }}
+     - scipy >=1.5
++    - re2
++    - c-ares
+     - ml_dtypes >=0.0.3
+     - __cuda  # [cuda_compiler_version != "None"]
+   run_constrained:
+diff --git a/recipe/patches/0003-Patched-openxla-for-tf_runtime.patch b/recipe/patches/0003-Patched-openxla-for-tf_runtime.patch
+new file mode 100644
+index 0000000000000000000000000000000000000000..e72979e754db651d5e2c6780cb7eb307255dfffb
+GIT binary patch
+literal 7917
+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
+
+literal 0
+HcmV?d00001
+
+-- 
+2.34.1
+
