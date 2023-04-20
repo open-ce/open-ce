@@ -39,4 +39,5 @@ packages:
   - feedstock: https://github.com/conda-forge/jaxlib-feedstock
     git_tag : 6ab76659ccfadf22c682dee27a7f2d467674561c
     patches :
-      - feedstock-patches/jaxlib/0001-Jaxlib-changes-for-open-ce.patch
+      - feedstock-patches/jaxlib/0001-Jaxlib-changes-for-open-ce.patch          #[build_type == 'cpu']
+      - feedstock-patches/jaxlib/0001-Cuda-build-changes-for-open-ce.patch      #[build_type == 'cuda']
