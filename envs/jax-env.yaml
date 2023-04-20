@@ -4,6 +4,15 @@ imported_envs:
   - tensorflow-s390x-extra-deps-env.yaml
 
 packages:
+{% if build_type == 'cuda' %}
+  - feedstock : nccl
+  - feedstock : cudnn
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
+  - feedstock : https://github.com/conda-forge/nvcc-feedstock
+    git_tag : 9c8e43393d9c798c52a9d8e56785920ef767cabb
+    patches :
+      - feedstock-patches/nvcc/0001-Changes-for-open-ce.patch
+{% endif %}
   - feedstock: https://github.com/conda-forge/ml_dtypes-feedstock
     git_tag : 223279658692d13684fe7aba1fdb61c6ee77076d
     patches :
