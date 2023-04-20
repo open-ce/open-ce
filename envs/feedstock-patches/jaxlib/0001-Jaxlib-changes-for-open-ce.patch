@@ -1,14 +1,14 @@
-From 81f715059ced63dad6c7a39064c17987f75b2110 Mon Sep 17 00:00:00 2001
+From f74a255668dcdff09675a3a3231abeef131e8c8f Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 19 Apr 2023 05:55:19 +0000
+Date: Thu, 20 Apr 2023 06:52:00 +0000
 Subject: [PATCH] Jaxlib changes for open-ce
 
 ---
- recipe/build.sh                               |   2 ++
- recipe/conda_build_config.yaml                |   5 +++
- recipe/meta.yaml                              |  32 ++++++++++--------
- .../0003-Patched-openxla-for-tf_runtime.patch | Bin 0 -> 7917 bytes
- 4 files changed, 24 insertions(+), 15 deletions(-)
+ recipe/build.sh                               |   2 +
+ recipe/conda_build_config.yaml                |   5 +
+ recipe/meta.yaml                              |  32 +--
+ .../0003-Patched-openxla-for-tf_runtime.patch | 196 ++++++++++++++++++
+ 4 files changed, 220 insertions(+), 15 deletions(-)
  create mode 100644 recipe/patches/0003-Patched-openxla-for-tf_runtime.patch
 
 diff --git a/recipe/build.sh b/recipe/build.sh
@@ -107,66 +107,206 @@ index 09aac1d..e91a49a 100644
    run_constrained:
 diff --git a/recipe/patches/0003-Patched-openxla-for-tf_runtime.patch b/recipe/patches/0003-Patched-openxla-for-tf_runtime.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..e72979e754db651d5e2c6780cb7eb307255dfffb
-GIT binary patch
-literal 7917
-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
-
-literal 0
-HcmV?d00001
-
+index 0000000..e72979e
+--- /dev/null
++++ b/recipe/patches/0003-Patched-openxla-for-tf_runtime.patch
+@@ -0,0 +1,196 @@
++From 03aa78468acc523db8d3043af3b7ed121ed9a7c9 Mon Sep 17 00:00:00 2001
++From: Nishidha Panpaliya <npanpa23@in.ibm.com>
++Date: Tue, 18 Apr 2023 06:09:25 +0000
++Subject: [PATCH] Patched XLA for TF runtime
++
++---
++ WORKSPACE                                     |   4 +-
++ build/build.py                                |   1 +
++ build/build_wheel.py                          |   1 +
++ ...001-TF-runtime-patched-on-big-endian.patch | 130 ++++++++++++++++++
++ 4 files changed, 135 insertions(+), 1 deletion(-)
++ create mode 100644 third_party/xla/0001-TF-runtime-patched-on-big-endian.patch
++
++diff --git a/WORKSPACE b/WORKSPACE
++index baf0f76e5..5cbae9e2c 100644
++--- a/WORKSPACE
+++++ b/WORKSPACE
++@@ -12,6 +12,8 @@ http_archive(
++     urls = [
++         "https://github.com/openxla/xla/archive/79ca8d03c296ede04dc9a86ce9dde79ed909dda8.tar.gz",
++     ],
+++    patch_args = ["-p1"],
+++    patches = ["//third_party:xla/0001-TF-runtime-patched-on-big-endian.patch"],
++ )
++ 
++ # For development, one often wants to make changes to the TF repository as well
++@@ -47,4 +49,4 @@ xla_workspace0()
++ 
++ 
++ load("//third_party/flatbuffers:workspace.bzl", flatbuffers = "repo")
++-flatbuffers()
++\ No newline at end of file
+++flatbuffers()
++diff --git a/build/build.py b/build/build.py
++index 85e3c5e17..a3bbf0303 100755
++--- a/build/build.py
+++++ b/build/build.py
++@@ -469,6 +469,7 @@ def main():
++       "darwin_arm64": "arm64",
++       "darwin_x86_64": "x86_64",
++       "ppc": "ppc64le",
+++      "s390x": "s390x",
++       "aarch64": "aarch64",
++   }
++   # TODO(phawkins): support other bazel cpu overrides.
++diff --git a/build/build_wheel.py b/build/build_wheel.py
++index 421440321..8c26c7ee9 100644
++--- a/build/build_wheel.py
+++++ b/build/build_wheel.py
++@@ -264,6 +264,7 @@ def build_wheel(sources_path, output_path, cpu):
++     ("Linux", "x86_64"): ("manylinux2014", "x86_64"),
++     ("Linux", "aarch64"): ("manylinux2014", "aarch64"),
++     ("Linux", "ppc64le"): ("manylinux2014", "ppc64le"),
+++    ("Linux", "s390x"): ("manylinux2014", "s390x"),
++     ("Darwin", "x86_64"): ("macosx_10_14", "x86_64"),
++     ("Darwin", "arm64"): ("macosx_11_0", "arm64"),
++     ("Windows", "AMD64"): ("win", "amd64"),
++diff --git a/third_party/xla/0001-TF-runtime-patched-on-big-endian.patch b/third_party/xla/0001-TF-runtime-patched-on-big-endian.patch
++new file mode 100644
++index 000000000..2461a2ff4
++--- /dev/null
+++++ b/third_party/xla/0001-TF-runtime-patched-on-big-endian.patch
++@@ -0,0 +1,130 @@
+++From d3ffb36eaee7e1905a6a5d70e30d7d5269f8adc8 Mon Sep 17 00:00:00 2001
+++From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+++Date: Tue, 18 Apr 2023 06:08:00 +0000
+++Subject: [PATCH] TF runtime patched on big endian
+++
+++---
+++ ...ble-asserts-for-little-endian-checks.patch | 85 +++++++++++++++++++
+++ third_party/tf_runtime/workspace.bzl          |  2 +-
+++ third_party/tsl/workspace3.bzl                |  2 +-
+++ 3 files changed, 87 insertions(+), 2 deletions(-)
+++ create mode 100644 third_party/tf_runtime/0001-Disable-asserts-for-little-endian-checks.patch
+++
+++diff --git a/third_party/tf_runtime/0001-Disable-asserts-for-little-endian-checks.patch b/third_party/tf_runtime/0001-Disable-asserts-for-little-endian-checks.patch
+++new file mode 100644
+++index 000000000..07b042e74
+++--- /dev/null
++++++ b/third_party/tf_runtime/0001-Disable-asserts-for-little-endian-checks.patch
+++@@ -0,0 +1,85 @@
++++From d3bb7c35e60e6cf619dd43435e4643fa059cc615 Mon Sep 17 00:00:00 2001
++++From: Nishidha Panpaliya <npanpa23@in.ibm.com>
++++Date: Fri, 14 Apr 2023 11:37:23 +0000
++++Subject: [PATCH] Disable asserts for little endian checks
++++
++++---
++++ include/tfrt/bef/bef_reader.h               | 2 +-
++++ include/tfrt/bef_converter/bef_emitter.h    | 2 +-
++++ include/tfrt/host_context/attribute_utils.h | 4 ++--
++++ lib/tensor/tensor_serialize_utils.cc        | 4 ++--
++++ 4 files changed, 6 insertions(+), 6 deletions(-)
++++
++++diff --git a/include/tfrt/bef/bef_reader.h b/include/tfrt/bef/bef_reader.h
++++index b0ff7ab5..20bc6e62 100644
++++--- a/include/tfrt/bef/bef_reader.h
+++++++ b/include/tfrt/bef/bef_reader.h
++++@@ -146,7 +146,7 @@ class BEFKernel {
++++                                                    kKernelEntryAlignment) /
++++                                          kKernelEntryAlignment),
++++         body_start_(result_table_ + header_->num_results) {
++++-    ASSERT_LITTLE_ENDIAN();
+++++    //ASSERT_LITTLE_ENDIAN();
++++   }
++++ 
++++   uint32_t kernel_code() const { return header_->kernel_code; }
++++diff --git a/include/tfrt/bef_converter/bef_emitter.h b/include/tfrt/bef_converter/bef_emitter.h
++++index 2aae7d44..154eda31 100644
++++--- a/include/tfrt/bef_converter/bef_emitter.h
+++++++ b/include/tfrt/bef_converter/bef_emitter.h
++++@@ -59,7 +59,7 @@ class BefEmitter {
++++   // Emit a generic typed value: e.g., Emit<uint32_t>(val).
++++   template <typename T>
++++   void Emit(T value) {
++++-    ASSERT_LITTLE_ENDIAN();
+++++    //ASSERT_LITTLE_ENDIAN();
++++     EmitAlignment(alignof(T));
++++     EmitBytes(llvm::ArrayRef(reinterpret_cast<uint8_t*>(&value), sizeof(T)));
++++   }
++++diff --git a/include/tfrt/host_context/attribute_utils.h b/include/tfrt/host_context/attribute_utils.h
++++index cbded469..b1074096 100644
++++--- a/include/tfrt/host_context/attribute_utils.h
+++++++ b/include/tfrt/host_context/attribute_utils.h
++++@@ -52,7 +52,7 @@ class Attribute {
++++  public:
++++   explicit Attribute(const void* value)
++++       : value_(*reinterpret_cast<const T*>(value)) {
++++-    ASSERT_LITTLE_ENDIAN();
+++++    //ASSERT_LITTLE_ENDIAN();
++++   }
++++ 
++++   const T& get() const { return value_; }
++++@@ -127,7 +127,7 @@ class CompilationUnitAttribute {
++++  public:
++++   explicit CompilationUnitAttribute(const void* value)
++++       : addr_(reinterpret_cast<intptr_t>(value)) {
++++-    ASSERT_LITTLE_ENDIAN();
+++++    //ASSERT_LITTLE_ENDIAN();
++++     const auto* ptr = static_cast<const uint8_t*>(value);
++++ 
++++     ptr = ReadVbrInt(ptr, &id_);
++++diff --git a/lib/tensor/tensor_serialize_utils.cc b/lib/tensor/tensor_serialize_utils.cc
++++index ddaa7b1b..c585054e 100644
++++--- a/lib/tensor/tensor_serialize_utils.cc
+++++++ b/lib/tensor/tensor_serialize_utils.cc
++++@@ -102,7 +102,7 @@ std::string SerializeTensorMetadata(const TensorMetadata& md) {
++++ 
++++ llvm::Expected<TensorMetadata> DeserializeTensorMetadataInternal(
++++     const char* pos, size_t size) {
++++-  ASSERT_LITTLE_ENDIAN();
+++++  //ASSERT_LITTLE_ENDIAN();
++++   DType kind = static_cast<DType>(*reinterpret_cast<const uint64_t*>(pos));
++++   pos += sizeof(uint64_t);
++++   const int num_dimensions = size / 8 - 1;
++++@@ -119,7 +119,7 @@ llvm::Expected<TensorMetadata> DeserializeTensorMetadataInternal(
++++ 
++++ llvm::Expected<TensorMetadata> DeserializeTensorMetadata(
++++     string_view serialized) {
++++-  ASSERT_LITTLE_ENDIAN();
+++++  //ASSERT_LITTLE_ENDIAN();
++++   return DeserializeTensorMetadataInternal(serialized.data(),
++++                                            serialized.size());
++++ }
++++-- 
++++2.34.1
++++
+++diff --git a/third_party/tf_runtime/workspace.bzl b/third_party/tf_runtime/workspace.bzl
+++index f61b4868f..84b57d37f 100644
+++--- a/third_party/tf_runtime/workspace.bzl
++++++ b/third_party/tf_runtime/workspace.bzl
+++@@ -16,5 +16,5 @@ def repo():
+++         urls = tf_mirror_urls("https://github.com/tensorflow/runtime/archive/{commit}.tar.gz".format(commit = TFRT_COMMIT)),
+++         # A patch file can be provided for atomic commits to both TF and TFRT.
+++         # The job that bumps the TFRT_COMMIT also resets patch_file to 'None'.
+++-        patch_file = None,
++++        patch_file = ["//third_party:tf_runtime/0001-Disable-asserts-for-little-endian-checks.patch"],
+++     )
+++diff --git a/third_party/tsl/workspace3.bzl b/third_party/tsl/workspace3.bzl
+++index 41cfed2b2..20dd80302 100644
+++--- a/third_party/tsl/workspace3.bzl
++++++ b/third_party/tsl/workspace3.bzl
+++@@ -15,7 +15,7 @@ def workspace():
+++         ],
+++     )
+++ 
+++-    tf_runtime()
++++    #tf_runtime()
+++ 
+++     # https://github.com/bazelbuild/bazel-skylib/releases
+++     http_archive(
+++-- 
+++2.34.1
+++
++-- 
++2.34.1
++
 -- 
 2.34.1
 

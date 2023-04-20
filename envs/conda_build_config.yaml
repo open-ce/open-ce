@@ -212,8 +212,7 @@ onnxconverter_common:
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.20.*    # [cudatoolkit == '11.2']
-  - 0.3.23.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 0.3.23.*
 opencv:
   - 4.7.*
 openjdk:

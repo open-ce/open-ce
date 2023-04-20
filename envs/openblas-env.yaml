@@ -12,10 +12,5 @@ packages:
       - feedstock-patches/openmp/0002-disable-LIBOMPTARGET-to-fix-build-on-baremetal.patch
       - feedstock-patches/openmp/0003-P10-changes.patch
       - feedstock-patches/openmp/0004-Updated-openmp-to-14.0.6.patch
-  - feedstock : openblas                                  # [cudatoolkit == '11.2']
-    git_tag: 3e15134ab02161e1018786deb0e5645354c7178f     # [cudatoolkit == '11.2']
-    patches:                                              # [cudatoolkit == '11.2']
-      - feedstock-patches/openblas/0001-Fixed-build-by-forcing-to-use-open-ce-s-built-llvm-o.patch # [cudatoolkit == '11.2']
-
-  - feedstock : openblas                             # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - feedstock : openblas
 {% endif %}
