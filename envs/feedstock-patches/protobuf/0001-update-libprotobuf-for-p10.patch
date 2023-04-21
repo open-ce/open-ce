@@ -1,0 +1,38 @@
+From f26dd765ddc75210ceffaccdb1fe82e770020855 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 21 Apr 2023 13:28:53 +0000
+Subject: [PATCH] update libprotobuf for p10
+
+---
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index a640fd7..827ec79 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -46,8 +46,8 @@ outputs:
+         - {{ pin_subpackage('libprotobuf', max_pin='x.x') }}
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}            #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}          #[ppc_arch != "p10"]
+         - cmake       # [win]
+         - ninja       # [win]
+         - autoconf    # [not win]
+@@ -106,8 +106,8 @@ outputs:
+     script: build-lib.bat  # [win]
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}            #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}          #[ppc_arch != "p10"]
+         - cmake  # [win]
+         - ninja  # [win]
+       host:
+-- 
+2.34.1
+
