@@ -1,7 +1,7 @@
-From 78603f9845f20e3ae289baa61eabff8c6073f04f Mon Sep 17 00:00:00 2001
+From ca7f7568dd0fb94526ec8ce9fddf5130cbaceee0 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23in.ibm.com>
-Date: Thu, 20 Apr 2023 17:25:18 +0000
-Subject: [PATCH] Cuda build changes
+Date: Fri, 21 Apr 2023 05:52:31 +0000
+Subject: [PATCH] Cuda changes
 
 ---
  recipe/build.sh                | 17 +++++++++--------
@@ -68,7 +68,7 @@ index 871eeca..310f166 100644
 +cudnn:
 +  - 8.8.1
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index e91a49a..1d09ede 100644
+index e91a49a..bfd6f45 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -25,6 +25,8 @@ build:
@@ -80,23 +80,17 @@ index e91a49a..1d09ede 100644
  
  requirements:
    build:
-@@ -66,7 +68,7 @@ requirements:
+@@ -65,8 +67,9 @@ requirements:
+     - scipy >=1.5
      - re2
      - c-ares
++    - nccl {{ nccl }}      #[build_type == 'cuda']
      - ml_dtypes >=0.0.3
 -    - __cuda  # [cuda_compiler_version != "None"]
 +    #- __cuda  # [cuda_compiler_version != "None"]
    run_constrained:
      - jax >={{ version }}
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx]
-@@ -76,6 +78,7 @@ test:
-     - test_jaxlib.py
-   requires:
-     - pip
-+    - nccl {{ nccl }}
-   commands:
-     - pip check
-     - python test_jaxlib.py
 -- 
 2.34.1
 
