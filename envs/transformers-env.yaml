@@ -21,5 +21,3 @@ packages:
   - feedstock : sentencepiece
   - feedstock : transformers
 {% endif %}
-
-git_tag_for_env: open-ce-v1.7.7
