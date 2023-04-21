@@ -1,17 +1,17 @@
-From 1f1f6a282a120ecb8587e5914911bbc94ae7a9f3 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23in.ibm.com>
-Date: Wed, 19 Apr 2023 08:42:18 +0000
-Subject: [PATCH] Jax fixed for open-ce
+From 8709bffce0ec3a7ea02c8ab05833479cd524a72d Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Fri, 21 Apr 2023 00:31:21 -0500
+Subject: [PATCH] Fix for open-ce
 
 ---
- recipe/meta.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 74ef794..3a8e577 100644
+index 74ef794..5808406 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -21,13 +21,15 @@ requirements:
+@@ -21,13 +21,16 @@ requirements:
      - pip
    run:
      - python >=3.8
@@ -22,6 +22,7 @@ index 74ef794..3a8e577 100644
      - ml_dtypes >=0.0.3
 +    - re2
 +    - c-ares
++    - nccl {{ nccl }}
      # Not declared in the metadata but essential to this package.
      # update minimum from https://github.com/google/jax/blob/main/jax/version.py#L21
 -    - jaxlib >=0.4.6
@@ -30,5 +31,5 @@ index 74ef794..3a8e577 100644
  test:
    imports:
 -- 
-2.34.1
+2.31.1
 
