@@ -15,9 +15,9 @@ index 0000000..ebe6ac5
 +++ b/config/conda_build_config.yaml
 @@ -0,0 +1,5 @@
 +c_compiler_version:
-+  - 11.2.0          # [ppc64le and cudatoolkit == "11.2"]
++  - 11.2.0          # [cudatoolkit == "11.2"]
 +cxx_compiler_version:
-+  - 11.2.0          # [ppc64le and cudatoolkit == "11.2"]
++  - 11.2.0          # [cudatoolkit == "11.2"]
 +
 -- 
 2.34.1
