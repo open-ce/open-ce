@@ -15,9 +15,9 @@ index 0000000..c793a51
 +++ b/config/conda_build_config.yaml
 @@ -0,0 +1,4 @@
 +c_compiler_version:
-+  - 8.2.0          # [cudatoolkit == "11.2"]
++  - 8.*          # [cudatoolkit == "11.2"]
 +cxx_compiler_version:
-+  - 8.2.0          # [cudatoolkit == "11.2"]
++  - 8.*          # [cudatoolkit == "11.2"]
 -- 
 2.31.1
 
