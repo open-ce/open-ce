@@ -16,7 +16,8 @@ packages:
   - feedstock: https://github.com/conda-forge/ml_dtypes-feedstock
     git_tag : 223279658692d13684fe7aba1fdb61c6ee77076d
     patches :
-      - feedstock-patches/ml_dtypes/0001-Updated-for-open-ce.patch 
+      - feedstock-patches/ml_dtypes/0001-Updated-for-open-ce.patch
+      - feedstock-patches/ml_dtypes/0001-Fixed-build-for-cuda-11.2.patch       #[cudatoolkit == '11.2']
   - feedstock: https://github.com/conda-forge/pyink-feedstock
     git_tag : a2e8c2f6bdb6929afbb52efb03c62e3dcaa0000b
     patches :
@@ -32,5 +33,7 @@ packages:
   - feedstock : grpc-cpp
   - feedstock: https://github.com/conda-forge/bazel-toolchain-feedstock
     git_tag : 8da0f5daa593b72ffee327c8df149bab04b903bb
+    patches :
+      - feedstock-patches/bazel-toolchain/0001-Use-gcc-8.2-for-cuda-11.2-builds.patch
   - feedstock : jax
   - feedstock : jaxlib
