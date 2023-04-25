@@ -18,6 +18,8 @@ packages:
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   - feedstock : https://github.com/conda-forge/cmake-feedstock
     git_tag : 0a6e1b3981a240d0d80829fbfc6080aaf6d2a9f6
+    patches :
+      - feedstock-patches/cmake/0001-use-GCC-8-for-cuda-11.2-builds.patch
   {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
   - feedstock : cudnn
