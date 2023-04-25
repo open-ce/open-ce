@@ -14,7 +14,7 @@ packages:
       - feedstock-patches/nvcc/0001-Changes-for-open-ce.patch
 {% endif %}
   - feedstock: https://github.com/conda-forge/ml_dtypes-feedstock
-    git_tag : 223279658692d13684fe7aba1fdb61c6ee77076d
+    git_tag : f4c0c1b67f25ab103bee27cea5ea57e59ebb8b29
     patches :
       - feedstock-patches/ml_dtypes/0001-Updated-for-open-ce.patch
       - feedstock-patches/ml_dtypes/0001-Fixed-build-for-cuda-11.2.patch       #[cudatoolkit == '11.2']

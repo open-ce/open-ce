@@ -1,12 +1,11 @@
-From 20cee8bbfb39971952e3b1182bd45fbe2b1834ba Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Tue, 25 Apr 2023 06:05:31 -0500
-Subject: [PATCH] Fixed build for cuda 11.2
+From 41d19889859f6918387832a488e4c59762b18244 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23in.ibm.com>
+Date: Tue, 25 Apr 2023 11:38:36 +0000
+Subject: [PATCH] Added ml_dtypes patch for cuda 11.2
 
 ---
  config/conda_build_config.yaml | 5 +++++
- recipe/meta.yaml               | 8 ++++----
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ 1 file changed, 5 insertions(+)
  create mode 100644 config/conda_build_config.yaml
 
 diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
@@ -20,35 +19,6 @@ index 0000000..ebe6ac5
 +cxx_compiler_version:
 +  - 11.2.0          # [ppc64le and cudatoolkit == "11.2"]
 +
-diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 795b445..c19c4ab 100644
---- a/recipe/meta.yaml
-+++ b/recipe/meta.yaml
-@@ -20,12 +20,12 @@ requirements:
-     - cross-python_{{ target_platform }}   # [build_platform != target_platform]
-     - python                               # [build_platform != target_platform]
-     - numpy                                # [build_platform != target_platform]
--    - pybind11 >=2.10.0,<2.11.dev0         # [build_platform != target_platform]
-+    - pybind11 {{ pybind11 }}              # [build_platform != target_platform]
-   host:
-     - python
-     - numpy
--    - pybind11 >=2.10.0,<2.11.dev0
--    - setuptools >=67.6.0,<67.7.dev0
-+    - pybind11 {{ pybind11 }}
-+    - setuptools {{ setuptools }}
-     - pip
-   run:
-     - python
-@@ -36,7 +36,7 @@ test:
-     - ml_dtypes
-   commands:
-     - pip check
--    - pytest -n auto
-+    - pytest -n auto    #[py>39]
-   source_files:
-     - ml_dtypes/tests
-   requires:
 -- 
-2.31.1
+2.34.1
 
