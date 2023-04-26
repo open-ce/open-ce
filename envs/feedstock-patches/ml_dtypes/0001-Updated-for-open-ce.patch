@@ -1,14 +1,14 @@
-From f8baef7b12b06082353e96f05ffec1dbd44b71cd Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 17 Apr 2023 09:01:16 -0400
+From 759ad9720b6cc170535a2b61ab9e2ff9c33d1eba Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23in.ibm.com>
+Date: Tue, 25 Apr 2023 12:55:18 +0000
 Subject: [PATCH] Updated for open-ce
 
 ---
- recipe/meta.yaml | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ recipe/meta.yaml | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 44d2abf..1ceb538 100644
+index 795b445..6490320 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -18,14 +18,14 @@ requirements:
@@ -31,6 +31,15 @@ index 44d2abf..1ceb538 100644
      - pip
    run:
      - python
+@@ -36,7 +36,7 @@ test:
+     - ml_dtypes
+   commands:
+     - pip check
+-    - pytest -n auto
++    - pytest -n auto    #[py>39]
+   source_files:
+     - ml_dtypes/tests
+   requires:
 -- 
-2.31.1
+2.34.1
 

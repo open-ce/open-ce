@@ -7,8 +7,9 @@ packages:
     git_tag : bd7dc1e77a9284e8aad26c6f02753797499a764f
     patches :
       - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
+      - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch
   - feedstock : https://github.com/conda-forge/libprotobuf-feedstock.git
     git_tag : a2b38e3077de05fe7b71e8d58a73935ecd0891ea
     patches :
       - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
-
+      - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
