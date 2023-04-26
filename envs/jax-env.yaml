@@ -30,6 +30,8 @@ packages:
       - feedstock-patches/hatch-fancy-pypi-readme/0001-Fixed-pip-check-in-test-section.patch
   - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
     git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
+    patches :                                                       #[ppc_arch == 'p10']
+      - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
   - feedstock : grpc-cpp
   - feedstock: https://github.com/conda-forge/bazel-toolchain-feedstock
     git_tag : 8da0f5daa593b72ffee327c8df149bab04b903bb
