@@ -1,30 +1,18 @@
-From b64ad734c4ffa3beee913deb720b8a10571d7293 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Wed, 19 Apr 2023 09:18:43 +0000
-Subject: [PATCH] Fixed libprotobuf Build
+From 275f6080ef6bd23f256367b83d94e66d40077dc7 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 26 Apr 2023 03:05:39 -0500
+Subject: [PATCH] Fixed libprotobuf build
 
 ---
- config/conda_build_config.yaml | 4 ++++
- recipe/build-lib.sh            | 4 ++--
- recipe/build-shared.sh         | 4 ++--
- 3 files changed, 8 insertions(+), 4 deletions(-)
- create mode 100644 config/conda_build_config.yaml
+ recipe/build-lib.sh    | 7 ++++---
+ recipe/build-shared.sh | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
-new file mode 100644
-index 0000000..c793a51
---- /dev/null
-+++ b/config/conda_build_config.yaml
-@@ -0,0 +1,4 @@
-+c_compiler_version:
-+  - 8.2.0          # [ppc64le and cudatoolkit == "11.2"]
-+cxx_compiler_version:
-+  - 8.2.0          # [ppc64le and cudatoolkit == "11.2"]
 diff --git a/recipe/build-lib.sh b/recipe/build-lib.sh
-index 6071cec..e8899ef 100644
+index 6071cec..496df37 100644
 --- a/recipe/build-lib.sh
 +++ b/recipe/build-lib.sh
-@@ -5,8 +5,8 @@ if [ "$(uname)" == "Linux" ];
+@@ -5,11 +5,12 @@ if [ "$(uname)" == "Linux" ];
  then
      # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
      # unit test can fail if optmization above 0 are used.
@@ -34,12 +22,17 @@ index 6071cec..e8899ef 100644
 +#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
      export PROTOBUF_OPT_FLAG="-O2"
      # to improve performance, disable checks intended for debugging
-     CXXFLAGS="$CXXFLAGS -DNDEBUG"
+-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
++    CXXFLAGS="$CXXFLAGS -DNDEBUG -fplt"
++    CFLAGS="$CFLAGS -fplt"
+ elif [ "$(uname)" == "Darwin" ];
+ then
+     # remove pie from LDFLAGS
 diff --git a/recipe/build-shared.sh b/recipe/build-shared.sh
-index ca7bc09..7aa2227 100644
+index ca7bc09..c9f96cf 100644
 --- a/recipe/build-shared.sh
 +++ b/recipe/build-shared.sh
-@@ -6,8 +6,8 @@ if [ "$(uname)" == "Linux" ];
+@@ -6,11 +6,12 @@ if [ "$(uname)" == "Linux" ];
  then
      # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
      # unit test can fail if optmization above 0 are used.
@@ -49,7 +42,12 @@ index ca7bc09..7aa2227 100644
 +#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
      export PROTOBUF_OPT_FLAG="-O2"
      # to improve performance, disable checks intended for debugging
-     CXXFLAGS="$CXXFLAGS -DNDEBUG"
+-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
++    CXXFLAGS="$CXXFLAGS -DNDEBUG -fplt"
++    CFLAGS="$CFLAGS -fplt"
+ elif [ "$(uname)" == "Darwin" ];
+ then
+     # remove pie from LDFLAGS
 -- 
-2.34.1
+2.31.1
 
