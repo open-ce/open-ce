@@ -1,14 +1,27 @@
-From b952539222cf9d2d9ab5f6c48df283095573783a Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23in.ibm.com>
-Date: Tue, 25 Apr 2023 13:02:52 +0000
-Subject: [PATCH] Fixed nvcc build for cuda 11.2
+From 68a28b758a39e766ad29c9be32bc143d176d1fb7 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 26 Apr 2023 10:08:13 +0000
+Subject: [PATCH] Changes for open-ce and cuda 11.2
 
 ---
+ config/conda_build_config.yaml |   5 +
  recipe/conda_build_config.yaml | 165 +--------------------------------
  recipe/linux/activate.sh       |   2 +-
  recipe/linux/test_nvcc.sh      |   7 +-
- 3 files changed, 8 insertions(+), 166 deletions(-)
+ 4 files changed, 13 insertions(+), 166 deletions(-)
+ create mode 100644 config/conda_build_config.yaml
 
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..52cd35f
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,5 @@
++c_compiler_version:
++  - 8.*          # [ppc64le and cudatoolkit == "11.2"]
++cxx_compiler_version:
++  - 8.*          # [ppc64le and cudatoolkit == "11.2"]
++
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
 index 041740e..2ecbc60 100644
 --- a/recipe/conda_build_config.yaml
@@ -205,24 +218,18 @@ index f09ebe2..a9810af 100644
    if [ "${CONDA_BUILD}" = "1" ]
    then
 diff --git a/recipe/linux/test_nvcc.sh b/recipe/linux/test_nvcc.sh
-index 782297f..4262c54 100644
+index 782297f..b2b7cbe 100644
 --- a/recipe/linux/test_nvcc.sh
 +++ b/recipe/linux/test_nvcc.sh
-@@ -1,6 +1,6 @@
- #!/bin/bash
- 
--set -euxo pipefail
-+set -ex pipefail
- 
- # Verify the symlink to the libcuda stub library exists.
- test "$(realpath $(${CC} --print-sysroot))" = "$(realpath ${CONDA_BUILD_SYSROOT})"
-@@ -46,8 +46,7 @@ fi
+@@ -45,9 +45,8 @@ fi
+ # Check CMAKE_ARGS
  if [[
      ${CMAKE_ARGS} == *-DCUDAToolkit_ROOT=${CUDA_HOME}* &&
-     ${CMAKE_ARGS} == *-DCUDA_TOOLKIT_ROOT_DIR=${CUDA_HOME}* &&
+-    ${CMAKE_ARGS} == *-DCUDA_TOOLKIT_ROOT_DIR=${CUDA_HOME}* &&
 -    ${CMAKE_ARGS} == *-DCMAKE_FIND_ROOT_PATH=${CUDA_HOME}*
 -]]; then
-+    ${CMAKE_ARGS} == *-DCMAKE_FIND_ROOT_PATH=${CUDA_HOME}* ]]; then
++    ${CMAKE_ARGS} == *-DCUDA_TOOLKIT_ROOT_DIR=${CUDA_HOME}* ]]; then
++#    ${CMAKE_ARGS} == *-DCMAKE_FIND_ROOT_PATH=${CUDA_HOME}* ]]; then
      echo "CMAKE_ARGS looks good: $CMAKE_ARGS"
  else
      echo "CMAKE_ARGS couldn't be correctly configured: $CMAKE_ARGS" && exit 1
