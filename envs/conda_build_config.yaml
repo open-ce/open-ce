@@ -240,7 +240,7 @@ pybind11:
 pydantic:
   - 1.9.*
 pytest:
-  - 6.*
+  - 7.*
 python:
   - 3.8   # [not s390x]
   - 3.9
