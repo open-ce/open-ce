@@ -17,10 +17,10 @@ imported_envs:
 #  - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
-#  - orbit-ml-env.yaml
+  - orbit-ml-env.yaml
   - deepspeed-env.yaml
   - misc-env.yaml
-#  - or-tools-env.yaml
+  - or-tools-env.yaml
 
 packages:
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
