@@ -1,0 +1,23 @@
+From eacb43a863371e97d28342a24b0edf5db080d5f1 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 28 Apr 2023 11:30:43 +0000
+Subject: [PATCH] use GCC 11 for cuda 11.2 build
+
+---
+ config/conda_build_config.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 config/conda_build_config.yaml
+
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..4aa0018
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,4 @@
++c_compiler_version:
++  - 11.2.0          # [ppc64le and cudatoolkit == "11.2"]
++cxx_compiler_version:
++  - 11.2.0          # [ppc64le and cudatoolkit == "11.2"]
+-- 
+2.34.1
+
