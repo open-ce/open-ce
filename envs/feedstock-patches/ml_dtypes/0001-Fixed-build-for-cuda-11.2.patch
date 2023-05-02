@@ -1,7 +1,7 @@
-From 41d19889859f6918387832a488e4c59762b18244 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23in.ibm.com>
-Date: Tue, 25 Apr 2023 11:38:36 +0000
-Subject: [PATCH] Added ml_dtypes patch for cuda 11.2
+From 2f3c98cb8fe6c03585c4e21808fdbebb4e4d59ab Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 27 Apr 2023 15:02:41 +0000
+Subject: [PATCH] Fixed cuda 11.2 builds
 
 ---
  config/conda_build_config.yaml | 5 +++++
@@ -10,14 +10,14 @@ Subject: [PATCH] Added ml_dtypes patch for cuda 11.2
 
 diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
 new file mode 100644
-index 0000000..ebe6ac5
+index 0000000..a886137
 --- /dev/null
 +++ b/config/conda_build_config.yaml
 @@ -0,0 +1,5 @@
 +c_compiler_version:
-+  - 11.2.0          # [cudatoolkit == "11.2"]
++  - 11.*          # [cudatoolkit == "11.2"]
 +cxx_compiler_version:
-+  - 11.2.0          # [cudatoolkit == "11.2"]
++  - 11.*          # [cudatoolkit == "11.2"]
 +
 -- 
 2.34.1

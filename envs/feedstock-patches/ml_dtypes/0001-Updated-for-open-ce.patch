@@ -1,17 +1,17 @@
-From 759ad9720b6cc170535a2b61ab9e2ff9c33d1eba Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23in.ibm.com>
-Date: Tue, 25 Apr 2023 12:55:18 +0000
-Subject: [PATCH] Updated for open-ce
+From 685a230d53d3c8c0a3a7c6b3bcc0ff81cb556a6b Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 27 Apr 2023 15:01:55 +0000
+Subject: [PATCH] Fixed for open-ce
 
 ---
- recipe/meta.yaml | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ recipe/meta.yaml | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 795b445..6490320 100644
+index 795b445..8c113ba 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -18,14 +18,14 @@ requirements:
+@@ -18,14 +18,15 @@ requirements:
      - {{ compiler('cxx') }}
      - {{ compiler('c') }}
      - cross-python_{{ target_platform }}   # [build_platform != target_platform]
@@ -27,19 +27,11 @@ index 795b445..6490320 100644
 +    - numpy {{ numpy }}
      - pybind11 >=2.10.0,<2.11.dev0
 -    - setuptools >=67.6.0,<67.7.dev0
-+    - setuptools {{ setuptools }}
++    - setuptools 65.*               #[cudatoolkit == "11.2"]
++    - setuptools {{ setuptools }}   #[cudatoolkit == "11.8" or build_type == "cpu"]
      - pip
    run:
      - python
-@@ -36,7 +36,7 @@ test:
-     - ml_dtypes
-   commands:
-     - pip check
--    - pytest -n auto
-+    - pytest -n auto    #[py>39]
-   source_files:
-     - ml_dtypes/tests
-   requires:
 -- 
 2.34.1
 
