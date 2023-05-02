@@ -273,7 +273,7 @@ rust_compiler_version:
 safeint:
   - 3.0
 scipy:
-  - 1.*
+  - 1.10.*
 scikit_learn:
   - 1.1.*
 sentencepiece:
