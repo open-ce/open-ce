@@ -212,7 +212,8 @@ onnxconverter_common:
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.23.*
+  - 0.3.23.*      #[not s390x]
+  - 0.3.21.*      #[s390x]
 opencv:
   - 4.7.*
 openjdk:
