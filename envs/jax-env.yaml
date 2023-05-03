@@ -1,7 +1,7 @@
 imported_envs:
   - bazel-env.yaml
   - common-deps.yaml
-  - openblas-env.yaml
+  - openblas-env.yaml     #[not s390x]
   - tensorflow-s390x-extra-deps-env.yaml
 
 packages:
