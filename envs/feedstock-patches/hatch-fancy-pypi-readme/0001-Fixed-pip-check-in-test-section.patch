@@ -1,0 +1,29 @@
+From 8ab65ea51a0da005775b3ff2746f06e16738c67a Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 17 Apr 2023 09:21:47 -0400
+Subject: [PATCH] Fixed pip check in test section
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 354cb0e..d04fc56 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -39,11 +39,11 @@ test:
+   imports:
+     - hatch_fancy_pypi_readme
+   commands:
++    - pip install build
+     - pip check
+     - hatch-fancy-pypi-readme --help
+     - pytest -vvv --capture=tee-sys tests
+   requires:
+-    - build
+     - pip
+     - pytest
+ 
+-- 
+2.31.1
+

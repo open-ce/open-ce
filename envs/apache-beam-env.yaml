@@ -22,13 +22,11 @@ packages:
   - feedstock : https://github.com/conda-forge/dill-feedstock
     git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : 97bf9eebc206d17594013dd0e89938f6536a783a    
-    patches :
-      - feedstock-patches/rust/0001-Fixed-build.patch
+    git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f     # 1.65
   - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
     git_tag : eb4d41c65c002e4367f5b3aa20d547a815fe9d58
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : 75803486a2dbca1b39b2a0594b682afaabcb5b13
+    git_tag : f025039f103f39e50829188fe020b09ec8374edd 
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
@@ -45,6 +43,7 @@ packages:
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
       - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
+      - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
   - feedstock : apache-beam
 {% endif %}
 {% endif %}

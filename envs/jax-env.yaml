@@ -1,0 +1,43 @@
+imported_envs:
+  - bazel-env.yaml
+  - common-deps.yaml
+  - openblas-env.yaml
+  - tensorflow-s390x-extra-deps-env.yaml
+
+packages:
+{% if build_type == 'cuda' %}
+  - feedstock : nccl
+  - feedstock : cudnn
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
+  - feedstock : https://github.com/conda-forge/nvcc-feedstock
+    git_tag : 9c8e43393d9c798c52a9d8e56785920ef767cabb
+    patches :
+      - feedstock-patches/nvcc/0001-Changes-for-open-ce.patch
+{% endif %}
+  - feedstock: https://github.com/conda-forge/ml_dtypes-feedstock
+    git_tag : f4c0c1b67f25ab103bee27cea5ea57e59ebb8b29
+    patches :
+      - feedstock-patches/ml_dtypes/0001-Updated-for-open-ce.patch
+      - feedstock-patches/ml_dtypes/0001-Fixed-build-for-cuda-11.2.patch       #[cudatoolkit == '11.2']
+  - feedstock: https://github.com/conda-forge/pyink-feedstock
+    git_tag : a2e8c2f6bdb6929afbb52efb03c62e3dcaa0000b
+    patches :
+      - feedstock-patches/pyink/0001-Fixed-build.patch
+  - feedstock: https://github.com/conda-forge/black-feedstock
+    git_tag : e249fb3eb839d8c84a1a634fbd74d2a53fc9199b
+  - feedstock: https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
+    git_tag : 4904e98b139ebfbb6765ceaecaa3753dd994b5c6
+    patches :
+      - feedstock-patches/hatch-fancy-pypi-readme/0001-Fixed-pip-check-in-test-section.patch
+  - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
+    git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
+    patches :
+      - feedstock-patches/abseil-cpp/0001-use-GCC-11-for-cuda-11.2-build.patch
+      - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
+  - feedstock : grpc-cpp
+  - feedstock: https://github.com/conda-forge/bazel-toolchain-feedstock
+    git_tag : 8da0f5daa593b72ffee327c8df149bab04b903bb
+    patches :
+      - feedstock-patches/bazel-toolchain/0001-Use-gcc-8.2-for-cuda-11.2-builds.patch
+  - feedstock : jax
+  - feedstock : jaxlib

@@ -1,0 +1,24 @@
+From 86fb6bcb0ab5d4485f88af59e79c65954a010d9d Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 17 Apr 2023 09:20:39 -0400
+Subject: [PATCH] Fixed build
+
+---
+ recipe/meta.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 85f6b81..c1e3a52 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -42,6 +42,7 @@ test:
+     - pyink --help
+   requires:
+     - pip
++    - black >=22.12.0
+ 
+ about:
+   home: https://github.com/google/pyink
+-- 
+2.31.1
+

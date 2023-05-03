@@ -1,79 +1,81 @@
-From 977757305448974707002b658278c2d7165a1ac6 Mon Sep 17 00:00:00 2001
-From: Archanashinde1 <archana.shinde1@github.com>
-Date: Tue, 24 Jan 2023 06:51:32 +0000
-Subject: [PATCH] update pin dependencies
+From bd9d91f67fc8a277972b5485eb29fefdec2e0bf1 Mon Sep 17 00:00:00 2001
+From: Archana Shinde <archana.shinde2504@gmail.com>
+Date: Tue, 11 Apr 2023 07:16:53 -0400
+Subject: [PATCH] pin dependencies
 
 ---
  recipe/meta.yaml | 29 ++++++++++++++++-------------
  1 file changed, 16 insertions(+), 13 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 5c7572b..cc1965b 100644
+index 490cbb8..f0f3263 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -37,17 +37,19 @@ outputs:
-         - make
+@@ -32,9 +32,9 @@ outputs:
          - pkg-config
        host:
--        - abseil-cpp
+         # eigen does not have a run-export but is header-only
+-        - eigen
+-        - libabseil
 -        - libprotobuf
--        - zlib 1.2.11
-+        - abseil-cpp {{ abseil_cpp }}
-+        - libprotobuf {{ protobuf }}
-+        - zlib {{ zlib }}
++        - eigen {{ eigen }}
++        - libabseil {{ abseil_cpp }}
++        - libprotobuf {{ libprotobuf }}
+         - re2
+         - zlib
          # coin or deps
-         - coin-or-utils
-         - coin-or-osi
--        - coin-or-clp =1.17.4
-+        - coin-or-clp 
-         - coin-or-cgl
-         - coin-or-cbc
-         # Source: https://github.com/google/or-tools/blob/stable/cmake/dependencies/CMakeLists.txt
+@@ -47,6 +47,8 @@ outputs:
+         # fake python dependency to avoid conda-smithy collapsing the builds per arch;
+         # we can remove this once we manage to base the python bindings on libortools
          - python
 +      run:
 +        - openblas {{ openblas }}
        run_constrained:
-         - scip =7.0.1
- 
-@@ -92,28 +94,29 @@ outputs:
-         - setuptools
+         # make sure we don't co-install with old version of previous package name
+         - ortools-cpp ={{ version }}
+@@ -88,21 +90,21 @@ outputs:
+         - python
+         - mypy-protobuf
+         - pkg-config
+-        - setuptools
++        - setuptools {{ setuptools }}
          - swig >=4.0
        host:
--        - abseil-cpp
-+        - abseil-cpp {{ abseil_cpp }}
+         - python
+         - pip
          - absl-py >=0.13
--        - libprotobuf
 -        - numpy
-+        - libprotobuf {{ protobuf }}
 +        - numpy {{ numpy }}
          - mypy-protobuf
-         - pip >=9.0.1
--        - python >=3.6
-+        - python 
-         - virtualenv
+-        - protobuf >=4.21.12
+-        - scipy >=1.10
++        - protobuf {{ protobuf }}
++        - scipy {{ scipy }}
          - wheel
--        - zlib 1.2.11
-+        - zlib {{ zlib }}
-         # coin or deps
-         - coin-or-utils
-         - coin-or-osi
--        - coin-or-clp =1.17.4
-+        - coin-or-clp
-         - coin-or-cgl
-         - coin-or-cbc
-       run:
+         # C/C++ deps
+-        - eigen
+-        - libabseil
+-        - libprotobuf
++        - eigen {{ eigen }}
++        - libabseil {{ abseil_cpp }}
++        - libprotobuf {{ libprotobuf }}
+         - pybind11
+         - re2
+         - zlib
+@@ -116,9 +118,10 @@ outputs:
+         - python
          - absl-py >=0.13
          - mypy-protobuf
 -        - {{ pin_compatible('numpy') }}
--        - protobuf
--        - python >=3.6
+-        - protobuf >=4.21.12
+-        - scipy >=1.10
 +        - numpy {{ numpy }}
 +        - protobuf {{ protobuf }}
-+        - python 
++        - scipy {{ scipy }}
 +        - openblas {{ openblas }}
          # Source: https://github.com/google/or-tools/blob/stable/ortools/python/setup.py.in#L44
-       run_constrained:
-         - scip =7.0.1
+ 
+     test:
 -- 
 2.34.1
 

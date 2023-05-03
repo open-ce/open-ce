@@ -1,0 +1,47 @@
+From 4dcfa15153fd5ada7a97418006bb475e875e83bf Mon Sep 17 00:00:00 2001
+From: Archana Shinde <archana.shinde2504@gmail.com>
+Date: Thu, 6 Apr 2023 04:47:56 -0400
+Subject: [PATCH] Pin dependencies
+
+---
+ recipe/meta.yaml | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 5f87325..14c8eef 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -25,22 +25,22 @@ requirements:
+   host:
+     - pip
+     - pytest
+-    - python >=3.7, <= 3.9
+-    - numpy >=1.18.2
++    - python
++    - numpy {{ numpy }}
+     - cmdstanpy >=1.0.4
+   run:
+-    - python >=3.7
+-    - numpy >=1.18
++    - python
++    - numpy {{ numpy }}
+     - pandas >=1.0.3
+     - matplotlib-base >=3.3.2
+-    - scipy >=1.4.1
+-    - pytorch >=1.11.0
++    - scipy {{ scipy }}
++    - pytorch-base {{ pytorch }}
+     - cmdstanpy >=1.0.4
+     - pyro-ppl >=1.4.0
+     - seaborn >=0.10.0
+     - statsmodels >=0.11.1
+-    - arviz
+-    - tqdm >=4.36.1
++    - arviz {{ arviz }}
++    - tqdm {{ tqdm }}
+     
+ 
+ test:
+-- 
+2.34.1
+

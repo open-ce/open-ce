@@ -16,8 +16,12 @@ packages:
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
   {% endif %}
   - feedstock : sentencepiece
-  - feedstock : torchdata
+  - feedstock : torchdata      # [build_type == 'cpu' or cudatoolkit == '11.8']
   - feedstock : torchtext
   - feedstock : av
   - feedstock : torchvision
+  - feedstock : https://github.com/AnacondaRecipes/leveldb-feedstock      #[ppc_arch == "p10"]
+    git_tag: 44dd156fd8f7a81536926e11b54fdbf9df2c3158                     #[ppc_arch == "p10"]
+    patches:                                                              #[ppc_arch == "p10"]
+      - feedstock-patches/leveldb/0001-changes-for-opence.patch           #[ppc_arch == "p10"]
 {% endif %}

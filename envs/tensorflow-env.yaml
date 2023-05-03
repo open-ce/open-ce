@@ -5,6 +5,7 @@ imported_envs:
   - tensorflow-s390x-extra-deps-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
   - common-deps.yaml
+  - jax-env.yaml
 
 packages:
 {% if build_type == 'cuda' %}
@@ -13,15 +14,16 @@ packages:
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
 {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
-    git_tag : 85fff27f50229187e7877c434590b01ac42ba772
+    git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
     patches :
-      - feedstock-patches/absl-py/0001-Updated-to-1.0.0.patch
+      - feedstock-patches/absl-py/0001-Updated-to-absl-py-1.2.0.patch
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
       - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
+      - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
@@ -32,6 +34,7 @@ packages:
   - feedstock : tensorflow-hub
   - feedstock : tensorflow-metadata
   - feedstock : etils
+  - feedstock : array-record
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization

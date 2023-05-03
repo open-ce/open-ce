@@ -1,0 +1,23 @@
+From 89056e723ac84149b6c2d7c45115d5d8d874fbd4 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 25 Apr 2023 05:50:46 -0500
+Subject: [PATCH] Use gcc 8.2 for cuda 11.2 builds
+
+---
+ config/conda_build_config.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 config/conda_build_config.yaml
+
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..c793a51
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,4 @@
++c_compiler_version:
++  - 8.*          # [cudatoolkit == "11.2"]
++cxx_compiler_version:
++  - 8.*          # [cudatoolkit == "11.2"]
+-- 
+2.31.1
+

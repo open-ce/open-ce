@@ -1,7 +1,9 @@
 abseil_cpp:
-  - 20210324
+  - 20230125.0
 absl_py:
-  - 1.0.*
+  - 1.2.*
+array_record:
+  - 0.2.*
 arviz:
   - 0.14.0
 arrow:
@@ -124,7 +126,7 @@ importlib_resources:
 jasper:
   - 2.0.14
 jax:
-  - 0.3.25
+  - 0.4.7
 joblib:
   - 1.*
 jpeg:
@@ -202,7 +204,7 @@ numactl:
   - 2.0.*
 numpy:
   - 1.22.*   # [cudatoolkit == '11.2']
-  - 1.23.*   # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 1.23.5   # [build_type == 'cpu' or cudatoolkit == '11.8']
 onnx:
   - 1.13.*
 onnxconverter_common:
@@ -210,8 +212,7 @@ onnxconverter_common:
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.20.*    # [cudatoolkit == '11.2']
-  - 0.3.21.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 0.3.23.*
 opencv:
   - 4.7.*
 openjdk:
@@ -239,7 +240,7 @@ pybind11:
 pydantic:
   - 1.9.*
 pytest:
-  - 6.*
+  - 7.*
 python:
   - 3.8   # [not s390x]
   - 3.9
@@ -265,18 +266,18 @@ reproc_cpp:
   - 14.2.*
 rust:
   - 1.62.*     # [cudatoolkit == '11.2']
-  - 1.60.*     # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 1.65.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
 rust_compiler_version:
   - '1.46.0'   # [cudatoolkit == '11.2']
-  - '1.60.0'   # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - '1.65.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
 safeint:
   - 3.0
 scipy:
-  - 1.*
+  - 1.10.*
 scikit_learn:
   - 1.1.*
 sentencepiece:
-  - 0.1.97
+  - 0.1.98
 setuptools:
   - 58.*    # [cudatoolkit == '11.2']
   - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
@@ -390,12 +391,12 @@ vector_settings:
 ##
 # yamllint disable rule:line-length
 cuda_levels:
-  - 5.2,6.0,7.0,7.5,8.0             # [x86_64 and cudatoolkit == '11.2']
-  - 5.2,6.0,7.0,7.5,8.0,8.6,9.0     # [x86_64 and cudatoolkit == '11.8']
+  - 6.0,7.0,7.5,8.0             # [x86_64 and cudatoolkit == '11.2']
+  - 6.0,7.0,7.5,8.0,8.6,9.0     # [x86_64 and cudatoolkit == '11.8']
   - 6.0,7.0,7.5,8.0                 # [ppc64le and cudatoolkit == '11.2']
   - 6.0,7.0,7.5,8.0,8.6,9.0         # [ppc64le and cudatoolkit == '11.8']
 cuda_levels_details:
-  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80                         # [x86_64 and cudatoolkit == '11.2']
-  - sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64 and cudatoolkit == '11.8']
+  - sm_60,sm_61,sm_70,sm_75,sm_80,compute_80                         # [x86_64 and cudatoolkit == '11.2']
+  - sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64 and cudatoolkit == '11.8']
   - sm_60,sm_70,sm_75,sm_80,compute_80                                     # [ppc64le and cudatoolkit == '11.2']
   - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90               # [ppc64le and cudatoolkit == '11.8']
