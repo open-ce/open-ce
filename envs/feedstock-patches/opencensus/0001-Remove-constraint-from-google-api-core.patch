@@ -1,0 +1,25 @@
+From 4b9612b9e3fe1bc019a3113428f54b99c845260f Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Tue, 2 May 2023 23:29:20 -0400
+Subject: [PATCH] Remove constraint from google-api-core
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 83077cf..fad005b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -20,7 +20,7 @@ requirements:
+   run:
+     - python >=3.6
+     - opencensus-context ==0.1.2
+-    - google-api-core >=1.0.0, <2.0.0
++    - google-api-core >=1.0.0
+ 
+ test:
+   imports:
+-- 
+2.31.1
+

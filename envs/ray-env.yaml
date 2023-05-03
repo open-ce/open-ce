@@ -22,5 +22,9 @@ packages:
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 6c88fc1f9d47e348479edf4a7e28742b2cb49dcb
   - feedstock : dm-tree
+  - feedstock : https://github.com/AnacondaRecipes/opencensus-feedstock
+    git_tag : 29535305e9e7456f6b82758366a581cfa8512bfd
+    patches :
+      - feedstock-patches/opencensus/0001-Remove-constraint-from-google-api-core.patch 
   - feedstock : ray-packages
 {% endif %}
