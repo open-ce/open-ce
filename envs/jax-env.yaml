@@ -39,5 +39,6 @@ packages:
     git_tag : 8da0f5daa593b72ffee327c8df149bab04b903bb
     patches :
       - feedstock-patches/bazel-toolchain/0001-Use-gcc-8.2-for-cuda-11.2-builds.patch
+      - feedstock-patches/bazel-toolchain/0001-Patch-to-fix-s390x.patch                 #[s390x]
   - feedstock : jax
   - feedstock : jaxlib
