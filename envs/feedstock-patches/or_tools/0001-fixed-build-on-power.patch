@@ -1,56 +1,55 @@
-From f8b78d1e139f645ff759116a901c2ad24e9fcb89 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 1 Feb 2023 14:02:55 +0000
+From 0f0a311055e97bed902969ddc682ead49d827d20 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Fri, 28 Apr 2023 13:33:01 +0000
 Subject: [PATCH] fixed build on power
 
 ---
- config/conda_build_config.yaml | 5 +++++
+ config/conda_build_config.yaml | 4 ++++
  recipe/build-cpp.sh            | 4 ++++
  recipe/build-python.sh         | 4 ++++
- 3 files changed, 13 insertions(+)
+ 3 files changed, 12 insertions(+)
  create mode 100644 config/conda_build_config.yaml
 
 diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
 new file mode 100644
-index 0000000..5cfedb6
+index 0000000..5a062da
 --- /dev/null
 +++ b/config/conda_build_config.yaml
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,4 @@
 +c_compiler_version:
 +  - 8.*                      # [ppc64le and cudatoolkit == '11.2']
 +cxx_compiler_version:
 +  - 8.*                      # [ppc64le and cudatoolkit == '11.2']
-+
 diff --git a/recipe/build-cpp.sh b/recipe/build-cpp.sh
-index 8795ee5..e31adb8 100644
+index 4ff6133..d7985f4 100644
 --- a/recipe/build-cpp.sh
 +++ b/recipe/build-cpp.sh
-@@ -3,6 +3,10 @@
- cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=$PREFIX \
+@@ -4,6 +4,10 @@ set -ex
+ cmake -G Ninja \
+       ${CMAKE_ARGS} \
        -DCMAKE_BUILD_TYPE=Release \
-       -DCMAKE_INSTALL_LIBDIR=lib \
 +      -DSPM_BUILD_TEST=ON \
 +      -DSPM_ENABLE_TCMALLOC=OFF \
 +      -DSPM_USE_BUILTIN_PROTOBUF=OFF \
 +      -DCMAKE_AR=$GCC_AR \
-       -DBUILD_SHARED_LIBS=ON \
-       -BUILD_DEPS=OFF \
-       -DUSE_SCIP=OFF \
+       -DCMAKE_CXX_STANDARD=17 \
+       -DCMAKE_INSTALL_LIBDIR=lib \
+       -DCMAKE_INSTALL_PREFIX=$PREFIX \
 diff --git a/recipe/build-python.sh b/recipe/build-python.sh
-index db11530..b55e2e6 100644
+index 4249673..75264e1 100644
 --- a/recipe/build-python.sh
 +++ b/recipe/build-python.sh
-@@ -2,6 +2,10 @@
- 
- cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=$PREFIX \
+@@ -4,6 +4,10 @@ set -ex
+ cmake -G Ninja \
+       ${CMAKE_ARGS} \
        -DCMAKE_BUILD_TYPE=Release \
 +      -DSPM_BUILD_TEST=ON \
 +      -DSPM_ENABLE_TCMALLOC=OFF \
 +      -DSPM_USE_BUILTIN_PROTOBUF=OFF \
 +      -DCMAKE_AR=$GCC_AR \
+       -DCMAKE_CXX_STANDARD=17 \
        -DCMAKE_INSTALL_LIBDIR=lib \
-       -DBUILD_SHARED_LIBS=ON \
-       -DBUILD_DEPS=OFF \
+       -DCMAKE_INSTALL_PREFIX=$PREFIX \
 -- 
 2.34.1
 

@@ -12,3 +12,7 @@ packages:
     git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1
     patches :
       - feedstock-patches/cryptography/0001-opence-changes-for-crytography.patch
+  - feedstock: https://github.com/conda-forge/tokenizers-feedstock
+    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
+    patches :
+     - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch
