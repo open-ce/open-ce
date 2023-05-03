@@ -10,6 +10,6 @@ packages:
     - feedstock : https://github.com/conda-forge/prophet-feedstock
       git_tag : 0b31e3221d7b7e640afeabcacf417a8085e8b8a2
       patches :
-    - feedstock-patches/prophet/0001-Pin-dependencies.patch
+        - feedstock-patches/prophet/0001-Pin-dependencies.patch
   {% endif %}
 {% endif %}
