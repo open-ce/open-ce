@@ -1,0 +1,105 @@
+From e682d802bbad430a926e0a05d94236bec4dd7116 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 4 May 2023 12:57:13 +0000
+Subject: [PATCH] P10 changes
+
+---
+ recipe/bazel_toolchain/cc_toolchain_config.bzl | 8 ++++++--
+ recipe/build.sh                                | 2 ++
+ recipe/gen-bazel-toolchain                     | 6 ++++--
+ recipe/meta.yaml                               | 2 ++
+ 4 files changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/bazel_toolchain/cc_toolchain_config.bzl b/recipe/bazel_toolchain/cc_toolchain_config.bzl
+index b91aa80..41d8796 100644
+--- a/recipe/bazel_toolchain/cc_toolchain_config.bzl
++++ b/recipe/bazel_toolchain/cc_toolchain_config.bzl
+@@ -26,7 +26,7 @@ def _impl(ctx):
+         ),
+         tool_path(
+             name = "ar",
+-            path = "${CONDA_PREFIX}/bin/${AR}",
++            path = "${AR}",
+         ),
+         tool_path(
+             name = "cpp",
+@@ -42,7 +42,7 @@ def _impl(ctx):
+         ),
+         tool_path(
+             name = "objdump",
+-            path = "/usr/bin/objdump",
++            path = "${OBJDUMP}",
+         ),
+         tool_path(
+             name = "strip",
+@@ -313,6 +313,10 @@ def _impl(ctx):
+         if (len("${CUDA_HOME}")):
+             cxx_builtin_include_directories.append("${CUDA_HOME}/include")
+             cxx_builtin_include_directories.append("${CUDA_HOME}/targets/x86_64-linux/include/")
++        if ("${PPC_ARCH}" == 'p10'):
++            cxx_builtin_include_directories.append("${GCC_11_HOME}/lib/gcc/ppc64le-redhat-linux/11/include")
++            cxx_builtin_include_directories.append("${GCC_11_HOME}/include")
++            cxx_builtin_include_directories.append("${GCC_11_HOME}/include/c++/11")
+ 
+     return cc_common.create_cc_toolchain_config_info(
+         ctx = ctx,
+diff --git a/recipe/build.sh b/recipe/build.sh
+index e48e941..1c1e1e5 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -2,6 +2,8 @@
+ 
+ set -euxo pipefail
+ 
++export ppc_arch=$ppc_arch
++
+ mkdir -p $PREFIX/bin
+ cp ${RECIPE_DIR}/gen-bazel-toolchain $PREFIX/bin/
+ mkdir -p $PREFIX/share
+diff --git a/recipe/gen-bazel-toolchain b/recipe/gen-bazel-toolchain
+index 4eddb0f..09f868b 100755
+--- a/recipe/gen-bazel-toolchain
++++ b/recipe/gen-bazel-toolchain
+@@ -30,6 +30,7 @@ function apply_cc_template() {
+   sed -ie "s:\${LDFLAGS}:${LDFLAGS}:" $1
+   sed -ie "s:\${NM}:${NM}:" $1
+   sed -ie "s:\${STRIP}:${STRIP}:" $1
++  sed -ie "s:\${OBJDUMP}:${OBJDUMP}:" $1
+   sed -ie "s:\${AR}:${BAZEL_TOOLCHAIN_AR}:" $1
+   sed -ie "s:\${HOST}:${HOST}:" $1
+   sed -ie "s:\${LIBCXX}:${BAZEL_TOOLCHAIN_LIBCXX}:" $1
+@@ -64,7 +65,7 @@ pushd bazel_toolchain
+     export BAZEL_TOOLCHAIN_AR=${LIBTOOL}
+   else
+     export BAZEL_TOOLCHAIN_COMPILER_VERSION=$(${CC} -v 2>&1|tail -n1|cut -d' ' -f3)
+-    export BAZEL_TOOLCHAIN_AR=$(basename ${AR})
++    export BAZEL_TOOLCHAIN_AR=${AR}
+     touch cc_wrapper.sh
+     touch cc_wrapper_build.sh
+     export BAZEL_TOOLCHAIN_LIBCXX="stdc++"
+@@ -121,7 +122,8 @@ pushd bazel_toolchain
+   sed -ie "s:BUILD_CPU:${BUILD_CPU}:" BUILD
+ 
+   HOST_PREFIX=${PREFIX}
+-
++  sed -ie "s:\${PPC_ARCH}:${ppc_arch}:" cc_toolchain_config.bzl
++  sed -ie "s:\${GCC_11_HOME}:${GCC_11_HOME}:" cc_toolchain_config.bzl
+   cp cc_toolchain_config.bzl cc_toolchain_build_config.bzl
+   apply_cc_template cc_toolchain_config.bzl
+   apply_cc_template crosstool_wrapper_driver_is_not_gcc
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index db4de8a..f9da0d8 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -9,6 +9,8 @@ package:
+ build:
+   number: 0
+   skip: true  # [win]
++  script_env:
++    - GCC_11_HOME      #[ppc_arch == 'p10']
+ 
+ requirements:
+   run_constrained:
+-- 
+2.34.1
+
