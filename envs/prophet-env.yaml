@@ -1,15 +1,14 @@
 builder_version: ">=10.0.1"
 
+imported_envs:
+  - cmdstan-env.yaml
+
 packages:
 {% if not s390x %}
   {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
-    - feedstock : https://github.com/conda-forge/cmdstan-feedstock
-      git_tag : 52c0b44afc40e71dc1e628f3903d4776e1d99af0 
-    - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock
-      git_tag : 1cc20198a84a08ac28515bd601b39047ecedaef6 
-    - feedstock : https://github.com/conda-forge/prophet-feedstock
-      git_tag : 0b31e3221d7b7e640afeabcacf417a8085e8b8a2
-      patches :
-        - feedstock-patches/prophet/0001-Pin-dependencies.patch
+  - feedstock : https://github.com/conda-forge/prophet-feedstock
+    git_tag : 0b31e3221d7b7e640afeabcacf417a8085e8b8a2
+    patches :
+      - feedstock-patches/prophet/0001-Pin-dependencies.patch
   {% endif %}
 {% endif %}

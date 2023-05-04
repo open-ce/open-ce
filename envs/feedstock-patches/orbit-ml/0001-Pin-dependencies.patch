@@ -1,17 +1,84 @@
-From 4dcfa15153fd5ada7a97418006bb475e875e83bf Mon Sep 17 00:00:00 2001
-From: Archana Shinde <archana.shinde2504@gmail.com>
-Date: Thu, 6 Apr 2023 04:47:56 -0400
-Subject: [PATCH] Pin dependencies
+From 38bbd67f82f4929a645780469157a8261e05a331 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 4 May 2023 02:24:35 -0400
+Subject: [PATCH] Fixed orbit-ml build and pin deps
 
 ---
- recipe/meta.yaml | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ recipe/0001-Disable-cmdstan-build.patch | 46 +++++++++++++++++++++++++
+ recipe/meta.yaml                        | 22 ++++++------
+ 2 files changed, 58 insertions(+), 10 deletions(-)
+ create mode 100644 recipe/0001-Disable-cmdstan-build.patch
 
+diff --git a/recipe/0001-Disable-cmdstan-build.patch b/recipe/0001-Disable-cmdstan-build.patch
+new file mode 100644
+index 0000000..deed7dd
+--- /dev/null
++++ b/recipe/0001-Disable-cmdstan-build.patch
+@@ -0,0 +1,46 @@
++From aaf00377cff5f9304a8bc3381e6a6cf000664460 Mon Sep 17 00:00:00 2001
++From: Nishidha Panpaliya <npanpa23@in.ibm.com>
++Date: Thu, 4 May 2023 01:53:08 -0400
++Subject: [PATCH] Disable build of cmdstan
++
++---
++ setup.py | 20 ++++++++++----------
++ 1 file changed, 10 insertions(+), 10 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index aa055e7..c840b5a 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -54,19 +54,19 @@ def install_cmdstanpy():
++     # target_dir = os.path.join(self.setup_path, "stan_compiled")
++     # self.mkpath(target_dir)
++ 
++-    if not cmdstanpy.install_cmdstan(
++-        version=CMDSTAN_VERSION,
+++    #if not cmdstanpy.install_cmdstan(
+++    #    version=CMDSTAN_VERSION,
++         # if we want to do it inside the repo dir, we need to include the folder in
++         # MANIFEST.in
++         # dir=target_dir,
++-        overwrite=True,
++-        verbose=True,
++-        cores=cpu_count(),
++-        progress=True,
++-    ):
++-        raise RuntimeError("CmdStan failed to install in repackaged directory")
++-    else:
++-        print("Installed cmdstanpy package.")
+++     #   overwrite=True,
+++     #   verbose=True,
+++     #   cores=cpu_count(),
+++     #   progress=True,
+++    #):
+++    #    raise RuntimeError("CmdStan failed to install in repackaged directory")
+++    #else:
+++    #    print("Installed cmdstanpy package.")
++ 
++ 
++ class BuildPyCommand(build_py):
++-- 
++2.31.1
++
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 5f87325..14c8eef 100644
+index 5f87325..520f9cc 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -25,22 +25,22 @@ requirements:
+@@ -7,8 +7,10 @@ package:
+   version: {{ version }}
+ 
+ source:
+-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/orbit-ml-{{ version }}.tar.gz
+-  sha256: 5843f7748036f39bb4d95af07aadca5e8a2f5f2de6f5eda16cf4a73ad8cc3bb3
++  git_url: https://github.com/uber/orbit.git
++  git_rev: v{{ version }}
++  patches:
++    - 0001-Disable-cmdstan-build.patch
+ 
+ # build:
+ #   number: 0
+@@ -25,22 +27,22 @@ requirements:
    host:
      - pip
      - pytest
@@ -43,5 +110,5 @@ index 5f87325..14c8eef 100644
  
  test:
 -- 
-2.34.1
+2.31.1
 
