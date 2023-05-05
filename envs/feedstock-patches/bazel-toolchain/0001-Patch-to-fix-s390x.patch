@@ -1,0 +1,37 @@
+From d8f6c2908ee4bf5f9499817c11a8cd17d5011756 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 3 May 2023 11:14:38 +0000
+Subject: [PATCH] Patch to fix s390x
+
+---
+ recipe/gen-bazel-toolchain | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/recipe/gen-bazel-toolchain b/recipe/gen-bazel-toolchain
+index 4eddb0f..9590bf7 100755
+--- a/recipe/gen-bazel-toolchain
++++ b/recipe/gen-bazel-toolchain
+@@ -93,7 +93,11 @@ pushd bazel_toolchain
+   elif [[ "${target_platform}" == "linux-ppc64le" ]]; then
+     export TARGET_LIBC="unknown"
+     export TARGET_CPU="ppc"
++  elif [[ "${target_platform}" == "linux-s390x" ]]; then
++    export TARGET_LIBC="unknown"
++    export TARGET_CPU="s390x"
+   fi
++
+   export BUILD_SYSTEM=${BUILD}
+   if [[ "${build_platform}" == "osx-64" ]]; then
+     export BUILD_CPU="darwin"
+@@ -107,6 +111,8 @@ pushd bazel_toolchain
+     export BUILD_CPU="aarch64"
+   elif [[ "${build_platform}" == "linux-ppc64le" ]]; then
+     export BUILD_CPU="ppc"
++  elif [[ "${build_platform}" == "linux-s390x" ]]; then
++    export BUILD_CPU="s390x"
+   fi
+   # The current Bazel release cannot distinguish between osx-arm64 and osx-64.
+   # This will change with later releases and then we should get rid of this section again.
+-- 
+2.34.1
+

@@ -2,11 +2,15 @@ builder_version: ">=10.0.1"
 
 imported_envs:
 {% if not s390x %}
+  {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - pytorch-env.yaml
+  - cmdstan-env.yaml
+  {% endif %}
 {% endif %}
 
 packages:
 {% if not s390x %}
+  {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - feedstock : https://github.com/conda-forge/pyro-api-feedstock
     git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
   - feedstock : https://github.com/conda-forge/arviz-feedstock
@@ -17,12 +21,9 @@ packages:
     git_tag : 2e94a4f271af14e7628ac4890736171fa0e9a71d  
     patches :
       - feedstock-patches/pyro-ppl/0001-Pin-dependencies.patch
-  - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock.git
-    git_tag : 1cc20198a84a08ac28515bd601b39047ecedaef6
-  - feedstock : https://github.com/conda-forge/cmdstan-feedstock.git
-    git_tag : f690e3236286bc66cfb46d85f629eab1f776dc18
   - feedstock : https://github.com/conda-forge/orbit-ml-feedstock.git
     git_tag : b951041856822d417209352c027a9af55d202fa5
     patches :
       - feedstock-patches/orbit-ml/0001-Pin-dependencies.patch
+  {% endif %}
 {% endif %}
