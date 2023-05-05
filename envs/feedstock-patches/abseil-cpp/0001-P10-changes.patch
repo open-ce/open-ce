@@ -1,18 +1,18 @@
-From a4b6020c444ed56f7c77343cc4461f48531cecae Mon Sep 17 00:00:00 2001
+From 9778ebda76b192a23cac2883c54ea27d582f9670 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 26 Apr 2023 05:25:04 +0000
-Subject: [PATCH] P10 changes
+Date: Wed, 3 May 2023 12:57:23 +0000
+Subject: [PATCH] Fixed abseil-cpp for P10
 
 ---
- recipe/build-abseil.sh | 20 +++++++++++++++++++-
- recipe/meta.yaml       | 16 +++++++++++-----
- 2 files changed, 30 insertions(+), 6 deletions(-)
+ recipe/build-abseil.sh | 19 +++++++++++++++++++
+ recipe/meta.yaml       | 11 ++++++++---
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/build-abseil.sh b/recipe/build-abseil.sh
-index 041a9c2..eaf341a 100644
+index 041a9c2..e4bc6b5 100644
 --- a/recipe/build-abseil.sh
 +++ b/recipe/build-abseil.sh
-@@ -5,10 +5,28 @@ set -exuo pipefail
+@@ -5,10 +5,29 @@ set -exuo pipefail
  mkdir -p build
  cd build
  
@@ -37,13 +37,13 @@ index 041a9c2..eaf341a 100644
  cmake ${CMAKE_ARGS} \
      -DCMAKE_BUILD_TYPE=Release \
      -DCMAKE_CXX_STANDARD=17 \
--    -DCMAKE_INSTALL_LIBDIR=lib \
+     -DCMAKE_INSTALL_LIBDIR=lib \
 +    -DCMAKE_INSTALL_PREFIX=${PREFIX} \
      -DCMAKE_PREFIX_PATH=${PREFIX} \
      -DBUILD_SHARED_LIBS=ON \
      -DABSL_PROPAGATE_CXX_STD=ON \
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 9ae57dc..291feba 100644
+index 9ae57dc..ad07589 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -41,6 +41,9 @@ source:
@@ -83,21 +83,6 @@ index 9ae57dc..291feba 100644
          - cmake
          - ninja
          - pkg-config
-@@ -78,11 +83,12 @@ outputs:
-         - if not exist %LIBRARY_LIB%\\abseil_dll.lib exit 1           # [win]
- 
-         # absl_* libraries
-+        - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PREFIX/lib64/pkgconfig
-       {% for each_lib in absl_libs %}
-         # presence of shared libs
--        - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
-+        - test -f $PREFIX/lib64/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
-         # absence of static libs
--        - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
-+        - test ! -f $PREFIX/lib64/libabsl_{{ each_lib }}.a              # [unix]
- 
-         # some static libs remain on windows even for shared builds, see above
-         {% if each_lib in absl_libs_always_static_on_win %}
 -- 
 2.34.1
 

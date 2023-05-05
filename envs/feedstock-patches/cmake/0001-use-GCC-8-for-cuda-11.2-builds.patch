@@ -1,7 +1,7 @@
-From 96160d8239a18433fa83a2f12ced9a7387aeb38e Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 25 Apr 2023 09:03:25 +0000
-Subject: [PATCH] use GCC 8 for cuda 11.2 builds
+From 1698d0a7d4afce249eb7de8a954433aa7530bfd9 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Fri, 5 May 2023 09:37:52 +0000
+Subject: [PATCH] Fixed compiler version for x86
 
 ---
  config/conda_build_config.yaml | 4 ++++
@@ -10,14 +10,14 @@ Subject: [PATCH] use GCC 8 for cuda 11.2 builds
 
 diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
 new file mode 100644
-index 0000000..91cd6c9
+index 0000000..837c987
 --- /dev/null
 +++ b/config/conda_build_config.yaml
 @@ -0,0 +1,4 @@
 +c_compiler_version:
-+  - 8.2.0          # [cudatoolkit == "11.2"]
++  - 8.*          # [cudatoolkit == "11.2"]
 +cxx_compiler_version:
-+  - 8.2.0          # [cudatoolkit == "11.2"]
++  - 8.*          # [cudatoolkit == "11.2"]
 -- 
 2.34.1
 
