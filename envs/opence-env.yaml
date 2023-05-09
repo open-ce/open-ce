@@ -14,7 +14,9 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - mamba-env.yaml
-  - ray-env.yaml
+
+  # Disable ray-env for now as it is failing i CI environment
+  #- ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
