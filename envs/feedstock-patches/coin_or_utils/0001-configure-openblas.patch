@@ -1,7 +1,7 @@
-From 855489a542292f8bb2d6dc944bd11855eb690352 Mon Sep 17 00:00:00 2001
-From: Archanashinde1 <archana.shinde1@github.com>
-Date: Mon, 12 Dec 2022 14:11:25 +0000
-Subject: [PATCH] configure openblas
+From 9bc563e03e414650f53ce812089c391e04c66636 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 9 May 2023 08:49:37 +0000
+Subject: [PATCH] update pkgconfig pin
 
 ---
  recipe/build.sh  | 6 +++---
@@ -31,7 +31,7 @@ index 88e404d..49ff12a 100644
 \ No newline at end of file
 +make install
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index a207bf5..93079a5 100644
+index a207bf5..1893456 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -23,15 +23,12 @@ requirements:
@@ -39,7 +39,7 @@ index a207bf5..93079a5 100644
      - {{ compiler('cxx') }}
      - {{ compiler('fortran') }}
 -    - pkg-config
-+    - pkg-config {{ pkg_config }}
++    - pkg-config {{ pkgconfig }}
      - make  # [unix]
    host:
 -    - zlib

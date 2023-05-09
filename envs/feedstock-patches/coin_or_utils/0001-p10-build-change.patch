@@ -1,29 +1,31 @@
-From 9becee8909894d1351303c32c4677c2012109410 Mon Sep 17 00:00:00 2001
-From: Archanashinde1 <archana.shinde1@github.com>
-Date: Fri, 23 Dec 2022 09:12:55 +0000
-Subject: [PATCH] p10 change
+From 565a06d7e025d52c13244bddc1ab0c8e1c9bbcc7 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 9 May 2023 09:02:56 +0000
+Subject: [PATCH] p10 chages local
 
 ---
- recipe/meta.yaml | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 93079a5..66eb565 100644
+index 24320ea..27d0911 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -20,9 +20,9 @@ build:
+@@ -20,10 +20,10 @@ build:
  requirements:
    build:
      - gnuconfig  # [unix]
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
 -    - {{ compiler('fortran') }}
-+    - {{ compiler('c') }}        #[ppc_arch != 'p10']
-+    - {{ compiler('cxx') }}      #[ppc_arch != 'p10']
-+    - {{ compiler('fortran') }}  #[ppc_arch != 'p10']
-     - pkg-config {{ pkg_config }}
+-    - pkg-config
++    - {{ compiler('c') }}            #[ppc_arch != "p10"]
++    - {{ compiler('cxx') }}          #[ppc_arch != "p10"]
++    - {{ compiler('fortran') }}      #[ppc_arch != "p10"]
++    - pkg-config 
      - make  # [unix]
    host:
+     - zlib
 -- 
 2.34.1
 
