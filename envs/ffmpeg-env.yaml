@@ -3,3 +3,5 @@ builder_version: ">=10.0.1"
 packages:
   - feedstock : https://github.com/AnacondaRecipes/ffmpeg-feedstock
     git_tag : 57ca332013295a161307fa10afdae2197a56cc93
+    patches :
+      - feedstock-patches/ffmpeg/0001-disable-codecs-for-opence.patch
