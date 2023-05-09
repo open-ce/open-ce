@@ -5,6 +5,7 @@ conda_build_configs:
   - conda_build_config_p10.yaml
 
 imported_envs:
+  - ffmpeg-env.yaml
   - common-p10-deps.yaml
   - openblas-env.yaml
   - onnx-env.yaml
