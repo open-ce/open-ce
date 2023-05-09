@@ -34,7 +34,7 @@ packages:
     git_tag: 22229f9a9fac80480b91c74316a19e14bbf90a6b
   - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
     git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
-    patches :
+    patches :                                                #[ppc_arch == 'p10' or cudatoolkit == '11.2']
       - feedstock-patches/abseil-cpp/0001-use-GCC-11-for-cuda-11.2-build.patch   #[cudatoolkit == '11.2']
       - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
   - feedstock : grpc-cpp
