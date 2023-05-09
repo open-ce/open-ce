@@ -21,7 +21,7 @@ index 93079a5..66eb565 100644
 +    - {{ compiler('c') }}        #[ppc_arch != 'p10']
 +    - {{ compiler('cxx') }}      #[ppc_arch != 'p10']
 +    - {{ compiler('fortran') }}  #[ppc_arch != 'p10']
-     - pkg-config {{ pkg_config }}
+     - pkg-config {{ pkgconfig }}
      - make  # [unix]
    host:
 -- 

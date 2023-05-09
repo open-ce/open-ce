@@ -39,7 +39,7 @@ index a207bf5..93079a5 100644
      - {{ compiler('cxx') }}
      - {{ compiler('fortran') }}
 -    - pkg-config
-+    - pkg-config {{ pkg_config }}
++    - pkg-config {{ pkgconfig }}
      - make  # [unix]
    host:
 -    - zlib
