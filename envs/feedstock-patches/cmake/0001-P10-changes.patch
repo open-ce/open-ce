@@ -1,0 +1,27 @@
+From c2dac8842b5df7eada3f22b90a037a74a8a0a15d Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 10 May 2023 15:30:56 +0000
+Subject: [PATCH] P10 changes
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 98cea89..3ff8a7c 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -23,8 +23,8 @@ build:
+ 
+ requirements:
+   build:
+-    - {{ compiler('c') }}
+-    - {{ compiler('cxx') }}
++    - {{ compiler('c') }}         #[ppc_arch != "p10"]
++    - {{ compiler('cxx') }}       #[ppc_arch != "p10"]
+     - make            # [unix]
+     - patch           # [not win]
+     - m2-patch        # [win]
+-- 
+2.34.1
+
