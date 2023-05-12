@@ -1,15 +1,15 @@
-From 90fb053d9c55eef7ea223e1e5c4a409c530a0218 Mon Sep 17 00:00:00 2001
-From: root <root@dldev7.aus.stglabs.ibm.com>
-Date: Thu, 11 May 2023 05:00:48 -0400
+From fbc264e18d85e20e7473184eeb1d10e15ce9ff14 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 12 May 2023 06:06:53 +0000
 Subject: [PATCH] opence changes for build with openssl for fips
 
 ---
- recipe/build.sh  | 32 +++++++++++++++++++++++++++-----
+ recipe/build.sh  | 27 ++++++++++++++++++++++-----
  recipe/meta.yaml | 13 +++----------
- 2 files changed, 30 insertions(+), 15 deletions(-)
+ 2 files changed, 25 insertions(+), 15 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 8528472..887d01b 100755
+index 8528472..d7ef169 100755
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -1,4 +1,5 @@
@@ -18,7 +18,7 @@ index 8528472..887d01b 100755
  
  # unset the SUBDIR variable since it changes the behavior of make here
  unset SUBDIR
-@@ -20,17 +21,22 @@ if [[ ${USE_NONFREE} == yes ]]; then
+@@ -20,15 +21,15 @@ if [[ ${USE_NONFREE} == yes ]]; then
    _CONFIG_OPTS+=("--enable-libx264")
  else
    _CONFIG_OPTS+=("--disable-nonfree")
@@ -38,15 +38,8 @@ index 8528472..887d01b 100755
 +  _CONFIG_OPTS+=("--disable-libx264")
  fi
  
-+#export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PREFIX/lib/pkgconfig
-+
-+#pkg-config --list-all
-+#pkg-config gnutls --cflags
-+
  ./configure \
-         --prefix="${PREFIX}" \
-         --cc=${CC} \
-@@ -50,6 +56,22 @@ fi
+@@ -50,6 +51,22 @@ fi
          --enable-version3 \
          --enable-zlib \
        	--enable-libmp3lame \
@@ -120,5 +113,5 @@ index 23ad810..6aa9a7b 100644
          "swresample",
          "avcodec",
 -- 
-2.27.0
+2.34.1
 
