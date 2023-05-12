@@ -16,3 +16,5 @@ packages:
     git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
     patches :
      - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch
+
+git_tag_for_env: open-ce-v1.9.0
