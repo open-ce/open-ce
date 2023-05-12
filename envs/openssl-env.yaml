@@ -17,7 +17,7 @@ packages:
     patches :
      - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch
   # overrides the ffmpeg feedstock used in the ffmpeg env.
-  # the patch used here is specific for FIPS build
+  # the patch used here adds a dependency on opence openssl for FIPS build
   - feedstock : https://github.com/AnacondaRecipes/ffmpeg-feedstock
     git_tag : 57ca332013295a161307fa10afdae2197a56cc93
     patches :
