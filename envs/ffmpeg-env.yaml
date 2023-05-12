@@ -4,6 +4,8 @@ packages:
 {% if s390x %}
   - feedstock : https://github.com/AnacondaRecipes/libvpx-feedstock
     git_tag : c34e6177a29623e268c6533d19a3d5efebd13711
+    patches:
+      - feedstock-patches/libvpx/0001-enable-libvpx-for-s390x.patch
   - feedstock : https://github.com/AnacondaRecipes/yasm-feedstock
     git_tag : 94a331b4ddce69c3c105ff97e54d659dcdecd25e
 {% endif %}
