@@ -16,3 +16,5 @@ packages:
   - feedstock : pytorch_scatter
   - feedstock : pytorch_geometric
 {% endif %}
+
+git_tag_for_env: open-ce-v1.9.0

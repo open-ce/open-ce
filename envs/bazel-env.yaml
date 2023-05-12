@@ -5,3 +5,5 @@ packages:
     runtime_package : False        #[not x86_64]
   - feedstock : bazel
     runtime_package : False
+
+git_tag_for_env: open-ce-v1.9.0

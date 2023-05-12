@@ -26,3 +26,5 @@ packages:
     patches:                                                              #[ppc_arch == "p10"]
       - feedstock-patches/leveldb/0001-changes-for-opence.patch           #[ppc_arch == "p10"]
 {% endif %}
+
+git_tag_for_env: open-ce-v1.9.0
