@@ -10,17 +10,19 @@ packages:
 {% if not s390x %}
   - feedstock : pytorch
   - feedstock : numactl
+  - feedstock : sentencepiece
+  - feedstock : torchtext
+{% if not s390x %}
+  - feedstock : av
+  - feedstock : torchvision
+{% endif %}
   {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : magma
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
   {% endif %}
-  - feedstock : sentencepiece
   - feedstock : torchdata      # [build_type == 'cpu' or cudatoolkit == '11.8']
-  - feedstock : torchtext
-  - feedstock : av
-  - feedstock : torchvision
   - feedstock : https://github.com/AnacondaRecipes/leveldb-feedstock      #[ppc_arch == "p10"]
     git_tag: 44dd156fd8f7a81536926e11b54fdbf9df2c3158                     #[ppc_arch == "p10"]
     patches:                                                              #[ppc_arch == "p10"]
