@@ -225,7 +225,7 @@ pathy:
   - 0.6.*
 pip:
   - 21.*
-#using pkg_config is not working here with ffmpeg-feedstock, so updated to pkgconfig
+#pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
 pkgconfig:
   - 0.29.2
 preshed:
