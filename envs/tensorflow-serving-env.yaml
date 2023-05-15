@@ -12,18 +12,17 @@ packages:
 {% if not s390x %}
 
   {% if build_type == 'cuda' %}
-    - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
+    - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
     - feedstock: nccl
     - feedstock: cudnn
   {% endif %}
+    - feedstock : https://github.com/conda-forge/grpcio-feedstock
+      git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+      patches :
+        - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
+        - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
+
     - feedstock: libevent
     - feedstock: tensorflow-serving
-
-  {% if python is string %}
-    {% set py = python | replace(".", "") | int %}
-    {% if py >= 38 %}
-    - feedstock: protobuf
-    {% endif %}
-  {% endif %}
 
 {% endif %}
