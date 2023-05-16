@@ -4,7 +4,6 @@ imported_envs:
 {% if build_type == 'cuda' %}
   - tensorflow-env.yaml
   - openblas-env.yaml
-  - ffmpeg-env.yaml
 {% endif %}
 
 packages:

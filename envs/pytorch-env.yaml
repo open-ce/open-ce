@@ -3,7 +3,6 @@ builder_version: ">=10.0.1"
 imported_envs:
   - openblas-env.yaml
   - scipy-env.yaml
-  - ffmpeg-env.yaml
 
 packages:
   - feedstock : pytorch
