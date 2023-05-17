@@ -1,14 +1,14 @@
-From 685a230d53d3c8c0a3a7c6b3bcc0ff81cb556a6b Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 27 Apr 2023 15:01:55 +0000
-Subject: [PATCH] Fixed for open-ce
+From fa4fdb9bf9a4ab0915c6e735fd896148b46eaebe Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23in.ibm.com>
+Date: Wed, 17 May 2023 10:11:40 +0000
+Subject: [PATCH] Fixed
 
 ---
- recipe/meta.yaml | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ recipe/meta.yaml | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 795b445..8c113ba 100644
+index 795b445..7973372 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -18,14 +18,15 @@ requirements:
@@ -32,6 +32,14 @@ index 795b445..8c113ba 100644
      - pip
    run:
      - python
+@@ -42,6 +43,7 @@ test:
+   requires:
+     - pip
+     - pytest
++    - py
+     - pytest-xdist
+     - pylint >=2.6.0
+     - pyink
 -- 
 2.34.1
 
