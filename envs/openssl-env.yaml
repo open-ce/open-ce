@@ -13,4 +13,9 @@ packages:
     patches :
       - feedstock-patches/cryptography/0001-opence-changes-for-crytography.patch
 
-git_tag_for_env: open-ce-v1.7.7
+  # overrides the ffmpeg feedstock used in the ffmpeg env.
+  # the patch used here adds a dependency on opence openssl for FIPS build
+  - feedstock : https://github.com/AnacondaRecipes/ffmpeg-feedstock
+    git_tag : 57ca332013295a161307fa10afdae2197a56cc93
+    patches :
+      - feedstock-patches/ffmpeg/0001-opence-changes-for-build-with-openssl-for-fips.patch

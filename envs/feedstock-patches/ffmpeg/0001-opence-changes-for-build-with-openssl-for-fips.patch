@@ -1,0 +1,117 @@
+From fbc264e18d85e20e7473184eeb1d10e15ce9ff14 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 12 May 2023 06:06:53 +0000
+Subject: [PATCH] opence changes for build with openssl for fips
+
+---
+ recipe/build.sh  | 27 ++++++++++++++++++++++-----
+ recipe/meta.yaml | 13 +++----------
+ 2 files changed, 25 insertions(+), 15 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 8528472..d7ef169 100755
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -1,4 +1,5 @@
+ #!/bin/bash
++set -ex
+ 
+ # unset the SUBDIR variable since it changes the behavior of make here
+ unset SUBDIR
+@@ -20,15 +21,15 @@ if [[ ${USE_NONFREE} == yes ]]; then
+   _CONFIG_OPTS+=("--enable-libx264")
+ else
+   _CONFIG_OPTS+=("--disable-nonfree")
+-  _CONFIG_OPTS+=("--enable-gpl")
+-  _CONFIG_OPTS+=("--enable-gnutls")
++  _CONFIG_OPTS+=("--disable-gpl")
++  _CONFIG_OPTS+=("--disable-gnutls")
+   # OpenSSL 3 will be Apache-licensed so we can revisit this later:
+   # https://github.com/openssl/openssl/commit/151333164ece49fdba3fe5c4bbdc3333cd9ae66d
+-  _CONFIG_OPTS+=("--disable-openssl")
++  _CONFIG_OPTS+=("--enable-openssl")
+   # The Cisco GPL-compliant wrapper (you need to get your own binaries for this)
+-  _CONFIG_OPTS+=("--enable-libopenh264")
++  _CONFIG_OPTS+=("--disable-libopenh264")
+   # GPL-3.0
+-  _CONFIG_OPTS+=("--enable-libx264")
++  _CONFIG_OPTS+=("--disable-libx264")
+ fi
+ 
+ ./configure \
+@@ -50,6 +51,22 @@ fi
+         --enable-version3 \
+         --enable-zlib \
+       	--enable-libmp3lame \
++        --disable-encoder=h264 \
++        --disable-decoder=h264 \
++        --disable-decoder=libh264 \
++        --disable-decoder=libx264 \
++        --disable-decoder=libopenh264 \
++        --disable-encoder=libopenh264 \
++        --disable-encoder=libx264 \
++        --disable-decoder=libx264rgb \
++        --disable-encoder=libx264rgb \
++        --disable-encoder=hevc \
++        --disable-decoder=hevc \
++        --disable-encoder=aac \
++        --disable-decoder=aac \
++        --disable-decoder=aac_fixed \
++        --disable-encoder=aac_latm \
++        --disable-decoder=aac_latm \
+         "${_CONFIG_OPTS[@]}"
+ 
+ make -j${CPU_COUNT} ${VERBOSE_AT}
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 23ad810..6aa9a7b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -28,25 +28,23 @@ requirements:
+   build:
+     - {{ compiler("c") }}
+     - {{ compiler("cxx") }}
+-    - pkg-config  # [not win]
++    - pkg-config {{ pkgconfig }}
+     - libtool  # [not win]
+     - nasm  # [(osx and x86_64) or linux32 or linux64]
+     - make  # [not win]
+   host:
+     - bzip2  # [not win]
+     - freetype  # [not win]
+-    - gnutls  # [not win]
+     - libiconv  # [not win and not linux]
+-    - x264  # [not win]
+     - zlib  # [not win]
+-    - openh264  # [not win]
+     - lame  # [not win]
+     - gmp  # [unix]
+     - libvpx  # [not win]
+     - libopus # [not win]
+-    - openssl # [not win]
++    - openssl 1.1.1zz
+   run:
+     - lame  # [not win]
++    - openssl 1.1.1zz
+ 
+ test:
+   commands:
+@@ -55,16 +53,11 @@ test:
+     - ffmpeg -loglevel panic -protocols | grep "https"  # [not win]
+     - ffmpeg -loglevel panic -codecs | grep "libmp3lame"  # [not win]
+     - ffmpeg -loglevel panic -codecs | grep "DEVI.S zlib"  # [unix]
+-    - ffmpeg -loglevel panic -codecs | grep "DEV.LS h264"  # [linux64 or osx64]
+-    - ffmpeg -loglevel panic -codecs | grep "D.V.LS h264"  # [ppc64le]
+-    - ffmpeg -loglevel panic -codecs | grep "libx264"  # [linux64 or osx64]
+-    - ffmpeg -loglevel panic -codecs | grep "libopenh264"  # [linux64 or osx64]
+     # Verify dynamic libraries on all systems
+     {% set ffmpeg_libs = [
+         "avcodec",
+         "avdevice",
+         "swresample",
+-        "postproc",
+         "avfilter",
+         "swresample",
+         "avcodec",
+-- 
+2.34.1
+
