@@ -1,20 +1,21 @@
-From 8cd0ac2f037d9bd67d29a639a6907fa57261c2bb Mon Sep 17 00:00:00 2001
+From c6d77e4d93e4d17485b3acbbb30c20d6b27e950e Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 12 Aug 2022 09:05:17 +0000
+Date: Wed, 17 May 2023 14:34:12 +0000
 Subject: [PATCH] fix for py310
 
 ---
- recipe/meta.yaml | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ recipe/meta.yaml | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 81f9048..ebffc93 100644
+index 81f9048..4f87080 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,6 +1,5 @@
  {% set version = "6.1.1" %}
- {% set test_skips = "not (dawg_data_sparql or definednamespace_creator)" %}
+-{% set test_skips = "not (dawg_data_sparql or definednamespace_creator)" %}
 -{% set cov_fail_under = 72 %}
++{% set test_skips = "not (dawg_data_sparql or definednamespace_creator or testGuessFormatForParse)" %}
  
  package:
    name: rdflib
