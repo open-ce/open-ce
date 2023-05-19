@@ -31,4 +31,4 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
 
-git_tag_for_env: open-ce-v1.7.7
+git_tag_for_env: open-ce-v1.7.8
