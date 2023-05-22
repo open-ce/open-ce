@@ -23,12 +23,12 @@ imported_envs:
   - misc-env.yaml
 
 packages:
-  - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
-    git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9   # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-    patches:                                             # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-      - feedstock-patches/h5py/0001-Fixed-h5py.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-      - feedstock-patches/h5py/0001-P10-changes.patch    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]              
-  - feedstock : opencv   # [not s390x]
+  - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[build_type == 'cpu' or cudatoolkit == "11.4"]
+    git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9   # [build_type == 'cpu' or cudatoolkit == '11.4']
+    patches:                                             # [build_type == 'cpu' or cudatoolkit == '11.4']
+      - feedstock-patches/h5py/0001-Fixed-h5py.patch     # [build_type == 'cpu' or cudatoolkit == '11.4']
+      - feedstock-patches/h5py/0001-P10-changes.patch    # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
   - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
