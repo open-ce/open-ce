@@ -16,7 +16,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
     patches :
-      - feedstock-patches/absl-py/0001-Updated-to-absl-py-1.2.0.patch
+      - feedstock-patches/absl-py/0001-Updated-absl-py-to-1.0.0.patch
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
@@ -38,7 +38,6 @@ packages:
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
-  - feedstock : typeguard
   - feedstock : tensorflow-addons             #[build_type == 'cpu']
   - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
 
