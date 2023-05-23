@@ -1,12 +1,12 @@
-From adb926a278a2aab0319af79fa2f25223428aff59 Mon Sep 17 00:00:00 2001
+From 88faa1fffce1275483a08a28f70cd3cb060da869 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 12 May 2023 06:25:42 +0000
+Date: Tue, 23 May 2023 12:02:10 +0000
 Subject: [PATCH] disable codecs for opence
 
 ---
  recipe/build.sh  | 27 ++++++++++++++++++++++-----
- recipe/meta.yaml | 10 +---------
- 2 files changed, 23 insertions(+), 14 deletions(-)
+ recipe/meta.yaml | 14 ++++----------
+ 2 files changed, 26 insertions(+), 15 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 8528472..d7ef169 100755
@@ -63,10 +63,18 @@ index 8528472..d7ef169 100755
  
  make -j${CPU_COUNT} ${VERBOSE_AT}
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 23ad810..ee65946 100644
+index 23ad810..ba26a99 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -28,18 +28,15 @@ requirements:
+@@ -16,6 +16,7 @@ source:
+ 
+ build:
+   number: 0
++  string: opence_{{ PKG_BUILDNUM }}
+   # The windows build is repacking binaries rather than building from source
+   run_exports:
+   # seems to be minor version compatibility
+@@ -28,25 +29,23 @@ requirements:
    build:
      - {{ compiler("c") }}
      - {{ compiler("cxx") }}
@@ -86,7 +94,16 @@ index 23ad810..ee65946 100644
      - lame  # [not win]
      - gmp  # [unix]
      - libvpx  # [not win]
-@@ -55,16 +52,11 @@ test:
+     - libopus # [not win]
+-    - openssl # [not win]
++    - openssl
+   run:
+     - lame  # [not win]
++    - openssl
+ 
+ test:
+   commands:
+@@ -55,16 +54,11 @@ test:
      - ffmpeg -loglevel panic -protocols | grep "https"  # [not win]
      - ffmpeg -loglevel panic -codecs | grep "libmp3lame"  # [not win]
      - ffmpeg -loglevel panic -codecs | grep "DEVI.S zlib"  # [unix]
