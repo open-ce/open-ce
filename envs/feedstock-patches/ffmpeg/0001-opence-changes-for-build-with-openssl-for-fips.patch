@@ -1,12 +1,12 @@
-From adb926a278a2aab0319af79fa2f25223428aff59 Mon Sep 17 00:00:00 2001
+From fbc264e18d85e20e7473184eeb1d10e15ce9ff14 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 12 May 2023 06:25:42 +0000
-Subject: [PATCH] disable codecs for opence
+Date: Fri, 12 May 2023 06:06:53 +0000
+Subject: [PATCH] opence changes for build with openssl for fips
 
 ---
  recipe/build.sh  | 27 ++++++++++++++++++++++-----
- recipe/meta.yaml | 10 +---------
- 2 files changed, 23 insertions(+), 14 deletions(-)
+ recipe/meta.yaml | 13 +++----------
+ 2 files changed, 25 insertions(+), 15 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 8528472..d7ef169 100755
@@ -63,10 +63,10 @@ index 8528472..d7ef169 100755
  
  make -j${CPU_COUNT} ${VERBOSE_AT}
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 23ad810..ee65946 100644
+index 23ad810..6aa9a7b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -28,18 +28,15 @@ requirements:
+@@ -28,25 +28,23 @@ requirements:
    build:
      - {{ compiler("c") }}
      - {{ compiler("cxx") }}
@@ -86,7 +86,16 @@ index 23ad810..ee65946 100644
      - lame  # [not win]
      - gmp  # [unix]
      - libvpx  # [not win]
-@@ -55,16 +52,11 @@ test:
+     - libopus # [not win]
+-    - openssl # [not win]
++    - openssl 1.1.1zz
+   run:
+     - lame  # [not win]
++    - openssl 1.1.1zz
+ 
+ test:
+   commands:
+@@ -55,16 +53,11 @@ test:
      - ffmpeg -loglevel panic -protocols | grep "https"  # [not win]
      - ffmpeg -loglevel panic -codecs | grep "libmp3lame"  # [not win]
      - ffmpeg -loglevel panic -codecs | grep "DEVI.S zlib"  # [unix]

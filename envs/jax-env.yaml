@@ -42,3 +42,5 @@ packages:
       - feedstock-patches/bazel-toolchain/0001-Patch-to-fix-s390x.patch                 #[s390x]
   - feedstock : jax
   - feedstock : jaxlib
+
+git_tag_for_env: open-ce-v1.9.0

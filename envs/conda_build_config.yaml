@@ -80,7 +80,7 @@ fmt:
 freetype:
   - 2
 fortran_compiler_version:
-  - 8.*                        # [cudatoolkit == '11.2'] 
+  - 8.*                        # [cudatoolkit == '11.2']
   - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.8']
 fsspec:
   - 2022.11.*
@@ -225,7 +225,7 @@ pathy:
   - 0.6.*
 pip:
   - 21.*
-#using pkg_config is not working here with ffmpeg-feedstock, so updated to pkgconfig
+#pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
 pkgconfig:
   - 0.29.2
 preshed:
