@@ -38,7 +38,6 @@ packages:
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
-  - feedstock : typeguard
   - feedstock : tensorflow-addons             #[build_type == 'cpu']
   - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
 
