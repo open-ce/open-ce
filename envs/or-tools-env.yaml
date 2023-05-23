@@ -52,7 +52,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
     patches :      
-      - feedstock-patches/absl-py/0001-Updated-to-absl-py-1.2.0.patch
+      - feedstock-patches/absl-py/0001-Updated-absl-py-to-1.0.0.patch
   - feedstock : https://github.com/conda-forge/or-tools-feedstock.git
     git_tag : 592415a03e8ec945600fb85270fd68f6fad9cabb
     patches :
