@@ -14,7 +14,7 @@ runs:
     - name: Clone build tools
       shell: bash -l {0}
       run: |
-        git clone https://github.com/open-ce/open-ce-builder.git \
+        git clone https://github.com/open-ce/open-ce-builder.git -b r10.0.2 \
                   ./open-ce-builder
     - name: Create Version Branch
       shell: bash -l {0}
