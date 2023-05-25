@@ -12,7 +12,7 @@ runs:
       run: |
         conda install -y conda-build=3.21.7
         echo "env_path=$GITHUB_ACTION_PATH/../../../envs" >> $GITHUB_ENV
-        git clone https://github.com/open-ce/open-ce-builder.git \
+        git clone https://github.com/open-ce/open-ce-builder.git -b r10.0.2 \
                   ./open-ce-builder
         pip install -e open-ce-builder
     - name: Check recipes
