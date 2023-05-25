@@ -83,7 +83,8 @@ future:
 gast:
   - 0.4.0
 git:
-  - 2.15
+  - 2.15    #[not s390x]
+  - 2.34.*  #[s390x]
 google_auth:
   - 1.*
 google_auth_oauthlib:
@@ -213,7 +214,8 @@ pathy:
   - 0.5.*
 pip:
   - 21.*
-pkg_config:
+#pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
+pkgconfig:
   - 0.29.2
 preshed:
   - 3.0.*
