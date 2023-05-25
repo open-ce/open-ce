@@ -14,4 +14,4 @@ packages:
     git_tag: a1855c8a4e3e2e597f612e4edd504bf1da81d91d
 {% endif %}
 
-git_tag_for_env: open-ce-v1.5.6
+git_tag_for_env: open-ce-v1.5.7
