@@ -11,4 +11,4 @@ packages:
   - feedstock : termcolor-cpp
   - feedstock : mamba
 
-git_tag_for_env: open-ce-v1.5.6
+git_tag_for_env: open-ce-v1.5.7
