@@ -100,7 +100,8 @@ grpc_cpp:
 grpcio:
   - 1.42.*
 harfbuzz:
-  - 1.8
+  - 1.8   #[not s390x]
+  - 4.3   #[s390x]
 # Note: hdf5 version must be compatible with h5py
 hdf5:
   - 1.10.6
