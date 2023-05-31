@@ -1,0 +1,12 @@
+imported_envs:
+  - tensorflow-env.yaml
+{% if build_type == 'cpu' %}
+  - xgboost-env.yaml
+  - arrow-env.yaml
+  - mamba-env.yaml
+{% endif %}
+
+packages:
+  - feedstock : opencv
+
+git_tag_for_env: open-ce-v1.5.7
