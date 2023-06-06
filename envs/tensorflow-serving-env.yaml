@@ -5,7 +5,7 @@ imported_envs:
   - common-deps.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
-conda_build_configs:
+conda_build_configs:                   #[ppc_arch == 'p10']
   - conda_build_config_p10.yaml        #[ppc_arch == 'p10']
 
 packages:
