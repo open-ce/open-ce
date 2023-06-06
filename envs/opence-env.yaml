@@ -24,6 +24,7 @@ imported_envs:
   - deepspeed-env.yaml
   - misc-env.yaml
   - or-tools-env.yaml
+  - tensorflow-serving-env.yaml
 
 packages:
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
