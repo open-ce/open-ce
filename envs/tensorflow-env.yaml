@@ -38,7 +38,7 @@ packages:
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
-  - feedstock : tensorflow-addons             #[build_type == 'cpu']
+  - feedstock : tensorflow-addons             #[build_type == 'cpu' or cudatoolkit == '11.2']
   - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
 
 git_tag_for_env: open-ce-v1.9.0

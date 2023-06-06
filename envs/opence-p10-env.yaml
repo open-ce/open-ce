@@ -16,6 +16,7 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - or-tools-env.yaml
+  - tensorflow-serving-env.yaml
 
 packages:
   - feedstock : opencv
