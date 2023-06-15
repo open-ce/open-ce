@@ -1,12 +1,15 @@
 builder_version: ">=10.0.1"
 
 imported_envs:
+{% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - tensorboard-env.yaml
   - pytorch-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
+{% endif %}
 
 packages:
 {% if not s390x %}
+{% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - feedstock : pytorch-lightning
   - feedstock : pytorch-lightning-bolts
   - feedstock : libflac
@@ -44,6 +47,7 @@ packages:
       - feedstock-patches/aioredis/0001-avoid-using-python-3.11.patch
   - feedstock : https://github.com/conda-forge/dateutils-feedstock
     git_tag : 2723b1b582889ac1e5f10e8aaf0cb91ff6c41844
+{% endif %}
 {% endif %}
 
 git_tag_for_env: open-ce-v1.9.0
