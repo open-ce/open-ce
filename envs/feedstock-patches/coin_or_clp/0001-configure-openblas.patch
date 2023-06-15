@@ -1,13 +1,27 @@
-From 80ca1a1a77a10bbf9341d9ba54a0620733200221 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Tue, 31 Jan 2023 06:11:23 +0000
-Subject: [PATCH] Configure openblas
+From 68f5c6863a93948327e638168741a4919ee1a997 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 15 Jun 2023 07:20:21 +0000
+Subject: [PATCH] configure openblas
 
 ---
- recipe/build.sh  | 6 +++---
- recipe/meta.yaml | 7 +++----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ config/conda_build_config.yaml | 6 ++++++
+ recipe/build.sh                | 6 +++---
+ recipe/meta.yaml               | 9 ++++-----
+ 3 files changed, 13 insertions(+), 8 deletions(-)
+ create mode 100644 config/conda_build_config.yaml
 
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..c823874
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,6 @@
++c_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
++cxx_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
++fortran_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
 diff --git a/recipe/build.sh b/recipe/build.sh
 index b44859c..8b3cc80 100644
 --- a/recipe/build.sh
@@ -31,10 +45,16 @@ index b44859c..8b3cc80 100644
 \ No newline at end of file
 +make install
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index d22b864..c81aa45 100644
+index d22b864..a0cc88a 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -29,15 +29,14 @@ requirements:
+@@ -24,20 +24,19 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+     - {{ compiler('fortran') }}
+-    - pkg-config
++    - pkg-config {{ pkgconfig }}
+     - make  # [unix]
    host:
      - coin-or-utils
      - coin-or-osi

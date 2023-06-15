@@ -1,13 +1,27 @@
-From 855489a542292f8bb2d6dc944bd11855eb690352 Mon Sep 17 00:00:00 2001
-From: Archanashinde1 <archana.shinde1@github.com>
-Date: Mon, 12 Dec 2022 14:11:25 +0000
+From f451c952813ce71c0df45afbcd83057aec06b250 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 15 Jun 2023 07:00:30 +0000
 Subject: [PATCH] configure openblas
 
 ---
- recipe/build.sh  | 6 +++---
- recipe/meta.yaml | 9 +++------
- 2 files changed, 6 insertions(+), 9 deletions(-)
+ config/conda_build_config.yaml | 6 ++++++
+ recipe/build.sh                | 6 +++---
+ recipe/meta.yaml               | 9 +++------
+ 3 files changed, 12 insertions(+), 9 deletions(-)
+ create mode 100644 config/conda_build_config.yaml
 
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..c823874
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,6 @@
++c_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
++cxx_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
++fortran_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 88e404d..49ff12a 100644
 --- a/recipe/build.sh
@@ -31,7 +45,7 @@ index 88e404d..49ff12a 100644
 \ No newline at end of file
 +make install
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index a207bf5..93079a5 100644
+index a207bf5..1893456 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -23,15 +23,12 @@ requirements:
