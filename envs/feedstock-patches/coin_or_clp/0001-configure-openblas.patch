@@ -1,13 +1,13 @@
-From 68f5c6863a93948327e638168741a4919ee1a997 Mon Sep 17 00:00:00 2001
+From c4df1266666b12fa4f20444abe2d1bcb891d903d Mon Sep 17 00:00:00 2001
 From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Thu, 15 Jun 2023 07:20:21 +0000
+Date: Fri, 16 Jun 2023 08:48:12 +0000
 Subject: [PATCH] configure openblas
 
 ---
  config/conda_build_config.yaml | 6 ++++++
  recipe/build.sh                | 6 +++---
- recipe/meta.yaml               | 9 ++++-----
- 3 files changed, 13 insertions(+), 8 deletions(-)
+ recipe/meta.yaml               | 7 +++----
+ 3 files changed, 12 insertions(+), 7 deletions(-)
  create mode 100644 config/conda_build_config.yaml
 
 diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
@@ -45,16 +45,10 @@ index b44859c..8b3cc80 100644
 \ No newline at end of file
 +make install
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index d22b864..a0cc88a 100644
+index 0020fa7..930c031 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -24,20 +24,19 @@ requirements:
-     - {{ compiler('c') }}
-     - {{ compiler('cxx') }}
-     - {{ compiler('fortran') }}
--    - pkg-config
-+    - pkg-config {{ pkgconfig }}
-     - make  # [unix]
+@@ -29,15 +29,14 @@ requirements:
    host:
      - coin-or-utils
      - coin-or-osi
