@@ -13,6 +13,8 @@ packages:
     patches:
       - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
       - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
+  - feedstock : https://github.com/AnacondaRecipes/cfitsio-feedstock
+    git_tag: f965e25fdec2b5dee0965cfaf2635384ae8e16ed
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : af1e1b369a2327a4a4b7d52a9a8579454729dd07
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock

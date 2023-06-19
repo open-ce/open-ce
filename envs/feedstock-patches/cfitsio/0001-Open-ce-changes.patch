@@ -1,0 +1,25 @@
+From a28c18225b35ad0236d6af7a27f35c3553e24064 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 19 Jun 2023 06:55:56 +0000
+Subject: [PATCH] Open-ce changes
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 78510b7..6d0b29c 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -35,7 +35,7 @@ requirements:
+   host:
+     - libcurl  # [not win]
+     - bzip2  # [not win]
+-    - zlib  # [not win]
++    - zlib {{ zlib }} # [not win]
+ 
+ test:
+   commands:
+-- 
+2.34.1
+
