@@ -9,14 +9,13 @@ imported_envs:
   - pytorch_geometric-env.yaml         # [build_type == 'cpu' or cudatoolkit == '11.8']
   - tensorflow-env.yaml
   - xgboost-env.yaml
-  - dali-env.yaml
+  - dali-env.yaml                      # [build_type == 'cpu' or cudatoolkit == '11.8']
   - horovod-env.yaml                   # [build_type == 'cpu' or cudatoolkit == '11.8']
   - lightgbm-env.yaml
   - arrow-env.yaml
   - mamba-env.yaml
 
-  # Disable ray-env for now as it is failing i CI environment
-  #- ray-env.yaml
+  - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml                  # [build_type == 'cpu' or cudatoolkit == '11.8']
