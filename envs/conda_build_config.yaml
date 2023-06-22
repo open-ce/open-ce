@@ -181,7 +181,7 @@ magma:
 make:
   - 4.2.1
 markdown:
-  - 3.3.*
+  - 3.4.*
 mock:
   - 3.*      # [not s390x]
   - 4.*      # [s390x]
@@ -237,7 +237,7 @@ psutil:
 pybind11:
   - 2.9.*
 pydantic:
-  - 1.9.*
+  - 1.10.*
 pytest:
   - 7.*
 python:
@@ -310,7 +310,7 @@ tensorflow_hub:
 tensorflow_io_gcs_filesystem:
   - 0.32.*
 termcolor:
-  - 1.1.0
+  - 2.1.*
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
