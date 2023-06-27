@@ -260,7 +260,7 @@ rdflib:
 requests:
   - 2.*
 regex:
-  - 2022.3.*
+  - 2022.7.*
 reproc_cpp:
   - 14.2.*
 rust:
