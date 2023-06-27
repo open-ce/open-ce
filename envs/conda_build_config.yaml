@@ -224,7 +224,7 @@ opt_einsum:
 pathy:
   - 0.6.*
 pip:
-  - 21.*
+  - 23.*
 #pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
 pkgconfig:
   - 0.29.2
