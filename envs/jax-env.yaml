@@ -25,6 +25,8 @@ packages:
       - feedstock-patches/pyink/0001-Fixed-build.patch
   - feedstock: https://github.com/conda-forge/black-feedstock
     git_tag : e249fb3eb839d8c84a1a634fbd74d2a53fc9199b
+    patches :
+      - feedstock-patches/black/0001-Fixed-build.patch
   - feedstock: https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
     git_tag : 4904e98b139ebfbb6765ceaecaa3753dd994b5c6
     patches :
