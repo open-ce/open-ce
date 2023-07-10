@@ -44,7 +44,7 @@ packages:
   - feedstock : https://github.com/conda-forge/aioredis-feedstock
     git_tag : fbfc6b513846aff97772f21b90ad0d0555884186
     patches:
-      - feedstock-patches/aioredis/0001-avoid-using-python-3.11.patch
+      - feedstock-patches/aioredis/0001-fix-for-python-3.11.patch
   - feedstock : https://github.com/conda-forge/dateutils-feedstock
     git_tag : 2723b1b582889ac1e5f10e8aaf0cb91ff6c41844
 {% endif %}
