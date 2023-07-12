@@ -16,6 +16,7 @@ imported_envs:
   - arrow-env.yaml
   - or-tools-env.yaml
   - tensorflow-serving-env.yaml
+  - jax-env.yaml
 
 packages:
   - feedstock : opencv

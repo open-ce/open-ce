@@ -1,19 +1,19 @@
-From 4deb26323f2964c0d9cd06c16071bb3a9a4687bd Mon Sep 17 00:00:00 2001
+From 9a8318519ba43c8480fc84ac56b0636d82ea0a16 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 22 Mar 2023 09:19:39 +0000
-Subject: [PATCH] Updated to 1.51.3
+Date: Wed, 12 Jul 2023 09:41:45 +0000
+Subject: [PATCH] Updated to 1.53.1
 
 ---
  recipe/meta.yaml | 30 +++++++++++++++---------------
  1 file changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..51e1fe5 100644
+index 19fa19a..1fb3d08 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,4 +1,4 @@
 -{% set version = "1.46.3" %}
-+{% set version = "1.51.3" %}
++{% set version = "1.53.1" %}
  
  package:
    name: grpcio
@@ -22,7 +22,7 @@ index 19fa19a..51e1fe5 100644
  source:
    url: https://pypi.io/packages/source/g/grpcio/grpcio-{{ version }}.tar.gz
 -  sha256: 4b8fd8b1cd553635274b83cd984f0755e6779886eca53c1c71d48215962eb689
-+  sha256: be7b2265b7527bb12109a7727581e274170766d5b3c9258d4e466f4872522d7a
++  sha256: 035e0b82ab8b4963430adcc89f5a7a889f5c102a903670c53d7a0268cad65142
    patches:
      - 0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
 -    - 0002-windows-ssl-lib-names.patch
@@ -73,5 +73,5 @@ index 19fa19a..51e1fe5 100644
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
  
 -- 
-2.34.1
+2.40.1
 

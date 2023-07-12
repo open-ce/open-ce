@@ -15,6 +15,6 @@ packages:
   - feedstock : https://github.com/conda-forge/grpcio-feedstock 
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches : 
-      - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
+      - feedstock-patches/grpcio/0001-Updated-to-1.53.1.patch
       - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
   - feedstock : tensorboard
