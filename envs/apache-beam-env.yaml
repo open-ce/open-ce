@@ -19,8 +19,6 @@ packages:
       - feedstock-patches/maturin/0001-Fixed-maturin.patch
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
-  - feedstock : https://github.com/conda-forge/dill-feedstock
-    git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f     # 1.65
   - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
