@@ -124,7 +124,7 @@ jasper:
 jax:
   - 0.4.7
 joblib:
-  - 1.*
+  - 1.2.*
 jpeg:
   - 9e
 jpegturbo:
@@ -230,7 +230,7 @@ protobuf:
 psutil:
   - 5
 pybind11:
-  - 2.9.*
+  - 2.10.*
 pydantic:
   - 1.10.*
 pytest:
@@ -241,7 +241,7 @@ python:
   - 3.10
   - 3.11
 pytorch:
-  - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 2.0.*
 pytorch_lightning:
   - 2.0.*
 pytorch_scatter:
@@ -259,9 +259,9 @@ regex:
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.65.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.65.*
 rust_compiler_version:
-  - '1.65.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - '1.65.0'
 safeint:
   - 3.0
 scipy:
@@ -383,4 +383,4 @@ cuda_levels:
   - 6.0,7.0,7.5,8.0,8.6,9.0         # [ppc64le]
 cuda_levels_details:
   - sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64]
-  - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90               # [ppc64le]
+  - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90         # [ppc64le]
