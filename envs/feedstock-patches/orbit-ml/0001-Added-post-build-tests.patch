@@ -1,0 +1,33 @@
+From 1540bf4147bb10a4f8db10fa653afe7a3cb61697 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Fri, 14 Jul 2023 04:55:26 +0000
+Subject: [PATCH] Added post build tests of orbit-ml
+
+---
+ tests/open-ce-tests.yaml | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 tests/open-ce-tests.yaml
+
+diff --git a/tests/open-ce-tests.yaml b/tests/open-ce-tests.yaml
+new file mode 100644
+index 0000000..a948d6b
+--- /dev/null
++++ b/tests/open-ce-tests.yaml
+@@ -0,0 +1,14 @@
++tests:
++  - name: Setup orbit Tests
++    command: |
++        conda install -y git
++        git clone --recursive -b $(python -c "import orbit; print('v'+orbit.__version__)") https://github.com/uber/orbit.git
++        cd orbit
++        conda install -y pyyaml pytest
++  - name: Run orbit Tests 
++    command: |
++        cd orbit 
++        pytest -v tests/
++  - name: Clean tests
++    command: |
++        rm -rf orbit
+-- 
+2.40.1
+
