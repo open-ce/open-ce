@@ -17,7 +17,7 @@ packages:
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   - feedstock : https://github.com/conda-forge/cmake-feedstock
-    git_tag : 0a6e1b3981a240d0d80829fbfc6080aaf6d2a9f6
+    git_tag : 70e07324f0ab7f075c5c325a55e31ddc9b68d985
     patches :
       - feedstock-patches/cmake/0001-use-GCC-8-for-cuda-11.2-builds.patch
       - feedstock-patches/cmake/0001-P10-changes.patch         #[ppc_arch == 'p10']
@@ -33,4 +33,4 @@ packages:
   - feedstock : tf2onnx
 {% endif %}
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1

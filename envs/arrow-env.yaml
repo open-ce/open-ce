@@ -8,10 +8,6 @@ packages:
 {% if s390x %}
   - feedstock : https://github.com/AnacondaRecipes/rapidjson-feedstock
     git_tag: 3ccf90746229705d0802944babd62fe8fadb7d19
-  - feedstock : https://github.com/conda-forge/libutf8proc-feedstock
-    git_tag: d2a2366dc3c02405b1b54b991758b5bb57b75e6d
-  - feedstock : https://github.com/AnacondaRecipes/re2-feedstock
-    git_tag: 428e7197734e4b3ca835474e31ada8c8c129adee
   - feedstock : https://github.com/AnacondaRecipes/gflags-feedstock
     git_tag: 8bfee448e77492920c23780385dddc5982947e58
   - feedstock : https://github.com/AnacondaRecipes/glog-feedstock
@@ -41,4 +37,4 @@ packages:
   - feedstock : pyarrow
   - feedstock : orc
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1

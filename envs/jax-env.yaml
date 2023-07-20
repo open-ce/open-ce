@@ -37,10 +37,11 @@ packages:
   - feedstock : grpc-cpp
   - feedstock: https://github.com/conda-forge/bazel-toolchain-feedstock
     git_tag : 8da0f5daa593b72ffee327c8df149bab04b903bb
-    patches :                                                  #[s390x or cudatoolkit == '11.2']
+    patches :                                                #[s390x or cudatoolkit == '11.2' or ppc_arch == 'p10']
       - feedstock-patches/bazel-toolchain/0001-Use-gcc-8.2-for-cuda-11.2-builds.patch   #[cudatoolkit == '11.2']
       - feedstock-patches/bazel-toolchain/0001-Patch-to-fix-s390x.patch                 #[s390x]
+      - feedstock-patches/bazel-toolchain/0001-P10-changes.patch                        #[ppc_arch == 'p10']
   - feedstock : jax
   - feedstock : jaxlib
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1

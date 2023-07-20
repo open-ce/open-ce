@@ -10,7 +10,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
     patches :
-      - feedstock-patches/absl-py/0001-Updated-to-absl-py-1.2.0.patch
+      - feedstock-patches/absl-py/0001-Updated-absl-py-to-1.0.0.patch
 
   - feedstock : https://github.com/conda-forge/grpcio-feedstock 
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
@@ -19,4 +19,4 @@ packages:
       - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
   - feedstock : tensorboard
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1

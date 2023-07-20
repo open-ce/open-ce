@@ -17,11 +17,11 @@ packages:
     patches :
      - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch
 
-  # overrides the ffmpeg feedstock used in the ffmpeg env.
-  # the patch used here adds a dependency on opence openssl for FIPS build
+  # duplicates the ffmpeg feedstock used in the ffmpeg env.
+  # having ffmpeg here, eases building ffmpeg via builder for FIPS
   - feedstock : https://github.com/AnacondaRecipes/ffmpeg-feedstock
     git_tag : 57ca332013295a161307fa10afdae2197a56cc93
     patches :
-      - feedstock-patches/ffmpeg/0001-opence-changes-for-build-with-openssl-for-fips.patch
+      - feedstock-patches/ffmpeg/0001-disable-codecs-for-opence.patch
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1

@@ -15,7 +15,9 @@ imported_envs:
   - arrow-env.yaml
   - mamba-env.yaml
 
-  - ray-env.yaml
+  # Disabling ray in FIPS enabled builds due to an error in cython on FIPS enabled system.
+  # Cause of error is hashlib.md5() in cython library and from react-scripts modules of ray
+  #- ray-env.yaml 
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml                  # [build_type == 'cpu' or cudatoolkit == '11.8']

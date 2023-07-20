@@ -13,6 +13,8 @@ packages:
   {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - feedstock : https://github.com/conda-forge/pyro-api-feedstock
     git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
+  - feedstock : https://github.com/AnacondaRecipes/libnetcdf-feedstock
+    git_tag : 53de9e49a2ce6c55d2402f9fc1c56b2c05130afe
   - feedstock : https://github.com/conda-forge/arviz-feedstock
     git_tag : ce04d272d7adaf537ed050752bf5c92514d6290f   
   - feedstock : https://github.com/conda-forge/xarray-einstats-feedstock
@@ -28,4 +30,4 @@ packages:
   {% endif %}
 {% endif %}
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1

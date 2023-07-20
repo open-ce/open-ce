@@ -13,6 +13,10 @@ packages:
     patches:
       - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
       - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
+  - feedstock : https://github.com/AnacondaRecipes/cfitsio-feedstock        #[cudatoolkit != '11.2']
+    git_tag: f965e25fdec2b5dee0965cfaf2635384ae8e16ed                       #[cudatoolkit != '11.2']
+    patches:                                                                #[cudatoolkit != '11.2']
+      - feedstock-patches/cfitsio/0001-Open-ce-changes.patch                #[cudatoolkit != '11.2']
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : af1e1b369a2327a4a4b7d52a9a8579454729dd07
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
@@ -29,4 +33,4 @@ packages:
   - feedstock : ray-packages
 {% endif %}
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1

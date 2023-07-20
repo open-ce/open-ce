@@ -5,7 +5,6 @@ conda_build_configs:
   - conda_build_config_p10.yaml
 
 imported_envs:
-  - ffmpeg-env.yaml
   - common-p10-deps.yaml
   - openblas-env.yaml
   - onnx-env.yaml
@@ -16,8 +15,9 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - or-tools-env.yaml
+  - tensorflow-serving-env.yaml
 
 packages:
   - feedstock : opencv
 
-git_tag_for_env: open-ce-v1.9.0
+git_tag_for_env: open-ce-v1.9.1
