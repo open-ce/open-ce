@@ -32,5 +32,3 @@ packages:
   - feedstock : onnxmltools
   - feedstock : tf2onnx
 {% endif %}
-
-git_tag_for_env: open-ce-v1.9.1
