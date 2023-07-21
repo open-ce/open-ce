@@ -12,5 +12,3 @@ packages:
       - feedstock-patches/prophet/0001-Pin-dependencies.patch
   {% endif %}
 {% endif %}
-
-git_tag_for_env: open-ce-v1.9.1

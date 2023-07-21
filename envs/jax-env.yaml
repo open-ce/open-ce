@@ -45,5 +45,3 @@ packages:
       - feedstock-patches/bazel-toolchain/0001-P10-changes.patch                        #[ppc_arch == 'p10']
   - feedstock : jax
   - feedstock : jaxlib
-
-git_tag_for_env: open-ce-v1.9.1

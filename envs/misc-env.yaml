@@ -11,5 +11,3 @@ packages:
     patches:
       - feedstock-patches/coremltools/0001-coremltools-recipe.patch
 {% endif %}
-
-git_tag_for_env: open-ce-v1.9.1
