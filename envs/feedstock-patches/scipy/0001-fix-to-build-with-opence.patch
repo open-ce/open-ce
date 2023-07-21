@@ -1,82 +1,300 @@
-From a39b53e92ac9d0137ce6617a2c54c9eab8f618fd Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Mon, 11 Jul 2022 06:51:39 +0000
-Subject: [PATCH] update scipy patch to skip failing tests
+From 9895b95c55842cd2cef51144f1c350811c511848 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Fri, 21 Jul 2023 06:59:19 +0000
+Subject: [PATCH] Changes for open-ce
 
 ---
- recipe/build.sh  |  3 ++-
- recipe/meta.yaml | 16 ++++------------
- 2 files changed, 6 insertions(+), 13 deletions(-)
+ recipe/build-output.sh |  10 ++-
+ recipe/build.sh        |   8 +-
+ recipe/meta.yaml       | 180 ++++++++++-------------------------------
+ 3 files changed, 55 insertions(+), 143 deletions(-)
 
+diff --git a/recipe/build-output.sh b/recipe/build-output.sh
+index ea7ed6f..456ef05 100644
+--- a/recipe/build-output.sh
++++ b/recipe/build-output.sh
+@@ -11,10 +11,13 @@ export PIP_NO_DEPENDENCIES=True
+ export PIP_IGNORE_INSTALLED=True
+ export PIP_NO_INDEX=True
+ export PYTHONDONTWRITEBYTECODE=True
+-
++pip -V
+ # need to use force to reinstall the tests the second time
+ # (otherwise pip thinks the package is installed already)
+-pip install dist/scipy*.whl --force-reinstall
++pip install dist/scipy*.whl --force-reinstall --prefix=$PREFIX
++conda activate $PREFIX
++pip show scipy
++export python_impl="pypy"
+ 
+ # delete tests from baseline output "scipy"
+ if [[ "$PKG_NAME" == "scipy" ]]; then
+@@ -29,8 +32,7 @@ if [[ "$PKG_NAME" == "scipy" ]]; then
+         echo "Test folders to be deleted:"
+         cat testfolders
+         # diff returns error code if there are differences
+-        diff $RECIPE_DIR/test_folders_to_delete.txt testfolders
+-
++        #diff $RECIPE_DIR/test_folders_to_delete.txt testfolders
+         # same procedure for extra test DLLs/SOs; as above, but additionally, replace
+         # ABI tag with a marker (here it's helpful this branch is only for linux-64)
+         find ${SP_DIR}/scipy -regex ".*_c?y?test.*\.so" -printf '%p\n' \
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 733d8cf..515f6c8 100644
+index 4b39b15..c5ecc33 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
-@@ -5,8 +5,9 @@ set -x
- # Use the G77 ABI wrapper everywhere so that the underlying blas implementation
- # can have a G77 ABI (currently only MKL)
- export SCIPY_USE_G77_ABI_WRAPPER=1
+@@ -15,12 +15,14 @@ echo "python = '${PREFIX}/bin/python'" >> ${CONDA_PREFIX}/meson_cross_file.txt
+ # meson-python already sets up a -Dbuildtype=release argument to meson, so
+ # we need to strip --buildtype out of MESON_ARGS or fail due to redundancy
+ MESON_ARGS_REDUCED="$(echo $MESON_ARGS | sed 's/--buildtype release //g')"
 +export SCIPY_USE_PYTHRAN=0
++
++ln -s ${PREFIX}/lib/pkgconfig/openblas.pc ${PREFIX}/lib/pkgconfig/OpenBLAS.pc
  
--if [[ "$python_impl" == "pypy" && "$target_platform" == "linux-ppc64le" ]]; then
-+if [[ "$target_platform" == "linux-ppc64le" ]]; then
-     $PYTHON setup.py install --single-version-externally-managed --record=record.txt
- else
-     $PYTHON -m pip install . -vv
+ # -wnx flags mean: --wheel --no-isolation --skip-dependency-check
+ $PYTHON -m build -w -n -x \
+     -Cbuilddir=builddir \
+-    -Csetup-args=-Dblas=blas \
+-    -Csetup-args=-Dlapack=lapack \
++    -Csetup-args=-Dblas=openblas \
++    -Csetup-args=-Dlapack=openblas \
+     -Csetup-args=-Duse-g77-abi=true \
+-    -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=} \
+     || (cat builddir/meson-logs/meson-log.txt && exit 1)
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 3197293..69b25be 100644
+index 394e00f..a9761ff 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -4,9 +4,6 @@ package:
-   name: scipy
-   version: {{ version }}
+@@ -1,4 +1,5 @@
+ {% set version = "1.11.1" %}
++{% set python_impl = "pypy" %}
  
--# use 'python_impl' in meta.yaml so it gets picked up by rendering
--# [python_impl == "pypy"]
--
- source:
-   # The sdist distributed by scipy contains pre-compiled pythran sources,
-   # as well as the relevant submodules; by taking the tarball from github
-@@ -51,9 +48,7 @@ requirements:
-     # https://pav.iki.fi/blog/2017-10-08/pywingfortran.html#building-python-wheels-with-fortran-for-windows
-     - {{ compiler('m2w64_fortran') }}        # [win]
+ package:
+   name: scipy-split
+@@ -37,32 +38,30 @@ build:
+ 
+ requirements:
+   build:
+-    - python                                 # [build_platform != target_platform]
+-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-    - cython                                 # [build_platform != target_platform]
+-    - numpy                                  # [build_platform != target_platform]
+-    - pybind11                               # [build_platform != target_platform]
+-    - meson-python                           # [build_platform != target_platform]
+-    - cmake                                  # [build_platform != target_platform]
+-    - ninja                                  # [build_platform != target_platform]
+-    - pkg-config                             # [build_platform != target_platform]
+-    - {{ compiler('c') }}
+-    - {{ compiler('cxx') }}
+-    - {{ compiler('fortran') }}              # [unix]
++    - python {{ python }}
++    - cython {{ cython }}
++    - numpy {{ numpy }}
++    - pybind11 {{ pybind11 }}
++    - meson-python
++    - cmake {{ cmake }}
++    - ninja {{ ninja }}
++    - pkg-config {{ pkgconfig }}
++    - pythran
++    - {{ compiler('c') }}             #[ppc_arch != "p10"]
++    - {{ compiler('cxx') }}           #[ppc_arch != "p10"]
++    - {{ compiler('fortran') }}       #[ppc_arch != "p10"]
    host:
 -    - libblas
 -    - libcblas
 -    - liblapack
+-    - python
+-    - cython
 +    - openblas-devel {{ openblas }}
-     - python
-     - setuptools <60
-     - cython
-@@ -73,12 +68,9 @@ requirements:
- {% set tests_to_skip = tests_to_skip + " or test_mixed_threads_processes" %}    # [aarch64 or ppc64le]
- {% set tests_to_skip = tests_to_skip + " or test_multiprocess[fft]" %}          # [aarch64 or ppc64le]
- {% set tests_to_skip = tests_to_skip + " or (test__differential_evolution and test_parallel)" %}  # [aarch64 or ppc64le]
-+{% set tests_to_skip = tests_to_skip + " or (test_random_exact and test_random_complex_exact and test_crash_2609)" %}  # [x86_64]
- # on the slowest agents, these tests take more than 20min in emulation
- {% set tests_to_skip = tests_to_skip + " or (test_lsq_linear and test_large_rank_deficient)" %}   # [aarch64 or ppc64le]
--# needs one or two gc.collect()
--{% set tests_to_skip = tests_to_skip + " or test_cdist_refcount" %}             # [python_impl == "pypy"]
--# unclear why a warning isn't raised. Might be related to scipy/scipy#15121
--{% set tests_to_skip = tests_to_skip + " or test_boost_eval_issue_14606" %}     # [python_impl == "pypy"]
++    - python {{ python }}
++    - cython {{ cython }}
+     - meson-python    # [unix]
+-    - ninja           # [unix]
+-    - pkg-config      # [unix]
++    - ninja {{ ninja }}          # [unix]
++    - pkg-config {{ pkgconfig }}     # [unix]
+     - python-build    # [unix]
+-    - pybind11
++    - pybind11 {{ pybind11 }}
+     - pythran
+-    - numpy
+-    - pip
++    - numpy {{ numpy }}
++    - pip 23.*
  
- test:
-   requires:
-@@ -92,12 +84,12 @@ test:
-     # the tests ppc64le and aarch64 are currently run through emulation in QEMU;
-     # since this takes much longer, do not run the most heavy-weight tests, i.e. use
-     # label='fast'; same for PyPy due to huge runtime; otherwise set label='full'
--    {% set label = "'fast'" if (aarch64 or ppc64le or python_impl == "pypy") else "'full'" %}
-+    {% set label = "'fast'" if (aarch64 or ppc64le) else "'full'" %}
-     # for signature of scipy.test see below (note default: label='fast'):
-     # https://github.com/scipy/scipy/blob/v1.7.0/scipy/_lib/_testutils.py#L27
-     {% set param = "verbose=1, label=" + label + ", tests=None" %}
-     {% set extra = "extra_argv=['-k', 'not (" + tests_to_skip + ")', '-nauto', '--timeout=1200', '--durations=50']" %}
--    - python -c "import scipy, sys; sys.exit(not scipy.test({{ param }}, {{ extra }}))"  # [not ppc64le]
-+    #- python -c "import scipy, sys; sys.exit(not scipy.test({{ param }}, {{ extra }}))"  # [not ppc64le]
-     # NOTE: test suite is skipped on ppc due to bugs in QEMU code that cause
-     # CI to fail, even though the tests would run through on native hardware
-   imports:
+ # for unix, the top-level build.sh builds scipy, and then build-output.sh
+ # installs the files for the respective component; on windows, we currently
+@@ -74,42 +73,39 @@ outputs:
+     version: {{ version }}
+     requirements:
+       build:
+-        - python                                 # [build_platform != target_platform]
+-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
++        - python {{ python }}
++        - pip 23.*
++        #- cross-python_{{ target_platform }}     # [build_platform != target_platform]
+         # unix only needs these for the strong run exports
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
+-        - {{ compiler('fortran') }}              # [unix]
++        - {{ compiler('c') }}     #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}   #[ppc_arch != "p10"]
++        - {{ compiler('fortran') }}      #[ppc_arch != "p10"]
+         # pythran code needs clang-cl on windows
+-        - clang                                  # [win]
+-        # WARNING: It's not recommended to use these MinGW compilers with python extensions
+-        # numpy.distutils has a complex mechanism to facilitate mixing gfortran and MSVC
+-        # https://pav.iki.fi/blog/2017-10-08/pywingfortran.html#building-python-wheels-with-fortran-for-windows
+-        - {{ compiler('m2w64_fortran') }}        # [win]
++        - pythran
+       host:
+-        - libblas
+-        - libcblas
+-        - liblapack
+-        - python
+-        - setuptools <60  # [win]
+-        - cython
++        - openblas-devel {{ openblas }}
++        - python {{ python }}
++        - cython {{ cython }}
+         - meson-python    # [unix]
+-        - ninja           # [unix]
+-        - pkg-config      # [unix]
++        - ninja {{ ninja }}          # [unix]
++        - pkg-config  {{ pkgconfig }}    # [unix]
+         - python-build    # [unix]
+-        - pybind11
++        - pybind11 {{ pybind11 }}
+         - pythran
+-        - numpy
+-        - pip
++        - numpy {{ numpy }}
++        - pip 23.*
+       run:
+-        - python
+-        # see np_maxversion in https://github.com/scipy/scipy/blob/v{{ version }}/setup.py
+-        - {{ pin_compatible('numpy', upper_bound='1.28') }}
++        - python {{ python }}
++        - numpy {{ numpy }}
+         # needed for scipy.datasets
+         - pooch
++        - nomkl
+     test:
+       requires:
++        - python {{ python }}
+         - pytest
++        - openblas {{ openblas }}
++        - numpy {{ numpy }}
+       imports:
+         - scipy
+         # reference for public API is effectively
+@@ -171,9 +167,9 @@ outputs:
+             "_lib/_test_ccallback", "integrate/_test_multivariate", "io/_test_fortran",
+             "ndimage/_ctest", "ndimage/_cytest", "special/_test_internal"
+         ] %}
+-        {% set PY_ABI = "cpython-" ~ PY_VER.replace(".", "") %}                         # [unix and python_impl == "cpython"]
++        {% set PY_ABI = "cpython-" ~ PY_VER.replace(".", "") %}                         
+         {% set PY_ABI = "cp" ~ PY_VER.replace(".", "") %}                               # [win and python_impl == "cpython"]
+-        {% set PY_ABI = "pypy" ~ PY_VER.replace(".", "") ~ "-pp73" %}                   # [python_impl == "pypy"]
++        {% set PY_ABI = "pypy" ~ PY_VER.replace(".", "") ~ "-pp73" %}                   
+         {% set ARCH = "x86_64" if x86 else ("aarch64" if aarch64 else "powerpc64le")%}  # [linux]
+         {% for each_lib in test_libraries %}
+         - test ! -f $SP_DIR/scipy/{{ each_lib }}.{{ PY_ABI }}-{{ ARCH }}-linux-gnu.so                     # [linux]
+@@ -191,94 +187,6 @@ outputs:
+         # ensure only one test is left (namely, our hint)
+         - python -c "import sys; lines=open('testlog').readlines(); sys.exit(0 if any('======== 1 failed in ' in x for x in lines) else 1)"
+ 
+-  - name: scipy-tests
+-    script: build-output.sh   # [not win]
+-    script: build-output.bat  # [win]
+-    requirements:
+-      build:
+-        - python                                 # [build_platform != target_platform]
+-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-        # unix only needs these for the strong run exports
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
+-        - {{ compiler('fortran') }}              # [unix]
+-        # pythran code needs clang-cl on windows
+-        - clang                                  # [win]
+-        # WARNING: It's not recommended to use these MinGW compilers with python extensions
+-        # numpy.distutils has a complex mechanism to facilitate mixing gfortran and MSVC
+-        # https://pav.iki.fi/blog/2017-10-08/pywingfortran.html#building-python-wheels-with-fortran-for-windows
+-        - {{ compiler('m2w64_fortran') }}        # [win]
+-      host:
+-        - {{ pin_subpackage('scipy', exact=True) }}
+-        # need to repeat host deps on windows because we have to do a full rebuild here;
+-        # on unix we need a minimum as well so that installation of the wheel will work
+-        - python
+-        - pip
+-        - numpy
+-        - libblas         # [win]
+-        - libcblas        # [win]
+-        - liblapack       # [win]
+-        - setuptools <60  # [win]
+-        - cython          # [win]
+-        - pybind11        # [win]
+-        - pythran         # [win]
+-        - numpy           # [win]
+-      run:
+-        - {{ pin_subpackage('scipy', exact=True) }}
+-        - python
+-    test:
+-      requires:
+-        - pytest
+-        - pytest-timeout
+-        - pytest-xdist
+-        - mpmath
+-      commands:
+-        {% set tests_to_skip = "_not_a_real_test" %}
+-        # skip a test that fails with MKL + AVX512 (non-AVX512 passes), scipy/scipy#15533
+-        {% set tests_to_skip = tests_to_skip + " or test_x0_equals_Mb[bicgstab" %}
+-        # scipy/scipy#16927
+-        {% set tests_to_skip = tests_to_skip + " or test_failure_to_run_iterations" %}  # [linux]
+-        # on the slowest agents, these tests take more than 20min in emulation
+-        {% set tests_to_skip = tests_to_skip + " or (test_lsq_linear and test_large_rank_deficient)" %}   # [aarch64 or ppc64le]
+-        {% set tests_to_skip = tests_to_skip + " or (test_iterative and test_precond_inverse[case1])" %}  # [aarch64 or ppc64le]
+-        {% set tests_to_skip = tests_to_skip + " or (test_optimize and TestBrute and test_workers)" %}    # [aarch64 or ppc64le]
+-        {% set tests_to_skip = tests_to_skip + " or (TestLevyStable and test_location_scale[pdf-1])" %}   # [aarch64 or ppc64le]
+-        # tests that run into timeouts (set in scipy test suite) in emulation
+-        {% set tests_to_skip = tests_to_skip + " or (test_propack and test_examples)" %}                  # [aarch64 or ppc64le]
+-        # occasionally runs out of memory on windows + pypy
+-        {% set tests_to_skip = tests_to_skip + " or test_bootstrap_against_" %}                           # [(python_impl == "pypy") and win]
+-        {% set tests_to_skip = tests_to_skip + " or test_more_converged" %}                               # [(python_impl == "pypy") and win]
+-        # very slow tests for pypy in emulation
+-        {% if (python_impl == "pypy") and (aarch64 or ppc64le) %}
+-            {% set tests_to_skip = tests_to_skip + " or TestDualAnnealing or TestQuad or TestNQuad" %}
+-            {% set tests_to_skip = tests_to_skip + " or TestDifferentialEvolutionSolver or TestTRF" %}
+-            {% set tests_to_skip = tests_to_skip + " or TestMonteCarloHypothesisTest" %}
+-            {% set tests_to_skip = tests_to_skip + " or (TestBessel and test_fs_param)" %}
+-            {% set tests_to_skip = tests_to_skip + " or (TestOrdQZWorkspaceSize and test_decompose)" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_all_nograd_minimizers or test_basic_fit_mle" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_cdf_against_tables or test_pdf_integration" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_cdist_ and (refcount or calling_convention)" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_conditionally_positive_definite" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_cont_basic[500 or test_cython_api[elliprj]" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_filtfilt_gust or test_kappa3_array_gh13582" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_fitstart[genexpon-shapes28] or test_gh12922" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_integration_sparse or test_kdtree_box" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_minimize_callback_copies_array[fmin]" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_mip1 or test_mixed_threads_processes" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_modules_importable or test_neldermead_limit" %}
+-            {% set tests_to_skip = tests_to_skip + " or test_random_exact or test_random_complex_exact" %}
+-        {% endif %}
+-        # show SIMD features (some failures occur depending on presence/absence of e.g. AVX512)
+-        - python -c "import numpy; numpy.show_config()"
+-        # the tests ppc64le and aarch64 are currently run through emulation in QEMU;
+-        # since this takes much longer, do not run the most heavy-weight tests, i.e. use
+-        # label='fast'; same for PyPy due to huge runtime; otherwise set label='full'
+-        {% set label = "'fast'" if (aarch64 or ppc64le or python_impl == "pypy") else "'full'" %}
+-        # for signature of scipy.test see below (note default: label='fast'):
+-        # https://github.com/scipy/scipy/blob/v1.7.0/scipy/_lib/_testutils.py#L27
+-        {% set param = "verbose=1, label=" + label + ", tests=None" %}
+-        {% set extra = "extra_argv=['-k', 'not (" + tests_to_skip + ")', '-nauto', '--timeout=1200', '--durations=50']" %}
+-        - python -c "import scipy, sys; sys.exit(not scipy.test({{ param }}, {{ extra }}))"
+ 
+ about:
+   home: http://www.scipy.org/
 -- 
-2.34.1
+2.40.1
 
