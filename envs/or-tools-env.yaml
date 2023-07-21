@@ -57,6 +57,7 @@ packages:
     git_tag : 592415a03e8ec945600fb85270fd68f6fad9cabb
     patches :
       - feedstock-patches/or_tools/0001-update-pin-dependencies.patch
+      - feedstock-patches/or_tools/0001-Post-build-test-dir.patch
       - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
       - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le and cudatoolkit == '11.2']
 {% endif %}

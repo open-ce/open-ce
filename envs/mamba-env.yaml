@@ -10,5 +10,7 @@ packages:
   - feedstock : https://github.com/conda-forge/pybind11-feedstock
     git_tag : 3d3cbe7e8422e78a1c315004ed14480e00f30b59
     patches :
-           - feedstock-patches/pybind11/pybind11_p10.patch		
+           - feedstock-patches/pybind11/pybind11_p10.patch
+  - feedstock : https://github.com/conda-forge/libsolv-feedstock.git
+    git_tag : 428e7eb3314aa728a1cd9069e8b74b49bae648bf	
   - feedstock : mamba
