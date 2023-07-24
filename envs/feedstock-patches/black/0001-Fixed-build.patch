@@ -1,0 +1,24 @@
+From 129f80044b8f9724ec317838136e87c3ef1bcdf3 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 28 Jun 2023 10:01:14 +0000
+Subject: [PATCH] Fixed build
+
+---
+ recipe/meta.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 047d04f..cc89d05 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -34,7 +34,6 @@ outputs:
+         - click >=8.0.0
+         - platformdirs >=2
+         - tomli >=1.1.0  # [py<311]
+-        - typed-ast >=1.4.2  # [py<38]
+         - pathspec >=0.9
+         - typing_extensions >=3.10  # [py<310]
+         - mypy_extensions >=0.4.3
+-- 
+2.34.1
+

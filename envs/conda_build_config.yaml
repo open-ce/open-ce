@@ -67,6 +67,8 @@ cython:
   - 0.29
 cython_blis:
   - 0.7.*
+dill:
+  - 0.3.6
 dm_tree:
   - 0.1.*
 eigen:
@@ -181,7 +183,7 @@ magma:
 make:
   - 4.2.1
 markdown:
-  - 3.3.*
+  - 3.4.*
 mock:
   - 3.*      # [not s390x]
   - 4.*      # [s390x]
@@ -224,7 +226,7 @@ opt_einsum:
 pathy:
   - 0.6.*
 pip:
-  - 21.*
+  - 23.*
 #pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
 pkgconfig:
   - 0.29.2
@@ -237,7 +239,7 @@ psutil:
 pybind11:
   - 2.9.*
 pydantic:
-  - 1.9.*
+  - 1.10.*
 pytest:
   - 7.*
 python:
@@ -260,7 +262,7 @@ rdflib:
 requests:
   - 2.*
 regex:
-  - 2022.3.*
+  - 2022.7.*
 reproc_cpp:
   - 14.2.*
 rust:
@@ -294,7 +296,7 @@ srsly:
 starlette:
   - 0.20.*
 sqlite:
-  - 3.38.*   # [s390x]
+  - 3.41.*   # [s390x]
 tabulate:
   - 0.8.*
 tensorboard:
@@ -310,7 +312,7 @@ tensorflow_hub:
 tensorflow_io_gcs_filesystem:
   - 0.32.*
 termcolor:
-  - 1.1.0
+  - 2.1.*
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
