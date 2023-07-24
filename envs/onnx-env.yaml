@@ -20,10 +20,9 @@ packages:
   - feedstock : https://github.com/conda-forge/cmake-feedstock
     git_tag : 70e07324f0ab7f075c5c325a55e31ddc9b68d985
     patches :
-      - feedstock-patches/cmake/0001-use-GCC-8-for-cuda-11.2-builds.patch
       - feedstock-patches/cmake/0001-P10-changes.patch         #[ppc_arch == 'p10']
   {% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
+  - feedstock : cudatoolkit
   - feedstock : cudnn
   - feedstock : nccl
   {% endif %}

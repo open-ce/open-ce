@@ -5,13 +5,12 @@ imported_envs:
   - tensorflow-s390x-extra-deps-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
   - common-deps.yaml
-  - jax-env.yaml
 
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : cudnn
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
+  - feedstock : cudatoolkit
 {% endif %}
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
