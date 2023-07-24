@@ -134,7 +134,7 @@ keras_applications:
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.12.*
+  - 2.13.*
 leveldb:
   - 1.23.*
 libiconv:
