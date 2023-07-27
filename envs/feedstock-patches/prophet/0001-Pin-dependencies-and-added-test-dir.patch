@@ -1,0 +1,70 @@
+From 129eaa5e5481b1d5efcc4277ce0e2c311fa351d8 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 6 Jul 2023 05:00:39 +0000
+Subject: [PATCH] Pin dependencies and added test dir
+
+---
+ recipe/meta.yaml         | 10 +++++-----
+ tests/open-ce-tests.yaml | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+), 5 deletions(-)
+ create mode 100644 tests/open-ce-tests.yaml
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index eafb51f..9b32fa9 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -31,8 +31,8 @@ requirements:
+     - python
+     - pip
+     - cmdstanpy >=1.0.4
+-    - cmdstan ==2.32.1
+-    - setuptools >=42
++    - cmdstan ==2.31.0
++    - setuptools {{ setuptools }}
+     - wheel >=0.37.0
+     - importlib_resources
+     - tbb-devel
+@@ -40,16 +40,16 @@ requirements:
+   run:
+     - python
+     # Pin the cmdstan version
+-    - cmdstan ==2.32.1
++    - cmdstan ==2.31.0
+     - cmdstanpy >=1.0.4
+-    - numpy >=1.15.4
++    - numpy {{ numpy }}
+     - matplotlib-base >=2.0.0
+     - pandas >=1.0.4
+     - lunarcalendar >=0.0.9
+     - convertdate >=2.1.2
+     - holidays >=0.25.0
+     - python-dateutil >=2.8.0
+-    - tqdm >=4.36.1
++    - tqdm {{ tqdm }}
+     - importlib_resources
+ 
+ test:
+diff --git a/tests/open-ce-tests.yaml b/tests/open-ce-tests.yaml
+new file mode 100644
+index 0000000..2c6e265
+--- /dev/null
++++ b/tests/open-ce-tests.yaml
+@@ -0,0 +1,15 @@
++tests:
++  - name: Setup prophet Tests
++    command: |
++        conda install -y git
++        git clone --recursive -b $(python -c "import prophet; print('v'+prophet.__version__)") https://github.com/facebook/prophet.git
++        cd prophet/python/prophet
++        conda install -y pyyaml pytest 
++        conda install holidays=0.27 -c conda-forge
++  - name: Run prophet tests
++    command: |
++        cd prophet/python/prophet
++        pytest --import-mode=importlib tests/
++  - name: Clean tests
++    command: |
++        rm -rf prophet
+-- 
+2.34.1
+
