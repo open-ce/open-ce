@@ -1,45 +1,71 @@
-From 7e3473c3b9899a5a77e5fabeb3292c689c849616 Mon Sep 17 00:00:00 2001
+From 99073ff6cac938dc365422b6f4ede3797f8e1f2a Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Fri, 28 Jul 2023 10:48:35 +0000
-Subject: [PATCH] Fixed grpcio to make it work with openssl3
+Date: Fri, 28 Jul 2023 11:32:31 +0000
+Subject: [PATCH] Fixed grpcio with openssl 3
 
 ---
- .../0001-Make-grpc-work-with-openssl-3.patch  | Bin 0 -> 1939 bytes
- recipe/build.sh                               |  11 ++++--
- recipe/meta.yaml                              |  35 +++++++++---------
- 3 files changed, 25 insertions(+), 21 deletions(-)
+ .../0001-Make-grpc-work-with-openssl-3.patch  | 48 +++++++++++++++++++
+ recipe/build.sh                               | 10 ++--
+ recipe/meta.yaml                              | 35 +++++++-------
+ 3 files changed, 72 insertions(+), 21 deletions(-)
  create mode 100644 recipe/0001-Make-grpc-work-with-openssl-3.patch
 
 diff --git a/recipe/0001-Make-grpc-work-with-openssl-3.patch b/recipe/0001-Make-grpc-work-with-openssl-3.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..2f39549485182a5038b7d85cd08d29392bedc9f5
-GIT binary patch
-literal 1939
-zcmbVNZExC05dOZuVw8(yTYkYd1RHcYg%?9y5wI}mt~#A8zpP<fu(`Eqlhgh9&eA}k
-zm!#FLEWEp(nSJJYW|k2zw_v(W>L!-$w4DxZSvN_iljOPWc4F$ZaKDwBrfcU3Jd_25
-zbO)9LrrA9_V4J2zMi{0GQ&z26wvHi)i(R~7Pci(86MXFE9V-l$Y>l+s{ziszO}jAS
-zOat46cl!-Sv72C-UCZfOZBR`dB-|$-Xj*sS&!D#$-2Vj+@ka_PzDwbA$v?tpR<EJl
-z(W0t0&?H3Hb#k!D*@nWuU;(ZxTJLwp?g`g7psK2{u|Zf=kgnrmMKcYWz>13Unw3Q*
-ztBTmj=!Sk>>k1(m%X8566{{g`2pESWlGBv1BBPIB#c4BdC+3Z77)j!`9XCm{81pjQ
-zt(L%d=1mX`oJF|11O2A$Y7VI4)dt*{1>Q6aC(+OgK)r=)dE)nn{#<EX%Y)f;<d2oc
-zh9ybKS+PPAjF_BU9=!S3i_kv&f1b1cyKkQT+1#Iw1ro8X5cmZON;9ZS*m30I5$ZLq
-zs92*KdrqPJL^)>};)3d_s_7OGD33X#710MlFq-tnA#`s+_v<y|S+t9J{nR+6q6=~L
-zB>snP8Wm3)tVlQej3Na`X9a)&%jw@BU&}*3?DZ#J)SCoTMXULqBFLkqAV423LO(k4
-zDa@j983eQW;?^V}Xo^B_u$+4!Xg=DBedSX8Q#~b(<Mdg4H;Zl4NgS(b7}T+wo!qvP
-z>{9%b%UAJFOCf%{qq(5s??HN&gS27A{!zl(6dW46O<d<C-*!dXAc?|Hs_doDfMd{`
-zdtu~H2b1N{6AZ{DhKTF6@u6geES<3~X&|LBr`2In7CBo*$LNZNM9w|?6zNBSIJG6=
-zq>E}f9{(e!mt+@UP<crsy2$6XAw5^d;ZRrx{hvN`ze~P3jpxB28hcZ3-dlLX*JB(I
-zAzdY>0w8^?5#VdsUfP%NSbaqc%JB}&4giGsO;fbI+BDl*M|3_a++X^WVf4GdxR1j3
-z;lg`}di`*M>c2h)v$+=yqLDxGM3;&od|pqdv9Gwu<AOw@67|38(c%;1WnrvnEnhu<
-zzS7|8O3{e=J)}2l?M=1MuwVw>9}Bzz{n_-GLWI|!H(20(<b~L(vK+i$+~a4#kEVbM
-z2MUgLr(UM7zQx^h3ccYF8wYO#yc+P%JDw{dUv|__#5(UA70xMDFDg~VzXl+-(J~E-
-FkS`mZ8KnRK
-
-literal 0
-HcmV?d00001
-
+index 0000000..2f39549
+--- /dev/null
++++ b/recipe/0001-Make-grpc-work-with-openssl-3.patch
+@@ -0,0 +1,48 @@
++From 083e8b127679e415b99bff289ae74b124c0082fb Mon Sep 17 00:00:00 2001
++From: Nishidha Panpaliya <npanpa23@in.ibm.com>
++Date: Fri, 28 Jul 2023 10:17:16 +0000
++Subject: [PATCH] Make grpc work with openssl 3
++
++---
++ Makefile | 1 -
++ setup.py | 5 +++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 1ac3f6b058..bb8678bcda 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -568,7 +568,6 @@ OPENSSL_DEP += $(LIBDIR)/$(CONFIG)/libboringssl.a
++ OPENSSL_MERGE_LIBS += $(LIBDIR)/$(CONFIG)/libboringssl.a
++ OPENSSL_MERGE_OBJS += $(LIBBORINGSSL_OBJS)
++ # need to prefix these to ensure overriding system libraries
++-CPPFLAGS := -Ithird_party/boringssl-with-bazel/src/include $(CPPFLAGS)  
++ ifeq ($(DISABLE_ALPN),true)
++ CPPFLAGS += -DTSI_OPENSSL_ALPN_SUPPORT=0
++ LIBS_SECURE = $(OPENSSL_LIBS)
++diff --git a/setup.py b/setup.py
++index 8da207b713..e7239f21bd 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -69,8 +69,6 @@ if 'linux' in sys.platform:
++ if 'openbsd' in sys.platform:
++     CARES_INCLUDE += (os.path.join('third_party', 'cares', 'config_openbsd'),)
++ RE2_INCLUDE = (os.path.join('third_party', 're2'),)
++-SSL_INCLUDE = (os.path.join('third_party', 'boringssl-with-bazel', 'src',
++-                            'include'),)
++ UPB_INCLUDE = (os.path.join('third_party', 'upb'),)
++ UPB_GRPC_GENERATED_INCLUDE = (os.path.join('src', 'core', 'ext',
++                                            'upb-generated'),)
++@@ -308,6 +306,9 @@ if BUILD_WITH_SYSTEM_ABSL:
++                           CORE_C_FILES)
++     ABSL_INCLUDE = (os.path.join('/usr', 'include'),)
++ 
+++
+++SSL_INCLUDE = (os.environ.get("SSL_INC", ""),
+++                os.path.join('third_party', 'boringssl-with-bazel', 'src', 'include'))
++ EXTENSION_INCLUDE_DIRECTORIES = ((PYTHON_STEM,) + CORE_INCLUDE + ABSL_INCLUDE +
++                                  ADDRESS_SORTING_INCLUDE + CARES_INCLUDE +
++                                  RE2_INCLUDE + SSL_INCLUDE + UPB_INCLUDE +
++-- 
++2.40.1
++
 diff --git a/recipe/build.sh b/recipe/build.sh
-index f797569..756886f 100644
+index f797569..8d90821 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -1,11 +1,12 @@
@@ -58,12 +84,11 @@ index f797569..756886f 100644
  
  if [[ "${target_platform}" == linux-* ]]; then
      # set these so the default in setup.py are not used
-@@ -21,5 +22,7 @@ fi
+@@ -21,5 +22,6 @@ fi
  
  ln -s "$(which $CC)" "$SRC_DIR/cc"
  export PATH="$SRC_DIR:$PATH"
 -
-+#export CXXFLAGS="$CXXFLAGS -I${PREFIX}/include/openssl -DOPENSSL_NO_DEPRECATED_3_0=0 -DOPENSSL_X509_H=1"
 +export CPPFLAGS="-I${PREFIX}/include $CPPFLAGS -DOPENSSL_NO_DEPRECATED=0 -DOPENSSL_X509_H=1"
 +export LDFLAGS="$LDFLAGS -L${PREFIX}/lib"
  $PYTHON -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
