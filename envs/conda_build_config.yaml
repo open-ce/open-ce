@@ -207,7 +207,7 @@ openblas:
   - 0.3.23.*      #[not s390x]
   - 0.3.21.*      #[s390x]
 opencv:
-  - 4.7.*
+  - 4.8.*
 openjdk:
   - 11.0.*
 openmpi:
@@ -271,7 +271,7 @@ scikit_learn:
 sentencepiece:
   - 0.1.97
 setuptools:
-  - 65.*
+  - 68.*
 setuptools_rust:
   - 1.5.*
 six:
