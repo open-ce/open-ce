@@ -16,7 +16,7 @@ packages:
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
-    git_tag : 88e52a018d299a5b3b0ca7f4363d89c17fd67677
+    git_tag : dd3ad2bf3128b222fa0bae834499dcb6232c9e47
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : 9eebdc51a4cb9f3222f6f9250c80c563f869b15e
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
