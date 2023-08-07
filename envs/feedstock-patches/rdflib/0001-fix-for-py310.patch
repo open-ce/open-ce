@@ -1,14 +1,14 @@
-From c6d77e4d93e4d17485b3acbbb30c20d6b27e950e Mon Sep 17 00:00:00 2001
+From db2f0106301bd06e4f87e92bcaaa7fa59e84c9a6 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Wed, 17 May 2023 14:34:12 +0000
-Subject: [PATCH] fix for py310
+Date: Mon, 7 Aug 2023 04:55:25 +0000
+Subject: [PATCH] fixed build
 
 ---
- recipe/meta.yaml | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 81f9048..4f87080 100644
+index 81f9048..76ca183 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,6 +1,5 @@
@@ -19,7 +19,15 @@ index 81f9048..4f87080 100644
  
  package:
    name: rdflib
-@@ -53,7 +52,7 @@ test:
+@@ -32,6 +31,7 @@ requirements:
+     - pyparsing
+     - python >=3.7
+     - setuptools
++    - attrs
+ 
+ test:
+   source_files:
+@@ -53,7 +53,7 @@ test:
      - pip check
      # some missing file not in repo
      - rm test/test_so_69984830.py || del test/test_so_69984830.py
