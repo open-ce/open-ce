@@ -1,7 +1,7 @@
-From ec5e897074e4f822fe4d0a31860879bff2d4b7eb Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Fri, 14 Apr 2023 09:32:50 +0000
-Subject: [PATCH] Merged
+From c6454c76b408274c3e25b9e73042243c92b19806 Mon Sep 17 00:00:00 2001
+From: root <root@dldev7.aus.stglabs.ibm.com>
+Date: Thu, 10 Aug 2023 03:10:33 -0400
+Subject: [PATCH] Modified
 
 ---
  recipe/conda_build_config.yaml | 76 +++++-----------------------------
@@ -9,7 +9,7 @@ Subject: [PATCH] Merged
  2 files changed, 12 insertions(+), 71 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index 36c9601..4124840 100644
+index e9338a0..228158b 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
 @@ -1,82 +1,26 @@
@@ -87,8 +87,8 @@ index 36c9601..4124840 100644
 +  - x86_64-conda-linux-gnu-cc           # [x86_64]
 +  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
  version:
-   - 1.65.0
--  - 1.67.0
+   - 1.70.0
+-  - 1.72.0
 -channel_sources:
 -  - conda-forge
 -  - conda-forge/label/rust_dev,conda-forge
@@ -106,7 +106,7 @@ index 36c9601..4124840 100644
 -    - channel_targets
      - version
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 0e6b86b..4b41d4c 100644
+index 4a7a391..e4c8b90 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -37,10 +37,7 @@ outputs:
@@ -133,5 +133,5 @@ index 0e6b86b..4b41d4c 100644
    - name: rust-gnu_{{ target_platform }}
      script: bld.bat
 -- 
-2.34.1
+2.27.0
 

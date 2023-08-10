@@ -265,10 +265,10 @@ reproc_cpp:
   - 14.2.*
 rust:
   - 1.62.*     # [cudatoolkit == '11.2']
-  - 1.65.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.70.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
 rust_compiler_version:
   - '1.46.0'   # [cudatoolkit == '11.2']
-  - '1.65.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - '1.70.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
 safeint:
   - 3.0
 scipy:
