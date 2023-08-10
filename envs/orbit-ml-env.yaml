@@ -24,4 +24,5 @@ packages:
     git_tag : b951041856822d417209352c027a9af55d202fa5
     patches :
       - feedstock-patches/orbit-ml/0001-Pin-dependencies.patch
+      - feedstock-patches/orbit-ml/0001-Added-post-build-tests.patch
 {% endif %}
