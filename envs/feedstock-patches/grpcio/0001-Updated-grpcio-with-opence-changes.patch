@@ -1,7 +1,7 @@
-From 2af72e39233584e81de34153eb7b96f1e417ba83 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 11 Aug 2023 15:27:05 +0000
-Subject: [PATCH] Build grpcio 1.54.3
+From d164f6e0094744b01e4cc871f5b4a11cac6c1451 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Fri, 11 Aug 2023 12:49:47 -0400
+Subject: [PATCH] Updated grpcio 1.54 with open-ce changes
 
 ---
  recipe/0001-Fix-openssl-for-s390x.patch | Bin 0 -> 783 bytes
@@ -30,7 +30,7 @@ literal 0
 HcmV?d00001
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index f797569..a0eb2ea 100644
+index f797569..4b683f5 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -1,12 +1,23 @@
@@ -48,7 +48,7 @@ index f797569..a0eb2ea 100644
  export GRPC_PYTHON_BUILD_WITH_CYTHON="True"
  
 +ARCH=$(uname -m)
-+if [[ $ARCH == "s390x" ]]; then
++if [[ $ARCH == "s390x" || $ARCH == "ppc64le" ]]; then
 +    echo "Patching boringssl"
 +    CURPWD=$(pwd)
 +    cd $SRC_DIR/third_party/boringssl-with-bazel
@@ -135,5 +135,5 @@ index 19fa19a..ee9aa1c 100644
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
  
 -- 
-2.34.1
+2.27.0
 
