@@ -22,11 +22,11 @@ packages:
   - feedstock : https://github.com/conda-forge/dill-feedstock
     git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f     # 1.65
+    git_tag : c8908fc6bac90ec126c2ad63c7c9a53d6832d279  #1.70
   - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
     git_tag : eb4d41c65c002e4367f5b3aa20d547a815fe9d58
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : f025039f103f39e50829188fe020b09ec8374edd 
+    git_tag : 1d7270e5c88fa72566dd7abd4185d2cdb1d25a85
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
