@@ -102,7 +102,7 @@ googledrivedownloader:
 gmock:
   - 1.13
 grpc_cpp:
-  - 1.53.*
+  - 1.54.*
 grpcio:
   - 1.54.*
 harfbuzz:
