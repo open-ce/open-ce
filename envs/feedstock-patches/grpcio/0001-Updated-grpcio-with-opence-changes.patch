@@ -1,39 +1,51 @@
-From d164f6e0094744b01e4cc871f5b4a11cac6c1451 Mon Sep 17 00:00:00 2001
+From 709fbc83e8eaf23b20d23ce6bea935a0bef49950 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Fri, 11 Aug 2023 12:49:47 -0400
-Subject: [PATCH] Updated grpcio 1.54 with open-ce changes
+Date: Wed, 16 Aug 2023 07:45:43 +0000
+Subject: [PATCH] Fixed grpcio
 
 ---
- recipe/0001-Fix-openssl-for-s390x.patch | Bin 0 -> 783 bytes
- recipe/build.sh                         |  19 +++++++++----
- recipe/meta.yaml                        |  34 ++++++++++++------------
- 3 files changed, 31 insertions(+), 22 deletions(-)
+ recipe/0001-Fix-openssl-for-s390x.patch | 25 ++++++++++++++++++
+ recipe/build.sh                         | 18 +++++++++----
+ recipe/meta.yaml                        | 34 ++++++++++++-------------
+ 3 files changed, 55 insertions(+), 22 deletions(-)
  create mode 100644 recipe/0001-Fix-openssl-for-s390x.patch
 
 diff --git a/recipe/0001-Fix-openssl-for-s390x.patch b/recipe/0001-Fix-openssl-for-s390x.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..c29467f10dbd7eb8efd964d34b35cd5eed403f8e
-GIT binary patch
-literal 783
-zcmaJ<%WfJm6y5tPj>sm_Fz+D*R8>$C)JkcKO0ue|kso)!?O-F1M}XRouOZ!ZgJsFS
-zzQ^Z2&RsgY!&r)(cqs}|HI$7W1kZ|wk7TB*d@>qWa>7M3Rsx@`!J78S$H=njWuwTl
-zoGk;*6puuE-fAqiws*YK9Pd<klG~!3X_IKNOQhYsXOG;|6icUv$aBp5O&}>s<kfUk
-zPDcfzEG)L}#ZQucitnrW%i`k?EcFp~Pp0cyG}fUjC)ts)IF1=QCsS=?+bc@{VN$_6
-zO1Aiez!)Go8r>4)mYWT!5E|Na<h-`#Ho808idwpu@f~AIHx1%=qdj<fg<f27GHnzc
-z!E;`f*@Ra~@}R{1qzKJMo@Mt{b<X}OKZ~LWS7Xd(i1Q*JjuE{b;en2xoWWo*z;A{$
-zMXSAUDJG*dH{ecgwGYkh9d!woy^-g-I~;V|!dQ>Jv#OT_zYQI;&IK&E=?>&BbYTu`
-za0Lxcou^&k_|}^@usiL&tvz)fLL2T*!!scl?dkGUUi@j8gMCoLU4V&{LkJ3*61Y;@
-zY`|gY@L!$@i*Lxep!?v}{4(|s;&HbjkHzYBz@i&PjW&d@tEVsP^>ck+)gL~+Fx;GL
-gZWzK%H$mbvNZr=;e6@Ohs_VO;09cWfRgyFI7v)&?od5s;
-
-literal 0
-HcmV?d00001
-
+index 0000000..db2134d
+--- /dev/null
++++ b/recipe/0001-Fix-openssl-for-s390x.patch
+@@ -0,0 +1,25 @@
++From c9e4eb6376241855411f927f59109754e4404aa5 Mon Sep 17 00:00:00 2001
++From: Deepali Chourasia <deepch23@in.ibm.com>
++Date: Wed, 16 Aug 2023 07:34:18 +0000
++Subject: [PATCH] Fix openssl for s390x
++
++---
++ src/include/openssl/base.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/include/openssl/base.h b/src/include/openssl/base.h
++index a1a4309a4..8db692ea3 100644
++--- a/src/include/openssl/base.h
+++++ b/src/include/openssl/base.h
++@@ -121,7 +121,7 @@ extern "C" {
++ // little-endian architectures. Functions will not produce the correct answer
++ // on other systems. Run the crypto_test binary, notably
++ // crypto/compiler_test.cc, before adding a new architecture.
++-#error "Unknown target CPU"
+++#define OPENSSL_64_BIT
++ #endif
++ 
++ #if defined(__APPLE__)
++-- 
++2.40.1
++
 diff --git a/recipe/build.sh b/recipe/build.sh
-index f797569..4b683f5 100644
+index f797569..ae1fedf 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
-@@ -1,12 +1,23 @@
+@@ -1,12 +1,22 @@
  #!/bin/bash
  
 +set -exou
@@ -49,18 +61,17 @@ index f797569..4b683f5 100644
  
 +ARCH=$(uname -m)
 +if [[ $ARCH == "s390x" || $ARCH == "ppc64le" ]]; then
-+    echo "Patching boringssl"
 +    CURPWD=$(pwd)
 +    cd $SRC_DIR/third_party/boringssl-with-bazel
 +    git apply ${RECIPE_DIR}/0001-Fix-openssl-for-s390x.patch
-+    echo "Done with patching"
++    echo "Done with patching boringssl"
 +    cd $CURPWD
 +fi
 +
  if [[ "${target_platform}" == linux-* ]]; then
      # set these so the default in setup.py are not used
      # it seems that we need to link to pthrad on linux or osx.
-@@ -20,6 +31,4 @@ if [[ "$target_platform" == osx-64 ]]; then
+@@ -20,6 +30,4 @@ if [[ "$target_platform" == osx-64 ]]; then
  fi
  
  ln -s "$(which $CC)" "$SRC_DIR/cc"
@@ -135,5 +146,5 @@ index 19fa19a..ee9aa1c 100644
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
  
 -- 
-2.27.0
+2.40.1
 
