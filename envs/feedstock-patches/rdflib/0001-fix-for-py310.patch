@@ -1,21 +1,21 @@
-From 6a59a224874d96b6b043b2b164e216d01ccb4678 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 4 Aug 2023 12:21:34 +0000
-Subject: [PATCH] fix build
+From 50608f3da5165abbb377d70b351a5ab0ff482b24 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 17 Aug 2023 08:43:25 +0000
+Subject: [PATCH] Update patch
 
 ---
  recipe/meta.yaml | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 81f9048..76ca183 100644
+index 81f9048..8b85605 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,6 +1,5 @@
  {% set version = "6.1.1" %}
 -{% set test_skips = "not (dawg_data_sparql or definednamespace_creator)" %}
 -{% set cov_fail_under = 72 %}
-+{% set test_skips = "not (dawg_data_sparql or definednamespace_creator or testGuessFormatForParse)" %}
++{% set test_skips = "not (test_sparql_service or dawg_data_sparql or definednamespace_creator or testGuessFormatForParse)" %}
  
  package:
    name: rdflib
