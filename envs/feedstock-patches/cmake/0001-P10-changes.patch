@@ -1,14 +1,31 @@
-From c2dac8842b5df7eada3f22b90a037a74a8a0a15d Mon Sep 17 00:00:00 2001
+From b42e9aac70238cb0346eb83cadf5edc4c34de67e Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 10 May 2023 15:30:56 +0000
+Date: Mon, 21 Aug 2023 15:36:17 +0000
 Subject: [PATCH] P10 changes
 
 ---
+ recipe/build.sh  | 5 +++++
  recipe/meta.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 521aabc..eec1ad5 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -2,6 +2,11 @@
+ set -ex
+ 
+ CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_FIND_ROOT_PATH=${PREFIX} -DCMAKE_INSTALL_RPATH=${PREFIX}/lib"
++
++if [[ $ppc_arch == "p10" ]]; then
++    rm ${PREFIX}/lib/libstdc++.so*
++fi
++
+ CMAKE_ARGS="$CMAKE_ARGS -DCURSES_INCLUDE_PATH=${PREFIX}/include -DBUILD_CursesDialog=ON -DCMake_HAVE_CXX_MAKE_UNIQUE:INTERNAL=FALSE"
+ CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_PREFIX_PATH=${PREFIX}"
+ 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 98cea89..3ff8a7c 100644
+index 2791fb9..25dd04d 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -23,8 +23,8 @@ build:
