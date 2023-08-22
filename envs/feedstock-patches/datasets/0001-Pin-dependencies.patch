@@ -1,17 +1,23 @@
-From 27eea451b618510ba88c8880b7e7240dfec84b3c Mon Sep 17 00:00:00 2001
-From: ArchanaSinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 4 Apr 2023 11:43:29 +0000
+From 404c8d7e2a9f4913a64d7c3018ad3063b8bed928 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Tue, 22 Aug 2023 09:11:18 +0000
 Subject: [PATCH] Pin dependencies
 
 ---
- recipe/meta.yaml | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 2ad3847..e055589 100644
+index 2ad3847..ed37fb7 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -28,7 +28,7 @@ requirements:
+@@ -23,12 +23,12 @@ requirements:
+     - python >=3.6
+   run:
+     - aiohttp
+-    - dill >=0.3.0,<0.3.7
++    - dill {{ dill }}
+     - fsspec >=2021.11.1
      - huggingface_hub >=0.2.0,<1.0.0
      - importlib-metadata
      - multiprocess
@@ -39,5 +45,5 @@ index 2ad3847..e055589 100644
    requires:
      - pip
 -- 
-2.34.1
+2.40.1
 
