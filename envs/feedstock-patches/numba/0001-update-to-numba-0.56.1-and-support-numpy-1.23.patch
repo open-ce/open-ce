@@ -1,0 +1,97 @@
+From c911df87a30617d63af8f5995f6a5cd9d86a28a5 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Thu, 13 Oct 2022 04:23:15 -0400
+Subject: [PATCH] update to numba 0.56.1 and support numpy 1.23
+
+---
+ recipe/0001-unpin-setuptools.patch | 12 ++++++++++++
+ recipe/meta.yaml                   | 23 ++++++++++++-----------
+ 2 files changed, 24 insertions(+), 11 deletions(-)
+ create mode 100644 recipe/0001-unpin-setuptools.patch
+
+diff --git a/recipe/0001-unpin-setuptools.patch b/recipe/0001-unpin-setuptools.patch
+new file mode 100644
+index 0000000..bb6c9e3
+--- /dev/null
++++ b/recipe/0001-unpin-setuptools.patch
+@@ -0,0 +1,12 @@
++diff --git a/setup.py b/setup.py
++index 2a6d12277..20948975f 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -375,7 +375,6 @@ build_requires = ['numpy >={},<{}'.format(min_numpy_build_version,
++ install_requires = [
++     'llvmlite >={},<{}'.format(min_llvmlite_version, max_llvmlite_version),
++     'numpy >={},<{}'.format(min_numpy_run_version, max_numpy_run_version),
++-    'setuptools<60',
++     'importlib_metadata; python_version < "3.9"',
++ ]
++ 
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b051462..dec7578 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,6 +1,6 @@
+ {% set name = "numba" %}
+-{% set version = "0.55.1" %}
+-{% set sha256 = "542a9b514031f6afae971b627930fcaec057cdb604d54db7cbddfb050c580fb9" %}
++{% set version = "0.56.1" %}
++{% set sha256 = "4c0b0063c18df39399832f1a6fbcb16c2e683b7d75fa33c54dd29a1bd1f12ef1" %}
+ 
+ package:
+   name: numba
+@@ -11,7 +11,7 @@ source:
+   url: https://github.com/numba/{{ name }}/archive/{{ version }}.tar.gz
+   sha256: {{ sha256 }}
+   patches:
+-    - patch-parfor.patch
++    - 0001-unpin-setuptools.patch
+ 
+ build:
+   number: 0
+@@ -41,16 +41,17 @@ requirements:
+     - pip
+     - setuptools
+     - wheel
+-    - llvmlite 0.38.*
+-    - numpy
+-    - tbb-devel 2021.*
++    - llvmlite 0.39.*
++    - numpy {{ numpy }}
++    - tbb-devel 2021.*,<2021.6
+     - _openmp_mutex            # [linux and not ppc64le]
+   run:
+     - python
+-    - {{ pin_compatible('llvmlite', max_pin='x.x') }}
+-    - {{ pin_compatible('numpy') }}
++    - llvmlite 0.39.*
++    - numpy {{ numpy }}
+     # needed for pkg_resources
+     - setuptools
++    - importlib_metadata # [py<39]
+ 
+   run_constrained:
+     - tbb  >=2021.0
+@@ -60,16 +61,16 @@ requirements:
+     - cudatoolkit >=9.2   # [x86 and not osx]
+     - cudatoolkit >=9.0   # [x86 and osx]
+     # scipy 1.0 or later
+-    - scipy >=1.0
++    - scipy {{ scipy }}
+     # numpy has a hard upper limit currently
+-    - numpy >=1.18,<1.22
++    - numpy {{ numpy }}
+ 
+ test:
+   requires:
+     # Required to test optional Numba features
+     - jinja2
+     - cffi
+-    - scipy
++    - scipy {{ scipy }}
+     - ipython
+     - setuptools
+     - pip
+-- 
+2.23.0
+

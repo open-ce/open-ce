@@ -1,10 +1,10 @@
 builder_version: ">=10.0.1"
 
+{% if not s390x %}
 imported_envs:
 {% if not s390x %}
   - tensorflow-env.yaml
 {% endif %}
-  - common-deps.yaml
 
 packages:
   - feedstock : onnx
@@ -32,3 +32,5 @@ packages:
   - feedstock : onnxmltools
   - feedstock : tf2onnx
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.8

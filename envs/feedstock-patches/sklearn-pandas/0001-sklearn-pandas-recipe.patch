@@ -1,14 +1,14 @@
-From 072cce4ac3da7be3a419e9ebe9abc616727f0be8 Mon Sep 17 00:00:00 2001
+From 66574a95c4448c8e69ca554aa53eaa449bc9c321 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 23 Mar 2023 08:57:35 +0000
-Subject: [PATCH] Sklearn pandas recipe
+Date: Mon, 30 Jan 2023 07:38:42 -0500
+Subject: [PATCH] Open-ce changes
 
 ---
- recipe/meta.yaml | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index fc916e2..ada09f2 100644
+index fc916e2..447317e 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -18,13 +18,13 @@ build:
@@ -19,10 +19,9 @@ index fc916e2..ada09f2 100644
 +    - python
    run:
 -    - python >=3.7
--    - scikit-learn >=0.23.0
--    - scipy >=1.5.1
 +    - python
-+    - scikit-learn {{ scikit_learn }}
+     - scikit-learn >=0.23.0
+-    - scipy >=1.5.1
 +    - scipy {{ scipy }}
      - pandas >=1.1.4
 -    - numpy >=1.18.1
@@ -31,5 +30,5 @@ index fc916e2..ada09f2 100644
  test:
    imports:
 -- 
-2.34.1
+2.23.0
 

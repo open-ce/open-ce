@@ -17,7 +17,7 @@ autoconf:
 automake:
   - 1.16
 av:
-  - 10.*
+  - 9.*
 bazel:
   - 5.*
 black:
@@ -91,7 +91,8 @@ future:
 gast:
   - 0.4.0
 git:
-  - 2.34
+  - 2.15    #[not s390x]
+  - 2.34.*  #[s390x]
 google_auth:
   - 2.*
 google_auth_oauthlib:
@@ -139,7 +140,8 @@ keras_preprocessing:
 keras:
   - 2.12.*
 leveldb:
-  - 1.23.*
+  - 1.20.*  # [not s390x]
+  - 1.22.*  # [s390x]
 libiconv:
   - 1.16
 libdate:
@@ -183,7 +185,7 @@ magma:
 make:
   - 4.2.1
 markdown:
-  - 3.4.*
+  - 3.3.*
 mock:
   - 3.*      # [not s390x]
   - 4.*      # [s390x]
@@ -203,7 +205,7 @@ numactl:
   - 2.0.*
 numpy:
   - 1.22.*   # [cudatoolkit == '11.2']
-  - 1.23.5   # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 1.23.1   # [build_type == 'cpu' or cudatoolkit == '11.4']
 onnx:
   - 1.13.*
 onnxconverter_common:
@@ -226,7 +228,7 @@ opt_einsum:
 pathy:
   - 0.6.*
 pip:
-  - 23.*
+  - 21.*
 #pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
 pkgconfig:
   - 0.29.2
@@ -239,9 +241,9 @@ psutil:
 pybind11:
   - 2.9.*
 pydantic:
-  - 1.10.*
+  - 1.9.*
 pytest:
-  - 7.*
+  - 6.*
 python:
   - 3.8   # [not s390x]
   - 3.9
@@ -262,7 +264,7 @@ rdflib:
 requests:
   - 2.*
 regex:
-  - 2022.7.*
+  - 2022.3.*
 reproc_cpp:
   - 14.2.*
 rust:
@@ -281,10 +283,10 @@ sentencepiece:
   - 0.1.97
 setuptools:
   - 58.*    # [cudatoolkit == '11.2']
-  - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.4']
 setuptools_rust:
   - 0.12.*    # [cudatoolkit == '11.2']
-  - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
 six:
   - 1.16.0
 smart_open:

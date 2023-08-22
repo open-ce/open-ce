@@ -5,7 +5,8 @@ imported_envs:
   - common-deps.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
-conda_build_configs:                   #[ppc_arch == 'p10']
+conda_build_configs:
+  - tensorflow_serving_conda_build_config.yaml
   - conda_build_config_p10.yaml        #[ppc_arch == 'p10']
 
 packages:
@@ -23,4 +24,13 @@ packages:
         - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
     - feedstock: tensorflow-serving
 
+  {% if python is string %}
+    {% set py = python | replace(".", "") | int %}
+    {% if py >= 38 %}
+    - feedstock: protobuf
+    {% endif %}
+  {% endif %}
+
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.8

@@ -1,11 +1,13 @@
 builder_version: ">=10.0.1"
 
 imported_envs:
-  - common-p10-deps.yaml      #[ppc_arch == "p10"]
+  - scipy-env.yaml
 
 packages:
 {% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
 {% endif %}
   - feedstock : LightGBM
   - feedstock : openmpi          #[mpi_type == 'openmpi']
+
+git_tag_for_env: open-ce-v1.7.8

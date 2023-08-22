@@ -1,7 +1,7 @@
 builder_version: ">=10.0.1"
 
 imported_envs:
-  - common-p10-deps.yaml      #[ppc_arch == "p10"]
+  - scipy-env.yaml
 
 packages:
 {% if build_type == 'cuda' %}
@@ -9,3 +9,5 @@ packages:
   - feedstock : nccl
 {% endif %}
   - feedstock : xgboost
+
+git_tag_for_env: open-ce-v1.7.8

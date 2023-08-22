@@ -5,6 +5,8 @@ imported_envs:
 
 packages:
 {% if not s390x %}
+  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
+    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
   - feedstock : https://github.com/conda-forge/openmp-feedstock
     git_tag: 0115cb8cc0ba8d65de222b78c148f75c179e645d
     patches:
@@ -14,3 +16,5 @@ packages:
       - feedstock-patches/openmp/0004-Updated-openmp-to-14.0.6.patch
   - feedstock : openblas
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.8

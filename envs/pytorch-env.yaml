@@ -3,12 +3,9 @@ builder_version: ">=10.0.1"
 imported_envs:
 {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - openblas-env.yaml
-  - common-p10-deps.yaml      #[ppc_arch == "p10"]
-  - common-deps.yaml
-{% endif %}
+  - scipy-env.yaml
 
 packages:
-{% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - feedstock : pytorch
   - feedstock : numactl
   - feedstock : sentencepiece
@@ -17,15 +14,13 @@ packages:
   - feedstock : av
   - feedstock : torchvision
 {% endif %}
-  {% if build_type == 'cuda' %}
+{% if build_type == 'cuda' %}
   - feedstock : nccl
   - feedstock : magma
   - feedstock : cudnn
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
-  {% endif %}
-  - feedstock : torchdata      # [build_type == 'cpu' or cudatoolkit == '11.8']
-  - feedstock : https://github.com/AnacondaRecipes/leveldb-feedstock      #[ppc_arch == "p10"]
-    git_tag: 44dd156fd8f7a81536926e11b54fdbf9df2c3158                     #[ppc_arch == "p10"]
-    patches:                                                              #[ppc_arch == "p10"]
-      - feedstock-patches/leveldb/0001-changes-for-opence.patch           #[ppc_arch == "p10"]
+  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
+  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
+    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.8

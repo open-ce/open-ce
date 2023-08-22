@@ -4,6 +4,7 @@ imported_envs:
 {% if not s390x %}
   - arrow-env.yaml
   - tensorflow-env.yaml
+  - scipy-env.yaml
 {% endif %}
 
 packages:
@@ -13,16 +14,16 @@ packages:
     patches:
       - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
       - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
-  - feedstock : https://github.com/AnacondaRecipes/cfitsio-feedstock        #[cudatoolkit != '11.2']
-    git_tag: f965e25fdec2b5dee0965cfaf2635384ae8e16ed                       #[cudatoolkit != '11.2']
-    patches:                                                                #[cudatoolkit != '11.2']
-      - feedstock-patches/cfitsio/0001-Open-ce-changes.patch                #[cudatoolkit != '11.2']
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : af1e1b369a2327a4a4b7d52a9a8579454729dd07
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
     git_tag : 1431680c5d1e8b842704ce40ced10377cade59e7
+  - feedstock : https://github.com/conda-forge/gym-feedstock
+    git_tag: 2a7ffecb73b770d6889ec06e133bd3cfe8c02041
+    patches:
+      - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 6c88fc1f9d47e348479edf4a7e28742b2cb49dcb
   - feedstock : dm-tree
@@ -32,3 +33,5 @@ packages:
       - feedstock-patches/opencensus/0001-Remove-constraint-from-google-api-core.patch 
   - feedstock : ray-packages
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.8

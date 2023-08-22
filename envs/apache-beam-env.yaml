@@ -1,14 +1,13 @@
 imported_envs:
 {% if not s390x %}
-{% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
+{% if build_type == 'cpu' or cudatoolkit == '11.4' %}
   - arrow-env.yaml
-  - common-deps.yaml
 {% endif %}
 {% endif %}
 
 packages:
 {% if not s390x %}
-{% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
+{% if build_type == 'cpu' or cudatoolkit == '11.4' %}
   - feedstock : https://github.com/conda-forge/httplib2-feedstock.git
     git_tag : 90f5bd5d0fd0c37bf66bf0167fd268df572033cb
   - feedstock : https://github.com/conda-forge/orjson-feedstock.git
@@ -19,6 +18,8 @@ packages:
       - feedstock-patches/maturin/0001-Fixed-maturin.patch
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
+  - feedstock : https://github.com/conda-forge/dill-feedstock
+    git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f     # 1.65
   - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
@@ -34,14 +35,10 @@ packages:
     patches :
       - feedstock-patches/cargo_bundle_licenses/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/cloudpickle-feedstock
-    git_tag : 73f5d154a4aad63608ca5f483db5730f0b2f51f1
-  - feedstock : https://github.com/conda-forge/objsize-feedstock.git
-    git_tag : 3345dbe50a983982838194e4224bb494d5247cc6
-  - feedstock : https://github.com/conda-forge/grpcio-feedstock
-    git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
-    patches :
-      - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
-      - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
+    git_tag : 3e0ee6656ea16f597738b224001448bf0e332210    
   - feedstock : apache-beam
 {% endif %}
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.8
+

@@ -8,7 +8,7 @@ imported_envs:
 packages:
   - feedstock : tensorboard-data-server
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
-    git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
+    git_tag : 85fff27f50229187e7877c434590b01ac42ba772
     patches :
       - feedstock-patches/absl-py/0001-Updated-absl-py-to-1.0.0.patch
 
@@ -18,3 +18,5 @@ packages:
       - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
       - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
   - feedstock : tensorboard
+
+git_tag_for_env: open-ce-v1.7.8

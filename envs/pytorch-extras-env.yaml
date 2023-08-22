@@ -49,3 +49,5 @@ packages:
     git_tag : 2723b1b582889ac1e5f10e8aaf0cb91ff6c41844
 {% endif %}
 {% endif %}
+
+git_tag_for_env: open-ce-v1.7.8
