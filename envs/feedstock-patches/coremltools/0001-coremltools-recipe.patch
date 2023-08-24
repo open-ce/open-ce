@@ -1,29 +1,66 @@
-From ee26b37c1135d0caea38889fbf54f06d9c3c7a9b Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 11 Jul 2023 09:07:49 +0000
-Subject: [PATCH] fix for python 3.11
+From 77c1e67c42aa7e5c0647d92449405bfbe0905786 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 24 Aug 2023 09:31:42 +0000
+Subject: [PATCH] Open-CE changes for coremltools
 
 ---
- recipe/meta.yaml | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ recipe/0001-Adjust-dist-info.patch | 25 +++++++++++++++++++++++++
+ recipe/meta.yaml                   | 30 +++++++++++++++---------------
+ 2 files changed, 40 insertions(+), 15 deletions(-)
+ create mode 100644 recipe/0001-Adjust-dist-info.patch
 
+diff --git a/recipe/0001-Adjust-dist-info.patch b/recipe/0001-Adjust-dist-info.patch
+new file mode 100644
+index 0000000..328dafd
+--- /dev/null
++++ b/recipe/0001-Adjust-dist-info.patch
+@@ -0,0 +1,25 @@
++From ef6835e4270acef8eca2ac3ccfad51f238e24318 Mon Sep 17 00:00:00 2001
++From: Nishidha Panpaliya <npanpa23@in.ibm.com>
++Date: Thu, 24 Aug 2023 08:34:25 +0000
++Subject: [PATCH] Adjust dist info
++
++---
++ setup.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index 459e6128..ef79fa10 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -77,7 +77,7 @@ setup(
++     },
++     install_requires=[
++         "numpy >= 1.14.5",
++-        "protobuf >= 3.1.0, <= 4.0.0",
+++        "protobuf >= 3.1.0",
++         "sympy",
++         "tqdm",
++         "packaging",
++-- 
++2.40.1
++
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 8e74dc1..1bae8dc 100644
+index 8e74dc1..aa6798e 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
  {% set name = "coremltools" %}
 -{% set version = "4.1" %}
-+{% set version = "7.0b1" %}
++{% set version = "7.0b2" %}
  
  package:
    name: {{ name|lower }}
-@@ -11,10 +11,10 @@ source:
+@@ -10,11 +10,13 @@ source:
+   #   - LICENSE.txt
    #   - CMakeLists.txt
    # so we use GitHub releases.
-   url: https://github.com/apple/{{ name }}/archive/{{ version }}.tar.gz
+-  url: https://github.com/apple/{{ name }}/archive/{{ version }}.tar.gz
 -  sha256: fdbc1e96bdeda0b23222864cb802053c67d8165a9e000e873d9b4028815ce61b
-+  sha256: 0aa4b7b466477a73984e22c46af516fb761c84c21d60cd88a0a7d29242f429b4
++  git_url: https://github.com/apple/{{ name }}
++  git_rev: {{ version }}
++  patches:
++    - 0001-Adjust-dist-info.patch
  
  build:
 -  number: 2
@@ -31,31 +68,34 @@ index 8e74dc1..1bae8dc 100644
    # The upstream package does not support Windows.
    skip: true  # [win]
  
-@@ -25,17 +25,19 @@ requirements:
+@@ -25,17 +27,19 @@ requirements:
      - {{ compiler('c') }}
      - {{ compiler('cxx') }}
    host:
 -    - python
 -    - numpy
+-    - pip
 +    - python {{ python }}
 +    - numpy {{ numpy }}
-     - pip
++    - pip {{ pip }}
    run:
 -    - python
 +    - python {{ python }}
      - {{ pin_compatible('numpy') }}
-     - protobuf >=3.1.0
-     - six >=1.1.0
+-    - protobuf >=3.1.0
+-    - six >=1.1.0
++    - protobuf {{ protobuf }}
++    - six {{ six }}
      - attrs
 +    - cattrs
      - sympy
 -    - scipy
-+    - pyyaml {{ pyyaml }}
++    - pyaml
 +    - scipy {{ scipy }}
      - tqdm
      - packaging
    run_constrained:
-@@ -47,10 +49,6 @@ test:
+@@ -47,10 +51,6 @@ test:
      - coremltools
      # required for predict() on macOS
      - coremltools.libcoremlpython  # [osx]
@@ -67,5 +107,5 @@ index 8e74dc1..1bae8dc 100644
  about:
    home: https://github.com/apple/coremltools
 -- 
-2.34.1
+2.40.1
 
