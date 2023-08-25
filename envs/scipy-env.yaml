@@ -8,3 +8,4 @@ packages:
     git_tag : bb70c70c654008b57f86eab0fba185533adf8f5b
     patches :
       - feedstock-patches/scipy/0001-fix-to-build-with-opence.patch
+git_tag_for_env: open-ce-v1.10.0

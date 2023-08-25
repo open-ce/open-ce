@@ -14,3 +14,4 @@ packages:
       - feedstock-patches/openmp/0004-Updated-openmp-to-14.0.6.patch
   - feedstock : openblas
 {% endif %}
+git_tag_for_env: open-ce-v1.10.0
