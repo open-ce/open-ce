@@ -19,7 +19,7 @@ packages:
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   - feedstock : https://github.com/conda-forge/cmake-feedstock
     git_tag : 70e07324f0ab7f075c5c325a55e31ddc9b68d985
-    patches :
+    patches :                                                  #[ppc_arch == 'p10']
       - feedstock-patches/cmake/0001-P10-changes.patch         #[ppc_arch == 'p10']
   {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit
