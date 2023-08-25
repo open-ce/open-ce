@@ -283,7 +283,7 @@ spdlog:
 srsly:
   - 2.*
 starlette:
-  - 0.20.*
+  - 0.25.*
 sqlite:
   - 3.41.*   # [s390x]
 tabulate:

@@ -18,7 +18,7 @@ packages:
     patches: 
       - feedstock-patches/cfitsio/0001-Open-ce-changes.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : af1e1b369a2327a4a4b7d52a9a8579454729dd07
+    git_tag : 9eebdc51a4cb9f3222f6f9250c80c563f869b15e
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
