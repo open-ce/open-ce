@@ -7,7 +7,7 @@ array_record:
 arviz:
   - 0.14.0
 arrow:
-  - 11.0.0
+  - 12.0.1
 astunparse:
   - 1.6
 attrs:
@@ -25,13 +25,12 @@ black:
 bsddb3:
   - 6.2.9
 boost:
-  - 1.67.0  # [not s390x]
+  - 1.73.0  # [not s390x]
   - 1.65.*  # [s390x]
 boost_mp11:
   - 1.76.*
 c_compiler_version:
-  - 8.*                        # [cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 11.2.*
 catalogue:
   - 2.*
 cffi:
@@ -55,10 +54,9 @@ coverage:
 cpp_filesystem:
   - 1.5.*
 cudnn:
-  - 8.8.*    # [build_type == 'cuda']
+  - 8.9.*    # [build_type == 'cuda']
 cxx_compiler_version:
-  - 8.*                        # [cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 11.2.*
 cxxfilt:
   - 0.2.*
 cymem:
@@ -76,14 +74,13 @@ eigen:
 ffmpeg:
   - 4.2.*
 flatbuffers:
-  - 2.0.*
+  - 23.1.21
 fmt:
   - 9.1.0
 freetype:
   - 2
 fortran_compiler_version:
-  - 8.*                        # [cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 11.2.*
 fsspec:
   - 2022.11.*
 future:
@@ -91,7 +88,7 @@ future:
 gast:
   - 0.4.0
 git:
-  - 2.34
+  - 2.40
 google_auth:
   - 2.*
 google_auth_oauthlib:
@@ -105,9 +102,9 @@ googledrivedownloader:
 gmock:
   - 1.13
 grpc_cpp:
-  - 1.41.*
+  - 1.54.*
 grpcio:
-  - 1.51.*
+  - 1.54.*
 harfbuzz:
   - 4.3.*
 # Note: hdf5 version must be compatible with h5py
@@ -127,7 +124,7 @@ jasper:
 jax:
   - 0.4.7
 joblib:
-  - 1.*
+  - 1.2.*
 jpeg:
   - 9e
 jpegturbo:
@@ -137,7 +134,7 @@ keras_applications:
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.12.*
+  - 2.13.*
 leveldb:
   - 1.23.*
 libiconv:
@@ -147,15 +144,12 @@ libdate:
 libevent:
   - 2.1.*
 libgcc:
-  - 9.1.*                      # [x86_64 and cudatoolkit == '11.2']
   - 8.2.*                      # [ppc64le]
   - 9.3.*                      # [s390x]
 libstdcxx:
-  - 9.1.*                      # [x86_64 and cudatoolkit == '11.2']
   - 8.2.*                      # [ppc64le]
   - 9.3.*                      # [s390x]
 libgfortran:
-  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le]
   - 7.5.*                      # [s390x]
 libogg:
@@ -196,29 +190,28 @@ networkx:
 ninja:
   - 1.10.*
 nccl:
-  - 2.17.*
+  - 2.18.*
 nlohmann_json:
   - 3.*
 numactl:
   - 2.0.*
 numpy:
-  - 1.22.*   # [cudatoolkit == '11.2']
-  - 1.23.5   # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 1.24.3
 onnx:
-  - 1.13.*
+  - 1.14.*
 onnxconverter_common:
-  - 1.13.*
+  - 1.14.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
   - 0.3.23.*      #[not s390x]
   - 0.3.21.*      #[s390x]
 opencv:
-  - 4.7.*
+  - 4.8.*
 openjdk:
   - 11.0.*
 openmpi:
-  - 4.1.4
+  - 4.1.5
 optional_lite:
   - 3.4.*
 opt_einsum:
@@ -237,7 +230,7 @@ protobuf:
 psutil:
   - 5
 pybind11:
-  - 2.9.*
+  - 2.10.*
 pydantic:
   - 1.10.*
 pytest:
@@ -246,9 +239,9 @@ python:
   - 3.8   # [not s390x]
   - 3.9
   - 3.10
+  - 3.11
 pytorch:
-  - 1.10.*               # [cudatoolkit == '11.2']
-  - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 2.0.*
 pytorch_lightning:
   - 2.0.*
 pytorch_scatter:
@@ -266,25 +259,21 @@ regex:
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.62.*     # [cudatoolkit == '11.2']
-  - 1.65.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.65.*
 rust_compiler_version:
-  - '1.46.0'   # [cudatoolkit == '11.2']
-  - '1.65.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - '1.65.0'
 safeint:
   - 3.0
 scipy:
-  - 1.10.*
+  - 1.11.*
 scikit_learn:
-  - 1.1.*
+  - 1.2.*
 sentencepiece:
   - 0.1.97
 setuptools:
-  - 58.*    # [cudatoolkit == '11.2']
-  - 65.*    # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 68.*
 setuptools_rust:
-  - 0.12.*    # [cudatoolkit == '11.2']
-  - 1.5.*     # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 1.5.*
 six:
   - 1.16.0
 smart_open:
@@ -300,31 +289,29 @@ sqlite:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.12.*
+  - 2.13.*
 tensorboard_data_server:
   - 0.7.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.12.*
+  - 2.13.*
 tensorflow_hub:
-  - 0.13
+  - 0.14
 tensorflow_io_gcs_filesystem:
-  - 0.32.*
+  - 0.33.*
 termcolor:
   - 2.1.*
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
-  - 2.12.*
+  - 2.13.*
 torchmetrics:
   - 0.11.*
 torchtext:
-  - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 0.15.*
 torchvision:
-  - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.15.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - 0.15.*
 tqdm:
   - 4.*
 typer:
@@ -392,12 +379,8 @@ vector_settings:
 ##
 # yamllint disable rule:line-length
 cuda_levels:
-  - 6.0,7.0,7.5,8.0             # [x86_64 and cudatoolkit == '11.2']
-  - 6.0,7.0,7.5,8.0,8.6,9.0     # [x86_64 and cudatoolkit == '11.8']
-  - 6.0,7.0,7.5,8.0                 # [ppc64le and cudatoolkit == '11.2']
-  - 6.0,7.0,7.5,8.0,8.6,9.0         # [ppc64le and cudatoolkit == '11.8']
+  - 6.0,7.0,7.5,8.0,8.6,9.0     # [x86_64]
+  - 6.0,7.0,7.5,8.0,8.6,9.0         # [ppc64le]
 cuda_levels_details:
-  - sm_60,sm_61,sm_70,sm_75,sm_80,compute_80                         # [x86_64 and cudatoolkit == '11.2']
-  - sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64 and cudatoolkit == '11.8']
-  - sm_60,sm_70,sm_75,sm_80,compute_80                                     # [ppc64le and cudatoolkit == '11.2']
-  - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90               # [ppc64le and cudatoolkit == '11.8']
+  - sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64]
+  - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90         # [ppc64le]

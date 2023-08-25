@@ -46,8 +46,7 @@ packages:
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
   - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
     git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
-    patches :                                                 #[ppc_arch == 'p10' or cudatoolkit == '11.2']
-      - feedstock-patches/abseil-cpp/0001-use-GCC-11-for-cuda-11.2-build.patch   #[cudatoolkit == '11.2']
+    patches :                                                 #[ppc_arch == 'p10']
       - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
@@ -59,5 +58,5 @@ packages:
       - feedstock-patches/or_tools/0001-update-pin-dependencies.patch
       - feedstock-patches/or_tools/0001-Post-build-test-dir.patch
       - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
-      - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le and cudatoolkit == '11.2']
+      - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le]
 {% endif %}

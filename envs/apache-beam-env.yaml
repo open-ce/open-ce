@@ -1,14 +1,11 @@
 imported_envs:
 {% if not s390x %}
-{% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
   - arrow-env.yaml
   - common-deps.yaml
-{% endif %}
 {% endif %}
 
 packages:
 {% if not s390x %}
-{% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
   - feedstock : https://github.com/conda-forge/httplib2-feedstock.git
     git_tag : 90f5bd5d0fd0c37bf66bf0167fd268df572033cb
   - feedstock : https://github.com/conda-forge/orjson-feedstock.git
@@ -40,8 +37,6 @@ packages:
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
-      - feedstock-patches/grpcio/0001-Updated-to-1.51.3.patch
-      - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
+      - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
   - feedstock : apache-beam
-{% endif %}
 {% endif %}

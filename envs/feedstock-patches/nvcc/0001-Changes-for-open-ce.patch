@@ -1,14 +1,14 @@
-From 68a28b758a39e766ad29c9be32bc143d176d1fb7 Mon Sep 17 00:00:00 2001
+From 6314ef009048470c7aa59d06fabecc8c1187e4cc Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 26 Apr 2023 10:08:13 +0000
-Subject: [PATCH] Changes for open-ce and cuda 11.2
+Date: Tue, 11 Jul 2023 13:30:20 +0000
+Subject: [PATCH] Opence changes
 
 ---
  config/conda_build_config.yaml |   5 +
- recipe/conda_build_config.yaml | 165 +--------------------------------
+ recipe/conda_build_config.yaml | 167 +--------------------------------
  recipe/linux/activate.sh       |   2 +-
  recipe/linux/test_nvcc.sh      |   7 +-
- 4 files changed, 13 insertions(+), 166 deletions(-)
+ 4 files changed, 14 insertions(+), 167 deletions(-)
  create mode 100644 config/conda_build_config.yaml
 
 diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
@@ -23,7 +23,7 @@ index 0000000..52cd35f
 +  - 8.*          # [ppc64le and cudatoolkit == "11.2"]
 +
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index 041740e..2ecbc60 100644
+index 041740e..48735ba 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
 @@ -1,6 +1,3 @@
@@ -190,9 +190,7 @@ index 041740e..2ecbc60 100644
 -  - cos7   # [linux and ppc64le]        # CUDA 11.6
 -  - cos7   # [linux and ppc64le]        # CUDA 11.7
 -  - cos7   # [linux and ppc64le]        # CUDA 11.8
-+  - 11.2   # [cudatoolkit == '11.2']
-+  - 11.8   # [cudatoolkit == '11.8']
- 
+-
 -  - cos7   # [linux and aarch64]        # CUDA 11.0
 -  - cos7   # [linux and aarch64]        # CUDA 11.1
 -  - cos7   # [linux and aarch64]        # CUDA 11.2
@@ -202,10 +200,13 @@ index 041740e..2ecbc60 100644
 -  - cos7   # [linux and aarch64]        # CUDA 11.6
 -  - cos7   # [linux and aarch64]        # CUDA 11.7
 -  - cos7   # [linux and aarch64]        # CUDA 11.8
++  - 11.2   # [cudatoolkit == '11.2']
++  - 11.8   # [cudatoolkit == '11.8']
++  - 12.2   # [cudatoolkit == '12.2']
 +cdt_name:
 +  - cos7
 diff --git a/recipe/linux/activate.sh b/recipe/linux/activate.sh
-index f09ebe2..a9810af 100644
+index f09ebe2..ce7f297 100644
 --- a/recipe/linux/activate.sh
 +++ b/recipe/linux/activate.sh
 @@ -58,7 +58,7 @@ then
@@ -213,7 +214,7 @@ index f09ebe2..a9810af 100644
  fi
  
 -if [[ -z "$(${CUDA_HOME}/bin/nvcc --version | grep "Cuda compilation tools, release __PKG_VERSION__")" ]]
-+if [[ -z "$(${CUDA_HOME}/bin/nvcc --version | grep "Cuda compilation tools, release 11.[2,8]")" ]]
++if [[ -z "$(${CUDA_HOME}/bin/nvcc --version | grep "Cuda compilation tools, release 1[1,2].[2,8]")" ]]
  then
    if [ "${CONDA_BUILD}" = "1" ]
    then
@@ -241,5 +242,5 @@ index 782297f..b2b7cbe 100644
 \ No newline at end of file
 +nvcc $NVCC_FLAGS test.cu
 -- 
-2.34.1
+2.40.1
 

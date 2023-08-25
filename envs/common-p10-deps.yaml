@@ -5,6 +5,6 @@ imported_envs:
 
 packages:
   - feedstock : https://github.com/conda-forge/numpy-feedstock
-    git_tag : 2c0473fbf1054f9591fab5001f204aca7aab95b8
+    git_tag : a0dc7f756f8b782a7f171b5f0df87ac8f04fa5e6     # 1.24.3
     patches :
       - feedstock-patches/numpy/0001-Changes-for-P10-and-Open-ce.patch

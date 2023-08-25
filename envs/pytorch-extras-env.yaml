@@ -1,25 +1,24 @@
 builder_version: ">=10.0.1"
 
 imported_envs:
-{% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - tensorboard-env.yaml
   - pytorch-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
-{% endif %}
 
 packages:
 {% if not s390x %}
-{% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - feedstock : pytorch-lightning
   - feedstock : pytorch-lightning-bolts
   - feedstock : libflac
   - feedstock : libsndfile
+  - feedstock : https://github.com/conda-forge/backoff-feedstock
+    git_tag : 0bbeb5afb679ceedeb7e9625d4c1e6022dfdb9fe
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
-    git_tag : 6c88fc1f9d47e348479edf4a7e28742b2cb49dcb
+    git_tag : dd3ad2bf3128b222fa0bae834499dcb6232c9e47
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : 3ea659dca911c759e6aeafc490f938754c66e42a
+    git_tag : 9eebdc51a4cb9f3222f6f9250c80c563f869b15e
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/deepdiff-feedstock
@@ -47,5 +46,4 @@ packages:
       - feedstock-patches/aioredis/0001-fix-for-python-3.11.patch
   - feedstock : https://github.com/conda-forge/dateutils-feedstock
     git_tag : 2723b1b582889ac1e5f10e8aaf0cb91ff6c41844
-{% endif %}
 {% endif %}

@@ -1,43 +1,41 @@
-From 27eea451b618510ba88c8880b7e7240dfec84b3c Mon Sep 17 00:00:00 2001
-From: ArchanaSinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 4 Apr 2023 11:43:29 +0000
-Subject: [PATCH] Pin dependencies
+From a2cbc67cab6521a82178a206262f7e760199d813 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 22 Aug 2023 13:51:25 +0000
+Subject: [PATCH] pin dependencies
 
 ---
- recipe/meta.yaml | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 2ad3847..e055589 100644
+index e3eb5c2..084a227 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -28,7 +28,7 @@ requirements:
-     - huggingface_hub >=0.2.0,<1.0.0
+@@ -23,20 +23,20 @@ requirements:
+     - python >=3.8.0
+   run:
+     - aiohttp
+-    - dill >=0.3.0,<0.3.8
++    - dill {{ dill }}
+     - fsspec >=2021.11.1
+     - huggingface_hub >=0.14.0,<1.0.0
      - importlib-metadata
      - multiprocess
 -    - numpy >=1.17
 +    - numpy {{ numpy }}
      - packaging
      - pandas
-     - pyarrow >=6.0.0
-@@ -37,7 +37,7 @@ requirements:
+-    - pyarrow >=8.0.0
++    - pyarrow {{ arrow }}
+     - python >=3.8.0
+     - python-xxhash
      - pyyaml >=5.1
      - requests >=2.19.0
-     - responses <0.19
 -    - tqdm >=4.62.1
 +    - tqdm {{ tqdm }}
  
  test:
    imports:
-@@ -51,7 +51,7 @@ test:
-     - datasets.tasks
-     - datasets.utils
-   commands:
--    - pip check
-+#    - pip check
-     - datasets-cli --help
-   requires:
-     - pip
 -- 
-2.34.1
+2.40.1
 

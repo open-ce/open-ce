@@ -5,12 +5,10 @@ imported_envs:
 
 packages:
 {% if not s390x %}
-  {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - feedstock : https://github.com/conda-forge/prophet-feedstock
     git_tag : dcfd71f76db41221136fd8cf23ab88642e2ced6f
     patches :
       - feedstock-patches/prophet/0001-Pin-dependencies-and-added-test-dir.patch
   - feedstock : https://github.com/conda-forge/holidays-feedstock.git
     git_tag : 4d747d0607fb049f6f6569b5ec06dcc76b54d2b1
-  {% endif %}
 {% endif %}

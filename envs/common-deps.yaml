@@ -1,8 +1,6 @@
 builder_version: ">=10.0.1"
 
 packages:
-  - feedstock : https://github.com/AnacondaRecipes/zlib-feedstock   # [cudatoolkit == '11.2']
-    git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f               # [cudatoolkit == '11.2']
   - feedstock : https://github.com/conda-forge/protobuf-feedstock.git
     git_tag : bd7dc1e77a9284e8aad26c6f02753797499a764f
     patches :
@@ -14,3 +12,4 @@ packages:
       - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
       - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
       - feedstock-patches/protobuf/0001-fix-libprotobuf-for-cuda-11.2-build.patch
+
