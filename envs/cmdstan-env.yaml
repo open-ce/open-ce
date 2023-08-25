@@ -7,3 +7,4 @@ packages:
   - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock
     git_tag : 1cc20198a84a08ac28515bd601b39047ecedaef6
 {% endif %}
+git_tag_for_env: open-ce-v1.10.0

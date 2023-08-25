@@ -10,3 +10,4 @@ packages:
   - feedstock : https://github.com/conda-forge/libsolv-feedstock.git
     git_tag : 428e7eb3314aa728a1cd9069e8b74b49bae648bf	
   - feedstock : mamba
+git_tag_for_env: open-ce-v1.10.0

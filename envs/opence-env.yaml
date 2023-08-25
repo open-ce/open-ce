@@ -39,3 +39,4 @@ packages:
     git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
+git_tag_for_env: open-ce-v1.10.0
