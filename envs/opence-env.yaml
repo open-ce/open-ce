@@ -36,7 +36,7 @@ packages:
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
   - feedstock : https://github.com/conda-forge/tokenizers-feedstock.git  # [not s390x]
-    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
+    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08                   # [not s390x]  
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
 git_tag_for_env: open-ce-v1.10.0
