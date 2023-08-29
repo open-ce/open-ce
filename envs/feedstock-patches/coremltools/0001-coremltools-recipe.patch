@@ -1,12 +1,12 @@
-From 79eedd4e89ed727aa1473632adc66570463a7ae2 Mon Sep 17 00:00:00 2001
+From 3c5a14bda39997e2cada0120a3093a3a8babea54 Mon Sep 17 00:00:00 2001
 From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 29 Aug 2023 11:16:17 +0000
-Subject: [PATCH] coremltools recipe
+Date: Tue, 29 Aug 2023 12:13:02 +0000
+Subject: [PATCH] new-patch
 
 ---
- recipe/0001-Adjust-dist-info.patch | 25 +++++++++++++++++++++++
- recipe/meta.yaml                   | 32 +++++++++++++++---------------
- 2 files changed, 41 insertions(+), 16 deletions(-)
+ recipe/0001-Adjust-dist-info.patch | 25 ++++++++++++++++++++++
+ recipe/meta.yaml                   | 33 +++++++++++++++---------------
+ 2 files changed, 42 insertions(+), 16 deletions(-)
  create mode 100644 recipe/0001-Adjust-dist-info.patch
 
 diff --git a/recipe/0001-Adjust-dist-info.patch b/recipe/0001-Adjust-dist-info.patch
@@ -41,7 +41,7 @@ index 0000000..d267237
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 8e74dc1..5c503fc 100644
+index 8e74dc1..acafb99 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -68,7 +68,7 @@ index 8e74dc1..5c503fc 100644
    # The upstream package does not support Windows.
    skip: true  # [win]
  
-@@ -25,19 +27,21 @@ requirements:
+@@ -25,19 +27,22 @@ requirements:
      - {{ compiler('c') }}
      - {{ compiler('cxx') }}
    host:
@@ -92,13 +92,14 @@ index 8e74dc1..5c503fc 100644
      - sympy
 -    - scipy
 +    - scipy {{ scipy }}
++    - pyaml
      - tqdm
      - packaging
 +    - libuuid
    run_constrained:
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx]
      - pytorch >=1.4
-@@ -47,10 +51,6 @@ test:
+@@ -47,10 +52,6 @@ test:
      - coremltools
      # required for predict() on macOS
      - coremltools.libcoremlpython  # [osx]
