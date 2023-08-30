@@ -1,0 +1,66 @@
+From 3516ee8dd1bdd748ed81521b18f2a4d1c799ae24 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 30 Aug 2023 04:10:41 +0000
+Subject: [PATCH] Use LIMIT_BUILD_RESOURCES flag to use restricted resources
+
+---
+ recipe/build-shared.sh | 20 ++++++++++++++++++--
+ recipe/meta.yaml       |  3 +++
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/build-shared.sh b/recipe/build-shared.sh
+index c9f96cf..a19db9c 100644
+--- a/recipe/build-shared.sh
++++ b/recipe/build-shared.sh
+@@ -2,6 +2,22 @@
+ 
+ set -ex
+ 
++ARCH=$(uname -m)
++NO_OF_MAKE_THREADS=128
++if [[ $ARCH == "ppc64le" ]]; then
++    if [ -z ${LIMIT_BUILD_RESOURCES+x} ];
++    then
++        echo "ERROR: LIMIT_BUILD_RESOURCES is unset. Please set it to 1 if the build system is low in resources, else set it to 0"
++        exit 1
++    else
++        echo "LIMIT_BUILD_RESOURCES is set to $LIMIT_BUILD_RESOURCES"
++        if [[ ${LIMIT_BUILD_RESOURCES} == true || ${LIMIT_BUILD_RESOURCES} == 1 ]];
++        then
++            NO_OF_MAKE_THREADS=8
++        fi
++    fi
++fi
++
+ if [ "$(uname)" == "Linux" ];
+ then
+     # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
+@@ -44,9 +60,9 @@ if [ "${HOST}" == "powerpc64le-conda_cos7-linux-gnu" ]; then
+     make -j 2
+     make check -j 2 || (cat src/test-suite.log; exit 1)
+ else
+-    make -j ${CPU_COUNT}
++    make -j $NO_OF_MAKE_THREADS
+     if [[ "$CONDA_BUILD_CROSS_COMPILATION" != 1 ]]; then
+-        make check -j ${CPU_COUNT} || (cat src/test-suite.log; exit 1)
++        make check -j $NO_OF_MAKE_THREADS || (cat src/test-suite.log; exit 1)
+     fi
+ fi
+ make install
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 827ec79..997080d 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -44,6 +44,9 @@ outputs:
+         # https://abi-laboratory.pro/tracker/timeline/protobuf/
+         # One exception was that 3.6.1 was incompatible with 3.6.0
+         - {{ pin_subpackage('libprotobuf', max_pin='x.x') }}
++      script_env:
++        - LIMIT_BUILD_RESOURCES
++
+     requirements:
+       build:
+         - {{ compiler('c') }}            #[ppc_arch != "p10"]
+-- 
+2.40.1
+
