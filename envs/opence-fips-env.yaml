@@ -32,14 +32,14 @@ imported_envs:
   - jax-env.yaml
 
 packages:
-  - feedstock : https://github.com/conda-forge/eigen-feedstock.git
-    git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
   - feedstock : https://github.com/conda-forge/datasets-feedstock.git
-    git_tag : fb3f04ae741963e29698b54f75eab4da549db6fb
+    git_tag : 28cdd715a81009b8723a09180408e83d2acfb8b2
     patches:
       - feedstock-patches/datasets/0001-Pin-dependencies.patch
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
+  - feedstock : https://github.com/conda-forge/tokenizers-feedstock.git   # [not s390x]
+    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08                    # [not s390x]
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
 git_tag_for_env: open-ce-v1.10.0
