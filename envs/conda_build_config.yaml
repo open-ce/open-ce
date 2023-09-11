@@ -105,7 +105,7 @@ gmock:
 grpc_cpp:
   - 1.41.*
 grpcio:
-  - 1.51.*
+  - 1.53.*
 harfbuzz:
   - 4.3.*
 # Note: hdf5 version must be compatible with h5py
@@ -258,7 +258,7 @@ pyyaml:
 rdflib:
   - 6.1.1
 requests:
-  - 2.*
+  - 2.31.*
 regex:
   - 2022.3.*
 reproc_cpp:
@@ -292,7 +292,7 @@ spdlog:
 srsly:
   - 2.*
 starlette:
-  - 0.20.*
+  - 0.25.*
 sqlite:
   - 3.38.*   # [s390x]
 tabulate:
