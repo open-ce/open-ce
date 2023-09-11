@@ -1,18 +1,18 @@
-From ec5e897074e4f822fe4d0a31860879bff2d4b7eb Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Fri, 14 Apr 2023 09:32:50 +0000
-Subject: [PATCH] Merged
+From 433b32ce888dd804aeac40633e0af630820ee57f Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Mon, 11 Sep 2023 16:43:46 +0000
+Subject: [PATCH] update to 1.70.1
 
 ---
- recipe/conda_build_config.yaml | 76 +++++-----------------------------
+ recipe/conda_build_config.yaml | 71 ++++------------------------------
  recipe/meta.yaml               |  7 +---
- 2 files changed, 12 insertions(+), 71 deletions(-)
+ 2 files changed, 10 insertions(+), 68 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index 36c9601..4124840 100644
+index 8afc86b..4634454 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
-@@ -1,82 +1,26 @@
+@@ -1,82 +1,27 @@
  cross_target_platform:
 -  - linux-64                            # [linux]
 -  - linux-aarch64                       # [linux]
@@ -20,7 +20,7 @@ index 36c9601..4124840 100644
 -  - osx-64                              # [linux64 or osx]
 -  - osx-arm64                           # [linux64 or osx]
 -  - win-64                              # [linux64 or (osx and x86_64) or win64]
-+  - linux-64                            # [x86_64]
++  - linux-64                            # [linux64]
 +  - linux-ppc64le                       # [ppc64le]
  rust_arch:
 -  - x86_64-unknown-linux-gnu            # [linux]
@@ -29,12 +29,11 @@ index 36c9601..4124840 100644
 -  - x86_64-apple-darwin                 # [linux64 or osx]
 -  - aarch64-apple-darwin                # [linux64 or osx]
 -  - x86_64-pc-windows-msvc              # [linux64 or (osx and x86_64) or win64]
-+  - x86_64-unknown-linux-gnu            # [x86_64]
++  - x86_64-unknown-linux-gnu            # [linux64]
 +  - powerpc64le-unknown-linux-gnu       # [ppc64le]
  rust_arch_env_build:
--  - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
+   - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [aarch64]
-+  - X86_64_UNKNOWN_LINUX_GNU            # [x86_64]
    - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
 -  - X86_64_APPLE_DARWIN                 # [osx and x86_64]
 -  - AARCH64_APPLE_DARWIN                # [osx and arm64]
@@ -46,12 +45,11 @@ index 36c9601..4124840 100644
 -  - X86_64_APPLE_DARWIN                 # [linux64 or osx]
 -  - AARCH64_APPLE_DARWIN                # [linux64 or osx]
 -  - X86_64_PC_WINDOWS_MSVC              # [linux64 or (osx and x86_64) or win64]
-+  - X86_64_UNKNOWN_LINUX_GNU            # [x86_64]
++  - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 +  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
  rust_default_cc_build:
--  - x86_64-conda-linux-gnu-cc           # [linux64]
+   - x86_64-conda-linux-gnu-cc           # [linux64]
 -  - aarch64-conda-linux-gnu-cc          # [aarch64]
-+  - x86_64-conda-linux-gnu-cc           # [x86_64]
    - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
 -  - x86_64-apple-darwin13.4.0-clang     # [osx and x86_64]
 -  - arm64-apple-darwin20.0.0-clang      # [osx and arm64]
@@ -63,7 +61,9 @@ index 36c9601..4124840 100644
 -  - x86_64-apple-darwin13.4.0-clang     # [linux64 or osx]
 -  - arm64-apple-darwin20.0.0-clang      # [linux64 or osx]
 -  - clang-cl                            # [linux64 or (osx and x86_64) or win64]
--
++  - x86_64-conda-linux-gnu-cc           # [linux64]
++  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
+ 
 -# This should be max(build_platform_ver, cross_target_platform_ver)
 -MACOSX_SDK_VERSION:
 -  - 0                                   # [linux]
@@ -84,11 +84,9 @@ index 36c9601..4124840 100644
 -  - 0                                   # [linux64 or win64]
 -  # For osx-64 -> win-64 cross-compiling, set deployment target for the build system
 -  - 10.9                                # [osx and x86_64]
-+  - x86_64-conda-linux-gnu-cc           # [x86_64]
-+  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
  version:
-   - 1.65.0
--  - 1.67.0
+   - 1.71.1
+-  - 1.74.0
 -channel_sources:
 -  - conda-forge
 -  - conda-forge/label/rust_dev,conda-forge
@@ -106,7 +104,7 @@ index 36c9601..4124840 100644
 -    - channel_targets
      - version
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 0e6b86b..4b41d4c 100644
+index c24bd0e..cad449c 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -37,10 +37,7 @@ outputs:
@@ -133,5 +131,5 @@ index 0e6b86b..4b41d4c 100644
    - name: rust-gnu_{{ target_platform }}
      script: bld.bat
 -- 
-2.34.1
+2.40.1
 

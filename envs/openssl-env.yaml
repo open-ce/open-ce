@@ -3,14 +3,13 @@ builder_version: ">=10.0.1"
 packages:
   - feedstock: openssl
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f     # 1.65
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : f025039f103f39e50829188fe020b09ec8374edd
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95  
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock 
-#    git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1  #v39
-    git_tag : a2504e53594be2712d11ff57b2190e45e38e27c2 #v41.0.1
+    git_tag : b6df720b6804150350fd1c268df513ffb8113f26
     patches :
       - feedstock-patches/cryptography/0001-opence-changes-for-crytography.patch
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
