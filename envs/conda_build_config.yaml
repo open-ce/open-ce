@@ -315,6 +315,8 @@ termcolor_cpp:
   - 2.0.0
 tf_estimator:
   - 2.12.*
+tokenizers:
+  - 0.11.4
 torchmetrics:
   - 0.11.*
 torchtext:
