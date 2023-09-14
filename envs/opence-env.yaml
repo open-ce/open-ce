@@ -17,7 +17,7 @@ imported_envs:
 
   - ray-env.yaml
   - apache-beam-env.yaml
-  - prophet-env.yaml
+#  - prophet-env.yaml
   - orbit-ml-env.yaml                  # [build_type == 'cpu' or cudatoolkit == '11.8']
   - deepspeed-env.yaml                 # [build_type == 'cpu' or cudatoolkit == '11.8']
   - misc-env.yaml
