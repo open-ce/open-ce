@@ -1,14 +1,14 @@
-From 71b33b2ed1cac6b19a125150b3496a82e33eadd3 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Mon, 11 Sep 2023 16:35:44 +0000
-Subject: [PATCH] update in recipe
+From ccc78b3b7deb5a56a72f357a467ac3efe0602a5e Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Thu, 14 Sep 2023 14:04:08 +0000
+Subject: [PATCH] changes for opence fips
 
 ---
- recipe/meta.yaml | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ recipe/meta.yaml | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 004052a..edb84bc 100644
+index 004052a..acfab53 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -13,6 +13,7 @@ source:
@@ -19,7 +19,18 @@ index 004052a..edb84bc 100644
    missing_dso_whitelist:
      - /usr/lib/libresolv.9.dylib  # [osx]
      - /usr/lib64/libgcc_s.so.1  # [linux]
-@@ -32,17 +33,18 @@ requirements:
+@@ -23,26 +24,28 @@ build:
+     - export PYO3_CROSS_PYTHON_VERSION=$PY_VER
+     # see below for what OPENSSL_DIR should be pointing to:
+     # https://github.com/sfackler/rust-openssl/blob/openssl-sys-v0.9.72/openssl/src/lib.rs#L55-L56
+-    - export OPENSSL_DIR=$PREFIX
+     {% endif %}
++    - export OPENSSL_DIR=$PREFIX
+     - cd bindings/python
+-    - {{ PYTHON }} -m pip install . -vv
++    - {{ PYTHON }} -m pip install . -vv .
+ 
+ requirements:
    build:
      - python                                 # [build_platform != target_platform]
      - cross-python_{{ target_platform }}     # [build_platform != target_platform]
@@ -35,13 +46,14 @@ index 004052a..edb84bc 100644
      - setuptools
 -    - openssl    # [linux]
 +    - openssl 1.1.1zz    # [linux]
++
    run:
      - python
 +    - openssl 1.1.1zz
  
  test:
    imports:
-@@ -76,6 +78,7 @@ test:
+@@ -76,6 +79,7 @@ test:
      {% set tests_to_skip = "_not_a_real_test" %}
      # windows and expectation of forking -> not gonna happen
      {% set tests_to_skip = tests_to_skip + " or with_parallelism" %}  # [win]
