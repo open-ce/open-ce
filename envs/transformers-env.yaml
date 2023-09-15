@@ -1,0 +1,27 @@
+builder_version: ">=10.0.1"
+
+imported_envs:
+  - common-deps.yaml
+  - openssl-env.yaml
+
+packages:
+{% if not s390x %}
+  - feedstock : https://github.com/conda-forge/rust-feedstock
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
+    patches :                                                                         #[s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
+    git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
+  - feedstock: https://github.com/conda-forge/tokenizers-feedstock
+    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
+    patches :
+     - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch
+  - feedstock : huggingface_hub
+  - feedstock : sacremoses
+  - feedstock : sentencepiece
+  - feedstock : transformers
+{% endif %}

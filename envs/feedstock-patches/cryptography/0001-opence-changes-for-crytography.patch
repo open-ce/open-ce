@@ -1,41 +1,53 @@
-From 290c57e09e3d4989e83fb9c03d96af54971bd620 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Wed, 17 May 2023 12:33:09 +0000
-Subject: [PATCH] opence changes for cryptography
+From ec41507690cba4813c966c5a9c15d45506284360 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 12 Sep 2023 11:09:27 +0000
+Subject: [PATCH] update
 
 ---
- recipe/meta.yaml | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ recipe/meta.yaml | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 1b76b0f..bec0beb 100644
+index 5d17aa9..d3127f3 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -11,24 +11,25 @@ source:
+@@ -11,12 +11,13 @@ source:
  build:
    number: 0
    skip: true  # [py<37 or win32]
--  script: {{ PYTHON }} -m pip install . -vv --no-deps
-+  string: fips_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
-+  script: CFLAGS="-I$CONDA_PREFIX/include" LDFLAGS="-L$CONDA_PREFIX/lib"  {{ PYTHON }} -m pip install . -vv --no-deps
-   missing_dso_whitelist:  # [s390x]
-     - $RPATH/ld64.so.1    # [s390x]
++  string: opence_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+   # linux-ppc64le failing test phase on all 1.1.1 builds skipping until 1.1.1 is dropped completely
+   # for more info on error: https://anaconda.atlassian.net/browse/PKG-2252
+   # This can be dropped after OpenSSL 1.1.1 support is dropped in Sept 2023
+-  {% if ARCH == "ppc64le" and (openssl | string).startswith('1.1.1') %}
+-  skip: true
+-  {% endif %}
++#  {% if ARCH == "ppc64le" and (openssl | string).startswith('1.1.1') %}
++#  skip: true
++#  {% endif %}
+   script:
+   # As of cryptography version 40.0.0, build instructions have changed: https://cryptography.io/en/latest/changelog/#v40-0-0
+   # here is the documentation on setting things manually, https://docs.rs/openssl/latest/openssl/#manual
+@@ -28,20 +29,19 @@ build:
  requirements:
    build:
      - {{ compiler('rust') }}
 -    - vs2017_{{ target_platform }}    # [win]
+-
 +    - {{ compiler('c') }}
    host:
 -    - python
-+    - python {{ python }}
-     - cffi >=1.12
 -    - pip
--    - setuptools >=40.6.0,!=60.9.0
+-    - setuptools >=61.0.0
 -    - setuptools-rust >=0.11.4
-+    - pip  {{ pip }}
++    - python {{ python }}
++    - pip {{ pip }}
 +    - setuptools {{ setuptools }}
 +    - setuptools-rust {{ setuptools_rust }}
      - wheel
+-    - openssl {{openssl}}
++    - openssl 1.1.1zz
+     - cffi 1.15.1
    run:
 -    - python
 +    - python {{ python }}
@@ -45,14 +57,6 @@ index 1b76b0f..bec0beb 100644
      - libgcc-ng     # [linux]; needed by `_rust.abi3.so`
  
  test:
-@@ -37,6 +38,7 @@ test:
-     - hypothesis >=1.11.4,!=3.79.2
-     - iso8601
-     - pip
-+    - py
-     - pretend
-     - pytest >=6.2.0
-     - pytest-subtests
 -- 
-2.34.1
+2.40.1
 

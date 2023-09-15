@@ -15,14 +15,15 @@ imported_envs:
   - arrow-env.yaml
   - mamba-env.yaml
 
-  - ray-env.yaml
+#  - ray-env.yaml
   - apache-beam-env.yaml
-  - prophet-env.yaml
+#  - prophet-env.yaml
   - orbit-ml-env.yaml                  # [build_type == 'cpu' or cudatoolkit == '11.8']
   - deepspeed-env.yaml                 # [build_type == 'cpu' or cudatoolkit == '11.8']
   - misc-env.yaml
   - or-tools-env.yaml
   - tensorflow-serving-env.yaml
+  - transformers-env.yaml
 
   # On s390x, ffmpeg is not available in anaconda's main channel, hence we need to use our own ffmpeg for s390x
   - ffmpeg-env.yaml        #[s390x]
@@ -33,7 +34,7 @@ packages:
   - feedstock : https://github.com/conda-forge/datasets-feedstock.git
     git_tag : fb3f04ae741963e29698b54f75eab4da549db6fb
     patches:
-      - feedstock-patches/datasets/0001-Pin-dependencies.patch
+      - feedstock-patches/datasets/0001-changes-for-opence.patch
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
   - feedstock : https://github.com/conda-forge/llvmlite-feedstock.git   #[s390x]

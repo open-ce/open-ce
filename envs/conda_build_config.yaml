@@ -105,7 +105,7 @@ gmock:
 grpc_cpp:
   - 1.41.*
 grpcio:
-  - 1.51.*
+  - 1.53.*
 harfbuzz:
   - 4.3.*
 # Note: hdf5 version must be compatible with h5py
@@ -258,17 +258,17 @@ pyyaml:
 rdflib:
   - 6.1.1
 requests:
-  - 2.*
+  - 2.31.*
 regex:
   - 2022.3.*
 reproc_cpp:
   - 14.2.*
 rust:
   - 1.62.*     # [cudatoolkit == '11.2']
-  - 1.65.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.71.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
 rust_compiler_version:
   - '1.46.0'   # [cudatoolkit == '11.2']
-  - '1.65.0'   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - '1.71.1'   # [build_type == 'cpu' or cudatoolkit == '11.4']
 safeint:
   - 3.0
 scipy:
@@ -292,7 +292,7 @@ spdlog:
 srsly:
   - 2.*
 starlette:
-  - 0.20.*
+  - 0.25.*
 sqlite:
   - 3.38.*   # [s390x]
 tabulate:
@@ -315,6 +315,8 @@ termcolor_cpp:
   - 2.0.0
 tf_estimator:
   - 2.12.*
+tokenizers:
+  - 0.11.4
 torchmetrics:
   - 0.11.*
 torchtext:
