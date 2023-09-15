@@ -1,14 +1,14 @@
-From 6e6d4188847c2e23b6304b80614e9f2a7ec71859 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Mon, 11 Sep 2023 10:21:03 +0000
+From 7ad5a9fc6afe897d52f18a84a9fbfdd206043567 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 15 Sep 2023 10:43:05 +0000
 Subject: [PATCH] Update to 1.53.0
 
 ---
- recipe/meta.yaml | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ recipe/meta.yaml | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..0d88242 100644
+index 19fa19a..ee6952f 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,4 +1,4 @@
@@ -17,7 +17,7 @@ index 19fa19a..0d88242 100644
  
  package:
    name: grpcio
-@@ -6,7 +6,7 @@ package:
+@@ -6,12 +6,12 @@ package:
  
  source:
    url: https://pypi.io/packages/source/g/grpcio/grpcio-{{ version }}.tar.gz
@@ -25,7 +25,15 @@ index 19fa19a..0d88242 100644
 +  sha256: a4952899b4931a6ba12951f9a141ef3e74ff8a6ec9aa2dc602afa40f63595e33
    patches:
      - 0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
-     - 0002-windows-ssl-lib-names.patch
+-    - 0002-windows-ssl-lib-names.patch
+-    - 0001-fix-win-setup.patch
+-    - 0001-fix-win-commands.patch
++    - 0002-windows-ssl-lib-names.patch  #[win]
++    - 0001-fix-win-setup.patch          #[win]
++    - 0001-fix-win-commands.patch       #[win]
+ 
+ build:
+   number: 0
 @@ -19,26 +19,26 @@ build:
  
  requirements:
