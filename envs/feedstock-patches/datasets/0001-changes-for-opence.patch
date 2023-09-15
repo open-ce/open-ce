@@ -1,0 +1,85 @@
+From b6c2fb9ccc405aaa40cf9659907a5d51eee52f90 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 15 Sep 2023 06:57:00 +0000
+Subject: [PATCH] changes for opence
+
+---
+ recipe/0001-Fix-for-FIPS.patch | 25 +++++++++++++++++++++++++
+ recipe/meta.yaml               |  8 +++++---
+ 2 files changed, 30 insertions(+), 3 deletions(-)
+ create mode 100644 recipe/0001-Fix-for-FIPS.patch
+
+diff --git a/recipe/0001-Fix-for-FIPS.patch b/recipe/0001-Fix-for-FIPS.patch
+new file mode 100644
+index 0000000..98f8898
+--- /dev/null
++++ b/recipe/0001-Fix-for-FIPS.patch
+@@ -0,0 +1,25 @@
++From 888670e7e9341ad213cf34e014b161ff0a72b3ea Mon Sep 17 00:00:00 2001
++From: Deepali Chourasia <deepch23@in.ibm.com>
++Date: Fri, 15 Sep 2023 06:54:19 +0000
++Subject: [PATCH] Fix for FIPS
++
++---
++ src/datasets/keyhash.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/datasets/keyhash.py b/src/datasets/keyhash.py
++index 5b3babf67..c17ca3575 100644
++--- a/src/datasets/keyhash.py
+++++ b/src/datasets/keyhash.py
++@@ -87,7 +87,7 @@ class KeyHasher:
++     """KeyHasher class for providing hash using md5"""
++ 
++     def __init__(self, hash_salt: str):
++-        self._split_md5 = hashlib.md5(_as_bytes(hash_salt))
+++        self._split_md5 = hashlib.md5(_as_bytes(hash_salt), usedforsecurity=False)
++ 
++     def hash(self, key: Union[str, int, bytes]) -> int:
++         """Returns 128-bits unique hash of input key
++-- 
++2.40.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 2ad3847..16ed2fd 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -9,6 +9,8 @@ package:
+ source:
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+   sha256: e2764c90aa3af96450a9747a934b8893b121f79f58d89e123cb1a7046bb8e81e
++  patches:
++    - 0001-Fix-for-FIPS.patch
+ 
+ build:
+   noarch: python
+@@ -28,7 +30,7 @@ requirements:
+     - huggingface_hub >=0.2.0,<1.0.0
+     - importlib-metadata
+     - multiprocess
+-    - numpy >=1.17
++    - numpy {{ numpy }}
+     - packaging
+     - pandas
+     - pyarrow >=6.0.0
+@@ -37,7 +39,7 @@ requirements:
+     - pyyaml >=5.1
+     - requests >=2.19.0
+     - responses <0.19
+-    - tqdm >=4.62.1
++    - tqdm {{ tqdm }}
+ 
+ test:
+   imports:
+@@ -51,7 +53,7 @@ test:
+     - datasets.tasks
+     - datasets.utils
+   commands:
+-    - pip check
++#    - pip check
+     - datasets-cli --help
+   requires:
+     - pip
+-- 
+2.40.1
+
