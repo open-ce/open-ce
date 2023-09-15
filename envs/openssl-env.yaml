@@ -1,8 +1,5 @@
 builder_version: ">=10.0.1"
 
-imported_envs:               #[s390x]
-  - arrow-env.yaml           #[s390x] 
-
 packages:
 {% if s390x %}
   - feedstock : https://github.com/AnacondaRecipes/libvpx-feedstock
