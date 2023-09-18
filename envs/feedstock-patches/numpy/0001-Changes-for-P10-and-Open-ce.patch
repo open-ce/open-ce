@@ -1,22 +1,22 @@
-From 320e81479f294f2420e339d0745d1b0a66d5d6a5 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 27 Jan 2023 11:15:58 +0000
-Subject: [PATCH] Fixed Open-CE build for P10
+From e8c3c3e46ee41f284895b7b2a3a27b8c1a2ba0e2 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Mon, 18 Sep 2023 05:51:03 +0000
+Subject: [PATCH] ass update patch
 
 ---
  recipe/build.sh  | 10 +++++-----
- recipe/meta.yaml | 28 ++++++++++++++--------------
- 2 files changed, 19 insertions(+), 19 deletions(-)
+ recipe/meta.yaml | 29 +++++++++++++++--------------
+ 2 files changed, 20 insertions(+), 19 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 821a220..67a90c5 100644
+index 821a220..3be9cf5 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -8,19 +8,19 @@ if [[ ! -f $BUILD_PREFIX/bin/ranlib ]]; then
      ln -s $AR $BUILD_PREFIX/bin/ar
  fi
  
-+# compiler_compat/ld causes problem in finding openblas lib
++compiler_compat/ld causes problem in finding openblas lib
 +rm $PREFIX/compiler_compat/ld
 +
  cat > site.cfg <<EOF
@@ -38,7 +38,7 @@ index 821a220..67a90c5 100644
 -
  $PYTHON -m pip install --no-deps --ignore-installed -v .
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 82e24fb..19c79b1 100644
+index 82e24fb..f05524d 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -31,19 +31,18 @@ requirements:
@@ -49,8 +49,8 @@ index 82e24fb..19c79b1 100644
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
 +    - setuptools {{ setuptools }}                     # [build_platform != target_platform]
-+    - {{ compiler('c') }}      #[ppc_arch != 'p10']
-+    - {{ compiler('cxx') }}    #[ppc_arch != 'p10']
++    - {{ compiler('c') }}              #[ppc_arch != 'p10']
++    - {{ compiler('cxx') }}            #[ppc_arch != 'p10']
    host:
 -    - setuptools <60.0.0
 +    - setuptools {{ setuptools }}
@@ -60,32 +60,38 @@ index 82e24fb..19c79b1 100644
 -    - libblas
 -    - libcblas
 -    - liblapack
-+    - libopenblas {{ openblas }}
++    - openblas {{ openblas }}
    run:
      - python
-+    - libopenblas {{ openblas }}
++    - openblas {{ openblas }}
    run_constrained:
      # enforce eviction of package from anaconda defaults
      - numpy-base <0a0
-@@ -52,7 +51,7 @@ requirements:
+@@ -52,20 +51,21 @@ requirements:
  # https://github.com/numpy/numpy/issues/15243
  {% set tests_to_skip = tests_to_skip + " or test_loss_of_precision[complex256]" %}  # [ppc64le]
  # Sometimes crashes on travis (needs too much memory); since 1.22.4 it fails for pypy
 -{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                  # [(CI == "travis") or ((python_impl == "pypy") and linux)]
-+{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                  # [((python_impl == "pypy") and linux)]
++{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                # [((python_impl == "pypy") and linux)]
  # there are some tests that cannot really work in emulation, see e.g. numpy/numpy#20445
  {% set tests_to_skip = tests_to_skip + " or Test_ARM_Features" %}                   # [build_platform != target_platform]
  # test_new_policy reruns part of test suite; including a CPU feature test that fails in emulation
-@@ -65,7 +64,7 @@ test:
+ {% set tests_to_skip = tests_to_skip + " or test_new_policy" %}                     # [build_platform != target_platform]
+ # flaky refcount-based test; already skipped upstream for win+py39
+ {% set tests_to_skip = tests_to_skip + " or test_partial_iteration_cleanup" %}      # [osx]
++{% set tests_to_skip = tests_to_skip + " or test_cython" %}
+ 
+ 
+ test:
    requires:
      - pytest
      - pytest-timeout
 -    - pytest-xdist         # [CI != "travis"]
-+    - pytest-xdist
++    - pytest-xdist         
      # (mostly) optional test requirements (except wheel, python-cov, mypy), see
      # https://github.com/numpy/numpy/blob/main/test_requirements.txt
      - cffi                 # [py<=39 and python_impl != "pypy"]
-@@ -74,22 +73,23 @@ test:
+@@ -74,22 +74,23 @@ test:
      # workaround for python/cpython#98706
      - importlib_metadata >=4.13  # [py==311]
      - pytz
@@ -97,7 +103,7 @@ index 82e24fb..19c79b1 100644
 -    - {{ compiler('c') }}        # [linux]
 -    - {{ compiler('fortran') }}  # [linux]
 +    - {{ compiler('c') }}        #[ppc_arch != 'p10']
-+    - {{ compiler('fortran') }}    #[ppc_arch != 'p10']
++    - {{ compiler('fortran') }}  #[ppc_arch != 'p10']
    commands:
      - f2py -h
      # numpy.test will show SIMD features of agent (in the past, there have been
@@ -115,5 +121,5 @@ index 82e24fb..19c79b1 100644
    imports:
      - numpy
 -- 
-2.34.1
+2.40.1
 
