@@ -1,22 +1,22 @@
-From e8c3c3e46ee41f284895b7b2a3a27b8c1a2ba0e2 Mon Sep 17 00:00:00 2001
+From 0e463c38d79aeff6547a6ae8e38016b02eda10ac Mon Sep 17 00:00:00 2001
 From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Mon, 18 Sep 2023 05:51:03 +0000
-Subject: [PATCH] ass update patch
+Date: Mon, 18 Sep 2023 07:09:24 +0000
+Subject: [PATCH] ass
 
 ---
  recipe/build.sh  | 10 +++++-----
- recipe/meta.yaml | 29 +++++++++++++++--------------
- 2 files changed, 20 insertions(+), 19 deletions(-)
+ recipe/meta.yaml | 31 ++++++++++++++++---------------
+ 2 files changed, 21 insertions(+), 20 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 821a220..3be9cf5 100644
+index 821a220..67a90c5 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -8,19 +8,19 @@ if [[ ! -f $BUILD_PREFIX/bin/ranlib ]]; then
      ln -s $AR $BUILD_PREFIX/bin/ar
  fi
  
-+compiler_compat/ld causes problem in finding openblas lib
++# compiler_compat/ld causes problem in finding openblas lib
 +rm $PREFIX/compiler_compat/ld
 +
  cat > site.cfg <<EOF
@@ -38,7 +38,7 @@ index 821a220..3be9cf5 100644
 -
  $PYTHON -m pip install --no-deps --ignore-installed -v .
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 82e24fb..f05524d 100644
+index 82e24fb..5165868 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -31,19 +31,18 @@ requirements:
@@ -48,9 +48,9 @@ index 82e24fb..f05524d 100644
 -    - setuptools <60.0.0                     # [build_platform != target_platform]
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
-+    - setuptools {{ setuptools }}                     # [build_platform != target_platform]
-+    - {{ compiler('c') }}              #[ppc_arch != 'p10']
-+    - {{ compiler('cxx') }}            #[ppc_arch != 'p10']
++    - setuptools {{ setuptools }}                   # [build_platform != target_platform]
++    - {{ compiler('c') }}            #[ppc_arch != 'p10']
++    - {{ compiler('cxx') }}          #[ppc_arch != 'p10']
    host:
 -    - setuptools <60.0.0
 +    - setuptools {{ setuptools }}
@@ -60,10 +60,10 @@ index 82e24fb..f05524d 100644
 -    - libblas
 -    - libcblas
 -    - liblapack
-+    - openblas {{ openblas }}
++    - libopenblas {{ openblas }}
    run:
      - python
-+    - openblas {{ openblas }}
++    - libopenblas {{ openblas }}
    run_constrained:
      # enforce eviction of package from anaconda defaults
      - numpy-base <0a0
@@ -72,7 +72,7 @@ index 82e24fb..f05524d 100644
  {% set tests_to_skip = tests_to_skip + " or test_loss_of_precision[complex256]" %}  # [ppc64le]
  # Sometimes crashes on travis (needs too much memory); since 1.22.4 it fails for pypy
 -{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                  # [(CI == "travis") or ((python_impl == "pypy") and linux)]
-+{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                # [((python_impl == "pypy") and linux)]
++{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                  # [((python_impl == "pypy") and linux)]
  # there are some tests that cannot really work in emulation, see e.g. numpy/numpy#20445
  {% set tests_to_skip = tests_to_skip + " or Test_ARM_Features" %}                   # [build_platform != target_platform]
  # test_new_policy reruns part of test suite; including a CPU feature test that fails in emulation
@@ -87,7 +87,7 @@ index 82e24fb..f05524d 100644
      - pytest
      - pytest-timeout
 -    - pytest-xdist         # [CI != "travis"]
-+    - pytest-xdist         
++    - pytest-xdist
      # (mostly) optional test requirements (except wheel, python-cov, mypy), see
      # https://github.com/numpy/numpy/blob/main/test_requirements.txt
      - cffi                 # [py<=39 and python_impl != "pypy"]
@@ -96,8 +96,9 @@ index 82e24fb..f05524d 100644
      - importlib_metadata >=4.13  # [py==311]
      - pytz
 -    - setuptools <60.0.0
+-    - typing_extensions
 +    - setuptools {{ setuptools }}
-     - typing_extensions
++    - typing_extensions {{ typing_extensions }}
      # some linux tests need a C compiler;
      # extra f2py tests need a fortran compiler
 -    - {{ compiler('c') }}        # [linux]
