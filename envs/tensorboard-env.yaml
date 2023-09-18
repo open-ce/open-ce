@@ -19,4 +19,4 @@ packages:
       - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
   - feedstock : tensorboard
 
-git_tag_for_env: open-ce-v1.9.1
+git_tag_for_env: open-ce-v1.9.2
