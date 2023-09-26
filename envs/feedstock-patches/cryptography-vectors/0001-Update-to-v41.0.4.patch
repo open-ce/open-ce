@@ -1,14 +1,14 @@
-From a1487c67187e0e51c0b89200160a79fac0a0ff85 Mon Sep 17 00:00:00 2001
+From 6d5404f8f7589584ec821bf6fd31384ddc00529b Mon Sep 17 00:00:00 2001
 From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 26 Sep 2023 11:18:28 +0000
-Subject: [PATCH] Update to v41.0.4
+Date: Tue, 26 Sep 2023 12:46:49 +0000
+Subject: [PATCH] updtae patch
 
 ---
- recipe/meta.yaml | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index bef72c7..ed0c243 100644
+index bef72c7..863636d 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -18,12 +18,11 @@ index bef72c7..ed0c243 100644
  
  package:
    name: {{ name|lower }}
-@@ -7,7 +7,8 @@ package:
+@@ -7,7 +7,7 @@ package:
  
  source:
    url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/cryptography_vectors-{{ version }}.tar.gz
 -  sha256: 80de0452c4b34f56f5518e81ebd75b6b905f5728aaed521d42e41f4ebc8a43fb
-+#  sha256: 80de0452c4b34f56f5518e81ebd75b6b905f5728aaed521d42e41f4ebc8a43fb
 +  sha256: 440af2813ea7aeb52181ec651a36d9ae8f0976e8b3a62b411a800fe6fa57a19e
  
  build:
