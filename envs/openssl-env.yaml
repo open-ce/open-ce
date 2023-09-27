@@ -19,9 +19,12 @@ packages:
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock
-    git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1   #v41.0.4
-    patches:
-      - feedstock-patches/cryptography/0001-Update-to-v41.0.4.patch
+    git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1                                #[not ppc64le]
+    patches:                                                                          #[not ppc64le]
+      - feedstock-patches/cryptography/0001-Update-to-v41.0.4.patch                   #[not ppc64le]
+    git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1                                #[ppc64le]
+    patches :                                                                         #[ppc64le]
+      - feedstock-patches/cryptography/0001-opence-changes-for-crytography-v39.patch  #[ppc64le]
   - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock
     git_tag : da99f6d9c556d180dec326a941f2d8293819a113             #v41.0.4
     patches:
