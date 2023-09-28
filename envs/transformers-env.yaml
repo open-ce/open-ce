@@ -18,6 +18,7 @@ packages:
   - feedstock : sacremoses
   - feedstock : sentencepiece
   - feedstock : transformers
+    git_tag : 2048a03ec5f446225ac300f8aa040cc4d6127f22
 {% endif %}
 
 git_tag_for_env: open-ce-v1.7.8

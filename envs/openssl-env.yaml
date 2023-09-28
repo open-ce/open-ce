@@ -2,6 +2,7 @@ builder_version: ">=10.0.1"
 
 packages:
   - feedstock: openssl
+    git_tag : b5d90cd5b5495767643a6578c29dd404b5473167
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f     # 1.65
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock

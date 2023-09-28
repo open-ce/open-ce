@@ -26,6 +26,7 @@ packages:
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : keras
   - feedstock : tensorflow
+    git_tag : 02cce0483e495cb590a6b8512f76066e2b1300eb
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
   - feedstock : tensorflow-estimator

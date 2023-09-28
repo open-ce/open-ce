@@ -8,5 +8,5 @@ packages:
     patches :
            - feedstock-patches/pybind11/pybind11_p10.patch		
   - feedstock : mamba
-
+    git_tag : 430c3503073a09c2791ea43dc0bf0632081b3f30
 git_tag_for_env: open-ce-v1.7.8
