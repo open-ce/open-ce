@@ -1,17 +1,35 @@
-From 03e747d6172dfe81ab1487696a4c848239ff981b Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Fri, 25 Mar 2022 04:31:34 -0400
+From 3852bfa515f40648b5c3823913445a501cc8df74 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 29 Sep 2023 03:15:09 +0000
 Subject: [PATCH] Removed recipes for packages other than gym
 
 ---
- recipe/meta.yaml | 123 -----------------------------------------------
- 1 file changed, 123 deletions(-)
+ recipe/meta.yaml | 130 ++---------------------------------------------
+ 1 file changed, 4 insertions(+), 126 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 592648b..987ec2f 100644
+index 592648b..829dcd3 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -46,129 +46,6 @@ outputs:
+@@ -29,13 +29,14 @@ outputs:
+     requirements:
+       host:
+         - python
+-        - pip
++        - pip {{ pip }}
+         - cloudpickle >=1.2.0
+-        - numpy
++        - numpy {{ numpy }}
++        - setuptools {{ setuptools }}
+       run:
+         - python
+         - cloudpickle >=1.2.0
+-        - numpy
++        - numpy {{ numpy }}
+         - importlib_metadata >=4.8.1  # [py<38]
+     test:
+       requires:
+@@ -46,129 +47,6 @@ outputs:
        commands:
          # TODO: run test suite
  
@@ -142,5 +160,5 @@ index 592648b..987ec2f 100644
    #   requirements:
    #     host:
 -- 
-2.23.0
+2.40.1
 
