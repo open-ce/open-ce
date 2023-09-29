@@ -331,7 +331,7 @@ tqdm:
 typer:
   - 0.4.0
 typing_extensions:
-  - 4.*
+  - 4.5.*
 unzip:
   - 6.0
 wasabi:
