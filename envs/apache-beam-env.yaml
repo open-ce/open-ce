@@ -22,8 +22,8 @@ packages:
     git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c # 1.71
-    patches:
-      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch
+    patches:                                                                       #[s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch         #[s390x]
   - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
     git_tag : eb4d41c65c002e4367f5b3aa20d547a815fe9d58
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
