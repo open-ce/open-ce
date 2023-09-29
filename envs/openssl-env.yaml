@@ -14,7 +14,7 @@ packages:
     git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1                                #[not ppc64le]
     patches:                                                                          #[not ppc64le]
       - feedstock-patches/cryptography/0001-Update-to-v41.0.4.patch                   #[not ppc64le] 
-  - git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1                                #[ppc64le]
+    git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1                                #[ppc64le]
     patches :                                                                         #[ppc64le]
       - feedstock-patches/cryptography/0001-opence-changes-for-crytography-v39.patch  #[ppc64le]
   - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock      #[not ppc64le]
