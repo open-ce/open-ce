@@ -3,9 +3,11 @@ builder_version: ">=10.0.1"
 packages:
 {% if not s390x %}
   - feedstock : https://github.com/conda-forge/rust-feedstock     # [build_type == 'cpu' or cudatoolkit == '11.4']
-    git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f            # [build_type == 'cpu' or cudatoolkit == '11.4']
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c            # [build_type == 'cpu' or cudatoolkit == '11.4']
+    patches:                                                                    #[s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch      #[s390x]
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock # [build_type == 'cpu' or cudatoolkit == '11.4']
-    git_tag : f025039f103f39e50829188fe020b09ec8374edd            # [build_type == 'cpu' or cudatoolkit == '11.4']
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95            # [build_type == 'cpu' or cudatoolkit == '11.4']
     patches :                                                     # [build_type == 'cpu' or cudatoolkit == '11.4']
       - feedstock-patches/rust-activation/0001-Fixed-build.patch  # [build_type == 'cpu' or cudatoolkit == '11.4']
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock # [build_type == 'cpu' or cudatoolkit == '11.4']

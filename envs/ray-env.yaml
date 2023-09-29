@@ -26,6 +26,10 @@ packages:
       - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 7e7e8d4a74719ba7ce134ecf7b317c44c1cf39a9
+  - feedstock : https://github.com/conda-forge/grpcio-feedstock
+    git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+    patches:
+      - feedstock-patches/grpcio/0001-Updated-to-1.53.0.patch
   - feedstock : dm-tree
   - feedstock : ray-packages
 {% endif %}
