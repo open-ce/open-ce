@@ -21,11 +21,13 @@ packages:
   - feedstock : https://github.com/conda-forge/dill-feedstock
     git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : 0181e7e92d5d5eeb952f5a08eead4dd840bf443f     # 1.65
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c # 1.71
+    patches:
+      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch  
   - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
     git_tag : eb4d41c65c002e4367f5b3aa20d547a815fe9d58
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : f025039f103f39e50829188fe020b09ec8374edd 
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
