@@ -17,6 +17,10 @@ packages:
   {% endif %}
     - feedstock: libevent
     - feedstock: tensorflow-serving
+    - feedstock : https://github.com/conda-forge/grpcio-feedstock
+      git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+      patches:
+        - feedstock-patches/grpcio/0001-Updated-to-1.53.0.patch
 
   {% if python is string %}
     {% set py = python | replace(".", "") | int %}
