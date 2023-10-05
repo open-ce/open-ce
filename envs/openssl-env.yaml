@@ -9,7 +9,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/yasm-feedstock
     git_tag : 94a331b4ddce69c3c105ff97e54d659dcdecd25e
 {% endif %}
-  - feedstock: openssl
+  - feedstock: openssl     #[not s390x]
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
     patches :                                                                         #[s390x]
