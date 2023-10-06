@@ -19,7 +19,8 @@ packages:
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
     git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
     patches :
-     - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch
+     - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch                #[not s390x]
+     - feedstock-patches/tokenizers/0001-opence-changes-for-s390x.patch               #[s390x]
   - feedstock : huggingface_hub
   - feedstock : sacremoses
   - feedstock : sentencepiece
