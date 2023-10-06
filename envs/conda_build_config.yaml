@@ -89,7 +89,7 @@ gast:
   - 0.4.0
 git:
   - 2.15    #[not s390x]
-  - 2.34.*  #[s390x]
+  - 2.40.*  #[s390x]
 google_auth:
   - 1.*
 google_auth_oauthlib:
