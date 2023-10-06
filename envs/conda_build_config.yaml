@@ -89,7 +89,8 @@ future:
 gast:
   - 0.4.0
 git:
-  - 2.34
+  - 2.34   #[not s390x]
+  - 2.40   #[s390x]
 google_auth:
   - 2.*
 google_auth_oauthlib:
