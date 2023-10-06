@@ -1,0 +1,87 @@
+From 7630d715c712d0a0977d35a9817eecfe86a4ba27 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 6 Oct 2023 08:07:39 +0000
+Subject: [PATCH] opence changes for s390x
+
+---
+ recipe/meta.yaml | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 004052a..cf75594 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -13,6 +13,7 @@ source:
+ 
+ build:
+   number: 0
++  string: opence_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+   missing_dso_whitelist:
+     - /usr/lib/libresolv.9.dylib  # [osx]
+     - /usr/lib64/libgcc_s.so.1  # [linux]
+@@ -23,26 +24,31 @@ build:
+     - export PYO3_CROSS_PYTHON_VERSION=$PY_VER
+     # see below for what OPENSSL_DIR should be pointing to:
+     # https://github.com/sfackler/rust-openssl/blob/openssl-sys-v0.9.72/openssl/src/lib.rs#L55-L56
+-    - export OPENSSL_DIR=$PREFIX
+     {% endif %}
++    - export OPENSSL_DIR=$PREFIX
+     - cd bindings/python
+-    - {{ PYTHON }} -m pip install . -vv
++    - {{ PYTHON }} -m pip install . -vv .
+ 
+ requirements:
+   build:
+     - python                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-    - openssl                                # [build_platform != target_platform]
++    - openssl 1.1.1zz          #[not s390x]
++    - openssl                  #[s390x]
+     - {{ compiler('cxx') }}
+     - {{ compiler('rust') }}
+   host:
+     - python
+-    - pip
++    - pip 23
+     - setuptools-rust >=0.11.5
+     - setuptools
+-    - openssl    # [linux]
++    - openssl              #[s390x]
++    - openssl 1.1.1zz      #[not s390x]
++
+   run:
+     - python
++    - openssl              #[s390x]
++    - openssl 1.1.1zz      #[not s390x]
+ 
+ test:
+   imports:
+@@ -57,13 +63,14 @@ test:
+   requires:
+     - pip
+     - pytest
+-    - datasets
++    - tqdm
+     - numpy *
+     - requests
+     - curl *
+     # temp: fix until https://github.com/conda-forge/multiprocess-feedstock/pull/46
+     # percolates far enough so that the solver doesn't pull in an old version anymore
+     - dill >=0.3.6
++    - huggingface_hub
+   source_files:
+     - bindings/python/tests
+   commands:
+@@ -76,7 +83,8 @@ test:
+     {% set tests_to_skip = "_not_a_real_test" %}
+     # windows and expectation of forking -> not gonna happen
+     {% set tests_to_skip = tests_to_skip + " or with_parallelism" %}  # [win]
+-    - pytest -v tests -k "not ({{ tests_to_skip }})"
++    {% set tests_to_skip = tests_to_skip + " or test_datasets" %}
++    - pytest -v tests -k "not ({{ tests_to_skip }})" --ignore=tests/documentation/test_tutorial_train_from_iterators.py
+ 
+ about:
+   home: https://pypi.org/project/tokenizers/
+-- 
+2.40.1
+
