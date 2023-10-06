@@ -1,14 +1,14 @@
-From 974df2adf7941365d0b2954739feb7e451e5b489 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 26 Sep 2023 12:44:37 +0000
-Subject: [PATCH] Update patch
+From aac962e7387ba35f5942895f4ca274f7c9328275 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 6 Oct 2023 09:43:31 +0000
+Subject: [PATCH] Update to v41.0.4
 
 ---
- recipe/meta.yaml | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ recipe/meta.yaml | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 4e20d73..6f34e4e 100644
+index 4e20d73..10b6c5d 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,4 +1,4 @@
@@ -40,7 +40,7 @@ index 4e20d73..6f34e4e 100644
    script:
    # As of cryptography version 40.0.0, build instructions have changed: https://cryptography.io/en/latest/changelog/#v40-0-0
    # here is the documentation on setting things manually, https://docs.rs/openssl/latest/openssl/#manual
-@@ -28,20 +29,19 @@ build:
+@@ -28,20 +29,21 @@ build:
  requirements:
    build:
      - {{ compiler('rust') }}
@@ -58,14 +58,16 @@ index 4e20d73..6f34e4e 100644
 +    - setuptools-rust {{ setuptools_rust }}
      - wheel
 -    - openssl {{openssl}}
-+    - openssl 1.1.1zz
++    - openssl            #[s390x]
++    - openssl 1.1.1zz    #[not s390x]
      - cffi 1.15.1
    run:
 -    - python
 +    - python {{ python }}
      - cffi >=1.12
 -    - openssl
-+    - openssl 1.1.1zz
++    - openssl            #[s390x]
++    - openssl 1.1.1zz    #[not s390x]
      - libgcc-ng     # [linux]; needed by `_rust.abi3.so`
  
  test:
