@@ -1,0 +1,23 @@
+From 0566d36059615017cb2308bd76e4067482aae841 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 5 Oct 2023 10:29:55 +0000
+Subject: [PATCH] use gcc 11.2 to fix build for cuda 11.2
+
+---
+ config/conda_build_config.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 config/conda_build_config.yaml
+
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..46f4c34
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,4 @@
++c_compiler_version:
++  - 11.2.0                      # [cudatoolkit == '11.2']
++cxx_compiler_version:
++  - 11.2.0                   # [cudatoolkit == '11.2']
+-- 
+2.40.1
+
