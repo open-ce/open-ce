@@ -293,7 +293,7 @@ srsly:
 starlette:
   - 0.19.*
 sqlite:
-  - 3.38.*   # [s390x]
+  - 3.41.*   # [s390x]
 tabulate:
   - 0.8.*
 tensorboard:
