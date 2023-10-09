@@ -1,7 +1,7 @@
-From fbc264e18d85e20e7473184eeb1d10e15ce9ff14 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 12 May 2023 06:06:53 +0000
-Subject: [PATCH] opence changes for build with openssl for fips
+From c9fe3062b1fc7d24ccee4df64f554acf3d747ddd Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Mon, 9 Oct 2023 08:01:49 +0000
+Subject: [PATCH] Update Patch
 
 ---
  recipe/build.sh  | 27 ++++++++++++++++++++++-----
@@ -63,7 +63,7 @@ index 8528472..d7ef169 100755
  
  make -j${CPU_COUNT} ${VERBOSE_AT}
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 23ad810..6aa9a7b 100644
+index 23ad810..8469427 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -28,25 +28,23 @@ requirements:
@@ -88,10 +88,10 @@ index 23ad810..6aa9a7b 100644
      - libvpx  # [not win]
      - libopus # [not win]
 -    - openssl # [not win]
-+    - openssl 1.1.1zz
++    - openssl
    run:
      - lame  # [not win]
-+    - openssl 1.1.1zz
++    - openssl
  
  test:
    commands:
