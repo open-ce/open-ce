@@ -1,16 +1,16 @@
-From 728fdbebd14a697d494f07a922e0c6ccb4fc7ff4 Mon Sep 17 00:00:00 2001
+From e096c9afff846c9a630ff6400d2e604f7958778f Mon Sep 17 00:00:00 2001
 From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Thu, 28 Sep 2023 16:50:55 +0000
-Subject: [PATCH] s390x change
+Date: Wed, 4 Oct 2023 08:51:14 +0000
+Subject: [PATCH] Update patch
 
 ---
- recipe/conda_build_config.yaml | 2 ++
+ recipe/conda_build_config.yaml | 1 +
  recipe/install-rust.sh         | 1 +
  recipe/meta.yaml               | 2 ++
- 3 files changed, 5 insertions(+)
+ 3 files changed, 4 insertions(+)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index fb6cd35..8524441 100644
+index fb6cd35..c129690 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
 @@ -5,6 +5,7 @@ rust_arch:
@@ -21,11 +21,6 @@ index fb6cd35..8524441 100644
  
  rust_std_extra:
    - aarch64-apple-ios
-@@ -16,3 +17,4 @@ rust_std_extra:
-   - i686-linux-android
-   - wasm32-unknown-unknown
-   - x86_64-linux-android
-+  - s390x-unknown-linux-gnu 
 diff --git a/recipe/install-rust.sh b/recipe/install-rust.sh
 index 90f1768..1348402 100755
 --- a/recipe/install-rust.sh
@@ -52,5 +47,5 @@ index 53f14fb..1911da5 100644
      sha256: 916056603da88336aba68bbeab49711cc8fdb9cfb46a49b04850c0c09761f58c  # [osx and x86_64]
    - url: https://static.rust-lang.org/dist/rust-{{ version }}-aarch64-apple-darwin.tar.gz  # [osx and arm64]
 -- 
-2.40.1
+2.34.1
 

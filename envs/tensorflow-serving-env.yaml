@@ -20,8 +20,9 @@ packages:
     - feedstock : https://github.com/conda-forge/grpcio-feedstock
       git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
       patches:
-        - feedstock-patches/grpcio/0001-Updated-to-1.53.0.patch
-        - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch
+        - feedstock-patches/grpcio/0001-Updated-to-1.53.0.patch                           #[not s390x]
+        - feedstock-patches/grpcio/0001-use-gcc-11.2-to-fix-build-for-cuda-11.2.patch     #[not s390x]
+        - feedstock-patches/grpcio/0001-opence-changes-for-s390x.patch                    #[s390x] 
   {% if python is string %}
     {% set py = python | replace(".", "") | int %}
     {% if py >= 38 %}
