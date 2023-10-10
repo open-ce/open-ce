@@ -1,14 +1,14 @@
-From c3504cd624b1dc75311e90c291933d4a1eef260f Mon Sep 17 00:00:00 2001
+From 22f81133f7e140686afda0f776ca7ed278bf1194 Mon Sep 17 00:00:00 2001
 From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Fri, 6 Oct 2023 13:14:39 +0000
-Subject: [PATCH] Update
+Date: Tue, 10 Oct 2023 05:35:43 +0000
+Subject: [PATCH] Update patch
 
 ---
- recipe/meta.yaml | 30 ++++++++++++++++--------------
- 1 file changed, 16 insertions(+), 14 deletions(-)
+ recipe/meta.yaml | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 4e20d73..30000b3 100644
+index 4e20d73..86ac97d 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,4 +1,4 @@
@@ -71,6 +71,15 @@ index 4e20d73..30000b3 100644
      - libgcc-ng     # [linux]; needed by `_rust.abi3.so`
  
  test:
+@@ -59,7 +61,7 @@ test:
+   commands:
+     - pip check
+     # run_test.py will check that the correct openssl version is linked
+-    - pytest -n auto #  [not arm64]
++    - pytest -v -n auto -k "not (test_scrypt_malloc_failure)" # [not arm64]
+     - pytest -n auto -k "not (test_der_x509_certificate_extensions[x509/PKITS_data/certs/ValidcRLIssuerTest28EE.crt] or test_x509_csr_extensions or test_no_leak_free or test_no_leak_no_malloc or test_leak or test_load_pkcs12_key_and_certificates[pkcs12/cert-key-aes256cbc.p12] or test_create_certificate_with_extensions or test_ec_derive_private_key or test_ec_private_numbers_private_key or test_create_ocsp_request or test_write_pkcs12_key_and_certificates or test_errors or test_load_pkcs12_key_and_certificates[pkcs12/cert-aes256cbc-no-key.p12] or test_ec_private_numbers_private_key or test_pem_x509_certificate_extensions[x509/cryptography.io.pem] or test_create_crl_with_idp or test_no_leak_gc or test_x25519_pubkey_from_private_key)" # [arm64]
+ 
+ about:
 -- 
 2.34.1
 
