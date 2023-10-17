@@ -16,6 +16,7 @@ packages:
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
+    runtime_package : False                                           #[cudatoolkit == '11.2']
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
     git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
     patches :
