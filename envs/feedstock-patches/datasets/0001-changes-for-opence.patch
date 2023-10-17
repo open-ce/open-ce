@@ -1,12 +1,12 @@
-From b6c2fb9ccc405aaa40cf9659907a5d51eee52f90 Mon Sep 17 00:00:00 2001
+From 5946bfdd20ebcf54e6444f7a233e687cb7ab43ff Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 15 Sep 2023 06:57:00 +0000
+Date: Tue, 17 Oct 2023 10:37:07 +0000
 Subject: [PATCH] changes for opence
 
 ---
  recipe/0001-Fix-for-FIPS.patch | 25 +++++++++++++++++++++++++
- recipe/meta.yaml               |  8 +++++---
- 2 files changed, 30 insertions(+), 3 deletions(-)
+ recipe/meta.yaml               | 10 ++++++----
+ 2 files changed, 31 insertions(+), 4 deletions(-)
  create mode 100644 recipe/0001-Fix-for-FIPS.patch
 
 diff --git a/recipe/0001-Fix-for-FIPS.patch b/recipe/0001-Fix-for-FIPS.patch
@@ -41,7 +41,7 @@ index 0000000..98f8898
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 2ad3847..16ed2fd 100644
+index 2ad3847..edec9f8 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -9,6 +9,8 @@ package:
@@ -53,16 +53,18 @@ index 2ad3847..16ed2fd 100644
  
  build:
    noarch: python
-@@ -28,7 +30,7 @@ requirements:
+@@ -28,16 +30,16 @@ requirements:
      - huggingface_hub >=0.2.0,<1.0.0
      - importlib-metadata
      - multiprocess
 -    - numpy >=1.17
 +    - numpy {{ numpy }}
      - packaging
-     - pandas
+-    - pandas
++    - pandas 2.0
      - pyarrow >=6.0.0
-@@ -37,7 +39,7 @@ requirements:
+     - python >=3.6
+     - python-xxhash
      - pyyaml >=5.1
      - requests >=2.19.0
      - responses <0.19
