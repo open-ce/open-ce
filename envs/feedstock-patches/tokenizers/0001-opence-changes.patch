@@ -1,0 +1,79 @@
+From 320062b610f10746b406d17e1367350c4c6d88a0 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archanashinde2504@gmail.com>
+Date: Thu, 26 Oct 2023 08:37:48 +0000
+Subject: [PATCH] opence changes for s390x
+
+---
+ recipe/meta.yaml | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 004052a..b37c751 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -13,6 +13,7 @@ source:
+ 
+ build:
+   number: 0
++  string: opence_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+   missing_dso_whitelist:
+     - /usr/lib/libresolv.9.dylib  # [osx]
+     - /usr/lib64/libgcc_s.so.1  # [linux]
+@@ -26,23 +27,24 @@ build:
+     - export OPENSSL_DIR=$PREFIX
+     {% endif %}
+     - cd bindings/python
+-    - {{ PYTHON }} -m pip install . -vv
++    - {{ PYTHON }} -m pip install . -vv .
+ 
+ requirements:
+   build:
+     - python                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-    - openssl                                # [build_platform != target_platform]
++    - openssl
+     - {{ compiler('cxx') }}
+     - {{ compiler('rust') }}
+   host:
+     - python
+-    - pip
++    - pip 23
+     - setuptools-rust >=0.11.5
+     - setuptools
+-    - openssl    # [linux]
++    - openssl
+   run:
+     - python
++    - openssl
+ 
+ test:
+   imports:
+@@ -57,13 +59,14 @@ test:
+   requires:
+     - pip
+     - pytest
+-    - datasets
++    - tqdm
+     - numpy *
+     - requests
+     - curl *
+     # temp: fix until https://github.com/conda-forge/multiprocess-feedstock/pull/46
+     # percolates far enough so that the solver doesn't pull in an old version anymore
+     - dill >=0.3.6
++    - huggingface_hub
+   source_files:
+     - bindings/python/tests
+   commands:
+@@ -76,7 +79,8 @@ test:
+     {% set tests_to_skip = "_not_a_real_test" %}
+     # windows and expectation of forking -> not gonna happen
+     {% set tests_to_skip = tests_to_skip + " or with_parallelism" %}  # [win]
+-    - pytest -v tests -k "not ({{ tests_to_skip }})"
++    {% set tests_to_skip = tests_to_skip + " or test_datasets" %}
++    - pytest -v tests -k "not ({{ tests_to_skip }})" --ignore=tests/documentation/test_tutorial_train_from_iterators.py
+ 
+ about:
+   home: https://pypi.org/project/tokenizers/
+-- 
+2.34.1
+
