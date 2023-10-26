@@ -11,13 +11,13 @@ packages:
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock
-    git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1                               
-    patches:                                                                         
-      - feedstock-patches/cryptography/0001-Update-to-v41.0.4.patch                  
-  - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock      
-    git_tag : da99f6d9c556d180dec326a941f2d8293819a113                                
-    patches:                                                                          
-      - feedstock-patches/cryptography-vectors/0001-Update-to-v41.0.4.patch           
+    git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1
+    patches:
+      - feedstock-patches/cryptography/0001-Update-to-v41.0.4.patch
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock
+    git_tag : da99f6d9c556d180dec326a941f2d8293819a113
+    patches:
+      - feedstock-patches/cryptography-vectors/0001-Update-to-v41.0.4.patch
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
     git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
     patches :
