@@ -1,0 +1,56 @@
+From afa9145cfbd64aa24c8e81abec8a60817cf56fcb Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 14 Sep 2023 07:10:11 +0000
+Subject: [PATCH] Add fix to support 390x platform
+
+---
+ recipe/conda_build_config.yaml | 2 ++
+ recipe/install-rust.sh         | 1 +
+ recipe/meta.yaml               | 2 ++
+ 3 files changed, 5 insertions(+)
+
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index fb6cd35..dee1a5a 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -5,6 +5,7 @@ rust_arch:
+   - x86_64-pc-windows-msvc      # [win64]
+   - x86_64-apple-darwin         # [osx and x86_64]
+   - aarch64-apple-darwin        # [osx and arm64]
++  - s390x-unknown-linux-gnu     # [s390x]
+ 
+ rust_std_extra:
+   - aarch64-apple-ios
+@@ -16,3 +17,4 @@ rust_std_extra:
+   - i686-linux-android
+   - wasm32-unknown-unknown
+   - x86_64-linux-android
++#  - s390x-unknown-linux-gnu  
+diff --git a/recipe/install-rust.sh b/recipe/install-rust.sh
+index 90f1768..1348402 100755
+--- a/recipe/install-rust.sh
++++ b/recipe/install-rust.sh
+@@ -17,6 +17,7 @@ cp -aR "${DESTDIR}${PREFIX}"/* "${PREFIX}/"
+ case "$target_platform" in
+     linux-64) rust_env_arch=X86_64_UNKNOWN_LINUX_GNU ;;
+     linux-aarch64) rust_env_arch=AARCH64_UNKNOWN_LINUX_GNU ;;
++    linux-s390x) rust_env_arch=S390X_UNKNOWN_LINUX_GNU ;;
+     linux-ppc64le) rust_env_arch=POWERPC64LE_UNKNOWN_LINUX_GNU ;;
+     win-64) rust_env_arch=X86_64_PC_WINDOWS_MSVC ;;
+     osx-64) rust_env_arch=X86_64_APPLE_DARWIN ;;
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 53f14fb..1911da5 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -15,6 +15,8 @@ source:
+     sha256: 911f2370b67b066cefd2ee772c5219015817e2c2dc327351f8b00c5ca7a1098f  # [aarch64]
+   - url: https://static.rust-lang.org/dist/rust-{{ version }}-powerpc64le-unknown-linux-gnu.tar.gz  # [ppc64le]
+     sha256: bac57066882366e4628d1ed2bbe4ab19c0b373aaf45582c2da9f639f2f6ea537  # [ppc64le]
++  - url: https://static.rust-lang.org/dist/rust-{{ version }}-s390x-unknown-linux-gnu.tar.gz  # [s390x]
++    sha256: 4205dc823ef57c4d9bdf80fb4ecb1e23a71af6dca05432b9fb5a6e9e08fe8f19  # [s390x]
+   - url: https://static.rust-lang.org/dist/rust-{{ version }}-x86_64-apple-darwin.tar.gz  # [osx and x86_64]
+     sha256: 916056603da88336aba68bbeab49711cc8fdb9cfb46a49b04850c0c09761f58c  # [osx and x86_64]
+   - url: https://static.rust-lang.org/dist/rust-{{ version }}-aarch64-apple-darwin.tar.gz  # [osx and arm64]
+-- 
+2.34.1
+
