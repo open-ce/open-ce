@@ -42,6 +42,4 @@ packages:
       - feedstock-patches/tokenizers/0001-opence-changes.patch
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
-  - feedstock : zdnn # [s390x]
-
 git_tag_for_env: open-ce-v1.10.0

@@ -326,8 +326,6 @@ wrapt:
   - 1.14.*
 yaml_cpp:
   - 0.7.0
-zdnn:     # [s390x]
-  - 1.0.* # [s390x]
 zlib:
   - 1.2.*
 zstd:
