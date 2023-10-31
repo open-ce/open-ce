@@ -241,7 +241,7 @@ python:
   - 3.10
   - 3.11
 pytorch:
-  - 2.0.*
+  - 2.1.*
 pytorch_lightning:
   - 2.0.*
 pytorch_scatter:
@@ -309,9 +309,9 @@ tf_estimator:
 torchmetrics:
   - 0.11.*
 torchtext:
-  - 0.15.*
+  - 0.16.*
 torchvision:
-  - 0.15.*
+  - 0.16.*
 tqdm:
   - 4.*
 typer:
