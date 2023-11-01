@@ -241,13 +241,13 @@ python:
   - 3.10
   - 3.11
 pytorch:
-  - 2.0.*
+  - 2.1.*
 pytorch_lightning:
-  - 2.0.*
+  - 2.1.*
 pytorch_scatter:
-  - 2.1.1
+  - 2.1.2
 pytorch_sparse:
-  - 0.6.17
+  - 0.6.18
 pyyaml:
   - 6.*
 rdflib:
@@ -307,9 +307,9 @@ tf_estimator:
 torchmetrics:
   - 0.11.*
 torchtext:
-  - 0.15.*
+  - 0.16.*
 torchvision:
-  - 0.15.*
+  - 0.16.*
 tqdm:
   - 4.*
 typer:
