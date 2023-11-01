@@ -243,11 +243,11 @@ python:
 pytorch:
   - 2.1.*
 pytorch_lightning:
-  - 2.0.*
+  - 2.1.*
 pytorch_scatter:
-  - 2.1.1
+  - 2.1.2
 pytorch_sparse:
-  - 0.6.17
+  - 0.6.18
 pyyaml:
   - 6.*
 rdflib:
