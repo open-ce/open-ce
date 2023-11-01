@@ -23,4 +23,3 @@ packages:
     - feedstock: tensorflow-serving
 
 {% endif %}
-git_tag_for_env: open-ce-v1.10.0

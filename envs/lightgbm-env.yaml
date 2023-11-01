@@ -10,4 +10,3 @@ packages:
 {% endif %}
   - feedstock : LightGBM
   - feedstock : openmpi          #[mpi_type == 'openmpi']
-git_tag_for_env: open-ce-v1.10.0
