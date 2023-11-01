@@ -1,18 +1,18 @@
-From 79c1021a59f4a33b4d36a38221d1737c326f1828 Mon Sep 17 00:00:00 2001
-From: ARchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Thu, 24 Aug 2023 08:33:12 +0000
-Subject: [PATCH] Update recipe
+From 0169f691329d7cbe6e9c2b19a339fe9b9a7efd14 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 14 Sep 2023 07:30:08 +0000
+Subject: [PATCH] update patch
 
 ---
- recipe/conda_build_config.yaml | 75 +++++-----------------------------
+ recipe/conda_build_config.yaml | 77 +++++++---------------------------
  recipe/meta.yaml               |  7 +---
- 2 files changed, 12 insertions(+), 70 deletions(-)
+ 2 files changed, 16 insertions(+), 68 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index e9338a0..1a76598 100644
+index 8afc86b..86c58aa 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
-@@ -1,82 +1,27 @@
+@@ -1,82 +1,33 @@
  cross_target_platform:
 -  - linux-64                            # [linux]
 -  - linux-aarch64                       # [linux]
@@ -20,8 +20,9 @@ index e9338a0..1a76598 100644
 -  - osx-64                              # [linux64 or osx]
 -  - osx-arm64                           # [linux64 or osx]
 -  - win-64                              # [linux64 or (osx and x86_64) or win64]
-+  - linux-64                            # [x86_64]
++  - linux-64                            # [linux64]
 +  - linux-ppc64le                       # [ppc64le]
++  - linux-s390x                         # [s390x]
  rust_arch:
 -  - x86_64-unknown-linux-gnu            # [linux]
 -  - aarch64-unknown-linux-gnu           # [linux]
@@ -29,16 +30,17 @@ index e9338a0..1a76598 100644
 -  - x86_64-apple-darwin                 # [linux64 or osx]
 -  - aarch64-apple-darwin                # [linux64 or osx]
 -  - x86_64-pc-windows-msvc              # [linux64 or (osx and x86_64) or win64]
-+  - x86_64-unknown-linux-gnu            # [x86_64]
++  - x86_64-unknown-linux-gnu            # [linux64]
 +  - powerpc64le-unknown-linux-gnu       # [ppc64le]
++  - s390x-unknown-linux-gnu             # [s390x]
  rust_arch_env_build:
--  - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
+   - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [aarch64]
-+  - X86_64_UNKNOWN_LINUX_GNU            # [x86_64]
    - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
 -  - X86_64_APPLE_DARWIN                 # [osx and x86_64]
 -  - AARCH64_APPLE_DARWIN                # [osx and arm64]
 -  - X86_64_PC_WINDOWS_MSVC              # [win64]
++  - S390X_UNKNOWN_LINUX_GNU             # [s390x]
  rust_arch_env:
 -  - X86_64_UNKNOWN_LINUX_GNU            # [linux]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [linux]
@@ -46,16 +48,17 @@ index e9338a0..1a76598 100644
 -  - X86_64_APPLE_DARWIN                 # [linux64 or osx]
 -  - AARCH64_APPLE_DARWIN                # [linux64 or osx]
 -  - X86_64_PC_WINDOWS_MSVC              # [linux64 or (osx and x86_64) or win64]
-+  - X86_64_UNKNOWN_LINUX_GNU            # [x86_64]
++  - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 +  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
++  - S390X_UNKNOWN_LINUX_GNU             # [s390x]
  rust_default_cc_build:
--  - x86_64-conda-linux-gnu-cc           # [linux64]
+   - x86_64-conda-linux-gnu-cc           # [linux64]
 -  - aarch64-conda-linux-gnu-cc          # [aarch64]
-+  - x86_64-conda-linux-gnu-cc           # [x86_64]
    - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
 -  - x86_64-apple-darwin13.4.0-clang     # [osx and x86_64]
 -  - arm64-apple-darwin20.0.0-clang      # [osx and arm64]
 -  - clang-cl                            # [win64]
++  - s390x-conda-linux-gnu-cc            # [s390x]
  rust_default_cc:
 -  - x86_64-conda-linux-gnu-cc           # [linux]
 -  - aarch64-conda-linux-gnu-cc          # [linux]
@@ -63,8 +66,9 @@ index e9338a0..1a76598 100644
 -  - x86_64-apple-darwin13.4.0-clang     # [linux64 or osx]
 -  - arm64-apple-darwin20.0.0-clang      # [linux64 or osx]
 -  - clang-cl                            # [linux64 or (osx and x86_64) or win64]
-+  - x86_64-conda-linux-gnu-cc           # [x86_64]
++  - x86_64-conda-linux-gnu-cc           # [linux64]
 +  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
++  - s390x-conda-linux-gnu-cc            # [s390x]
  
 -# This should be max(build_platform_ver, cross_target_platform_ver)
 -MACOSX_SDK_VERSION:
@@ -87,8 +91,8 @@ index e9338a0..1a76598 100644
 -  # For osx-64 -> win-64 cross-compiling, set deployment target for the build system
 -  - 10.9                                # [osx and x86_64]
  version:
-   - 1.70.0
--  - 1.72.0
+   - 1.71.1
+-  - 1.74.0
 -channel_sources:
 -  - conda-forge
 -  - conda-forge/label/rust_dev,conda-forge
@@ -106,7 +110,7 @@ index e9338a0..1a76598 100644
 -    - channel_targets
      - version
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 4a7a391..e4c8b90 100644
+index c24bd0e..cad449c 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -37,10 +37,7 @@ outputs:
@@ -133,5 +137,5 @@ index 4a7a391..e4c8b90 100644
    - name: rust-gnu_{{ target_platform }}
      script: bld.bat
 -- 
-2.40.1
+2.34.1
 
