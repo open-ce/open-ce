@@ -5,7 +5,6 @@ imported_envs:
   - tensorflow-env.yaml
 {% endif %}
   - common-deps.yaml
-  - scipy-env.yaml
 
 packages:
   - feedstock : onnx
