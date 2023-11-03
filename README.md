@@ -39,7 +39,7 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 | 1.6.0                   | 10.0.0                  |
 | 1.6.1                   | 10.0.3                  |
 | 1.7.9                   | 12.0.1                  |
-| 1.8.1                   | 12.0.1                  |
+| 1.8.1                   | 12.0.1                  |          
 | 1.9.2                   | 12.0.1                  |
 | 1.10.0                  | 13.0.0                  |
 
