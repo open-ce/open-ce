@@ -30,8 +30,6 @@ packages:
     git_tag : 29535305e9e7456f6b82758366a581cfa8512bfd
     patches :
       - feedstock-patches/opencensus/0001-Remove-constraint-from-google-api-core.patch 
-#  - feedstock : ray-packages
-  - feedstock: https://github.com/npanpaliya/ray-packages-feedstock
-    git_tag: ray-update-263
+  - feedstock : ray-packages
 {% endif %}
 git_tag_for_env: open-ce-v1.10.0
