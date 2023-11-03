@@ -16,7 +16,7 @@ imported_envs:
   - arrow-env.yaml
   - mamba-env.yaml
   - jax-env.yaml
-#  - ray-env.yaml
+  - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
@@ -36,6 +36,10 @@ packages:
       - feedstock-patches/datasets/0001-Pin-dependencies.patch
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
+  - feedstock : https://github.com/conda-forge/tokenizers-feedstock.git
+    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
+    patches :
+      - feedstock-patches/tokenizers/0001-opence-changes.patch
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
 git_tag_for_env: open-ce-v1.10.0
