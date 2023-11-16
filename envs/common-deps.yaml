@@ -2,14 +2,22 @@ builder_version: ">=10.0.1"
 
 packages:
   - feedstock : https://github.com/conda-forge/protobuf-feedstock.git
-    git_tag : bd7dc1e77a9284e8aad26c6f02753797499a764f
+    git_tag : 73c966ddc772fd453295d480ea171118b8a14cef    #v4.25
     patches :
-      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
+      - feedstock-patches/protobuf/0001-Update-protobuf-to-v4.25.0.patch
+#      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
       - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch
   - feedstock : https://github.com/conda-forge/libprotobuf-feedstock.git
-    git_tag : a2b38e3077de05fe7b71e8d58a73935ecd0891ea
+    git_tag : 99db880cdee836c9ce0a895775c5ae93bb5a2fb9
     patches :
-      - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
+      - feedstock-patches/protobuf/0001-Update-libprotobf-to-v25.0.patch
+#      - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
       - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
-      - feedstock-patches/protobuf/0001-fix-libprotobuf-for-cuda-11.2-build.patch
-      - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch
+#      - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch
+  - feedstock : https://github.com/conda-forge/rsync-feedstock.git
+    git_tag : d215ac7c66f3d2daa59c4049693956c89c4844ae
+  - feedstock : https://github.com/conda-forge/popt-feedstock.git
+    git_tag : cdac27839348127e9c471b0e7942d2554e94369e
+  - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
+    git_tag : ebee76d428d63e1158c146b66acdf34ce691eda5
+

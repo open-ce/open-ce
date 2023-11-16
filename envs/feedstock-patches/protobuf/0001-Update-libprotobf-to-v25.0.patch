@@ -1,0 +1,34 @@
+From ef8fdaac3d9d38c31699687a6e808668db7fa4cd Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Wed, 8 Nov 2023 13:25:56 +0000
+Subject: [PATCH] Update to v25.0
+
+---
+ recipe/meta.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 9ba9bbc..ac85f0c 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,5 +1,5 @@
+ # keep this without major version to let the bot pick it up
+-{% set version = "24.3" %}
++{% set version = "25.0" %}
+ # protobuf doesn't add the major version in the tag, it's defined per language in
+ # https://github.com/protocolbuffers/protobuf/blob/main/version.json
+ {% set major = "4" %}
+@@ -12,7 +12,9 @@ package:
+ 
+ source:
+   - url: https://github.com/protocolbuffers/protobuf/archive/refs/tags/v{{ version.replace(".rc", "-rc") }}.tar.gz
+-    sha256: 07d69502e58248927b58c7d7e7424135272ba5b2852a753ab6b67e62d2d29355
++#    sha256: 07d69502e58248927b58c7d7e7424135272ba5b2852a753ab6b67e62d2d29355
++#    sha256: 68f7caf0d4f012fd194a301420cf6aa258366144d814f358c5b32558228afa7c
++    sha256: 7beed9c511d632cff7c22ac0094dd7720e550153039d5da7e059bcceb488474a
+     patches:
+       - patches/0001-use-consistent-cmake-location.patch
+       - patches/0002-set-static-lib-extension-on-windows.patch
+-- 
+2.40.1
+

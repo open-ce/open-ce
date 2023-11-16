@@ -1,0 +1,33 @@
+From e1cf686c439237daf1d45ce1ebfa364d41a4d624 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Wed, 8 Nov 2023 13:25:00 +0000
+Subject: [PATCH] Update to v4.25.0
+
+---
+ recipe/meta.yaml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 69ebe2a..c274d9b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,5 +1,5 @@
+ # keep this without major version to let the bot pick it up
+-{% set version = "24.3" %}
++{% set version = "25.0" %}
+ # protobuf doesn't add the major version in the tag, it's defined per language in
+ # https://github.com/protocolbuffers/protobuf/blob/main/version.json
+ {% set major = "4" %}
+@@ -12,7 +12,8 @@ package:
+ 
+ source:
+   url: https://github.com/protocolbuffers/protobuf/archive/refs/tags/v{{ version }}.tar.gz
+-  sha256: 07d69502e58248927b58c7d7e7424135272ba5b2852a753ab6b67e62d2d29355
++#  sha256: 07d69502e58248927b58c7d7e7424135272ba5b2852a753ab6b67e62d2d29355  #v24.3
++  sha256: 7beed9c511d632cff7c22ac0094dd7720e550153039d5da7e059bcceb488474a   #v25.0
+   patches:
+     - patches/0001-do-not-link-msvc-runtime-statically.patch
+     - patches/0002-fix-paths-for-include-lib-directories.patch
+-- 
+2.40.1
+
