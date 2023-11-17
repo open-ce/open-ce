@@ -19,7 +19,7 @@ automake:
 av:
   - 10.*
 bazel:
-  - 5.*
+  - 6.*
 black:
   - 22.*
 bsddb3:
@@ -159,7 +159,7 @@ libopus:
 libpng:
   - 1.6
 libprotobuf:
-  - 3.21.12
+  - 4.25.0
 libtar:
   - 1.2.*
 libtiff:
@@ -226,7 +226,7 @@ pkgconfig:
 preshed:
   - 3.0.*
 protobuf:
-  - 4.21.12
+  - 4.25.0
 psutil:
   - 5
 pybind11:
@@ -293,7 +293,7 @@ tensorboard_data_server:
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.13.*
+  - 2.14.*
 tensorflow_hub:
   - 0.14
 tensorflow_io_gcs_filesystem:
