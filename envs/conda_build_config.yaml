@@ -102,9 +102,9 @@ googledrivedownloader:
 gmock:
   - 1.13
 grpc_cpp:
-  - 1.54.*
+  - 1.59.*
 grpcio:
-  - 1.54.*
+  - 1.59.*
 harfbuzz:
   - 4.3.*
 # Note: hdf5 version must be compatible with h5py
@@ -159,7 +159,7 @@ libopus:
 libpng:
   - 1.6
 libprotobuf:
-  - 4.25.0
+  - 3.25.0
 libtar:
   - 1.2.*
 libtiff:
