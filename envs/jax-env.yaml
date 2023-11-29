@@ -44,4 +44,4 @@ packages:
   - feedstock : jax
   - feedstock : jaxlib
 
-git_tag_for_env: open-ce-v1.9.2
+git_tag_for_env: open-ce-v1.9.3
