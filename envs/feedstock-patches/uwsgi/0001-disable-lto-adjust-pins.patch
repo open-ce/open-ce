@@ -1,7 +1,7 @@
-From 3e1922f10a90b692b8cd9c233f006330cea9f931 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Wed, 15 Mar 2023 06:10:36 +0000
-Subject: [PATCH] Open-CE changes
+From 0a49c579638e3ead8a46e148d7395cd10165e5d5 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Wed, 29 Nov 2023 08:52:48 +0000
+Subject: [PATCH] update patch
 
 ---
  recipe/build.sh  |  2 +-
@@ -9,25 +9,25 @@ Subject: [PATCH] Open-CE changes
  2 files changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index cc88e64..aa719f1 100644
+index b337743..e576375 100644
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
-@@ -3,7 +3,7 @@ export UWSGI_INCLUDES="${PREFIX}/include,${PREFIX}/include/openssl"
+@@ -7,7 +7,7 @@ export UWSGI_INCLUDES="${PREFIX}/include,${PREFIX}/include/openssl"
  export LDFLAGS="-L${PREFIX}/lib ${LDFLAGS}"
  
- if [[ $(uname) == Linux ]]; then
+ if [[ "${target_platform}" == linux-* ]]; then
 -  export LDFLAGS="${LDFLAGS} -Wl,--no-as-needed"
 +  export LDFLAGS="${LDFLAGS} -fno-lto -Wl,--no-as-needed"
  fi
  
  UWSGI_EMBED_PLUGINS=stats_pusher_statsd ${PYTHON} -m pip install . --no-deps -vv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index aef49e9..88c454b 100644
+index fe977b8..9d77b2a 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -13,25 +13,28 @@ build:
-   number: 0
-   skip: True  # [win]
+@@ -15,11 +15,13 @@ build:
+   number: 3
+   skip: true  # [win]
    detect_binary_files_with_prefix: true
 +  ignore_run_exports:
 +    - libxml2
@@ -36,12 +36,13 @@ index aef49e9..88c454b 100644
    build:
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
-+    - {{ compiler('c') }}        # [ppc_arch != "p10"]
-+    - {{ compiler('cxx') }}      # [ppc_arch != "p10"]
++    - {{ compiler('c') }}                    # [ppc_arch != "p10"]
++    - {{ compiler('cxx') }}                  # [ppc_arch != "p10"]
+     - python                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
    host:
-     - icu
-     - jansson
-     - libpython-static  # [py>=38]
+@@ -28,14 +30,15 @@ requirements:
+     - libpython-static
      - libxml2  # [not win]
      - openssl
 -    - pcre
@@ -60,5 +61,5 @@ index aef49e9..88c454b 100644
  test:
    source_files:
 -- 
-2.34.1
+2.40.1
 

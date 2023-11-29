@@ -8,7 +8,7 @@ packages:
       - feedstock-patches/jansson/0001-Open-CE-changes.patch
 {% endif %}
   - feedstock: http://github.com/conda-forge/uwsgi-feedstock
-    git_tag: 810642a204a7332afc1376aaceb357fa59938b02  #2.0.20
+    git_tag: 940ae4e6c96576ae89de809abed20bc8fbfef26b  #2.0.22
     patches:
       - feedstock-patches/uwsgi/0001-disable-lto-adjust-pins.patch
 
