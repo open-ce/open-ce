@@ -25,7 +25,7 @@ jobs:
         shell: bash -l {0}
         run: |
           git clone https://github.com/open-ce/open-ce-builder.git \
-                    ./open-ce-builder -b v12.0.2
+                    ./open-ce-builder -b r12.0.1
           pip install ./open-ce-builder
       - name: Perform Release Dry-Run
         shell: bash -l {0}

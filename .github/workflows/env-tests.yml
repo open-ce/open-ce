@@ -33,7 +33,7 @@ jobs:
           # Use yamllint to check the actual yaml files.
           yamllint .github/actions/*/*.yml .github/workflows/*.yml
           yamllint ./envs/conda_build_config.yaml
-          pip install git+https://github.com/open-ce/open-ce-builder.git@main
+          pip install git+https://github.com/open-ce/open-ce-builder.git@r12.0.1
           # Use the conda_build api to lint the env files since they use jinja.
           open-ce validate env envs/*-env.yaml
           # Validate conda_build_config for the main open-ce env file.
