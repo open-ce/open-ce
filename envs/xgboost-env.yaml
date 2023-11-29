@@ -10,4 +10,4 @@ packages:
 {% endif %}
   - feedstock : xgboost
 
-git_tag_for_env: open-ce-v1.9.3
+git_tag_for_env: open-ce-v1.9.2
