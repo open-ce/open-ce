@@ -36,4 +36,4 @@ packages:
     patches:                                                        # [cudatoolkit == '11.2']
       - feedstock-patches/zlib/0001-Updated-zlib-source-url.patch   # [cudatoolkit == '11.2']
 
-git_tag_for_env: open-ce-v1.7.9
+git_tag_for_env: open-ce-v1.7.10
