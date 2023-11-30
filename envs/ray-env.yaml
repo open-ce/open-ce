@@ -36,4 +36,4 @@ packages:
   - feedstock : ray-packages
 {% endif %}
 
-git_tag_for_env: open-ce-v1.7.9
+git_tag_for_env: open-ce-v1.7.10
