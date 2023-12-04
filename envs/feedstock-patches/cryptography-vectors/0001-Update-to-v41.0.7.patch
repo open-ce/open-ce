@@ -1,30 +1,29 @@
-From a1487c67187e0e51c0b89200160a79fac0a0ff85 Mon Sep 17 00:00:00 2001
+From d09c79352a0202111bd3d2241e3e8189b6c8c7a9 Mon Sep 17 00:00:00 2001
 From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 26 Sep 2023 11:18:28 +0000
-Subject: [PATCH] Update to v41.0.4
+Date: Fri, 1 Dec 2023 16:49:01 +0000
+Subject: [PATCH] Update to v41.0.7
 
 ---
- recipe/meta.yaml | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index bef72c7..ed0c243 100644
+index bef72c7..df7827b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
  {% set name = "cryptography-vectors" %}
 -{% set version = "41.0.3" %}
-+{% set version = "41.0.4" %}
++{% set version = "41.0.7" %}
  
  package:
    name: {{ name|lower }}
-@@ -7,7 +7,8 @@ package:
+@@ -7,7 +7,7 @@ package:
  
  source:
    url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/cryptography_vectors-{{ version }}.tar.gz
 -  sha256: 80de0452c4b34f56f5518e81ebd75b6b905f5728aaed521d42e41f4ebc8a43fb
-+#  sha256: 80de0452c4b34f56f5518e81ebd75b6b905f5728aaed521d42e41f4ebc8a43fb
-+  sha256: 440af2813ea7aeb52181ec651a36d9ae8f0976e8b3a62b411a800fe6fa57a19e
++  sha256 : 7b36f976b6e58cc1801310e1c93c584c6539d371da7f8538edd8fc463dc80d5b
  
  build:
    skip: true  # [py<37]
