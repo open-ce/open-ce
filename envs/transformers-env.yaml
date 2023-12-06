@@ -6,7 +6,7 @@ packages:
     git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c  #v1.71
     patches:                                                                    #[s390x]
       - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch      #[s390x]
-  - feedstock : https://github.com/conda-forge/rust-acti vation-feedstock
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
     git_tag : df83e9f4c99787a3c68f892a5808623484527a95  #v1.71
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
