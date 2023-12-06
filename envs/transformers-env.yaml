@@ -2,19 +2,16 @@ builder_version: ">=10.0.1"
 
 packages:
 {% if not s390x %}
-  - feedstock : https://github.com/conda-forge/rust-feedstock     # [build_type == 'cpu' or cudatoolkit == '11.4']
-    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c            # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - feedstock : https://github.com/conda-forge/rust-feedstock
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c  #v1.71
     patches:                                                                    #[s390x]
       - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch      #[s390x]
-  - feedstock : https://github.com/conda-forge/rust-activation-feedstock # [build_type == 'cpu' or cudatoolkit == '11.4']
-    git_tag : df83e9f4c99787a3c68f892a5808623484527a95            # [build_type == 'cpu' or cudatoolkit == '11.4']
-    patches :                                                     # [build_type == 'cpu' or cudatoolkit == '11.4']
-      - feedstock-patches/rust-activation/0001-Fixed-build.patch  # [build_type == 'cpu' or cudatoolkit == '11.4']
-  - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock # [build_type == 'cpu' or cudatoolkit == '11.4']
-    git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774            # [build_type == 'cpu' or cudatoolkit == '11.4']
-
-  - feedstock : https://github.com/conda-forge/rust-feedstock.git # [cudatoolkit == '11.2']
-    git_tag : 429557ee73ad0f98221df7260733506ac03d30ae            # [cudatoolkit == '11.2']
+  - feedstock : https://github.com/conda-forge/rust-acti vation-feedstock
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95  #v1.71
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
+    git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
   - feedstock : tokenizers
   - feedstock : huggingface_hub
   - feedstock : sacremoses
