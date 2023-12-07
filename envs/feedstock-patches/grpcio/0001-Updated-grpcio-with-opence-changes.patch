@@ -1,46 +1,13 @@
-From 709fbc83e8eaf23b20d23ce6bea935a0bef49950 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 16 Aug 2023 07:45:43 +0000
-Subject: [PATCH] Fixed grpcio
+From 66829c2b32bd7939b32d1ebe479c77f2d131462b Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 21 Nov 2023 12:44:20 +0000
+Subject: [PATCH] v59
 
 ---
- recipe/0001-Fix-openssl-for-s390x.patch | 25 ++++++++++++++++++
- recipe/build.sh                         | 18 +++++++++----
- recipe/meta.yaml                        | 34 ++++++++++++-------------
- 3 files changed, 55 insertions(+), 22 deletions(-)
- create mode 100644 recipe/0001-Fix-openssl-for-s390x.patch
+ recipe/build.sh  | 18 +++++++++++++-----
+ recipe/meta.yaml | 34 +++++++++++++++++-----------------
+ 2 files changed, 30 insertions(+), 22 deletions(-)
 
-diff --git a/recipe/0001-Fix-openssl-for-s390x.patch b/recipe/0001-Fix-openssl-for-s390x.patch
-new file mode 100644
-index 0000000..db2134d
---- /dev/null
-+++ b/recipe/0001-Fix-openssl-for-s390x.patch
-@@ -0,0 +1,25 @@
-+From c9e4eb6376241855411f927f59109754e4404aa5 Mon Sep 17 00:00:00 2001
-+From: Deepali Chourasia <deepch23@in.ibm.com>
-+Date: Wed, 16 Aug 2023 07:34:18 +0000
-+Subject: [PATCH] Fix openssl for s390x
-+
-+---
-+ src/include/openssl/base.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/include/openssl/base.h b/src/include/openssl/base.h
-+index a1a4309a4..8db692ea3 100644
-+--- a/src/include/openssl/base.h
-++++ b/src/include/openssl/base.h
-+@@ -121,7 +121,7 @@ extern "C" {
-+ // little-endian architectures. Functions will not produce the correct answer
-+ // on other systems. Run the crypto_test binary, notably
-+ // crypto/compiler_test.cc, before adding a new architecture.
-+-#error "Unknown target CPU"
-++#define OPENSSL_64_BIT
-+ #endif
-+ 
-+ #if defined(__APPLE__)
-+-- 
-+2.40.1
-+
 diff --git a/recipe/build.sh b/recipe/build.sh
 index f797569..ae1fedf 100644
 --- a/recipe/build.sh
@@ -79,12 +46,12 @@ index f797569..ae1fedf 100644
 -
  $PYTHON -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..ee9aa1c 100644
+index 19fa19a..4036ff0 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,17 +1,17 @@
 -{% set version = "1.46.3" %}
-+{% set version = "1.54.3" %}
++{% set version = "1.59.3" %}
  
  package:
    name: grpcio
