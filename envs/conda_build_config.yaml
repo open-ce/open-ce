@@ -159,7 +159,7 @@ libopus:
 libpng:
   - 1.6
 libprotobuf:
-  - 3.25.0
+  - 4.25.0
 libtar:
   - 1.2.*
 libtiff:
