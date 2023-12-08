@@ -159,7 +159,7 @@ libopus:
 libpng:
   - 1.6
 libprotobuf:
-  - 4.25.0
+  - 3.21.12
 libtar:
   - 1.2.*
 libtiff:
@@ -226,7 +226,7 @@ pkgconfig:
 preshed:
   - 3.0.*
 protobuf:
-  - 4.25.0
+  - 4.21.12
 psutil:
   - 5
 pybind11:
