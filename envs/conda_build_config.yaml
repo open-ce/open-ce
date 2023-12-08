@@ -1,5 +1,5 @@
 abseil_cpp:
-  - 20230802.1
+  - 20230125.0
 absl_py:
   - 1.0.*
 array_record:
@@ -45,8 +45,8 @@ cli11:
 cloudpickle:
   - 2.*
 cmake:
-  - 3.26.*  
-#  - 3.18.*   # [s390x]
+  - 3.19.*   # [not s390x]
+  - 3.18.*   # [s390x]
 contextvars:
   - 2.4
 coverage:
