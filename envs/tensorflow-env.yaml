@@ -15,7 +15,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
     git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
     patches :
-      - feedstock-patches/absl-py/0001-Updated-absl-py-to-1.0.0.patch
+      - feedstock-patches/absl-py/0001-Updated-absl-py-to-2.0.0.patch
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
@@ -23,11 +23,15 @@ packages:
     patches :
       - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
   - feedstock : https://github.com/conda-forge/python-flatbuffers-feedstock
-    git_tag : 33360d623f714d44b2524320c8d2c5f3440ce435
+    git_tag : ad39926f9497e80ac1a0ed7f8d35c4ce87cab70f
     patches :
       - feedstock-patches/flatbuffers/0001-OpenCE-changes.patch
   - feedstock : https://github.com/conda-forge/flatbuffers-feedstock
-    git_tag : 246926fe4b05d902071f4fdb12a33c338e0a7847
+    git_tag : b6c8864ad3faf00f41011b02937f46c220d9695c
+#  - feedstock : https://github.com/conda-forge/ml_dtypes-feedstock.git
+#    git_tag : 108e75ca8f9ff4a3bc88c813ccc9ff060710d5d4
+#  - feedstock : https://github.com/conda-forge/pybind11-feedstock.git
+#    git_tag : e510938e7907fd2c0a90bbbbe5cb4e6e262159c3
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree
