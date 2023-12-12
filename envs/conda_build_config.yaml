@@ -1,7 +1,7 @@
 abseil_cpp:
   - 20230125.0
 absl_py:
-  - 1.0.*
+  - 2.0.*
 array_record:
   - 0.2.*
 arviz:
@@ -74,7 +74,7 @@ eigen:
 ffmpeg:
   - 4.2.*
 flatbuffers:
-  - 23.1.21
+  - 23.5.26
 fmt:
   - 9.1.0
 freetype:
@@ -134,7 +134,7 @@ keras_applications:
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.13.*
+  - 2.14.*
 leveldb:
   - 1.23.*
 libiconv:
@@ -230,7 +230,7 @@ protobuf:
 psutil:
   - 5
 pybind11:
-  - 2.10.*
+  - 2.11.*
 pydantic:
   - 1.10.*
 pytest:
@@ -287,7 +287,7 @@ sqlite:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.13.*
+  - 2.14.*
 tensorboard_data_server:
   - 0.7.*
 tensorboard_plugin_wit:
@@ -303,7 +303,7 @@ termcolor:
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
-  - 2.13.*
+  - 2.14.*
 torchmetrics:
   - 0.11.*
 torchtext:
