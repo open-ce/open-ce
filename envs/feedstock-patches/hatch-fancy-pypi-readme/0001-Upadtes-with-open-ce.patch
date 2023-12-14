@@ -1,0 +1,32 @@
+From c9f9491af6250d955c62045df0180e58357d4fa1 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 14 Dec 2023 04:49:02 +0000
+Subject: [PATCH] Upadtes with open-ce
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index af8e81a..c3c0d23 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -19,13 +19,13 @@ build:
+ requirements:
+   host:
+     - hatchling
+-    - pip
++    - pip {{ pip }}
+     - python >=3.7
+   run:
+     - hatchling
+     - python >=3.7
+     - tomli
+-    - typing-extensions
++    - typing-extensions {{ typing_extensions }}
+ 
+ test:
+   source_files:
+-- 
+2.40.1
+
