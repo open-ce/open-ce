@@ -11,5 +11,4 @@ packages:
     patches :
       - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
       - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
-      - feedstock-patches/protobuf/0001-fix-libprotobuf-for-cuda-11.2-build.patch
       - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch
