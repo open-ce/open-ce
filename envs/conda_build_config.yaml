@@ -178,6 +178,8 @@ make:
   - 4.2.1
 markdown:
   - 3.4.*
+ml_dtypes:
+  - 0.2.0
 mock:
   - 3.*      # [not s390x]
   - 4.*      # [s390x]
@@ -198,7 +200,7 @@ numactl:
 numpy:
   - 1.26
 onnx:
-  - 1.14.*
+  - 1.15.*
 onnxconverter_common:
   - 1.14.*
 onnx_graphsurgeon:
@@ -297,7 +299,7 @@ tensorflow:
 tensorflow_hub:
   - 0.14
 tensorflow_io_gcs_filesystem:
-  - 0.34.*
+  - 0.35.*
 termcolor:
   - 2.1.*
 termcolor_cpp:
