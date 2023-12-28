@@ -28,10 +28,6 @@ packages:
       - feedstock-patches/flatbuffers/0001-OpenCE-changes.patch
   - feedstock : https://github.com/conda-forge/flatbuffers-feedstock
     git_tag : b6c8864ad3faf00f41011b02937f46c220d9695c
-  - feedstock : https://github.com/conda-forge/ml_dtypes-feedstock.git
-    git_tag : b8bc940c50cce505b56cc5ec9e3e0bf6ffe71107   #v2.0.0
-    patches : 
-      - feedstock-patches/ml_dtypes/0001-Open-ce-changes.patch  
   - feedstock : https://github.com/conda-forge/pyink-feedstock.git
     git_tag : 57646639a62389746e999980f0bcbf40258307de
     patches :
