@@ -1,25 +1,25 @@
-From 320062b610f10746b406d17e1367350c4c6d88a0 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archanashinde2504@gmail.com>
-Date: Thu, 26 Oct 2023 08:37:48 +0000
-Subject: [PATCH] opence changes for s390x
+From 8643d5cfd1c449b29beefaf572b4d5ca70bf559e Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <aman_surkar@persistent.com>
+Date: Fri, 5 Jan 2024 09:02:43 +0000
+Subject: [PATCH] opence-changes
 
 ---
  recipe/meta.yaml | 16 ++++++++++------
  1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 004052a..b37c751 100644
+index 8c27652..43ee80b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -13,6 +13,7 @@ source:
+@@ -12,6 +12,7 @@ source:
+     - patches/0001-don-t-fork-on-windows.patch  # [win]
  
  build:
-   number: 0
 +  string: opence_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+   number: 1
    missing_dso_whitelist:
      - /usr/lib/libresolv.9.dylib  # [osx]
-     - /usr/lib64/libgcc_s.so.1  # [linux]
-@@ -26,23 +27,24 @@ build:
+@@ -26,24 +27,25 @@ build:
      - export OPENSSL_DIR=$PREFIX
      {% endif %}
      - cd bindings/python
@@ -32,23 +32,24 @@ index 004052a..b37c751 100644
      - cross-python_{{ target_platform }}     # [build_platform != target_platform]
 -    - openssl                                # [build_platform != target_platform]
 +    - openssl
+     - maturin >=1.0,<2.0                     # [build_platform != target_platform]
      - {{ compiler('cxx') }}
      - {{ compiler('rust') }}
    host:
      - python
 -    - pip
 +    - pip 23
-     - setuptools-rust >=0.11.5
-     - setuptools
+     - maturin >=1.0,<2.0
 -    - openssl    # [linux]
 +    - openssl
    run:
      - python
+     - huggingface_hub >=0.16.4,<1.0
 +    - openssl
  
  test:
    imports:
-@@ -57,13 +59,14 @@ test:
+@@ -58,13 +60,14 @@ test:
    requires:
      - pip
      - pytest
@@ -64,7 +65,7 @@ index 004052a..b37c751 100644
    source_files:
      - bindings/python/tests
    commands:
-@@ -76,7 +79,8 @@ test:
+@@ -77,7 +80,8 @@ test:
      {% set tests_to_skip = "_not_a_real_test" %}
      # windows and expectation of forking -> not gonna happen
      {% set tests_to_skip = tests_to_skip + " or with_parallelism" %}  # [win]
@@ -75,5 +76,5 @@ index 004052a..b37c751 100644
  about:
    home: https://pypi.org/project/tokenizers/
 -- 
-2.34.1
+2.40.1
 
