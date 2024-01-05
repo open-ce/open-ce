@@ -307,7 +307,7 @@ termcolor_cpp:
 tf_estimator:
   - 2.14.*
 torchmetrics:
-  - 0.11.*
+  - 1.2.*
 torchtext:
   - 0.16.*
 torchvision:
