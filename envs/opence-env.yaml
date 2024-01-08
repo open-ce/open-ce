@@ -14,7 +14,7 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - mamba-env.yaml
-  - jax-env.yaml
+#  - jax-env.yaml
 #  - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml

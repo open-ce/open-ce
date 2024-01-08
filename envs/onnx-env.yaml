@@ -25,9 +25,9 @@ packages:
   - feedstock : cudnn
   - feedstock : nccl
   {% endif %}
-  - feedstock : onnxruntime
+#  - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : skl2onnx
-  - feedstock : onnxmltools
+#  - feedstock : onnxmltools
   - feedstock : tf2onnx
 {% endif %}
