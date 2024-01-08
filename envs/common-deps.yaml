@@ -11,5 +11,8 @@ packages:
     patches :
       - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
       - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
-      - feedstock-patches/protobuf/0001-fix-libprotobuf-for-cuda-11.2-build.patch
       - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch
+  - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   # [py==311]
+    git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          # [py==311]
+    patches :                                                                   # [py==311]
+      - feedstock-patches/scikit-learn/0001-update-for-python-3.11.patch        # [py==311]

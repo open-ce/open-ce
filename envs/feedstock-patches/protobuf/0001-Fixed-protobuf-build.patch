@@ -1,24 +1,12 @@
-From d0393df0824ef9b9868d75a5823283d7875e7ed9 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Tue, 13 Jun 2023 09:33:17 +0000
-Subject: [PATCH] Fixed protobuf to make it work with pip 23.*
+From a6df137fb01eb7908f29c733db6167e331a67741 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 19 Dec 2023 10:52:37 +0000
+Subject: [PATCH] Update
 
 ---
- config/conda_build_config.yaml | 4 ++++
- recipe/meta.yaml               | 6 +++---
- 2 files changed, 7 insertions(+), 3 deletions(-)
- create mode 100644 config/conda_build_config.yaml
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
-new file mode 100644
-index 0000000..c793a51
---- /dev/null
-+++ b/config/conda_build_config.yaml
-@@ -0,0 +1,4 @@
-+c_compiler_version:
-+  - 8.2.0          # [ppc64le and cudatoolkit == "11.2"]
-+cxx_compiler_version:
-+  - 8.2.0          # [ppc64le and cudatoolkit == "11.2"]
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 5389f6a..b219259 100644
 --- a/recipe/meta.yaml
@@ -46,5 +34,5 @@ index 5389f6a..b219259 100644
      - libprotobuf-static {{ lib_major + "." + version }}  # [win]
    run:
 -- 
-2.34.1
+2.40.1
 

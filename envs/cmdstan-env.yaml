@@ -3,7 +3,9 @@ builder_version: ">=10.0.1"
 packages:
 {% if not s390x %}
   - feedstock : https://github.com/conda-forge/cmdstan-feedstock
-    git_tag : f690e3236286bc66cfb46d85f629eab1f776dc18
+    git_tag : e0e093c0a691ddab1c4e30b2978bb61263e6aef7
   - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock
-    git_tag : 1cc20198a84a08ac28515bd601b39047ecedaef6
+    git_tag : 7341ff5c1247213455484bf76e4be1d5484fe07d
+  - feedstock : https://github.com/conda-forge/stanio-feedstock
+    git_tag : 2207dffbadf3364df2b714969cb5f040c79b65a5
 {% endif %}

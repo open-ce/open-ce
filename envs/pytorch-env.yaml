@@ -4,7 +4,6 @@ imported_envs:
   - openblas-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
   - common-deps.yaml
-  - scipy-env.yaml
 
 packages:
   - feedstock : pytorch

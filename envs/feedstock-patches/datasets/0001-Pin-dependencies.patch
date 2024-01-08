@@ -1,24 +1,82 @@
-From a2cbc67cab6521a82178a206262f7e760199d813 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Tue, 22 Aug 2023 13:51:25 +0000
+From 03364166914452a73d325fa09d67ebb536208370 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 5 Jan 2024 09:22:59 +0000
 Subject: [PATCH] pin dependencies
 
 ---
- recipe/meta.yaml | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ ...otfix-not-needed-when-pyarrow-14.0.1.patch | 41 +++++++++++++++++++
+ recipe/meta.yaml                              | 12 +++---
+ 2 files changed, 48 insertions(+), 5 deletions(-)
+ create mode 100644 recipe/0001-pyarrow_hotfix-not-needed-when-pyarrow-14.0.1.patch
 
+diff --git a/recipe/0001-pyarrow_hotfix-not-needed-when-pyarrow-14.0.1.patch b/recipe/0001-pyarrow_hotfix-not-needed-when-pyarrow-14.0.1.patch
+new file mode 100644
+index 0000000..d313f68
+--- /dev/null
++++ b/recipe/0001-pyarrow_hotfix-not-needed-when-pyarrow-14.0.1.patch
+@@ -0,0 +1,41 @@
++From 3c86566ed36993f9fc73bd65faf384d2a43bbc63 Mon Sep 17 00:00:00 2001
++From: Deepali Chourasia <deepch23@in.ibm.com>
++Date: Fri, 5 Jan 2024 09:00:10 +0000
++Subject: [PATCH] pyarrow_hotfix not needed when pyarrow>=14.0.1
++
++---
++ setup.py                          | 4 ++--
++ src/datasets/features/features.py | 1 -
++ 2 files changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index e33a8491..d18fda65 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -114,9 +114,9 @@ REQUIRED_PKGS = [
++     "numpy>=1.17",
++     # Backend and serialization.
++     # Minimum 8.0.0 to be able to use .to_reader()
++-    "pyarrow>=8.0.0",
+++    "pyarrow>=14.0.1",
++     # As long as we allow pyarrow < 14.0.1, to fix vulnerability CVE-2023-47248
++-    "pyarrow-hotfix",
+++#    "pyarrow-hotfix",
++     # For smart caching dataset processing
++     "dill>=0.3.0,<0.3.8",  # tmp pin until dill has official support for determinism see https://github.com/uqfoundation/dill/issues/19
++     # For performance gains with apache arrow
++diff --git a/src/datasets/features/features.py b/src/datasets/features/features.py
++index 6ebdb487..705c6025 100644
++--- a/src/datasets/features/features.py
+++++ b/src/datasets/features/features.py
++@@ -31,7 +31,6 @@ import pandas as pd
++ import pyarrow as pa
++ import pyarrow.compute as pc
++ import pyarrow.types
++-import pyarrow_hotfix  # noqa: F401  # to fix vulnerability on pyarrow<14.0.1
++ from pandas.api.extensions import ExtensionArray as PandasExtensionArray
++ from pandas.api.extensions import ExtensionDtype as PandasExtensionDtype
++ 
++-- 
++2.40.1
++
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index e3eb5c2..084a227 100644
+index c5f95bd..45dd8f4 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -23,20 +23,20 @@ requirements:
+@@ -9,6 +9,8 @@ package:
+ source:
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+   sha256: ad3215e9b1984d1de4fda2123bc7319ccbdf1e17d0c3d5590d13debff308a080
++  patches:
++    - 0001-pyarrow_hotfix-not-needed-when-pyarrow-14.0.1.patch
+ 
+ build:
+   noarch: python
+@@ -23,21 +25,21 @@ requirements:
      - python >=3.8.0
    run:
      - aiohttp
 -    - dill >=0.3.0,<0.3.8
 +    - dill {{ dill }}
-     - fsspec >=2021.11.1
-     - huggingface_hub >=0.14.0,<1.0.0
+     - fsspec >=2023.1.0,<=2023.10.0
+     - huggingface_hub >=0.19.4
      - importlib-metadata
      - multiprocess
 -    - numpy >=1.17
@@ -26,7 +84,9 @@ index e3eb5c2..084a227 100644
      - packaging
      - pandas
 -    - pyarrow >=8.0.0
+-    - pyarrow-hotfix
 +    - pyarrow {{ arrow }}
++#    - pyarrow-hotfix
      - python >=3.8.0
      - python-xxhash
      - pyyaml >=5.1
