@@ -13,11 +13,10 @@ packages:
     git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
     patches :                                                                         #[s390x]
       - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
-  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : df83e9f4c99787a3c68f892a5808623484527a95
-    patches :
-      - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
     git_tag : f02f2b6c9c4c455115acc5f248c944d00e2a11b6
     patches :
       - feedstock-patches/tokenizers/0001-opence-changes.patch
+    git_tag : 5c5e81e32ee569fe7de10f3505eb20ed7e871e6c
+  - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
+    git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
