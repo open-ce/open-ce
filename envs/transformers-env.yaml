@@ -17,5 +17,7 @@ packages:
     git_tag : f02f2b6c9c4c455115acc5f248c944d00e2a11b6
     patches :
       - feedstock-patches/tokenizers/0001-opence-changes.patch
+  - feedstock : https://github.com/conda-forge/transformers-feedstock
+    git_tag : 5c5e81e32ee569fe7de10f3505eb20ed7e871e6c
   - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
     git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
