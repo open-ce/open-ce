@@ -1,4 +1,4 @@
-builder_version: ">=10.0.1"
+builder_version: ">=13.0.0"
 
 conda_build_configs:
   - conda_build_config.yaml
