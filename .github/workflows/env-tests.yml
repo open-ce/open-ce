@@ -40,6 +40,6 @@ jobs:
           open-ce validate config --conda_build_config \
                                             ./envs/conda_build_config.yaml \
                                             ./envs/*-env.yaml \
-                                            --python_versions 3.8,3.9,3.10 \
+                                            --python_versions 3.9,3.10,3.11 \
                                             --build_types cuda,cpu \
                                             --mpi_types openmpi,system
