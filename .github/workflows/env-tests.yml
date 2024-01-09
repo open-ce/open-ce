@@ -25,7 +25,7 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install -y python=3.10 pylint=2.12.2 \
-                           conda-build=3.22
+                           conda=23.7.3 conda-build=3.22
           pip install yamllint==1.24.2
       - name: Validate config files
         shell: bash -l {0}
@@ -40,6 +40,6 @@ jobs:
           open-ce validate config --conda_build_config \
                                             ./envs/conda_build_config.yaml \
                                             ./envs/*-env.yaml \
-                                            --python_versions 3.8,3.9,3.10 \
+                                            --python_versions 3.9,3.10,3.11 \
                                             --build_types cuda,cpu \
                                             --mpi_types openmpi,system
