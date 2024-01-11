@@ -1,14 +1,14 @@
-From 71a613cc6b7d18e72f7b0dca3c13600b95ad13c1 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Fri, 8 Dec 2023 11:52:33 +0000
-Subject: [PATCH] update
+From f48391096bce1d2508c0b9e2df147b0885312637 Mon Sep 17 00:00:00 2001
+From: Archana Shinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 11 Jan 2024 11:53:32 +0000
+Subject: [PATCH] Opence changes
 
 ---
  recipe/meta.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index c8f4878..aebd747 100644
+index ffdac8f..65c5c25 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -19,7 +19,7 @@ requirements:

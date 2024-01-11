@@ -14,22 +14,20 @@ packages:
     patches :
       - feedstock-patches/nvcc/0001-Changes-for-open-ce.patch
 {% endif %}
-  - feedstock: https://github.com/conda-forge/ml_dtypes-feedstock
-    git_tag : f4c0c1b67f25ab103bee27cea5ea57e59ebb8b29
+  - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
+    git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
+  - feedstock : https://github.com/conda-forge/pyink-feedstock.git
+    git_tag : 57646639a62389746e999980f0bcbf40258307de
     patches :
-      - feedstock-patches/ml_dtypes/0001-Updated-for-open-ce.patch
-  - feedstock: https://github.com/conda-forge/pyink-feedstock
-    git_tag : a2e8c2f6bdb6929afbb52efb03c62e3dcaa0000b
+      - feedstock-patches/pyink/0001-Upadtes-for-open-ce.patch
+  - feedstock : https://github.com/conda-forge/black-feedstock.git
+    git_tag : 7bb21b29627bac864e4763dc65aaa52aa63deb23
     patches :
-      - feedstock-patches/pyink/0001-Fixed-build.patch
-  - feedstock: https://github.com/conda-forge/black-feedstock
-    git_tag : e249fb3eb839d8c84a1a634fbd74d2a53fc9199b
+      - feedstock-patches/black/0001-Updates-for-open-ce-change.patch
+  - feedstock : https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
+    git_tag : 7ad703f99406292de8d0111655f989ba2fb3de64
     patches :
-      - feedstock-patches/black/0001-Fixed-build.patch
-  - feedstock: https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
-    git_tag : 4904e98b139ebfbb6765ceaecaa3753dd994b5c6
-    patches :
-      - feedstock-patches/hatch-fancy-pypi-readme/0001-Fixed-pip-check-in-test-section.patch
+      - feedstock-patches/hatch-fancy-pypi-readme/0001-Upadtes-with-open-ce.patch
   - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
     git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
     patches :                                               #[ppc_arch == 'p10']
