@@ -1,35 +1,30 @@
-From 129eaa5e5481b1d5efcc4277ce0e2c311fa351d8 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Thu, 6 Jul 2023 05:00:39 +0000
-Subject: [PATCH] Pin dependencies and added test dir
+From dca0aaf8496bcdecd7d16ade36e4839261b9485c Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <aman_surkar@persistent.com>
+Date: Thu, 18 Jan 2024 07:35:39 +0000
+Subject: [PATCH] Refreshed to v1.1.5
 
 ---
- recipe/meta.yaml         | 10 +++++-----
+ recipe/meta.yaml         |  6 +++---
  tests/open-ce-tests.yaml | 15 +++++++++++++++
- 2 files changed, 20 insertions(+), 5 deletions(-)
+ 2 files changed, 18 insertions(+), 3 deletions(-)
  create mode 100644 tests/open-ce-tests.yaml
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index eafb51f..9b32fa9 100644
+index f3b9b24..daadcf1 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -31,8 +31,8 @@ requirements:
-     - python
+@@ -30,7 +30,7 @@ requirements:
      - pip
      - cmdstanpy >=1.0.4
--    - cmdstan ==2.32.1
+     - cmdstan ==2.33.1
 -    - setuptools >=42
-+    - cmdstan ==2.31.0
 +    - setuptools {{ setuptools }}
      - wheel >=0.37.0
      - importlib_resources
      - tbb-devel
-@@ -40,16 +40,16 @@ requirements:
-   run:
-     - python
+@@ -40,14 +40,14 @@ requirements:
      # Pin the cmdstan version
--    - cmdstan ==2.32.1
-+    - cmdstan ==2.31.0
+     - cmdstan ==2.33.1
      - cmdstanpy >=1.0.4
 -    - numpy >=1.15.4
 +    - numpy {{ numpy }}
@@ -46,7 +41,7 @@ index eafb51f..9b32fa9 100644
  test:
 diff --git a/tests/open-ce-tests.yaml b/tests/open-ce-tests.yaml
 new file mode 100644
-index 0000000..2c6e265
+index 0000000..f230a8a
 --- /dev/null
 +++ b/tests/open-ce-tests.yaml
 @@ -0,0 +1,15 @@
@@ -56,7 +51,7 @@ index 0000000..2c6e265
 +        conda install -y git
 +        git clone --recursive -b $(python -c "import prophet; print('v'+prophet.__version__)") https://github.com/facebook/prophet.git
 +        cd prophet/python/prophet
-+        conda install -y pyyaml pytest 
++       conda install -y pyyaml pytest 
 +        conda install holidays=0.27 -c conda-forge
 +  - name: Run prophet tests
 +    command: |
@@ -66,5 +61,5 @@ index 0000000..2c6e265
 +    command: |
 +        rm -rf prophet
 -- 
-2.34.1
+2.40.1
 

@@ -6,7 +6,7 @@ imported_envs:
 packages:
 {% if not s390x %}
   - feedstock : https://github.com/conda-forge/prophet-feedstock
-    git_tag : dcfd71f76db41221136fd8cf23ab88642e2ced6f
+    git_tag : 1d19e1169f396232268c93fd97ee5b7caee95829
     patches :
       - feedstock-patches/prophet/0001-Pin-dependencies-and-added-test-dir.patch
   - feedstock : https://github.com/conda-forge/holidays-feedstock.git
