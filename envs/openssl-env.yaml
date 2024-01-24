@@ -13,35 +13,35 @@ packages:
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f              # [cudatoolkit == '11.2']
     patches:                                                        # [cudatoolkit == '11.2']
       - feedstock-patches/zlib/0001-Updated-zlib-source-url.patch   # [cudatoolkit == '11.2']
-#  - feedstock : https://github.com/conda-forge/rust-feedstock
-#    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
-#    patches :                                                                         #[s390x]
-#      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
-#  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-#    git_tag : df83e9f4c99787a3c68f892a5808623484527a95  
-#    patches :
-#      - feedstock-patches/rust-activation/0001-Fixed-build.patch
-#  - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock
-#    git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1                                #[not ppc64le]
-#    patches:                                                                          #[not ppc64le]
-#      - feedstock-patches/cryptography/0001-Update-to-v41.0.7.patch                   #[not ppc64le]
-#    git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1                                #[ppc64le]
-#    patches :                                                                         #[ppc64le]
-#      - feedstock-patches/cryptography/0001-opence-changes-for-crytography-v39.patch  #[ppc64le]
-#  - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock      #[not ppc64le]
-#    git_tag : da99f6d9c556d180dec326a941f2d8293819a113                                #[not ppc64le]
-#    patches:                                                                          #[not ppc64le]
-#      - feedstock-patches/cryptography-vectors/0001-Update-to-v41.0.7.patch           #[not ppc64le]
-#  - feedstock: https://github.com/conda-forge/tokenizers-feedstock
-#    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
-#    patches :
-#     - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch                #[not s390x]
-#     - feedstock-patches/tokenizers/0001-opence-changes-for-s390x.patch               #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-feedstock
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
+    patches :                                                                         #[s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock
+    git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1                                #[not ppc64le]
+    patches:                                                                          #[not ppc64le]
+      - feedstock-patches/cryptography/0001-Update-to-v41.0.7.patch                   #[not ppc64le]
+    git_tag : 926030e5fd40c00a9716e00efa62f4e286aaa8b1                                #[ppc64le]
+    patches :                                                                         #[ppc64le]
+      - feedstock-patches/cryptography/0001-opence-changes-for-crytography-v39.patch  #[ppc64le]
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock      #[not ppc64le]
+    git_tag : da99f6d9c556d180dec326a941f2d8293819a113                                #[not ppc64le]
+    patches:                                                                          #[not ppc64le]
+      - feedstock-patches/cryptography-vectors/0001-Update-to-v41.0.7.patch           #[not ppc64le]
+  - feedstock: https://github.com/conda-forge/tokenizers-feedstock
+    git_tag : 026e5a6446124a4635e604de2dc3c1a83e66bc08
+    patches :
+     - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch                #[not s390x]
+     - feedstock-patches/tokenizers/0001-opence-changes-for-s390x.patch               #[s390x]
   # duplicates the ffmpeg feedstock used in the ffmpeg env.
   # having ffmpeg here, eases building ffmpeg via builder for FIPS
-#  - feedstock : https://github.com/AnacondaRecipes/ffmpeg-feedstock
-#    git_tag : 57ca332013295a161307fa10afdae2197a56cc93
-#    patches :
-#      - feedstock-patches/ffmpeg/0001-disable-codecs-for-opence.patch
+  - feedstock : https://github.com/AnacondaRecipes/ffmpeg-feedstock
+    git_tag : 57ca332013295a161307fa10afdae2197a56cc93
+    patches :
+      - feedstock-patches/ffmpeg/0001-disable-codecs-for-opence.patch
 
 git_tag_for_env: open-ce-v1.9.3
