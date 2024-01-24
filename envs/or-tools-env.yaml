@@ -61,4 +61,4 @@ packages:
       - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le and cudatoolkit == '11.2']
 {% endif %}
 
-git_tag_for_env: open-ce-v1.9.3
+git_tag_for_env: open-ce-v1.9.4
