@@ -62,7 +62,7 @@ index 2ad3847..edec9f8 100644
      - packaging
 -    - pandas
 +    - pandas 2.0
-     - pyarrow {{ arrow }}
+     - pyarrow >=6.0.0
      - python >=3.6
      - python-xxhash
      - pyyaml >=5.1
