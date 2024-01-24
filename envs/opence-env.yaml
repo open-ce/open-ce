@@ -25,8 +25,7 @@ imported_envs:
 #  - tensorflow-serving-env.yaml
   - transformers-env.yaml
 
-  # On s390x, ffmpeg is not available in anaconda's main channel, hence we need to use our own ffmpeg for s390x
-  - ffmpeg-env.yaml        #[s390x]
+  - ffmpeg-env.yaml
 
 packages:
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
