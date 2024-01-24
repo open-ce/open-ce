@@ -13,13 +13,12 @@ packages:
     git_tag : 30371b0c9c707927c900bd49ca1ec39d3c3e8e0f              # [cudatoolkit == '11.2']
     patches:                                                        # [cudatoolkit == '11.2']
       - feedstock-patches/zlib/0001-Updated-zlib-source-url.patch   # [cudatoolkit == '11.2']
-  - feedstock: openssl     #[not s390x]
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
     patches :                                                                         #[s390x]
       - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : df83e9f4c99787a3c68f892a5808623484527a95  
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock
