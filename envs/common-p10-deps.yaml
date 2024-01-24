@@ -9,4 +9,4 @@ packages:
     patches :
       - feedstock-patches/numpy/0001-Changes-for-P10-and-Open-ce.patch
 
-git_tag_for_env: open-ce-v1.9.3
+git_tag_for_env: open-ce-v1.9.4

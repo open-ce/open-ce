@@ -11,4 +11,4 @@ packages:
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
 {% endif %}
 
-git_tag_for_env: open-ce-v1.9.3
+git_tag_for_env: open-ce-v1.9.4
