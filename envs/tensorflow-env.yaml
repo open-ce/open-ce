@@ -5,8 +5,7 @@ imported_envs:
   - tensorflow-s390x-extra-deps-env.yaml
   - common-p10-deps.yaml      #[ppc_arch == "p10"]
   - common-deps.yaml
-  #Disable jax for cuda temporarily as build with cuda is failing.
-  - jax-env.yaml      # [build_type == 'cpu']
+  - jax-env.yaml
 
 packages:
 {% if build_type == 'cuda' %}
