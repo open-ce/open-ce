@@ -41,6 +41,8 @@ packages:
       - feedstock-patches/bazel-toolchain/0001-Use-gcc-8.2-for-cuda-11.2-builds.patch   #[cudatoolkit == '11.2']
       - feedstock-patches/bazel-toolchain/0001-Patch-to-fix-s390x.patch                 #[s390x]
       - feedstock-patches/bazel-toolchain/0001-P10-changes.patch                        #[ppc_arch == 'p10']
+  - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
+    git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : jax
   - feedstock : jaxlib
 
