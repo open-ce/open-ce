@@ -48,9 +48,9 @@ index b91aa80..b4c8719 100644
              cxx_builtin_include_directories.append("${CUDA_HOME}/include")
              cxx_builtin_include_directories.append("${CUDA_HOME}/targets/x86_64-linux/include/")
 +        if ("${PPC_ARCH}" == "p10"):
-+            cxx_builtin_include_directories.append("${GCC_HOME}/lib/gcc/ppc64le-redhat-linux/11/include")
++            cxx_builtin_include_directories.append("${GCC_HOME}/lib/gcc/ppc64le-redhat-linux/12/include")
 +            cxx_builtin_include_directories.append("${GCC_HOME}/include")
-+            cxx_builtin_include_directories.append("${GCC_HOME}/include/c++/11")
++            cxx_builtin_include_directories.append("${GCC_HOME}/include/c++/12")
  
      return cc_common.create_cc_toolchain_config_info(
          ctx = ctx,
