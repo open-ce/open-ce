@@ -26,11 +26,13 @@ packages:
   - feedstock : cudnn
   - feedstock : nccl
   {% endif %}
+  - feedstock : https://github.com/conda-forge/typing_extensions-feedstock.git
+    git_tag : db12cbec273867700c91f82fad22aa6d27519058
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : skl2onnx
   - feedstock : onnxmltools
-  - feedstock : tf2onnx
+#  - feedstock : tf2onnx
 {% endif %}
 
 git_tag_for_env: open-ce-v1.9.4
