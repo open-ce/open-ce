@@ -18,14 +18,14 @@ index 041a9c2..e4bc6b5 100644
  
 +if [[ $ppc_arch == "p10" ]]
 +then
-+    if [[ -z "${GCC_11_HOME}" ]];
++    if [[ -z "${GCC_HOME}" ]];
 +    then
-+        echo "Please set GCC_11_HOME to the install path of gcc-toolset-11"
++        echo "Please set GCC_HOME to the install path of gcc-toolset-12"
 +        exit 1
 +    else
-+        export PATH=$GCC_11_HOME/bin:$PATH
-+        export CC=$GCC_11_HOME/bin/gcc
-+        export CXX=$GCC_11_HOME/bin/g++
++        export PATH=$GCC_HOME/bin:$PATH
++        export CC=$GCC_HOME/bin/gcc
++        export CXX=$GCC_HOME/bin/g++
 +        export BAZEL_LINKLIBS=-l%:libstdc++.a
 +        if [[ -z "${CMAKE_ARGS+x}" ]];
 +        then
@@ -52,7 +52,7 @@ index 9ae57dc..ad07589 100644
    number: 1
 +  script_env:
 +    - CMAKE_ARGS
-+    - GCC_11_HOME
++    - GCC_HOME
  
  outputs:
    # default behaviour is shared; however note that upstream does not support
@@ -61,7 +61,7 @@ index 9ae57dc..ad07589 100644
      build:
        string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 +      script_env:
-+        - GCC_11_HOME             #[ppc_arch == 'p10']
++        - GCC_HOME             #[ppc_arch == 'p10']
        run_exports:
          - libabseil ={{ version }}=cxx{{ cxx_standard }}*
  

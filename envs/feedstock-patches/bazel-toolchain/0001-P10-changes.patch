@@ -48,9 +48,9 @@ index b91aa80..b4c8719 100644
              cxx_builtin_include_directories.append("${CUDA_HOME}/include")
              cxx_builtin_include_directories.append("${CUDA_HOME}/targets/x86_64-linux/include/")
 +        if ("${PPC_ARCH}" == "p10"):
-+            cxx_builtin_include_directories.append("${GCC_11_HOME}/lib/gcc/ppc64le-redhat-linux/11/include")
-+            cxx_builtin_include_directories.append("${GCC_11_HOME}/include")
-+            cxx_builtin_include_directories.append("${GCC_11_HOME}/include/c++/11")
++            cxx_builtin_include_directories.append("${GCC_HOME}/lib/gcc/ppc64le-redhat-linux/12/include")
++            cxx_builtin_include_directories.append("${GCC_HOME}/include")
++            cxx_builtin_include_directories.append("${GCC_HOME}/include/c++/12")
  
      return cc_common.create_cc_toolchain_config_info(
          ctx = ctx,
@@ -95,9 +95,9 @@ index 4eddb0f..2062179 100755
 +  sed -ie "s:\${PPC_ARCH}:${ppc_arch}:" cc_toolchain_config.bzl
  
 +  if [[ "${ppc_arch}" == 'p10' ]]; then
-+      sed -ie "s:\${GCC_11_HOME}:${GCC_11_HOME}:" cc_toolchain_config.bzl
-+      sed -ie "s:\${CPP}:${GCC_11_HOME}/bin/cpp:" cc_toolchain_config.bzl
-+      sed -ie "s:\${GCOV}:${GCC_11_HOME}/bin/gcov:" cc_toolchain_config.bzl
++      sed -ie "s:\${GCC_HOME}:${GCC_HOME}:" cc_toolchain_config.bzl
++      sed -ie "s:\${CPP}:${GCC_HOME}/bin/cpp:" cc_toolchain_config.bzl
++      sed -ie "s:\${GCOV}:${GCC_HOME}/bin/gcov:" cc_toolchain_config.bzl
 +  else
 +      sed -ie "s:\${CPP}:/usr/bin/cpp:" cc_toolchain_config.bzl
 +      sed -ie "s:\${GCOV}:/usr/bin/gcov:" cc_toolchain_config.bzl
@@ -123,7 +123,7 @@ index 4eddb0f..2062179 100755
 +        BAZEL_TOOLCHAIN_AR=${BAZEL_TOOLCHAIN_AR//${HOST}/${BUILD}}
 +        HOST=${BUILD}
 +      else
-+        BAZEL_TOOLCHAIN_GCC=${GCC_11_HOME}/bin/gcc
++        BAZEL_TOOLCHAIN_GCC=${GCC_HOME}/bin/gcc
        fi
        TARGET_CPU=${BUILD_CPU}
        TARGET_SYSTEM=${BUILD_SYSTEM}
@@ -149,7 +149,7 @@ index db4de8a..d2d87ee 100644
    number: 0
    skip: true  # [win]
 +  script_env:
-+    - GCC_11_HOME      #[ppc_arch == 'p10']
++    - GCC_HOME      #[ppc_arch == 'p10']
  
  requirements:
    run_constrained:
@@ -177,27 +177,27 @@ index 97fb190..f36695f 100644
 +
 +if [[ $ppc_arch == "p10" ]]
 +then
-+    if [[ -z "${GCC_11_HOME}" ]];
++    if [[ -z "${GCC_HOME}" ]];
 +    then
-+        echo "Please set GCC_11_HOME to the install path of gcc-toolset-11"
++        echo "Please set GCC_HOME to the install path of gcc-toolset-12"
 +        exit 1
 +    else
-+        export PATH=$GCC_11_HOME/bin:$PATH
-+        export CC=$GCC_11_HOME/bin/gcc
-+        export CXX=$GCC_11_HOME/bin/g++
++        export PATH=$GCC_HOME/bin:$PATH
++        export CC=$GCC_HOME/bin/gcc
++        export CXX=$GCC_HOME/bin/g++
 +        export GCC=$CC
 +        export GXX=$CXX
-+        export AR=${GCC_11_HOME}/bin/ar
-+        export LD=${GCC_11_HOME}/bin/ld.bfd
-+        export NM=${GCC_11_HOME}/bin/nm
-+        export OBJCOPY=${GCC_11_HOME}/bin/objcopy
-+        export OBJDUMP=${GCC_11_HOME}/bin/objdump
-+        export RANLIB=${GCC_11_HOME}/bin/ranlib
-+        export STRIP=${GCC_11_HOME}/bin/strip
-+        export READELF=${GCC_11_HOME}/bin/readelf
++        export AR=${GCC_HOME}/bin/ar
++        export LD=${GCC_HOME}/bin/ld.bfd
++        export NM=${GCC_HOME}/bin/nm
++        export OBJCOPY=${GCC_HOME}/bin/objcopy
++        export OBJDUMP=${GCC_HOME}/bin/objdump
++        export RANLIB=${GCC_HOME}/bin/ranlib
++        export STRIP=${GCC_HOME}/bin/strip
++        export READELF=${GCC_HOME}/bin/readelf
 +        export HOST=powerpc64le-conda_cos7-linux-gnu
 +        export BAZEL_LINKLIBS=-l%:libstdc++.a
-+        export LDFLAGS="-L${GCC_11_HOME}/lib -L$PREFIX/lib -L$BUILD_PREFIX/lib"
++        export LDFLAGS="-L${GCC_HOME}/lib -L$PREFIX/lib -L$BUILD_PREFIX/lib"
 +        export CFLAGS="-mcpu=power9 -mtune=power10"
 +        export CXXFLAGS="-mcpu=power9 -mtune=power10"
 +        export CPPFLAGS="-mcpu=power9 -mtune=power10"
