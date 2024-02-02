@@ -32,7 +32,7 @@ packages:
   - feedstock : onnxconverter-common
   - feedstock : skl2onnx
   - feedstock : onnxmltools
-#  - feedstock : tf2onnx
+  - feedstock : tf2onnx
 {% endif %}
 
 git_tag_for_env: open-ce-v1.9.4
