@@ -10,7 +10,7 @@ imported_envs:
   - onnx-env.yaml
   - pytorch-env.yaml
   - pytorch-extras-env.yaml
-#  - tensorflow-env.yaml
+  - tensorflow-env.yaml
   - xgboost-env.yaml
   - lightgbm-env.yaml
   - arrow-env.yaml
