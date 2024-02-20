@@ -1,19 +1,19 @@
-From 7ad5a9fc6afe897d52f18a84a9fbfdd206043567 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 15 Sep 2023 10:43:05 +0000
-Subject: [PATCH] Update to 1.53.0
+From 56a4b91792605c02e6fad6de3be8fedfb7ef0df4 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archanashinde2504@gmail.com>
+Date: Tue, 20 Feb 2024 09:33:56 +0000
+Subject: [PATCH] Update to 1.53.2 to fix CVE
 
 ---
  recipe/meta.yaml | 28 ++++++++++++++--------------
  1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..ee6952f 100644
+index 19fa19a..ed5415d 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,4 +1,4 @@
 -{% set version = "1.46.3" %}
-+{% set version = "1.53.0" %}
++{% set version = "1.53.2" %}
  
  package:
    name: grpcio
@@ -22,7 +22,7 @@ index 19fa19a..ee6952f 100644
  source:
    url: https://pypi.io/packages/source/g/grpcio/grpcio-{{ version }}.tar.gz
 -  sha256: 4b8fd8b1cd553635274b83cd984f0755e6779886eca53c1c71d48215962eb689
-+  sha256: a4952899b4931a6ba12951f9a141ef3e74ff8a6ec9aa2dc602afa40f63595e33
++  sha256: 0c9e42f2499c8603af1d88771dc97e2c6b0310c278337058fd7fd1ddb35ab853
    patches:
      - 0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
 -    - 0002-windows-ssl-lib-names.patch

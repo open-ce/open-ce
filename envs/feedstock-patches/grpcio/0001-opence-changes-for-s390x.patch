@@ -1,7 +1,7 @@
-From 116e56c25c1fb72b01faeb04787f71d9f0bc1491 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 5 Oct 2023 13:08:22 +0000
-Subject: [PATCH] opence changes for s390x
+From 73124a58b197dd0365310143362d6fe494bc18ee Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 20 Feb 2024 11:56:18 +0000
+Subject: [PATCH] Update to 1.53.2 to fix CVE
 
 ---
  config/conda_build_config.yaml          |  4 ++++
@@ -93,12 +93,12 @@ index f797569..ca7c25a 100644
  
  $PYTHON -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..690bf38 100644
+index 19fa19a..16a4566 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,4 +1,4 @@
 -{% set version = "1.46.3" %}
-+{% set version = "1.53.0" %}
++{% set version = "1.53.2" %}
  
  package:
    name: grpcio
@@ -107,7 +107,7 @@ index 19fa19a..690bf38 100644
  source:
    url: https://pypi.io/packages/source/g/grpcio/grpcio-{{ version }}.tar.gz
 -  sha256: 4b8fd8b1cd553635274b83cd984f0755e6779886eca53c1c71d48215962eb689
-+  sha256: a4952899b4931a6ba12951f9a141ef3e74ff8a6ec9aa2dc602afa40f63595e33
++  sha256: 0c9e42f2499c8603af1d88771dc97e2c6b0310c278337058fd7fd1ddb35ab853
    patches:
      - 0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
 -    - 0002-windows-ssl-lib-names.patch
@@ -159,5 +159,5 @@ index 19fa19a..690bf38 100644
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
  
 -- 
-2.40.1
+2.34.1
 
