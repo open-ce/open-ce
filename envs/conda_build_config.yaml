@@ -82,7 +82,7 @@ freetype:
 fortran_compiler_version:
   - 11.2.*
 fsspec:
-  - 2022.11.*
+  - 2023.10.*
 future:
   - 0.18.*
 gast:
