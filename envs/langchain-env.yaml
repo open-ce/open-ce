@@ -21,4 +21,7 @@ packages:
     git_tag : 6ec329ff0dbae6943c5ccfba0163ebb17903bc19
   - feedstock : https://github.com/conda-forge/langchain-core-feedstock.git
     git_tag : 11e865add3303da3f3ffae317dd6c75443d481bb
-  - feedstock : langchain
+  - feedstock : https://github.com/conda-forge/langchain-feedstock.git
+    git_tag : 6431d8c54b8a22424fcb639590691802469c375f
+    patches :
+           - feedstock-patches/langchain/0001-Opence-changed-for-langchain.patch
