@@ -16,6 +16,6 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   # [py==311]
     git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          # [py==311]
     patches :                                                                   # [py==311]
-      - feedstock-patches/scikit-learn/0001-update-for-python-3.11.patch        # [py==311]
+      - feedstock-patches/scikit-learn/0001-changes-for-opence.patch            # [py==311]
   - feedstock : https://github.com/conda-forge/filesystem-spec-feedstock
     git_tag : be754febf038a93d01e6f7de85d5489ced355f88
