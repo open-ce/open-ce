@@ -3,7 +3,6 @@ builder_version: ">=13.0.0"
 imported_envs:
   - bazel-env.yaml
   - common-deps.yaml
-#  - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
 conda_build_configs:                   #[ppc_arch == 'p10']
   - conda_build_config_p10.yaml        #[ppc_arch == 'p10']
