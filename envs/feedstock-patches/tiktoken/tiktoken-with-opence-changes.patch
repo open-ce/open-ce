@@ -1,0 +1,33 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b6c7378..70779cd 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -17,21 +17,21 @@ build:
+ 
+ requirements:
+   build:
+-    - python                                 # [build_platform != target_platform]
++    - python {{python}}                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+     - {{ compiler('cxx') }}
+     - {{ compiler('rust') }}
+     - cargo-bundle-licenses
+   host:
+-    - python
+-    - setuptools >=62.4
++    - python {{python}}
++    - setuptools {{setuptools}}
+     - wheel
+-    - setuptools-rust >=1.5.2
+-    - pip
++    - setuptools-rust {{setuptools_rust}}
++    - pip {{pip}}
+   run:
+-    - python
++    - python {{python}}
+     - regex >=2022.1.18
+-    - requests >=2.26.0
++    - requests {{requests}}
+ 
+ test:
+   imports:

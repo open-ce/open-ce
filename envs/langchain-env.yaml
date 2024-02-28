@@ -1,0 +1,24 @@
+builder_version: ">=13.0.0"
+
+imported_envs:
+  - pytorch-env.yaml
+  - common-deps.yaml
+
+packages:
+  - feedstock : https://github.com/conda-forge/tiktoken-feedstock.git
+    git_tag : 9e4540dd98fa5628afb9a8bc1cbf25c5197fcfe6
+    patches :
+           - feedstock-patches/tiktoken/tiktoken-with-opence-changes.patch  
+  - feedstock : https://github.com/conda-forge/packaging-feedstock.git
+    git_tag : e04488e01c5686c08fbe433ac838c12113e6b5b2
+  - feedstock : https://github.com/conda-forge/pytest-subtests-feedstock.git
+    git_tag : 99c4493f2f49c7700cc269dd2b7da6a15d31371c
+  - feedstock : https://github.com/conda-forge/jsonpatch-feedstock.git
+    git_tag : b91d2f21f2e8cf6cf2af15ab8e36e753a340ff55
+  - feedstock : https://github.com/conda-forge/langsmith-feedstock.git
+    git_tag : 010eb770882b877d27c5dde1fe6ed66db56d284a
+  - feedstock : https://github.com/conda-forge/langchain-community-feedstock.git
+    git_tag : 6ec329ff0dbae6943c5ccfba0163ebb17903bc19
+  - feedstock : https://github.com/conda-forge/langchain-core-feedstock.git
+    git_tag : 11e865add3303da3f3ffae317dd6c75443d481bb
+  - feedstock : langchain
