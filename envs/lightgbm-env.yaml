@@ -1,8 +1,5 @@
 builder_version: ">=13.0.0"
 
-imported_envs:
-  - common-p10-deps.yaml      #[ppc_arch == "p10"]
-
 packages:
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit

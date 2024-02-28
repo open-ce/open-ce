@@ -306,6 +306,8 @@ termcolor_cpp:
   - 2.0.0
 tf_estimator:
   - 2.14.*
+tiktoken:
+  - 0.6.0
 torchmetrics:
   - 1.2.*
 torchtext:

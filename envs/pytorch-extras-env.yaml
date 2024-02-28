@@ -3,7 +3,6 @@ builder_version: ">=13.0.0"
 imported_envs:
   - tensorboard-env.yaml
   - pytorch-env.yaml
-  - common-p10-deps.yaml      #[ppc_arch == "p10"]
 
 packages:
 {% if not s390x %}

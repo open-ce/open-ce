@@ -1,0 +1,75 @@
+From 5f0ca501cbcc5a79487ecf52b75fc49148049c00 Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <aman_surkar@persistent.com>
+Date: Wed, 28 Feb 2024 11:42:40 +0000
+Subject: [PATCH] Opence changes for langchain
+
+---
+ recipe/meta.yaml | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 1739753..ba5bee9 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -13,23 +13,23 @@ build:
+   entry_points:
+     - langchain-server = langchain.server:main
+   noarch: python
+-  script: {{ PYTHON }} -m pip install . -vv
++  script: {{ PYTHON }} -m pip install . --no-deps -vv
+   number: 0
+ 
+ requirements:
+   host:
+-    - python >=3.8,<4.0
++    - python {{python}}
+     - poetry-core >=1.0.0
+-    - pip
++    - pip {{pip}}
+   run:
+-    - python >=3.8,<4.0
++    - python {{python}}
+     - langchain-core >=0.1.22,<0.2
+     - langchain-community >=0.0.18,<0.1
+-    - pydantic >=1,<3
++    - pydantic {{pydantic}}
+     - sqlalchemy >=1.4,<3
+-    - requests >=2.0.0,<3.0.0
++    - requests {{requests}}
+     - pyyaml >=5.3
+-    - numpy >=1.0.0,<2.0.0
++    - numpy {{numpy}}
+     - aiohttp >=3.8.3,<4.0.0
+     - tenacity >=8.1.0,<9.0.0
+     - jsonpatch >=1.33.0,<2.0.0
+@@ -38,15 +38,15 @@ requirements:
+     - langsmith >=0.0.83,<0.1
+   run_constrained:
+     - azure-core >=1.26.4,<2.0.0
+-    - tqdm >=4.48.0
++    - tqdm {{tqdm}}
+     - openapi-pydantic >=0.3.2,<0.4.0
+     - faiss-cpu >=1.0.0,<2.0.0
+     - manifest-ml >=0.0.1,<0.0.2
+     - transformers >=4.0.0,<5.0.0
+     - beautifulsoup4 >=4.0.0,<5.0.0
+-    - pytorch >=1,<3
++    - pytorch-base {{pytorch}}
+     - jinja2 >=3.0.0,<4.0.0
+-    - tiktoken >=0.3.2,<0.6.0
++    - tiktoken {{tiktoken}}
+     - qdrant-client >=1.3.1,<2.0.0
+     - cohere >=4.0.0,<5.0.0
+     - openai <2
+@@ -75,7 +75,7 @@ requirements:
+     - chardet >=5.1.0,<6.0.0
+     - requests-toolbelt >=1.0.0,<2.0.0
+     - openlm >=0.0.5,<0.0.6
+-    - scikit-learn >=1.2.2,<2.0.0
++    - scikit-learn {{scikit_learn}}
+     - azure-ai-formrecognizer >=3.2.1,<4.0.0
+     - azure-ai-vision >=0.11.1,<0.11.2
+     - azure-cognitiveservices-speech >=1.28.0,<2.0.0
+-- 
+2.40.1
+

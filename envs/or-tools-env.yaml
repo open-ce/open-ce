@@ -3,7 +3,6 @@ builder_version: ">=13.0.0"
 imported_envs:
 {% if not s390x %}
   - openblas-env.yaml
-  - common-p10-deps.yaml      #[ppc_arch == "p10"]
 {% endif %}
   - common-deps.yaml
 
