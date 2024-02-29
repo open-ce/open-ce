@@ -26,6 +26,7 @@ imported_envs:
   - transformers-env.yaml
 #  - openssl-env.yaml
   - ffmpeg-env.yaml
+  - langchain-env.yaml
 
 packages:
   - feedstock : https://github.com/conda-forge/joblib-feedstock
