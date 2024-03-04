@@ -21,7 +21,7 @@ This repository contains a collection of Open-CE files that can be used to creat
 will contain packages for every feedstock listed within the Open-CE files. Different variants of Python and CUDA can
 be specified at build time. Open-CE currently supports the following:
 
-| | Supported Versions | |
+| | Supported Versions |
 | --- | --- |
 | Architecture | Power, x86, s390x |
 | Python | 3.9, 3.10, 3.11 |
