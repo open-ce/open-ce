@@ -1,21 +1,27 @@
-builder_version: ">=10.0.1"
+builder_version: ">=13.0.0"
 
 imported_envs:
+{% if not s390x %}
   - tensorflow-env.yaml
+{% endif %}
+  - common-deps.yaml
 
 packages:
+  - feedstock : onnx
 {% if not s390x %}
   - feedstock : safeint
   - feedstock : gtest
   - feedstock : libdate
-  - feedstock : onnx
   - feedstock : optional-lite
   - feedstock : boost_mp11
-  - feedstock : nlohmann_json
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
+  - feedstock : https://github.com/conda-forge/cmake-feedstock
+    git_tag : 70e07324f0ab7f075c5c325a55e31ddc9b68d985
+    patches :                                                  #[ppc_arch == 'p10']
+      - feedstock-patches/cmake/0001-P10-changes.patch         #[ppc_arch == 'p10']
   {% if build_type == 'cuda' %}
-  - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
+  - feedstock : cudatoolkit
   - feedstock : cudnn
   - feedstock : nccl
   {% endif %}

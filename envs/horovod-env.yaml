@@ -1,15 +1,11 @@
-builder_version: ">=10.0.1"
+builder_version: ">=13.0.0"
 
 imported_envs:
-{% if build_type == 'cuda' %}
     - pytorch-env.yaml
     - tensorflow-env.yaml
-{% endif %}
 
 packages:
 {% if not s390x %}
-  {% if build_type == 'cuda' %}
     - feedstock : horovod
     - feedstock : openmpi #[mpi_type == 'openmpi']
-  {% endif %}
 {% endif %}

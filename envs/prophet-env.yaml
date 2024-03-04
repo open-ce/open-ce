@@ -1,0 +1,14 @@
+builder_version: ">=13.0.0"
+
+imported_envs:
+  - cmdstan-env.yaml
+
+packages:
+{% if not s390x %}
+  - feedstock : https://github.com/conda-forge/prophet-feedstock
+    git_tag : 1d19e1169f396232268c93fd97ee5b7caee95829
+    patches :
+      - feedstock-patches/prophet/0001-Pin-dependencies-and-added-test-dir.patch
+  - feedstock : https://github.com/conda-forge/holidays-feedstock.git
+    git_tag : 4d747d0607fb049f6f6569b5ec06dcc76b54d2b1
+{% endif %}

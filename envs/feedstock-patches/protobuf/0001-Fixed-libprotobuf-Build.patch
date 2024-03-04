@@ -1,0 +1,53 @@
+From 275f6080ef6bd23f256367b83d94e66d40077dc7 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 26 Apr 2023 03:05:39 -0500
+Subject: [PATCH] Fixed libprotobuf build
+
+---
+ recipe/build-lib.sh    | 7 ++++---
+ recipe/build-shared.sh | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/recipe/build-lib.sh b/recipe/build-lib.sh
+index 6071cec..496df37 100644
+--- a/recipe/build-lib.sh
++++ b/recipe/build-lib.sh
+@@ -5,11 +5,12 @@ if [ "$(uname)" == "Linux" ];
+ then
+     # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
+     # unit test can fail if optmization above 0 are used.
+-    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
+-    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
++#    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
++#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
+     export PROTOBUF_OPT_FLAG="-O2"
+     # to improve performance, disable checks intended for debugging
+-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
++    CXXFLAGS="$CXXFLAGS -DNDEBUG -fplt"
++    CFLAGS="$CFLAGS -fplt"
+ elif [ "$(uname)" == "Darwin" ];
+ then
+     # remove pie from LDFLAGS
+diff --git a/recipe/build-shared.sh b/recipe/build-shared.sh
+index ca7bc09..c9f96cf 100644
+--- a/recipe/build-shared.sh
++++ b/recipe/build-shared.sh
+@@ -6,11 +6,12 @@ if [ "$(uname)" == "Linux" ];
+ then
+     # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
+     # unit test can fail if optmization above 0 are used.
+-    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
+-    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
++#    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
++#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
+     export PROTOBUF_OPT_FLAG="-O2"
+     # to improve performance, disable checks intended for debugging
+-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
++    CXXFLAGS="$CXXFLAGS -DNDEBUG -fplt"
++    CFLAGS="$CFLAGS -fplt"
+ elif [ "$(uname)" == "Darwin" ];
+ then
+     # remove pie from LDFLAGS
+-- 
+2.31.1
+

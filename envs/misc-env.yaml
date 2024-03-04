@@ -1,0 +1,13 @@
+builder_version: ">=13.0.0"
+
+packages:
+  - feedstock : https://github.com/conda-forge/sklearn-pandas-feedstock
+    git_tag: cba478bd00c03f2260aed2c25b5d98fa98a20b70
+    patches:
+      - feedstock-patches/sklearn-pandas/0001-sklearn-pandas-recipe.patch
+{% if s390x %}
+  - feedstock : https://github.com/conda-forge/coremltools-feedstock
+    git_tag: e546cec25f1a70b77c7dfec14725bab1f2b6b33c
+    patches:
+      - feedstock-patches/coremltools/0001-coremltools-recipe.patch
+{% endif %}

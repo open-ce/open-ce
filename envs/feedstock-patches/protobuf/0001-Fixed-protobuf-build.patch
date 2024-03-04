@@ -1,0 +1,38 @@
+From a6df137fb01eb7908f29c733db6167e331a67741 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 19 Dec 2023 10:52:37 +0000
+Subject: [PATCH] Update
+
+---
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 5389f6a..b219259 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -19,10 +19,10 @@ source:
+     - patches/0004-fix-build-with-python-311.patch
+ 
+ build:
+-  number: 0
++  number: 1
+   script:
+     - cd python
+-    - {{ PYTHON }} -m pip install . -vv --install-option="--cpp_implementation"
++    - {{ PYTHON }} -m pip install --use-pep517 . -vv --config-setting="--build-option=--cpp_implementation"
+ 
+ requirements:
+   build:
+@@ -33,7 +33,7 @@ requirements:
+     - {{ compiler('cxx') }}
+   host:
+     - python
+-    - pip
++    - pip 23.*
+     - libprotobuf {{ lib_major + "." + version }}         # [unix]
+     - libprotobuf-static {{ lib_major + "." + version }}  # [win]
+   run:
+-- 
+2.40.1
+

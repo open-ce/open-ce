@@ -1,0 +1,33 @@
+From e8aff6ab3a6f4f5e99a1b997982fd02c02828405 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 21 Nov 2022 14:47:50 +0000
+Subject: [PATCH] disable pip check
+
+---
+ recipe/meta.yaml | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index d095df7..53b2a43 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -31,10 +31,12 @@ test:
+   imports:
+     - inquirer
+     - inquirer.render
+-  commands:
+-    - pip check
+-  requires:
+-    - pip
++  # disable pip check here as it fails because poetry requires keyring<22.0.0,>=21.2.0
++  # but keyring<22.0.0,>=21.2.0 is not available for python 3.10
++  #commands:
++  # - pip check
++  #requires:
++  # - pip
+ 
+ about:
+   home: https://github.com/magmax/python-inquirer
+-- 
+2.34.1
+

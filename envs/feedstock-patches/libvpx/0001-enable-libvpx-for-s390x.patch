@@ -1,0 +1,24 @@
+From 6ad8611e28a991d0e7d8229ac0df47726c55d70b Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Fri, 12 May 2023 11:22:52 +0100
+Subject: [PATCH] enable libvpx for s390x
+
+---
+ recipe/meta.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index c79a4d1..4e1155f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -12,7 +12,6 @@ source:
+ 
+ build:
+   number: 0
+-  skip: True  # [win or s390x]
+   run_exports:
+     # new so names and compatibility changes on minor version
+     # https://abi-laboratory.pro/tracker/timeline/libvpx/
+-- 
+2.31.1
+

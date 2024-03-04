@@ -1,9 +1,13 @@
 abseil_cpp:
-  - 20210324
+  - 20230125.0
 absl_py:
-  - 1.0.*
+  - 2.0.*
+array_record:
+  - 0.2.*
+arviz:
+  - 0.14.0
 arrow:
-  - 8.0.0
+  - 14.0.1
 astunparse:
   - 1.6
 attrs:
@@ -13,29 +17,27 @@ autoconf:
 automake:
   - 1.16
 av:
-  - 9.*
+  - 10.*
 bazel:
-  - 5.*
+  - 6.*
 black:
-  - 22.3.0
+  - 23.10.*
 bsddb3:
   - 6.2.9
 boost:
-  - 1.67.0  # [not s390x]
+  - 1.73.0  # [not s390x]
   - 1.65.*  # [s390x]
 boost_mp11:
   - 1.76.*
 c_compiler_version:
-  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
-  - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 11.2.*
 catalogue:
   - 2.*
 cffi:
   - 1.15.*  # [not s390x]
   - 1.15.*  # [s390x]
 clang:
-  - 13.0.*
+  - 14.0.*
 click:
   - 8.*
 cli11:
@@ -50,13 +52,11 @@ contextvars:
 coverage:
   - 5.*
 cpp_filesystem:
-  - 1.5.8
+  - 1.5.*
 cudnn:
-  - 8.3.0.*    # [build_type == 'cuda']
+  - 8.9.*    # [build_type == 'cuda']
 cxx_compiler_version:
-  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
-  - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 11.2.*
 cxxfilt:
   - 0.2.*
 cymem:
@@ -65,32 +65,34 @@ cython:
   - 0.29
 cython_blis:
   - 0.7.*
+dill:
+  - 0.3.6
 dm_tree:
   - 0.1.*
 eigen:
-  - 3.3.7
+  - 3.4.*
 ffmpeg:
   - 4.2.*
 flatbuffers:
-  - 2.0.*
+  - 23.1.21
+fmt:
+  - 9.1.0
 freetype:
   - 2
 fortran_compiler_version:
-  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
-  - 7.3.*                      # [ppc64le and cudatoolkit == '11.2']
-  - 11.2.*                     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 11.2.*
 fsspec:
-  - 2021.*
+  - 2023.10.*
 future:
   - 0.18.*
 gast:
   - 0.4.0
 git:
-  - 2.15
+  - 2.40
 google_auth:
-  - 1.*
+  - 2.*
 google_auth_oauthlib:
-  - 0.4.*
+  - 0.5.*
 google_pasta:
   - 0.2
 googleapis_common_protos:
@@ -98,21 +100,20 @@ googleapis_common_protos:
 googledrivedownloader:
   - 0.4
 gmock:
-  - 1.10.0
+  - 1.13
 grpc_cpp:
-  - 1.41.*
+  - 1.54.*
 grpcio:
-  - 1.42.*
+  - 1.54.*
 harfbuzz:
-  - 1.8
+  - 4.3.*
 # Note: hdf5 version must be compatible with h5py
 hdf5:
-  - 1.12.1     # [build_type == 'cpu' or cudatoolkit == '11.4']
-  - 1.10.6     # [cudatoolkit == '11.2']
+  - 1.10.6
 hypothesis:
   - 5.*
 h5py:
-  - 3.6.*
+  - 3.7.*
 icu:
   - 58.*   #[not s390x]
   - 68.*   #[s390x]
@@ -120,22 +121,22 @@ importlib_resources:
   - 5.*
 jasper:
   - 2.0.14
+jax:
+  - 0.4.7
 joblib:
-  - 1.*
+  - 1.3.*
 jpeg:
   - 9e
 jpegturbo:
-  - 2.1.0
+  - 2.1.4
 keras_applications:
   - 1.0.8
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.9.*
+  - 2.14.*
 leveldb:
-  - 1.20.*
-libarchive:
-  - 3.4.*
+  - 1.23.*
 libiconv:
   - 1.16
 libdate:
@@ -143,15 +144,12 @@ libdate:
 libevent:
   - 2.1.*
 libgcc:
-  - 9.1.*                      # [x86_64 and cudatoolkit == '11.2']
   - 8.2.*                      # [ppc64le]
   - 9.3.*                      # [s390x]
 libstdcxx:
-  - 9.1.*                      # [x86_64 and cudatoolkit == '11.2']
   - 8.2.*                      # [ppc64le]
   - 9.3.*                      # [s390x]
 libgfortran:
-  - 7.5.*                      # [x86_64 and cudatoolkit == '11.2']
   - 7.3.*                      # [ppc64le]
   - 7.5.*                      # [s390x]
 libogg:
@@ -160,6 +158,8 @@ libopus:
   - 1.3.*
 libpng:
   - 1.6
+libprotobuf:
+  - 3.21.12
 libtar:
   - 1.2.*
 libtiff:
@@ -167,7 +167,7 @@ libtiff:
 libtool:
   - 2.4.6
 libsolv:
-  - 0.7.*
+  - 0.7.24
 libvorbis:
   - 1.3.7
 lmdb:
@@ -177,7 +177,9 @@ magma:
 make:
   - 4.2.1
 markdown:
-  - 3.3.*
+  - 3.4.*
+ml_dtypes:
+  - 0.2.0
 mock:
   - 3.*      # [not s390x]
   - 4.*      # [s390x]
@@ -190,27 +192,28 @@ networkx:
 ninja:
   - 1.10.*
 nccl:
-  - 2.12.*
+  - 2.19.*
 nlohmann_json:
   - 3.*
 numactl:
   - 2.0.*
 numpy:
-  - 1.23.*
+  - 1.26
 onnx:
-  - 1.12.*
+  - 1.15.*
 onnxconverter_common:
-  - 1.9.*
+  - 1.14.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.20.*
+  - 0.3.26.*      #[not s390x]
+  - 0.3.21.*      #[s390x]
 opencv:
-  - 4.6.*
+  - 4.8.*
 openjdk:
   - 11.0.*
 openmpi:
-  - 4.1.1
+  - 4.1.5
 optional_lite:
   - 3.4.*
 opt_einsum:
@@ -218,34 +221,35 @@ opt_einsum:
 pathy:
   - 0.6.*
 pip:
-  - 21.*
-pkg_config:
+  - 23.*
+#pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
+pkgconfig:
   - 0.29.2
 preshed:
   - 3.0.*
 protobuf:
-  - 3.19.*
+  - 4.21.12
 psutil:
   - 5
 pybind11:
-  - 2.9.*
+  - 2.10.*
 pydantic:
-  - 1.9.*
+  - 1.10.*
 pytest:
-  - 6.*
+  - 7.*
 python:
   - 3.8   # [not s390x]
   - 3.9
   - 3.10
+  - 3.11
 pytorch:
-  - 1.10.*               # [cudatoolkit == '11.2']
-  - 1.12.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 2.1.*
 pytorch_lightning:
-  - 1.6.*
+  - 2.1.*
 pytorch_scatter:
-  - 2.0.8
+  - 2.1.2
 pytorch_sparse:
-  - 0.6.10
+  - 0.6.18
 pyyaml:
   - 6.*
 rdflib:
@@ -253,72 +257,63 @@ rdflib:
 requests:
   - 2.*
 regex:
-  - 2022.3.*
+  - 2022.7.*
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.62.0
+  - 1.71.*
 rust_compiler_version:
-  - '1.46'
+  - '1.71.1'
 safeint:
   - 3.0
 scipy:
-  - 1.*
+  - 1.11.*
+scikit_learn:
+  - 1.3.*
 sentencepiece:
-  - 0.1.96
+  - 0.1.99
 setuptools:
-  - 61.*
+  - 68.*
 setuptools_rust:
-  - 0.12.*
+  - 1.5.*
 six:
-  - 1.15.0  # [not s390x]
-  - 1.16.0  # [s390x]
+  - 1.16.0
 smart_open:
   - 2.2.*
-spacy_legacy:
-  - 3.0.9
-spacy_loggers:
-  - 1.0.2
 spdlog:
-  - 1.9.2
+  - 1.11.0
 srsly:
   - 2.*
-starlette:
-  - 0.19.*
 sqlite:
-  - 3.38.*   # [s390x]
+  - 3.41.*   # [s390x]
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.9.*
+  - 2.14.*
 tensorboard_data_server:
-  - 0.6.*
+  - 0.7.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.9.*
+  - 2.14.*
 tensorflow_hub:
-  - 0.12
+  - 0.15
 tensorflow_io_gcs_filesystem:
-  - 0.26.*
+  - 0.35.*
 termcolor:
-  - 1.1.0
+  - 2.1.*
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
-  - 2.9.*
-thinc:
-  - 8.0.*
-tokenizers:
-  - 0.11.4
+  - 2.14.*
+tiktoken:
+  - 0.6.0
 torchmetrics:
-  - 0.8.*
+  - 1.2.*
 torchtext:
-  - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.16.*
 torchvision:
-  - 0.11.*               # [cudatoolkit == '11.2']
-  - 0.13.*               # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 0.16.*
 tqdm:
   - 4.*
 typer:
@@ -331,16 +326,14 @@ wasabi:
   - 0.9.*
 werkzeug:
   - 2.*
-wheel:
-  - 0.37*
 wrapt:
   - 1.14.*
 yaml_cpp:
-  - 0.6.3
+  - 0.8.0
 zlib:
-  - 1.2.12
+  - 1.2.*
 zstd:
-  - 1.4.*
+  - 1.5.*
 
 ##
 ## ARCHITECTURE SPECIFIC OPTIMIZATION SETTINGS
@@ -388,12 +381,8 @@ vector_settings:
 ##
 # yamllint disable rule:line-length
 cuda_levels:
-  - 3.7,5.2,6.0,7.0,7.5,8.0         # [x86_64 and cudatoolkit == '11.2']
-  - 3.7,5.2,6.0,7.0,7.5,8.0,8.6     # [x86_64 and cudatoolkit == '11.4']
-  - 3.7,6.0,7.0,7.5,8.0             # [ppc64le and cudatoolkit == '11.2']
-  - 3.7,6.0,7.0,7.5,8.0,8.6         # [ppc64le and cudatoolkit == '11.4']
+  - 6.0,7.0,7.5,8.0,8.6,9.0     # [x86_64]
+  - 6.0,7.0,7.5,8.0,8.6,9.0         # [ppc64le]
 cuda_levels_details:
-  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80              # [x86_64 and cudatoolkit == '11.2']
-  - sm_37,sm_52,sm_60,sm_61,sm_70,sm_75,sm_80,compute_80,compute_86   # [x86_64 and cudatoolkit == '11.4']
-  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80                          # [ppc64le and cudatoolkit == '11.2']
-  - sm_37,sm_60,sm_70,sm_75,sm_80,compute_80,compute_86               # [ppc64le and cudatoolkit == '11.4']
+  - sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64]
+  - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90         # [ppc64le]

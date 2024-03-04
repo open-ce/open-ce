@@ -1,0 +1,45 @@
+From fa4fdb9bf9a4ab0915c6e735fd896148b46eaebe Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23in.ibm.com>
+Date: Wed, 17 May 2023 10:11:40 +0000
+Subject: [PATCH] Fixed
+
+---
+ recipe/meta.yaml | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 795b445..7973372 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -18,14 +18,15 @@ requirements:
+     - {{ compiler('cxx') }}
+     - {{ compiler('c') }}
+     - cross-python_{{ target_platform }}   # [build_platform != target_platform]
+-    - python                               # [build_platform != target_platform]
+-    - numpy                                # [build_platform != target_platform]
++    - python {{ python }}                  # [build_platform != target_platform]
++    - numpy {{ numpy }}                    # [build_platform != target_platform]
+     - pybind11 >=2.10.0,<2.11.dev0         # [build_platform != target_platform]
+   host:
+-    - python
+-    - numpy
++    - python {{ python }}
++    - numpy {{ numpy }}
+     - pybind11 >=2.10.0,<2.11.dev0
+-    - setuptools >=67.6.0,<67.7.dev0
++    - setuptools 65.*               #[cudatoolkit == "11.2"]
++    - setuptools {{ setuptools }}   #[cudatoolkit == "11.8" or build_type == "cpu"]
+     - pip
+   run:
+     - python
+@@ -42,6 +43,7 @@ test:
+   requires:
+     - pip
+     - pytest
++    - py
+     - pytest-xdist
+     - pylint >=2.6.0
+     - pyink
+-- 
+2.34.1
+

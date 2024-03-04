@@ -1,24 +1,33 @@
-From 8cd0ac2f037d9bd67d29a639a6907fa57261c2bb Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 12 Aug 2022 09:05:17 +0000
-Subject: [PATCH] fix for py310
+From 50608f3da5165abbb377d70b351a5ab0ff482b24 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 17 Aug 2023 08:43:25 +0000
+Subject: [PATCH] Update patch
 
 ---
- recipe/meta.yaml | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 81f9048..ebffc93 100644
+index 81f9048..8b85605 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,6 +1,5 @@
  {% set version = "6.1.1" %}
- {% set test_skips = "not (dawg_data_sparql or definednamespace_creator)" %}
+-{% set test_skips = "not (dawg_data_sparql or definednamespace_creator)" %}
 -{% set cov_fail_under = 72 %}
++{% set test_skips = "not (test_sparql_service or dawg_data_sparql or definednamespace_creator or testGuessFormatForParse)" %}
  
  package:
    name: rdflib
-@@ -53,7 +52,7 @@ test:
+@@ -32,6 +31,7 @@ requirements:
+     - pyparsing
+     - python >=3.7
+     - setuptools
++    - attrs
+ 
+ test:
+   source_files:
+@@ -53,7 +53,7 @@ test:
      - pip check
      # some missing file not in repo
      - rm test/test_so_69984830.py || del test/test_so_69984830.py
@@ -28,5 +37,5 @@ index 81f9048..ebffc93 100644
  about:
    home: https://github.com/RDFLib/rdflib
 -- 
-2.34.1
+2.40.1
 

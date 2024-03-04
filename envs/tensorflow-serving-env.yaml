@@ -1,25 +1,24 @@
-builder_version: ">=10.0.1"
+builder_version: ">=13.0.0"
 
 imported_envs:
   - bazel-env.yaml
+  - common-deps.yaml
 
-conda_build_configs:
-  - tensorflow_serving_conda_build_config.yaml
+conda_build_configs:                   #[ppc_arch == 'p10']
+  - conda_build_config_p10.yaml        #[ppc_arch == 'p10']
 
 packages:
 {% if not s390x %}
 
   {% if build_type == 'cuda' %}
-    - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
+    - feedstock : cudatoolkit
     - feedstock: nccl
     - feedstock: cudnn
   {% endif %}
-    - feedstock: libevent
+    - feedstock : https://github.com/conda-forge/grpcio-feedstock
+      git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+      patches :
+        - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
     - feedstock: tensorflow-serving
-
-  {% set py_ver = python | float %}
-  {% if py_ver >= 3.8 %}
-    - feedstock: protobuf
-  {% endif %}
 
 {% endif %}

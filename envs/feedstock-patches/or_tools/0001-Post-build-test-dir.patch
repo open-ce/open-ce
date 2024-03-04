@@ -1,0 +1,37 @@
+From 37c48ecfefbf23ac0c81215433c3815168334396 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Thu, 20 Jul 2023 08:35:49 +0000
+Subject: [PATCH] Post build test dir
+
+---
+ tests/open-ce-tests.yaml | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 tests/open-ce-tests.yaml
+
+diff --git a/tests/open-ce-tests.yaml b/tests/open-ce-tests.yaml
+new file mode 100644
+index 0000000..312c941
+--- /dev/null
++++ b/tests/open-ce-tests.yaml
+@@ -0,0 +1,18 @@
++tests:
++  - name: Setup ortools Tests
++    command: |
++        conda install -y git
++        git clone https://github.com/google/or-tools.git
++        cd or-tools
++        GIT_TAG=$(git describe --tags)
++        git checkout "$GIT_TAG"
++#        python -c "import ortools"
++        conda install -y pyyaml pytest
++  - name: Run ortool tests
++    command: |
++#        python -c "import ortools" 
++        skipped_test="not sat/python/cp_model_test.py and not sat/python/swig_helper_test.py and not linear_solver/python/model_builder_test.py"
++        pytest -v -k "${skipped_test}"
++  - name: Clean tests
++    command: |
++        rm -rf or-tools
+-- 
+2.40.1
+

@@ -1,0 +1,115 @@
+From 3c5a14bda39997e2cada0120a3093a3a8babea54 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 29 Aug 2023 12:13:02 +0000
+Subject: [PATCH] new-patch
+
+---
+ recipe/0001-Adjust-dist-info.patch | 25 ++++++++++++++++++++++
+ recipe/meta.yaml                   | 33 +++++++++++++++---------------
+ 2 files changed, 42 insertions(+), 16 deletions(-)
+ create mode 100644 recipe/0001-Adjust-dist-info.patch
+
+diff --git a/recipe/0001-Adjust-dist-info.patch b/recipe/0001-Adjust-dist-info.patch
+new file mode 100644
+index 0000000..d267237
+--- /dev/null
++++ b/recipe/0001-Adjust-dist-info.patch
+@@ -0,0 +1,25 @@
++From 6997f623d1c364574612642b4325584066d7eab6 Mon Sep 17 00:00:00 2001
++From: ArchanaShinde1 <archana.shinde2504@gmail.com>
++Date: Tue, 29 Aug 2023 11:10:07 +0000
++Subject: [PATCH] Adjust dist info
++
++---
++ setup.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index 459e6128..a40ae7b0 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -77,7 +77,7 @@ setup(
++     },
++     install_requires=[
++         "numpy >= 1.14.5",
++-        "protobuf >= 3.1.0, <= 4.0.0",
+++        "protobuf >= 3.1.0",
++         "sympy",
++         "tqdm",
++         "packaging",
++-- 
++2.40.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8e74dc1..acafb99 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,5 +1,5 @@
+ {% set name = "coremltools" %}
+-{% set version = "4.1" %}
++{% set version = "7.0b2" %}
+ 
+ package:
+   name: {{ name|lower }}
+@@ -10,11 +10,13 @@ source:
+   #   - LICENSE.txt
+   #   - CMakeLists.txt
+   # so we use GitHub releases.
+-  url: https://github.com/apple/{{ name }}/archive/{{ version }}.tar.gz
+-  sha256: fdbc1e96bdeda0b23222864cb802053c67d8165a9e000e873d9b4028815ce61b
++  git_url: https://github.com/apple/{{ name }}
++  git_rev: {{ version }}
++  patches:
++    - 0001-Adjust-dist-info.patch
+ 
+ build:
+-  number: 2
++  number: 1
+   # The upstream package does not support Windows.
+   skip: true  # [win]
+ 
+@@ -25,19 +27,22 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+   host:
+-    - python
+-    - numpy
+-    - pip
++    - python {{ python }}
++    - numpy {{ numpy }}
++    - pip {{ pip }}
++    - libuuid
+   run:
+-    - python
++    - python {{ python }}
+     - {{ pin_compatible('numpy') }}
+-    - protobuf >=3.1.0
+-    - six >=1.1.0
+-    - attrs
++    - protobuf {{ protobuf }}
++    - six {{ six }}
++    - cattrs
+     - sympy
+-    - scipy
++    - scipy {{ scipy }}
++    - pyaml
+     - tqdm
+     - packaging
++    - libuuid
+   run_constrained:
+     - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx]
+     - pytorch >=1.4
+@@ -47,10 +52,6 @@ test:
+     - coremltools
+     # required for predict() on macOS
+     - coremltools.libcoremlpython  # [osx]
+-  commands:
+-    # TODO: change to running `coremlconverter --help`
+-    # when the upstream bug is fixed.
+-    - test -f ${PREFIX}/bin/coremlconverter
+ 
+ about:
+   home: https://github.com/apple/coremltools
+-- 
+2.40.1
+

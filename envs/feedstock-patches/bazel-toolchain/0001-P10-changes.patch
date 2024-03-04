@@ -1,0 +1,212 @@
+From 63b58857968f787044d84b6f9c9922558e9946c7 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 11 May 2023 11:17:07 +0000
+Subject: [PATCH] P10 changes
+
+---
+ .../bazel_toolchain/cc_toolchain_config.bzl   | 12 ++++---
+ recipe/build.sh                               |  2 ++
+ recipe/gen-bazel-toolchain                    | 35 +++++++++++++------
+ recipe/meta.yaml                              |  8 +++--
+ recipe/run_test.sh                            | 31 ++++++++++++++++
+ 5 files changed, 70 insertions(+), 18 deletions(-)
+
+diff --git a/recipe/bazel_toolchain/cc_toolchain_config.bzl b/recipe/bazel_toolchain/cc_toolchain_config.bzl
+index b91aa80..b4c8719 100644
+--- a/recipe/bazel_toolchain/cc_toolchain_config.bzl
++++ b/recipe/bazel_toolchain/cc_toolchain_config.bzl
+@@ -26,15 +26,15 @@ def _impl(ctx):
+         ),
+         tool_path(
+             name = "ar",
+-            path = "${CONDA_PREFIX}/bin/${AR}",
++            path = "${AR}",
+         ),
+         tool_path(
+             name = "cpp",
+-            path = "/usr/bin/cpp",
++            path = "${CPP}",
+         ),
+         tool_path(
+             name = "gcov",
+-            path = "/usr/bin/gcov",
++            path = "${GCOV}",
+         ),
+         tool_path(
+             name = "nm",
+@@ -42,7 +42,7 @@ def _impl(ctx):
+         ),
+         tool_path(
+             name = "objdump",
+-            path = "/usr/bin/objdump",
++            path = "${OBJDUMP}",
+         ),
+         tool_path(
+             name = "strip",
+@@ -313,6 +313,10 @@ def _impl(ctx):
+         if (len("${CUDA_HOME}")):
+             cxx_builtin_include_directories.append("${CUDA_HOME}/include")
+             cxx_builtin_include_directories.append("${CUDA_HOME}/targets/x86_64-linux/include/")
++        if ("${PPC_ARCH}" == "p10"):
++            cxx_builtin_include_directories.append("${GCC_HOME}/lib/gcc/ppc64le-redhat-linux/11/include")
++            cxx_builtin_include_directories.append("${GCC_HOME}/include")
++            cxx_builtin_include_directories.append("${GCC_HOME}/include/c++/11")
+ 
+     return cc_common.create_cc_toolchain_config_info(
+         ctx = ctx,
+diff --git a/recipe/build.sh b/recipe/build.sh
+index e48e941..1c1e1e5 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -2,6 +2,8 @@
+ 
+ set -euxo pipefail
+ 
++export ppc_arch=$ppc_arch
++
+ mkdir -p $PREFIX/bin
+ cp ${RECIPE_DIR}/gen-bazel-toolchain $PREFIX/bin/
+ mkdir -p $PREFIX/share
+diff --git a/recipe/gen-bazel-toolchain b/recipe/gen-bazel-toolchain
+index 4eddb0f..2062179 100755
+--- a/recipe/gen-bazel-toolchain
++++ b/recipe/gen-bazel-toolchain
+@@ -30,6 +30,7 @@ function apply_cc_template() {
+   sed -ie "s:\${LDFLAGS}:${LDFLAGS}:" $1
+   sed -ie "s:\${NM}:${NM}:" $1
+   sed -ie "s:\${STRIP}:${STRIP}:" $1
++  sed -ie "s:\${OBJDUMP}:${OBJDUMP}:" $1
+   sed -ie "s:\${AR}:${BAZEL_TOOLCHAIN_AR}:" $1
+   sed -ie "s:\${HOST}:${HOST}:" $1
+   sed -ie "s:\${LIBCXX}:${BAZEL_TOOLCHAIN_LIBCXX}:" $1
+@@ -64,7 +65,7 @@ pushd bazel_toolchain
+     export BAZEL_TOOLCHAIN_AR=${LIBTOOL}
+   else
+     export BAZEL_TOOLCHAIN_COMPILER_VERSION=$(${CC} -v 2>&1|tail -n1|cut -d' ' -f3)
+-    export BAZEL_TOOLCHAIN_AR=$(basename ${AR})
++    export BAZEL_TOOLCHAIN_AR=${AR}
+     touch cc_wrapper.sh
+     touch cc_wrapper_build.sh
+     export BAZEL_TOOLCHAIN_LIBCXX="stdc++"
+@@ -121,7 +122,16 @@ pushd bazel_toolchain
+   sed -ie "s:BUILD_CPU:${BUILD_CPU}:" BUILD
+ 
+   HOST_PREFIX=${PREFIX}
++  sed -ie "s:\${PPC_ARCH}:${ppc_arch}:" cc_toolchain_config.bzl
+ 
++  if [[ "${ppc_arch}" == 'p10' ]]; then
++      sed -ie "s:\${GCC_HOME}:${GCC_HOME}:" cc_toolchain_config.bzl
++      sed -ie "s:\${CPP}:${GCC_HOME}/bin/cpp:" cc_toolchain_config.bzl
++      sed -ie "s:\${GCOV}:${GCC_HOME}/bin/gcov:" cc_toolchain_config.bzl
++  else
++      sed -ie "s:\${CPP}:/usr/bin/cpp:" cc_toolchain_config.bzl
++      sed -ie "s:\${GCOV}:/usr/bin/gcov:" cc_toolchain_config.bzl
++  fi
+   cp cc_toolchain_config.bzl cc_toolchain_build_config.bzl
+   apply_cc_template cc_toolchain_config.bzl
+   apply_cc_template crosstool_wrapper_driver_is_not_gcc
+@@ -129,21 +139,24 @@ pushd bazel_toolchain
+     if [[ "${build_platform}" != "${target_platform}" ]]; then
+       if [[ "${target_platform}" == osx-* ]]; then
+         BAZEL_TOOLCHAIN_GCC=cc_wrapper_build.sh
+-      else
++      elif [[ "${ppc_arch}" == 'p9' ]]; then
+         BAZEL_TOOLCHAIN_GCC=${BAZEL_TOOLCHAIN_GCC//${HOST}/${BUILD}}
++        PREFIX=${CONDA_PREFIX}
++        LD=${LD//${HOST}/${BUILD}}
++        CFLAGS=${CFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
++        CPPFLAGS=${CPPFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
++        CXXFLAGS=${CXXFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
++        LDFLAGS=${LDFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
++        NM=${NM//${HOST}/${BUILD}}
++        STRIP=${STRIP//${HOST}/${BUILD}}
++        BAZEL_TOOLCHAIN_AR=${BAZEL_TOOLCHAIN_AR//${HOST}/${BUILD}}
++        HOST=${BUILD}
++      else
++        BAZEL_TOOLCHAIN_GCC=${GCC_HOME}/bin/gcc
+       fi
+       TARGET_CPU=${BUILD_CPU}
+       TARGET_SYSTEM=${BUILD_SYSTEM}
+       target_platform=${build_platform}
+-      PREFIX=${CONDA_PREFIX}
+-      LD=${LD//${HOST}/${BUILD}}
+-      CFLAGS=${CFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
+-      CPPFLAGS=${CPPFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
+-      CXXFLAGS=${CXXFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
+-      LDFLAGS=${LDFLAGS//${HOST_PREFIX}/${CONDA_PREFIX}}
+-      NM=${NM//${HOST}/${BUILD}}
+-      STRIP=${STRIP//${HOST}/${BUILD}}
+-      BAZEL_TOOLCHAIN_AR=${BAZEL_TOOLCHAIN_AR//${HOST}/${BUILD}}
+       HOST=${BUILD}
+     fi
+     apply_cc_template cc_toolchain_build_config.bzl
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index db4de8a..d2d87ee 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -9,6 +9,8 @@ package:
+ build:
+   number: 0
+   skip: true  # [win]
++  script_env:
++    - GCC_HOME      #[ppc_arch == 'p10']
+ 
+ requirements:
+   run_constrained:
+@@ -18,9 +20,9 @@ requirements:
+ 
+ test:
+   requires:
+-    - {{ compiler('c') }}
+-    - {{ compiler('cxx') }}
+-    - bazel
++    - {{ compiler('c') }}         #[ppc_arch != 'p10']
++    - {{ compiler('cxx') }}       #[ppc_arch != 'p10']
++    - bazel {{ bazel }}
+ 
+ about:
+   home: https://github.com/conda-forge/bazel-toolchain-feedstock
+diff --git a/recipe/run_test.sh b/recipe/run_test.sh
+index 97fb190..f36695f 100644
+--- a/recipe/run_test.sh
++++ b/recipe/run_test.sh
+@@ -5,5 +5,36 @@ set -exuo pipefail
+ cp -r ${RECIPE_DIR}/tutorial .
+ cd tutorial
+ 
++
++if [[ $ppc_arch == "p10" ]]
++then
++    if [[ -z "${GCC_HOME}" ]];
++    then
++        echo "Please set GCC_HOME to the install path of gcc-toolset-12"
++        exit 1
++    else
++        export PATH=$GCC_HOME/bin:$PATH
++        export CC=$GCC_HOME/bin/gcc
++        export CXX=$GCC_HOME/bin/g++
++        export GCC=$CC
++        export GXX=$CXX
++        export AR=${GCC_HOME}/bin/ar
++        export LD=${GCC_HOME}/bin/ld.bfd
++        export NM=${GCC_HOME}/bin/nm
++        export OBJCOPY=${GCC_HOME}/bin/objcopy
++        export OBJDUMP=${GCC_HOME}/bin/objdump
++        export RANLIB=${GCC_HOME}/bin/ranlib
++        export STRIP=${GCC_HOME}/bin/strip
++        export READELF=${GCC_HOME}/bin/readelf
++        export HOST=powerpc64le-conda_cos7-linux-gnu
++        export BAZEL_LINKLIBS=-l%:libstdc++.a
++        export LDFLAGS="-L${GCC_HOME}/lib -L$PREFIX/lib -L$BUILD_PREFIX/lib"
++        export CFLAGS="-mcpu=power9 -mtune=power10"
++        export CXXFLAGS="-mcpu=power9 -mtune=power10"
++        export CPPFLAGS="-mcpu=power9 -mtune=power10"
++        export CONDA_BUILD_SYSROOT=""
++    fi
++fi
++
+ source gen-bazel-toolchain
+ bazel build --logging=6 --subcommands --verbose_failures --crosstool_top=//bazel_toolchain:toolchain --cpu ${TARGET_CPU} //main:hello-world 
+-- 
+2.34.1
+

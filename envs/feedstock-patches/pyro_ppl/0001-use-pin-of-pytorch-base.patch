@@ -1,0 +1,13 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 0b08ff8..29283bf 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -23,7 +23,7 @@ requirements:
+     - opt_einsum >=2.3.2
+     - pyro-api >=0.1.1
+     - python >=3.6
+-    - pytorch >=1.11
++    - pytorch-base {{ pytorch }}
+     - tqdm >=4.36
+ 
+ test:

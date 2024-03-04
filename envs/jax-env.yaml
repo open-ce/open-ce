@@ -1,0 +1,48 @@
+imported_envs:
+  - bazel-env.yaml
+  - common-deps.yaml
+  - openblas-env.yaml     #[not s390x]
+  - tensorflow-s390x-extra-deps-env.yaml
+
+packages:
+{% if build_type == 'cuda' %}
+  - feedstock : nccl
+  - feedstock : cudnn
+  - feedstock : cudatoolkit
+  - feedstock : https://github.com/conda-forge/nvcc-feedstock
+    git_tag : 9c8e43393d9c798c52a9d8e56785920ef767cabb
+    patches :
+      - feedstock-patches/nvcc/0001-Changes-for-open-ce.patch
+{% endif %}
+  - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
+    git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
+  - feedstock : https://github.com/conda-forge/pyink-feedstock.git
+    git_tag : 57646639a62389746e999980f0bcbf40258307de
+    patches :
+      - feedstock-patches/pyink/0001-Upadtes-for-open-ce.patch
+  - feedstock : https://github.com/conda-forge/black-feedstock.git
+    git_tag : 7bb21b29627bac864e4763dc65aaa52aa63deb23
+    patches :
+      - feedstock-patches/black/0001-Updates-for-open-ce-change.patch
+  - feedstock : https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
+    git_tag : 7ad703f99406292de8d0111655f989ba2fb3de64
+    patches :
+      - feedstock-patches/hatch-fancy-pypi-readme/0001-Upadtes-with-open-ce.patch
+  - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
+    git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
+    patches :                                               #[ppc_arch == 'p10']
+      - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
+  - feedstock : grpc-cpp
+  - feedstock: https://github.com/conda-forge/bazel-toolchain-feedstock
+    git_tag : 8da0f5daa593b72ffee327c8df149bab04b903bb
+    patches :                                                #[s390x or ppc_arch == 'p10']
+      - feedstock-patches/bazel-toolchain/0001-Patch-to-fix-s390x.patch                 #[s390x]
+      - feedstock-patches/bazel-toolchain/0001-P10-changes.patch                        #[ppc_arch == 'p10']
+  - feedstock : https://github.com/conda-forge/python-flatbuffers-feedstock
+    git_tag : 33360d623f714d44b2524320c8d2c5f3440ce435
+    patches :
+      - feedstock-patches/flatbuffers/0001-OpenCE-changes.patch
+  - feedstock : https://github.com/conda-forge/flatbuffers-feedstock
+    git_tag : 246926fe4b05d902071f4fdb12a33c338e0a7847
+  - feedstock : jax
+  - feedstock : jaxlib

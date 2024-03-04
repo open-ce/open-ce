@@ -10,7 +10,7 @@ runs:
     - name: Install dependencies and set envrionment
       shell: bash -l {0}
       run: |
-        conda install -y conda-build=3.21.7
+        conda install -y python=3.10 conda=23.7.3 conda-build=3.22
         echo "env_path=$GITHUB_ACTION_PATH/../../../envs" >> $GITHUB_ENV
         git clone https://github.com/open-ce/open-ce-builder.git \
                   ./open-ce-builder
@@ -28,5 +28,5 @@ runs:
         open-ce validate config \
                          ${env_path}/*-env.yaml \
                          --build_types cuda,cpu \
-                         --python_versions 3.8,3.9 \
+                         --python_versions 3.9,3.10,3.11 \
                          --repository_folder ../

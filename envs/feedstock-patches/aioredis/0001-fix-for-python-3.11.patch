@@ -1,0 +1,64 @@
+From 038208fcfb119628199dcb24967f3ce2588d2381 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Thu, 6 Jul 2023 11:13:07 +0000
+Subject: [PATCH] fix build for python 3.11
+
+---
+ ...duplicate-class-error-for-python3.11.patch | 31 +++++++++++++++++++
+ recipe/meta.yaml                              |  2 ++
+ 2 files changed, 33 insertions(+)
+ create mode 100644 recipe/0001-fix-duplicate-class-error-for-python3.11.patch
+
+diff --git a/recipe/0001-fix-duplicate-class-error-for-python3.11.patch b/recipe/0001-fix-duplicate-class-error-for-python3.11.patch
+new file mode 100644
+index 0000000..00f03f1
+--- /dev/null
++++ b/recipe/0001-fix-duplicate-class-error-for-python3.11.patch
+@@ -0,0 +1,31 @@
++From 753a1fffe6693a5d9b602aabbc4f32e4ad9ce774 Mon Sep 17 00:00:00 2001
++From: Deepali Chourasia <deepch23@in.ibm.com>
++Date: Tue, 4 Jul 2023 11:36:14 +0000
++Subject: [PATCH] fix duplicate class error for python3.11
++
++---
++ aioredis/exceptions.py | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/aioredis/exceptions.py b/aioredis/exceptions.py
++index e4c2ed1..7dc89f8 100644
++--- a/aioredis/exceptions.py
+++++ b/aioredis/exceptions.py
++@@ -1,5 +1,4 @@
++ """Core exceptions raised by the Redis client"""
++-import asyncio
++ import builtins
++ 
++ 
++@@ -11,7 +10,7 @@ class ConnectionError(RedisError):
++     pass
++ 
++ 
++-class TimeoutError(asyncio.TimeoutError, builtins.TimeoutError, RedisError):
+++class TimeoutError(builtins.TimeoutError, RedisError):
++     pass
++ 
++ 
++-- 
++2.34.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 451f045..722f753 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -8,6 +8,8 @@ package:
+ source:
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+   sha256: eaa51aaf993f2d71f54b70527c440437ba65340588afeb786cd87c55c89cd98e
++  patches:
++    - 0001-fix-duplicate-class-error-for-python3.11.patch
+ 
+ build:
+   number: 0
+-- 
+2.34.1
+

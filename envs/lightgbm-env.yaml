@@ -1,13 +1,10 @@
-builder_version: ">=10.0.1"
-
-imported_envs:
-  - scipy-env.yaml
+builder_version: ">=13.0.0"
 
 packages:
-{% if not s390x %}
-  {% if build_type == 'cuda' %}
-    - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.4"]
-  {% endif %}
-    - feedstock : LightGBM
-    - feedstock : openmpi          #[mpi_type == 'openmpi']
+{% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit
 {% endif %}
+  - feedstock : LightGBM
+  - feedstock : https://github.com/conda-forge/joblib-feedstock
+    git_tag : 0321370cf00a8b3c27910f16e7afa71b5a041174
+  - feedstock : openmpi          #[mpi_type == 'openmpi']

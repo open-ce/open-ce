@@ -1,0 +1,38 @@
+From 2f43d8f40963bebeb889fb6fa60eca89fc0a7a66 Mon Sep 17 00:00:00 2001
+From: Archana Shinde <archana.shinde2504@gmail.com>
+Date: Fri, 14 Apr 2023 07:23:09 -0400
+Subject: [PATCH] p10 changes
+
+---
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 490cbb8..a3f15d6 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -25,8 +25,8 @@ outputs:
+         - python
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}     #[ppc_arch != 'p10']
++        - {{ compiler('cxx') }}   #[ppc_arch != 'p10']
+         - cmake >=3.18
+         - ninja
+         - pkg-config
+@@ -80,8 +80,8 @@ outputs:
+ 
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}       #[ppc_arch != 'p10']
++        - {{ compiler('cxx') }}     #[ppc_arch != 'p10']
+         - cmake >=3.18
+         - git
+         - ninja
+-- 
+2.34.1
+

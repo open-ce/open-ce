@@ -1,0 +1,80 @@
+From 8643d5cfd1c449b29beefaf572b4d5ca70bf559e Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <aman_surkar@persistent.com>
+Date: Fri, 5 Jan 2024 09:02:43 +0000
+Subject: [PATCH] opence-changes
+
+---
+ recipe/meta.yaml | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8c27652..43ee80b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -12,6 +12,7 @@ source:
+     - patches/0001-don-t-fork-on-windows.patch  # [win]
+ 
+ build:
++  string: opence_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+   number: 1
+   missing_dso_whitelist:
+     - /usr/lib/libresolv.9.dylib  # [osx]
+@@ -26,24 +27,25 @@ build:
+     - export OPENSSL_DIR=$PREFIX
+     {% endif %}
+     - cd bindings/python
+-    - {{ PYTHON }} -m pip install . -vv
++    - {{ PYTHON }} -m pip install . -vv .
+ 
+ requirements:
+   build:
+     - python                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-    - openssl                                # [build_platform != target_platform]
++    - openssl
+     - maturin >=1.0,<2.0                     # [build_platform != target_platform]
+     - {{ compiler('cxx') }}
+     - {{ compiler('rust') }}
+   host:
+     - python
+-    - pip
++    - pip 23
+     - maturin >=1.0,<2.0
+-    - openssl    # [linux]
++    - openssl
+   run:
+     - python
+     - huggingface_hub >=0.16.4,<1.0
++    - openssl
+ 
+ test:
+   imports:
+@@ -58,13 +60,14 @@ test:
+   requires:
+     - pip
+     - pytest
+-    - datasets
++    - tqdm
+     - numpy *
+     - requests
+     - curl *
+     # temp: fix until https://github.com/conda-forge/multiprocess-feedstock/pull/46
+     # percolates far enough so that the solver doesn't pull in an old version anymore
+     - dill >=0.3.6
++    - huggingface_hub
+   source_files:
+     - bindings/python/tests
+   commands:
+@@ -77,7 +80,8 @@ test:
+     {% set tests_to_skip = "_not_a_real_test" %}
+     # windows and expectation of forking -> not gonna happen
+     {% set tests_to_skip = tests_to_skip + " or with_parallelism" %}  # [win]
+-    - pytest -v tests -k "not ({{ tests_to_skip }})"
++    {% set tests_to_skip = tests_to_skip + " or test_datasets" %}
++    - pytest -v tests -k "not ({{ tests_to_skip }})" --ignore=tests/documentation/test_tutorial_train_from_iterators.py
+ 
+ about:
+   home: https://pypi.org/project/tokenizers/
+-- 
+2.40.1
+

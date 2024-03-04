@@ -1,32 +1,34 @@
-builder_version: ">=10.0.1"
+builder_version: ">=13.0.0"
 
 imported_envs:
 {% if not s390x %}
-{% if build_type == 'cpu' %}
   - arrow-env.yaml
   - tensorflow-env.yaml
-  - scipy-env.yaml
 {% endif %}
 
 packages:
-{% if build_type == 'cpu' %}
-  - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
+{% if not s390x %}
+  - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git 
     git_tag: 312dca71c6d5a752ad6a2ab7c0a65a55b71a3e81
     patches:
-      -  feedstock-patches/unicorn/0001-remove-unicode-char-from-summary.patch
+      - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
+      - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
+  - feedstock : https://github.com/AnacondaRecipes/cfitsio-feedstock
+    git_tag: f965e25fdec2b5dee0965cfaf2635384ae8e16ed
+    patches: 
+      - feedstock-patches/cfitsio/0001-Open-ce-changes.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : b8e09882d12c58fd3f4ebd3db4bc70fb7b7146ee
+    git_tag : af1e1b369a2327a4a4b7d52a9a8579454729dd07
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
     git_tag : 1431680c5d1e8b842704ce40ced10377cade59e7
-  - feedstock : https://github.com/conda-forge/gym-feedstock
-    git_tag: 2a7ffecb73b770d6889ec06e133bd3cfe8c02041
-    patches:
-      - feedstock-patches/gym/0001-Removed-recipes-for-packages-other-than-gym.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
-    git_tag : 7e7e8d4a74719ba7ce134ecf7b317c44c1cf39a9
+    git_tag : 6c88fc1f9d47e348479edf4a7e28742b2cb49dcb
   - feedstock : dm-tree
+  - feedstock : https://github.com/AnacondaRecipes/opencensus-feedstock
+    git_tag : 29535305e9e7456f6b82758366a581cfa8512bfd
+    patches :
+      - feedstock-patches/opencensus/0001-Remove-constraint-from-google-api-core.patch 
   - feedstock : ray-packages
-{% endif %}
 {% endif %}

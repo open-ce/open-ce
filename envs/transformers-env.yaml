@@ -1,14 +1,23 @@
-builder_version: ">=10.0.1"
+builder_version: ">=13.0.0"
 
 packages:
-{% if not s390x %}
-  - feedstock : https://github.com/conda-forge/rust-feedstock.git
-    git_tag : 429557ee73ad0f98221df7260733506ac03d30ae
+{% if s390x %}
+  - feedstock : https://github.com/AnacondaRecipes/libvpx-feedstock
+    git_tag : c34e6177a29623e268c6533d19a3d5efebd13711
     patches :
-            - feedstock-patches/transformer/0001-fix-to-build-with-rust.patch
-  - feedstock : tokenizers
-  - feedstock : huggingface_hub
-  - feedstock : sacremoses
-  - feedstock : sentencepiece
-  - feedstock : transformers
+      - feedstock-patches/libvpx/0001-enable-libvpx-for-s390x.patch
+  - feedstock : https://github.com/AnacondaRecipes/yasm-feedstock
+    git_tag : 94a331b4ddce69c3c105ff97e54d659dcdecd25e
 {% endif %}
+  - feedstock : https://github.com/conda-forge/rust-feedstock
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
+    patches :                                                                         #[s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
+  - feedstock: https://github.com/conda-forge/tokenizers-feedstock
+    git_tag : f02f2b6c9c4c455115acc5f248c944d00e2a11b6
+    patches :
+      - feedstock-patches/tokenizers/0001-opence-changes.patch
+  - feedstock : https://github.com/conda-forge/transformers-feedstock
+    git_tag : 5c5e81e32ee569fe7de10f3505eb20ed7e871e6c
+  - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
+    git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2

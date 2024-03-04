@@ -1,0 +1,61 @@
+builder_version: ">=13.0.0"
+
+imported_envs:
+{% if not s390x %}
+  - openblas-env.yaml
+{% endif %}
+  - common-deps.yaml
+
+packages:
+{% if not s390x %}
+  - feedstock : https://github.com/conda-forge/coin-or-utils-feedstock
+    git_tag : b1aaa52731225e0f6cf27e98772ad9843899a2e9
+    patches :
+      - feedstock-patches/coin_or_utils/0001-configure-openblas.patch
+      - feedstock-patches/coin_or_utils/0001-p10-build-change.patch           #[ppc_arch == "p10"]
+  - feedstock : https://github.com/conda-forge/coin-or-osi-feedstock.git
+    git_tag : 697a1fac1bba42eb7d4e7dce3bb23d3036ea6679
+    patches :
+      - feedstock-patches/coin_or_osi/0001-Configure-openblas.patch
+      - feedstock-patches/coin_or_osi/0001-p10-build-change.patch       #[ppc_arch == "p10"]
+  - feedstock : https://github.com/conda-forge/coin-or-clp-feedstock.git
+    git_tag : d1523c92392c5696b0845dec0e8bd2b8edfe0735
+    patches :
+      - feedstock-patches/coin_or_clp/0001-configure-openblas.patch
+      - feedstock-patches/coin_or_clp/0001-p10-build-change.patch       #[ppc_arch == "p10"]
+  - feedstock : https://github.com/conda-forge/coin-or-cgl-feedstock.git
+    git_tag : 99e5f29f329a6df7bdc2b7572500110f339471a3
+    patches :
+      - feedstock-patches/coin_or_cgl/0001-Configure-openblas.patch
+      - feedstock-patches/coin_or_cgl/0001-p10-build-change.patch       #[ppc_arch == "p10"]
+  - feedstock : https://github.com/conda-forge/coin-or-cbc-feedstock.git
+    git_tag : 0006eed887b517679525b7d1a709e9a046836b6d
+    patches :
+      - feedstock-patches/coin_or_cbc/0001-add-runtime-dependancy-openblas.patch
+      - feedstock-patches/coin_or_cbc/0001-p10-build-change.patch        #[ppc_arch == "p10"]
+  - feedstock : https://github.com/conda-forge/mypy-protobuf-feedstock.git
+    git_tag : 8c3a61a32ad7a09e8415a533ee58788d40138b50
+    patches :
+      - feedstock-patches/mypy_protobuf/0001-pin-protobuf.patch
+  - feedstock : https://github.com/conda-forge/types-protobuf-feedstock.git
+    git_tag : 9f8e11bda4a6e61c391acfdc1d31d5c067d350ff
+  - feedstock : https://github.com/conda-forge/types-futures-feedstock.git
+    git_tag : 727ace026b68af15332f3d655cd2ef5306351932
+  - feedstock : https://github.com/conda-forge/eigen-feedstock.git
+    git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
+  - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
+    git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
+    patches :                                                 #[ppc_arch == 'p10']
+      - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
+  - feedstock : https://github.com/AnacondaRecipes/absl-py-feedstock
+    git_tag : be1d3b7f51b3f9896c92709885faa1819f4bd6c9
+    patches :      
+      - feedstock-patches/absl-py/0001-Updated-absl-py-to-2.0.0.patch
+  - feedstock : https://github.com/conda-forge/or-tools-feedstock.git
+    git_tag : 592415a03e8ec945600fb85270fd68f6fad9cabb
+    patches :
+      - feedstock-patches/or_tools/0001-update-pin-dependencies.patch
+      - feedstock-patches/or_tools/0001-Post-build-test-dir.patch
+      - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
+      - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le]
+{% endif %}

@@ -1,0 +1,51 @@
+From aba181895f490e3aacec1133b933d28e1e5971b4 Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <aman_surkar@persistent.com>
+Date: Wed, 28 Feb 2024 10:45:29 +0000
+Subject: [PATCH] Opence changes for tiktoken
+
+---
+ recipe/meta.yaml | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b6c7378..ad2e16f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -12,26 +12,26 @@ source:
+ build:
+   script:
+     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+-    - {{ PYTHON }} -m pip install . -vv
++    - {{ PYTHON }} -m pip install . --no-deps -vv
+   number: 0
+ 
+ requirements:
+   build:
+-    - python                                 # [build_platform != target_platform]
++    - python {{python}}                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+     - {{ compiler('cxx') }}
+     - {{ compiler('rust') }}
+     - cargo-bundle-licenses
+   host:
+-    - python
+-    - setuptools >=62.4
++    - python {{python}}
++    - setuptools {{setuptools}}
+     - wheel
+-    - setuptools-rust >=1.5.2
+-    - pip
++    - setuptools-rust {{setuptools_rust}}
++    - pip {{pip}}
+   run:
+-    - python
++    - python {{python}}
+     - regex >=2022.1.18
+-    - requests >=2.26.0
++    - requests {{requests}}
+ 
+ test:
+   imports:
+-- 
+2.40.1
+

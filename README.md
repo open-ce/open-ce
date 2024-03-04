@@ -4,8 +4,8 @@
   <img src="https://avatars0.githubusercontent.com/u/68873540?s=400&u=a02dc4156e50cdffb23172aba7133e44381885d4&v=4" alt="Open-CE Logo" width="30%">
 </p>
 
-[![Python Support](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue.svg)](#requirements)
-[![Cuda Support](https://img.shields.io/badge/cuda-11.0%20%7C%2011.2-blue)](#)
+[![Python Support](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue.svg)](#requirements)
+[![Cuda Support](https://img.shields.io/badge/cuda-11.8%20%7C%2012.2%20-blue)](#)
 [![Architecture Support](https://img.shields.io/badge/architecture-x86%20%7C%20ppc64le%20%7C%20s390x-blue)](#)
 [![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
 ---
@@ -24,18 +24,30 @@ be specified at build time. Open-CE currently supports the following:
 | | Supported Versions | |
 | --- | --- |
 | Architecture | Power, x86, s390x |
-| Python | 3.8, 3.9 |
-| CUDA | 11.2 11.4 |
+| Python | 3.9, 3.10, 3.11 |
+| CUDA | 11.8, 12.2 |
 
 
 The `open-ce` tool can also be used to build all or some of the packages provided by Open-CE. For more information on the `open-ce` tool,
 please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-builder).
 
+#### Open-CE Builder compatibility with various Open-CE releases
+| Open-CE version         | Open-CE Builder version |
+|-------------------------|-------------------------|
+| All releases upto 1.5.2 | <=9.0.0                 |
+| >= 1.5.3                | 9.0.0                   |
+| 1.6.0                   | 10.0.0                  |
+| 1.6.1                   | 10.0.3                  |
+| 1.7.8                   | >=12.0.1                |
+| 1.8.1                   | >=12.0.1                |
+| 1.9.1                   | >=12.0.1                |
+| 1.10.0                  | >=12.0.1                |
+
 ## GETTING STARTED
 
 ### Requirements
 
-* `conda` == 4.12
+* `conda`
   * The conda tool can either be installed through [Anaconda](https://www.anaconda.com/products/individual#Downloads) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 ### Community Builds
@@ -45,6 +57,12 @@ channels provide packages for both Power and x86 architectures. The latest versi
 https://ftp.osuosl.org/pub/open-ce/current/.
 
 MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple versions of Open-CE are hosted within this single channel: https://opence.mit.edu/.
+
+### Builds with Enterprise Production Support
+
+Rocket Software hosts pre-built versions of the Open-CE at conda channel [here](https://anaconda.org/rocketce). This channel provides packages for Power architecture(ppc64le). The latest version of Open-CE can be pulled down using the mentioned channel.
+
+In order to get notification you can register at https://community.rocketsoftware.com/forums/forum-home/community-members?communitykey=c7ece6e8-5a29-4a17-a2bc-68b65f89d29f. Please reach out to jadhavs@rocketsoftware.com for any questions and enquiries.
 
 ### Installing Packages
 

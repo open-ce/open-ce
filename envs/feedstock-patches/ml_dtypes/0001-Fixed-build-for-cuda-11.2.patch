@@ -1,0 +1,24 @@
+From 2f3c98cb8fe6c03585c4e21808fdbebb4e4d59ab Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 27 Apr 2023 15:02:41 +0000
+Subject: [PATCH] Fixed cuda 11.2 builds
+
+---
+ config/conda_build_config.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 config/conda_build_config.yaml
+
+diff --git a/config/conda_build_config.yaml b/config/conda_build_config.yaml
+new file mode 100644
+index 0000000..a886137
+--- /dev/null
++++ b/config/conda_build_config.yaml
+@@ -0,0 +1,5 @@
++c_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
++cxx_compiler_version:
++  - 11.*          # [cudatoolkit == "11.2"]
++
+-- 
+2.34.1
+

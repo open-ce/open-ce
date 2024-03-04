@@ -1,6 +1,7 @@
-builder_version: ">=10.0.1"
+builder_version: ">=13.0.0"
 
 imported_envs:
+  - common-deps.yaml
   - openblas-env.yaml
   - onnx-env.yaml
   - pytorch-env.yaml
@@ -9,20 +10,34 @@ imported_envs:
   - tensorflow-env.yaml
   - xgboost-env.yaml
   - dali-env.yaml
-  - spacy-env.yaml
-  - transformers-env.yaml
   - horovod-env.yaml
   - lightgbm-env.yaml
   - arrow-env.yaml
-  - uwsgi-env.yaml
   - mamba-env.yaml
-  - ray-env.yaml
+  - jax-env.yaml
+#  - ray-env.yaml
+  - apache-beam-env.yaml
+  - prophet-env.yaml
+  - orbit-ml-env.yaml
+  - deepspeed-env.yaml
+  - misc-env.yaml
+  - or-tools-env.yaml
+#  - tensorflow-serving-env.yaml
+  - transformers-env.yaml
+#  - openssl-env.yaml
+  - ffmpeg-env.yaml
+  - langchain-env.yaml
 
 packages:
-  - feedstock : https://github.com/AnacondaRecipes/h5py-feedstock  #[(build_type == 'cpu' or cudatoolkit == "11.4") and not s390x]
-    git_tag : 4d8e6c1ec80d3dfa1fe78ed4eab0bc22340516f9   # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-    patches:                                             # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-      - feedstock-patches/h5py/0001-Fixed-h5py.patch     # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]
-      - feedstock-patches/h5py/0001-P10-changes.patch    # [(build_type == 'cpu' or cudatoolkit == '11.4') and not s390x]              
-  - feedstock : opencv   # [not s390x]
+  - feedstock : https://github.com/conda-forge/joblib-feedstock
+    git_tag : 0321370cf00a8b3c27910f16e7afa71b5a041174
+  - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
+    git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
+  - feedstock : https://github.com/conda-forge/datasets-feedstock.git
+    git_tag : 2526f9639ccb6c0e9626e2f7c20849f78fa099c0
+    patches:
+      - feedstock-patches/datasets/0001-Pin-dependencies.patch
+  - feedstock : https://github.com/conda-forge/eigen-feedstock.git
+    git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
+  - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']

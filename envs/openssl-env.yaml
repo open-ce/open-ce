@@ -1,0 +1,39 @@
+builder_version: ">=13.0.0"
+
+packages:
+{% if s390x %}
+  - feedstock : https://github.com/AnacondaRecipes/libvpx-feedstock
+    git_tag : c34e6177a29623e268c6533d19a3d5efebd13711
+    patches :
+      - feedstock-patches/libvpx/0001-enable-libvpx-for-s390x.patch
+  - feedstock : https://github.com/AnacondaRecipes/yasm-feedstock
+    git_tag : 94a331b4ddce69c3c105ff97e54d659dcdecd25e
+{% endif %}
+#  - feedstock: openssl
+  - feedstock : https://github.com/conda-forge/rust-feedstock
+    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
+    patches :                                                                         #[s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : df83e9f4c99787a3c68f892a5808623484527a95
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock
+    git_tag : 9a5d0096892ec8c0a990026fef0b641160dcfaa1
+    patches:
+      - feedstock-patches/cryptography/0001-Update-to-v41.0.4.patch
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock
+    git_tag : da99f6d9c556d180dec326a941f2d8293819a113
+    patches:
+      - feedstock-patches/cryptography-vectors/0001-Update-to-v41.0.4.patch
+  - feedstock: https://github.com/conda-forge/tokenizers-feedstock
+    git_tag : f02f2b6c9c4c455115acc5f248c944d00e2a11b6
+    patches :
+      - feedstock-patches/tokenizers/0001-opence-changes.patch        
+     
+  # duplicates the ffmpeg feedstock used in the ffmpeg env.
+  # having ffmpeg here, eases building ffmpeg via builder for FIPS
+  - feedstock : https://github.com/AnacondaRecipes/ffmpeg-feedstock
+    git_tag : 57ca332013295a161307fa10afdae2197a56cc93
+    patches :
+      - feedstock-patches/ffmpeg/0001-disable-codecs-for-opence.patch
