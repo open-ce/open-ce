@@ -1,0 +1,14 @@
+builder_version: ">=10.0.1"
+
+packages:
+  - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
+    git_tag : 7534e99fe8f61a0bfae25fa4638d4dd287ce793a 
+#    runtime_package : False
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock   # [ppc64le]
+    git_tag : 9d12eb05b8a22b180e0a39b94219eecb2a91dc50                     # [ppc64le]
+  - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock      #[ppc64le]
+    git_tag : 9d66a43b9fdbde3f825b619cdd2d8c37b81c3262                                #[ppc64le]
+  - feedstock : https://github.com/conda-forge/pyopenssl-feedstock         # [ppc64le]
+    git_tag : 573623854daf9f0ba268b33d19bebbd0adfee0ef                     # [ppc64le]
+
+git_tag_for_env: open-ce-v1.9.4

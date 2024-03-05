@@ -1,0 +1,42 @@
+From 2bfe4832c169d4dbcee1223da95eb52f8effd7b9 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Tue, 5 Mar 2024 09:28:47 +0000
+Subject: [PATCH] changes to build v42.0.4 for opence
+
+---
+ recipe/meta.yaml | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 2a8790f..797dcf1 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,4 +1,4 @@
+-{% set version = "42.0.2" %}
++{% set version = "42.0.4" %}
+ 
+ package:
+   name: cryptography
+@@ -6,7 +6,7 @@ package:
+ 
+ source:
+   url: https://pypi.io/packages/source/c/cryptography/cryptography-{{ version }}.tar.gz
+-  sha256: e0ec52ba3c7f1b7d813cd52649a5b3ef1fc0d433219dc8c93827c57eab6cf888
++  sha256: 831a4b37accef30cccd34fcb916a5d7b5be3cbbe27268a02832c3e450aea39cb
+ 
+ build:
+   number: 0
+@@ -30,8 +30,9 @@ requirements:
+     - setuptools >=61.0.0
+     - setuptools-rust >=1.7.0
+     - wheel
+-    - openssl {{openssl}}
++    - openssl
+     - cffi 1.15.1
++    - tomli
+   run:
+     - python
+     - cffi >=1.12
+-- 
+2.40.1
+
