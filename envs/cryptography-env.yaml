@@ -6,8 +6,12 @@ packages:
 #    runtime_package : False
   - feedstock: https://github.com/AnacondaRecipes/cryptography-feedstock   # [ppc64le]
     git_tag : 9d12eb05b8a22b180e0a39b94219eecb2a91dc50                     # [ppc64le]
+    patches :                                                              # [ppc64le]
+      - feedstock-patches/cryptography/0001-changes-to-build-v42.0.4-for-opence.patch #[ppc64le]
   - feedstock: https://github.com/AnacondaRecipes/cryptography-vectors-feedstock      #[ppc64le]
     git_tag : 9d66a43b9fdbde3f825b619cdd2d8c37b81c3262                                #[ppc64le]
+    patches :                                                                                  #[ppc64le]
+      - feedstock-patches/cryptography-vectors/0001-changes-to-build-v42.0.4-for-opence.patch  #[ppc64le]
   - feedstock : https://github.com/conda-forge/pyopenssl-feedstock         # [ppc64le]
     git_tag : 573623854daf9f0ba268b33d19bebbd0adfee0ef                     # [ppc64le]
 
