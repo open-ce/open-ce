@@ -1,6 +1,6 @@
-From 63b58857968f787044d84b6f9c9922558e9946c7 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 11 May 2023 11:17:07 +0000
+From db12d9eb350eb217418421066c53fc17f3d573e9 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 6 Mar 2024 08:52:37 +0000
 Subject: [PATCH] P10 changes
 
 ---
@@ -12,7 +12,7 @@ Subject: [PATCH] P10 changes
  5 files changed, 70 insertions(+), 18 deletions(-)
 
 diff --git a/recipe/bazel_toolchain/cc_toolchain_config.bzl b/recipe/bazel_toolchain/cc_toolchain_config.bzl
-index b91aa80..b4c8719 100644
+index b91aa80..e5cc10c 100644
 --- a/recipe/bazel_toolchain/cc_toolchain_config.bzl
 +++ b/recipe/bazel_toolchain/cc_toolchain_config.bzl
 @@ -26,15 +26,15 @@ def _impl(ctx):
@@ -48,9 +48,9 @@ index b91aa80..b4c8719 100644
              cxx_builtin_include_directories.append("${CUDA_HOME}/include")
              cxx_builtin_include_directories.append("${CUDA_HOME}/targets/x86_64-linux/include/")
 +        if ("${PPC_ARCH}" == "p10"):
-+            cxx_builtin_include_directories.append("${GCC_HOME}/lib/gcc/ppc64le-redhat-linux/11/include")
++            cxx_builtin_include_directories.append("${GCC_HOME}/lib/gcc/ppc64le-redhat-linux/12/include")
 +            cxx_builtin_include_directories.append("${GCC_HOME}/include")
-+            cxx_builtin_include_directories.append("${GCC_HOME}/include/c++/11")
++            cxx_builtin_include_directories.append("${GCC_HOME}/include/c++/12")
  
      return cc_common.create_cc_toolchain_config_info(
          ctx = ctx,
@@ -68,7 +68,7 @@ index e48e941..1c1e1e5 100644
  cp ${RECIPE_DIR}/gen-bazel-toolchain $PREFIX/bin/
  mkdir -p $PREFIX/share
 diff --git a/recipe/gen-bazel-toolchain b/recipe/gen-bazel-toolchain
-index 4eddb0f..2062179 100755
+index 4eddb0f..ef3bd18 100755
 --- a/recipe/gen-bazel-toolchain
 +++ b/recipe/gen-bazel-toolchain
 @@ -30,6 +30,7 @@ function apply_cc_template() {
@@ -141,7 +141,7 @@ index 4eddb0f..2062179 100755
      fi
      apply_cc_template cc_toolchain_build_config.bzl
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index db4de8a..d2d87ee 100644
+index db4de8a..dea132b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -9,6 +9,8 @@ package:
@@ -167,7 +167,7 @@ index db4de8a..d2d87ee 100644
  about:
    home: https://github.com/conda-forge/bazel-toolchain-feedstock
 diff --git a/recipe/run_test.sh b/recipe/run_test.sh
-index 97fb190..f36695f 100644
+index 97fb190..36274d1 100644
 --- a/recipe/run_test.sh
 +++ b/recipe/run_test.sh
 @@ -5,5 +5,36 @@ set -exuo pipefail
@@ -208,5 +208,5 @@ index 97fb190..f36695f 100644
  source gen-bazel-toolchain
  bazel build --logging=6 --subcommands --verbose_failures --crosstool_top=//bazel_toolchain:toolchain --cpu ${TARGET_CPU} //main:hello-world 
 -- 
-2.34.1
+2.40.1
 
