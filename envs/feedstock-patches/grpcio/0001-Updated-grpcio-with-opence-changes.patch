@@ -1,20 +1,20 @@
-From 0b30b5b5a4d44697750c54a9f49868c18c449a9d Mon Sep 17 00:00:00 2001
+From 7a0f4dca6f0598e3a732071134ac90519aba5d9c Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Mon, 4 Mar 2024 08:55:06 +0000
+Date: Wed, 6 Mar 2024 10:40:38 +0000
 Subject: [PATCH] Updated-grpcio-with-opence-changes
 
 ---
- 0001-Fix-openssl-for-s390x.patch | 25 +++++++++++++++++++++++
- recipe/build.sh                  | 16 +++++++++++----
- recipe/meta.yaml                 | 34 ++++++++++++++++----------------
+ recipe/0001-Fix-openssl-for-s390x.patch | 25 ++++++++++++++++++
+ recipe/build.sh                         | 16 +++++++++---
+ recipe/meta.yaml                        | 34 ++++++++++++-------------
  3 files changed, 54 insertions(+), 21 deletions(-)
- create mode 100644 0001-Fix-openssl-for-s390x.patch
+ create mode 100644 recipe/0001-Fix-openssl-for-s390x.patch
 
-diff --git a/0001-Fix-openssl-for-s390x.patch b/0001-Fix-openssl-for-s390x.patch
+diff --git a/recipe/0001-Fix-openssl-for-s390x.patch b/recipe/0001-Fix-openssl-for-s390x.patch
 new file mode 100644
 index 0000000..c19e123
 --- /dev/null
-+++ b/0001-Fix-openssl-for-s390x.patch
++++ b/recipe/0001-Fix-openssl-for-s390x.patch
 @@ -0,0 +1,25 @@
 +From a193a4b60e67a4716baf6e56c1e6190bb440e3bc Mon Sep 17 00:00:00 2001
 +From: Aman Surkar <Aman.Surkar@ibm.com>
