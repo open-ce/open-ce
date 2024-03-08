@@ -11,16 +11,6 @@ packages:
     git_tag: 8bfee448e77492920c23780385dddc5982947e58
   - feedstock : https://github.com/AnacondaRecipes/glog-feedstock
     git_tag: b6c2a87be675b6bf46a8b158372610926a74857b
-  - feedstock : https://github.com/AnacondaRecipes/boost-cpp-feedstock
-    git_tag: 95c6649b96a11fb439d04fe36cc645720d156afb
-    patches:
-      - feedstock-patches/boost_cpp/build-only-required.patch
-  - feedstock : https://github.com/AnacondaRecipes/libevent-feedstock
-    git_tag: 2417ee9ec9baafa03fd8d4970e48a70c3e55d249
-    patches:
-      - feedstock-patches/libevent/s390x-fix1.patch
-  - feedstock : https://github.com/AnacondaRecipes/thrift-cpp-feedstock
-    git_tag: 09e3838f8caaa3ab9728b111620422dd524459e1
 {% endif %}
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit

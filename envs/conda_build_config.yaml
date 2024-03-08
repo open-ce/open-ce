@@ -26,7 +26,7 @@ bsddb3:
   - 6.2.9
 boost:
   - 1.73.0  # [not s390x]
-  - 1.65.*  # [s390x]
+  - 1.82.*  # [s390x]
 boost_mp11:
   - 1.76.*
 c_compiler_version:
