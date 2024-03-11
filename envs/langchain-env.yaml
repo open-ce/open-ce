@@ -19,6 +19,8 @@ packages:
     git_tag : 010eb770882b877d27c5dde1fe6ed66db56d284a
   - feedstock : https://github.com/conda-forge/langchain-community-feedstock.git
     git_tag : 6ec329ff0dbae6943c5ccfba0163ebb17903bc19
+    patches :
+           - feedstock-patches/langchain-community/0001-changes-for-opence.patch
   - feedstock : https://github.com/conda-forge/langchain-core-feedstock.git
     git_tag : 11e865add3303da3f3ffae317dd6c75443d481bb
   - feedstock : https://github.com/conda-forge/langchain-feedstock.git
