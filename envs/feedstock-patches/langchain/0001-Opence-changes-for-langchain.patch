@@ -1,6 +1,6 @@
-From d4252884b1a8356a7bcc5fe478af6137c515f036 Mon Sep 17 00:00:00 2001
+From 2b0b943ead07da33173a59d208b1ff3f3fa5a85f Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Mon, 11 Mar 2024 08:42:22 +0000
+Date: Tue, 12 Mar 2024 14:48:51 +0000
 Subject: [PATCH] Opence changes for langchain
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] Opence changes for langchain
  1 file changed, 7 insertions(+), 94 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 1739753..61643d1 100644
+index 1739753..d656faf 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -13,116 +13,29 @@ build:
@@ -22,13 +22,13 @@ index 1739753..61643d1 100644
  requirements:
    host:
 -    - python >=3.8,<4.0
-+    - python {{python}}
++    - python
      - poetry-core >=1.0.0
 -    - pip
 +    - pip {{pip}}
    run:
 -    - python >=3.8,<4.0
-+    - python {{python}}
++    - python
      - langchain-core >=0.1.22,<0.2
      - langchain-community >=0.0.18,<0.1
 -    - pydantic >=1,<3
