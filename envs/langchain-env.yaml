@@ -1,10 +1,13 @@
 builder_version: ">=13.0.0"
 
 imported_envs:
+{% if not s390x %}
   - pytorch-env.yaml
   - common-deps.yaml
+{% endif %}
 
 packages:
+{% if not s390x %}
   - feedstock : https://github.com/conda-forge/tiktoken-feedstock.git
     git_tag : 9e4540dd98fa5628afb9a8bc1cbf25c5197fcfe6
     patches :
@@ -27,3 +30,4 @@ packages:
     git_tag : 6431d8c54b8a22424fcb639590691802469c375f
     patches :
            - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch
+{% endif %}
