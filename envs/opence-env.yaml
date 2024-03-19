@@ -39,5 +39,7 @@ packages:
       - feedstock-patches/datasets/0001-Pin-dependencies.patch
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
+  - feedstock : https://github.com/conda-forge/llvmlite-feedstock.git   #[s390x]
+    git_tag : a404f49637b5c3bbd9f0687dfc09de289208f5a6                  #[s390x]
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
