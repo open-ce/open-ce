@@ -52,5 +52,7 @@ packages:
     git_tag : d003de7de0238b34da02a77b3e574a0495015987
   - feedstock : https://github.com/conda-forge/aioredis-feedstock
     git_tag : fbfc6b513846aff97772f21b90ad0d0555884186
+    patches:
+      - feedstock-patches/aioredis/0001-Fix-to-not-to-use-python-3.11-for-test-stage.patch
 {% endif %}
 git_tag_for_env: open-ce-v1.8.1
