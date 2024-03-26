@@ -1,0 +1,24 @@
+From c8a1ef66605c3247e6dedc4c3722c1d84f4aabdc Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Tue, 26 Mar 2024 12:52:05 +0000
+Subject: [PATCH] Removed pytest-subtests
+
+---
+ recipe/meta.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b434b07..1a48fd6 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -25,7 +25,6 @@ requirements:
+     - python >=3.8.1,<4.0
+     - pydantic >=1.0.0,<3.0.0
+     - requests >=2.0.0,<3.0.0
+-    - pytest-subtests >=0.11.0,<0.12.0
+ 
+ test:
+   imports:
+-- 
+2.40.1
+
