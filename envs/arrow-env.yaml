@@ -4,14 +4,6 @@ imported_envs:
   - common-deps.yaml
 
 packages:
-{% if s390x %}
-  - feedstock : https://github.com/AnacondaRecipes/rapidjson-feedstock
-    git_tag: 3ccf90746229705d0802944babd62fe8fadb7d19
-  - feedstock : https://github.com/AnacondaRecipes/gflags-feedstock
-    git_tag: 8bfee448e77492920c23780385dddc5982947e58
-  - feedstock : https://github.com/AnacondaRecipes/glog-feedstock
-    git_tag: b6c2a87be675b6bf46a8b158372610926a74857b
-{% endif %}
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit
 {% endif %}
