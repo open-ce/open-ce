@@ -1,32 +1,36 @@
-From 37c48ecfefbf23ac0c81215433c3815168334396 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Thu, 20 Jul 2023 08:35:49 +0000
-Subject: [PATCH] Post build test dir
+From 88ec3aa4bc52e90cc3c6d039962167fd01cc5148 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Wed, 27 Mar 2024 11:51:47 +0000
+Subject: [PATCH] add tests dir
 
 ---
- tests/open-ce-tests.yaml | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ tests/open-ce-tests.yaml | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
  create mode 100644 tests/open-ce-tests.yaml
 
 diff --git a/tests/open-ce-tests.yaml b/tests/open-ce-tests.yaml
 new file mode 100644
-index 0000000..312c941
+index 0000000..4b1cc74
 --- /dev/null
 +++ b/tests/open-ce-tests.yaml
-@@ -0,0 +1,18 @@
+@@ -0,0 +1,22 @@
 +tests:
 +  - name: Setup ortools Tests
 +    command: |
-+        conda install -y git
++        python -c "import ortools; print(ortools.__version__)"
++        conda install -y git        
++        ORTOOLS_VERSION=$(python -c "import ortools; print(ortools.__version__)")
++        TAG=${ORTOOLS_VERSION%.*}
++        echo ${TAG}
 +        git clone https://github.com/google/or-tools.git
 +        cd or-tools
-+        GIT_TAG=$(git describe --tags)
-+        git checkout "$GIT_TAG"
-+#        python -c "import ortools"
-+        conda install -y pyyaml pytest
++        git checkout v${TAG}
++        conda install -y pyyaml pytest absl-py=2.0.* pandas
++  - name: Test Imports
++    command: |
++        python -c "import ortools"
 +  - name: Run ortool tests
 +    command: |
-+#        python -c "import ortools" 
 +        skipped_test="not sat/python/cp_model_test.py and not sat/python/swig_helper_test.py and not linear_solver/python/model_builder_test.py"
 +        pytest -v -k "${skipped_test}"
 +  - name: Clean tests
