@@ -37,8 +37,8 @@ packages:
       - feedstock-patches/inquirer/0001-disable-pip-check.patch
   - feedstock : https://github.com/conda-forge/blessed-feedstock
     git_tag : 312e173f249e145e91a3883dd8b27374e6b95ecb
-  - feedstock : https://github.com/conda-forge/readchar-feedstock
-    git_tag : d003de7de0238b34da02a77b3e574a0495015987
+#  - feedstock : https://github.com/conda-forge/readchar-feedstock
+#    git_tag : d003de7de0238b34da02a77b3e574a0495015987
   - feedstock : https://github.com/conda-forge/aioredis-feedstock
     git_tag : fbfc6b513846aff97772f21b90ad0d0555884186
     patches:

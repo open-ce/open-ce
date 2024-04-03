@@ -33,14 +33,12 @@ packages:
     patches :
       - feedstock-patches/coin_or_cbc/0001-add-runtime-dependancy-openblas.patch
       - feedstock-patches/coin_or_cbc/0001-p10-build-change.patch        #[ppc_arch == "p10"]
-  - feedstock : https://github.com/conda-forge/mypy-protobuf-feedstock.git
-    git_tag : 8c3a61a32ad7a09e8415a533ee58788d40138b50
-    patches :
-      - feedstock-patches/mypy_protobuf/0001-pin-protobuf.patch
-  - feedstock : https://github.com/conda-forge/types-protobuf-feedstock.git
-    git_tag : 9f8e11bda4a6e61c391acfdc1d31d5c067d350ff
-  - feedstock : https://github.com/conda-forge/types-futures-feedstock.git
-    git_tag : 727ace026b68af15332f3d655cd2ef5306351932
+#  - feedstock : https://github.com/conda-forge/mypy-protobuf-feedstock.git
+#    git_tag : 8c3a61a32ad7a09e8415a533ee58788d40138b50
+#    patches :
+#      - feedstock-patches/mypy_protobuf/0001-pin-protobuf.patch
+#  - feedstock : https://github.com/conda-forge/types-protobuf-feedstock.git
+#    git_tag : 9f8e11bda4a6e61c391acfdc1d31d5c067d350ff
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
   - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
