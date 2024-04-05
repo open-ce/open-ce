@@ -300,8 +300,6 @@ tensorflow_hub:
   - 0.15
 tensorflow_io_gcs_filesystem:
   - 0.35.*
-termcolor:
-  - 2.1.*
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
