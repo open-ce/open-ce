@@ -10,12 +10,8 @@ packages:
 {% if not s390x %}
   - feedstock : https://github.com/conda-forge/pyro-api-feedstock
     git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
-  - feedstock : https://github.com/AnacondaRecipes/libnetcdf-feedstock
-    git_tag : 53de9e49a2ce6c55d2402f9fc1c56b2c05130afe
   - feedstock : https://github.com/conda-forge/arviz-feedstock
     git_tag : ce04d272d7adaf537ed050752bf5c92514d6290f   
-  - feedstock : https://github.com/conda-forge/xarray-einstats-feedstock
-    git_tag : c9bc98ac6fee6f67d977fbb841cbae5fc1c22753
   - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
     git_tag : 2e94a4f271af14e7628ac4890736171fa0e9a71d  
     patches :

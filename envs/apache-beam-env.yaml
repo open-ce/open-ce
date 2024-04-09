@@ -28,10 +28,6 @@ packages:
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
     git_tag : f51a98b1aa3b2591cebe3e0f42231b1f6c1d6fcc
-  - feedstock : https://github.com/conda-forge/cargo-bundle-licenses-feedstock.git
-    git_tag : 932b58eef20b055621ea007b1d828326e7238801
-    patches :
-      - feedstock-patches/cargo_bundle_licenses/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/objsize-feedstock.git
     git_tag : 3345dbe50a983982838194e4224bb494d5247cc6
   - feedstock : https://github.com/conda-forge/grpcio-feedstock
