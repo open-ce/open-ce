@@ -19,7 +19,7 @@ packages:
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : c89f28555e45730b64ba0e6e28b440cd1d6e806c #1.71
+    git_tag : 9aee1c5efbefc34306adc633797e93ebd525b9ae
     patches :                                                                         #[s390x]
       - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
