@@ -12,7 +12,7 @@ packages:
   - feedstock : https://github.com/conda-forge/typing_extensions-feedstock #[ppc64le]
     git_tag : 9a0b96020807b110fba8adf9a8c15d11d43023bd                     #[ppc64le]
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : 9aee1c5efbefc34306adc633797e93ebd525b9ae
+    git_tag : de8ddcf242d3c7086369f0d3d3a89fa9e1abd6c8
     patches :                                                                         #[s390x]
       - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
