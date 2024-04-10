@@ -1,14 +1,14 @@
-From 8643d5cfd1c449b29beefaf572b4d5ca70bf559e Mon Sep 17 00:00:00 2001
+From 6d238e9c7f81ae6b1a05b353060aec12b208e805 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Fri, 5 Jan 2024 09:02:43 +0000
+Date: Fri, 5 Apr 2024 12:37:34 +0000
 Subject: [PATCH] opence-changes
 
 ---
- recipe/meta.yaml | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ recipe/meta.yaml | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 8c27652..43ee80b 100644
+index b39ee4c..8cd5a6f 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -12,6 +12,7 @@ source:
@@ -16,10 +16,10 @@ index 8c27652..43ee80b 100644
  
  build:
 +  string: opence_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
-   number: 1
+   number: 0
    missing_dso_whitelist:
      - /usr/lib/libresolv.9.dylib  # [osx]
-@@ -26,24 +27,25 @@ build:
+@@ -26,21 +27,21 @@ build:
      - export OPENSSL_DIR=$PREFIX
      {% endif %}
      - cd bindings/python
@@ -45,15 +45,11 @@ index 8c27652..43ee80b 100644
    run:
      - python
      - huggingface_hub >=0.16.4,<1.0
-+    - openssl
- 
- test:
-   imports:
-@@ -58,13 +60,14 @@ test:
+@@ -59,13 +60,14 @@ test:
    requires:
      - pip
      - pytest
--    - datasets
+-    - datasets >=2.16
 +    - tqdm
      - numpy *
      - requests
@@ -65,7 +61,7 @@ index 8c27652..43ee80b 100644
    source_files:
      - bindings/python/tests
    commands:
-@@ -77,7 +80,8 @@ test:
+@@ -78,7 +80,8 @@ test:
      {% set tests_to_skip = "_not_a_real_test" %}
      # windows and expectation of forking -> not gonna happen
      {% set tests_to_skip = tests_to_skip + " or with_parallelism" %}  # [win]
