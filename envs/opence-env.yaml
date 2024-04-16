@@ -22,7 +22,7 @@ imported_envs:
   - deepspeed-env.yaml
   - misc-env.yaml
   - or-tools-env.yaml
-  - tensorflow-serving-env.yaml
+  - tensorflow-serving-env.yaml #[x86_64 or (ppc64le and build_type == "cpu")]
   - transformers-env.yaml
 #  - openssl-env.yaml
   - ffmpeg-env.yaml
