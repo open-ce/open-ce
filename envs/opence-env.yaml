@@ -15,7 +15,7 @@ imported_envs:
   - arrow-env.yaml
   - mamba-env.yaml
   - jax-env.yaml
-#  - ray-env.yaml
+  - ray-env.yaml      #[x86_64]
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
@@ -24,7 +24,6 @@ imported_envs:
   - or-tools-env.yaml
   - tensorflow-serving-env.yaml #[x86_64 or (ppc64le and build_type == "cpu")]
   - transformers-env.yaml
-#  - openssl-env.yaml
   - ffmpeg-env.yaml
   - langchain-env.yaml
 

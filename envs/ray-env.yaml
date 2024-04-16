@@ -4,6 +4,7 @@ imported_envs:
 {% if not s390x %}
   - arrow-env.yaml
   - tensorflow-env.yaml
+  - openblas-env.yaml
 {% endif %}
 
 packages:
