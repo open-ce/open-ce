@@ -1,7 +1,0 @@
-builder_version: ">=13.0.0"
-
-packages:
-  - feedstock: https://github.com/conda-forge/uwsgi-feedstock
-    git_tag: ef5adbc9104c71345006181b80a45c6f60c41782
-    patches:
-      - feedstock-patches/uwsgi/0001-Opence-changes.patch  #patch for 2.0.25.1
