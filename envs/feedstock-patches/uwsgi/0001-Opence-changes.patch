@@ -1,14 +1,14 @@
-From e803f87891b8b3c23c3dcbda224aac41894bd7eb Mon Sep 17 00:00:00 2001
+From e1618e6b57d4ed5478717bfba97c78adfc657d24 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Thu, 18 Apr 2024 10:23:30 +0000
+Date: Thu, 18 Apr 2024 11:03:03 +0000
 Subject: [PATCH] Opence changes
 
 ---
- recipe/meta.yaml | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ recipe/meta.yaml | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 31f6612..881c21d 100644
+index 31f6612..8ef8076 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -36,7 +36,7 @@ index 31f6612..881c21d 100644
      - cross-python_{{ target_platform }}     # [build_platform != target_platform]
    host:
      - icu
-@@ -27,10 +27,10 @@ requirements:
+@@ -27,13 +27,13 @@ requirements:
      - libxml2  # [not win]
      - openssl
      - pcre
@@ -49,7 +49,11 @@ index 31f6612..881c21d 100644
 +    - zlib {{zlib}}
    run:
      - jansson
-     - python
+-    - python
++    - python {{python}}
+ 
+ test:
+   source_files:
 -- 
 2.40.1
 
