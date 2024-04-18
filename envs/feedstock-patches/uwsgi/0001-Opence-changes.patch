@@ -1,0 +1,55 @@
+From e803f87891b8b3c23c3dcbda224aac41894bd7eb Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 18 Apr 2024 10:23:30 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 31f6612..881c21d 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,5 +1,5 @@
+ {% set name = "uWSGI" %}
+-{% set version = "2.0.23" %}
++{% set version = "2.0.25.1" %}
+ 
+ package:
+   name: {{ name|lower }}
+@@ -7,7 +7,7 @@ package:
+ 
+ source:
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name|lower }}-{{ version }}.tar.gz
+-  sha256: 0cafda0c16f921db7fe42cfaf81b167cf884ee17350efbdd87d1ecece2d7de37
++  sha256: d653d2d804c194c8cbe2585fa56efa2650313ae75c686a9d7931374d4dfbfc6e
+ 
+ build:
+   number: 0
+@@ -18,7 +18,7 @@ requirements:
+   build:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+-    - python                                 # [build_platform != target_platform]
++    - python {{python}}                      # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+   host:
+     - icu
+@@ -27,10 +27,10 @@ requirements:
+     - libxml2  # [not win]
+     - openssl
+     - pcre
+-    - pip
+-    - python
++    - pip {{pip}}
++    - python {{python}}
+     - yaml
+-    - zlib
++    - zlib {{zlib}}
+   run:
+     - jansson
+     - python
+-- 
+2.40.1
+
