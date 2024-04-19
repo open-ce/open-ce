@@ -15,7 +15,7 @@ imported_envs:
   - arrow-env.yaml
   - mamba-env.yaml
   - jax-env.yaml
-  - ray-env.yaml      #[x86_64]
+  - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
