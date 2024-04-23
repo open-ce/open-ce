@@ -51,4 +51,3 @@ packages:
       - feedstock-patches/or_tools/0001-p10-changes.patch               #[ppc_arch == "p10"]
       - feedstock-patches/or_tools/0001-fixed-build-on-power.patch      #[ppc64le]
 {% endif %}
-git_tag_for_env: open-ce-v1.11.0
