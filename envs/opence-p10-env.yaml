@@ -20,3 +20,4 @@ imported_envs:
 
 packages:
   - feedstock : opencv
+git_tag_for_env: open-ce-v1.11.0

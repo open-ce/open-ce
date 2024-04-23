@@ -22,3 +22,4 @@ packages:
       - feedstock-patches/orbit-ml/0001-Pin-dependencies.patch
       - feedstock-patches/orbit-ml/0001-Added-post-build-tests.patch
 {% endif %}
+git_tag_for_env: open-ce-v1.11.0
