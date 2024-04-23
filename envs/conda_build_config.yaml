@@ -317,7 +317,7 @@ tqdm:
 typer:
   - 0.4.0
 typing_extensions:
-  - 4.*
+  - 4.*    #[not ppc64le]
   - 4.7.1  #[ppc64le]  
 unzip:
   - 6.0
