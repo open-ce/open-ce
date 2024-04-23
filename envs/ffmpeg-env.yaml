@@ -13,4 +13,3 @@ packages:
     git_tag : 57ca332013295a161307fa10afdae2197a56cc93
     patches :
       - feedstock-patches/ffmpeg/0001-disable-codecs-for-opence.patch
-git_tag_for_env: open-ce-v1.11.0

@@ -54,4 +54,3 @@ packages:
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
   - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
-git_tag_for_env: open-ce-v1.11.0

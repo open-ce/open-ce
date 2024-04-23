@@ -46,4 +46,3 @@ packages:
       - feedstock-patches/uwsgi/0001-Opence-changes.patch  #patch for 2.0.25.1
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
-git_tag_for_env: open-ce-v1.11.0
