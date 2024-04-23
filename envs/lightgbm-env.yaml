@@ -12,4 +12,3 @@ packages:
     patches :                                                                   # [py==311]
       - feedstock-patches/scikit-learn/0001-changes-for-opence.patch            # [py==311]
   - feedstock : openmpi          #[mpi_type == 'openmpi']
-git_tag_for_env: open-ce-v1.11.0
