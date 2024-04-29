@@ -53,5 +53,7 @@ packages:
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
   - feedstock : tensorflow-model-optimization
-  - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
+  - feedstock : https://github.com/cdeepali/tensorflow-io-gcs-filesystem-feedstock
+    git_tag : dc-fixbuild-bzip2
+#  - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
 git_tag_for_env: open-ce-v1.11.0
