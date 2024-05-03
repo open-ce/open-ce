@@ -1,25 +1,12 @@
-From e0f5a2d939248527fead4d14e8f95aa06c9128d0 Mon Sep 17 00:00:00 2001
+From cc7ecccdec3305aa6c39a9601a34ac47fc4928c9 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Mon, 22 Apr 2024 13:51:13 +0000
-Subject: [PATCH] Disabled ssl
+Date: Fri, 3 May 2024 11:41:30 +0000
+Subject: [PATCH] Opence-changes
 
 ---
- recipe/build.sh  |  1 +
  recipe/meta.yaml | 14 +++++++-------
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/recipe/build.sh b/recipe/build.sh
-index b337743..0ec2d3f 100644
---- a/recipe/build.sh
-+++ b/recipe/build.sh
-@@ -2,6 +2,7 @@
- 
- set -euxo pipefail
- 
-+export UWSGI_PROFILE_OVERRIDE=ssl=false;
- export UWSGI_PROFILE="${RECIPE_DIR}/uwsgi_config.ini"
- export UWSGI_INCLUDES="${PREFIX}/include,${PREFIX}/include/openssl"
- export LDFLAGS="-L${PREFIX}/lib ${LDFLAGS}"
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 31f6612..8ef8076 100644
 --- a/recipe/meta.yaml
