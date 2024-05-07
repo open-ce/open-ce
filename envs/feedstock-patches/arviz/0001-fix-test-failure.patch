@@ -1,0 +1,36 @@
+From e081f1066f7c918390fa702064771899440acfb7 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Tue, 7 May 2024 06:24:16 +0000
+Subject: [PATCH] fix test failure
+
+---
+ recipe/meta.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 535561b..b0a69ab 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -21,8 +21,8 @@ requirements:
+     - python >=3
+     - setuptools >=60.0
+     - matplotlib-base >=3.5
+-    - numpy >=1.20
+-    - scipy >=1.8
++    - numpy {{ numpy }}
++    - scipy {{ scipy }}
+     - packaging
+     - pandas >=1.4
+     - xarray >=0.21.0
+@@ -35,6 +35,8 @@ test:
+     - arviz
+   requires:
+     - pip
++    - python <3.12
++    - scipy {{ scipy }}
+   commands:
+     - pip check
+ 
+-- 
+2.40.1
+

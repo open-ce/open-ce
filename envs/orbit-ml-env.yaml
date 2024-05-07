@@ -12,6 +12,8 @@ packages:
     git_tag : 5943002669cb56ec550fcfad6657aa1a6d8b2637
   - feedstock : https://github.com/conda-forge/arviz-feedstock
     git_tag : ce04d272d7adaf537ed050752bf5c92514d6290f   
+    patches :
+      - feedstock-patches/arviz/0001-fix-test-failure.patch
   - feedstock : https://github.com/conda-forge/pyro-ppl-feedstock
     git_tag : 2e94a4f271af14e7628ac4890736171fa0e9a71d  
     patches :
