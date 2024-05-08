@@ -4,7 +4,7 @@
   <img src="https://avatars0.githubusercontent.com/u/68873540?s=400&u=a02dc4156e50cdffb23172aba7133e44381885d4&v=4" alt="Open-CE Logo" width="30%">
 </p>
 
-[![Python Support](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue.svg)](#requirements)
+[![Python Support](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue.svg)](#requirements)
 [![Cuda Support](https://img.shields.io/badge/cuda-11.8%20%7C%2012.2%20-blue)](#)
 [![Architecture Support](https://img.shields.io/badge/architecture-x86%20%7C%20ppc64le%20%7C%20s390x-blue)](#)
 [![GitHub Licence](https://img.shields.io/github/license/open-ce/open-ce.svg)](LICENSE)
@@ -24,7 +24,7 @@ be specified at build time. Open-CE currently supports the following:
 | | Supported Versions |
 | --- | --- |
 | Architecture | Power, x86, s390x |
-| Python | 3.9, 3.10, 3.11 |
+| Python | 3.10, 3.11 |
 | CUDA | 11.8, 12.2 |
 
 
@@ -34,14 +34,11 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 #### Open-CE Builder compatibility with various Open-CE releases
 | Open-CE version         | Open-CE Builder version |
 |-------------------------|-------------------------|
-| All releases upto 1.5.2 | <=9.0.0                 |
-| >= 1.5.3                | 9.0.0                   |
-| 1.6.0                   | 10.0.0                  |
-| 1.6.1                   | 10.0.3                  |
-| 1.7.8                   | >=12.0.1                |
-| 1.8.1                   | >=12.0.1                |
-| 1.9.1                   | >=12.0.1                |
-| 1.10.0                  | >=12.0.1                |
+| 1.7.8                   | 12.0.1                  |
+| 1.8.1                   | 12.0.1                  |
+| 1.9.1                   | 12.0.3                  |
+| 1.10.0                  | 12.0.3                  |
+| 1.11.0                  | >=13.0.1                |
 
 ## GETTING STARTED
 
