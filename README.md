@@ -34,15 +34,11 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 #### Open-CE Builder compatibility with various Open-CE releases
 | Open-CE version         | Open-CE Builder version |
 |-------------------------|-------------------------|
-| All releases upto 1.5.2 | <=9.0.0                 |
-| >= 1.5.3                | 9.0.0                   |
-| 1.6.0                   | 10.0.0                  |
-| 1.6.1                   | 10.0.3                  |
-| 1.7.8                   | >=12.0.1                |
-| 1.8.1                   | >=12.0.1                |
-| 1.9.1                   | >=12.0.1                |
-| 1.10.0                  | >=12.0.1                |
-| 1.11.0                  | >=13.0.0                |
+| 1.7.8                   | 12.0.1                  |
+| 1.8.1                   | 12.0.1                  |
+| 1.9.1                   | 12.0.3                  |
+| 1.10.0                  | 12.0.3                  |
+| 1.11.0                  | >=13.0.1                |
 
 ## GETTING STARTED
 
