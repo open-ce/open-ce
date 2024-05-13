@@ -1,0 +1,25 @@
+From fc35fb5738d75547087f5ca05745b692603243f3 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Tue, 23 Apr 2024 09:52:01 +0000
+Subject: [PATCH] Pinned typing-extensions
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 5ed0fc2..9e65e53 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,7 +29,7 @@ requirements:
+     - packaging >=20.9
+     - requests
+     - tqdm >=4.42.1
+-    - typing-extensions >=3.7.4.3
++    - typing-extensions {{typing_extensions}}
+ 
+ test:
+   imports:
+-- 
+2.40.1
+

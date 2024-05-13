@@ -18,10 +18,10 @@ packages:
   - feedstock : magma
   - feedstock : cudnn
   - feedstock : cudatoolkit
-  - feedstock : https://github.com/conda-forge/libnvjitlink-feedstock
-    git_tag: c18691c9f494a7a2ac856cf9e025a8b9e549017c
-    patches:
-      - feedstock-patches/libnvjitlink/0001-changes-for-opence.patch
+  - feedstock : https://github.com/conda-forge/libnvjitlink-feedstock     #[build_type == 'cuda' and cudatoolkit == '12.2']
+    git_tag: c18691c9f494a7a2ac856cf9e025a8b9e549017c                     #[build_type == 'cuda' and cudatoolkit == '12.2']
+    patches:                                                              #[build_type == 'cuda' and cudatoolkit == '12.2']
+      - feedstock-patches/libnvjitlink/0001-changes-for-opence.patch      #[build_type == 'cuda' and cudatoolkit == '12.2']
   {% endif %}
   - feedstock : torchdata
   - feedstock : https://github.com/AnacondaRecipes/leveldb-feedstock      #[ppc_arch == "p10"]

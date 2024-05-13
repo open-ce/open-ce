@@ -14,7 +14,7 @@ imported_envs:
   - lightgbm-env.yaml
   - arrow-env.yaml
   - mamba-env.yaml
-  - jax-env.yaml
+  - jax-env.yaml     # [build_type == 'cpu' or x86_64]
   - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
@@ -32,6 +32,8 @@ packages:
     git_tag : 0321370cf00a8b3c27910f16e7afa71b5a041174
   - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
     git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
+    patches :                                                                  #[ppc64le]
+      - feedstock-patches/huggingface-hub/0001-Pinned-typing-extensions.patch  #[ppc64le]
   - feedstock : https://github.com/conda-forge/datasets-feedstock.git
     git_tag : 2526f9639ccb6c0e9626e2f7c20849f78fa099c0
     patches:

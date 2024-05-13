@@ -9,8 +9,6 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/yasm-feedstock
     git_tag : 94a331b4ddce69c3c105ff97e54d659dcdecd25e
 {% endif %}
-  - feedstock : https://github.com/conda-forge/typing_extensions-feedstock #[ppc64le]
-    git_tag : 9a0b96020807b110fba8adf9a8c15d11d43023bd                     #[ppc64le]
   - feedstock : https://github.com/conda-forge/rust-feedstock
     git_tag : de8ddcf242d3c7086369f0d3d3a89fa9e1abd6c8
     patches :                                                                         #[s390x]
@@ -23,3 +21,5 @@ packages:
     git_tag : 5c5e81e32ee569fe7de10f3505eb20ed7e871e6c
   - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
     git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
+    patches :                                                                  #[ppc64le]
+      - feedstock-patches/huggingface-hub/0001-Pinned-typing-extensions.patch  #[ppc64le]

@@ -1,14 +1,14 @@
-From b3540f5b72bdad25a233165761cb448c68f33440 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Wed, 3 Apr 2024 15:39:38 +0000
+From 643fd0b57ab648e01f2ed9e22d4a54854e651126 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 9 May 2024 05:13:58 +0000
 Subject: [PATCH] changes for opence
 
 ---
- recipe/meta.yaml | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 854b575..c8a9b13 100644
+index 854b575..2573ed6 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -41,7 +41,7 @@ requirements:
@@ -20,20 +20,33 @@ index 854b575..c8a9b13 100644
      - scipy >=1.5.0
      - threadpoolctl >=2.0.0
      - llvm-openmp  # [osx]
-@@ -56,9 +56,12 @@ requirements:
- # https://github.com/scikit-learn/scikit-learn/issues/20335
- {% set tests_to_skip = tests_to_skip + " or test_loadings_converges" %}
- # Numerically unstable test numerical difference in test
--{% set tests_to_skip = tests_to_skip + " or test_mlp_regressor_dtypes_casting" %}         # [ppc64le]
-+{% set tests_to_skip = tests_to_skip + " or test_mlp_regressor_dtypes_casting or test_estimators or test_covariance" %}         # [ppc64le]
-+{% set tests_to_skip = tests_to_skip + " or test_shrunk_covariance or test_ledoit_wolf or test_oas or test_mcd" %}              # [ppc64le]
-+{% set tests_to_skip = tests_to_skip + " or test_toy_ard_object or test_ard_accuracy_on_easy_problem" %}                        # [ppc64le]
- # The following test seems to be crashing CI OS.
- {% set tests_to_skip = tests_to_skip + " or test_non_negative_factorization_consistency" %}         # [osx and arm64]
-+{% set tests_to_skip = tests_to_skip + " or test_spline_transformer_sparse_output or test_singular_matrix" %}
+@@ -49,17 +49,6 @@ requirements:
+     # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
+     - blas=*=openblas  # [osx and x86_64]
  
+-# Some tests take alot of memory, and seem to cause segfaults when memory runs out
+-{% set test_cpus = 1 %}
+-
+-{% set tests_to_skip = "_not_a_real_test" %}
+-# https://github.com/scikit-learn/scikit-learn/issues/20335
+-{% set tests_to_skip = tests_to_skip + " or test_loadings_converges" %}
+-# Numerically unstable test numerical difference in test
+-{% set tests_to_skip = tests_to_skip + " or test_mlp_regressor_dtypes_casting" %}         # [ppc64le]
+-# The following test seems to be crashing CI OS.
+-{% set tests_to_skip = tests_to_skip + " or test_non_negative_factorization_consistency" %}         # [osx and arm64]
+-
  test:
    requires:
+     - cython >=0.29.24
+@@ -87,7 +76,7 @@ test:
+     - set OMP_NUM_THREADS=1               # [win]
+     - export OPENBLAS_NUM_THREADS=1       # [not win]
+     - export OMP_NUM_THREADS=1            # [not win]
+-    - pytest --timeout 300 -n {{ test_cpus }} --verbose --pyargs sklearn -k "not ({{ tests_to_skip }})"
++    - pytest --verbose --pyargs sklearn.datasets.tests
+ 
+ about:
+   home: https://scikit-learn.org/
 -- 
-2.34.1
+2.40.1
 
