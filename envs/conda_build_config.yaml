@@ -200,7 +200,7 @@ numactl:
 numpy:
   - 1.26
 onnx:
-  - 1.15.*
+  - 1.16.*
 onnxconverter_common:
   - 1.14.*
 onnx_graphsurgeon:
