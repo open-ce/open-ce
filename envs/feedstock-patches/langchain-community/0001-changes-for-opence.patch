@@ -1,20 +1,20 @@
-From 304793efec9eb6f964fbf0c71f85b2da77dafb93 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Mon, 11 Mar 2024 08:40:03 +0000
-Subject: [PATCH] changes for opence
+From d780ee477a2c69ee53e19e2568f7b5a497a290d0 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana-Shinde1@ibm.com>
+Date: Mon, 20 May 2024 07:40:45 +0000
+Subject: [PATCH] Open-ce changes
 
 ---
  recipe/meta.yaml | 66 ------------------------------------------------
  1 file changed, 66 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index ed6e52e..6302529 100644
+index d896066..08e2cdf 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -30,72 +30,6 @@ requirements:
      - tenacity >=8.1.0,<9.0.0
      - dataclasses-json >=0.5.7,<0.7
-     - langsmith >=0.0.83,<0.1
+     - langsmith >=0.1.0,<0.2.0
 -  run_constrained:
 -    - tqdm >=4.48.0
 -    - openapi-pydantic >=0.3.2,<0.4.0

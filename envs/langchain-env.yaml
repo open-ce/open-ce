@@ -14,17 +14,17 @@ packages:
   - feedstock : https://github.com/conda-forge/jsonpatch-feedstock.git             #[ppc64le]
     git_tag : b91d2f21f2e8cf6cf2af15ab8e36e753a340ff55                             #[ppc64le]
   - feedstock : https://github.com/conda-forge/langsmith-feedstock.git
-    git_tag : 010eb770882b877d27c5dde1fe6ed66db56d284a
-    patches :
-           - feedstock-patches/langchain/0001-Removed-pytest-subtests.patch
+    git_tag : 04695685fde05f1b43ac9df311a5be9f633300dd
+  - feedstock : https://github.com/conda-forge/langchain-text-splitters-feedstock
+    git_tag: b1a882d80228a52e0efd0d78985e403bfcdf58bb
   - feedstock : https://github.com/conda-forge/langchain-community-feedstock.git
-    git_tag : 6ec329ff0dbae6943c5ccfba0163ebb17903bc19
+    git_tag : 85e26900b84c2b3b96c89060e602ed6b6e7d4c37
     patches :
            - feedstock-patches/langchain-community/0001-changes-for-opence.patch
   - feedstock : https://github.com/conda-forge/langchain-core-feedstock.git
-    git_tag : 11e865add3303da3f3ffae317dd6c75443d481bb
+    git_tag : dd3be8796e9c91d7bd4e454d33f326605743bb13
   - feedstock : https://github.com/conda-forge/langchain-feedstock.git
-    git_tag : 6431d8c54b8a22424fcb639590691802469c375f
+    git_tag : a73cf20cb696f83f9debb53fa46eed2565b1e360
     patches :
            - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch
 git_tag_for_env: open-ce-v1.11.0
