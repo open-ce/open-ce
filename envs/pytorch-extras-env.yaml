@@ -18,8 +18,12 @@ packages:
     git_tag : dd3ad2bf3128b222fa0bae834499dcb6232c9e47
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : 9eebdc51a4cb9f3222f6f9250c80c563f869b15e
+    patches:
+      - feedstock-patches/starlette/0001-Fix-CVE-2023-29159-by-backporting.patch
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
+    patches:
+      - feedstock-patches/python-multipart/0001-Add-fix-to-CVE-2024-24762-by-backporting-it.patch
   - feedstock : https://github.com/conda-forge/deepdiff-feedstock
     git_tag : f7914a1d64cf029852de9d6a9c362c2a40374a4f
   - feedstock : https://github.com/conda-forge/ordered-set-feedstock
