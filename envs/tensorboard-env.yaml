@@ -14,13 +14,7 @@ packages:
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
       - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
-  - feedstock : https://github.com/conda-forge/werkzeug-feedstock
-    git_tag : 0b61b029702f9f5c76595dd26b077563072b805c
-  - feedstock : https://github.com/conda-forge/watchdog-feedstock
-    git_tag : ea3652a18b7c19bf02fbc2a32d3661dff8ff5c95
-  - feedstock : https://github.com/conda-forge/ephemeral-port-reserve-feedstock
-    git_tag : c25410cfffbe312521886a50f70609875cab0b59
-  - feedstock : https://github.com/conda-forge/pytest-xprocess-feedstock
-    git_tag : 7c5bf1825f59e5ad6e922b059f629be4dfacf242
+  - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git    #[ppc64le]
+    git_tag : e1d5cae5e98645557119f79cd60f221a00e26e34      #[ppc64le]
   - feedstock : tensorboard
 git_tag_for_env: open-ce-v1.11.0
