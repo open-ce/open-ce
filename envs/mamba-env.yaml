@@ -3,9 +3,5 @@ builder_version: ">=13.0.0"
 packages:
   - feedstock : https://github.com/conda-forge/cli11-feedstock
     git_tag : a8e959fcae876db93c92918e57914f632feac574
-  - feedstock : https://github.com/conda-forge/pybind11-feedstock
-    git_tag : 3d3cbe7e8422e78a1c315004ed14480e00f30b59
-    patches :
-           - feedstock-patches/pybind11/pybind11_p10.patch
   - feedstock : mamba
 git_tag_for_env: open-ce-v1.11.0
