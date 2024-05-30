@@ -20,8 +20,12 @@ packages:
       - feedstock-patches/cfitsio/0001-Open-ce-changes.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : 9eebdc51a4cb9f3222f6f9250c80c563f869b15e
+    patches:
+      - feedstock-patches/starlette/0001-Fix-CVE-2023-29159-by-backporting.patch
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
     git_tag : d40967f6afce79de33c3870798301aa797c490a7
+    patches:
+      - feedstock-patches/python-multipart/0001-Add-fix-to-CVE-2024-24762-by-backporting-it.patch
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
     git_tag : 1431680c5d1e8b842704ce40ced10377cade59e7
   - feedstock : https://github.com/conda-forge/fastapi-feedstock

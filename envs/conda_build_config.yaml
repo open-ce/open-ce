@@ -200,13 +200,13 @@ numactl:
 numpy:
   - 1.26
 onnx:
-  - 1.15.*
+  - 1.16.*
 onnxconverter_common:
   - 1.14.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.26.*      #[not s390x]
+  - 0.3.27.*      #[not s390x]
   - 0.3.21.*      #[s390x]
 opencv:
   - 4.8.*
@@ -324,7 +324,7 @@ unzip:
 wasabi:
   - 0.9.*
 werkzeug:
-  - 2.*
+  - 3.*
 wrapt:
   - 1.14.*
 yaml_cpp:
