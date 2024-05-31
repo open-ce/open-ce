@@ -1,0 +1,31 @@
+From b3672e41aa3c38969da669936b54ab97be33b346 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 31 May 2024 09:35:16 +0000
+Subject: [PATCH] opence changes for langchain-text-splitters
+
+---
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 784ea35..ab47e98 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,11 +16,11 @@ build:
+ 
+ requirements:
+   host:
+-    - python >=3.8,<4.0
++    - python
+     - poetry-core >=1.0.0
+-    - pip
++    - pip {{pip}}
+   run:
+-    - python >=3.8.1,<4.0
++    - python
+     - langchain-core >=0.1.28,<0.2.0
+   run_constrained:
+     - lxml >=5.1.0,<6.0.0
+-- 
+2.40.1
+
