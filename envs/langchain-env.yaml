@@ -16,7 +16,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/orjson-feedstock                #[ppc64le]
     git_tag : bdea9ad2212ca9185bb81928a3b7ba4c5c59cbaf                             #[ppc64le]          
   - feedstock : https://github.com/conda-forge/langchain-text-splitters-feedstock.git
-    git_tag : 58421cd09fa7a223738594cab7b1158d8b21e31f
+    git_tag : b1a882d80228a52e0efd0d78985e403bfcdf58bb
     patches :
       - feedstock-patches/langchain/0001-opence-changes-for-langchain-text-splitters.patch
   - feedstock : https://github.com/conda-forge/langsmith-feedstock.git
