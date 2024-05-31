@@ -17,6 +17,8 @@ packages:
     git_tag : 8bdaa6419a2aa2b336076a4a3d714244afb6cc88
     patches :
       - feedstock-patches/tokenizers/0001-opence-changes.patch
+  - feedstock : https://github.com/conda-forge/safetensors-feedstock     #[not x86_64]
+    git_tag : 1e5227b14f1c93caa9819f429e15b859cee36236                   #[not x86_64]
   - feedstock : https://github.com/conda-forge/transformers-feedstock
     git_tag : 053ca66df0d4963ad295b5e2f9f0d0a2f42c51b1
   - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
