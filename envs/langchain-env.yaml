@@ -13,18 +13,26 @@ packages:
     git_tag : e04488e01c5686c08fbe433ac838c12113e6b5b2                             #[ppc64le]
   - feedstock : https://github.com/conda-forge/jsonpatch-feedstock.git             #[ppc64le]
     git_tag : b91d2f21f2e8cf6cf2af15ab8e36e753a340ff55                             #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/orjson-feedstock                #[ppc64le]
+    git_tag : bdea9ad2212ca9185bb81928a3b7ba4c5c59cbaf                             #[ppc64le]          
+  - feedstock : https://github.com/conda-forge/langchain-text-splitters-feedstock.git
+    git_tag : 58421cd09fa7a223738594cab7b1158d8b21e31f
+    patches :
+      - feedstock-patches/langchain/0001-opence-changes-for-langchain-text-splitters.patch
   - feedstock : https://github.com/conda-forge/langsmith-feedstock.git
-    git_tag : 010eb770882b877d27c5dde1fe6ed66db56d284a
+    git_tag : aabd64e30fe4e5efb49bc44b254d8b7586717d99
     patches :
-           - feedstock-patches/langchain/0001-Removed-pytest-subtests.patch
+      - feedstock-patches/langchain/0001-opence-changes-for-langsmith.patch 
   - feedstock : https://github.com/conda-forge/langchain-community-feedstock.git
-    git_tag : 6ec329ff0dbae6943c5ccfba0163ebb17903bc19
+    git_tag : 85e26900b84c2b3b96c89060e602ed6b6e7d4c37
     patches :
-           - feedstock-patches/langchain-community/0001-changes-for-opence.patch
+      - feedstock-patches/langchain-community/0001-changes-for-opence.patch
   - feedstock : https://github.com/conda-forge/langchain-core-feedstock.git
-    git_tag : 11e865add3303da3f3ffae317dd6c75443d481bb
-  - feedstock : https://github.com/conda-forge/langchain-feedstock.git
-    git_tag : 6431d8c54b8a22424fcb639590691802469c375f
+    git_tag : dd3be8796e9c91d7bd4e454d33f326605743bb13
     patches :
-           - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch
+      - feedstock-patches/langchain/0001-opence-changes-for-langchain-core.patch
+  - feedstock : https://github.com/conda-forge/langchain-feedstock.git
+    git_tag : a73cf20cb696f83f9debb53fa46eed2565b1e360
+    patches :
+      - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch 
 git_tag_for_env: open-ce-v1.11.0

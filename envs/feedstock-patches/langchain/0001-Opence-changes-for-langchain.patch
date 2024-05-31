@@ -1,17 +1,17 @@
-From 2b0b943ead07da33173a59d208b1ff3f3fa5a85f Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 12 Mar 2024 14:48:51 +0000
-Subject: [PATCH] Opence changes for langchain
+From aba70691e61749d8b34b1a8864ddd40d0b739b29 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 31 May 2024 05:50:00 +0000
+Subject: [PATCH] opence changes
 
 ---
  recipe/meta.yaml | 101 ++++-------------------------------------------
  1 file changed, 7 insertions(+), 94 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 1739753..d656faf 100644
+index 0e33bf0..a931131 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -13,116 +13,29 @@ build:
+@@ -13,117 +13,30 @@ build:
    entry_points:
      - langchain-server = langchain.server:main
    noarch: python
@@ -25,12 +25,13 @@ index 1739753..d656faf 100644
 +    - python
      - poetry-core >=1.0.0
 -    - pip
-+    - pip {{pip}}
++    - pip {{ pip }}
    run:
+     - langchain-text-splitters >=0.0.1,<0.1
 -    - python >=3.8,<4.0
 +    - python
-     - langchain-core >=0.1.22,<0.2
-     - langchain-community >=0.0.18,<0.1
+     - langchain-core >=0.1.33,<0.2.0
+     - langchain-community >=0.0.29,<0.1
 -    - pydantic >=1,<3
 +    - pydantic {{pydantic}}
      - sqlalchemy >=1.4,<3
@@ -44,7 +45,7 @@ index 1739753..d656faf 100644
      - jsonpatch >=1.33.0,<2.0.0
      - dataclasses-json >=0.5.7,<0.7
      - async-timeout >=4.0.0,<5.0.0
-     - langsmith >=0.0.83,<0.1
+     - langsmith >=0.1.17,<0.2.0
 -  run_constrained:
 -    - azure-core >=1.26.4,<2.0.0
 -    - tqdm >=4.48.0
