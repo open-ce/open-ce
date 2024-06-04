@@ -23,7 +23,8 @@ packages:
   - feedstock : https://github.com/conda-forge/black-feedstock.git
     git_tag : 7bb21b29627bac864e4763dc65aaa52aa63deb23
     patches :
-      - feedstock-patches/black/0001-Fix-CVE-2024-21503.patch
+      - feedstock-patches/black/0001-Fix-CVE-2024-21503.patch                       #[not s390x]
+      - feedstock-patches/black/0001-Update-patch-of-black-to-fix-s390x-build.patch #[s390x]
   - feedstock : https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
     git_tag : 7ad703f99406292de8d0111655f989ba2fb3de64
     patches :
