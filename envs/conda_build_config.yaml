@@ -387,4 +387,4 @@ cuda_levels:
 cuda_levels_details:
   - sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64]
   - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90         # [ppc64le]
-git_tag_for_env: open-ce-v1.11.0
+git_tag_for_env: open-ce-v1.11.1
