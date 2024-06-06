@@ -19,4 +19,6 @@ packages:
       - feedstock-patches/scikit-learn/0001-changes-for-opence.patch            # [py==311]
   - feedstock : https://github.com/conda-forge/filesystem-spec-feedstock
     git_tag : be754febf038a93d01e6f7de85d5489ced355f88
+  - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git    #[ppc64le]
+    git_tag : e1d5cae5e98645557119f79cd60f221a00e26e34                       #[ppc64le]
 git_tag_for_env: open-ce-v1.11.0
