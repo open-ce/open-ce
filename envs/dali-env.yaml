@@ -27,4 +27,5 @@ packages:
         - feedstock-patches/nasm/0001-Fixed-sha256sum.patch           #[ppc64le]
   {% endif %}
 {% endif %}
-git_tag_for_env: open-ce-v1.11.1
+
+git_tag_for_env: open-ce-v1.11.0

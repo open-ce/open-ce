@@ -47,4 +47,4 @@ packages:
     git_tag : 246926fe4b05d902071f4fdb12a33c338e0a7847
   - feedstock : jax
   - feedstock : jaxlib
-git_tag_for_env: open-ce-v1.11.1
+git_tag_for_env: open-ce-v1.11.0

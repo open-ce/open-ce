@@ -50,4 +50,4 @@ packages:
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
   - feedstock : zdnn # [s390x]
-git_tag_for_env: open-ce-v1.11.1
+git_tag_for_env: open-ce-v1.11.0

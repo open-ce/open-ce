@@ -48,4 +48,4 @@ packages:
   - feedstock : https://github.com/conda-forge/dateutils-feedstock
     git_tag : 2723b1b582889ac1e5f10e8aaf0cb91ff6c41844
 {% endif %}
-git_tag_for_env: open-ce-v1.11.1
+git_tag_for_env: open-ce-v1.11.0
