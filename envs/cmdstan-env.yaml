@@ -9,4 +9,4 @@ packages:
   - feedstock : https://github.com/conda-forge/stanio-feedstock
     git_tag : 2207dffbadf3364df2b714969cb5f040c79b65a5
 {% endif %}
-git_tag_for_env: open-ce-v1.11.0
+git_tag_for_env: open-ce-v1.11.1
