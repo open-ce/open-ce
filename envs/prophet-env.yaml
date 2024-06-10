@@ -12,4 +12,4 @@ packages:
   - feedstock : https://github.com/conda-forge/holidays-feedstock.git
     git_tag : 4d747d0607fb049f6f6569b5ec06dcc76b54d2b1
 {% endif %}
-git_tag_for_env: open-ce-v1.11.0
+git_tag_for_env: open-ce-v1.11.1
