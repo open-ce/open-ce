@@ -49,4 +49,4 @@ packages:
       - feedstock-patches/flatbuffers/0001-fix-build-for-UBI8.patch
   - feedstock : jax
   - feedstock : jaxlib
-git_tag_for_env: open-ce-v1.11.1
+git_tag_for_env: open-ce-v1.11.2

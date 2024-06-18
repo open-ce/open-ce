@@ -8,4 +8,4 @@ packages:
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
 {% endif %}
-git_tag_for_env: open-ce-v1.11.1
+git_tag_for_env: open-ce-v1.11.2
