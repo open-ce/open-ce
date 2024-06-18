@@ -1,0 +1,52 @@
+From fea11e2dd3bd3958f5680fe9e452da3d4b15bd0b Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 10 Jun 2024 08:26:51 +0000
+Subject: [PATCH] fix build for UBI8
+
+---
+ recipe/build.sh  | 4 ++++
+ recipe/meta.yaml | 7 ++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index ebdeeba..ec48562 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -35,6 +35,10 @@ fi
+ mkdir build-cmake
+ pushd build-cmake
+ 
++if [[ $ppc_arch == "p10" ]]
++then
++  CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX"
++fi
+ cmake ${CMAKE_ARGS} \
+   -DCMAKE_BUILD_TYPE=Release \
+   -DFLATBUFFERS_OSX_BUILD_UNIVERSAL=OFF \
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8d9d986..e5b7d59 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -17,15 +17,16 @@ build:
+ requirements:
+   build:
+     - cmake
+-    - {{ compiler('c') }}
+-    - {{ compiler('cxx') }}
++    - {{ compiler('c') }}    #[ppc_arch != 'p10']
++    - {{ compiler('cxx') }}  #[ppc_arch != 'p10']
+     - ninja
+ 
+ test:
+   commands:
+     - test -f $PREFIX/bin/flatc                                                     # [not win]
+     - test -f $PREFIX/include/flatbuffers/flatbuffers.h                             # [not win]
+-    - test -f $PREFIX/lib/libflatbuffers${SHLIB_EXT}                                # [not win]
++    - test -f $PREFIX/lib/libflatbuffers${SHLIB_EXT}                                #[ppc_arch != 'p10']
++    - test -f $PREFIX/lib64/libflatbuffers${SHLIB_EXT}                              #[ppc_arch == 'p10']
+     - if not exist %PREFIX%\\Library\\bin\\flatc.exe exit 1                         # [win]
+     - if not exist %PREFIX%\\Library\\include\\flatbuffers\\flatbuffers.h exit 1    # [win]
+ 
+-- 
+2.40.1
+
