@@ -25,4 +25,4 @@ packages:
     git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
     patches :                                                                  #[ppc64le]
       - feedstock-patches/huggingface-hub/0001-Pinned-typing-extensions.patch  #[ppc64le]
-git_tag_for_env: open-ce-v1.11.1
+git_tag_for_env: open-ce-v1.11.2
