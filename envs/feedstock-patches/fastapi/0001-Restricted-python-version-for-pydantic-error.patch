@@ -1,0 +1,30 @@
+From 6776537002749efa59ecc5dc17b37f257bc21731 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 27 Jun 2024 04:46:22 +0000
+Subject: [PATCH] Restricted python version for pydantic error
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 2648448..ef86aeb 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,11 +16,11 @@ build:
+ 
+ requirements:
+   host:
+-    - python >=3.7
++    - python <=3.12.3
+     - pip
+     - hatchling
+   run:
+-    - python >=3.7
++    - python <=3.12.3
+     - starlette >=0.25.0,<0.26.0
+     - pydantic >=1.6.2,!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0
+ 
+-- 
+2.40.1
+

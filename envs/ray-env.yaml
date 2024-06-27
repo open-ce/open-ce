@@ -30,6 +30,8 @@ packages:
     git_tag : 1431680c5d1e8b842704ce40ced10377cade59e7
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : dd3ad2bf3128b222fa0bae834499dcb6232c9e47
+    patches:
+      - feedstock-patches/fastapi/0001-Restricted-python-version-for-pydantic-error.patch
   - feedstock : dm-tree
   - feedstock : https://github.com/AnacondaRecipes/opencensus-feedstock
     git_tag : 29535305e9e7456f6b82758366a581cfa8512bfd
