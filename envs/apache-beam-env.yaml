@@ -12,6 +12,8 @@ packages:
     git_tag : 90f5bd5d0fd0c37bf66bf0167fd268df572033cb
   - feedstock : https://github.com/AnacondaRecipes/orjson-feedstock                #[not x86_64]
     git_tag : bdea9ad2212ca9185bb81928a3b7ba4c5c59cbaf                             #[not x86_64]
+    patches :                                                                      #[not x86_64]
+      - feedstock-patches/orjson/0001-pin-rust_compiler-version.patch              #[not x86_64]
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
   - feedstock : https://github.com/conda-forge/rust-feedstock

@@ -1,0 +1,30 @@
+From ba0e3c403aa4c68f58ca670806db27c2142d4150 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Tue, 23 Jul 2024 04:48:22 -0400
+Subject: [PATCH] pin rust_compiler version
+
+---
+ recipe/conda_build_config.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index 1ce2ca1..270c4d5 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -1,5 +1,5 @@
+ rust_compiler_version:
+-  - 1.76.0
++  - 1.77.0
+ # orjson has wheels only for MacOS SDK 11.0, see https://pypi.org/project/orjson/3.8.8/#files
+ MACOSX_DEPLOYMENT_TARGET:
+   - 11.0  # [osx and arm64]
+@@ -7,4 +7,4 @@ MACOSX_SDK_VERSION:
+   - "11.0"                 # [osx and arm64]
+ # https://github.com/rust-lang/rust/pull/104385
+ CONDA_BUILD_SYSROOT:
+-  - /opt/MacOSX10.12.sdk        # [osx and x86_64]
+\ No newline at end of file
++  - /opt/MacOSX10.12.sdk        # [osx and x86_64]
+-- 
+2.43.5
+

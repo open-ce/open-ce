@@ -15,6 +15,8 @@ packages:
     git_tag : b91d2f21f2e8cf6cf2af15ab8e36e753a340ff55                             #[ppc64le]
   - feedstock : https://github.com/AnacondaRecipes/orjson-feedstock                #[not x86_64]
     git_tag : bdea9ad2212ca9185bb81928a3b7ba4c5c59cbaf                             #[not x86_64]
+    patches :                                                                      #[not x86_64]
+      - feedstock-patches/orjson/0001-pin-rust_compiler-version.patch              #[not x86_64]
   - feedstock : https://github.com/conda-forge/langchain-text-splitters-feedstock.git
     git_tag : b1a882d80228a52e0efd0d78985e403bfcdf58bb
     patches :
