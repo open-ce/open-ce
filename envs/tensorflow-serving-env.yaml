@@ -8,18 +8,14 @@ conda_build_configs:                   #[ppc_arch == 'p10']
   - conda_build_config_p10.yaml        #[ppc_arch == 'p10']
 
 packages:
-{% if not s390x %}
-
-  {% if build_type == 'cuda' %}
-    - feedstock : cudatoolkit
-    - feedstock: nccl
-    - feedstock: cudnn
-  {% endif %}
-    - feedstock : https://github.com/conda-forge/grpcio-feedstock
-      git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
-      patches :
-        - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
-    - feedstock: tensorflow-serving
-
+{% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit
+  - feedstock: nccl
+  - feedstock: cudnn
 {% endif %}
+  - feedstock : https://github.com/conda-forge/grpcio-feedstock
+    git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
+    patches :
+      - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
+  - feedstock: tensorflow-serving
 git_tag_for_env: open-ce-v1.11.2
