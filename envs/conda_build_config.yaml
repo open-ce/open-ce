@@ -204,9 +204,9 @@ numpy:
   - 1.22.*   # [cudatoolkit == '11.2']
   - 1.23.5   # [build_type == 'cpu' or cudatoolkit == '11.8']
 onnx:
-  - 1.13.*
+  - 1.16.*
 onnxconverter_common:
-  - 1.13.*
+  - 1.14.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
@@ -266,10 +266,10 @@ reproc_cpp:
   - 14.2.*
 rust:
   - 1.62.*     # [cudatoolkit == '11.2']
-  - 1.71.*     # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - 1.77.*     # [build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8']
 rust_compiler_version:
   - '1.46.0'   # [cudatoolkit == '11.2']
-  - '1.71.1'   # [build_type == 'cpu' or cudatoolkit == '11.4']
+  - '1.77.0'   # [build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8']
 safeint:
   - 3.0
 scipy:
@@ -337,7 +337,7 @@ unzip:
 wasabi:
   - 0.9.*
 werkzeug:
-  - 2.*
+  - 3.*
 wrapt:
   - 1.14.*
 yaml_cpp:
