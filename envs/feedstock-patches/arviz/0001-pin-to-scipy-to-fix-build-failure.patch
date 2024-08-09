@@ -1,0 +1,25 @@
+From e9ef3b11e9bfabe70e98985f53b538293b8fdb84 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 9 Aug 2024 11:44:04 +0000
+Subject: [PATCH] pin to scipy to fix build failure
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 535561b..30391cf 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -22,7 +22,7 @@ requirements:
+     - setuptools >=60.0
+     - matplotlib-base >=3.5
+     - numpy >=1.20
+-    - scipy >=1.8
++    - scipy {{ scipy }}
+     - packaging
+     - pandas >=1.4
+     - xarray >=0.21.0
+-- 
+2.40.1
+

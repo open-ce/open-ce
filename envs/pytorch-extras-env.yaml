@@ -18,6 +18,8 @@ packages:
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 2602adc1acde629174ecb5e484f897d38a907c60
+    patches:
+      - feedstock-patches/fastapi/0001-Fix-build-failure.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : 8f6cb798dbe530b72cdf609d47f5c6594cf40c9c
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock
