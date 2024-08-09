@@ -136,7 +136,7 @@ keras_applications:
 keras_preprocessing:
   - 1.1.*
 keras:
-  - 2.12.*
+  - 2.13.*
 leveldb:
   - 1.23.*
 libiconv:
@@ -299,23 +299,23 @@ sqlite:
 tabulate:
   - 0.8.*
 tensorboard:
-  - 2.12.*
+  - 2.13.*
 tensorboard_data_server:
   - 0.7.*
 tensorboard_plugin_wit:
   - 1.6
 tensorflow:
-  - 2.12.*
+  - 2.13.*
 tensorflow_hub:
   - 0.13
 tensorflow_io_gcs_filesystem:
-  - 0.32.*
+  - 0.33.*
 termcolor:
   - 1.1.0
 termcolor_cpp:
   - 2.0.0
 tf_estimator:
-  - 2.12.*
+  - 2.13.*
 tokenizers:
   - 0.13.3
 torchmetrics:
