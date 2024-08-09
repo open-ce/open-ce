@@ -19,5 +19,13 @@ packages:
       - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
       - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
       - feedstock-patches/protobuf/0001-fix-libprotobuf-for-cuda-11.2-build.patch
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v72.1.0           #[ppc64le]
+    git_tag : 1d5a7bec76c7f4887f832afbb99a9111294e2c52                                  #[ppc64le]
+    patches :                                                                           #[ppc64le]
+      - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]
+  - feedstock : https://github.com/conda-forge/requests-feedstock     #2.32.3           #[ppc64le]
+    git_tag : 1677aed84c3ee88b7f4372af8ba41143cc6d4119                                  #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git #v3.0.3       #[ppc64le]
+    git_tag : e1d5cae5e98645557119f79cd60f221a00e26e34                                  #[ppc64le]
 
 git_tag_for_env: open-ce-v1.9.4
