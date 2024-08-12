@@ -1,0 +1,30 @@
+From f746106b074a95ef4cbb70cca340d9a953859ea5 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 9 Aug 2024 11:44:52 +0000
+Subject: [PATCH] Fix build failure
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8065087..cf0ae57 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,11 +16,11 @@ build:
+ 
+ requirements:
+   host:
+-    - python >=3.7
++    - python <3.12
+     - pip
+     - hatchling
+   run:
+-    - python >=3.7
++    - python <3.12
+     - starlette >=0.27.0,<0.28.0
+     - pydantic >=1.6.2,!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0
+ 
+-- 
+2.40.1
+
