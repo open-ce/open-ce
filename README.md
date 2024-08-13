@@ -38,7 +38,7 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 | 1.8.1                   | 12.0.1                  |
 | 1.9.1                   | 12.0.3                  |
 | 1.10.0                  | 12.0.3                  |
-| 1.11.0                  | >=13.0.1                |
+| 1.11.2                  | 13.0.2                  |
 
 ## GETTING STARTED
 
