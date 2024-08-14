@@ -18,5 +18,6 @@ packages:
       - feedstock-patches/grpcio/0001-Update-to-1.53.2-to-fix-CVE.patch            #[not s390x]
       - feedstock-patches/grpcio/0001-opence-changes-for-s390x.patch     #[s390x]
   - feedstock : tensorboard
+    git_tag : r2.13.0
 
 git_tag_for_env: open-ce-v1.9.4

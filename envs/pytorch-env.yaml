@@ -9,7 +9,9 @@ imported_envs:
 
 packages:
 {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
-  - feedstock : pytorch
+#  - feedstock : pytorch
+  - feedstock : https://github.com/cdeepali/pytorch-feedstock
+    git_tag : dc-195_CVEfix
   - feedstock : numactl
   - feedstock : sentencepiece
   - feedstock : torchtext
