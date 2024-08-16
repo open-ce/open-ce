@@ -26,7 +26,7 @@ packages:
       - feedstock-patches/grpcio/0001-opence-changes-for-s390x.patch     #[s390x]
   - feedstock : keras
     git_tag : r2.13.1
-  - feedstock : tensorflow
+  - feedstock : https://github.com/Aman-Surkar/tensorflow-feedstock
     git_tag : r2.13.1
   - feedstock : dm-tree
   - feedstock : tensorflow-probability
