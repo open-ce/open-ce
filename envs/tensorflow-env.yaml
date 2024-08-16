@@ -29,7 +29,7 @@ packages:
   - feedstock : https://github.com/Aman-Surkar/tensorflow-feedstock
     git_tag : r2.13.1
   - feedstock : dm-tree
-  - feedstock : tensorflow-probability
+  - feedstock : https://github.com/Aman-Surkar/tensorflow-probability-feedstock 
     git_tag : r0.21.0
   - feedstock : tensorflow-estimator
     git_tag : r2.13.0
