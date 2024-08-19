@@ -4,8 +4,10 @@ imported_envs:
   - openblas-env.yaml
 
 packages:
-  - feedstock : https://github.com/conda-forge/numpy-feedstock
-    git_tag : 2c0473fbf1054f9591fab5001f204aca7aab95b8
+  - feedstock : https://github.com/conda-forge/typing_extensions-feedstock.git
+    git_tag : db12cbec273867700c91f82fad22aa6d27519058
+  - feedstock : https://github.com/AnacondaRecipes/numpy-feedstock
+    git_tag : 3828436c4d164bfeb3a245a511232bf095dd0b8b     # 1.26.0
     patches :
       - feedstock-patches/numpy/0001-Changes-for-P10-and-Open-ce.patch
 
