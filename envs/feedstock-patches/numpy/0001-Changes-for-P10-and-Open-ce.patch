@@ -1,126 +1,113 @@
-From 0e463c38d79aeff6547a6ae8e38016b02eda10ac Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Mon, 18 Sep 2023 07:09:24 +0000
-Subject: [PATCH] ass
+From ec762c9a3af6f4794750858aa80386a92a28f850 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 27 May 2024 09:20:39 +0000
+Subject: [PATCH] update to build with GCC12
 
 ---
- recipe/build.sh  | 10 +++++-----
- recipe/meta.yaml | 31 ++++++++++++++++---------------
- 2 files changed, 21 insertions(+), 20 deletions(-)
+ recipe/conda_build_config.yaml |  2 ++
+ recipe/install_base.sh         | 19 ++++++++++++++++++-
+ recipe/meta.yaml               | 21 +++++++++++++--------
+ 3 files changed, 33 insertions(+), 9 deletions(-)
 
-diff --git a/recipe/build.sh b/recipe/build.sh
-index 821a220..67a90c5 100644
---- a/recipe/build.sh
-+++ b/recipe/build.sh
-@@ -8,19 +8,19 @@ if [[ ! -f $BUILD_PREFIX/bin/ranlib ]]; then
-     ln -s $AR $BUILD_PREFIX/bin/ar
- fi
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index d53d8ac..4426880 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -8,3 +8,5 @@ c_compiler:    # [win]
+   - vs2019     # [win]
+ cxx_compiler:  # [win]
+   - vs2019     # [win]
++blas_impl:
++  - openblas
+diff --git a/recipe/install_base.sh b/recipe/install_base.sh
+index 6661929..2c4320b 100644
+--- a/recipe/install_base.sh
++++ b/recipe/install_base.sh
+@@ -4,10 +4,27 @@ set -e
  
-+# compiler_compat/ld causes problem in finding openblas lib
-+rm $PREFIX/compiler_compat/ld
+ UNAME_M=$(uname -m)
+ 
++EXTRA_OPTS=""
++echo $GCC_HOME
 +
- cat > site.cfg <<EOF
- [DEFAULT]
- library_dirs = $PREFIX/lib
- include_dirs = $PREFIX/include
- 
- [lapack]
--libraries = lapack,blas
-+libraries = openblas
- 
- [blas]
--libraries = cblas,blas
-+libraries = openblas
- EOF
- 
--export NPY_LAPACK_ORDER=lapack
--export NPY_BLAS_ORDER=blas
--
- $PYTHON -m pip install --no-deps --ignore-installed -v .
++if [[ $ppc_arch == "p10" ]]
++then
++    if [[ -z "${GCC_HOME}" ]];
++    then
++        echo "Please set GCC_HOME to the install path of gcc-toolset-12"
++        exit 1
++    else
++        export PATH=$GCC_HOME/bin:$PATH
++        export CC=$GCC_HOME/bin/gcc
++        export CXX=$GCC_HOME/bin/g++
++    fi
++fi
++
+ case "$UNAME_M" in
+     ppc64*)
+         # Optimizations trigger compiler bug.
+-        EXTRA_OPTS="--no-use-pep517 --global-option=build --global-option=--cpu-dispatch=min"
++         export CXXFLAGS="$(echo ${CXXFLAGS} | sed -e 's/ -fno-plt//')"
++         export CFLAGS="$(echo ${CFLAGS} | sed -e 's/ -fno-plt//')"
+         ;;
+     *)
+         EXTRA_OPTS=""
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 82e24fb..5165868 100644
+index 82345d0..1130963 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -31,19 +31,18 @@ requirements:
-     - python                                 # [build_platform != target_platform]
-     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-     - cython                                 # [build_platform != target_platform]
--    - setuptools <60.0.0                     # [build_platform != target_platform]
--    - {{ compiler('c') }}
--    - {{ compiler('cxx') }}
-+    - setuptools {{ setuptools }}                   # [build_platform != target_platform]
-+    - {{ compiler('c') }}            #[ppc_arch != 'p10']
-+    - {{ compiler('cxx') }}          #[ppc_arch != 'p10']
-   host:
--    - setuptools <60.0.0
-+    - setuptools {{ setuptools }}
-     - python
-     - pip
-     - cython
--    - libblas
--    - libcblas
--    - liblapack
-+    - libopenblas {{ openblas }}
-   run:
-     - python
-+    - libopenblas {{ openblas }}
-   run_constrained:
-     # enforce eviction of package from anaconda defaults
-     - numpy-base <0a0
-@@ -52,20 +51,21 @@ requirements:
- # https://github.com/numpy/numpy/issues/15243
- {% set tests_to_skip = tests_to_skip + " or test_loss_of_precision[complex256]" %}  # [ppc64le]
- # Sometimes crashes on travis (needs too much memory); since 1.22.4 it fails for pypy
--{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                  # [(CI == "travis") or ((python_impl == "pypy") and linux)]
-+{% set tests_to_skip = tests_to_skip + " or test_large_archive" %}                  # [((python_impl == "pypy") and linux)]
- # there are some tests that cannot really work in emulation, see e.g. numpy/numpy#20445
- {% set tests_to_skip = tests_to_skip + " or Test_ARM_Features" %}                   # [build_platform != target_platform]
- # test_new_policy reruns part of test suite; including a CPU feature test that fails in emulation
- {% set tests_to_skip = tests_to_skip + " or test_new_policy" %}                     # [build_platform != target_platform]
- # flaky refcount-based test; already skipped upstream for win+py39
- {% set tests_to_skip = tests_to_skip + " or test_partial_iteration_cleanup" %}      # [osx]
-+{% set tests_to_skip = tests_to_skip + " or test_cython" %}
+@@ -13,6 +13,8 @@ source:
  
- 
- test:
-   requires:
-     - pytest
-     - pytest-timeout
--    - pytest-xdist         # [CI != "travis"]
-+    - pytest-xdist
-     # (mostly) optional test requirements (except wheel, python-cov, mypy), see
-     # https://github.com/numpy/numpy/blob/main/test_requirements.txt
-     - cffi                 # [py<=39 and python_impl != "pypy"]
-@@ -74,22 +74,23 @@ test:
-     # workaround for python/cpython#98706
-     - importlib_metadata >=4.13  # [py==311]
-     - pytz
--    - setuptools <60.0.0
--    - typing_extensions
-+    - setuptools {{ setuptools }}
-+    - typing_extensions {{ typing_extensions }}
-     # some linux tests need a C compiler;
-     # extra f2py tests need a fortran compiler
--    - {{ compiler('c') }}        # [linux]
--    - {{ compiler('fortran') }}  # [linux]
-+    - {{ compiler('c') }}        #[ppc_arch != 'p10']
-+    - {{ compiler('fortran') }}  #[ppc_arch != 'p10']
-   commands:
-     - f2py -h
-     # numpy.test will show SIMD features of agent (in the past, there have been
-     # failures that occured depending on presence/absence of e.g. AVX512);
-     # for signature of numpy.test see the following (note default: label='fast'),
-     # https://github.com/numpy/numpy/blob/maintenance/1.22.x/numpy/_pytesttester.py#L81-L82
--    {% set label = "'fast'" if (CI == "travis") or (aarch64 and python_impl == "pypy") else "'full'" %}
--    {% set num_proc = "'-nauto', " if (CI != "travis") else "" %}
-+    {% set label = "'fast'" if (aarch64 and python_impl == "pypy") else "'full'" %}
-+    {% set num_proc = "" %}
-     {% set param = "verbose=1, label=" + label + ", tests=None" %}
-     {% set extra = "extra_argv=['-k', 'not (" + tests_to_skip + ")', " + num_proc + "'--timeout=3000', '--durations=50']" %}
-+    - python -c "import numpy; numpy.show_config()"
-     - python -c "import numpy, sys; sys.exit(not numpy.test({{ param }}, {{ extra }}))"
-   imports:
-     - numpy
+ build:
+   number: 0
++  script_env:      #[ppc_arch == 'p10']
++    - GCC_HOME     #[ppc_arch == 'p10']
+   # numpy 1.26 no longer supports Python 3.8: https://numpy.org/devdocs/release/1.26.0-notes.html
+   # "This release supports Python versions 3.9-3.12"
+   skip: True  # [(blas_impl == 'openblas' and win)]
+@@ -35,10 +37,13 @@ outputs:
+         - f2py = numpy.f2py.f2py2e:main
+       missing_dso_whitelist:  # [s390x]
+         - $RPATH/ld64.so.1    # [s390x]
++      script_env:      #[ppc_arch == 'p10']
++        - GCC_HOME     #[ppc_arch == 'p10']
++
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}      #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}    #[ppc_arch != "p10"]
+         - armpl  # [aarch64]        
+         - ninja-base
+         - pkg-config
+@@ -71,8 +76,8 @@ outputs:
+     requirements:
+       build:
+         # for runtime alignment
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}     #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}   #[ppc_arch != "p10"]
+         - armpl  # [aarch64]
+       host:
+         - python
+@@ -115,11 +120,11 @@ outputs:
+         - pytest-xdist
+         - hypothesis >=6.81.1
+         - pytz >=2023.3
+-        - {{ compiler('c') }}  # [not osx]
+-        - {{ compiler('cxx') }}  # [not osx]
+-        - {{ compiler('fortran') }}  # [not osx]
++        - {{ compiler('c') }}       #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}     #[ppc_arch != "p10"]
++        - {{ compiler('fortran') }} #[ppc_arch != "p10"]
+         - nomkl  # [x86 and blas_impl != 'mkl']
+-        - typing-extensions >=4.2.0
++        - typing-extensions {{ typing_extensions }}       
+         - mypy >=1.5.1
+         - cffi  # [py<310]
+         - charset-normalizer
 -- 
 2.40.1
 
