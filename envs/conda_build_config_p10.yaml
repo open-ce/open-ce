@@ -6,5 +6,5 @@ cpu_opt_tune:
   - power10                 # [ppc64le]
 vector_settings:
   - no-pcrel                # [ppc64le]
-setuptools:
-  - 63.*
+numpy:
+  - 1.26
