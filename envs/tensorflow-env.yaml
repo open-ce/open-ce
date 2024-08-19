@@ -44,6 +44,7 @@ packages:
   - feedstock : tensorflow-text
     git_tag : r2.13.0
   - feedstock : tensorflow-model-optimization
+    git_tag : r0.7.5
   - feedstock : tensorflow-addons
     git_tag : r0.21.0
   - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
