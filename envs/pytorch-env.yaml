@@ -25,7 +25,8 @@ packages:
   - feedstock : cudnn
   - feedstock : cudatoolkit    #[cudatoolkit == "11.2" or cudatoolkit == "11.8"]
   {% endif %}
-  - feedstock : torchdata      # [build_type == 'cpu' or cudatoolkit == '11.8']
+  - feedstock : https://github.com/Aman-Surkar/torchdata-feedstock      # [build_type == 'cpu' or cudatoolkit == '11.8']
+    git_tag : r0.6.0
   - feedstock : https://github.com/AnacondaRecipes/leveldb-feedstock      #[ppc_arch == "p10"]
     git_tag: 44dd156fd8f7a81536926e11b54fdbf9df2c3158                     #[ppc_arch == "p10"]
     patches:                                                              #[ppc_arch == "p10"]
