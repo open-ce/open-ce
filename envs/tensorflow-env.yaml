@@ -41,6 +41,7 @@ packages:
   - feedstock : tensorflow-metadata
     git_tag : r1.13.1
   - feedstock : etils
+    git_tag : r1.0.0
   - feedstock : array-record
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
