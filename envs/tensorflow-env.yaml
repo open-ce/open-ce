@@ -42,7 +42,8 @@ packages:
     git_tag : r1.13.1
   - feedstock : etils
     git_tag : r1.0.0
-  - feedstock : array-record
+  - feedstock : https://github.com/Archana-Shinde1/array-record-feedstock
+    git_tag : pin2pip
   - feedstock : tensorflow-datasets
   - feedstock : tensorflow-text
     git_tag : r2.13.0
