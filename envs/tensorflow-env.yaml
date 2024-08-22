@@ -44,7 +44,8 @@ packages:
     git_tag : r1.0.0
   - feedstock : https://github.com/Archana-Shinde1/array-record-feedstock
     git_tag : pin2pip
-  - feedstock : tensorflow-datasets
+  - feedstock : https://github.com/Archana-Shinde1/tensorflow-datasets-feedstock
+    git_tag : pin-pip
   - feedstock : tensorflow-text
     git_tag : r2.13.0
   - feedstock : tensorflow-model-optimization
