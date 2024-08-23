@@ -37,7 +37,8 @@ packages:
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
     git_tag : r2.13.0  
-  - feedstock : tensorflow-hub
+  - feedstock : https://github.com/Archana-Shinde1/tensorflow-hub-feedstock
+    git_tag : pin2setuptools
   - feedstock : tensorflow-metadata
     git_tag : r1.13.1
   - feedstock : etils
