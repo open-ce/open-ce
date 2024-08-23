@@ -47,7 +47,9 @@ packages:
     patches :
       - feedstock-patches/grpcio/0001-Update-to-1.53.2-to-fix-CVE.patch            #[not s390x]
       - feedstock-patches/grpcio/0001-opence-changes-for-s390x.patch     #[s390x]
-  - feedstock : apache-beam
+#  - feedstock : apache-beam
+  - feedstock : https://github.com/Archana-Shinde1/apache-beam-feedstock
+    git_tag : fix-test
 {% endif %}
 {% endif %}
 

@@ -35,6 +35,8 @@ packages:
       - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
   - feedstock : grpc-cpp
   - feedstock : pyarrow
+    git_tag : r14.0.1
   - feedstock : orc
+    git_tag : main
 
 git_tag_for_env: open-ce-v1.9.4

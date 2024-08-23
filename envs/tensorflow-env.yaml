@@ -25,20 +25,35 @@ packages:
       - feedstock-patches/grpcio/0001-Update-to-1.53.2-to-fix-CVE.patch            #[not s390x]
       - feedstock-patches/grpcio/0001-opence-changes-for-s390x.patch     #[s390x]
   - feedstock : keras
-  - feedstock : tensorflow
-  - feedstock : dm-tree
-  - feedstock : tensorflow-probability
-  - feedstock : tensorflow-estimator
+    git_tag : r2.13.1
+  - feedstock : https://github.com/Aman-Surkar/tensorflow-feedstock
+    git_tag : r2.13.1
+  - feedstock : https://github.com/Aman-Surkar/dm-tree-feedstock
+    git_tag : r0.1.8
+  - feedstock : https://github.com/Aman-Surkar/tensorflow-probability-feedstock 
+    git_tag : r0.21.0
+  - feedstock : https://github.com/Aman-Surkar/tensorflow-estimator-feedstock
+    git_tag : r2.13.0
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
-  - feedstock : tensorflow-hub
+    git_tag : r2.13.0  
+  - feedstock : https://github.com/Archana-Shinde1/tensorflow-hub-feedstock
+    git_tag : pin2setuptools
   - feedstock : tensorflow-metadata
+    git_tag : r1.13.1
   - feedstock : etils
-  - feedstock : array-record
-  - feedstock : tensorflow-datasets
+    git_tag : r1.0.0
+  - feedstock : https://github.com/Archana-Shinde1/array-record-feedstock
+    git_tag : pin2pip
+  - feedstock : https://github.com/Archana-Shinde1/tensorflow-datasets-feedstock
+    git_tag : pin-pip
   - feedstock : tensorflow-text
+    git_tag : r2.13.0
   - feedstock : tensorflow-model-optimization
+    git_tag : r0.7.5
   - feedstock : tensorflow-addons
+    git_tag : r0.21.0
   - feedstock : tensorflow-io-gcs-filesystem  # [not s390x]
+    git_tag : r0.33.0  # [not s390x]
 
 git_tag_for_env: open-ce-v1.9.4

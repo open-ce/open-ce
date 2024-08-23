@@ -8,6 +8,7 @@ imported_envs:
 
 packages:
   - feedstock : onnx
+    git_tag : r1.16
 {% if not s390x %}
   - feedstock : safeint
   - feedstock : gtest
@@ -30,9 +31,14 @@ packages:
     git_tag : db12cbec273867700c91f82fad22aa6d27519058
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
+    git_tag : r1.14
   - feedstock : skl2onnx
+    git_tag : r1.16
   - feedstock : onnxmltools
-  - feedstock : tf2onnx
+    git_tag : r1.12
+#  - feedstock : tf2onnx
+  - feedstock : https://github.com/Archana-Shinde1/tf2onnx-feedstock
+    git_tag : fix-failure
 {% endif %}
 
 git_tag_for_env: open-ce-v1.9.4

@@ -11,6 +11,7 @@ packages:
 {% if not s390x %}
 {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
   - feedstock : pytorch-lightning
+    git_tag : r2.0.1
   - feedstock : pytorch-lightning-bolts
   - feedstock : libflac
   - feedstock : libsndfile
