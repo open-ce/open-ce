@@ -32,7 +32,7 @@ packages:
     git_tag : r0.1.8
   - feedstock : https://github.com/Aman-Surkar/tensorflow-probability-feedstock 
     git_tag : r0.21.0
-  - feedstock : tensorflow-estimator
+  - feedstock : https://github.com/Aman-Surkar/tensorflow-estimator-feedstock
     git_tag : r2.13.0
   - feedstock : tensorboard-data-server
   - feedstock : tensorboard
