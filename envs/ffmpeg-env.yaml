@@ -14,4 +14,4 @@ packages:
     patches :
       - feedstock-patches/ffmpeg/0001-disable-codecs-for-opence.patch
 
-git_tag_for_env: open-ce-v1.9.5-cpd
+git_tag_for_env: open-ce-v1.9.4
