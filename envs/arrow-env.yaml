@@ -37,4 +37,4 @@ packages:
   - feedstock : pyarrow
   - feedstock : orc
 
-git_tag_for_env: open-ce-v1.9.5-cpd
+git_tag_for_env: open-ce-v1.9.4
