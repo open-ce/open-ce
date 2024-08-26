@@ -41,4 +41,4 @@ packages:
   - feedstock : opencv
   - feedstock : cudatoolkit-dev     # [build_type == 'cuda']
 
-git_tag_for_env: open-ce-v1.9.4
+git_tag_for_env: open-ce-v1.9.5-cpd
