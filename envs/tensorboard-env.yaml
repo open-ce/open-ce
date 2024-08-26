@@ -19,4 +19,4 @@ packages:
       - feedstock-patches/grpcio/0001-opence-changes-for-s390x.patch     #[s390x]
   - feedstock : tensorboard
 
-git_tag_for_env: open-ce-v1.9.4
+git_tag_for_env: open-ce-v1.9.5
