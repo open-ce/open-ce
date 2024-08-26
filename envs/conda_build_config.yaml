@@ -307,7 +307,7 @@ tensorboard_plugin_wit:
 tensorflow:
   - 2.13.*
 tensorflow_hub:
-  - 0.13
+  - 0.14
 tensorflow_io_gcs_filesystem:
   - 0.33.*
 termcolor:
