@@ -43,6 +43,7 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 | 1.7.5                   | >=11.0.4                |
 | 1.8.0                   | 11.0.3                  |
 | 1.8.1                   | >=11.0.4                |
+| 1.9.5-cpd               | 12.0.3
 
 ## GETTING STARTED
 
@@ -64,6 +65,11 @@ MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple
 Rocket Software hosts pre-built versions of the Open-CE at conda channel [here](https://anaconda.org/rocketce). This channel provides packages for Power architecture(ppc64le). The latest version of Open-CE can be pulled down using the mentioned channel.
 
 In order to get notification you can register at https://community.rocketsoftware.com/forums/forum-home/community-members?communitykey=c7ece6e8-5a29-4a17-a2bc-68b65f89d29f. Please reach out to jadhavs@rocketsoftware.com for any questions and enquiries.
+
+### Build instruction on ppc(p9 and p10)
+Setuptools v72.1.0 (The default Conda channel does not have the CVE patch version available) can be build
+1. Set `export CONDA_ADD_PIP_AS_PYTHON_DEPENDENCY=0` and then build common-deps.yaml
+2. `unset CONDA_ADD_PIP_AS_PYTHON_DEPENDENCY` and then build opence-env.yaml.
 
 ### Installing Packages
 
