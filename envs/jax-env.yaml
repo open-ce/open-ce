@@ -43,6 +43,12 @@ packages:
       - feedstock-patches/bazel-toolchain/0001-P10-changes.patch                        #[ppc_arch == 'p10']
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
+  - feedstock : https://github.com/conda-forge/python-flatbuffers-feedstock
+    git_tag : 33360d623f714d44b2524320c8d2c5f3440ce435
+    patches :
+      - feedstock-patches/flatbuffers/0001-OpenCE-changes.patch
+  - feedstock : https://github.com/conda-forge/flatbuffers-feedstock
+    git_tag : 246926fe4b05d902071f4fdb12a33c338e0a7847
   - feedstock : jax
   - feedstock : jaxlib
 
