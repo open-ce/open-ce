@@ -1,5 +1,14 @@
+From 3f67e2def3bc6f1043e39b5ce25c205a6964e6e7 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Wed, 28 Aug 2024 06:18:50 +0000
+Subject: [PATCH] Pinned icu to 73.1
+
+---
+ recipe/meta.yaml | 128 +++++++++++++++++++++++------------------------
+ 1 file changed, 64 insertions(+), 64 deletions(-)
+
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 6f6b558..2ea54f2 100644
+index 6f6b558..4b07dc9 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,14 +1,14 @@
@@ -20,6 +29,24 @@ index 6f6b558..2ea54f2 100644
    patches:
      # https://svn.boost.org/trac10/attachment/ticket/11120/python_jam.patch
      - python_jam.patch
+@@ -29,7 +29,7 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+   host:
+-    - icu                   # [unix]
++    - icu 73.1                  # [unix]
+     - bzip2                 # [unix]
+     - zlib
+ 
+@@ -42,7 +42,7 @@ outputs:
+         - {{ compiler('c') }}
+         - {{ compiler('cxx') }}
+       host:
+-        - icu               # [unix]
++        - icu 73.1              # [unix]
+         - bzip2             # [unix]
+         - zlib
+     test:
 @@ -108,57 +108,57 @@ outputs:
          - conda inspect linkages -p $PREFIX libboost  # [not win]
          - conda inspect objects -p $PREFIX libboost   # [osx]
@@ -152,3 +179,6 @@ index 6f6b558..2ea54f2 100644
  
  about:
    home: http://www.boost.org/
+-- 
+2.40.1
+
