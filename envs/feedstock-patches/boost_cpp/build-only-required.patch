@@ -1,5 +1,14 @@
+From 04dca100de4d549da1f61a27f4ac06f14316f0d6 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Wed, 28 Aug 2024 06:31:44 +0000
+Subject: [PATCH] Pinned icu to 73.1 for s390x
+
+---
+ recipe/meta.yaml | 130 ++++++++++++++++++++++++-----------------------
+ 1 file changed, 66 insertions(+), 64 deletions(-)
+
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 6f6b558..2ea54f2 100644
+index 6f6b558..2c87234 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,14 +1,14 @@
@@ -20,7 +29,27 @@ index 6f6b558..2ea54f2 100644
    patches:
      # https://svn.boost.org/trac10/attachment/ticket/11120/python_jam.patch
      - python_jam.patch
-@@ -108,57 +108,57 @@ outputs:
+@@ -29,7 +29,8 @@ requirements:
+     - {{ compiler('c') }}
+     - {{ compiler('cxx') }}
+   host:
+-    - icu                   # [unix]
++    - icu                   #[not s390x]
++    - icu 73.1              #[s390x]
+     - bzip2                 # [unix]
+     - zlib
+ 
+@@ -42,7 +43,8 @@ outputs:
+         - {{ compiler('c') }}
+         - {{ compiler('cxx') }}
+       host:
+-        - icu               # [unix]
++        - icu               #[not s390x]
++        - icu 73.1          #[s390x]
+         - bzip2             # [unix]
+         - zlib
+     test:
+@@ -108,57 +110,57 @@ outputs:
          - conda inspect linkages -p $PREFIX libboost  # [not win]
          - conda inspect objects -p $PREFIX libboost   # [osx]
  
@@ -129,7 +158,7 @@ index 6f6b558..2ea54f2 100644
  
  
    # Metapackages to mirror conda-forge's name. It is my goal to deprecate
-@@ -171,14 +171,14 @@ outputs:
+@@ -171,14 +173,14 @@ outputs:
        run:
          - {{ pin_subpackage('libboost', exact=True) }}
  
@@ -152,3 +181,6 @@ index 6f6b558..2ea54f2 100644
  
  about:
    home: http://www.boost.org/
+-- 
+2.40.1
+
