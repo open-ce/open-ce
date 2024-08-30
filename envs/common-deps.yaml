@@ -12,6 +12,10 @@ packages:
       - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
       - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
       - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch #[not s390x]
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v72.1.0           #[ppc64le]
+    git_tag : 1d5a7bec76c7f4887f832afbb99a9111294e2c52                                  #[ppc64le]
+    patches :                                                                           #[ppc64le]
+      - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]
   # Build scikit-learn as scikit-learn Anaconda requires numpy<1.25
   - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   # [py==311]
     git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          # [py==311]

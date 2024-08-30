@@ -1,0 +1,23 @@
+From 084f4346f96532dd33ce7738ac81396c297eabec Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <Archana.Shinde1@ibm.com>
+Date: Tue, 6 Aug 2024 13:39:46 +0000
+Subject: [PATCH] fix build failure
+
+---
+ recipe/build.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 6bd3a0a..fa35f13 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -1,5 +1,6 @@
+ #!/bin/bash
+ 
++export CONDA_ADD_PIP_AS_PYTHON_DEPENDENCY=0
+ export SETUPTOOLS_DISABLE_VERSIONED_EASY_INSTALL_SCRIPT=1
+ export DISTRIBUTE_DISABLE_VERSIONED_EASY_INSTALL_SCRIPT=1
+ 
+-- 
+2.40.1
+
