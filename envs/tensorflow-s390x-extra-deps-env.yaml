@@ -1,7 +1,7 @@
 packages:
 {% if s390x %}
-  - feedstock : https://github.com/AnacondaRecipes/flatbuffers-feedstock.git
-    git_tag: c7bd7770705d34151e80cae10b7b4a4cc960094f
+  - feedstock : https://github.com/conda-forge/flatbuffers-feedstock
+    git_tag : 246926fe4b05d902071f4fdb12a33c338e0a7847
   - feedstock : https://github.com/AnacondaRecipes/promise-feedstock
     git_tag: a1855c8a4e3e2e597f612e4edd504bf1da81d91d
   - feedstock : https://github.com/conda-forge/clangdev-feedstock
