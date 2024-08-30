@@ -187,8 +187,6 @@ murmurhash:
   - 1.0.*
 nasm:                          # [x86_64]
   - 2.13.03                    # [x86_64]
-networkx:
-  - 2.*
 ninja:
   - 1.10.*
 nccl:
