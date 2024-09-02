@@ -5,6 +5,14 @@ imported_envs:
   - common-deps.yaml
 
 packages:
+  - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock
+    git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock
+    git_tag : b4a76d6016ac5c555a0cf1763d887f5c67c2d210
+    patches:
+      - feedstock-patches/pydantic-core/0001-changes-for-opence.patch
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock
+    git_tag: 6148ac902c701e69aab9d00846c19e1565b7e083
   - feedstock : https://github.com/conda-forge/tiktoken-feedstock.git
     git_tag : 9e4540dd98fa5628afb9a8bc1cbf25c5197fcfe6
     patches :

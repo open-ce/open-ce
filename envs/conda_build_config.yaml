@@ -232,7 +232,7 @@ psutil:
 pybind11:
   - 2.10.*
 pydantic:
-  - 1.10.*
+  - 2.*
 pytest:
   - 7.*
 python:

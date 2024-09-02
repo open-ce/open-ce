@@ -1,0 +1,39 @@
+From 5b823dd1afee25db15ad635fff22aff49da1aecf Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 2 Sep 2024 13:42:25 +0000
+Subject: [PATCH] changes for opence
+
+---
+ recipe/meta.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index bc6e15a..b42a498 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -5,8 +5,8 @@ package:
+   version: {{ version }}
+ 
+ source:
+-  url: https://pypi.io/packages/source/p/pydantic-core/pydantic_core-{{ version }}.tar.gz
+-  sha256: 1fd0c1d395372843fba13a51c28e3bb9d59bd7aebfeb17358ffaaa1e4dbbe948
++  git_url: https://github.com/pydantic/pydantic-core
++  git_rev: v{{ version }}
+ 
+ build:
+   script_env:          # [linux]
+@@ -15,9 +15,9 @@ build:
+     # PyPy has weird sysconfigdata name
+     - rm -f $PREFIX/lib/pypy$PY_VER/_sysconfigdata.py  # [build_platform != target_platform and target_platform == "linux-ppc64le"]
+     # maturin looks at the gitignore file, but it is quite aggressive for conda-forge
+-    - mv ${FEEDSTOCK_ROOT}/.gitignore ${FEEDSTOCK_ROOT}/gitignore     # [linux]
++#    - mv ${FEEDSTOCK_ROOT}/.gitignore ${FEEDSTOCK_ROOT}/gitignore     # [linux]
+     - {{ PYTHON }} -m pip install . -vv
+-    - mv ${FEEDSTOCK_ROOT}/gitignore ${FEEDSTOCK_ROOT}/.gitignore     # [linux]
++#    - mv ${FEEDSTOCK_ROOT}/gitignore ${FEEDSTOCK_ROOT}/.gitignore     # [linux]
+   number: 1
+ 
+ requirements:
+-- 
+2.40.1
+
