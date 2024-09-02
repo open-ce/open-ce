@@ -34,14 +34,34 @@ packages:
     patches :
       - feedstock-patches/pyink/0001-Upadtes-for-open-ce.patch
   - feedstock : https://github.com/conda-forge/black-feedstock.git
-    git_tag : 7bb21b29627bac864e4763dc65aaa52aa63deb23
+    git_tag : c49fe234affbb58d96b2d1585f8aff8b4f21c020   #v24.3.0
     patches :
-      - feedstock-patches/black/0001-Fix-CVE-2024-21503.patch                       #[not s390x]
-      - feedstock-patches/black/0001-Update-patch-of-black-to-fix-s390x-build.patch #[s390x]
+      - feedstock-patches/black/0001-build-CVE-fix-version-24.3.0.patch
+#      - feedstock-patches/black/0001-Update-patch-of-black-to-fix-s390x-build.patch #[s390x]
   - feedstock : https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
     git_tag : 7ad703f99406292de8d0111655f989ba2fb3de64
     patches :
       - feedstock-patches/hatch-fancy-pypi-readme/0001-Upadtes-with-open-ce.patch  
+  - feedstock : https://github.com/conda-forge/aiohttp-feedstock   #v3.10.2
+    git_tag : 73444d61e5984b28390514413d7d56bbc5b2e27b
+    patches :
+      - feedstock-patches/aiohttp/0001-CVE-fixed-version-3.10.2.patch
+  - feedstock : https://github.com/conda-forge/aiohappyeyeballs-feedstock.git
+    git_tag : b282b4db2ac2e6ace5efa3d1bd93ac2a28563dcf
+  - feedstock : https://github.com/conda-forge/proxy-py-feedstock.git
+    git_tag : 0c8912c78865b55b544c1a35129187b2a6d60514
+  - feedstock : https://github.com/conda-forge/re-assert-feedstock
+    git_tag : 71f1d6fe03f51e7849044e193eef507c8f64f57c
+  - feedstock : https://github.com/conda-forge/zipp-feedstock   #v3.19.1
+    git_tag : e5bd9fdcab2413fc4c7399400040634bc5421a3f
+    patches :
+      - feedstock-patches/zipp/0001-update-recipe-for-open-ce-changes.patch
+  - feedstock : https://github.com/conda-forge/jaraco.test-feedstock
+    git_tag : 864a27b070378481c319c22bccdba6c82977af07
+  - feedstock : https://github.com/conda-forge/jaraco.context-feedstock.git
+    git_tag : 819219aa5a7a0f0474525304274f952cfdc56b7f
+  - feedstock : https://github.com/conda-forge/backports.tarfile-feedstock.git
+    git_tag : 0aed6724708917d98af1719085b666f085030e4b
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree

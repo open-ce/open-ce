@@ -21,7 +21,7 @@ av:
 bazel:
   - 6.*
 black:
-  - 23.10.*
+  - 24.3.0
 bsddb3:
   - 6.2.9
 boost:
