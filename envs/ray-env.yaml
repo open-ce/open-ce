@@ -19,19 +19,27 @@ packages:
     patches: 
       - feedstock-patches/cfitsio/0001-Open-ce-changes.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : 9eebdc51a4cb9f3222f6f9250c80c563f869b15e
+    git_tag : 8043cc232022c06b91ea8da00ac291def319a81e  #0.36.2
     patches:
-      - feedstock-patches/starlette/0001-Fix-CVE-2023-29159-by-backporting.patch
-  - feedstock : https://github.com/conda-forge/python-multipart-feedstock
-    git_tag : d40967f6afce79de33c3870798301aa797c490a7
-    patches:
-      - feedstock-patches/python-multipart/0001-Add-fix-to-CVE-2024-24762-by-backporting-it.patch
+      - feedstock-patches/starlette/0001-Pinned-python-multipart-to-fix-CVE-2024-24762.patch
+  - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.0.7
+    git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
   - feedstock : https://github.com/conda-forge/aiorwlock-feedstock
     git_tag : 1431680c5d1e8b842704ce40ced10377cade59e7
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
-    git_tag : dd3ad2bf3128b222fa0bae834499dcb6232c9e47
+    git_tag : 3dd382b293b66015609d422170f4e0719ae58100
     patches:
-      - feedstock-patches/fastapi/0001-Restricted-python-version-for-pydantic-error.patch
+      - feedstock-patches/fastapi/0001-Relaxed-starlette-and-pinned-pydantic.patch  #v0.109.1
+  - feedstock : https://github.com/conda-forge/anyio-feedstock
+    git_tag : 4204c3f90b747bcf6673f61a77f40aa16239612c
+    patches:
+      - feedstock-patches/anyio/0001-Skipped-failed-tests.patch
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock
+    git_tag : b4a76d6016ac5c555a0cf1763d887f5c67c2d210
+    patches:
+      - feedstock-patches/pydantic-core/0001-changes-for-opence.patch
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock
+    git_tag: 6148ac902c701e69aab9d00846c19e1565b7e083
   - feedstock : dm-tree
   - feedstock : https://github.com/AnacondaRecipes/opencensus-feedstock
     git_tag : 29535305e9e7456f6b82758366a581cfa8512bfd
