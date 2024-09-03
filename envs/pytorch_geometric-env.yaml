@@ -18,5 +18,6 @@ packages:
   - feedstock : pytorch_sparse
   - feedstock : pytorch_scatter
   - feedstock : pytorch_geometric
+    git_tag : main
 {% endif %}
 git_tag_for_env: open-ce-v1.11.2
