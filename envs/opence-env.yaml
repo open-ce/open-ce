@@ -15,8 +15,10 @@ imported_envs:
   - arrow-env.yaml
   - mamba-env.yaml
   - jax-env.yaml     # [build_type == 'cpu' or x86_64]
+
+# Disable ray and apache-beam for 1.11.3
 #  - ray-env.yaml
-  - apache-beam-env.yaml
+#  - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
   - deepspeed-env.yaml
