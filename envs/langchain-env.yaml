@@ -5,10 +5,18 @@ imported_envs:
   - common-deps.yaml
 
 packages:
+  - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock    #[ppc64le]
+    git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock      #[ppc64le]
+    git_tag : b4a76d6016ac5c555a0cf1763d887f5c67c2d210                          #[ppc64le]
+    patches:                                                                    #[ppc64le]
+      - feedstock-patches/pydantic-core/0001-changes-for-opence.patch           #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock           #[ppc64le]
+    git_tag: 6148ac902c701e69aab9d00846c19e1565b7e083                           #[ppc64le]
   - feedstock : https://github.com/conda-forge/tiktoken-feedstock.git
     git_tag : 9e4540dd98fa5628afb9a8bc1cbf25c5197fcfe6
     patches :
-           - feedstock-patches/tiktoken/tiktoken-with-opence-changes.patch  
+      - feedstock-patches/tiktoken/tiktoken-with-opence-changes.patch
   - feedstock : https://github.com/conda-forge/packaging-feedstock.git             #[ppc64le]
     git_tag : e04488e01c5686c08fbe433ac838c12113e6b5b2                             #[ppc64le]
   - feedstock : https://github.com/conda-forge/jsonpatch-feedstock.git             #[ppc64le]
