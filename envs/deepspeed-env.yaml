@@ -9,13 +9,13 @@ packages:
       git_tag: d8a1feb4e5099836efafb19fe449511ef6e8d9a7
     - feedstock : openmpi                  #[mpi_type == 'openmpi']
     - feedstock : deepspeed 
-    - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock
-      git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9
-    - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock
-      git_tag : b4a76d6016ac5c555a0cf1763d887f5c67c2d210
-      patches:
-        - feedstock-patches/pydantic-core/0001-changes-for-opence.patch
-    - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock
-      git_tag: 6148ac902c701e69aab9d00846c19e1565b7e083
+    - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock    #[ppc64le]
+      git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
+    - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock      #[ppc64le]
+      git_tag : b4a76d6016ac5c555a0cf1763d887f5c67c2d210                          #[ppc64le]
+      patches:                                                                    #[ppc64le]
+        - feedstock-patches/pydantic-core/0001-changes-for-opence.patch           #[ppc64le]
+    - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock           #[ppc64le]
+      git_tag: 6148ac902c701e69aab9d00846c19e1565b7e083                           #[ppc64le]
 {% endif %}
 git_tag_for_env: open-ce-v1.11.2
