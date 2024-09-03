@@ -27,7 +27,8 @@ imported_envs:
   - tensorflow-serving-env.yaml
   - transformers-env.yaml
   - ffmpeg-env.yaml
-  - langchain-env.yaml
+# Disabled in 1.11.3
+#  - langchain-env.yaml
   - tensorboard-env.yaml
 
 packages:
