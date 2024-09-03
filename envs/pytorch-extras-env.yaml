@@ -24,6 +24,8 @@ packages:
       - feedstock-patches/starlette/0001-Pinned-python-multipart-to-fix-CVE-2024-24762.patch
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.0.7
     git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
+    patches:
+      - feedstock-patches/python-multipart/0001-Changed-source-for-python-multipart.patch
   - feedstock : https://github.com/conda-forge/deepdiff-feedstock
     git_tag : f7914a1d64cf029852de9d6a9c362c2a40374a4f
   - feedstock : https://github.com/conda-forge/ordered-set-feedstock
