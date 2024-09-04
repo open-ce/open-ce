@@ -12,6 +12,7 @@ packages:
     - feedstock : cudatoolkit
     - feedstock : opencv
     - feedstock : DALI
+      git_tag : main
     - feedstock : jpeg-turbo
     - feedstock : libflac
     - feedstock : libsndfile
