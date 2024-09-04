@@ -59,7 +59,7 @@ packages:
   - feedstock : https://github.com/conda-forge/jaraco.text-feedstock #[s390x]
     git_tag : 191215926f54532bf1eface1e1a86c6e3fcbcba6               #[s390x]
   - feedstock : https://github.com/conda-forge/paste-feedstock       #[s390x]
-    git_tag :6f51e011e9af26b1e3d416941d59fa8af7d8269e                #[s390x]
+    git_tag : 6f51e011e9af26b1e3d416941d59fa8af7d8269e                #[s390x]
   - feedstock : https://github.com/conda-forge/zipp-feedstock   #v3.19.1
     git_tag : e5bd9fdcab2413fc4c7399400040634bc5421a3f
     patches :
