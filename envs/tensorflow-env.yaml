@@ -52,6 +52,12 @@ packages:
     git_tag : 0c8912c78865b55b544c1a35129187b2a6d60514
   - feedstock : https://github.com/conda-forge/re-assert-feedstock
     git_tag : 71f1d6fe03f51e7849044e193eef507c8f64f57c
+  - feedstock : https://github.com/conda-forge/gunicorn-feedstock    #[s390x]
+    git_tag : dfb1a0753cb407a520c0ca9856580a8cd9e6762b               #[s390x]
+  - feedstock : https://github.com/conda-forge/pastedeploy-feedstock #[s390x]
+    git_tag : d9be8cb4b889cd1bd419e4d7ed803ee573be065d               #[s390x]
+  - feedstock : https://github.com/conda-forge/jaraco.text-feedstock #[s390x]
+    git_tag : 191215926f54532bf1eface1e1a86c6e3fcbcba6               #[s390x]
   - feedstock : https://github.com/conda-forge/zipp-feedstock   #v3.19.1
     git_tag : e5bd9fdcab2413fc4c7399400040634bc5421a3f
     patches :
