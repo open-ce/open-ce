@@ -34,4 +34,4 @@ packages:
       - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
   - feedstock : apache-beam
 {% endif %}
-git_tag_for_env: open-ce-v1.11.2
+git_tag_for_env: open-ce-v1.11.3
