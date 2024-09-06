@@ -62,4 +62,4 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock    #[ppc64le]
     git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
 {% endif %}
-git_tag_for_env: open-ce-v1.11.2
+git_tag_for_env: open-ce-v1.11.3

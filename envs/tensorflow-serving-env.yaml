@@ -18,4 +18,4 @@ packages:
     patches :
       - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
   - feedstock: tensorflow-serving
-git_tag_for_env: open-ce-v1.11.2
+git_tag_for_env: open-ce-v1.11.3

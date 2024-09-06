@@ -18,4 +18,4 @@ packages:
     - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock           #[ppc64le]
       git_tag: 6148ac902c701e69aab9d00846c19e1565b7e083                           #[ppc64le]
 {% endif %}
-git_tag_for_env: open-ce-v1.11.2
+git_tag_for_env: open-ce-v1.11.3

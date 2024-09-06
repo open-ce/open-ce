@@ -45,4 +45,4 @@ packages:
     git_tag : a73cf20cb696f83f9debb53fa46eed2565b1e360
     patches :
       - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch 
-git_tag_for_env: open-ce-v1.11.2
+git_tag_for_env: open-ce-v1.11.3
