@@ -315,8 +315,7 @@ tqdm:
 typer:
   - 0.4.0
 typing_extensions:
-  - 4.*    #[not ppc64le]
-  - 4.7.1  #[ppc64le]  
+  - 4.*
 unzip:
   - 6.0
 wasabi:

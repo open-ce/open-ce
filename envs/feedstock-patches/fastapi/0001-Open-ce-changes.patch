@@ -1,0 +1,79 @@
+From cd9e893a7b86b467612fa229261f2e1087ff2b3b Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Wed, 4 Sep 2024 06:01:38 +0000
+Subject: [PATCH] Open-ce changes
+
+---
+ recipe/0001-Relaxed-starlette.patch | 25 +++++++++++++++++++++++++
+ recipe/meta.yaml                    | 12 +++++++-----
+ 2 files changed, 32 insertions(+), 5 deletions(-)
+ create mode 100644 recipe/0001-Relaxed-starlette.patch
+
+diff --git a/recipe/0001-Relaxed-starlette.patch b/recipe/0001-Relaxed-starlette.patch
+new file mode 100644
+index 0000000..58c4a8a
+--- /dev/null
++++ b/recipe/0001-Relaxed-starlette.patch
+@@ -0,0 +1,25 @@
++From b0bf66902eac4378222a551ffcb16b5fc9a5bf2b Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Wed, 4 Sep 2024 05:57:32 +0000
++Subject: [PATCH] Relaxed starlette
++
++---
++ pyproject.toml | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/pyproject.toml b/pyproject.toml
++index 31d9c59b..e9d4ae0b 100644
++--- a/pyproject.toml
+++++ b/pyproject.toml
++@@ -41,7 +41,7 @@ classifiers = [
++     "Topic :: Internet :: WWW/HTTP",
++ ]
++ dependencies = [
++-    "starlette>=0.35.0,<0.36.0",
+++    "starlette>=0.35.0",
++     "pydantic>=1.7.4,!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0",
++     "typing-extensions>=4.8.0",
++ ]
++-- 
++2.40.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 7d08092..72cbe75 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -8,6 +8,8 @@ package:
+ source:
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+   sha256: 5402389843a3561918634eb327e86b9ae98645a9e7696bede9074449c48d610a
++  patches:
++    - 0001-Relaxed-starlette.patch
+ 
+ build:
+   noarch: python
+@@ -16,15 +18,15 @@ build:
+ 
+ requirements:
+   host:
+-    - python >=3.8
++    - python <3.12
+     - pip
+     - hatchling >=1.13.0
+   run:
+     - anyio >=3.7.1,<4.0.0
+-    - python >=3.8
+-    - starlette >=0.35.0,<0.36.0
+-    - pydantic >=1.7.4,!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0
+-    - typing-extensions >=4.8.0
++    - python <3.12
++    - starlette
++    - pydantic {{ pydantic }}
++    - typing-extensions {{ typing_extensions }}
+ 
+ test:
+   imports:
+-- 
+2.40.1
+
