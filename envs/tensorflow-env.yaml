@@ -56,8 +56,10 @@ packages:
     git_tag : dfb1a0753cb407a520c0ca9856580a8cd9e6762b               #[s390x]
   - feedstock : https://github.com/conda-forge/pastedeploy-feedstock #[s390x]
     git_tag : 819ae7750312f86f2b8a75130c724bd54b3b474d              #[s390x]
-  - feedstock : https://github.com/conda-forge/jaraco.text-feedstock #[s390x]
-    git_tag : 191215926f54532bf1eface1e1a86c6e3fcbcba6               #[s390x]
+  - feedstock : https://github.com/conda-forge/jaraco.text-feedstock
+    git_tag : a85c541484f099f60be46dbf20dae1f5efedc05e
+    patches :
+      - feedstock-patches/jaraco-text/0001-Add-jaraco.context-in-run.patch
   - feedstock : https://github.com/conda-forge/paste-feedstock       #[s390x]
     git_tag : 6f51e011e9af26b1e3d416941d59fa8af7d8269e                #[s390x]
   - feedstock : https://github.com/conda-forge/zipp-feedstock   #v3.19.1
