@@ -31,7 +31,7 @@ packages:
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 3dd382b293b66015609d422170f4e0719ae58100
     patches:
-      - feedstock-patches/fastapi/0001-Relaxed-starlette-and-pinned-pydantic.patch  #v0.109.1
+      - feedstock-patches/fastapi/0001-Open-ce-changes.patch  #v0.109.1
   - feedstock : https://github.com/conda-forge/anyio-feedstock
     git_tag : 4204c3f90b747bcf6673f61a77f40aa16239612c
     patches:
