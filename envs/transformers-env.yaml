@@ -16,7 +16,8 @@ packages:
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
     git_tag : 8bdaa6419a2aa2b336076a4a3d714244afb6cc88
     patches :
-      - feedstock-patches/tokenizers/0001-opence-changes.patch
+      - feedstock-patches/tokenizers/0001-opence-changes.patch  #[ppc64le]
+      - feedstock-patches/tokenizers/0001-opence-changes-for-x86-and-s390x.patch  #[not ppc64le]
   - feedstock : https://github.com/conda-forge/safetensors-feedstock     #[not x86_64]
     git_tag : 1e5227b14f1c93caa9819f429e15b859cee36236                   #[not x86_64]
   - feedstock : https://github.com/conda-forge/transformers-feedstock
