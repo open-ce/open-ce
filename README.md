@@ -61,6 +61,14 @@ Rocket Software hosts pre-built versions of the Open-CE at conda channel [here](
 
 In order to get notification you can register at https://community.rocketsoftware.com/forums/forum-home/community-members?communitykey=c7ece6e8-5a29-4a17-a2bc-68b65f89d29f. Please reach out to jadhavs@rocketsoftware.com for any questions and enquiries.
 
+### Build steps for setuptools on Power9 and Power10.
+Ensure CONDA_ADD_PIP_AS_PYTHON_DEPENDENCY=0 is set before building setuptools v72.1.0.
+The steps to build setuptools with this environment variable and before other packages are:
+1. Set export CONDA_ADD_PIP_AS_PYTHON_DEPENDENCY=0
+2. Build common-deps.yaml
+3. unset CONDA_ADD_PIP_AS_PYTHON_DEPENDENCY
+4. Build opence-env.yaml.
+
 ### Installing Packages
 
 Open-CE packages can be installed from one of the community [builds](#community-builds). To install packages from one of the community channels, pass the channel's URL to the `conda` tool using the `-c` option.
