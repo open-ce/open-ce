@@ -18,7 +18,7 @@ imported_envs:
 
 # Disable ray and apache-beam for 1.11.3
 #  - ray-env.yaml
-#  - apache-beam-env.yaml
+  - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
   - deepspeed-env.yaml
@@ -28,7 +28,7 @@ imported_envs:
   - transformers-env.yaml
   - ffmpeg-env.yaml
 # Disabled in 1.11.3
-#  - langchain-env.yaml
+  - langchain-env.yaml
   - tensorboard-env.yaml
 
 packages:
