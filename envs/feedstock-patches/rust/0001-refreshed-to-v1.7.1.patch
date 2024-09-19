@@ -1,0 +1,40 @@
+From d96ea29ea8b4a1f5fb854d28bb3f2ada185bc812 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 19 Sep 2024 05:38:44 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 25ad233..c1f348f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -115,23 +115,17 @@ outputs:
+         # Added as run deps: libgcc-ng (via compiler strong run_exports), zlib
+         # - /lib64/libgcc_s.so.1  # [linux]
+         # - /lib64/libz.so.1  # [linux]
+-      run_exports:   # [(osx and x86_64) or linux]
+-        strong_constrains:   # [(osx and x86_64) or linux]
+-          - __osx >={{ c_stdlib_version }}  # [osx and x86_64]
+-          - __glibc >={{ c_stdlib_version }}  # [linux]
+     requirements:
+       build:
+         - posix  # [win]
+       host:
+         - {{ pin_subpackage("rust-std-" ~ rust_arch, exact=True) }}
+         - {{ compiler('c') }}  # [linux] -- rustc needs a toolchain to link executables
+-        - {{ stdlib('c') }}  # [linux]
+         # zlib is linked by **/lib/libLLVM-*-rust-*.so
+         - zlib  # [linux]
+       run:
+         - {{ pin_subpackage("rust-std-" ~ rust_arch, exact=True) }}
+         - gcc_impl_{{ target_platform }}  # [linux]
+-        - sysroot_{{ target_platform }} >={{ c_stdlib_version }}  # [linux]
+     test:
+       requires:
+         - posix  # [win]
+-- 
+2.40.1
+

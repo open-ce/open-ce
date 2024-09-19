@@ -10,8 +10,9 @@ packages:
     git_tag : 94a331b4ddce69c3c105ff97e54d659dcdecd25e
 {% endif %}
   - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : de8ddcf242d3c7086369f0d3d3a89fa9e1abd6c8
-    patches :                                                                         #[s390x]
+    git_tag : 5cd0f011186b182f22823def98def7084c06c0db
+    patches :
+      - feedstock-patches/rust/0001-refreshed-to-v1.7.1.patch #v1.7.1
       - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
   - feedstock: https://github.com/conda-forge/tokenizers-feedstock
     git_tag : 8bdaa6419a2aa2b336076a4a3d714244afb6cc88
