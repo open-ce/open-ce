@@ -26,23 +26,24 @@ packages:
     patches :                                                                      #[not x86_64]
       - feedstock-patches/orjson/0001-pin-rust_compiler-version.patch              #[not x86_64]
   - feedstock : https://github.com/conda-forge/langchain-text-splitters-feedstock.git
-    git_tag : b1a882d80228a52e0efd0d78985e403bfcdf58bb
-    patches :
-      - feedstock-patches/langchain/0001-opence-changes-for-langchain-text-splitters.patch
+    git_tag : 57a8d4cf9b7c36ab7ec6e34e55971a3954af0b36
   - feedstock : https://github.com/conda-forge/langsmith-feedstock.git
-    git_tag : aabd64e30fe4e5efb49bc44b254d8b7586717d99
-    patches :
-      - feedstock-patches/langchain/0001-opence-changes-for-langsmith.patch 
+    git_tag : 39617ee7441dd277d3800018e4ac1070114a992f
   - feedstock : https://github.com/conda-forge/langchain-community-feedstock.git
-    git_tag : 85e26900b84c2b3b96c89060e602ed6b6e7d4c37
-    patches :
-      - feedstock-patches/langchain-community/0001-changes-for-opence.patch
+    git_tag : 4d725b2c17f77bb1743775e3612bc5a46c2a80be
   - feedstock : https://github.com/conda-forge/langchain-core-feedstock.git
-    git_tag : dd3be8796e9c91d7bd4e454d33f326605743bb13
-    patches :
-      - feedstock-patches/langchain/0001-opence-changes-for-langchain-core.patch
+    git_tag : 94554619e1555f6dcbe81643afb96a661910a558
   - feedstock : https://github.com/conda-forge/langchain-feedstock.git
-    git_tag : a73cf20cb696f83f9debb53fa46eed2565b1e360
+    git_tag : fff239dbe1ed606df1e4554c6692eec22a784f01
     patches :
-      - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch 
+      - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch
+  - feedstock : https://github.com/conda-forge/poetry-core-feedstock
+    git_tag : 7de49dbab56fc8dcc8ba5e7d6c59b2df0c6ad58d
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+      - feedstock-patches/rust/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
 git_tag_for_env: open-ce-v1.11.3
