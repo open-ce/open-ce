@@ -1,0 +1,18 @@
+builder_version: ">=13.0.0"
+
+imported_envs:
+  - common-deps.yaml
+
+packages:
+{% if build_type == 'cuda' %}
+  - feedstock : https://github.com/conda-forge/nvcc-feedstock
+    git_tag : 9c8e43393d9c798c52a9d8e56785920ef767cabb
+    patches :
+      - feedstock-patches/nvcc/0001-Changes-for-open-ce.patch
+  - feedstock : cudatoolkit
+{% endif %}
+  - feedstock : https://github.com/conda-forge/bitsandbytes-feedstock
+    git_tag : 74eb7d7a4c0a1ae21fa8c79fc79f5f3720e67bb2 
+    patches :
+      - feedstock-patches/bitsandbytes/0001-changes-for-opence.patch
+git_tag_for_env: open-ce-v1.11.3
