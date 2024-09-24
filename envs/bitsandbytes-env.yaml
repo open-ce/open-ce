@@ -2,6 +2,7 @@ builder_version: ">=13.0.0"
 
 imported_envs:
   - common-deps.yaml
+  - pytorch-env.yaml
 
 packages:
 {% if build_type == 'cuda' %}
