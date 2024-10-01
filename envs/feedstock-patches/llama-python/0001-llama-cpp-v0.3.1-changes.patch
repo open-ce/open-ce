@@ -1,14 +1,41 @@
-From 589d1d80acccd00a8ddee5a28f188000f8703df0 Mon Sep 17 00:00:00 2001
+From dd575288a4ea107f487873a297be50aa3ffd3907 Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Tue, 1 Oct 2024 08:50:43 +0000
-Subject: [PATCH] llama-cpp v0.3.1 changes
+Date: Tue, 1 Oct 2024 14:15:06 +0000
+Subject: [PATCH] Update patch to fix failure
 
 ---
- recipe/meta.yaml | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+ recipe/0001-try-library-in-path.patch | Bin 0 -> 1960 bytes
+ recipe/meta.yaml                      |  26 +++++++++++++-------------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
+ create mode 100644 recipe/0001-try-library-in-path.patch
+
+diff --git a/recipe/0001-try-library-in-path.patch b/recipe/0001-try-library-in-path.patch
+new file mode 100644
+index 0000000000000000000000000000000000000000..5010c5d98d356027194667ce457c4e09a46950cf
+GIT binary patch
+literal 1960
+zcmb_dU2oGc6n)RHI0_GIX_CcR){lsxA)w-cFVXRYQ02r<Ym_FD?TSv&|BjtB*;aMz
+z0j#R2oqNx{KKI_!xvVybC-EiYAqiO;XOon~vvD?_(L9~dF$wbtBV<M*!tkLgvEVhx
+z1YwvoA4FkDoVkHX@JeQDT2g<p7A4~ZFAfL6;ow@Nn;@$;FP%43^8`0r?t$P_rVUCI
+zBfLzaD2WM1p;^vioBrULPVnvXtDD#FzC+7f6e5+>JVl9`>b2wezVDzY=!Pz{x;|fK
+z`nKk3$#<HUN>rr^>RbHA45M~gbAntH95&k(XC5X7PI0NN`Cv5k5P|W6w|jr+I85X@
+ze19c0==oE@(x)sOOV18`I_2zQ8U)$of<$x*5{BbAwl{h@ieqkrrz2fo!;fa(7$fsN
+zf!Q*iqo^obsx_6IEf0ha%yXGi#g`@BnA#{UJv4hubJCD)OoGp5H%uJZC32`+!*4-#
+zUdc_MG?iNY6nZ^y3sG)&?huuH+$NWtr;529p2f6j*oX?FD|~C?*mJx3ba0N`L`Z)<
+zNO~Wr%JrO4YutW6Zq{3UZ-emS=sLK%g3GA<DN6TnVe500pe6XCAvg}b>3=5pM7%z2
+z`{N-Y$84~oFm(LI;RJ)N&k=>Efsc$H1?v;&iB|j`pOOm2@nu_TvEgr}tmMG`TB>bb
+zS5k9^uDjf!W4Rtj9*Hp;UwUNxAK7kcdWIV#ExKw31bWTU4oRmv9*klz)7mT4mC+Y1
+zXaR0>RxN-TgT6tmMD@**IDW^2X|wJ);5(tT8khm-*)*?(GIFG8nek>S?KpULAe(7A
+z;oBiMPa~4|*zI0PuD7y8D~`eIH}BsM3}6p$B=7n2%oKk~<w^~KXRtDwK&;A2^1JLT
+z9^YlW*7&q&s&y~*E?7;~fsgLw;PSTdG%5?KaK8yUyA#cjyK`#9n)PLQSQ4By-Dx@6
+zpC$Ok_oh+MR-;9m8}E;mo>$wFwf%Khi`-o_D%cemR=k?Af|bDocrT0lGnAD^ZlT;e
+cQvLzOHc5X0wRhXZn;V$_0XR_*hXHY%KY%e*O8@`>
+
+literal 0
+HcmV?d00001
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 9389001..ae263e6 100644
+index 9389001..bc80b9b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,7 +1,7 @@
@@ -21,19 +48,20 @@ index 9389001..ae263e6 100644
  
  package:
    name: {{ name|lower }}
-@@ -9,10 +9,7 @@ package:
+@@ -9,10 +9,9 @@ package:
  
  source:
    url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/llama_cpp_python-{{ version }}.tar.gz
 -  sha256: 85f8fd110b4b90599d5ff427bd4a1a4db6e70817c60ba8aa609fa5c645761ec1
--  patches:
++  sha256: 75ec8374960b6353c254e55a48e7c7783abf6bcb9178ba0f655490738e5a9004 #v0.3.1
+   patches:
 -    # Asks cdll to look for the library in the path as well.
 -    - try-lib-in-path.patch
-+  sha256: 75ec8374960b6353c254e55a48e7c7783abf6bcb9178ba0f655490738e5a9004 #v0.3.1
++    - 0001-try-library-in-path.patch
  
  build:
    number: 0
-@@ -28,24 +25,24 @@ build:
+@@ -28,24 +27,24 @@ build:
      - {{ PYTHON }} -m pip install . -vv
  requirements:
    build:
@@ -66,7 +94,7 @@ index 9389001..ae263e6 100644
      - diskcache >=5.6.1
  
      - llama.cpp {{ llama_cpp_version }}
-@@ -63,6 +60,7 @@ test:
+@@ -63,6 +62,7 @@ test:
      - pip check
    requires:
      - pip
