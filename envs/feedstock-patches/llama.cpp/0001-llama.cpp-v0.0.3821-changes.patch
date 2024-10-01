@@ -1,14 +1,14 @@
-From a007d9ff394923a73d0b025ac9c4c8ab28cc7cc1 Mon Sep 17 00:00:00 2001
+From cf60044188809afe981bbeb11ad82a74dce1ca01 Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Tue, 1 Oct 2024 10:31:19 +0000
-Subject: [PATCH] update recipe
+Date: Tue, 1 Oct 2024 14:06:28 +0000
+Subject: [PATCH] update patch
 
 ---
- recipe/meta.yaml | 51 +++++++++++++++++++++---------------------------
- 1 file changed, 22 insertions(+), 29 deletions(-)
+ recipe/meta.yaml | 53 ++++++++++++++++++++++--------------------------
+ 1 file changed, 24 insertions(+), 29 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..bd12850 100644
+index b1428da..2ade59c 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -37,7 +37,7 @@ index b1428da..bd12850 100644
  
    script:
      - LLAMA_ARGS="-DLLAMA_BUILD_TESTS=OFF"              # [unix]
-@@ -40,11 +37,11 @@ build:
+@@ -40,11 +37,12 @@ build:
      {{ llama_args("METAL=OFF") }}       # [osx and x86_64]
      {{ llama_args("ACCELERATE=ON") }}   # [osx]
  
@@ -45,6 +45,7 @@ index b1428da..bd12850 100644
 -    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  # [cuda_compiler_version != "None"]
 +    {{ llama_args("CUDA=ON") }}                       #[build_type == 'cuda']
 +    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  #[build_type == 'cuda']
++    {{ cmake_args("CMAKE_INSTALL_PREFIX=$PREFIX") }}  # [ ppc_arch == "p10"]
  
 -    {{ llama_args("BLAS=ON") }}                     # [not osx and cuda_compiler_version == "None"]
 -    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
@@ -53,7 +54,7 @@ index b1428da..bd12850 100644
  
      - echo $LLAMA_ARGS  # [unix]
      - set LLAMA_ARGS    # [win]
-@@ -53,6 +50,9 @@ build:
+@@ -53,6 +51,9 @@ build:
      - cmake -S . -B build -G Ninja ${CMAKE_ARGS} ${LLAMA_ARGS}  # [unix]
      - cmake --build build
      - cmake --install build 
@@ -63,7 +64,7 @@ index b1428da..bd12850 100644
    
    missing_dso_whitelist:
      - "*/nvcuda.dll"    # [win]
-@@ -60,35 +60,28 @@ build:
+@@ -60,35 +61,29 @@ build:
  
  requirements:
    build:
@@ -89,6 +90,7 @@ index b1428da..bd12850 100644
 -    - blas-devel * *{{ blas_impl }}                 # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 -    - mkl-devel {{ mkl }}                           # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 +    - openblas {{ openblas }}                  #[build_type == 'cpu']
++    - mkl-devel {{ mkl }}                      #[build_type == 'cpu']
    run:
 -    - cuda-version {{ cuda_compiler_version }}      # [cuda_compiler_version != "None"]
 -
@@ -105,8 +107,8 @@ index b1428da..bd12850 100644
    commands:
 -    - main --help                                   # [build_platform == target_platform and cuda_compiler_version == "None"]
 -    - server --help                                 # [build_platform == target_platform and cuda_compiler_version == "None"]
-+    - main --help
-+    - server --help
++    - main --help            # [build_platform == target_platform and cuda_compiler_version == "None"]
++    - server --help          # [build_platform == target_platform and cuda_compiler_version == "None"]
  
  about:
    home: https://github.com/ggerganov/llama.cpp
