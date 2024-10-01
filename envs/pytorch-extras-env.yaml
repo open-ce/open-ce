@@ -30,11 +30,8 @@ packages:
     git_tag : f7914a1d64cf029852de9d6a9c362c2a40374a4f
   - feedstock : https://github.com/conda-forge/ordered-set-feedstock
     git_tag : ffb018797625d7f932bdd2f608d4f0813e227065
-  - feedstock : https://github.com/AnacondaRecipes/uvicorn-feedstock.git
-    git_tag: 312dca71c6d5a752ad6a2ab7c0a65a55b71a3e81
-    patches:
-      - feedstock-patches/uvicorn/0001-remove-unicode-char-from-summary.patch
-      - feedstock-patches/uvicorn/0001-Removed-skip-build-for-py310.patch
+  - feedstock : https://github.com/conda-forge/uvicorn-feedstock
+    git_tag : f5a97e4e7ecf157909e6b6344eb4d3f694680433  #v0.22.0
   - feedstock : https://github.com/conda-forge/starsessions-feedstock
     git_tag : bfaa9dcec65958ea57cb839c00b7c4a496e2f033
   - feedstock : https://github.com/conda-forge/inquirer-feedstock
