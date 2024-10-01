@@ -1,0 +1,79 @@
+From 589d1d80acccd00a8ddee5a28f188000f8703df0 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Tue, 1 Oct 2024 08:50:43 +0000
+Subject: [PATCH] llama-cpp v0.3.1 changes
+
+---
+ recipe/meta.yaml | 26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 9389001..ae263e6 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,7 +1,7 @@
+ {% set name = "llama-cpp-python" %}
+ # NOTE: VERIFY llama_cpp_version before merging!
+-{% set version = "0.2.24" %}
+-{% set llama_cpp_version = "0.0.1660" %}
++{% set version = "0.3.1" %}
++{% set llama_cpp_version = "0.0.3821" %}
+ 
+ package:
+   name: {{ name|lower }}
+@@ -9,10 +9,7 @@ package:
+ 
+ source:
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/llama_cpp_python-{{ version }}.tar.gz
+-  sha256: 85f8fd110b4b90599d5ff427bd4a1a4db6e70817c60ba8aa609fa5c645761ec1
+-  patches:
+-    # Asks cdll to look for the library in the path as well.
+-    - try-lib-in-path.patch
++  sha256: 75ec8374960b6353c254e55a48e7c7783abf6bcb9178ba0f655490738e5a9004 #v0.3.1
+ 
+ build:
+   number: 0
+@@ -28,24 +25,24 @@ build:
+     - {{ PYTHON }} -m pip install . -vv
+ requirements:
+   build:
+-    - python                                 # [build_platform != target_platform]
++    - python {{ python }}                            # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+ 
+-    - {{ compiler('c') }}
+-    - {{ compiler('cxx') }}
++    - {{ compiler('c') }}      # [ ppc_arch != "p10"]
++    - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+     - cmake
+     - make
+-    - pkgconfig
++    - pkg-config {{ pkgconfig }}
+ 
+   host:
+-    - python
++    - python {{ python }}
+     - scikit-build-core >=0.5.1
+-    - pip
++    - pip {{ pip }}
+ 
+   run:
+-    - python
++    - python {{ python }}
+     - typing-extensions >=4.5.0
+-    - numpy >=1.20.0
++    - numpy {{ numpy }}
+     - diskcache >=5.6.1
+ 
+     - llama.cpp {{ llama_cpp_version }}
+@@ -63,6 +60,7 @@ test:
+     - pip check
+   requires:
+     - pip
++    - jinja2
+ 
+ about:
+   home: https://github.com/abetlen/llama-cpp-python
+-- 
+2.40.1
+
