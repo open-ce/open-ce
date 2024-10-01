@@ -70,7 +70,7 @@ packages:
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
     git_tag : 15daecc326884626192eecfe6279580edaad0855
     patches :
-      - feedstock-patches/rust-activation/0001-Fixed-build.putch
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/llama-cpp-python-feedstock
     git_tag : 6f2f6845447045d69253841b67fed6ddc9c0218f   #v0.3.1
     patches :
