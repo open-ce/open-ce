@@ -18,6 +18,7 @@ packages:
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
   - feedstock : https://github.com/conda-forge/rust-feedstock.git
     git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches:
       - feedstock-patches/rust/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
     git_tag : 15daecc326884626192eecfe6279580edaad0855
