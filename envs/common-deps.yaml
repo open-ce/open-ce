@@ -23,8 +23,12 @@ packages:
       - feedstock-patches/scikit-learn/0001-changes-for-opence.patch            # [py==311]
   - feedstock : https://github.com/conda-forge/filesystem-spec-feedstock
     git_tag : be754febf038a93d01e6f7de85d5489ced355f88
+    patches:
+      - feedstock-patches/filesystem-spec/0001-changes-for-opence.patch
   - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git    #[ppc64le]
     git_tag : e1d5cae5e98645557119f79cd60f221a00e26e34                       #[ppc64le]
+    patches :                                                                #[ppc64le]
+      - feedstock-patches/werkzeug/0001-opence-changes.patch                 #[ppc64le]
   - feedstock : https://github.com/conda-forge/typing_extensions-feedstock.git #[ppc64le]
     git_tag : f853e30236c9c866bdc7cc8e4d1fbe766b182f37                         #[ppc64le]
 git_tag_for_env: open-ce-v1.11.3

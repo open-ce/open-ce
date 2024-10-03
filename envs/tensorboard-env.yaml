@@ -14,7 +14,5 @@ packages:
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
       - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
-  - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git    #[ppc64le]
-    git_tag : e1d5cae5e98645557119f79cd60f221a00e26e34      #[ppc64le]
   - feedstock : tensorboard
 git_tag_for_env: open-ce-v1.11.3
