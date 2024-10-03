@@ -16,8 +16,7 @@ imported_envs:
   - mamba-env.yaml
   - jax-env.yaml     # [build_type == 'cpu' or x86_64]
 
-# Disable ray and apache-beam for 1.11.3
-#  - ray-env.yaml
+  - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
@@ -27,9 +26,9 @@ imported_envs:
   - tensorflow-serving-env.yaml
   - transformers-env.yaml
   - ffmpeg-env.yaml
-# Disabled in 1.11.3
   - langchain-env.yaml
   - tensorboard-env.yaml
+  - bitsandbytes-env.yaml
 
 packages:
   - feedstock : https://github.com/conda-forge/joblib-feedstock
