@@ -19,7 +19,7 @@ automake:
 av:
   - 10.*
 bazel:
-  - 6.*
+  - 6.1.*
 black:
   - 24.4.2
 bsddb3:
