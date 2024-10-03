@@ -58,5 +58,12 @@ packages:
     git_tag: 6148ac902c701e69aab9d00846c19e1565b7e083                           #[ppc64le]
   - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock    #[ppc64le]
     git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+      - feedstock-patches/rust/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
 {% endif %}
 git_tag_for_env: open-ce-v1.11.3
