@@ -1,12 +1,12 @@
-From 5fddb63c031e63680972f4c89d0ca97fcb4f9d96 Mon Sep 17 00:00:00 2001
+From ea01900feaac05ee81de92f3ca1010881327468a Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Thu, 3 Oct 2024 12:25:18 +0000
-Subject: [PATCH] fixed import and opence changes
+Date: Thu, 3 Oct 2024 12:36:54 +0000
+Subject: [PATCH] fixed build failure to use cmake>3.21
 
 ---
  recipe/0001-try-library-in-path.patch | 43 +++++++++++++++++++++++++++
- recipe/meta.yaml                      | 26 ++++++++--------
- 2 files changed, 56 insertions(+), 13 deletions(-)
+ recipe/meta.yaml                      | 28 ++++++++---------
+ 2 files changed, 57 insertions(+), 14 deletions(-)
  create mode 100644 recipe/0001-try-library-in-path.patch
 
 diff --git a/recipe/0001-try-library-in-path.patch b/recipe/0001-try-library-in-path.patch
@@ -59,7 +59,7 @@ index 0000000..edcf1c7
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 9389001..bc80b9b 100644
+index 9389001..86d4a5f 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,7 +1,7 @@
@@ -95,9 +95,10 @@ index 9389001..bc80b9b 100644
  
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
+-    - cmake
 +    - {{ compiler('c') }}      # [ ppc_arch != "p10"]
 +    - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
-     - cmake
++    - cmake >=3.21
      - make
 -    - pkgconfig
 +    - pkg-config {{ pkgconfig }}
