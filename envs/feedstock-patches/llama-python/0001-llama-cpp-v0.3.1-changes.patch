@@ -1,39 +1,63 @@
-From dd575288a4ea107f487873a297be50aa3ffd3907 Mon Sep 17 00:00:00 2001
+From 5fddb63c031e63680972f4c89d0ca97fcb4f9d96 Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Tue, 1 Oct 2024 14:15:06 +0000
-Subject: [PATCH] Update patch to fix failure
+Date: Thu, 3 Oct 2024 12:25:18 +0000
+Subject: [PATCH] fixed import and opence changes
 
 ---
- recipe/0001-try-library-in-path.patch | Bin 0 -> 1960 bytes
- recipe/meta.yaml                      |  26 +++++++++++++-------------
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ recipe/0001-try-library-in-path.patch | 43 +++++++++++++++++++++++++++
+ recipe/meta.yaml                      | 26 ++++++++--------
+ 2 files changed, 56 insertions(+), 13 deletions(-)
  create mode 100644 recipe/0001-try-library-in-path.patch
 
 diff --git a/recipe/0001-try-library-in-path.patch b/recipe/0001-try-library-in-path.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..5010c5d98d356027194667ce457c4e09a46950cf
-GIT binary patch
-literal 1960
-zcmb_dU2oGc6n)RHI0_GIX_CcR){lsxA)w-cFVXRYQ02r<Ym_FD?TSv&|BjtB*;aMz
-z0j#R2oqNx{KKI_!xvVybC-EiYAqiO;XOon~vvD?_(L9~dF$wbtBV<M*!tkLgvEVhx
-z1YwvoA4FkDoVkHX@JeQDT2g<p7A4~ZFAfL6;ow@Nn;@$;FP%43^8`0r?t$P_rVUCI
-zBfLzaD2WM1p;^vioBrULPVnvXtDD#FzC+7f6e5+>JVl9`>b2wezVDzY=!Pz{x;|fK
-z`nKk3$#<HUN>rr^>RbHA45M~gbAntH95&k(XC5X7PI0NN`Cv5k5P|W6w|jr+I85X@
-ze19c0==oE@(x)sOOV18`I_2zQ8U)$of<$x*5{BbAwl{h@ieqkrrz2fo!;fa(7$fsN
-zf!Q*iqo^obsx_6IEf0ha%yXGi#g`@BnA#{UJv4hubJCD)OoGp5H%uJZC32`+!*4-#
-zUdc_MG?iNY6nZ^y3sG)&?huuH+$NWtr;529p2f6j*oX?FD|~C?*mJx3ba0N`L`Z)<
-zNO~Wr%JrO4YutW6Zq{3UZ-emS=sLK%g3GA<DN6TnVe500pe6XCAvg}b>3=5pM7%z2
-z`{N-Y$84~oFm(LI;RJ)N&k=>Efsc$H1?v;&iB|j`pOOm2@nu_TvEgr}tmMG`TB>bb
-zS5k9^uDjf!W4Rtj9*Hp;UwUNxAK7kcdWIV#ExKw31bWTU4oRmv9*klz)7mT4mC+Y1
-zXaR0>RxN-TgT6tmMD@**IDW^2X|wJ);5(tT8khm-*)*?(GIFG8nek>S?KpULAe(7A
-z;oBiMPa~4|*zI0PuD7y8D~`eIH}BsM3}6p$B=7n2%oKk~<w^~KXRtDwK&;A2^1JLT
-z9^YlW*7&q&s&y~*E?7;~fsgLw;PSTdG%5?KaK8yUyA#cjyK`#9n)PLQSQ4By-Dx@6
-zpC$Ok_oh+MR-;9m8}E;mo>$wFwf%Khi`-o_D%cemR=k?Af|bDocrT0lGnAD^ZlT;e
-cQvLzOHc5X0wRhXZn;V$_0XR_*hXHY%KY%e*O8@`>
-
-literal 0
-HcmV?d00001
-
+index 0000000..edcf1c7
+--- /dev/null
++++ b/recipe/0001-try-library-in-path.patch
+@@ -0,0 +1,43 @@
++From 34f7480c3838c266d07bf48086880b5791d0c082 Mon Sep 17 00:00:00 2001
++From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
++Date: Thu, 3 Oct 2024 12:06:06 +0000
++Subject: [PATCH] try library in path
++
++---
++ llama_cpp/_ctypes_extensions.py | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/llama_cpp/_ctypes_extensions.py b/llama_cpp/_ctypes_extensions.py
++index e88ed38..15562bc 100644
++--- a/llama_cpp/_ctypes_extensions.py
+++++ b/llama_cpp/_ctypes_extensions.py
++@@ -29,6 +29,7 @@ def load_shared_library(lib_base_name: str, base_path: pathlib.Path):
++     if sys.platform.startswith("linux") or sys.platform.startswith("freebsd"):
++         lib_paths += [
++             base_path / f"lib{lib_base_name}.so",
+++            f"lib{lib_base_name}.so",
++         ]
++     elif sys.platform == "darwin":
++         lib_paths += [
++@@ -62,14 +63,16 @@ def load_shared_library(lib_base_name: str, base_path: pathlib.Path):
++ 
++     # Try to load the shared library, handling potential errors
++     for lib_path in lib_paths:
++-        if lib_path.exists():
+++        if isinstance(lib_path, str) or lib_path.exists():
++             try:
++                 return ctypes.CDLL(str(lib_path), **cdll_args)  # type: ignore
+++            except OSError:
+++                pass
++             except Exception as e:
++                 raise RuntimeError(f"Failed to load shared library '{lib_path}': {e}")
++ 
++     raise FileNotFoundError(
++-        f"Shared library with base name '{lib_base_name}' not found"
+++        f"Shared library with base name '{lib_base_name}' not found in {lib_paths}"
++     )
++ 
++ 
++-- 
++2.40.1
++
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 9389001..bc80b9b 100644
 --- a/recipe/meta.yaml
