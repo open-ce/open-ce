@@ -1,13 +1,13 @@
-From 7a8bb3d85c116030207987d6f67dd9cb6c39018e Mon Sep 17 00:00:00 2001
+From 657ab6fca7b13de90d00a1bc36deb50e6edc3753 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 24 Sep 2024 06:59:24 +0000
+Date: Thu, 3 Oct 2024 17:35:40 +0000
 Subject: [PATCH] changes for opence
 
 ---
  recipe/build.sh                |  4 ++--
  recipe/conda_build_config.yaml |  3 +++
- recipe/meta.yaml               | 37 +++++++++++++++-------------------
- 3 files changed, 21 insertions(+), 23 deletions(-)
+ recipe/meta.yaml               | 39 +++++++++++++++-------------------
+ 3 files changed, 22 insertions(+), 24 deletions(-)
  create mode 100644 recipe/conda_build_config.yaml
 
 diff --git a/recipe/build.sh b/recipe/build.sh
@@ -39,7 +39,7 @@ index 0000000..a009eb8
 +- nvcc
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 25d7a23..2aeac76 100644
+index 25d7a23..80db42b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -75,8 +75,9 @@ index 25d7a23..2aeac76 100644
 +#    - {{ stdlib('c') }}
      - {{ compiler('cxx') }}
 -    - {{ compiler("cuda") }}                 # [cuda_compiler_version != "None"]
+-    - cmake
 +    - {{ compiler("cuda") }}                #[build_type == 'cuda']
-     - cmake
++    - cmake 3.22
      - ninja
    host:
 -    - python
