@@ -1,0 +1,30 @@
+From ddfbc376234e3486bfa009779bdf7a449359af7c Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Thu, 3 Oct 2024 06:33:27 +0000
+Subject: [PATCH] opence changes
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 6a6b8d4..7aa375e 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,11 +16,11 @@ build:
+ 
+ requirements:
+   host:
+-    - python
++    - python <3.12
+     - pip
+     - flit-core <4
+   run:
+-    - python
++    - python <3.12
+     - markupsafe >=2.1.1
+   run_constrained:
+     - watchdog >=2.3
+-- 
+2.40.1
+
