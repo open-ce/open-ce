@@ -1,14 +1,14 @@
-From cf60044188809afe981bbeb11ad82a74dce1ca01 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Tue, 1 Oct 2024 14:06:28 +0000
-Subject: [PATCH] update patch
+From 2a7b0e0c68c1e953c57a14f5cd5caf87a156ea8a Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde1@ibm.com>
+Date: Fri, 4 Oct 2024 07:08:25 +0000
+Subject: [PATCH] Update patch to remove mkl-devel
 
 ---
- recipe/meta.yaml | 53 ++++++++++++++++++++++--------------------------
- 1 file changed, 24 insertions(+), 29 deletions(-)
+ recipe/meta.yaml | 52 +++++++++++++++++++++---------------------------
+ 1 file changed, 23 insertions(+), 29 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..2ade59c 100644
+index b1428da..5578b61 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -64,7 +64,7 @@ index b1428da..2ade59c 100644
    
    missing_dso_whitelist:
      - "*/nvcuda.dll"    # [win]
-@@ -60,35 +61,29 @@ build:
+@@ -60,35 +61,28 @@ build:
  
  requirements:
    build:
@@ -90,7 +90,6 @@ index b1428da..2ade59c 100644
 -    - blas-devel * *{{ blas_impl }}                 # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 -    - mkl-devel {{ mkl }}                           # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 +    - openblas {{ openblas }}                  #[build_type == 'cpu']
-+    - mkl-devel {{ mkl }}                      #[build_type == 'cpu']
    run:
 -    - cuda-version {{ cuda_compiler_version }}      # [cuda_compiler_version != "None"]
 -
