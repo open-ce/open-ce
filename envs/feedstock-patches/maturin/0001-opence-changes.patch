@@ -1,0 +1,48 @@
+From 3b596a949f818f909262597237d61b50946a91c3 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 4 Oct 2024 05:00:28 +0000
+Subject: [PATCH] opence changes
+
+---
+ recipe/meta.yaml | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index f3d8860..0e18a6e 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -17,24 +17,24 @@ build:
+ 
+ requirements:
+   build:
+-    - python                                 # [build_platform != target_platform]
++    - python {{ python }}                                # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+     - {{ compiler('c') }}
+-    - {{ stdlib("c") }}
+     - {{ compiler('rust') }}
+     - openssl                          # [unix]
+     - pkg-config                       # [unix]
+   host:
+-    - pip
+-    - setuptools
+-    - setuptools-rust >=1.4.0
++    - pip {{ pip }}
++    - setuptools {{ setuptools }}
++    - setuptools-rust {{ setuptools_rust }}
+     - wheel
+-    - python
++    - python {{ python }}
+     - tomli >=1.1.0
+     - openssl                          # [unix]
+   run:
+-    - python
++    - python {{ python }}
+     - tomli >=1.1.0
++    - rust {{ rust }}
+ 
+ test:
+   commands:
+-- 
+2.40.1
+

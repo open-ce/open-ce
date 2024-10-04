@@ -1,0 +1,24 @@
+builder_version: ">=13.0.0"
+
+packages:
+  - feedstock : rust-nightly
+  - feedstock : https://github.com/conda-forge/polars-feedstock
+    git_tag : ec2fb8d77209f560705a6e3125ece7cad8e655ca
+    patches :
+      - feedstock-patches/polars/0001-opence-changes.patch
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches:
+      - feedstock-patches/rust/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/maturin-feedstock
+    git_tag : 8f30ac9261677703bb3dc2d6bb31528946d42e93
+    patches :
+        - feedstock-patches/maturin/0001-opence-changes.patch
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v72.1.0           #[ppc64le]
+    git_tag : 1d5a7bec76c7f4887f832afbb99a9111294e2c52                                  #[ppc64le]
+    patches :                                                                           #[ppc64le]
+      - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]

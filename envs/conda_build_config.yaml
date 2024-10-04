@@ -260,6 +260,8 @@ reproc_cpp:
   - 14.2.*
 rust:
   - 1.81.*
+rust_nightly:
+  - 1.82.*
 rust_compiler_version:
   - '1.81.0'
 safeint:
