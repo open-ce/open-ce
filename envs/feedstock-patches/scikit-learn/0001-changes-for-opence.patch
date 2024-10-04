@@ -1,42 +1,26 @@
-From 9e0233553cec57af9adeef5880155485b196b6ef Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Thu, 3 Oct 2024 08:49:06 +0000
+From 643fd0b57ab648e01f2ed9e22d4a54854e651126 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 9 May 2024 05:13:58 +0000
 Subject: [PATCH] changes for opence
 
 ---
- recipe/meta.yaml | 22 ++++++----------------
- 1 file changed, 6 insertions(+), 16 deletions(-)
+ recipe/meta.yaml | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 854b575..551f3ca 100644
+index 854b575..2573ed6 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -24,7 +24,7 @@ requirements:
-     - {{ compiler('cxx') }}
-   host:
-     # Host dependencies are pinned to last build
--    - python
-+    - python <3.12
-     - cython 0.29
-     - numpy {{ numpy }}
-     - llvm-openmp 14.0.6  # [osx]
-@@ -37,11 +37,12 @@ requirements:
-     # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
-     - blas=*=openblas  # [osx and x86_64]
-   run:
--    - python
-+    - python <3.12
+@@ -41,7 +41,7 @@ requirements:
      - joblib >=1.1.1
--    - {{ pin_compatible('numpy') }}
-+#    - {{ pin_compatible('numpy') }}
+     - {{ pin_compatible('numpy') }}
      # There is some problem on osx-64 when numpy 1.25 for python 3.11 is used - 48 tests fail badly.
 -    - numpy <1.25  # [osx-64 and py==311]
 +#    - numpy <1.25  # [osx-64 and py==311]
-+    - numpy {{ numpy }}
      - scipy >=1.5.0
      - threadpoolctl >=2.0.0
      - llvm-openmp  # [osx]
-@@ -49,17 +50,6 @@ requirements:
+@@ -49,17 +49,6 @@ requirements:
      # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
      - blas=*=openblas  # [osx and x86_64]
  
@@ -54,7 +38,7 @@ index 854b575..551f3ca 100644
  test:
    requires:
      - cython >=0.29.24
-@@ -87,7 +77,7 @@ test:
+@@ -87,7 +76,7 @@ test:
      - set OMP_NUM_THREADS=1               # [win]
      - export OPENBLAS_NUM_THREADS=1       # [not win]
      - export OMP_NUM_THREADS=1            # [not win]
