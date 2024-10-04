@@ -16,12 +16,12 @@ packages:
       - feedstock-patches/orjson/0001-pin-rust_compiler-version.patch              #[not x86_64]
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
     git_tag : 99db82b53099cbc1315238c835f3ad6bc7413774
-  - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : de8ddcf242d3c7086369f0d3d3a89fa9e1abd6c8
-    patches :                                                                         #[s390x]
-      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches:
+      - feedstock-patches/rust/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : 77337e3832b712a6de383c0a96dbe1a33d5f864f
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
@@ -32,6 +32,14 @@ packages:
     git_tag : a99441fbf15d9bafd4370ea1c88c3c54311efdff
     patches :
       - feedstock-patches/grpcio/0001-Updated-grpcio-with-opence-changes.patch
+  - feedstock : https://github.com/AnacondaRecipes/pymongo-feedstock
+    git_tag : 1c625d9efcd8da19de84fa41c614108fa9e61993
+    patches :
+      - feedstock-patches/pymongo/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/hatch-requirements-txt-feedstock
+    git_tag : c21a1e235a1245247fed16f6c0c906df1bebc829
+  - feedstock : https://github.com/conda-forge/mockupdb-feedstock
+    git_tag : 45ff6caf170481a1c79d2d427e77d38cb55567f3
   - feedstock : apache-beam
 {% endif %}
 git_tag_for_env: open-ce-v1.11.3

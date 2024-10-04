@@ -1,0 +1,80 @@
+builder_version: ">=13.0.0"
+
+imported_envs:
+  - common-deps.yaml
+  - openblas-env.yaml
+
+packages:
+{% if build_type == 'cuda' %}
+  - feedstock : cudatoolkit
+  - feedstock : https://github.com/conda-forge/nvcc-feedstock
+    git_tag : 9c8e43393d9c798c52a9d8e56785920ef767cabb
+    patches :
+      - feedstock-patches/nvcc/0001-Changes-for-open-ce.patch
+{% endif %}
+  - feedstock : https://github.com/conda-forge/scikit-build-core-feedstock
+    git_tag : d692e73b14221ec061f264315328592e5d313e09
+    patches:
+      - feedstock-patches/scikit-build/0001-Fixed-build-failure.patch
+  - feedstock : https://github.com/conda-forge/starlette-context-feedstock
+    git_tag : 3c7c2f8d6acc1050c7ad332d2e9ee8238ad7b4da
+  - feedstock: https://github.com/conda-forge/cattrs-feedstock
+    git_tag : c5642bdf737dadd5b496b011ad38da565718ab29
+  - feedstock : https://github.com/conda-forge/exceptiongroup-feedstock
+    git_tag : ff9fe97239a657e1fe67e56cdbd749efdd602b33
+  - feedstock : https://github.com/conda-forge/pydantic-settings-feedstock
+    git_tag : ea0347de81cdd29cf26f65ea3d68477db5be53dc #v2.0.1
+  - feedstock : https://github.com/conda-forge/pytest-subprocess-feedstock
+    git_tag : 4168faf02699c6ab9e10f0fea0a1f0ff348da0e7
+  - feedstock : https://github.com/conda-forge/llama.cpp-feedstock
+    git_tag : d75b52692c56ecdd33568ea44896cb266d58de5e   #v0.0.3821
+    patches :
+      - feedstock-patches/llama.cpp/0001-llama.cpp-v0.0.3821-changes.patch
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock
+    git_tag : 6148ac902c701e69aab9d00846c19e1565b7e083
+  - feedstock : https://github.com/conda-forge/fastapi-feedstock
+    git_tag : 3dd382b293b66015609d422170f4e0719ae58100
+    patches:
+      - feedstock-patches/fastapi/0001-Open-ce-changes.patch  #v0.109.1
+  - feedstock : https://github.com/conda-forge/anyio-feedstock
+    git_tag : 4204c3f90b747bcf6673f61a77f40aa16239612c
+    patches:
+      - feedstock-patches/anyio/0001-Skipped-failed-tests.patch
+  - feedstock : https://github.com/conda-forge/starlette-feedstock
+    git_tag : 8043cc232022c06b91ea8da00ac291def319a81e  #0.36.2
+    patches:
+      - feedstock-patches/starlette/0001-Pinned-python-multipart-to-fix-CVE-2024-24762.patch
+  - feedstock : https://github.com/conda-forge/uvicorn-feedstock
+    git_tag : f5a97e4e7ecf157909e6b6344eb4d3f694680433  #v0.22.0
+  - feedstock : https://github.com/conda-forge/diskcache-feedstock
+    git_tag : 54f9afb2bd1027f7d635df2c12ccc05139927ecd
+  - feedstock : https://github.com/conda-forge/sse-starlette-feedstock
+    git_tag : 4cb6aa44dd13c8dfb25de2b448827e2be0a85991
+  - feedstock : https://github.com/conda-forge/hatch-fancy-pypi-readme-feedstock
+    git_tag : 7ad703f99406292de8d0111655f989ba2fb3de64
+    patches :
+      - feedstock-patches/hatch-fancy-pypi-readme/0001-Upadtes-with-open-ce.patch
+  - feedstock : https://github.com/conda-forge/annotated-types-feedstock        #[ppc64le]
+    git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock
+    git_tag : b4a76d6016ac5c555a0cf1763d887f5c67c2d210
+    patches:
+      - feedstock-patches/pydantic-core/0001-changes-for-opence.patch
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches :
+      - feedstock-patches/rust/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/llama-cpp-python-feedstock
+    git_tag : 6f2f6845447045d69253841b67fed6ddc9c0218f   #v0.3.1
+    patches :
+      - feedstock-patches/llama-python/0001-llama-cpp-v0.3.1-changes.patch
+  - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.0.7
+    git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
+    patches:
+      - feedstock-patches/python-multipart/0001-Changed-source-for-python-multipart.patch
+  - feedstock : https://github.com/conda-forge/poetry-core-feedstock
+    git_tag : 7de49dbab56fc8dcc8ba5e7d6c59b2df0c6ad58d

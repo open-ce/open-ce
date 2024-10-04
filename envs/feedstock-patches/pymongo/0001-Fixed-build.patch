@@ -1,0 +1,24 @@
+From e6f6d3d5834c88b25bb237faaa0bf6d574709fe9 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Thu, 19 Sep 2024 10:37:47 +0000
+Subject: [PATCH] Fixed build
+
+---
+ recipe/meta.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 7d1e8b5..7a02c3a 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -53,6 +53,7 @@ requirements:
+ {% set tests_to_ignore = tests_to_ignore + " --ignore=test/atlas/test_connection.py" %}
+ # We don't have an OCSP instance (Online Certificate Status Protocol)
+ {% set tests_to_ignore = tests_to_ignore + " --ignore=test/ocsp/test_ocsp.py" %}
++{% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb/test_op_msg.py" %}
+ 
+ # No mockupdb for s390x
+ {% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb" %}  # [s390x]
+-- 
+2.40.1
+

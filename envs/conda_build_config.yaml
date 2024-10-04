@@ -19,7 +19,7 @@ automake:
 av:
   - 10.*
 bazel:
-  - 6.*
+  - 6.1.*
 black:
   - 24.4.2
 bsddb3:
@@ -259,9 +259,11 @@ regex:
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.71.*
+  - 1.81.*
+rust_nightly:
+  - 1.82.*
 rust_compiler_version:
-  - '1.71.1'
+  - '1.81.0'
 safeint:
   - 3.0
 scipy:
