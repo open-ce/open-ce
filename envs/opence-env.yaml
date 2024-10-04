@@ -29,6 +29,7 @@ imported_envs:
   - langchain-env.yaml
   - tensorboard-env.yaml
   - bitsandbytes-env.yaml
+  - llama-env.yaml
 
 packages:
   - feedstock : https://github.com/conda-forge/joblib-feedstock
