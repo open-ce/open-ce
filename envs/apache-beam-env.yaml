@@ -41,5 +41,6 @@ packages:
   - feedstock : https://github.com/conda-forge/mockupdb-feedstock
     git_tag : 45ff6caf170481a1c79d2d427e77d38cb55567f3
   - feedstock : apache-beam
+    git_tag : main
 {% endif %}
 git_tag_for_env: open-ce-v1.11.3
