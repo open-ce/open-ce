@@ -1,25 +1,24 @@
-From 41c69bb3e5b9cef0574f97e3f850b271239cd076 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Mon, 2 Sep 2024 15:38:46 +0000
-Subject: [PATCH] Skipped failed tests
+From 1f08962800a9bad348ed6b588fff02c9e8553e85 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde1@ibm.com>
+Date: Tue, 8 Oct 2024 06:54:57 +0000
+Subject: [PATCH] fixed failure with pin of aiohttp in test section
 
 ---
- recipe/run_test.py | 2 ++
- 1 file changed, 2 insertions(+)
+ recipe/meta.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/recipe/run_test.py b/recipe/run_test.py
-index 546930f..cc524a3 100644
---- a/recipe/run_test.py
-+++ b/recipe/run_test.py
-@@ -23,6 +23,8 @@ SKIPS = [
-     "happy_eyeballs",
-     "ipv6",
-     "block_device",
-+    "test_handshake_fail",
-+    "test_taskgroups",
- ]
- 
- PYTEST_ARGS = [
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 9f93689..7c31331 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -37,6 +37,7 @@ test:
+     - src/tests
+     - src/pyproject.toml
+   requires:
++    - aiohttp
+     - coverage >=4.5
+     - trio
+     - hypothesis >=4.0
 -- 
 2.40.1
 
