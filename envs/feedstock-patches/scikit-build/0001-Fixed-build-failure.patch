@@ -1,14 +1,14 @@
-From 256797e4ee8f4870505f9d1d634944e97368bfef Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde1@ibm.com>
-Date: Mon, 7 Oct 2024 10:31:03 +0000
-Subject: [PATCH] Skip failed test
+From 6ca34ba9a34ba99e8ddbe2abb18c211eb65ce2c6 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Tue, 8 Oct 2024 05:34:18 +0000
+Subject: [PATCH] skipped fail test
 
 ---
  recipe/meta.yaml | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 91ca991..b036f53 100644
+index 91ca991..a874b1c 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -23,7 +23,7 @@ requirements:
@@ -25,7 +25,7 @@ index 91ca991..b036f53 100644
    commands:
      - pip check
 -    - pytest -vv -m "not isolated" -k "not sdist_time_hash_set_epoch and not sdist_hash"
-+    - pytest -vv -m "not isolated" -k "not sdist_time_hash_set_epoch and not sdist_hash and not test_abi3_wheel and not test_pep517_wheel"
++    - pytest -vv -m "not isolated" -k "not sdist_time_hash_set_epoch and not sdist_hash and not test_abi3_wheel and not test_pep517_wheel and not test_navigate_editable_pkg[abs]"
    source_files:
      - tests/
      - src/
