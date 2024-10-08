@@ -1,13 +1,13 @@
-From 657ab6fca7b13de90d00a1bc36deb50e6edc3753 Mon Sep 17 00:00:00 2001
+From 7b37af2beda40263a58fa8032bb426eb53954d9f Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Thu, 3 Oct 2024 17:35:40 +0000
-Subject: [PATCH] changes for opence
+Date: Tue, 8 Oct 2024 04:13:38 +0000
+Subject: [PATCH] changes for open-ce
 
 ---
  recipe/build.sh                |  4 ++--
  recipe/conda_build_config.yaml |  3 +++
- recipe/meta.yaml               | 39 +++++++++++++++-------------------
- 3 files changed, 22 insertions(+), 24 deletions(-)
+ recipe/meta.yaml               | 37 +++++++++++++++-------------------
+ 3 files changed, 21 insertions(+), 23 deletions(-)
  create mode 100644 recipe/conda_build_config.yaml
 
 diff --git a/recipe/build.sh b/recipe/build.sh
@@ -39,7 +39,7 @@ index 0000000..a009eb8
 +- nvcc
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 25d7a23..80db42b 100644
+index 25d7a23..e4e7ffd 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -49,13 +49,11 @@ index 25d7a23..80db42b 100644
  
  package:
    name: {{ name|lower }}
-@@ -7,37 +7,32 @@ package:
- 
+@@ -8,36 +8,31 @@ package:
  source:
    # Don't use the PyPI source tarball as this already contains compiled code.
--  url: https://github.com/bitsandbytes-foundation/bitsandbytes/archive/refs/tags/{{ version }}.tar.gz
+   url: https://github.com/bitsandbytes-foundation/bitsandbytes/archive/refs/tags/{{ version }}.tar.gz
 -  sha256: 7a468bc977da19c176cc578954bfd7a3c64182f387a6849e9f0a38d5cba1b4df
-+  url: https://github.com/bitsandbytes-foundation/bitsandbytes/archive/refs/tags/v{{ version }}.tar.gz
 +  sha256: 1780a313e76697facaa48e98db06799911f25c4d681eb63686c8b916c52fca95
  
  build:
