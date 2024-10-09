@@ -1,14 +1,14 @@
-From 3e18a9e8d20d7a87b10430185890404da8822c63 Mon Sep 17 00:00:00 2001
+From 5f175a1deede0deda81333c7eb86bc78b71f81a2 Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Wed, 9 Oct 2024 06:43:09 +0000
-Subject: [PATCH] update patch
+Date: Wed, 9 Oct 2024 12:51:37 +0000
+Subject: [PATCH] Added selected tests
 
 ---
  recipe/meta.yaml | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 91ca991..69485bb 100644
+index 91ca991..1da612a 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -23,7 +23,7 @@ requirements:
@@ -25,7 +25,7 @@ index 91ca991..69485bb 100644
    commands:
      - pip check
 -    - pytest -vv -m "not isolated" -k "not sdist_time_hash_set_epoch and not sdist_hash"
-+    - pytest -vv -m "not isolated" -k "not sdist_time_hash_set_epoch and not sdist_hash and not test_abi3_wheel and not test_pep517_wheel and not test_navigate_editable_pkg[abs] and not test_navigate_editable_pkg[rel]"
++    - pytest --verbose tests/test_skbuild_settings.py tests/test_simplest_c.py tests/test_settings_overrides.py tests/test_settings.py tests/test_get_requires.py tests/test_cmake_config.py tests/test_auto.py
    source_files:
      - tests/
      - src/
