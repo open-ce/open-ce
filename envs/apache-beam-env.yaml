@@ -42,4 +42,4 @@ packages:
     git_tag : 45ff6caf170481a1c79d2d427e77d38cb55567f3
   - feedstock : apache-beam
 {% endif %}
-git_tag_for_env: open-ce-v1.11.3
+git_tag_for_env: open-ce-v1.11.4

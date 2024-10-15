@@ -45,4 +45,4 @@ packages:
     git_tag : 15daecc326884626192eecfe6279580edaad0855
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
-git_tag_for_env: open-ce-v1.11.3
+git_tag_for_env: open-ce-v1.11.4

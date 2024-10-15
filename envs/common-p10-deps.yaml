@@ -8,4 +8,4 @@ packages:
     git_tag : 3828436c4d164bfeb3a245a511232bf095dd0b8b     # 1.26.0
     patches :
       - feedstock-patches/numpy/0001-Changes-for-P10-and-Open-ce.patch
-git_tag_for_env: open-ce-v1.11.3
+git_tag_for_env: open-ce-v1.11.4

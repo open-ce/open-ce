@@ -16,4 +16,4 @@ packages:
     git_tag : 74eb7d7a4c0a1ae21fa8c79fc79f5f3720e67bb2 
     patches :
       - feedstock-patches/bitsandbytes/0001-changes-for-opence.patch
-git_tag_for_env: open-ce-v1.11.3
+git_tag_for_env: open-ce-v1.11.4
