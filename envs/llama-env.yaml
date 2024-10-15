@@ -76,5 +76,3 @@ packages:
     git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
     patches:
       - feedstock-patches/python-multipart/0001-Changed-source-for-python-multipart.patch
-  - feedstock : https://github.com/conda-forge/poetry-core-feedstock
-    git_tag : 7de49dbab56fc8dcc8ba5e7d6c59b2df0c6ad58d

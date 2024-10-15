@@ -9,6 +9,16 @@ imported_envs:
 
 packages:
 {% if not s390x %}
+  - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock    #[ppc64le]
+    git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches :
+      - feedstock-patches/rust/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/uvicorn-feedstock
     git_tag : f5a97e4e7ecf157909e6b6344eb4d3f694680433  #v0.22.0
   - feedstock : https://github.com/AnacondaRecipes/cfitsio-feedstock
@@ -44,6 +54,7 @@ packages:
     git_tag : 29535305e9e7456f6b82758366a581cfa8512bfd
     patches :
       - feedstock-patches/opencensus/0001-Remove-constraint-from-google-api-core.patch 
-  - feedstock : ray-packages
+  - feedstock : https://github.com/cdeepali/ray-packages-feedstock
+    git_tag : dc-1.114-fix 
 {% endif %}
 git_tag_for_env: open-ce-v1.11.3

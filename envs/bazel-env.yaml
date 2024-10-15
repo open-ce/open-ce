@@ -4,5 +4,6 @@ packages:
   - feedstock : cdts               #[not x86_64]
     runtime_package : False        #[not x86_64]
   - feedstock : bazel
+    git_tag : main
     runtime_package : False
 git_tag_for_env: open-ce-v1.11.3
