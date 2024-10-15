@@ -37,8 +37,6 @@ packages:
     git_tag : fff239dbe1ed606df1e4554c6692eec22a784f01
     patches :
       - feedstock-patches/langchain/0001-Opence-changes-for-langchain.patch
-  - feedstock : https://github.com/conda-forge/poetry-core-feedstock
-    git_tag : 7de49dbab56fc8dcc8ba5e7d6c59b2df0c6ad58d
   - feedstock : https://github.com/conda-forge/rust-feedstock.git
     git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
     patches:

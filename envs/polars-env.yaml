@@ -2,6 +2,7 @@ builder_version: ">=13.0.0"
 
 packages:
   - feedstock : rust-nightly
+    runtime_package : False
   - feedstock : https://github.com/conda-forge/polars-feedstock
     git_tag : ec2fb8d77209f560705a6e3125ece7cad8e655ca
     patches :

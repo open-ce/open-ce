@@ -1,24 +1,34 @@
-From e6f6d3d5834c88b25bb237faaa0bf6d574709fe9 Mon Sep 17 00:00:00 2001
+From 1f00a20dcd28b143e05a4255dc6f494ae33c0ada Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Thu, 19 Sep 2024 10:37:47 +0000
-Subject: [PATCH] Fixed build
+Date: Mon, 7 Oct 2024 09:23:13 +0000
+Subject: [PATCH] try to remove cyclic dependancy with mockupdb
 
 ---
- recipe/meta.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 7d1e8b5..7a02c3a 100644
+index 7d1e8b5..b69b5db 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -53,6 +53,7 @@ requirements:
- {% set tests_to_ignore = tests_to_ignore + " --ignore=test/atlas/test_connection.py" %}
- # We don't have an OCSP instance (Online Certificate Status Protocol)
+@@ -55,7 +55,7 @@ requirements:
  {% set tests_to_ignore = tests_to_ignore + " --ignore=test/ocsp/test_ocsp.py" %}
-+{% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb/test_op_msg.py" %}
  
  # No mockupdb for s390x
- {% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb" %}  # [s390x]
+-{% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb" %}  # [s390x]
++{% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb" %}
+ 
+ {% set tests_to_skip = "" %}
+ # The test is expecting to be running under  kubernetes?
+@@ -76,7 +76,7 @@ test:
+   requires:
+     - pip
+     - pytest >=7
+-    - mockupdb  # [not s390x]
++#    - mockupdb  # [not s390x]
+   commands:
+     - pip check
+     - pytest -v . {{ tests_to_ignore }} -k "not ({{ tests_to_skip }})"
 -- 
 2.40.1
 

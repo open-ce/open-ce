@@ -1,12 +1,25 @@
-From 41c69bb3e5b9cef0574f97e3f850b271239cd076 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Mon, 2 Sep 2024 15:38:46 +0000
-Subject: [PATCH] Skipped failed tests
+From 5242637acfa2e83f5d7e48303ea91073c418db20 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Tue, 8 Oct 2024 11:16:58 +0000
+Subject: [PATCH] fixed failure with pin of aiohttp in test section
 
 ---
+ recipe/meta.yaml   | 1 +
  recipe/run_test.py | 2 ++
- 1 file changed, 2 insertions(+)
+ 2 files changed, 3 insertions(+)
 
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 9f93689..7c31331 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -37,6 +37,7 @@ test:
+     - src/tests
+     - src/pyproject.toml
+   requires:
++    - aiohttp
+     - coverage >=4.5
+     - trio
+     - hypothesis >=4.0
 diff --git a/recipe/run_test.py b/recipe/run_test.py
 index 546930f..cc524a3 100644
 --- a/recipe/run_test.py
