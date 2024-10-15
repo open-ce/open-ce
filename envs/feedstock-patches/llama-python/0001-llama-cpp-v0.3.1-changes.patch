@@ -1,12 +1,12 @@
-From ea01900feaac05ee81de92f3ca1010881327468a Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Thu, 3 Oct 2024 12:36:54 +0000
-Subject: [PATCH] fixed build failure to use cmake>3.21
+From 79bf06cfe5a7f7705a1ee5dcf8c6e9dd8b54e822 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 9 Oct 2024 12:30:51 +0000
+Subject: [PATCH] change for opence
 
 ---
  recipe/0001-try-library-in-path.patch | 43 +++++++++++++++++++++++++++
- recipe/meta.yaml                      | 28 ++++++++---------
- 2 files changed, 57 insertions(+), 14 deletions(-)
+ recipe/meta.yaml                      | 42 +++++++++++++-------------
+ 2 files changed, 64 insertions(+), 21 deletions(-)
  create mode 100644 recipe/0001-try-library-in-path.patch
 
 diff --git a/recipe/0001-try-library-in-path.patch b/recipe/0001-try-library-in-path.patch
@@ -59,7 +59,7 @@ index 0000000..edcf1c7
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 9389001..86d4a5f 100644
+index 9389001..e1b7526 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,7 +1,7 @@
@@ -119,11 +119,25 @@ index 9389001..86d4a5f 100644
      - diskcache >=5.6.1
  
      - llama.cpp {{ llama_cpp_version }}
-@@ -63,6 +62,7 @@ test:
-     - pip check
-   requires:
-     - pip
-+    - jinja2
+@@ -56,13 +55,14 @@ requirements:
+     - pydantic-settings >=2.0.1
+     - sse-starlette >=1.6.1
+     - starlette-context >=0.3.6,<0.4
+-test:
+-  imports:
+-    - llama_cpp
+-  commands:
+-    - pip check
+-  requires:
+-    - pip
++
++  test:
++   commands:
++     - export LLAMA_CPP_LIB_PATH=$PREFIX/lib64      # [ ppc_arch == "p10"]
++     - python -c "import llama_cpp;"
++     - pip check
++   requires:
++     - pip
  
  about:
    home: https://github.com/abetlen/llama-cpp-python

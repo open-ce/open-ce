@@ -11,7 +11,7 @@ arrow:
 astunparse:
   - 1.6
 attrs:
-  - 21
+  - 23
 autoconf:
   - 2.69
 automake:
