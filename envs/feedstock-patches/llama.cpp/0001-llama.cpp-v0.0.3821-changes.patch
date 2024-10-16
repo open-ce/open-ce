@@ -1,12 +1,24 @@
-From fd845cb8e1cb04d7bde4e9ba1aac77325734f160 Mon Sep 17 00:00:00 2001
-From: "Archana.Shinde1" <archana.shinde1@ibm.com>
-Date: Mon, 14 Oct 2024 13:32:00 +0000
-Subject: [PATCH] Fixed cuda build failure
+From 09b785eff1f7148f79c765ec69767a2dabe4926e Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Wed, 16 Oct 2024 08:59:05 +0000
+Subject: [PATCH] Update patch to use nvcc compiler
 
 ---
- recipe/meta.yaml | 53 ++++++++++++++++++++++--------------------------
- 1 file changed, 24 insertions(+), 29 deletions(-)
+ recipe/conda_build_config.yaml |  3 ++
+ recipe/meta.yaml               | 53 +++++++++++++++-------------------
+ 2 files changed, 27 insertions(+), 29 deletions(-)
 
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index 7071b8b..0923543 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -5,3 +5,6 @@ blas_impl:
+   - mkl        # [(linux and not aarch64) or win]
+   - openblas   # [linux and aarch64]
+   - accelerate # [osx]
++
++cuda_compiler:
++  - nvcc
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index b1428da..fe06ae6 100644
 --- a/recipe/meta.yaml
