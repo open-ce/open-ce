@@ -243,7 +243,7 @@ python:
 pytorch:
   - 2.1.*
 pytorch_lightning:
-  - 2.1.*
+  - 2.3.*
 pytorch_scatter:
   - 2.1.2
 pytorch_sparse:
