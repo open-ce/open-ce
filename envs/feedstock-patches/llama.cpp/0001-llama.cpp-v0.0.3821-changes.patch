@@ -1,12 +1,12 @@
-From 09b785eff1f7148f79c765ec69767a2dabe4926e Mon Sep 17 00:00:00 2001
+From 7f6e44176504cbc0ef5aa11c97c1ca07b253163e Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Wed, 16 Oct 2024 08:59:05 +0000
-Subject: [PATCH] Update patch to use nvcc compiler
+Date: Thu, 17 Oct 2024 14:23:28 +0000
+Subject: [PATCH] Update patch to use latest cmake 3.26.4
 
 ---
  recipe/conda_build_config.yaml |  3 ++
- recipe/meta.yaml               | 53 +++++++++++++++-------------------
- 2 files changed, 27 insertions(+), 29 deletions(-)
+ recipe/meta.yaml               | 55 ++++++++++++++++------------------
+ 2 files changed, 28 insertions(+), 30 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
 index 7071b8b..0923543 100644
@@ -20,7 +20,7 @@ index 7071b8b..0923543 100644
 +cuda_compiler:
 +  - nvcc
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..fe06ae6 100644
+index b1428da..7763918 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -85,10 +85,11 @@ index b1428da..fe06ae6 100644
 -    - {{ stdlib('c') }}
 -    - {{ compiler('cxx') }}
 -    - {{ compiler('cuda') }}                        # [cuda_compiler_version != "None"]
+-    - cmake
 +    - {{ compiler('c') }}                        # [ ppc_arch != "p10"]
 +    - {{ compiler('cxx') }}                      # [ ppc_arch != "p10"]
 +    - {{ compiler('cuda') }}                     #[build_type == 'cuda']
-     - cmake
++    - cmake ==3.26.4
      - git
      - ninja
 -    - pkgconfig
