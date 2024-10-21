@@ -39,6 +39,7 @@ please see the open-ce-builder [repository](https://github.com/open-ce/open-ce-b
 | 1.9.1                   | 12.0.3                  |
 | 1.10.0                  | 12.0.3                  |
 | 1.11.3                  | >=13.0.2                |
+| 1.11.4                  | >=13.0.2                |
 
 ## GETTING STARTED
 
@@ -60,6 +61,8 @@ MIT hosts pre-built versions of Open-CE for the IBM Power architecture. Multiple
 Rocket Software hosts pre-built versions of the Open-CE at conda channel [here](https://anaconda.org/rocketce). This channel provides packages for Power architecture(ppc64le). The latest version of Open-CE can be pulled down using the mentioned channel.
 
 In order to get notification you can register at https://community.rocketsoftware.com/forums/forum-home/community-members?communitykey=c7ece6e8-5a29-4a17-a2bc-68b65f89d29f. Please reach out to jadhavs@rocketsoftware.com for any questions and enquiries.
+
+**Note**: Ray build requires a container with `--shm-size` around 20GB.
 
 ### Build steps for setuptools on Power9 and Power10.
 Ensure CONDA_ADD_PIP_AS_PYTHON_DEPENDENCY=0 is set before building setuptools v72.1.0.
