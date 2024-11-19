@@ -1,18 +1,18 @@
-From 46a8975965ffe6c5ed6f70841ce356a5b1db0a25 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Thu, 19 Sep 2024 07:14:24 +0000
-Subject: [PATCH] rust-activation update
+From 51c20f4d0e6f34af73aa032066324e1c1f65dc4b Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Tue, 19 Nov 2024 12:52:42 +0000
+Subject: [PATCH] Fixed build
 
 ---
- recipe/conda_build_config.yaml | 184 ++-------------------------------
+ recipe/conda_build_config.yaml | 190 +++------------------------------
  recipe/meta.yaml               |  27 +++--
- 2 files changed, 20 insertions(+), 191 deletions(-)
+ 2 files changed, 26 insertions(+), 191 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index 1cecc1f..45287d5 100644
+index 1cecc1f..d0da4d8 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
-@@ -1,194 +1,26 @@
+@@ -1,194 +1,32 @@
  cross_target_platform:
 -  - linux-64                            # [linux]
 -  - linux-aarch64                       # [linux]
@@ -28,6 +28,7 @@ index 1cecc1f..45287d5 100644
 -  - win-64                              # [linux64 or osx or win64]
 +  - linux-64                            # [linux64]
 +  - linux-ppc64le                       # [ppc64le]
++  - linux-s390x                         # [s390x]
  rust_arch:
 -  - x86_64-unknown-linux-gnu            # [linux]
 -  - aarch64-unknown-linux-gnu           # [linux]
@@ -43,6 +44,7 @@ index 1cecc1f..45287d5 100644
 -  - x86_64-pc-windows-msvc              # [linux64 or osx or win64]
 +  - x86_64-unknown-linux-gnu            # [linux64]
 +  - powerpc64le-unknown-linux-gnu       # [ppc64le]
++  - s390x-unknown-linux-gnu             # [s390x]
  rust_arch_env_build:
    - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [aarch64]
@@ -50,6 +52,7 @@ index 1cecc1f..45287d5 100644
 -  - X86_64_APPLE_DARWIN                 # [osx and x86_64]
 -  - AARCH64_APPLE_DARWIN                # [osx and arm64]
 -  - X86_64_PC_WINDOWS_MSVC              # [win64]
++  - S390X_UNKNOWN_LINUX_GNU             # [s390x]
  rust_arch_env:
 -  - X86_64_UNKNOWN_LINUX_GNU            # [linux]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [linux]
@@ -65,6 +68,7 @@ index 1cecc1f..45287d5 100644
 -  - X86_64_PC_WINDOWS_MSVC              # [linux64 or osx or win64]
 +  - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 +  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
++  - S390X_UNKNOWN_LINUX_GNU             # [s390x]
  rust_default_cc_build:
    - x86_64-conda-linux-gnu-cc           # [linux64]
 -  - aarch64-conda-linux-gnu-cc          # [aarch64]
@@ -72,6 +76,7 @@ index 1cecc1f..45287d5 100644
 -  - x86_64-apple-darwin13.4.0-clang     # [osx and x86_64]
 -  - arm64-apple-darwin20.0.0-clang      # [osx and arm64]
 -  - clang-cl                            # [win64]
++  - s390x-conda-linux-gnu-cc            # [s390x]
  rust_default_cc:
 -  - x86_64-conda-linux-gnu-cc           # [linux]
 -  - aarch64-conda-linux-gnu-cc          # [linux]
@@ -156,6 +161,7 @@ index 1cecc1f..45287d5 100644
 -  - 11.0                                # [osx and not x86_64]
 +  - x86_64-conda-linux-gnu-cc           # [linux64]
 +  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
++  - s390x-conda-linux-gnu-cc            # [s390x]
  version:
 -  - 1.80.1  # [linux]
 -  - 1.80.1  # [linux]
