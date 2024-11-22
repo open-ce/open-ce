@@ -1,17 +1,26 @@
-From 3b596a949f818f909262597237d61b50946a91c3 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Fri, 4 Oct 2024 05:00:28 +0000
-Subject: [PATCH] opence changes
-
----
- recipe/meta.yaml | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index 62e939a..6780993 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -3,5 +3,3 @@ cxx_compiler:          # [win]
+   - vs2022             # [win]
+ cxx_compiler_version:  # [win]
+   - 19.40              # [win]
+-rust_compiler_version:
+-  - "1.74"
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index f3d8860..0e18a6e 100644
+index f3d8860..0f409df 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -17,24 +17,24 @@ build:
+@@ -10,31 +10,31 @@ source:
+   sha256: 147754cb3d81177ee12d9baf575d93549e76121dacd3544ad6a50ab718de2b9c
+ 
+ build:
+-  number: 0
++  number: 1
+   skip: true  # [py==27]
+   missing_dso_whitelist:   # [osx]
+     - /usr/lib/libresolv.9.dylib  # [osx]
  
  requirements:
    build:
@@ -43,6 +52,3 @@ index f3d8860..0e18a6e 100644
  
  test:
    commands:
--- 
-2.40.1
-
