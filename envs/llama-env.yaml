@@ -41,9 +41,7 @@ packages:
     patches:
       - feedstock-patches/anyio/0001-Skipped-failed-tests.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : 8043cc232022c06b91ea8da00ac291def319a81e  #0.36.2
-    patches:
-      - feedstock-patches/starlette/0001-Pinned-python-multipart-to-fix-CVE-2024-24762.patch
+    git_tag : a4aef1199674dbb30842bf7c7816e8cfa1cffefd  #0.40.0
   - feedstock : https://github.com/conda-forge/uvicorn-feedstock
     git_tag : f5a97e4e7ecf157909e6b6344eb4d3f694680433  #v0.22.0
   - feedstock : https://github.com/conda-forge/diskcache-feedstock

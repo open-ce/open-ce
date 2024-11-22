@@ -26,9 +26,7 @@ packages:
     patches: 
       - feedstock-patches/cfitsio/0001-Open-ce-changes.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
-    git_tag : 8043cc232022c06b91ea8da00ac291def319a81e  #0.36.2
-    patches:
-      - feedstock-patches/starlette/0001-Pinned-python-multipart-to-fix-CVE-2024-24762.patch
+    git_tag : a4aef1199674dbb30842bf7c7816e8cfa1cffefd  #0.40.0
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.0.7
     git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
     patches:
