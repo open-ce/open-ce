@@ -17,7 +17,7 @@ packages:
   - feedstock : https://github.com/conda-forge/tokenize-rt-feedstock
     git_tag : 21f5be31c04b0fa67e5f96aa94621abba19e52c3
   - feedstock : https://github.com/conda-forge/black-feedstock.git                #[ppc64le]
-    git_tag : 911d1234adb64deca486ab362083d61cbbb19709   #v24.4.2                 #[ppc64le]
+    git_tag : 8522a1f91345da370d779c2c97b4af481909f9a0   #v24.8.0                 #[ppc64le]
     patches :                                                                     #[ppc64le]
       - feedstock-patches/black/0001-Updates-in-recipe-as-open-ce-changes.patch   #[ppc64le]
 #      - feedstock-patches/black/0001-Update-patch-of-black-to-fix-s390x-build.patch #[s390x]
