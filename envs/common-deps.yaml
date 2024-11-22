@@ -27,4 +27,18 @@ packages:
     git_tag : e1d5cae5e98645557119f79cd60f221a00e26e34                       #[ppc64le]
   - feedstock : https://github.com/conda-forge/typing_extensions-feedstock.git #[ppc64le]
     git_tag : f853e30236c9c866bdc7cc8e4d1fbe766b182f37                         #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/cryptography-feedstock          #[ppc64le]
+    git_tag : 7f71ebd7a05825a90011e57e561afc48ff4c61f7                             #[ppc64le]
+    patches:                                                                       #[ppc64le]
+      - feedstock-patches/cryptography/0001-Opence-changes.patch                   #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/cryptography-vectors-feedstock  #[ppc64le]
+    git_tag : d27672f942121ae385f3b0c99b2532a1d6930853                             #[ppc64le]
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches:
+      - feedstock-patches/rust/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
 git_tag_for_env: open-ce-v1.11.4

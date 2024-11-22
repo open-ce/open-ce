@@ -1,0 +1,29 @@
+From 26b80a5fe2149721b5ca053fb83f076b21182b93 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 22 Nov 2024 09:18:12 +0000
+Subject: [PATCH] Fixed test failure
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index aae68c1..0ae1958 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -18,10 +18,10 @@ build:
+ requirements:
+   host:
+     - pip
+-    - python >=3.7
++    - python <3.12
+     - poetry-core >=1.0.0
+   run:
+-    - python >=3.7
++    - python <3.12
+ 
+ test:
+   imports:
+-- 
+2.40.1
+
