@@ -24,7 +24,7 @@ packages:
   - feedstock : https://github.com/AnacondaRecipes/cfitsio-feedstock
     git_tag: f965e25fdec2b5dee0965cfaf2635384ae8e16ed
     patches: 
-      - feedstock-patches/cfitsio/0001-Fixed-failuer-change-of-sha256.patch
+      - feedstock-patches/cfitsio/0001-Update-sha256-value.patch
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : a4aef1199674dbb30842bf7c7816e8cfa1cffefd  #0.40.0
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.0.7
