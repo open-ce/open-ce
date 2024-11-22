@@ -59,7 +59,7 @@ packages:
   - feedstock : https://github.com/conda-forge/jaraco.text-feedstock
     git_tag : a85c541484f099f60be46dbf20dae1f5efedc05e
     patches :
-      - feedstock-patches/jaraco-text/0001-Add-jaraco.context-in-run.patch
+      - feedstock-patches/jaraco-text/0001-Opence-Changes.patch
   - feedstock : https://github.com/conda-forge/paste-feedstock       #[s390x]
     git_tag : 6f51e011e9af26b1e3d416941d59fa8af7d8269e                #[s390x]
   - feedstock : https://github.com/conda-forge/zipp-feedstock   #v3.19.1
@@ -70,8 +70,12 @@ packages:
     git_tag : 864a27b070378481c319c22bccdba6c82977af07
   - feedstock : https://github.com/conda-forge/jaraco.context-feedstock.git
     git_tag : 819219aa5a7a0f0474525304274f952cfdc56b7f
+    patches :
+      - feedstock-patches/jaraco.context/0001-Opence-Changes.patch
   - feedstock : https://github.com/conda-forge/backports.tarfile-feedstock.git
     git_tag : 0aed6724708917d98af1719085b666f085030e4b
+    patches :
+      - feedstock-patches/backports.tarfile/0001-Opence-changes.patch
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree

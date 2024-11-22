@@ -1,0 +1,31 @@
+From a9c2542cd27fe3832dc1ffaa9e04f6f057192ebc Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 22 Nov 2024 11:02:07 +0000
+Subject: [PATCH] Opence Changes
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 808b797..55304d9 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,12 +16,12 @@ build:
+ 
+ requirements:
+   host:
+-    - python >=3.8
++    - python <3.12
+     - pip
+     - setuptools >=56
+     - setuptools_scm >=3.4.1
+   run:
+-    - python >=3.8
++    - python <3.12
+     - backports.tarfile
+ 
+ test:
+-- 
+2.40.1
+
