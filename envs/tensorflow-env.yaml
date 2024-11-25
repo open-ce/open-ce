@@ -48,6 +48,8 @@ packages:
       - feedstock-patches/aiohttp/0001-CVE-fixed-version-3.10.2.patch
   - feedstock : https://github.com/conda-forge/aiohappyeyeballs-feedstock.git
     git_tag : b282b4db2ac2e6ace5efa3d1bd93ac2a28563dcf
+    patches :
+      - feedstock-patches/aiohappyeyeballs/0001-Opence-Changes.patch
   - feedstock : https://github.com/conda-forge/proxy-py-feedstock.git
     git_tag : 0c8912c78865b55b544c1a35129187b2a6d60514
   - feedstock : https://github.com/conda-forge/re-assert-feedstock
@@ -68,6 +70,8 @@ packages:
       - feedstock-patches/zipp/0001-update-recipe-for-open-ce-changes.patch
   - feedstock : https://github.com/conda-forge/jaraco.test-feedstock
     git_tag : 864a27b070378481c319c22bccdba6c82977af07
+    patches :
+      - feedstock-patches/jarco.test/0001-Opence-changes.patch
   - feedstock : https://github.com/conda-forge/jaraco.context-feedstock.git
     git_tag : 819219aa5a7a0f0474525304274f952cfdc56b7f
     patches :
