@@ -5,6 +5,7 @@ imported_envs:
   - openblas-env.yaml
 
 packages:
+{% if not s390x %}
 {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit
   - feedstock : https://github.com/conda-forge/nvcc-feedstock
@@ -75,4 +76,5 @@ packages:
     git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
     patches:
       - feedstock-patches/python-multipart/0001-Changed-source-for-python-multipart.patch
+{% endif %}
 git_tag_for_env: open-ce-v1.11.4

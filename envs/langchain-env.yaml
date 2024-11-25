@@ -31,6 +31,8 @@ packages:
       - feedstock-patches/langchain-text-splitters/0001-changes-for-opence.patch
   - feedstock : https://github.com/conda-forge/langsmith-feedstock.git
     git_tag : 39617ee7441dd277d3800018e4ac1070114a992f
+    patches :                                                                      #[s390x]
+      - feedstock-patches/langsmith/0001-Disabled-httpx-for-s390x.patch            #[s390x]
   - feedstock : https://github.com/conda-forge/langchain-community-feedstock.git
     git_tag : 4d725b2c17f77bb1743775e3612bc5a46c2a80be
   - feedstock : https://github.com/conda-forge/langchain-core-feedstock.git
