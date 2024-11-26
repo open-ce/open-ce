@@ -1,30 +1,43 @@
-From ba0e3c403aa4c68f58ca670806db27c2142d4150 Mon Sep 17 00:00:00 2001
+From 49406f54f2ac035d274b9b0cb4cecd62e1229a31 Mon Sep 17 00:00:00 2001
 From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 23 Jul 2024 04:48:22 -0400
-Subject: [PATCH] pin rust_compiler version
+Date: Tue, 26 Nov 2024 03:06:30 -0500
+Subject: [PATCH] opence changes
 
 ---
- recipe/conda_build_config.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ recipe/conda_build_config.yaml | 4 +---
+ recipe/meta.yaml               | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index 1ce2ca1..270c4d5 100644
+index 1ce2ca1..d35032d 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
-@@ -1,5 +1,5 @@
- rust_compiler_version:
+@@ -1,5 +1,3 @@
+-rust_compiler_version:
 -  - 1.76.0
-+  - 1.77.0
  # orjson has wheels only for MacOS SDK 11.0, see https://pypi.org/project/orjson/3.8.8/#files
  MACOSX_DEPLOYMENT_TARGET:
    - 11.0  # [osx and arm64]
-@@ -7,4 +7,4 @@ MACOSX_SDK_VERSION:
+@@ -7,4 +5,4 @@ MACOSX_SDK_VERSION:
    - "11.0"                 # [osx and arm64]
  # https://github.com/rust-lang/rust/pull/104385
  CONDA_BUILD_SYSROOT:
 -  - /opt/MacOSX10.12.sdk        # [osx and x86_64]
 \ No newline at end of file
 +  - /opt/MacOSX10.12.sdk        # [osx and x86_64]
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 90317c6..70ff52d 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -12,7 +12,7 @@ source:
+   sha256: 95cae920959d772f30ab36d3b25f83bb0f3be671e986c72ce22f8fa700dae061
+ 
+ build:
+-  number: 0
++  number: 1
+   skip: true  # [py<38]
+   missing_dso_whitelist:  # [s390x]
+     - '$RPATH/ld64.so.1'  # [s390x]
 -- 
 2.43.5
 
