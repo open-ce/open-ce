@@ -28,7 +28,7 @@ packages:
   - feedstock : https://github.com/conda-forge/langchain-text-splitters-feedstock.git
     git_tag : 57a8d4cf9b7c36ab7ec6e34e55971a3954af0b36
     patches :
-      - feedstock-patches/langchain-text-splitters/0001-changes-for-opence.patch
+      - feedstock-patches/langchain-text-splitters/0001-Opence-changes.patch
   - feedstock : https://github.com/conda-forge/langsmith-feedstock.git
     git_tag : 39617ee7441dd277d3800018e4ac1070114a992f
     patches :                                                                      #[s390x]
