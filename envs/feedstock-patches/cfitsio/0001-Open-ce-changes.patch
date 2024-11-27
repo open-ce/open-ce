@@ -1,16 +1,34 @@
-From a28c18225b35ad0236d6af7a27f35c3553e24064 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 19 Jun 2023 06:55:56 +0000
-Subject: [PATCH] Open-ce changes
+From 94f7210d2defa1b7536a6150c2ea8b6803be338a Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 27 Nov 2024 00:31:58 -0500
+Subject: [PATCH] Open-ce change
 
 ---
- recipe/meta.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 78510b7..6d0b29c 100644
+index 78510b7..50f916f 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
+@@ -2,7 +2,7 @@
+ {% set version = "3.470" %}
+ {% set nozeroversion = version[:-1] %}
+ # This is the SHA256 hash of the ungzipped tar file. See https://github.com/conda/conda/issues/3798.
+-{% set sha256 = "985606e058403c073a68d95be74e9696f0ded9414520784457a1d4cba8cca7e2" %}
++{% set sha256 = "418516f10ee1e0f1b520926eeca6b77ce639bed88804c7c545e74f26b3edf4ef" %}
+ 
+ package:
+   name: {{ name }}
+@@ -17,7 +17,7 @@ source:
+     - lcurl-pkg-config.patch
+ 
+ build:
+-  number: 7
++  number: 8
+   ignore_run_exports:
+     - libgfortran5  # [osx]
+   run_exports:
 @@ -35,7 +35,7 @@ requirements:
    host:
      - libcurl  # [not win]
@@ -21,5 +39,5 @@ index 78510b7..6d0b29c 100644
  test:
    commands:
 -- 
-2.34.1
+2.43.5
 
