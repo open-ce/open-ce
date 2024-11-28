@@ -44,4 +44,4 @@ packages:
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/pyopenssl-feedstock               #[ppc64le]
     git_tag : 8a545b01a8a9641b901bba19e5e130e93ca08cca                           #[ppc64le]
-git_tag_for_env: open-ce-v1.11.4
+git_tag_for_env: open-ce-v1.11.5

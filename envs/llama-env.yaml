@@ -77,4 +77,4 @@ packages:
     patches:
       - feedstock-patches/python-multipart/0001-Changed-source-for-python-multipart.patch
 {% endif %}
-git_tag_for_env: open-ce-v1.11.4
+git_tag_for_env: open-ce-v1.11.5

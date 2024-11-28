@@ -35,4 +35,4 @@ packages:
       - feedstock-patches/huggingface-hub/0001-Pinned-typing-extensions.patch  #[ppc64le]
   - feedstock : https://github.com/conda-forge/typing_extensions-feedstock.git #[ppc64le]
     git_tag : f853e30236c9c866bdc7cc8e4d1fbe766b182f37                         #[ppc64le]
-git_tag_for_env: open-ce-v1.11.4
+git_tag_for_env: open-ce-v1.11.5

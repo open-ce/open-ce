@@ -18,4 +18,4 @@ packages:
     patches :
       - feedstock-patches/bitsandbytes/0001-changes-for-opence.patch
 {% endif %}
-git_tag_for_env: open-ce-v1.11.4
+git_tag_for_env: open-ce-v1.11.5
