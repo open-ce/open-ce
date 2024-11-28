@@ -5,6 +5,7 @@ imported_envs:
   - common-deps.yaml
 
 packages:
+{% if not s390x %}
   - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock    #[ppc64le]
     git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
   - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock      #[ppc64le]
@@ -50,4 +51,5 @@ packages:
     git_tag : 15daecc326884626192eecfe6279580edaad0855
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
+{% endif %}
 git_tag_for_env: open-ce-v1.11.4

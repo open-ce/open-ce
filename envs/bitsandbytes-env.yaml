@@ -5,6 +5,7 @@ imported_envs:
   - pytorch-env.yaml
 
 packages:
+{% if not s390x %}
 {% if build_type == 'cuda' %}
   - feedstock : https://github.com/conda-forge/nvcc-feedstock
     git_tag : 9c8e43393d9c798c52a9d8e56785920ef767cabb
@@ -16,4 +17,5 @@ packages:
     git_tag : 74eb7d7a4c0a1ae21fa8c79fc79f5f3720e67bb2 
     patches :
       - feedstock-patches/bitsandbytes/0001-changes-for-opence.patch
+{% endif %}
 git_tag_for_env: open-ce-v1.11.4
