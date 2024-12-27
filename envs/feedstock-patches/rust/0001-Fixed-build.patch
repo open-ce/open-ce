@@ -1,0 +1,46 @@
+From 244a07a0485fcd0a146757cf6d7ab5fca556900e Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Thu, 19 Sep 2024 08:16:05 +0000
+Subject: [PATCH] Fixed build
+
+---
+ recipe/meta.yaml | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3b8a388..893f165 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -115,23 +115,23 @@ outputs:
+         # Added as run deps: libgcc-ng (via compiler strong run_exports), zlib
+         # - /lib64/libgcc_s.so.1  # [linux]
+         # - /lib64/libz.so.1  # [linux]
+-      run_exports:   # [(osx and x86_64) or linux]
+-        strong_constrains:   # [(osx and x86_64) or linux]
+-          - __osx >={{ c_stdlib_version }}  # [osx and x86_64]
+-          - __glibc >={{ c_stdlib_version }}  # [linux]
++#      run_exports:   # [(osx and x86_64) or linux]
++#        strong_constrains:   # [(osx and x86_64) or linux]
++#          - __osx >={{ c_stdlib_version }}  # [osx and x86_64]
++#          - __glibc >={{ c_stdlib_version }}  # [linux]
+     requirements:
+       build:
+         - posix  # [win]
+       host:
+         - {{ pin_subpackage("rust-std-" ~ rust_arch, exact=True) }}
+         - {{ compiler('c') }}  # [linux] -- rustc needs a toolchain to link executables
+-        - {{ stdlib('c') }}  # [linux]
++#      - {{ stdlib('c') }}  # [linux]
+         # zlib is linked by **/lib/libLLVM-*-rust-*.so
+         - zlib  # [linux]
+       run:
+         - {{ pin_subpackage("rust-std-" ~ rust_arch, exact=True) }}
+         - gcc_impl_{{ target_platform }}  # [linux]
+-        - sysroot_{{ target_platform }} >={{ c_stdlib_version }}  # [linux]
++#        - sysroot_{{ target_platform }} >={{ c_stdlib_version }}  # [linux]
+     test:
+       requires:
+         - posix  # [win]
+-- 
+2.40.1
+

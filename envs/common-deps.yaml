@@ -25,7 +25,23 @@ packages:
       - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]
   - feedstock : https://github.com/conda-forge/requests-feedstock     #2.32.3           #[ppc64le]
     git_tag : 1677aed84c3ee88b7f4372af8ba41143cc6d4119                                  #[ppc64le]
-  - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git #v3.0.3       #[ppc64le]
-    git_tag : e1d5cae5e98645557119f79cd60f221a00e26e34                                  #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git #v3.0.6       #[ppc64le]
+    git_tag : 72b04bca5df55645d691697f4932466f193dd6bf                                  #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/cryptography-feedstock          #[ppc64le]
+    git_tag : 7f71ebd7a05825a90011e57e561afc48ff4c61f7                             #[ppc64le]
+    patches:                                                                       #[ppc64le]
+      - feedstock-patches/cryptography/0001-Opence-changes.patch                   #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/cryptography-vectors-feedstock  #[ppc64le]
+    git_tag : d27672f942121ae385f3b0c99b2532a1d6930853                             #[ppc64le]
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches:
+      - feedstock-patches/rust/0001-Fixed-build.patch #[not s390x]
+#      - feedstock-patches/rust/0001-Add-fix-to-support-s390x-platform.patch #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+
 
 git_tag_for_env: open-ce-v1.9.5-cpd
