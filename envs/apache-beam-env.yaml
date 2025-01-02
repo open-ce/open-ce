@@ -11,8 +11,10 @@ packages:
 {% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
   - feedstock : https://github.com/conda-forge/httplib2-feedstock.git
     git_tag : 90f5bd5d0fd0c37bf66bf0167fd268df572033cb
-  - feedstock : https://github.com/conda-forge/orjson-feedstock.git
-    git_tag : a7ac51ae8db1305501bd7445a00b86f608a933f9
+  - feedstock : https://github.com/AnacondaRecipes/orjson-feedstock                #[not x86_64]
+    git_tag : bdea9ad2212ca9185bb81928a3b7ba4c5c59cbaf                             #[not x86_64]
+    patches :                                                                      #[not x86_64]
+      - feedstock-patches/orjson/0001-pin-rust_compiler-version.patch              #[not x86_64]
   - feedstock : https://github.com/conda-forge/maturin-feedstock.git
     git_tag : e50c2b63074fa3e90e553871c9ec4dc91a918a0e
     patches :
