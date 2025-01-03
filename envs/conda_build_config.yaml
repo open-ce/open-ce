@@ -249,7 +249,7 @@ pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
   - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
 pytorch_lightning:
-  - 2.0.*
+  - 2.3.*
 pytorch_scatter:
   - 2.1.1
 pytorch_sparse:
