@@ -17,6 +17,8 @@ packages:
   - feedstock : libsndfile
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
+    patches :
+      - feedstock-patches/fire/0001-Fixed-test-failure.patch
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
     git_tag : 2602adc1acde629174ecb5e484f897d38a907c60
     patches:
