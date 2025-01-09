@@ -1,14 +1,14 @@
-From fa4fdb9bf9a4ab0915c6e735fd896148b46eaebe Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23in.ibm.com>
-Date: Wed, 17 May 2023 10:11:40 +0000
-Subject: [PATCH] Fixed
+From 7cfd15f49c941e6283467c1d850a45cf2093db6c Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 3 Jan 2025 11:13:12 +0000
+Subject: [PATCH] Update patch to fix build failure
 
 ---
- recipe/meta.yaml | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ recipe/meta.yaml | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 795b445..7973372 100644
+index 795b445..919be6c 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -18,14 +18,15 @@ requirements:
@@ -32,7 +32,7 @@ index 795b445..7973372 100644
      - pip
    run:
      - python
-@@ -42,6 +43,7 @@ test:
+@@ -42,10 +43,13 @@ test:
    requires:
      - pip
      - pytest
@@ -40,6 +40,12 @@ index 795b445..7973372 100644
      - pytest-xdist
      - pylint >=2.6.0
      - pyink
+     - absl-py
++    - aiohttp
++    - black ==24.8.0
+ 
+ about:
+   home: https://pypi.org/project/ml-dtypes/
 -- 
-2.34.1
+2.40.1
 

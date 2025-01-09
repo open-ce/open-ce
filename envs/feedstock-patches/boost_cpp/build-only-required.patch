@@ -1,14 +1,14 @@
-From 04dca100de4d549da1f61a27f4ac06f14316f0d6 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Wed, 28 Aug 2024 06:31:44 +0000
-Subject: [PATCH] Pinned icu to 73.1 for s390x
+From c735d774d2a41635beb807bd2606b5052d9764d0 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Wed, 8 Jan 2025 11:08:38 +0000
+Subject: [PATCH] Modify the upstream URL to obtain the package's tar file
 
 ---
  recipe/meta.yaml | 130 ++++++++++++++++++++++++-----------------------
  1 file changed, 66 insertions(+), 64 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 6f6b558..2c87234 100644
+index 6f6b558..fb520c4 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,14 +1,14 @@
@@ -24,8 +24,8 @@ index 6f6b558..2c87234 100644
  source:
 -  url: https://dl.bintray.com/boostorg/release/{{ version }}/source/{{ filename }}
 -  sha256: 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81
-+  url: https://boostorg.jfrog.io/artifactory/main/release/{{ version }}/source/{{ filename }}
-+  sha256: a13de2c8fbad635e6ba9c8f8714a0e6b4264b60a29b964b940a22554705b6b60
++  url: https://sourceforge.net/projects/boost/files/boost/{{ version }}/{{ filename }}
++  sha256 : a13de2c8fbad635e6ba9c8f8714a0e6b4264b60a29b964b940a22554705b6b60
    patches:
      # https://svn.boost.org/trac10/attachment/ticket/11120/python_jam.patch
      - python_jam.patch

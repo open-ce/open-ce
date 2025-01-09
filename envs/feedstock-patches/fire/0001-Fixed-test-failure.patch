@@ -1,0 +1,25 @@
+From 5e8fde4c8b5190401706e34ee797d3b8a9f5cbed Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana-Shinde1@ibm.com>
+Date: Mon, 6 Jan 2025 11:13:42 +0000
+Subject: [PATCH] Fixed test failure
+
+---
+ recipe/meta.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 95bf56d..0402a07 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -25,6 +25,8 @@ requirements:
+     - six
+ 
+ test:
++  requires:
++    - python {{ python }}
+   imports:
+     - fire
+ 
+-- 
+2.40.1
+

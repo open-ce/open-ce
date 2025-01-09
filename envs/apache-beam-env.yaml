@@ -11,8 +11,10 @@ packages:
 {% if build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8' %}
   - feedstock : https://github.com/conda-forge/httplib2-feedstock.git
     git_tag : 90f5bd5d0fd0c37bf66bf0167fd268df572033cb
-  - feedstock : https://github.com/conda-forge/orjson-feedstock.git
-    git_tag : a7ac51ae8db1305501bd7445a00b86f608a933f9
+  - feedstock : https://github.com/AnacondaRecipes/orjson-feedstock
+    git_tag : bdea9ad2212ca9185bb81928a3b7ba4c5c59cbaf
+    patches :
+      - feedstock-patches/orjson/0001-pin-rust_compiler-version.patch
   - feedstock : https://github.com/conda-forge/maturin-feedstock.git
     git_tag : e50c2b63074fa3e90e553871c9ec4dc91a918a0e
     patches :
@@ -22,16 +24,17 @@ packages:
     runtime_package : False                                           #[cudatoolkit == '11.2']
   - feedstock : https://github.com/conda-forge/dill-feedstock
     git_tag : 5fd6c22dd882eb2682095669407f83b60fa4f040
-  - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : de8ddcf242d3c7086369f0d3d3a89fa9e1abd6c8     #1.77
-    patches :                                                                         #[s390x]
-      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
-  - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
-    git_tag : eb4d41c65c002e4367f5b3aa20d547a815fe9d58
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437   #v1.81.0
+    patches:
+      - feedstock-patches/rust/0001-Fixed-build.patch #[not s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-s390x-platform.patch #[s390x]
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : 77337e3832b712a6de383c0a96dbe1a33d5f864f
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock : https://github.com/AnacondaRecipes/pydot-feedstock
+    git_tag : eb4d41c65c002e4367f5b3aa20d547a815fe9d58
   - feedstock : https://github.com/conda-forge/crcmod-feedstock.git
     git_tag : f51a98b1aa3b2591cebe3e0f42231b1f6c1d6fcc
   - feedstock : https://github.com/conda-forge/cargo-bundle-licenses-feedstock.git

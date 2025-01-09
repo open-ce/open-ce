@@ -21,7 +21,7 @@ av:
 bazel:
   - 5.*
 black:
-  - 22.*
+  - 24.*
 bsddb3:
   - 6.2.9
 boost:
@@ -225,7 +225,7 @@ opt_einsum:
 pathy:
   - 0.6.*
 pip:
-  - 21.*
+  - 23.*
 #pkg_config is not working here with ffmpeg recipe, so updated to pkgconfig
 pkgconfig:
   - 0.29.2
@@ -249,7 +249,7 @@ pytorch:
   - 1.10.*               # [cudatoolkit == '11.2']
   - 2.0.*               # [build_type == 'cpu' or cudatoolkit == '11.8']
 pytorch_lightning:
-  - 2.0.*
+  - 2.3.*
 pytorch_scatter:
   - 2.1.1
 pytorch_sparse:
@@ -265,11 +265,11 @@ regex:
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.62.*     # [cudatoolkit == '11.2']
-  - 1.77.*     # [build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8']
+  - 1.81.*
+rust_nightly:
+  - 1.82.*
 rust_compiler_version:
-  - '1.46.0'   # [cudatoolkit == '11.2']
-  - '1.77.0'   # [build_type == 'cpu' or cudatoolkit == '11.4' or cudatoolkit == '11.8']
+  - '1.81.0'
 safeint:
   - 3.0
 scipy:

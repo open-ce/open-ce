@@ -1,24 +1,36 @@
-From 86fb6bcb0ab5d4485f88af59e79c65954a010d9d Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 17 Apr 2023 09:20:39 -0400
-Subject: [PATCH] Fixed build
+From efaa8ce9dd7abb7781164dd0e680634f22aed9a6 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 3 Jan 2025 09:55:47 +0000
+Subject: [PATCH] Fixed build patch
 
 ---
- recipe/meta.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ recipe/meta.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 85f6b81..c1e3a52 100644
+index 85f6b81..5517bbd 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -42,6 +42,7 @@ test:
+@@ -32,7 +32,7 @@ requirements:
+     - tomli >=1.1.0 
+     - typed-ast >=1.4.2
+     - typing-extensions >=3.10.0.0
+-    - black >=22.12.0
++    - black ==24.8.0
+ 
+ test:
+   imports:
+@@ -41,7 +41,9 @@ test:
+     - pip check
      - pyink --help
    requires:
-     - pip
-+    - black >=22.12.0
+-    - pip
++    - pip {{ pip }}
++    - black==24.8.0
++    - aiohttp
  
  about:
    home: https://github.com/google/pyink
 -- 
-2.31.1
+2.40.1
 

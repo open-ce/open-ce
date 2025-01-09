@@ -6,12 +6,13 @@ imported_envs:
 
 packages:
 {% if not s390x %}
-  - feedstock : https://github.com/conda-forge/rust-feedstock
-    git_tag : de8ddcf242d3c7086369f0d3d3a89fa9e1abd6c8 #1.77
-    patches :                                                                         #[s390x]
-      - feedstock-patches/rust/0001-Add-fix-to-support-390x-platform.patch            #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437  #1.81.0
+    patches:
+      - feedstock-patches/rust/0001-Fixed-build.patch #[not s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-s390x-platform.patch #[s390x]
   - feedstock : https://github.com/conda-forge/rust-activation-feedstock
-    git_tag : 77337e3832b712a6de383c0a96dbe1a33d5f864f
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/setuptools-rust-feedstock
