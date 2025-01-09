@@ -11,8 +11,7 @@ packages:
     - feedstock : https://github.com/conda-forge/hjson-py-feedstock
       git_tag: d8a1feb4e5099836efafb19fe449511ef6e8d9a7
     - feedstock : openmpi                  #[mpi_type == 'openmpi']
-    - feedstock : https://github.com/open-ce/deepspeed-feedstock
-      git_tag: main
+    - feedstock : deepspeed
   {% endif %}
 {% endif %}
 

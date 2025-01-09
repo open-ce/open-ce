@@ -23,12 +23,10 @@ packages:
 #    patches :
 #     - feedstock-patches/tokenizers/0001-changes-for-opence-fips.patch                #[not s390x]
 #     - feedstock-patches/tokenizers/0001-opence-changes-for-s390x.patch               #[s390x]
-  - feedstock : https://github.com/Aman-Surkar/huggingface_hub-feedstock
-    git_tag : main
+  - feedstock : huggingface_hub
   - feedstock : sacremoses
   - feedstock : sentencepiece
-  - feedstock : https://github.com/Aman-Surkar/transformers-feedstock
-    git_tag : main
+  - feedstock : transformers
 {% endif %}
 
 git_tag_for_env: open-ce-v1.9.5-cpd

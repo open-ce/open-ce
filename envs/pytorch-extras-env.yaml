@@ -10,8 +10,7 @@ imported_envs:
 packages:
 {% if not s390x %}
 {% if build_type == 'cpu' or cudatoolkit == '11.8' %}
-  - feedstock : https://github.com/Archana-Shinde1/pytorch-lightning-feedstock
-    git_tag : update-2.3.3
+  - feedstock : pytorch-lightning
   - feedstock : pytorch-lightning-bolts
   - feedstock : libflac
   - feedstock : libsndfile
