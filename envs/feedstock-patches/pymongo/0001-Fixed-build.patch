@@ -1,0 +1,34 @@
+From 1f00a20dcd28b143e05a4255dc6f494ae33c0ada Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Mon, 7 Oct 2024 09:23:13 +0000
+Subject: [PATCH] try to remove cyclic dependancy with mockupdb
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 7d1e8b5..b69b5db 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -55,7 +55,7 @@ requirements:
+ {% set tests_to_ignore = tests_to_ignore + " --ignore=test/ocsp/test_ocsp.py" %}
+ 
+ # No mockupdb for s390x
+-{% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb" %}  # [s390x]
++{% set tests_to_ignore = tests_to_ignore + " --ignore=test/mockupdb" %}
+ 
+ {% set tests_to_skip = "" %}
+ # The test is expecting to be running under  kubernetes?
+@@ -76,7 +76,7 @@ test:
+   requires:
+     - pip
+     - pytest >=7
+-    - mockupdb  # [not s390x]
++#    - mockupdb  # [not s390x]
+   commands:
+     - pip check
+     - pytest -v . {{ tests_to_ignore }} -k "not ({{ tests_to_skip }})"
+-- 
+2.40.1
+

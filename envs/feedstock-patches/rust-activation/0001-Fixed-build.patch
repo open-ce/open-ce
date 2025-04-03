@@ -1,50 +1,48 @@
-From 4b60ee7b2876a8eab4e7cf8eb9119cb89a6a0156 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Wed, 10 Apr 2024 06:43:14 +0000
-Subject: [PATCH] Fixed build
+From 46a8975965ffe6c5ed6f70841ce356a5b1db0a25 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Thu, 19 Sep 2024 07:14:24 +0000
+Subject: [PATCH] rust-activation update
 
 ---
- recipe/conda_build_config.yaml | 154 +++------------------------------
- recipe/meta.yaml               |   7 +-
- 2 files changed, 16 insertions(+), 145 deletions(-)
+ recipe/conda_build_config.yaml | 184 ++-------------------------------
+ recipe/meta.yaml               |  27 +++--
+ 2 files changed, 20 insertions(+), 191 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
-index d3fb77e..1ac835f 100644
+index 1cecc1f..45287d5 100644
 --- a/recipe/conda_build_config.yaml
 +++ b/recipe/conda_build_config.yaml
-@@ -1,49 +1,19 @@
+@@ -1,194 +1,26 @@
  cross_target_platform:
 -  - linux-64                            # [linux]
 -  - linux-aarch64                       # [linux]
 -  - linux-ppc64le                       # [linux]
 -  - osx-64                              # [linux64 or osx]
 -  - osx-arm64                           # [linux64 or osx]
--  - win-64                              # [linux64 or (osx and x86_64) or win64]
+-  - win-64                              # [linux64 or osx or win64]
 -  - linux-64                            # [linux]
 -  - linux-aarch64                       # [linux]
 -  - linux-ppc64le                       # [linux]
 -  - osx-64                              # [linux64 or osx]
 -  - osx-arm64                           # [linux64 or osx]
--  - win-64                              # [linux64 or (osx and x86_64) or win64]
+-  - win-64                              # [linux64 or osx or win64]
 +  - linux-64                            # [linux64]
 +  - linux-ppc64le                       # [ppc64le]
-+  - linux-s390x                         # [s390x]
  rust_arch:
 -  - x86_64-unknown-linux-gnu            # [linux]
 -  - aarch64-unknown-linux-gnu           # [linux]
 -  - powerpc64le-unknown-linux-gnu       # [linux]
 -  - x86_64-apple-darwin                 # [linux64 or osx]
 -  - aarch64-apple-darwin                # [linux64 or osx]
--  - x86_64-pc-windows-msvc              # [linux64 or (osx and x86_64) or win64]
+-  - x86_64-pc-windows-msvc              # [linux64 or osx or win64]
 -  - x86_64-unknown-linux-gnu            # [linux]
 -  - aarch64-unknown-linux-gnu           # [linux]
 -  - powerpc64le-unknown-linux-gnu       # [linux]
 -  - x86_64-apple-darwin                 # [linux64 or osx]
 -  - aarch64-apple-darwin                # [linux64 or osx]
--  - x86_64-pc-windows-msvc              # [linux64 or (osx and x86_64) or win64]
+-  - x86_64-pc-windows-msvc              # [linux64 or osx or win64]
 +  - x86_64-unknown-linux-gnu            # [linux64]
 +  - powerpc64le-unknown-linux-gnu       # [ppc64le]
-+  - s390x-unknown-linux-gnu             # [s390x]
  rust_arch_env_build:
    - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [aarch64]
@@ -52,100 +50,128 @@ index d3fb77e..1ac835f 100644
 -  - X86_64_APPLE_DARWIN                 # [osx and x86_64]
 -  - AARCH64_APPLE_DARWIN                # [osx and arm64]
 -  - X86_64_PC_WINDOWS_MSVC              # [win64]
-+  - S390X_UNKNOWN_LINUX_GNU             # [s390x]
  rust_arch_env:
 -  - X86_64_UNKNOWN_LINUX_GNU            # [linux]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [linux]
 -  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [linux]
 -  - X86_64_APPLE_DARWIN                 # [linux64 or osx]
 -  - AARCH64_APPLE_DARWIN                # [linux64 or osx]
--  - X86_64_PC_WINDOWS_MSVC              # [linux64 or (osx and x86_64) or win64]
+-  - X86_64_PC_WINDOWS_MSVC              # [linux64 or osx or win64]
 -  - X86_64_UNKNOWN_LINUX_GNU            # [linux]
 -  - AARCH64_UNKNOWN_LINUX_GNU           # [linux]
 -  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [linux]
 -  - X86_64_APPLE_DARWIN                 # [linux64 or osx]
 -  - AARCH64_APPLE_DARWIN                # [linux64 or osx]
--  - X86_64_PC_WINDOWS_MSVC              # [linux64 or (osx and x86_64) or win64]
+-  - X86_64_PC_WINDOWS_MSVC              # [linux64 or osx or win64]
 +  - X86_64_UNKNOWN_LINUX_GNU            # [linux64]
 +  - POWERPC64LE_UNKNOWN_LINUX_GNU       # [ppc64le]
-+  - S390X_UNKNOWN_LINUX_GNU             # [s390x]
  rust_default_cc_build:
    - x86_64-conda-linux-gnu-cc           # [linux64]
-   - aarch64-conda-linux-gnu-cc          # [aarch64]
-@@ -52,112 +22,16 @@ rust_default_cc_build:
-   - arm64-apple-darwin20.0.0-clang      # [osx and arm64]
-   - clang-cl                            # [win64]
+-  - aarch64-conda-linux-gnu-cc          # [aarch64]
+   - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
+-  - x86_64-apple-darwin13.4.0-clang     # [osx and x86_64]
+-  - arm64-apple-darwin20.0.0-clang      # [osx and arm64]
+-  - clang-cl                            # [win64]
  rust_default_cc:
 -  - x86_64-conda-linux-gnu-cc           # [linux]
 -  - aarch64-conda-linux-gnu-cc          # [linux]
 -  - powerpc64le-conda-linux-gnu-cc      # [linux]
 -  - x86_64-apple-darwin13.4.0-clang     # [linux64 or osx]
 -  - arm64-apple-darwin20.0.0-clang      # [linux64 or osx]
--  - clang-cl                            # [linux64 or (osx and x86_64) or win64]
+-  - clang-cl                            # [linux64 or osx or win64]
 -  - x86_64-conda-linux-gnu-cc           # [linux]
 -  - aarch64-conda-linux-gnu-cc          # [linux]
 -  - powerpc64le-conda-linux-gnu-cc      # [linux]
 -  - x86_64-apple-darwin13.4.0-clang     # [linux64 or osx]
 -  - arm64-apple-darwin20.0.0-clang      # [linux64 or osx]
--  - clang-cl                            # [linux64 or (osx and x86_64) or win64]
--
+-  - clang-cl                            # [linux64 or osx or win64]
 -# This should be max(build_platform_ver, cross_target_platform_ver)
 -MACOSX_SDK_VERSION:
 -  - 0                                   # [linux]
 -  - 0                                   # [linux]
 -  - 0                                   # [linux]
--  - 10.12                               # [linux64 or osx]
+-  - 10.13                               # [linux64 or osx]
 -  - 11.0                                # [linux64 or osx]
 -  - 0                                   # [linux64 or win64]
 -  # For osx-64 -> win-64 cross-compiling, set SDK version for the build system
--  - 10.12                               # [osx and x86_64]
+-  - 10.13                               # [osx and x86_64]
+-  # For osx-arm64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 11.0                                # [osx and not x86_64]
 -
 -  - 0                                   # [linux]
 -  - 0                                   # [linux]
 -  - 0                                   # [linux]
--  - 10.12                               # [linux64 or osx]
+-  - 10.13                               # [linux64 or osx]
 -  - 11.0                                # [linux64 or osx]
 -  - 0                                   # [linux64 or win64]
 -  # For osx-64 -> win-64 cross-compiling, set SDK version for the build system
--  - 10.12                               # [osx and x86_64]
--# This should match cross_target_platform_ver
+-  - 10.13                               # [osx and x86_64]
+-  # For osx-arm64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 11.0                                # [osx and not x86_64]
 -MACOSX_DEPLOYMENT_TARGET:
 -  - 0                                   # [linux]
 -  - 0                                   # [linux]
 -  - 0                                   # [linux]
--  - 10.12                               # [linux64 or osx]
+-  - 10.13                               # [linux64 or osx]
+-  - 11.0                                # [linux64 or osx]
+-  - 0                                   # [linux64 or win64]
+-  # For osx-64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 10.13                               # [osx and x86_64]
+-  # For osx-arm64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 11.0                                # [osx and not x86_64]
+-
+-  - 0                                   # [linux]
+-  - 0                                   # [linux]
+-  - 0                                   # [linux]
+-  - 10.13                               # [linux64 or osx]
+-  - 11.0                                # [linux64 or osx]
+-  - 0                                   # [linux64 or win64]
+-  # For osx-64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 10.13                               # [osx and x86_64]
+-  # For osx-arm64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 11.0                                # [osx and not x86_64]
+-# Don't call it c_stdlib_version as otherwise, we will get conflicts with cdt_name zipping
+-# This is also the version for the target, not the host (for cross-compilers)
+-target_c_stdlib_version:
+-  - '2.17'                              # [linux]
+-  - '2.17'                              # [linux]
+-  - '2.17'                              # [linux]
+-  - 10.13                               # [linux64 or osx]
 -  - 11.0                                # [linux64 or osx]
 -  - 0                                   # [linux64 or win64]
 -  # For osx-64 -> win-64 cross-compiling, set deployment target for the build system
--  - 10.12                               # [osx and x86_64]
+-  - 10.13                               # [osx and x86_64]
+-  # For osx-arm64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 11.0                                # [osx and not x86_64]
+-
+-  - '2.17'                              # [linux]
+-  - '2.17'                              # [linux]
+-  - '2.17'                              # [linux]
+-  - 10.13                               # [linux64 or osx]
+-  - 11.0                                # [linux64 or osx]
+-  - 0                                   # [linux64 or win64]
+-  # For osx-64 -> win-64 cross-compiling, set deployment target for the build system
+-  - 10.13                               # [osx and x86_64]
+-  # For osx-arm64 -> win-64 cross-compiling, set SDK version for the build system
+-  - 11.0                                # [osx and not x86_64]
 +  - x86_64-conda-linux-gnu-cc           # [linux64]
 +  - powerpc64le-conda-linux-gnu-cc      # [ppc64le]
-+  - s390x-conda-linux-gnu-cc            # [s390x]
- 
--  - 0                                   # [linux]
--  - 0                                   # [linux]
--  - 0                                   # [linux]
--  - 10.12                               # [linux64 or osx]
--  - 11.0                                # [linux64 or osx]
--  - 0                                   # [linux64 or win64]
--  # For osx-64 -> win-64 cross-compiling, set deployment target for the build system
--  - 10.12                               # [osx and x86_64]
  version:
--  - 1.77.0  # [linux]
--  - 1.77.0  # [linux]
--  - 1.77.0  # [linux]
--  - 1.77.0  # [linux64 or osx]
--  - 1.77.0  # [linux64 or osx]
--  - 1.77.0  # [linux64 or win64]
--  - 1.77.0  # [osx and x86_64]
+-  - 1.80.1  # [linux]
+-  - 1.80.1  # [linux]
+-  - 1.80.1  # [linux]
+-  - 1.80.1  # [linux64 or osx]
+-  - 1.80.1  # [linux64 or osx]
+-  - 1.80.1  # [linux64 or win64]
+-  - 1.80.1  # [osx]
 -
--  - 1.78.0  # [linux]
--  - 1.78.0  # [linux]
--  - 1.78.0  # [linux]
--  - 1.78.0  # [linux64 or osx]
--  - 1.78.0  # [linux64 or osx]
--  - 1.78.0  # [linux64 or win64]
--  - 1.78.0  # [osx and x86_64]
+-  - 1.81.0  # [linux]
+-  - 1.81.0  # [linux]
+   - 1.81.0  # [linux]
+-  - 1.81.0  # [linux64 or osx]
+-  - 1.81.0  # [linux64 or osx]
+-  - 1.81.0  # [linux64 or win64]
+-  - 1.81.0  # [osx]
 -channel_sources:
 -  - conda-forge  # [linux]
 -  - conda-forge  # [linux]
@@ -153,7 +179,7 @@ index d3fb77e..1ac835f 100644
 -  - conda-forge  # [linux64 or osx]
 -  - conda-forge  # [linux64 or osx]
 -  - conda-forge  # [linux64 or win64]
--  - conda-forge  # [osx and x86_64]
+-  - conda-forge  # [osx]
 -
 -  - conda-forge/label/rust_dev,conda-forge  # [linux]
 -  - conda-forge/label/rust_dev,conda-forge  # [linux]
@@ -161,7 +187,7 @@ index d3fb77e..1ac835f 100644
 -  - conda-forge/label/rust_dev,conda-forge  # [linux64 or osx]
 -  - conda-forge/label/rust_dev,conda-forge  # [linux64 or osx]
 -  - conda-forge/label/rust_dev,conda-forge  # [linux64 or win64]
--  - conda-forge/label/rust_dev,conda-forge  # [osx and x86_64]
+-  - conda-forge/label/rust_dev,conda-forge  # [osx]
 -channel_targets:
 -  - conda-forge main  # [linux]
 -  - conda-forge main  # [linux]
@@ -169,16 +195,15 @@ index d3fb77e..1ac835f 100644
 -  - conda-forge main  # [linux64 or osx]
 -  - conda-forge main  # [linux64 or osx]
 -  - conda-forge main  # [linux64 or win64]
--  - conda-forge main  # [osx and x86_64]
-+  - 1.77.0
- 
+-  - conda-forge main  # [osx]
+-
 -  - conda-forge rust_dev  # [linux]
 -  - conda-forge rust_dev  # [linux]
 -  - conda-forge rust_dev  # [linux]
 -  - conda-forge rust_dev  # [linux64 or osx]
 -  - conda-forge rust_dev  # [linux64 or osx]
 -  - conda-forge rust_dev  # [linux64 or win64]
--  - conda-forge rust_dev  # [osx and x86_64]
+-  - conda-forge rust_dev  # [osx]
  zip_keys:
    - - cross_target_platform
      - rust_arch
@@ -186,25 +211,62 @@ index d3fb77e..1ac835f 100644
      - rust_default_cc
 -    - MACOSX_SDK_VERSION
 -    - MACOSX_DEPLOYMENT_TARGET
+-    - target_c_stdlib_version
 -    - channel_sources
 -    - channel_targets
      - version
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index c38c6e4..366e2eb 100644
+index 033c2bf..01c1124 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -44,10 +44,7 @@ outputs:
+@@ -19,14 +19,14 @@ outputs:
+     script: bld.bat  # [win]
+     build:
+       skip: True  # [win and vc<14]
+-      run_exports:
+-        strong_constrains:
+-          {% if cross_target_platform.startswith("linux") %}
+-          - __glibc >={{ target_c_stdlib_version }}
+-          {% endif %}
+-          {% if cross_target_platform.startswith("osx") %}
+-          - __osx >={{ target_c_stdlib_version }}
+-          {% endif %}
++#      run_exports:
++#        strong_constrains:
++#          {% if cross_target_platform.startswith("linux") %}
++#          - __glibc >={{ target_c_stdlib_version }}
++#          {% endif %}
++#          {% if cross_target_platform.startswith("osx") %}
++#          - __osx >={{ target_c_stdlib_version }}
++#          {% endif %}
+     requirements:
+       host:
+         - rust-std-{{ rust_arch }}
+@@ -35,10 +35,10 @@ outputs:
+         - rust-std-{{ rust_arch }}  {{ version }}.*
+ {% if cross_target_platform.startswith("linux") %}
+         - gcc_{{ cross_target_platform }}
+-        - sysroot_{{ target_platform }} >={{ target_c_stdlib_version }}
++#        - sysroot_{{ target_platform }} >={{ target_c_stdlib_version }}
+ {% elif cross_target_platform.startswith("osx") %}
+         - clang_{{ cross_target_platform }}
+-        - macosx_deployment_target_{{ cross_target_platform }} >={{ target_c_stdlib_version }}
++#        - macosx_deployment_target_{{ cross_target_platform }} >={{ target_c_stdlib_version }}
+ {% elif cross_target_platform.startswith("win") %}
+         - cmake                                # [unix]
+         - ninja                                # [unix]
+@@ -49,10 +49,7 @@ outputs:
  {% endif %}
          - ld64_{{ target_platform }}  # [osx]
      test:
 -      requires:
 -        - file  # [unix]
        commands:
--        - echo {{ MACOSX_DEPLOYMENT_TARGET }}-{{ rust_arch_env }}-{{ rust_default_cc }}-{{ rust_arch_env_build }}-{{ rust_default_cc_build }}
+-        - echo {{ target_c_stdlib_version }}-{{ rust_arch_env }}-{{ rust_default_cc }}-{{ rust_arch_env_build }}-{{ rust_default_cc_build }}
          - set "REQUESTS_CA_BUNDLE="  # [win]
          - set "SSL_CERT_FILE="       # [win]
          - unset REQUESTS_CA_BUNDLE  # [unix]
-@@ -59,9 +56,9 @@ outputs:
+@@ -64,9 +61,9 @@ outputs:
          - file $PREFIX/.cargo/bin/xsv  # [unix and not cross_target_platform == "win-64"]
          - file $PREFIX/.cargo/bin/xsv | grep "Mach-O 64-bit arm64 executable"  # [unix and cross_target_platform == "osx-arm64"]
          - file $PREFIX/.cargo/bin/xsv | grep "Mach-O 64-bit x86_64 executable"  # [unix and cross_target_platform == "osx-64"]

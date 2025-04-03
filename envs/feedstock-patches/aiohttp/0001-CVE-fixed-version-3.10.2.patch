@@ -1,0 +1,74 @@
+From 12a02b2c779780154a1a19e8d37c46ff94e8b18f Mon Sep 17 00:00:00 2001
+From: ketank-new <ketan22584@gmail.com>
+Date: Tue, 19 Nov 2024 12:55:46 +0000
+Subject: [PATCH] updated patch
+
+---
+ recipe/meta.yaml | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index dbe751e..b5695a9 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,8 +1,9 @@
++{% set name = "aiohttp" %}
+ {% set tests_to_skip = "_not_a_real_test" %}
+ {% set version = "3.10.2" %}
+ 
+ package:
+-  name: aiohttp
++  name: {{name|lower }}
+   version: {{ version }}
+ 
+ source:
+@@ -17,24 +18,26 @@ source:
+ build:
+   number: 0
+   skip: true  # [win and python_impl == "pypy"]
+-  script: {{ PYTHON }} -m pip install . -vv
++  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+ 
+ requirements:
+   build:
+-    - python                                 # [build_platform != target_platform]
+-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+-    - cython                                 # [build_platform != target_platform]
++#    - python                                 # [build_platform != target_platform]
++#    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
++#    - cython                                 # [build_platform != target_platform]
+     - {{ compiler('c') }}
+-    - {{ stdlib("c") }}
++#    - {{ stdlib("c") }}
+   host:
+     - python
+     - pip
+     - cython
++    - setuptools
++    - wheel
+   run:
+     - aiohappyeyeballs >=2.3.0
+     - python
+     - aiosignal >=1.1.2
+-    - async-timeout >=4.0,<5.0  # [py<311]
++    - async-timeout >=4.0,<5.0
+     - attrs >=17.3.0
+     - frozenlist >=1.1.1
+     - multidict >=4.5,<7.0
+@@ -87,6 +90,13 @@ test:
+     {% set tests_to_skip = tests_to_skip + " or test_c_parser_loaded" %}                    # [python_impl == "pypy"]
+     {% set tests_to_skip = tests_to_skip + " or test_invalid_character[pyloop]" %}          # [python_impl == "pypy"]
+     {% set tests_to_skip = tests_to_skip + " or test_invalid_linebreak[pyloop]" %}          # [python_impl == "pypy"]
++    {% set tests_to_skip = tests_to_skip + " or test_tcp_connector_happy_eyeballs[pyloop-0.1]" %}
++    {% set tests_to_skip = tests_to_skip + " or test_tcp_connector_happy_eyeballs[pyloop-0.25]" %}
++    {% set tests_to_skip = tests_to_skip + " or test_tcp_connector_happy_eyeballs[pyloop-None]" %}
++    {% set tests_to_skip = tests_to_skip + " or test_static_directory_without_read_permission[pyloop-]" %}
++    {% set tests_to_skip = tests_to_skip + " or test_static_directory_without_read_permission[pyloop-my_file.txt]" %}
++    {% set tests_to_skip = tests_to_skip + " or test_static_file_without_read_permission[pyloop]" %}
++
+     # not working with pypy (win)
+     {% set tests_to_skip = tests_to_skip + " or test_access_to_the_file_with_spaces" %}     # [python_impl == "pypy" and win]
+     {% set tests_to_skip = tests_to_skip + " or test_follow_symlink[pyloop]" %}             # [python_impl == "pypy" and win]
+-- 
+2.40.1
+

@@ -6,6 +6,7 @@ conda_build_configs:
 
 imported_envs:
   - common-deps.yaml
+  - common-p10-deps.yaml
   - openblas-env.yaml
   - onnx-env.yaml
   - pytorch-env.yaml
@@ -17,6 +18,10 @@ imported_envs:
   - or-tools-env.yaml
   - tensorflow-serving-env.yaml
   - jax-env.yaml
+  - llama-env.yaml
 
 packages:
   - feedstock : opencv
+  - feedstock : https://github.com/conda-forge/eigen-feedstock.git
+    git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
+git_tag_for_env: open-ce-v1.11.4

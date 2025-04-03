@@ -1,98 +1,35 @@
-From a563e9ac716809da9ae3eec30ca37ed72a648dde Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 3 Aug 2023 11:31:43 +0000
-Subject: [PATCH] Fixed numpy for P10
+From ec762c9a3af6f4794750858aa80386a92a28f850 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 27 May 2024 09:20:39 +0000
+Subject: [PATCH] update to build with GCC12
 
 ---
- recipe/0001-Fixed-numpy.patch | 48 +++++++++++++++++++++++++++++++++++
- recipe/build.sh               | 39 +++++++++++++++++++++++++---
- recipe/meta.yaml              | 46 ++++++++++++++++++---------------
- 3 files changed, 108 insertions(+), 25 deletions(-)
- create mode 100644 recipe/0001-Fixed-numpy.patch
+ recipe/conda_build_config.yaml |  2 ++
+ recipe/install_base.sh         | 19 ++++++++++++++++++-
+ recipe/meta.yaml               | 21 +++++++++++++--------
+ 3 files changed, 33 insertions(+), 9 deletions(-)
 
-diff --git a/recipe/0001-Fixed-numpy.patch b/recipe/0001-Fixed-numpy.patch
-new file mode 100644
-index 0000000..0650d29
---- /dev/null
-+++ b/recipe/0001-Fixed-numpy.patch
-@@ -0,0 +1,48 @@
-+From 1374a17a7436390dbb4eec8092362e10ef22c9e9 Mon Sep 17 00:00:00 2001
-+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-+Date: Thu, 3 Aug 2023 11:29:56 +0000
-+Subject: [PATCH] Fixed numpy
-+
-+---
-+ numpy/distutils/ccompiler_opt.py            | 4 ++--
-+ numpy/distutils/tests/test_ccompiler_opt.py | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/numpy/distutils/ccompiler_opt.py b/numpy/distutils/ccompiler_opt.py
-+index da550722c..56fa506a1 100644
-+--- a/numpy/distutils/ccompiler_opt.py
-++++ b/numpy/distutils/ccompiler_opt.py
-+@@ -201,7 +201,7 @@ class _Config:
-+         gcc = dict(
-+             # native should always fail on arm and ppc64,
-+             # native usually works only with x86
-+-            native = '-march=native',
-++            native = '-mcpu=native',
-+             opt = '-O3',
-+             werror = '-Werror',
-+         ),
-+@@ -484,7 +484,7 @@ class attribute `conf_features`, also its override
-+                     flags="-mcpu=power9 -mtune=power9", implies_detect=False
-+                 ),
-+                 VSX4 = dict(
-+-                    flags="-mcpu=power10 -mtune=power10", implies_detect=False
-++                    flags="-mcpu=power9 -mtune=power10", implies_detect=False
-+                 )
-+             )
-+             if self.cc_is_clang:
-+diff --git a/numpy/distutils/tests/test_ccompiler_opt.py b/numpy/distutils/tests/test_ccompiler_opt.py
-+index 657ebdb68..d443afc29 100644
-+--- a/numpy/distutils/tests/test_ccompiler_opt.py
-++++ b/numpy/distutils/tests/test_ccompiler_opt.py
-+@@ -422,7 +422,7 @@ def test_args_options(self):
-+         # when option "native" is activated through the args
-+         try:
-+             self.expect("native",
-+-                trap_flags=".*(-march=native|-xHost|/QxHost).*",
-++                trap_flags=".*(-march=native|-mcpu=native|-xHost|/QxHost).*",
-+                 x86=".*", ppc64=".*", armhf=".*", s390x=".*"
-+             )
-+             if self.march() != "unknown":
-+-- 
-+2.34.1
-+
-diff --git a/recipe/build.sh b/recipe/build.sh
-index 821a220..9151efe 100644
---- a/recipe/build.sh
-+++ b/recipe/build.sh
-@@ -8,19 +8,50 @@ if [[ ! -f $BUILD_PREFIX/bin/ranlib ]]; then
-     ln -s $AR $BUILD_PREFIX/bin/ar
- fi
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index d53d8ac..4426880 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -8,3 +8,5 @@ c_compiler:    # [win]
+   - vs2019     # [win]
+ cxx_compiler:  # [win]
+   - vs2019     # [win]
++blas_impl:
++  - openblas
+diff --git a/recipe/install_base.sh b/recipe/install_base.sh
+index 6661929..2c4320b 100644
+--- a/recipe/install_base.sh
++++ b/recipe/install_base.sh
+@@ -4,10 +4,27 @@ set -e
  
-+# compiler_compat/ld causes problem in finding openblas lib
-+rm $PREFIX/compiler_compat/ld
+ UNAME_M=$(uname -m)
+ 
++EXTRA_OPTS=""
++echo $GCC_HOME
 +
- cat > site.cfg <<EOF
- [DEFAULT]
- library_dirs = $PREFIX/lib
- include_dirs = $PREFIX/include
- 
- [lapack]
--libraries = lapack,blas
-+libraries = openblas
- 
- [blas]
--libraries = cblas,blas
-+libraries = openblas
- EOF
- 
--export NPY_LAPACK_ORDER=lapack
--export NPY_BLAS_ORDER=blas
-+#export NPY_LAPACK_ORDER=lapack
-+#export NPY_BLAS_ORDER=blas
 +if [[ $ppc_arch == "p10" ]]
 +then
 +    if [[ -z "${GCC_HOME}" ]];
@@ -103,119 +40,74 @@ index 821a220..9151efe 100644
 +        export PATH=$GCC_HOME/bin:$PATH
 +        export CC=$GCC_HOME/bin/gcc
 +        export CXX=$GCC_HOME/bin/g++
-+        export GCC=$CC
-+        export GXX=$CXX
-+        export AR=${GCC_HOME}/bin/ar
-+        export LD=${GCC_HOME}/bin/ld
-+        export NM=${GCC_HOME}/bin/nm
-+        export OBJCOPY=${GCC_HOME}/bin/objcopy
-+        export OBJDUMP=${GCC_HOME}/bin/objdump
-+        export RANLIB=${GCC_HOME}/bin/ranlib
-+        export STRIP=${GCC_HOME}/bin/strip
-+        export READELF=${GCC_HOME}/bin/readelf
-+        export HOST=powerpc64le-conda_cos7-linux-gnu
-+
-+        # Removing these libs so that opencv libraries link against libstdc++.so present on
-+        # the system provided by gcc-toolset-12
-+        rm ${PREFIX}/lib/libstdc++.so*
 +    fi
 +fi
 +
- 
- $PYTHON -m pip install --no-deps --ignore-installed -v .
+ case "$UNAME_M" in
+     ppc64*)
+         # Optimizations trigger compiler bug.
+-        EXTRA_OPTS="--no-use-pep517 --global-option=build --global-option=--cpu-dispatch=min"
++         export CXXFLAGS="$(echo ${CXXFLAGS} | sed -e 's/ -fno-plt//')"
++         export CFLAGS="$(echo ${CFLAGS} | sed -e 's/ -fno-plt//')"
+         ;;
+     *)
+         EXTRA_OPTS=""
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 5ea8032..a9e8adb 100644
+index 82345d0..1130963 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -1,15 +1,18 @@
- {% set version = "1.24.3" %}
-+{% set python_impl = "pypy" %}
- 
- package:
-   name: numpy
-   version: {{ version }}
- 
- # use 'python_impl' in meta.yaml so it gets picked up by rendering
--# [python_impl == "pypy"]
-+ [python_impl == "pypy"]
- 
- source:
--  - url: https://github.com/numpy/numpy/releases/download/v{{ version }}/numpy-{{ version }}.tar.gz
--    sha256: ab344f1bf21f140adab8e47fdbc7c35a477dc01408791f8ba00d018dd0bc5155
-+  - git_url: https://github.com/numpy/numpy
-+    git_rev: v{{ version }}
-+    patches:
-+      - 0001-Fixed-numpy.patch
-   # the sources by upstream themselves (as opposed to automated by github) contain the
-   # svml submodule (which isn't in github tarball due to dear-github/dear-github#214);
-   # keep this for reference & debugging when necessary; for exact commit, see:
-@@ -20,6 +23,8 @@ source:
+@@ -13,6 +13,8 @@ source:
  
  build:
    number: 0
-+  script_env:
-+    - GCC_HOME
-   entry_points:
-     - f2py = numpy.f2py.f2py2e:main  # [win]
-   run_exports:
-@@ -27,22 +32,21 @@ build:
- 
- requirements:
-   build:
--    - python                                 # [build_platform != target_platform]
-+    - python {{ python }}                                # [build_platform != target_platform]
-     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
--    - cython                                 # [build_platform != target_platform]
--    - setuptools <60.0.0                     # [build_platform != target_platform]
--    - {{ compiler('c') }}
--    - {{ compiler('cxx') }}
-+    - cython {{ cython }}                                 # [build_platform != target_platform]
-+    - setuptools {{ setuptools }}                     # [build_platform != target_platform]
-+    - {{ compiler('c') }}    #[ppc_arch != "p10"]
-+    - {{ compiler('cxx') }}  #[ppc_arch != "p10"]
-   host:
--    - setuptools <60.0.0
--    - python
--    - pip
--    - cython
--    - libblas
--    - libcblas
--    - liblapack
-+    - setuptools {{ setuptools }}
-+    - python {{ python }}
-+    - pip {{ pip }}
-+    - cython {{ cython }}
-+    - libopenblas {{ openblas }}
-   run:
--    - python
-+    - python {{ python }}
-+    - libopenblas {{ openblas }}
-   run_constrained:
-     # enforce eviction of package from anaconda defaults
-     - numpy-base <0a0
-@@ -62,17 +66,17 @@ test:
-     # (mostly) optional test requirements (except wheel, python-cov, mypy), see
-     # https://github.com/numpy/numpy/blob/main/test_requirements.txt
-     - cffi                 # [py<=39 and python_impl != "pypy"]
--    - cython
-+    - cython {{ cython }}
-     - hypothesis
-     # workaround for python/cpython#98706
-     - importlib_metadata >=4.13  # [py==311]
-     - pytz
--    - setuptools <60.0.0
--    - typing_extensions
-+    - setuptools {{ setuptools }}
-+    - typing_extensions {{ typing_extensions }}
-     # some linux tests need a C compiler;
-     # extra f2py tests need a fortran compiler
--    - {{ compiler('c') }}        # [linux]
--    - {{ compiler('fortran') }}  # [linux]
-+    - {{ compiler('c') }}        # [ppc_arch != "p10"]
-+    - {{ compiler('fortran') }}  # [ppc_arch != "p10"]
-   commands:
-     - f2py -h
-     # numpy.test will show SIMD features of agent (in the past, there have been
++  script_env:      #[ppc_arch == 'p10']
++    - GCC_HOME     #[ppc_arch == 'p10']
+   # numpy 1.26 no longer supports Python 3.8: https://numpy.org/devdocs/release/1.26.0-notes.html
+   # "This release supports Python versions 3.9-3.12"
+   skip: True  # [(blas_impl == 'openblas' and win)]
+@@ -35,10 +37,13 @@ outputs:
+         - f2py = numpy.f2py.f2py2e:main
+       missing_dso_whitelist:  # [s390x]
+         - $RPATH/ld64.so.1    # [s390x]
++      script_env:      #[ppc_arch == 'p10']
++        - GCC_HOME     #[ppc_arch == 'p10']
++
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}      #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}    #[ppc_arch != "p10"]
+         - armpl  # [aarch64]        
+         - ninja-base
+         - pkg-config
+@@ -71,8 +76,8 @@ outputs:
+     requirements:
+       build:
+         # for runtime alignment
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}     #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}   #[ppc_arch != "p10"]
+         - armpl  # [aarch64]
+       host:
+         - python
+@@ -115,11 +120,11 @@ outputs:
+         - pytest-xdist
+         - hypothesis >=6.81.1
+         - pytz >=2023.3
+-        - {{ compiler('c') }}  # [not osx]
+-        - {{ compiler('cxx') }}  # [not osx]
+-        - {{ compiler('fortran') }}  # [not osx]
++        - {{ compiler('c') }}       #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}     #[ppc_arch != "p10"]
++        - {{ compiler('fortran') }} #[ppc_arch != "p10"]
+         - nomkl  # [x86 and blas_impl != 'mkl']
+-        - typing-extensions >=4.2.0
++        - typing-extensions {{ typing_extensions }}       
+         - mypy >=1.5.1
+         - cffi  # [py<310]
+         - charset-normalizer
 -- 
-2.34.1
+2.40.1
 
