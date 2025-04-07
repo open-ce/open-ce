@@ -1,0 +1,31 @@
+From f98bd6ff39b9728b4f9a21b01be44b7a9b567ce6 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde1@ibm.com>
+Date: Mon, 25 Nov 2024 05:33:32 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 822d43f..6ce2409 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,12 +16,12 @@ build:
+ 
+ requirements:
+   host:
+-    - python >=3.8
++    - python <3.12
+     - setuptools >=56
+     - setuptools-scm >=3.4.1
+     - pip
+   run:
+-    - python >=3.8
++    - python <3.12
+     - jaraco.functools
+     - jaraco.context
+     - jaraco.collections
+-- 
+2.40.1
+

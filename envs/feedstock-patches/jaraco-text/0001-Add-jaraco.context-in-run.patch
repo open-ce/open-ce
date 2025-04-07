@@ -1,0 +1,24 @@
+From ba3b6bedcfb665a77300371eaa9982ddd1b5dc1c Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 6 Sep 2024 06:54:05 +0000
+Subject: [PATCH] Add jaraco.context in run
+
+---
+ recipe/meta.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3a5fa02..69afef7 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -26,6 +26,7 @@ requirements:
+     - python
+     - jaraco.functools
+     - importlib_resources  # [py<39]
++    - jaraco.context
+ 
+ test:
+   imports:
+-- 
+2.40.1
+

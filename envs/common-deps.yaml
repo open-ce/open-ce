@@ -12,6 +12,10 @@ packages:
       - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
       - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
       - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch #[not s390x]
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v72.1.0           #[ppc64le]
+    git_tag : 1d5a7bec76c7f4887f832afbb99a9111294e2c52                                  #[ppc64le]
+    patches :                                                                           #[ppc64le]
+      - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]
   # Build scikit-learn as scikit-learn Anaconda requires numpy<1.25
   - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   # [py==311]
     git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          # [py==311]
@@ -19,3 +23,25 @@ packages:
       - feedstock-patches/scikit-learn/0001-changes-for-opence.patch            # [py==311]
   - feedstock : https://github.com/conda-forge/filesystem-spec-feedstock
     git_tag : be754febf038a93d01e6f7de85d5489ced355f88
+  - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git    #[ppc64le]
+    git_tag : 72b04bca5df55645d691697f4932466f193dd6bf                       #[ppc64le]
+  - feedstock : https://github.com/conda-forge/typing_extensions-feedstock.git #[ppc64le]
+    git_tag : f853e30236c9c866bdc7cc8e4d1fbe766b182f37                         #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/cryptography-feedstock          #[ppc64le]
+    git_tag : 7f71ebd7a05825a90011e57e561afc48ff4c61f7                             #[ppc64le]
+    patches:                                                                       #[ppc64le]
+      - feedstock-patches/cryptography/0001-Opence-changes.patch                   #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/cryptography-vectors-feedstock  #[ppc64le]
+    git_tag : d27672f942121ae385f3b0c99b2532a1d6930853                             #[ppc64le]
+  - feedstock : https://github.com/conda-forge/rust-feedstock.git
+    git_tag : c94f3a87eef0c274fa3c8f6f8a6ce364caa30437
+    patches:
+      - feedstock-patches/rust/0001-Fixed-build.patch #[not s390x]
+      - feedstock-patches/rust/0001-Add-fix-to-support-s390x-platform.patch #[s390x]
+  - feedstock : https://github.com/conda-forge/rust-activation-feedstock
+    git_tag : 15daecc326884626192eecfe6279580edaad0855
+    patches :
+      - feedstock-patches/rust-activation/0001-Fixed-build.patch
+  - feedstock : https://github.com/conda-forge/pyopenssl-feedstock               #[ppc64le]
+    git_tag : 8a545b01a8a9641b901bba19e5e130e93ca08cca                           #[ppc64le]
+git_tag_for_env: open-ce-v1.11.5

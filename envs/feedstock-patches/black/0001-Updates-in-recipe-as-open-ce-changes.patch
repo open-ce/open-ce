@@ -1,0 +1,40 @@
+From 3dadb410e92d38be28414a524ca24e3a1b941fc9 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Tue, 3 Sep 2024 06:52:19 +0000
+Subject: [PATCH] Updates in recipe as open-ce changes
+
+---
+ recipe/meta.yaml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index ed984d7..feb6025 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -26,13 +26,13 @@ outputs:
+         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+       host:
+         - python
+-        - pip
++        - pip {{ pip }}
+         - hatchling >=1.8.0
+         - hatch-vcs
+         - hatch-fancy-pypi-readme
+       run:
+         - python
+-        - click >=8.0.0
++        - click {{ click }}
+         - platformdirs >=2
+         - packaging >=22.0
+         - tomli >=1.1.0  # [py<311]
+@@ -41,6 +41,7 @@ outputs:
+         - mypy_extensions >=0.4.3
+     test:
+       requires:
++        - aiohttp
+         - pip
+       commands:
+         - black --help
+-- 
+2.40.1
+

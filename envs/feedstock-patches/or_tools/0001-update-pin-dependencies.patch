@@ -1,18 +1,21 @@
-From bd9d91f67fc8a277972b5485eb29fefdec2e0bf1 Mon Sep 17 00:00:00 2001
-From: Archana Shinde <archana.shinde2504@gmail.com>
-Date: Tue, 11 Apr 2023 07:16:53 -0400
-Subject: [PATCH] pin dependencies
+From 1f439e0c80448b6f5d03999dd8bbc237526655bf Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana-Shinde1@ibm.com>
+Date: Thu, 5 Sep 2024 04:21:53 +0000
+Subject: [PATCH] Update pin denpendencies
 
 ---
- recipe/meta.yaml | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+ recipe/meta.yaml | 32 +++++++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 13 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 490cbb8..f0f3263 100644
+index 490cbb8..fde48c0 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -32,9 +32,9 @@ outputs:
+@@ -30,11 +30,12 @@ outputs:
+         - cmake >=3.18
+         - ninja
          - pkg-config
++        - libprotobuf {{ libprotobuf }}
        host:
          # eigen does not have a run-export but is header-only
 -        - eigen
@@ -24,7 +27,7 @@ index 490cbb8..f0f3263 100644
          - re2
          - zlib
          # coin or deps
-@@ -47,6 +47,8 @@ outputs:
+@@ -47,6 +48,8 @@ outputs:
          # fake python dependency to avoid conda-smithy collapsing the builds per arch;
          # we can remove this once we manage to base the python bindings on libortools
          - python
@@ -33,13 +36,15 @@ index 490cbb8..f0f3263 100644
        run_constrained:
          # make sure we don't co-install with old version of previous package name
          - ortools-cpp ={{ version }}
-@@ -88,21 +90,21 @@ outputs:
+@@ -88,21 +91,23 @@ outputs:
          - python
          - mypy-protobuf
          - pkg-config
 -        - setuptools
 +        - setuptools {{ setuptools }}
          - swig >=4.0
++        - libprotobuf {{ libprotobuf }}
++        - protobuf {{ protobuf }}
        host:
          - python
          - pip
@@ -62,7 +67,7 @@ index 490cbb8..f0f3263 100644
          - pybind11
          - re2
          - zlib
-@@ -116,9 +118,10 @@ outputs:
+@@ -116,9 +121,10 @@ outputs:
          - python
          - absl-py >=0.13
          - mypy-protobuf
@@ -77,5 +82,5 @@ index 490cbb8..f0f3263 100644
  
      test:
 -- 
-2.34.1
+2.40.1
 

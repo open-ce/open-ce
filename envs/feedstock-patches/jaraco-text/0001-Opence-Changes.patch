@@ -1,0 +1,37 @@
+From 71e76e5c9eaf6b2044930291abb192bcec1cdbaa Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 22 Nov 2024 12:29:49 +0000
+Subject: [PATCH] Update patch
+
+---
+ recipe/meta.yaml | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 3a5fa02..2ccf142 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,16 +16,17 @@ build:
+ 
+ requirements:
+   build:
+-    - python                                 # [build_platform != target_platform]
++    - python {{python}}                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+   host:
+-    - python
++    - python {{python}}
+     - pip
+     - setuptools_scm >=3.4.1
+   run:
+-    - python
++    - python {{python}}
+     - jaraco.functools
+     - importlib_resources  # [py<39]
++    - jaraco.context
+ 
+ test:
+   imports:
+-- 
+2.40.1
+

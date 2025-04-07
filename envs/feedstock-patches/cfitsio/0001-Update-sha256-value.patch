@@ -1,0 +1,35 @@
+From b606fd9c560ff464ffdf28f36c60f73e29307089 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 22 Nov 2024 11:06:49 +0000
+Subject: [PATCH] Fixed failuer,change of sha256
+
+---
+ recipe/meta.yaml | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 78510b7..7e162c3 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -2,8 +2,7 @@
+ {% set version = "3.470" %}
+ {% set nozeroversion = version[:-1] %}
+ # This is the SHA256 hash of the ungzipped tar file. See https://github.com/conda/conda/issues/3798.
+-{% set sha256 = "985606e058403c073a68d95be74e9696f0ded9414520784457a1d4cba8cca7e2" %}
+-
++{% set sha256 = "418516f10ee1e0f1b520926eeca6b77ce639bed88804c7c545e74f26b3edf4ef" %}
+ package:
+   name: {{ name }}
+   version: {{ version }}
+@@ -35,7 +34,7 @@ requirements:
+   host:
+     - libcurl  # [not win]
+     - bzip2  # [not win]
+-    - zlib  # [not win]
++    - zlib {{ zlib }} # [not win]
+ 
+ test:
+   commands:
+-- 
+2.40.1
+

@@ -1,0 +1,171 @@
+From 6d5b5dc51047edf5c942de3a79598f1f96474519 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Mon, 3 Jun 2024 16:35:36 +0000
+Subject: [PATCH] Update patch of black to fix s390x build
+
+---
+ recipe/0001-CVE-2024-21503.patch | 111 +++++++++++++++++++++++++++++++
+ recipe/meta.yaml                 |  13 ++--
+ 2 files changed, 119 insertions(+), 5 deletions(-)
+ create mode 100644 recipe/0001-CVE-2024-21503.patch
+
+diff --git a/recipe/0001-CVE-2024-21503.patch b/recipe/0001-CVE-2024-21503.patch
+new file mode 100644
+index 0000000..d1b6e0d
+--- /dev/null
++++ b/recipe/0001-CVE-2024-21503.patch
+@@ -0,0 +1,111 @@
++From 7f78006720a273c8e80a343cd5e44da93b62a25a Mon Sep 17 00:00:00 2001
++From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
++Date: Mon, 3 Jun 2024 13:14:29 +0000
++Subject: [PATCH] CVE-2024-21503
++
++---
++ CHANGES.md           | 13 ++++++++++++-
++ src/black/strings.py | 18 ++++++------------
++ tests/test_black.py  | 11 +++++++++++
++ 3 files changed, 29 insertions(+), 13 deletions(-)
++
++diff --git a/CHANGES.md b/CHANGES.md
++index 2a50e45..71a7f8b 100644
++--- a/CHANGES.md
+++++ b/CHANGES.md
++@@ -6,6 +6,14 @@
++ 
++ <!-- Include any especially major or disruptive changes here -->
++ 
+++This release is a milestone: it fixes Black's first CVE security vulnerability. If you
+++run Black on untrusted input, or if you habitually put thousands of leading tab
+++characters in your docstrings, you are strongly encouraged to upgrade immediately to fix
+++[CVE-2024-21503](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-21503).
+++
+++This release also fixes a bug in Black's AST safety check that allowed Black to make
+++incorrect changes to certain f-strings that are valid in Python 3.12 and higher.
+++
++ ### Stable style
++ 
++ <!-- Changes that affect Black's stable style -->
++@@ -28,7 +36,10 @@
++ 
++ ### Performance
++ 
++-<!-- Changes that improve Black's performance. -->
+++Fix catastrophic performance on docstrings that contain large numbers of leading tab
+++  characters. This fixes
+++  [CVE-2024-21503](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-21503).
+++  (#4278)
++ 
++ ### Output
++ 
++diff --git a/src/black/strings.py b/src/black/strings.py
++index 0d30f09..b67566e 100644
++--- a/src/black/strings.py
+++++ b/src/black/strings.py
++@@ -14,7 +14,6 @@ STRING_PREFIX_CHARS: Final = "furbFURB"  # All possible string prefix characters
++ STRING_PREFIX_RE: Final = re.compile(
++     r"^([" + STRING_PREFIX_CHARS + r"]*)(.*)$", re.DOTALL
++ )
++-FIRST_NON_WHITESPACE_RE: Final = re.compile(r"\s*\t+\s*(\S)")
++ UNICODE_ESCAPE_RE: Final = re.compile(
++     r"(?P<backslashes>\\+)(?P<body>"
++     r"(u(?P<u>[a-fA-F0-9]{4}))"  # Character with 16-bit hex value xxxx
++@@ -51,18 +50,13 @@ def lines_with_leading_tabs_expanded(s: str) -> List[str]:
++     """
++     lines = []
++     for line in s.splitlines():
++-        # Find the index of the first non-whitespace character after a string of
++-        # whitespace that includes at least one tab
++-        match = FIRST_NON_WHITESPACE_RE.match(line)
++-        if match:
++-            first_non_whitespace_idx = match.start(1)
++-
++-            lines.append(
++-                line[:first_non_whitespace_idx].expandtabs()
++-                + line[first_non_whitespace_idx:]
++-            )
++-        else:
+++        stripped_line = line.lstrip()
+++        if not stripped_line or stripped_line == line:
++             lines.append(line)
+++        else:
+++            prefix_length = len(line) - len(stripped_line)
+++            prefix = line[:prefix_length].expandtabs()
+++            lines.append(prefix + stripped_line)
++     return lines
++ 
++ 
++diff --git a/tests/test_black.py b/tests/test_black.py
++index 537ca80..267d223 100644
++--- a/tests/test_black.py
+++++ b/tests/test_black.py
++@@ -44,6 +44,7 @@ from black.cache import FileData, get_cache_dir, get_cache_file
++ from black.debug import DebugVisitor
++ from black.output import color_diff, diff
++ from black.report import Report
+++from black.strings import lines_with_leading_tabs_expanded
++ 
++ # Import other test classes
++ from tests.util import (
++@@ -1940,6 +1941,16 @@ class BlackTestCase(BlackBaseTestCase):
++         err.match("invalid character")
++         err.match(r"\(<unknown>, line 1\)")
++ 
+++   def test_lines_with_leading_tabs_expanded(self) -> None:
+++        # See CVE-2024-21503. Mostly test that this completes in a reasonable
+++        # time.
+++        payload = "\t" * 10_000
+++        assert lines_with_leading_tabs_expanded(payload) == [payload]
+++
+++        tab = " " * 8
+++        assert lines_with_leading_tabs_expanded("\tx") == [f"{tab}x"]
+++        assert lines_with_leading_tabs_expanded("\t\tx") == [f"{tab}{tab}x"]
+++        assert lines_with_leading_tabs_expanded("\tx\n  y") == [f"{tab}x", "  y"]
++ 
++ class TestCaching:
++     def test_get_cache_dir(
++-- 
++2.34.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 24f6eba..316ccb7 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -6,8 +6,10 @@ package:
+   version: {{ version }}
+ 
+ source:
+-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+-  sha256: 31b9f87b277a68d0e99d2905edae08807c007973eaa609da5f0c62def6b7c0bd
++  url: https://github.com/psf/{{name}}/archive/refs/tags/{{version}}.tar.gz
++  sha256: f99b601da7cd8b5153de24bee86697c4ebbae8f0ab7010ed1e9bafefb06f912e
++  patches:
++    - 0001-CVE-2024-21503.patch
+ 
+ build:
+   number: 0
+@@ -26,18 +28,19 @@ outputs:
+         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+       host:
+         - python
+-        - pip
++        - pip {{pip}}
+         - hatchling >=1.8.0
+         - hatch-vcs
+         - hatch-fancy-pypi-readme
+       run:
+         - python
+-        - click >=8.0.0
++        - click {{click}}
+         - platformdirs >=2
+         - packaging >=22.0
+         - tomli >=1.1.0  # [py<311]
++        - typed-ast >=1.4.2
+         - pathspec >=0.9
+-        - typing_extensions >=4.0.1  # [py<311]
++        - typing_extensions {{typing_extensions}}  # [py<311]
+         - mypy_extensions >=0.4.3
+     test:
+       requires:
+-- 
+2.34.1
+

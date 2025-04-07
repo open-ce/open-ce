@@ -11,7 +11,7 @@ arrow:
 astunparse:
   - 1.6
 attrs:
-  - 21
+  - 23
 autoconf:
   - 2.69
 automake:
@@ -19,9 +19,9 @@ automake:
 av:
   - 10.*
 bazel:
-  - 6.*
+  - 6.1.*
 black:
-  - 23.10.*
+  - 24.8.0
 bsddb3:
   - 6.2.9
 boost:
@@ -187,8 +187,6 @@ murmurhash:
   - 1.0.*
 nasm:                          # [x86_64]
   - 2.13.03                    # [x86_64]
-networkx:
-  - 2.*
 ninja:
   - 1.10.*
 nccl:
@@ -200,13 +198,13 @@ numactl:
 numpy:
   - 1.26
 onnx:
-  - 1.15.*
+  - 1.16.*
 onnxconverter_common:
   - 1.14.*
 onnx_graphsurgeon:
   - 0.2.*
 openblas:
-  - 0.3.26.*      #[not s390x]
+  - 0.3.27.*      #[not s390x]
   - 0.3.21.*      #[s390x]
 opencv:
   - 4.8.*
@@ -234,7 +232,7 @@ psutil:
 pybind11:
   - 2.10.*
 pydantic:
-  - 1.10.*
+  - 2.*
 pytest:
   - 7.*
 python:
@@ -245,7 +243,7 @@ python:
 pytorch:
   - 2.1.*
 pytorch_lightning:
-  - 2.1.*
+  - 2.3.*
 pytorch_scatter:
   - 2.1.2
 pytorch_sparse:
@@ -261,9 +259,11 @@ regex:
 reproc_cpp:
   - 14.2.*
 rust:
-  - 1.71.*
+  - 1.81.*
+rust_nightly:
+  - 1.82.*
 rust_compiler_version:
-  - '1.71.1'
+  - '1.81.0'
 safeint:
   - 3.0
 scipy:
@@ -273,7 +273,7 @@ scikit_learn:
 sentencepiece:
   - 0.1.99
 setuptools:
-  - 68.*
+  - 72.*
 setuptools_rust:
   - 1.5.*
 six:
@@ -324,11 +324,13 @@ unzip:
 wasabi:
   - 0.9.*
 werkzeug:
-  - 2.*
+  - 3.*
 wrapt:
   - 1.14.*
 yaml_cpp:
   - 0.8.0
+zdnn:     # [s390x]
+  - 1.0.* # [s390x]
 zlib:
   - 1.2.*
 zstd:
@@ -385,3 +387,4 @@ cuda_levels:
 cuda_levels_details:
   - sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90   # [x86_64]
   - sm_60,sm_70,sm_75,sm_80,sm_86,sm_90,compute_80,compute_86,compute_90         # [ppc64le]
+git_tag_for_env: open-ce-v1.11.5

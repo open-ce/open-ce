@@ -1,0 +1,57 @@
+From bb1677e2af071b472c9097bf712d3085577960e8 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
+Date: Fri, 22 Nov 2024 09:45:42 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 912138d..2a9db16 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -11,6 +11,7 @@ source:
+ build:
+   number: 1
+   skip: true  # [py<37]
++  string: opence_py{{ python | replace(".", "") }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+   script:
+     # As of cryptography version 40.0.0, build instructions have changed: https://cryptography.io/en/latest/changelog/#v40-0-0
+     # here is the documentation on setting things manually, https://docs.rs/openssl/latest/openssl/#manual
+@@ -22,17 +23,17 @@ build:
+ requirements:
+   build:
+     - {{ compiler('rust') }}
+-    - vs2017_{{ target_platform }}    # [win]
++    - {{ compiler('c') }}
+   host:
+-    - python
+-    - pip
+-    - setuptools !=74.0.0,!=74.1.0,!=74.1.1,!=74.1.2,!=74.1.3,!=75.0.0,!=75.1.0,!=75.2.0
++    - python {{ python }}
++    - pip {{ pip }}
++    - setuptools {{setuptools}}
+     - wheel
+     - maturin >=1,<2
+     - cffi >=1.12
+-    - openssl {{ openssl }}
++    - openssl
+   run:
+-    - python
++    - python {{python}}
+     - cffi >=1.12
+     - openssl
+     - libgcc-ng     # [linux]; needed by `_rust.abi3.so`
+@@ -44,7 +45,7 @@ test:
+   requires:
+     - certifi
+     - cryptography-vectors {{ version }}
+-    - pip
++    - pip {{pip}}
+     - pytest >=6.2.0
+     - pytest-xdist
+     - pytest-benchmark
+-- 
+2.40.1
+

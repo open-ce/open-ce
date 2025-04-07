@@ -1,0 +1,27 @@
+From 8bd3a07a20a55e3aef6dea4b0282a6b706760be7 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Tue, 3 Sep 2024 06:12:06 +0000
+Subject: [PATCH] Changed source for python-multipart
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 681cc03..c688f43 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -6,8 +6,8 @@ package:
+   version: {{ version }}
+ 
+ source:
+-  url: https://pypi.io/packages/source/{{ name[0] }}/python_multipart/python_multipart-{{ version }}.tar.gz
+-  sha256: 288a6c39b06596c1b988bb6794c6fbc80e6c369e35e5062637df256bee0c9af9
++  url: https://github.com/Kludex/{{name}}/archive/refs/tags/{{version}}.tar.gz
++  sha256: 9b26d939085d52d633117828521fef8b6d08bb005743c752b7489b4f8a654d29
+ 
+ build:
+   noarch: python
+-- 
+2.40.1
+

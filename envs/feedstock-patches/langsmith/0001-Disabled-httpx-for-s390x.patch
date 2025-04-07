@@ -1,0 +1,25 @@
+From b99f3e76c0b160abd3fc2e629f16e11f3400e172 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Mon, 25 Nov 2024 08:21:15 +0000
+Subject: [PATCH] Disabled httpx for s390x
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 1f44a3e..df19f16 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -26,7 +26,7 @@ requirements:
+     - pydantic >=1,<3
+     - requests >=2.0.0,<3.0.0
+     - orjson >=3.9.14,<4.0.0
+-    - httpx >=0.23.0,<1
++    - httpx >=0.23.0,<1        #[not s390x]
+ 
+ test:
+   imports:
+-- 
+2.40.1
+
