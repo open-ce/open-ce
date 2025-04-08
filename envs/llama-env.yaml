@@ -28,9 +28,9 @@ packages:
   - feedstock : https://github.com/conda-forge/pytest-subprocess-feedstock
     git_tag : 4168faf02699c6ab9e10f0fea0a1f0ff348da0e7
   - feedstock : https://github.com/conda-forge/llama.cpp-feedstock
-    git_tag : d75b52692c56ecdd33568ea44896cb266d58de5e   #v0.0.3821
+    git_tag : d75b52692c56ecdd33568ea44896cb266d58de5e   #v0.0.5038
     patches :
-      - feedstock-patches/llama.cpp/0001-llama.cpp-v0.0.3821-changes.patch
+      - feedstock-patches/llama.cpp/0001-Update-v0.0.5038-to-allow-MMA-for-FP32-INT8-and-INT4.patch
   - feedstock : https://github.com/AnacondaRecipes/pydantic-feedstock
     git_tag : 6148ac902c701e69aab9d00846c19e1565b7e083
   - feedstock : https://github.com/conda-forge/fastapi-feedstock
@@ -69,9 +69,9 @@ packages:
     patches :
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/llama-cpp-python-feedstock
-    git_tag : 6f2f6845447045d69253841b67fed6ddc9c0218f   #v0.3.1
+    git_tag : 6f2f6845447045d69253841b67fed6ddc9c0218f   #v0.3.8
     patches :
-      - feedstock-patches/llama-python/0001-llama-cpp-v0.3.1-changes.patch
+      - feedstock-patches/llama-python/0001-Update-to-v0.3.8.patch
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.0.7
     git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
     patches:

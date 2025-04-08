@@ -1,0 +1,131 @@
+From dd72d2cc4fd99d3639b7e1bd4379a382c242abdf Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Tue, 8 Apr 2025 11:33:54 +0000
+Subject: [PATCH] Update v0.0.5038 to allow MMA for FP32, INT8, and INT4
+
+---
+ recipe/conda_build_config.yaml |  3 ++
+ recipe/meta.yaml               | 54 ++++++++++++++++------------------
+ 2 files changed, 29 insertions(+), 28 deletions(-)
+
+diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
+index 7071b8b..0923543 100644
+--- a/recipe/conda_build_config.yaml
++++ b/recipe/conda_build_config.yaml
+@@ -5,3 +5,6 @@ blas_impl:
+   - mkl        # [(linux and not aarch64) or win]
+   - openblas   # [linux and aarch64]
+   - accelerate # [osx]
++
++cuda_compiler:
++  - nvcc
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index b1428da..cd8062e 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,5 +1,5 @@
+ {% set name = "llama.cpp" %}
+-{% set version = "0.0.2646" %}
++{% set version = "0.0.5038" %}
+ 
+ package:
+   name: {{ name|lower }}
+@@ -7,15 +7,15 @@ package:
+ 
+ source:
+   url: https://github.com/ggerganov/llama.cpp/archive/b{{ version.split(".")[-1] }}.tar.gz
+-  sha256: 02953cc03455bac1fcb337ff841600654712f6f6bbed54c31078eead530ff1fa
++  sha256: 5e81c3badc181ed3b7a6ab6bda2abedc80c52527e3c079c7afff4c09f4843564
+   patches:
+     - mkl.patch                   # [blas_impl == "mkl"]
+ 
++
+ build:
+   number: 0
+-  string: cuda{{ cuda_compiler_version | replace('.', '') }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
+-  string: cpu_{{ blas_impl }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}                                 # [(osx and x86_64) or cuda_compiler_version == "None"]
+-  string: mps_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}                                                 # [osx and arm64]
++  string: cuda{{ cudatoolkit | replace('.', '') }}_{{ python | replace(".", "") }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  #[build_type == 'cuda']
++  string: cpu_py{{ python | replace(".", "") }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  #[build_type == 'cpu']
+ 
+   script:
+     - LLAMA_ARGS="-DLLAMA_BUILD_TESTS=OFF"              # [unix]
+@@ -40,11 +40,13 @@ build:
+     {{ llama_args("METAL=OFF") }}       # [osx and x86_64]
+     {{ llama_args("ACCELERATE=ON") }}   # [osx]
+ 
+-    {{ llama_args("CUDA=ON") }}                       # [cuda_compiler_version != "None"]
+-    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  # [cuda_compiler_version != "None"]
++    - LDFLAGS="$LDFLAGS -Wl,-rpath-link,${CUDA_HOME}/compat/"  #[build_type == 'cuda']
++    {{ llama_args("CUDA=ON") }}                       #[build_type == 'cuda']
++    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  #[build_type == 'cuda']
++    {{ cmake_args("CMAKE_INSTALL_PREFIX=$PREFIX") }}  # [ ppc_arch == "p10"]
+ 
+-    {{ llama_args("BLAS=ON") }}                     # [not osx and cuda_compiler_version == "None"]
+-    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
++    {{ llama_args("BLAS=ON") }}                     #[build_type == 'cpu']
++    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  #[build_type == 'cpu']
+ 
+     - echo $LLAMA_ARGS  # [unix]
+     - set LLAMA_ARGS    # [win]
+@@ -53,6 +55,9 @@ build:
+     - cmake -S . -B build -G Ninja ${CMAKE_ARGS} ${LLAMA_ARGS}  # [unix]
+     - cmake --build build
+     - cmake --install build 
++  script_env:
++    - CUDA_HOME            #[build_type == 'cuda']
++    - GCC_HOME             #[ppc_arch == 'p10']
+   
+   missing_dso_whitelist:
+     - "*/nvcuda.dll"    # [win]
+@@ -60,35 +65,28 @@ build:
+ 
+ requirements:
+   build:
+-    - {{ compiler('c') }}
+-    - {{ stdlib('c') }}
+-    - {{ compiler('cxx') }}
+-    - {{ compiler('cuda') }}                        # [cuda_compiler_version != "None"]
+-    - cmake
++    - {{ compiler('c') }}                        # [ ppc_arch != "p10"]
++    - {{ compiler('cxx') }}                      # [ ppc_arch != "p10"]
++    - {{ compiler('cuda') }}                     #[build_type == 'cuda']
++    - cmake ==3.26.4
+     - git
+     - ninja
+-    - pkgconfig
++    - pkg-config {{ pkgconfig }}
+   host:
+     # NOTE: Without cuda-version, we are installing cuda-toolkit 11.8 instead of 11.2!
+-    - cuda-version     {{ cuda_compiler_version }}  # [cuda_compiler_version != "None"]
+-    - cuda-cudart-dev  {{ cuda_compiler_version }}  # [(cuda_compiler_version or "").startswith("12")]
+-    - libcublas-dev    {{ cuda_compiler_version }}  # [(cuda_compiler_version or "").startswith("12")]
++    - cudatoolkit {{ cudatoolkit }}           #[build_type == 'cuda']
+ 
+-    - blas-devel * *{{ blas_impl }}                 # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
+-    - mkl-devel {{ mkl }}                           # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
++    - openblas {{ openblas }}                  #[build_type == 'cpu']
+   run:
+-    - cuda-version {{ cuda_compiler_version }}      # [cuda_compiler_version != "None"]
+-
+-    - llvm-openmp                                   # [linux and cuda_compiler_version == "None" and blas_impl == "mkl"]
+-    - __cuda                                        # [cuda_compiler_version != "None"]
+-    - cuda-nvcc-tools                               # [(cuda_compiler_version or "").startswith("12")]
++    - cudatoolkit {{ cudatoolkit }}        #[build_type == 'cuda']
++    - llvm-openmp                          #[build_type == 'cpu']
+ 
+ test:
+   requires:
+-    - cuda-version     {{ cuda_compiler_version }}  # [cuda_compiler_version != "None"]
++    - cudatoolkit {{ cudatoolkit }}           #[build_type == 'cuda']
+   commands:
+-    - main --help                                   # [build_platform == target_platform and cuda_compiler_version == "None"]
+-    - server --help                                 # [build_platform == target_platform and cuda_compiler_version == "None"]
++    - main --help            # [build_platform == target_platform and cuda_compiler_version == "None"]
++    - server --help          # [build_platform == target_platform and cuda_compiler_version == "None"]
+ 
+ about:
+   home: https://github.com/ggerganov/llama.cpp
+-- 
+2.40.1
+
