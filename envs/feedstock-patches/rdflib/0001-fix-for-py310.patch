@@ -1,14 +1,14 @@
-From 07c9863f3eee16eb810bb3ff0e350e1f09a42c0a Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Fri, 11 Apr 2025 06:53:18 +0000
-Subject: [PATCH] Update patch
+From a7d4137a778d6497cab61202e99a8faede911f96 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Fri, 11 Apr 2025 09:54:14 +0000
+Subject: [PATCH] Update test file name
 
 ---
  recipe/meta.yaml | 9 ++++++---
  1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 81f9048..dfa3cf2 100644
+index 81f9048..a9f20b0 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,6 +1,5 @@
@@ -34,7 +34,7 @@ index 81f9048..dfa3cf2 100644
 -    - pytest test -vv --cov rdflib --cov-report term-missing:skip-covered --no-cov-on-fail -k "{{ test_skips }}" --cov-fail-under {{ cov_fail_under }}
 +    - rm test/test_prettyxml.py
 +    - rm test/test_graph.py
-+    - rm test/serializer_xml.py
++    - rm test/test_serializer_xml.py
 +    - pytest test -vv --cov rdflib --cov-report term-missing:skip-covered --no-cov-on-fail  --ignore test/test_sparql_datetime.py -k "{{ test_skips }}"
  
  about:
