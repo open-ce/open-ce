@@ -28,7 +28,7 @@ packages:
   - feedstock : https://github.com/conda-forge/transformers-feedstock
     git_tag : 053ca66df0d4963ad295b5e2f9f0d0a2f42c51b1
     patches :
-      - feedstock-patches/transformers/0001-Bifurcated-transformers-into-v4.38-and-4.37.2.patch
+      - feedstock-patches/transformers/0001-Fixed-CVE-2024-11392-11393-11394-12720.patch
   - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
     git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
     patches :                                                                  #[ppc64le]
