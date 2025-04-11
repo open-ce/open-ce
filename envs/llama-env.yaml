@@ -53,8 +53,8 @@ packages:
     git_tag : 7ad703f99406292de8d0111655f989ba2fb3de64
     patches :
       - feedstock-patches/hatch-fancy-pypi-readme/0001-Upadtes-with-open-ce.patch
-  - feedstock : https://github.com/conda-forge/annotated-types-feedstock        #[ppc64le]
-    git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                          #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/annotated-types-feedstock        #[ppc64le]
+    git_tag : 44491b67fc663a52d874f4d1e7f8b77cca020dc9                              #[ppc64le]
   - feedstock : https://github.com/AnacondaRecipes/pydantic-core-feedstock
     git_tag : b4a76d6016ac5c555a0cf1763d887f5c67c2d210
     patches:
