@@ -17,4 +17,4 @@ packages:
     patches :                                                                           #[ppc64le]
       - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]
   - feedstock : openmpi          #[mpi_type == 'openmpi']
-git_tag_for_env: open-ce-v1.11.5
+git_tag_for_env: open-ce-v1.11.6
