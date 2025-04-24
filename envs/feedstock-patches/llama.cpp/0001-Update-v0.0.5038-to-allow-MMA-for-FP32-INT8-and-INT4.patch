@@ -1,7 +1,7 @@
-From 31cdbbd7c0e78958bd8452da9645e73589b49b73 Mon Sep 17 00:00:00 2001
+From edb32dcf2ef664f45b62b588153601cc3b37527a Mon Sep 17 00:00:00 2001
 From: Archana-Shinde1 <archana.shinde1@ibm.com>
-Date: Fri, 11 Apr 2025 11:19:59 +0000
-Subject: [PATCH] Removed mkl patch
+Date: Wed, 23 Apr 2025 12:52:31 +0000
+Subject: [PATCH] add change to use gcc-13 for p10 build
 
 ---
  recipe/conda_build_config.yaml |  3 ++
@@ -20,7 +20,7 @@ index 7071b8b..0923543 100644
 +cuda_compiler:
 +  - nvcc
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..bc55b62 100644
+index b1428da..d1fd233 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -73,7 +73,7 @@ index b1428da..bc55b62 100644
      - cmake --install build 
 +  script_env:
 +    - CUDA_HOME            #[build_type == 'cuda']
-+    - GCC_HOME             #[ppc_arch == 'p10']
++    - GCC_13_HOME             #[ppc_arch == 'p10']
    
    missing_dso_whitelist:
      - "*/nvcuda.dll"    # [win]
