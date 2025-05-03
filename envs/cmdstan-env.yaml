@@ -1,7 +1,7 @@
 builder_version: ">=13.0.0"
 
 packages:
-{% if not s390x %}
+{% if ppc64le %}
   - feedstock : https://github.com/conda-forge/cmdstan-feedstock
     git_tag : e0e093c0a691ddab1c4e30b2978bb61263e6aef7
   - feedstock : https://github.com/conda-forge/cmdstanpy-feedstock

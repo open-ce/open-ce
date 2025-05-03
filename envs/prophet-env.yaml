@@ -4,7 +4,7 @@ imported_envs:
   - cmdstan-env.yaml
 
 packages:
-{% if not s390x %}
+{% if ppc64le %}
   - feedstock : https://github.com/conda-forge/prophet-feedstock
     git_tag : 1d19e1169f396232268c93fd97ee5b7caee95829
     patches :
