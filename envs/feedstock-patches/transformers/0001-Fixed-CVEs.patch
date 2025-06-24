@@ -1,19 +1,19 @@
-From 1f2261df2200695bfeb71090974dddba711816e5 Mon Sep 17 00:00:00 2001
+From e1edfe5734a549077ecd5bad352b768b4620cea2 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Mon, 23 Jun 2025 09:41:43 +0000
+Date: Tue, 24 Jun 2025 06:13:50 +0000
 Subject: [PATCH] Fixed CVEs
 
 ---
- config/build-config.yaml                      |   6 ++
- ...1-Fix-for-CVE-2024-11392-11393-11394.patch | Bin 0 -> 3524 bytes
- .../0001-Fix-for-CVE-2024-12720.patch         | Bin 0 -> 1299 bytes
- ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | Bin 0 -> 10120 bytes
- transformers-4.37.2/meta.yaml                 |  69 ++++++++++++++++++
- ...1-Fix-for-CVE-2024-11392-11393-11394.patch | Bin 0 -> 3524 bytes
- .../0001-Fix-for-CVE-2024-12720.patch         | Bin 0 -> 1299 bytes
- ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | Bin 0 -> 10120 bytes
- {recipe => transformers-4.38.0}/meta.yaml     |  10 ++-
- 9 files changed, 82 insertions(+), 3 deletions(-)
+ config/build-config.yaml                      |   6 +
+ ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 +++++++++
+ .../0001-Fix-for-CVE-2024-12720.patch         |  25 +++
+ ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | 171 ++++++++++++++++++
+ transformers-4.37.2/meta.yaml                 |  69 +++++++
+ ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 +++++++++
+ .../0001-Fix-for-CVE-2024-12720.patch         |  25 +++
+ ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | 171 ++++++++++++++++++
+ {recipe => transformers-4.38.0}/meta.yaml     |  10 +-
+ 9 files changed, 654 insertions(+), 3 deletions(-)
  create mode 100644 config/build-config.yaml
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
@@ -38,139 +38,308 @@ index 0000000..c77c211
 +    path : transformers-4.38.0
 diff --git a/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch b/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..b32d912abc1c3757d1080eebd80d2510d8c9a012
-GIT binary patch
-literal 3524
-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
-
-literal 0
-HcmV?d00001
-
+index 0000000..b32d912
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+@@ -0,0 +1,90 @@
++From 2f46db656fc7cca1a859c59641f0a5ea5487086e Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:25:02 +0000
++Subject: [PATCH] Fix for CVE-2024-11392/11393/11394
++
++---
++ setup.py         |  2 +-
++ utils/release.py | 19 +++++++++++++++++--
++ 2 files changed, 18 insertions(+), 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 91eabe25fb..35c30c29a1 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -20,7 +20,7 @@ To create the package for pypi.
++ 1. Create the release branch named: v<RELEASE>-release, for example v4.19-release. For a patch release checkout the
++    current release branch.
++
++-   If releasing on a special branch, copy the updated README.md on the main branch for your the commit you will make
+++   If releasing on a special branch, copy the updated README.md on the main branch for the commit you will make
++    for the post-release and run `make fix-copies` on the main branch as well.
++
++ 2. Run `make pre-release` (or `make pre-patch` for a patch release) and commit these changes with the message:
++diff --git a/utils/release.py b/utils/release.py
++index 8ba0ead7c6..e75f002471 100644
++--- a/utils/release.py
+++++ b/utils/release.py
++@@ -44,12 +44,14 @@ or use `make post-release`.
++ import argparse
++ import os
++ import re
+++from pathlib import Path
++
++ import packaging.version
++
++
++ # All paths are defined with the intent that this script should be run from the root of the repo.
++ PATH_TO_EXAMPLES = "examples/"
+++PATH_TO_MODELS = "src/transformers/models"
++ # This maps a type of file to the pattern to look for when searching where the version is defined, as well as the
++ # template to follow when replacing it with the new version.
++ REPLACE_PATTERNS = {
++@@ -115,6 +117,17 @@ def global_version_update(version: str, patch: bool = False):
++         # We don't update the version in the examples for patch releases.
++         update_version_in_examples(version)
++
+++def remove_conversion_scripts():
+++    """
+++    Delete the scripts that convert models from older, unsupported formats. We don't want to include these
+++    in release wheels because they often have to open insecure file types (pickle, Torch .bin models). This results in
+++    vulnerability scanners flagging us and can cause compliance issues for users with strict security policies.
+++    """
+++    model_dir = Path(PATH_TO_MODELS)
+++    for conversion_script in list(model_dir.glob("**/convert*.py")):
+++        conversion_script.unlink()
+++
+++
++
++ def clean_main_ref_in_model_list():
++     """
++@@ -160,7 +173,7 @@ def pre_release_work(patch: bool = False):
++     """
++     Do all the necessary pre-release steps:
++     - figure out the next minor release version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++
++     Args:
++@@ -184,6 +197,8 @@ def pre_release_work(patch: bool = False):
++
++     print(f"Updating version to {version}.")
++     global_version_update(version, patch=patch)
+++    print("Deleting conversion scripts.")
+++    remove_conversion_scripts()
++     if not patch:
++         print("Cleaning main README, don't forget to run `make fix-copies`.")
++         clean_main_ref_in_model_list()
++@@ -193,7 +208,7 @@ def post_release_work():
++     """
++     Do all the necesarry post-release steps:
++     - figure out the next dev version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++     """
++     # First let's get the current version
++--
++2.40.1
++
 diff --git a/transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch b/transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..2f67d565ea9f82d592ea342b67221050ad3928c0
-GIT binary patch
-literal 1299
-zcmbtTOOKl{5Wf3YjFKKg2n1*n64ZTZ+o+eVR^6zVBwZO8h`V5r?d+r4AKw8KWmoE<
-zRV;%&&(EIEvs6_HGYrzu%Vu#L%rf5#7D<o<VVL=IjAs~fKU~Za=L@*0B-~*Qeh8iy
-zwG#r*^VyQpL~vDdvhURcSMaG3+)lU@ap@*idCop_gAuIuID$D`)rz8nDR}cJ2x)@t
-z(O`G`_!lN7g7xjy>iX*zmf{(*O2PGyFAfDv96tyHk1@w_7-*G@jp9<1M~O<0%PPe}
-zk7c#bxfz@40j2oOji}^(r@PO%Hg5d_uMmJuDSXI8fspLD%rPC2ETl%&gbZw}ktrj#
-zqGK_ZiYx=i$%O$vJ^?;HA(#o7;xnXPz%dD@;na0KT+F840zWRm_q^F;($wdq6EfSj
-z;iOYuUV<|Xf)P>MEu=^at~GpX=~;E`pjr|ogIk3w#f8N5o!*KV97c{3RZAwE!BKD(
-z)&);+(A&r%tP9Lc$yF}o*>Jm&y%CVUXC2e@;X9VqBSJxF8lHsN0R=py)suuB@>IxN
-zgEpKVfy_I5f7GpVPtS}Odh|9Omnqbh)*>!mfSQ3C;o#Rr(GwK}mV>V8oEn+{iBBy)
-zbN+fgg|6Pm1J(Q4w_$J*ZQP6IpT4fe^W)aCt>H!wN%P@#BWY(f*QD=Ql@VkG&-EE4
-zy0Mu3Pax|}YH!@F-GVe5>*Bvq4j|BnveJeM{D4%F9WRP~A|&;H3PzX$^|5>%3GevS
-zbs<c{=3CZ8*73D={H@!PqZ{T1y?)PX3)&`Xt%Wv9)UD;6CmcLc4q9&u&cTnURaoFo
-IJlALJ5C1EkWdHyG
-
-literal 0
-HcmV?d00001
-
+index 0000000..2f67d56
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
+@@ -0,0 +1,25 @@
++From 6e2d70f6bb26f1029c2c277f18eb6e7a1798ee89 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:27:27 +0000
++Subject: [PATCH] Fix for CVE-2024-12720
++
++---
++ src/transformers/models/nougat/tokenization_nougat_fast.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..0e96509e39 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -522,7 +522,7 @@ class NougatTokenizerFast(PreTrainedTokenizerFast):
++         generation = generation.replace("\n* [leftmargin=*]\n", "\n")
++         # Remove lines with markdown headings starting with #, with numerals,
++         # and possibly roman numerals with trailing spaces and newlines
++-        generation = re.sub(r"^#+ (?:\.?(?:\d|[ixv])+)*\s*(?:$|\n\s*)", "", generation, flags=re.M)
+++        generation = re.sub(r"^#+ (?:[\d+\.]+|[ixv\.]+)?\s*(?:$|\n\s*)", "", generation, flags=re.M)
++         # most likely hallucinated titles
++         lines = generation.split("\n")
++         if lines[-1].startswith("#") and lines[-1].lstrip("#").startswith(" ") and len(lines) > 1:
++--
++2.40.1
++
 diff --git a/transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch b/transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..19268a585919ed4463177935c97e6379addc025e
-GIT binary patch
-literal 10120
-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
-
-literal 0
-HcmV?d00001
-
+index 0000000..19268a5
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
+@@ -0,0 +1,171 @@
++From fb72789a310e19273c228851de8f954c7fcaf26f Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 23 Jun 2025 09:30:23 +0000
++Subject: [PATCH] Fixed CVE-2025-1194 and CVE-2025-2099
++
++---
++ .../tokenization_gpt_neox_japanese.py         | 21 ++++++++--
++ .../tokenization_gptsan_japanese.py           | 21 ++++++++--
++ .../models/nougat/tokenization_nougat_fast.py | 40 +++++++------------
++ src/transformers/testing_utils.py             |  4 +-
++ 4 files changed, 53 insertions(+), 33 deletions(-)
++
++diff --git a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++index fae50aa8ff..797c1e503a 100644
++--- a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
+++++ b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import Optional, Tuple
++ 
++ import numpy as np
++@@ -262,9 +263,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this using
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++index df3f94dc1e..c64ce9a282 100644
++--- a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
+++++ b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import List, Optional, Tuple, Union
++ 
++ import numpy as np
++@@ -445,9 +446,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this usingMore actions
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..bdb5338d0a 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -119,27 +119,17 @@ def normalize_list_like_lines(generation):
++         normalization adjusts the bullet point style and nesting levels based on the captured patterns.
++     """
++ 
++-    # This matches lines starting with - or *, not followed by - or * (lists)
++-    # that are then numbered by digits \d or roman numerals (one or more)
++-    # and then, optional additional numbering of this line is captured
++-    # this is then fed to re.finditer.
++-    pattern = r"(?:^)(-|\*)?(?!-|\*) ?((?:\d|[ixv])+ )?.+? (-|\*) (((?:\d|[ixv])+)\.(\d|[ixv]) )?.*(?:$)"
++-
++-    for match in reversed(list(re.finditer(pattern, generation, flags=re.I | re.M))):
++-        start, stop = match.span()
++-        delim = match.group(3) + " "
++-        splits = match.group(0).split(delim)
+++    lines = generation.split("\n")More actions
+++    output_lines = []
+++    for line_no, line in enumerate(lines):
+++        match = re.search(r". ([-*]) ", line)
+++        if not match or line[0] not in ("-", "*"):
+++            output_lines.append(line)
+++            continue  # Doesn't fit the pattern we want, no changes
+++        delim = match.group(1) + " "
+++        splits = line.split(delim)[1:]
++         replacement = ""
++-
++-        if match.group(1) is not None:
++-            splits = splits[1:]
++-            delim1 = match.group(1) + " "
++-        else:
++-            delim1 = ""
++-            continue  # Skip false positives
++-
++-        pre, post = generation[:start], generation[stop:]
++-
+++        delim1 = line[0] + " "
++         for i, item in enumerate(splits):
++             level = 0
++             potential_numeral, _, rest = item.strip().partition(" ")
++@@ -150,15 +140,15 @@ def normalize_list_like_lines(generation):
++                 level = potential_numeral.count(".")
++ 
++             replacement += (
++-                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or start == 0 else delim1) + item.strip()
+++                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or line_no == 0 else delim1) + item.strip()
++             )
++ 
++-        if post == "":
++-            post = "\n"
+++        if line_no == len(lines) - 1:  # If this is the last line in the generationMore actions
+++            replacement += "\n"  # Add an empty line to the end of the generation
++ 
++-        generation = pre + replacement + post
+++        output_lines.append(replacement)
++ 
++-    return generation
+++    return "\n".join(output_lines)
++ 
++ 
++ def find_next_punctuation(text: str, start_idx=0):
++diff --git a/src/transformers/testing_utils.py b/src/transformers/testing_utils.py
++index ca4b0db8b8..04570fafa1 100644
++--- a/src/transformers/testing_utils.py
+++++ b/src/transformers/testing_utils.py
++@@ -2161,8 +2161,8 @@ def preprocess_string(string, skip_cuda_tests):
++     cuda stuff is detective (with a heuristic), this method will return an empty string so no doctest will be run for
++     `string`.
++     """
++-    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )((?:.*?\n)*?.*?```)"
++-    codeblocks = re.split(re.compile(codeblock_pattern, flags=re.MULTILINE | re.DOTALL), string)
+++    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )(.*?```)"
+++    codeblocks = re.split(codeblock_pattern, string, flags=re.DOTALL)
++     is_cuda_found = False
++     for i, codeblock in enumerate(codeblocks):
++         if "load_dataset(" in codeblock and "# doctest: +IGNORE_RESULT" not in codeblock:
++-- 
++2.40.1
++
 diff --git a/transformers-4.37.2/meta.yaml b/transformers-4.37.2/meta.yaml
 new file mode 100644
 index 0000000..203674f
@@ -248,139 +417,308 @@ index 0000000..203674f
 +    - setu4993
 diff --git a/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch b/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..b32d912abc1c3757d1080eebd80d2510d8c9a012
-GIT binary patch
-literal 3524
-zcmd5<TW{h<6n^)wIAR|b7BHA_*Y0XjLbR2VZj_`KsjA3e#xTWrtQngm+U<Yucg8lk
-zcGW&qs*@PzcCO#~&g9hS9rdFAaJ3u`hEX^QLlKDaU=j`{!+sET#XyQde?01rhmy{9
-zLRT`SU_{;S)csPg+YP)^h?&xCC$OHItuXYS2Yxa5q?S8B)Vq(~iOA%Xu5;O<G0jqg
-z)4c(8$J5?m+U-%Zi^sdlmw(7Go6>I=v+Lu}ztgF@qevS%{(0WUfqpv(jwZbhzmMFz
-z?|JQZ+aoKpJoVFis-AB|kcyQ&Q?czB8B1X$@AyW+gqqJE7Sf|g#nMu^5y@JvS`>^)
-zC03eD>BQEXjTRlz3X+O(yWx2&6-Cr;uT@5(b1-6g`0A--CGThwNU@Z?LA3P!qd|Do
-z4SN$2P|)oT`+fG{(P<B+(IW|;J`sFxji~9~7+z}%jYL2x+ek`9xD{*Z;*{Q}%J(Sn
-z>G)wo={qfrNWu*zVkcKq+P}Y?pUr1i^N;OvL(7SfcVd^ulJ<Q+m{dzXogxbYx-v+p
-z1cn<KZgrlq86F2d%#D#rcGys8^pPVh{t%V(Dp?cYB*>;RR3a`7Yf-3?9(E~DSMY8{
-zm-E@l`P|>Fct0=fgi0zu7#H_CH*NtK+aU)S)2)hQY}`t(`5$RzOI}sTF<`TJL#l07
-zg^xtCB9kX{!*&5>cWwBpq`i5~F=6Re#xcT1J)bTQ$5JCJfj3l#nnD^+yS&^u-OrNL
-zaJoxtVV8yJ4&G3rvP}_HX)O>meTwE6g|qBDpDNKkUW%?1t5G=geK{ILT~zAm8M<E_
-zEl~bqn$h0xw*nL|fAk3xa5abBrMr*fdIPMhU8)VL&#Y5nEO1y(XnXi-0ELL@4q@8F
-zYFTZ$zz{($4-|C-aQb^`EGpi^+8deyO?=Kmg+%p7DgiPNu~SLLh|e~HU&@jVjY>1J
-z8=c21T1uC9r=3w@w9ZIJF6>688V-Q!J}<7nEatz?&M(g9SM-5uWf9s=&1+Wc=U-0d
-zXKvM+u#=&fEwHwOt(~0)E7=;Gd(AfNL<(~$yH6!6V^*U~JEd?XlLpnKDb{-HAalEs
-z2^dtEaKp8UAv|Sk%RmrBmX5cmL??e@3#-f|2*a_FhPXJ^w=5z-wPQMDiKxs&z!G^|
-z$%XTm^NX|D@q7U%ujiLPvU^`W#y}7ZT0?3E!Kj6vgBch=>sT*EyeQ3D6f{vUhf}hd
-zX%!STrKQ#}gq@1m%Er{O6IUn9{RLUn$=j@CnWv5xG*gA&MF$ak;5-YPtEW(Zutp_|
-z>Re?K8bp)rHgc!;auMpJGQB{Ft-~~CDXP_wY5sD;?WKr*xd#RUTgBOoid2&Wl#W*t
-z9_NY8Q!WDFk`W;?>pysTD;S;{jVz4wm6MDrak{{z6_q1lKoH;>3NAHd_8!Oqv}q&u
-z7;Dlg2HXun@=Re2Dd5XeJyqd0Mqj_y01)|0h%Kya_yrt|w0WFaoG$e4^Ei=4ELE(s
-zdlZaFFtilKV!dX#<Nz-S6Z80Eb3k8dtkAtAplEX_WtPPXPB~y9^D0Eqv2iRj)v*e}
-zul}>>I=dDtWdIGX{`%A6Y82a9_={Y@dWx0J>IWG<!?9j__pVbW=N+yWwMLav&gKg#
-zexAfC+18;6Kb}K%h^tAm;MTS<GFsrHP~o&y*kypYx){2vKrlMOji4+GbO4-m7o5ed
-zHru*`?CUkaa@aCD(Ih}^T;_=kxdRx)?V-h>nq+Fr%4s9vYtDPw?Q!G|SX2ojRY9mC
-z3r?M|TlPItj7FwXz5r1BwUU#2dG8pfi2dK~G36$f13@lk?L2k%yKuSWaFW;~cTXs8
-z4+t_pGqZ*>E`sB}W0uLNHU5_oEJURSq+gF}Kk+Sv@mhI~D*0M||I@EEirwGktdg!i
-zxP+DHE5z3v5wP?J43)jbvTRqt-{F-)xr!)3!zu7kOmQ$u6~_!bR`DoYt&$v318eDs
-z<JEi1!95oDeE=6hpD<o=gB?GDEjsyA+&%_73w{AoVHl*3ZUFxPr7O8VWa$5fP3PpH
-jB;Vlw9b+>>2Y74Ag&$b1F4ZNn@ZW;h^ZQ*t@VvhOF@JAQ
-
-literal 0
-HcmV?d00001
-
+index 0000000..b32d912
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+@@ -0,0 +1,90 @@
++From 2f46db656fc7cca1a859c59641f0a5ea5487086e Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:25:02 +0000
++Subject: [PATCH] Fix for CVE-2024-11392/11393/11394
++
++---
++ setup.py         |  2 +-
++ utils/release.py | 19 +++++++++++++++++--
++ 2 files changed, 18 insertions(+), 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 91eabe25fb..35c30c29a1 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -20,7 +20,7 @@ To create the package for pypi.
++ 1. Create the release branch named: v<RELEASE>-release, for example v4.19-release. For a patch release checkout the
++    current release branch.
++
++-   If releasing on a special branch, copy the updated README.md on the main branch for your the commit you will make
+++   If releasing on a special branch, copy the updated README.md on the main branch for the commit you will make
++    for the post-release and run `make fix-copies` on the main branch as well.
++
++ 2. Run `make pre-release` (or `make pre-patch` for a patch release) and commit these changes with the message:
++diff --git a/utils/release.py b/utils/release.py
++index 8ba0ead7c6..e75f002471 100644
++--- a/utils/release.py
+++++ b/utils/release.py
++@@ -44,12 +44,14 @@ or use `make post-release`.
++ import argparse
++ import os
++ import re
+++from pathlib import Path
++
++ import packaging.version
++
++
++ # All paths are defined with the intent that this script should be run from the root of the repo.
++ PATH_TO_EXAMPLES = "examples/"
+++PATH_TO_MODELS = "src/transformers/models"
++ # This maps a type of file to the pattern to look for when searching where the version is defined, as well as the
++ # template to follow when replacing it with the new version.
++ REPLACE_PATTERNS = {
++@@ -115,6 +117,17 @@ def global_version_update(version: str, patch: bool = False):
++         # We don't update the version in the examples for patch releases.
++         update_version_in_examples(version)
++
+++def remove_conversion_scripts():
+++    """
+++    Delete the scripts that convert models from older, unsupported formats. We don't want to include these
+++    in release wheels because they often have to open insecure file types (pickle, Torch .bin models). This results in
+++    vulnerability scanners flagging us and can cause compliance issues for users with strict security policies.
+++    """
+++    model_dir = Path(PATH_TO_MODELS)
+++    for conversion_script in list(model_dir.glob("**/convert*.py")):
+++        conversion_script.unlink()
+++
+++
++
++ def clean_main_ref_in_model_list():
++     """
++@@ -160,7 +173,7 @@ def pre_release_work(patch: bool = False):
++     """
++     Do all the necessary pre-release steps:
++     - figure out the next minor release version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++
++     Args:
++@@ -184,6 +197,8 @@ def pre_release_work(patch: bool = False):
++
++     print(f"Updating version to {version}.")
++     global_version_update(version, patch=patch)
+++    print("Deleting conversion scripts.")
+++    remove_conversion_scripts()
++     if not patch:
++         print("Cleaning main README, don't forget to run `make fix-copies`.")
++         clean_main_ref_in_model_list()
++@@ -193,7 +208,7 @@ def post_release_work():
++     """
++     Do all the necesarry post-release steps:
++     - figure out the next dev version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++     """
++     # First let's get the current version
++--
++2.40.1
++
 diff --git a/transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch b/transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..2f67d565ea9f82d592ea342b67221050ad3928c0
-GIT binary patch
-literal 1299
-zcmbtTOOKl{5Wf3YjFKKg2n1*n64ZTZ+o+eVR^6zVBwZO8h`V5r?d+r4AKw8KWmoE<
-zRV;%&&(EIEvs6_HGYrzu%Vu#L%rf5#7D<o<VVL=IjAs~fKU~Za=L@*0B-~*Qeh8iy
-zwG#r*^VyQpL~vDdvhURcSMaG3+)lU@ap@*idCop_gAuIuID$D`)rz8nDR}cJ2x)@t
-z(O`G`_!lN7g7xjy>iX*zmf{(*O2PGyFAfDv96tyHk1@w_7-*G@jp9<1M~O<0%PPe}
-zk7c#bxfz@40j2oOji}^(r@PO%Hg5d_uMmJuDSXI8fspLD%rPC2ETl%&gbZw}ktrj#
-zqGK_ZiYx=i$%O$vJ^?;HA(#o7;xnXPz%dD@;na0KT+F840zWRm_q^F;($wdq6EfSj
-z;iOYuUV<|Xf)P>MEu=^at~GpX=~;E`pjr|ogIk3w#f8N5o!*KV97c{3RZAwE!BKD(
-z)&);+(A&r%tP9Lc$yF}o*>Jm&y%CVUXC2e@;X9VqBSJxF8lHsN0R=py)suuB@>IxN
-zgEpKVfy_I5f7GpVPtS}Odh|9Omnqbh)*>!mfSQ3C;o#Rr(GwK}mV>V8oEn+{iBBy)
-zbN+fgg|6Pm1J(Q4w_$J*ZQP6IpT4fe^W)aCt>H!wN%P@#BWY(f*QD=Ql@VkG&-EE4
-zy0Mu3Pax|}YH!@F-GVe5>*Bvq4j|BnveJeM{D4%F9WRP~A|&;H3PzX$^|5>%3GevS
-zbs<c{=3CZ8*73D={H@!PqZ{T1y?)PX3)&`Xt%Wv9)UD;6CmcLc4q9&u&cTnURaoFo
-IJlALJ5C1EkWdHyG
-
-literal 0
-HcmV?d00001
-
+index 0000000..2f67d56
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
+@@ -0,0 +1,25 @@
++From 6e2d70f6bb26f1029c2c277f18eb6e7a1798ee89 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:27:27 +0000
++Subject: [PATCH] Fix for CVE-2024-12720
++
++---
++ src/transformers/models/nougat/tokenization_nougat_fast.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..0e96509e39 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -522,7 +522,7 @@ class NougatTokenizerFast(PreTrainedTokenizerFast):
++         generation = generation.replace("\n* [leftmargin=*]\n", "\n")
++         # Remove lines with markdown headings starting with #, with numerals,
++         # and possibly roman numerals with trailing spaces and newlines
++-        generation = re.sub(r"^#+ (?:\.?(?:\d|[ixv])+)*\s*(?:$|\n\s*)", "", generation, flags=re.M)
+++        generation = re.sub(r"^#+ (?:[\d+\.]+|[ixv\.]+)?\s*(?:$|\n\s*)", "", generation, flags=re.M)
++         # most likely hallucinated titles
++         lines = generation.split("\n")
++         if lines[-1].startswith("#") and lines[-1].lstrip("#").startswith(" ") and len(lines) > 1:
++--
++2.40.1
++
 diff --git a/transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch b/transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..19268a585919ed4463177935c97e6379addc025e
-GIT binary patch
-literal 10120
-zcmeHN|98|>7XN+zinqg_vq@(rOlGFv<_MKl*u@3$2(CZ0-61o1(}re}*(6h_j^_wP
-zC<qAnUI0bW6%|Dk6~7>e|I4kdyZ^=Bmv5743$3o}o;{~?nkIR<@80|FyZ63N?#nL6
-zZjokvxHLR6s+H9uRYyz1<wmJAGBT*@bfh^tSZNG58(On8)FgXti|nUuq7IW{u^Rl5
-zQn9FJb|IT8+0oMQdB>U29P*gBQNo+Yje1LI*sblECpC{&1)Dr6mB~{b3%i#FNpZAV
-zE>^K6SHxdtf2V$kHoPhse`d#lC;mK1b{R*gPM-Md&VnE>sOo5iXjZDFR2&`6WD12s
-zhA4`%)w5@)WxSwyhHcfR+Fs3~_L15lt*u$qrAm8_#J?^nsU#Qu9@gE}tTj6mvS#;|
-zty9z8YT2DB&Fj}CY^yaj*ArTFNu?M|N9B`WhPX~+tLJEz+q9h)b=<8Ubv?tHs&zcW
-zbkidcBk2-SAvqj;g)|M5x}-6!SyNQclfg1EESEaM60Ve!^Q2rRs2&X)3UVf+8_gyu
-z6s8Q1Xj@mwjRv#Ii2dVQ^;l?F|24T~3`?g+NK>POMNJ!NHWg)fbhx47ZCN8~u{czz
-z2nYCe$B;qK_?5@;_~WFY4(EqR4*w4myfs>F+wn-lHcj+;F;SVg?T~9*$&KA>cW5RT
-zb#v#ixhcZfn`@(o#9jBb1uM<WlLMW$Ni!tjV|7|MJDN+Zc1CDZ8Y<;SNv<?h&SMB-
-zOT*M$7X!KeyzS^uMNxAgj4A3!b`YI%H4_IBajDtF0Jl79c{PW&HP55YAlXJ7D&oG4
-zJ}LF6MK>oaEnhyj{KdWQ()ACQZ@t%DzI<!x;+gK!-7l9H&Ub&jcU{~qo_&DF_jugL
-z<6d{7Q!X`|@`V1PnlHVyboY)_92-{)qmx~AyjUnr%F9<5lBRLBG>NVFusmK=@!6&K
-zrKo4O+KsN3uN;dnmljTRCnThrkj44xLU8`+=*{r{_MNExMsWVu$qT`G>FPB+FD~51
-z<6}H-;_(R{xA6EBkI&?RY;WjtrVtx#O`8p^uvtPK*-R>SgYi!21M$U+MKpz!$MKY3
-zl5_IF((&W+fV2U^AHO}hF~X&@^GLY9WC;nEPMqi>V{yW}_$s_xoIkZVe^We;u0o3F
-zrq{MO|H0z?{l)oPA!&RQQ^)rSnVgd*q@Qk_`{#rE!Ia?T^69JMGUsVWg#8mU%9&hj
-z|1IReG$poUOc@v@WEPVw#tX5V#G5u;^xP>-H@e}rO>GVns^($NcI@`F(I9oLF@wpu
-zF(bmQPN%h5!|pf=d7ct&);9EzL&wF(X?bnib*bwbvy}Y3qgkHOG*Bq!XY$M(*}jdG
-z6;)NpZY$QsMc$@;IN+8ihkMK^neCVsb+o!+8r~cUBoU3crZF|`nR98OBD+%u<1!kN
-zH?4WZowhrsPNt|}Vw!UVhd@ydC9c+@y&(zRTDI#E%eD#_)zh|VPZ<p~S3|?0C_O<&
-zlVBoJA}iJmt7(fNN##6IRZJC$*@gKx<obO*BKIGwPUxYhcgH7m^z=!2AeZfDz9uR9
-z+(t>!%^pRHkN-D5{?K7Q+V%U)m~wwaDD=NJEh6p%Gd@h||8pw}9}9jn)NrYVNjnSd
-zWnf2v9RoHG>^QJjfSmw#64(N;Q@~CGdllFjU}u4y1NIuQ^S~|uy9n%cU<?=s<^#I~
-z>@u(`z}^7%Ca|l(-U9YEuxr5H0roDie*k+A*mYp<1N#8jhrn(C`v};_z-|Kj1lTQL
-zp91>~*ll2+1N#Elm%#1-`wH0Cz`g<YEwH=5z5{j-*nME%1A74M2jDLQKMMR9@Oj|J
-zfxiO$1n`r<7l5Avej50zz|R0b3;Z1L*MOe~egXJJ;I9K`z&UUq_$A<%fnNds2Jkn5
-zUj_aa@V9|q1O5*1cY*%{_<O*w1Aia*2f#lBegpVNz&{3l6Zj{<Zvp=l_-DXx1OFWO
-z7r?&+eh2thz`q9m4e)P)-v$01@O!}T1OFcQ1K>ZT7TLOKH)h;mQv8>}KMMXa@aMrl
-z4*o0Pp8)?P_zU2l0{=AluY!LD{IlSn1OGMf&x3yf{EOhf4n6~)gYScX3H;08UjhFO
-z@ZSXgD)?`K|2Fv7QbPN3T7cYD)Bu+ZrKQc#ph0?Zrb@Dp{c+E}C;qZMOAy(U8IfTl
-zCqkeZDE^YXVMv~SF<Ax3(+}5$<7wjcI7LugZ<d>*6&)eCqBMpo4LYioMoJro;y+8`
-zx-k4_ar><x_#VUc@?-@N&y(jY1R9UP<CV&wz~hz5&?X+=#N!C;S0emPJpPOE_+HyV
-z938!7C)j8U*~I1%qUl@5;#c{Vuce9MqE6y<eiNI=#t6=#MK-bd&v=V}*vrB?FZX@U
-zDEDeDo7j94n};FUm(zX|Y`%fo|HG@}>vxV3c(J6>#_-_qprX|E`e3;{q8B$<4Bvo|
-zM}zJSFbHtAI+`yHW3e00xNU?@I&ES-$!Te(@dB-xh>`K%jJU$h87ZtuiPCktz#P*D
-zJ32(u4|QD64GLEE4pz-QT)z!0ak<`{iOW0g3?VDAT|!Jci<J(n*txiYgylU^<7#Ma
-zujAl-Sf{qIjurSxHjD3bVXaUU2eAm)(!9nrZl?sQA$JY;QIP3j!<!}rtR0epJPyUf
-zS2+_4b;z+k7qt^f49tz{y<1Q&mfbYO9;kptumWGlqFg|)V*wJ!GJ)zj1k3oig@%ts
-zUCt$vZHW>k*5DkPuoA-)T=K+@O8jUL-3Y7w5o@7kT*(y56C6xD?0AGhnG@Rsjhd*8
-zXN!7$6E|86EZ-|3U1TFsmlkXM-(;!KofweEq_N)x7i3Hdmj3Rzab$K<&JlS`$&Hba
-zib(wr<p~8#@DZt?9KgQ6m$5(_3KOryfz8Ehv4d0R;Isvnlv0{Wkxu!jfGI|vCrwkE
-za<?JbZrl#T(_UFd4@xS(!Q|y}4(&FMB@m*xxF0B`O7gfbX0(#0Q;ywfOJ$klNS35(
-z$XF2;6BaWG$%-;^!*(g)5!Km3x7n6bGa|}PSXp^B6tz2EyCb3jy%+h9PllCEVHMF<
-zv+R6uA*@3~C-Eqn2g%bV*3g2%=8H=;r!g%#S%paBg@H+#WJ4CIN+6bQg%5|lB2nYT
-z$)FJhN!bGS$qr=GB1F8TwN<osn_6P3EOgYq6<KTx8CHi9vV}ZpQ`h<f#tZH>ib#x|
-z3v1hlu^=vjDcZVpdra1v6*ZofL{u^>LWRD$7+0&4Jyd{@*3=rbB`V@rwo6=3j0i0e
-zIz~9BC<Mbp*yd@B!;~)x+C*M>5eP|~O%McXiyF`hmMgp|ti!I|Q)nkx#lN&E_s<w@
-z+zrJlu6TFB=%1x-97ck^?a;h<B1YNEspHik4kpu~GcIBRO;lK6a-q90rtpPO=~$1T
-zbY<iTrioU+FNVfQXKv9aNW#di*qa8?+_uGjp`n?zDB<NvEsvoa=qz|ESUxk_lB~2v
-z;uT>oVI<1IrlmSq%&UXAu2h2aFI-oI8sZmgxJo75zU)|@lvPkH?x3cBX-~@GR!9F_
-z2}()Cx$r83Y$rt`rW!p?xGp~NvSc8X8#IJop3q_(1~Wyrq1nQop+gDcv~7Bm7VGw(
-zNfk4WiDrGdvAEzYjFY%34kC0s5nn69Ch|yOn4ad?AtlzNR+Q6lEmf-`Z|sgX<-*m9
-z;P$kaBtnr#dJeuism6M)n66-Iko68-N5DX6tBo6JLJP4B3Z9tG!X-4#K0VByP;_k!
-zH=LM08G#XcgIp_Jrsxw3IuyZ)l^RmWB5D?DD~Ay5NNIk7Z)O5yC6;ge+~tT@Yj>=M
-z*9j1l<Y7Y<J<1U)AO=&-(2r~@Vw^tu<BwGzovZ;`SJFh-w4qh%MZG>!A5oNIWpKFI
-z)S8;QPIY({uZKX;RdfPrmee6NKZ4&egy$$D;KZ~YyMg<zHIYrMDJeXmAuxm18XaA$
-z33g%y4O~UEppiQGQ4G49PCfBW2JVhZ0qWDpH0?MD?TiL~OA|n-7R7y09YLXKq5}kz
-zmpD`?i@3H}*>t-hB!!f9N*w(B3D@>e?7@)qU<!){0oA~diGqEBTD({WNbKOjg9x44
-zb12&Cw&&ytcVNQ8f7`cjC$a!t%D~u!B@ZCP8bewEvBc;SZUSE*NDA_`z*g~B8VNxx
-zE(NUiKDXz<?mfGo-WdX{C-)uLv1bojA=Ert_E#|wg0j-1^-Yuvmh*%~pOQ&yPqTO?
-z6X+MI6k619!`W?O2G>!GU1G5e9|=T->sP|Ee-TTX6Q2;K!z7h8ZB4J~;!^;MYl7&N
-t&<1ZE*)8!TS4nR7pPt_L?9SS=JNKjAvN4=WI$&ZfkW5Lb6csg-`8S{E>&5^8
-
-literal 0
-HcmV?d00001
-
+index 0000000..19268a5
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
+@@ -0,0 +1,171 @@
++From fb72789a310e19273c228851de8f954c7fcaf26f Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 23 Jun 2025 09:30:23 +0000
++Subject: [PATCH] Fixed CVE-2025-1194 and CVE-2025-2099
++
++---
++ .../tokenization_gpt_neox_japanese.py         | 21 ++++++++--
++ .../tokenization_gptsan_japanese.py           | 21 ++++++++--
++ .../models/nougat/tokenization_nougat_fast.py | 40 +++++++------------
++ src/transformers/testing_utils.py             |  4 +-
++ 4 files changed, 53 insertions(+), 33 deletions(-)
++
++diff --git a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++index fae50aa8ff..797c1e503a 100644
++--- a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
+++++ b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import Optional, Tuple
++ 
++ import numpy as np
++@@ -262,9 +263,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this using
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++index df3f94dc1e..c64ce9a282 100644
++--- a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
+++++ b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import List, Optional, Tuple, Union
++ 
++ import numpy as np
++@@ -445,9 +446,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this usingMore actions
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..bdb5338d0a 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -119,27 +119,17 @@ def normalize_list_like_lines(generation):
++         normalization adjusts the bullet point style and nesting levels based on the captured patterns.
++     """
++ 
++-    # This matches lines starting with - or *, not followed by - or * (lists)
++-    # that are then numbered by digits \d or roman numerals (one or more)
++-    # and then, optional additional numbering of this line is captured
++-    # this is then fed to re.finditer.
++-    pattern = r"(?:^)(-|\*)?(?!-|\*) ?((?:\d|[ixv])+ )?.+? (-|\*) (((?:\d|[ixv])+)\.(\d|[ixv]) )?.*(?:$)"
++-
++-    for match in reversed(list(re.finditer(pattern, generation, flags=re.I | re.M))):
++-        start, stop = match.span()
++-        delim = match.group(3) + " "
++-        splits = match.group(0).split(delim)
+++    lines = generation.split("\n")More actions
+++    output_lines = []
+++    for line_no, line in enumerate(lines):
+++        match = re.search(r". ([-*]) ", line)
+++        if not match or line[0] not in ("-", "*"):
+++            output_lines.append(line)
+++            continue  # Doesn't fit the pattern we want, no changes
+++        delim = match.group(1) + " "
+++        splits = line.split(delim)[1:]
++         replacement = ""
++-
++-        if match.group(1) is not None:
++-            splits = splits[1:]
++-            delim1 = match.group(1) + " "
++-        else:
++-            delim1 = ""
++-            continue  # Skip false positives
++-
++-        pre, post = generation[:start], generation[stop:]
++-
+++        delim1 = line[0] + " "
++         for i, item in enumerate(splits):
++             level = 0
++             potential_numeral, _, rest = item.strip().partition(" ")
++@@ -150,15 +140,15 @@ def normalize_list_like_lines(generation):
++                 level = potential_numeral.count(".")
++ 
++             replacement += (
++-                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or start == 0 else delim1) + item.strip()
+++                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or line_no == 0 else delim1) + item.strip()
++             )
++ 
++-        if post == "":
++-            post = "\n"
+++        if line_no == len(lines) - 1:  # If this is the last line in the generationMore actions
+++            replacement += "\n"  # Add an empty line to the end of the generation
++ 
++-        generation = pre + replacement + post
+++        output_lines.append(replacement)
++ 
++-    return generation
+++    return "\n".join(output_lines)
++ 
++ 
++ def find_next_punctuation(text: str, start_idx=0):
++diff --git a/src/transformers/testing_utils.py b/src/transformers/testing_utils.py
++index ca4b0db8b8..04570fafa1 100644
++--- a/src/transformers/testing_utils.py
+++++ b/src/transformers/testing_utils.py
++@@ -2161,8 +2161,8 @@ def preprocess_string(string, skip_cuda_tests):
++     cuda stuff is detective (with a heuristic), this method will return an empty string so no doctest will be run for
++     `string`.
++     """
++-    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )((?:.*?\n)*?.*?```)"
++-    codeblocks = re.split(re.compile(codeblock_pattern, flags=re.MULTILINE | re.DOTALL), string)
+++    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )(.*?```)"
+++    codeblocks = re.split(codeblock_pattern, string, flags=re.DOTALL)
++     is_cuda_found = False
++     for i, codeblock in enumerate(codeblocks):
++         if "load_dataset(" in codeblock and "# doctest: +IGNORE_RESULT" not in codeblock:
++-- 
++2.40.1
++
 diff --git a/recipe/meta.yaml b/transformers-4.38.0/meta.yaml
 similarity index 78%
 rename from recipe/meta.yaml
