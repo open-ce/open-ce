@@ -1,7 +1,7 @@
-From e1edfe5734a549077ecd5bad352b768b4620cea2 Mon Sep 17 00:00:00 2001
+From 5bb1416413829f1d03d1cbb11e040c301206f357 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Tue, 24 Jun 2025 06:13:50 +0000
-Subject: [PATCH] Fixed CVEs
+Date: Mon, 30 Jun 2025 12:40:18 +0000
+Subject: [PATCH] Fixed CVEs for transformers
 
 ---
  config/build-config.yaml                      |   6 +
@@ -12,8 +12,8 @@ Subject: [PATCH] Fixed CVEs
  ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 +++++++++
  .../0001-Fix-for-CVE-2024-12720.patch         |  25 +++
  ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | 171 ++++++++++++++++++
- {recipe => transformers-4.38.0}/meta.yaml     |  10 +-
- 9 files changed, 654 insertions(+), 3 deletions(-)
+ {recipe => transformers-4.38.0}/meta.yaml     |  12 +-
+ 9 files changed, 655 insertions(+), 4 deletions(-)
  create mode 100644 config/build-config.yaml
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
@@ -22,7 +22,7 @@ Subject: [PATCH] Fixed CVEs
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
  create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
- rename {recipe => transformers-4.38.0}/meta.yaml (78%)
+ rename {recipe => transformers-4.38.0}/meta.yaml (77%)
 
 diff --git a/config/build-config.yaml b/config/build-config.yaml
 new file mode 100644
@@ -342,7 +342,7 @@ index 0000000..19268a5
 +
 diff --git a/transformers-4.37.2/meta.yaml b/transformers-4.37.2/meta.yaml
 new file mode 100644
-index 0000000..203674f
+index 0000000..6c20ce3
 --- /dev/null
 +++ b/transformers-4.37.2/meta.yaml
 @@ -0,0 +1,69 @@
@@ -363,7 +363,7 @@ index 0000000..203674f
 +
 +build:
 +  noarch: python
-+  number: 0
++  number: 1
 +  script: {{ PYTHON }} -m pip install . -vv
 +
 +requirements:
@@ -720,13 +720,13 @@ index 0000000..19268a5
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/transformers-4.38.0/meta.yaml
-similarity index 78%
+similarity index 77%
 rename from recipe/meta.yaml
 rename to transformers-4.38.0/meta.yaml
-index 80688b6..3c49be0 100644
+index 80688b6..f3d6dc1 100644
 --- a/recipe/meta.yaml
 +++ b/transformers-4.38.0/meta.yaml
-@@ -6,8 +6,12 @@ package:
+@@ -6,12 +6,16 @@ package:
    version: {{ version }}
  
  source:
@@ -741,6 +741,11 @@ index 80688b6..3c49be0 100644
  
  build:
    noarch: python
+-  number: 0
++  number: 1
+   script: {{ PYTHON }} -m pip install . -vv
+ 
+ requirements:
 @@ -23,7 +27,7 @@ requirements:
      - datasets !=2.5.0  # Required for transformers-cli.
      - filelock
