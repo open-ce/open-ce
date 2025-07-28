@@ -273,7 +273,7 @@ scikit_learn:
 sentencepiece:
   - 0.1.99
 setuptools:
-  - 72.*
+  - 78.*
 setuptools_rust:
   - 1.5.*
 six:
