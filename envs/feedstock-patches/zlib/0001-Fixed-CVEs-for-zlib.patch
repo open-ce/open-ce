@@ -1,0 +1,72 @@
+From f48a3732058e0cf3e4ee9676ad11bf5595318e8f Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Wed, 30 Jul 2025 10:25:38 +0000
+Subject: [PATCH] Fixed CVEs for zlib
+
+---
+ .../0001-Fixed-CVE-2023-45853-for-zlib.patch  | 34 +++++++++++++++++++
+ recipe/meta.yaml                              |  5 +--
+ 2 files changed, 37 insertions(+), 2 deletions(-)
+ create mode 100644 recipe/0001-Fixed-CVE-2023-45853-for-zlib.patch
+
+diff --git a/recipe/0001-Fixed-CVE-2023-45853-for-zlib.patch b/recipe/0001-Fixed-CVE-2023-45853-for-zlib.patch
+new file mode 100644
+index 0000000..4bd6f9e
+--- /dev/null
++++ b/recipe/0001-Fixed-CVE-2023-45853-for-zlib.patch
+@@ -0,0 +1,34 @@
++From 5187c8aadbce904b3254ee9817c9ccd9f6585538 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 28 Jul 2025 11:48:33 +0000
++Subject: [PATCH] Fixed CVE-2023-45853 for zlib
++
++---
++ contrib/minizip/zip.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/contrib/minizip/zip.c b/contrib/minizip/zip.c
++index 66d693f..ac5de7c 100644
++--- a/contrib/minizip/zip.c
+++++ b/contrib/minizip/zip.c
++@@ -1083,6 +1083,17 @@ extern int ZEXPORT zipOpenNewFileInZip4_64 (zipFile file, const char* filename,
++       return ZIP_PARAMERROR;
++ #endif
++ 
+++    // The filename and comment length must fit in 16 bits.
+++    if ((filename!=NULL) && (strlen(filename)>0xffff))
+++        return ZIP_PARAMERROR;
+++    if ((comment!=NULL) && (strlen(comment)>0xffff))
+++        return ZIP_PARAMERROR;
+++    // The extra field length must fit in 16 bits. If the member also requires
+++    // a Zip64 extra block, that will also need to fit within that 16-bit
+++    // length, but that will be checked for later.
+++    if ((size_extrafield_local>0xffff) || (size_extrafield_global>0xffff))
+++        return ZIP_PARAMERROR;
+++
++     zi = (zip64_internal*)file;
++ 
++     if (zi->in_opened_file_inzip == 1)
++-- 
++2.40.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index a710097..402418f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -7,10 +7,11 @@ package:
+ 
+ source:
+   url:
+-    - http://zlib.net/zlib-{{ version }}.tar.gz
++    - http://zlib.net/fossils/zlib-{{ version }}.tar.gz
+     - https://gnupg.org/ftp/gcrypt/zlib/zlib-{{ version }}.tar.gz
+   sha256: b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30
+-
++  patches:
++    - 0001-Fixed-CVE-2023-45853-for-zlib.patch
+ build:
+   number: {{ build_num }}
+ 
+-- 
+2.40.1
+
