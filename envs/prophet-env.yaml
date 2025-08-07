@@ -11,5 +11,9 @@ packages:
       - feedstock-patches/prophet/0001-Pin-dependencies-and-added-test-dir.patch
   - feedstock : https://github.com/conda-forge/holidays-feedstock.git
     git_tag : 4d747d0607fb049f6f6569b5ec06dcc76b54d2b1
+  - feedstock : https://github.com/conda-forge/zlib-feedstock
+    git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
+    patches:
+      - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
 {% endif %}
 git_tag_for_env: open-ce-v1.11.6

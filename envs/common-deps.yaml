@@ -3,8 +3,8 @@ builder_version: ">=13.0.0"
 packages:
   - feedstock : https://github.com/conda-forge/protobuf-feedstock.git
     git_tag : a6af8c023ae88134ed3938bbeb90e05bc7fc0e09   #v25.8
-    patches :
-      - feedstock-patches/protobuf/0001-protobuf-v25.8-changes.patch
+#    patches :
+#      - feedstock-patches/protobuf/0001-protobuf-v25.8-changes.patch
 #      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
 #      - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch
   - feedstock : https://github.com/conda-forge/libprotobuf-feedstock.git
