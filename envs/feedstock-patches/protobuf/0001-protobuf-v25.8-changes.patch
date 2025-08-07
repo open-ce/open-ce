@@ -1,0 +1,41 @@
+From a7c8d64f81b2cc7e86a3ffbee0843681cb99797d Mon Sep 17 00:00:00 2001
+From: "Archana.Shinde1" <archana.shinde1@ibm.com>
+Date: Fri, 1 Aug 2025 07:34:35 +0000
+Subject: [PATCH] v25.8 changes
+
+---
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 773a344..0175937 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -1,5 +1,5 @@
+ # keep this without major version to let the bot pick it up
+-{% set version = "25.3" %}
++{% set version = "25.8" %}
+ # protobuf doesn't add the major version in the tag, it's defined per language in
+ # https://github.com/protocolbuffers/protobuf/blob/main/version.json
+ {% set major = "4" %}
+@@ -12,7 +12,7 @@ package:
+ 
+ source:
+   url: https://github.com/protocolbuffers/protobuf/archive/refs/tags/v{{ version }}.tar.gz
+-  sha256: d19643d265b978383352b3143f04c0641eea75a75235c111cc01a1350173180e
++  sha256: 5a5d91be7a47b15cecebdc24188e5cfd0a2fc0af03ae93fa239e842c4a5128d0
+   patches:
+     - patches/0001-do-not-link-msvc-runtime-statically.patch
+     - patches/0002-fix-paths-for-include-lib-directories.patch
+@@ -41,7 +41,7 @@ requirements:
+     - python
+     - pip
+     - setuptools
+-    - libabseil
++    - libabseil {{ abseil_cpp }}
+     - libprotobuf {{ lib_major ~ "." ~ version }}
+   run:
+     - python
+-- 
+2.40.1
+
