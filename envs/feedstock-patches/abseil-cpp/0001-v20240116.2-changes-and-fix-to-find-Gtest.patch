@@ -1,12 +1,12 @@
-From b7b8467a707d88bf6df0fabbcfe4052b5fccb591 Mon Sep 17 00:00:00 2001
+From d028b959a6f6fa11ece4ac4f6f912fe9c2248b5e Mon Sep 17 00:00:00 2001
 From: "Archana.Shinde1" <archana.shinde1@ibm.com>
-Date: Fri, 1 Aug 2025 07:31:41 +0000
-Subject: [PATCH] v20240116.2 changes and fix to find Gtest
+Date: Thu, 7 Aug 2025 06:16:41 +0000
+Subject: [PATCH] correction of abseil patch
 
 ---
- recipe/meta.yaml                                 |   4 +---
- recipe/patches/0001-cmake-use-gtest-config.patch | Bin 0 -> 875 bytes
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ recipe/meta.yaml                              |  4 +--
+ .../patches/0001-cmake-use-gtest-config.patch | 25 +++++++++++++++++++
+ 2 files changed, 26 insertions(+), 3 deletions(-)
  create mode 100644 recipe/patches/0001-cmake-use-gtest-config.patch
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
@@ -47,24 +47,35 @@ index ab7ad48..85d35cb 100644
        host:
 diff --git a/recipe/patches/0001-cmake-use-gtest-config.patch b/recipe/patches/0001-cmake-use-gtest-config.patch
 new file mode 100644
-index 0000000000000000000000000000000000000000..247b3379f5b36c458f6d8324c61a97792797adf7
-GIT binary patch
-literal 875
-zcmZ`%QE!_t7<~7yIAt%1D8$gDP&7@Y2_cba(gD>bO%o!<5U&YTm`JU(A3sC#(6pLm
-zjC?+h`_A8@sSn^b<&I-J`7L*@`IKE-R$;Llw!JB+!<c&VJf~Y54|Ro@zreIXsoPIj
-zl$vCrWLylqhV8N{Gvb}7a&8XrH9I5ngxrbk!C>{_8<}S<cd=;16-;=?Qt4PzP}@~=
-zatn>BLE_`~4`;25UyoigTmA++WX~K&$x*gkwqSKth>{Rp*9m41>M#_tl}7v8;x8;{
-z3N}%QJxAxP<azfyQAyskqOOM8sN3g!&-<-DA|w|@0bMUei){Qsa{B=wU74>iZzqLg
-zQ^zo-DlYrlE?`o6GnsV0KB*8*)9^{@?hd*+wXSSvr<VdGZ-?G}9H!xB=7njn*#x1V
-z_;HfXR}lu|qin{qVdJu{OI3jiWPq7BTl!FOEeS+19Ns^z!g<<#v|0!7)^qfV7w`z1
-z=p&pi{qWI`;t>Iq5Kcy(Vn6kNCVsTO@Y9pt(H5)q{GHtq(UpiAg~}^^$=GvN@?ns4
-zHyHWfpH`7S9}(@poY`i*SOxE>J(KSxR~4=|2@)>~`~<zC>-Md2w$zy#o{uka;0u22
-zc!i)(54{^9RdcZYG3PmQ(Wu_rzoE(69dFR822x8?AIsfEC07dN$o3+WTq0{Y4nj&%
-Pm4>>15X+cQ!zAP%yGH<=
-
-literal 0
-HcmV?d00001
-
+index 0000000..247b337
+--- /dev/null
++++ b/recipe/patches/0001-cmake-use-gtest-config.patch
+@@ -0,0 +1,25 @@
++From e70e8878d9e83e5c322f2c6cb6f08cc08cddd0b7 Mon Sep 17 00:00:00 2001
++From: "Archana.Shinde1" <archana.shinde1@ibm.com>
++Date: Fri, 1 Aug 2025 07:07:49 +0000
++Subject: [PATCH] cmake use gtest config
++
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 194f8708..58cc737f 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -152,7 +152,7 @@ set(ABSL_LOCAL_GOOGLETEST_DIR "/usr/src/googletest" CACHE PATH
++ if((BUILD_TESTING AND ABSL_BUILD_TESTING) OR ABSL_BUILD_TEST_HELPERS)
++   if (ABSL_USE_EXTERNAL_GOOGLETEST)
++     if (ABSL_FIND_GOOGLETEST)
++-      find_package(GTest REQUIRED)
+++      find_package(GTest CONFIG REQUIRED)
++     elseif(NOT TARGET GTest::gtest)
++       if(TARGET gtest)
++         # When Google Test is included directly rather than through find_package, the aliases are missing.
++-- 
++2.40.1
++
 -- 
 2.40.1
 
