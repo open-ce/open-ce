@@ -18,11 +18,6 @@ packages:
     git_tag : 944d5c2af53b5885f882a1d02fc645db4ccdb75c      #v20240116.2
     patches :
       - feedstock-patches/abseil-cpp/0001-v20240116.2-changes-and-fix-to-find-Gtest.patch
-# requires verification against the RHEL package
-  - feedstock : https://github.com/conda-forge/rsync-feedstock
-    git_tag : 7d30fcfc75a6932a0f7c169eb173da487c7d6f0d
-  - feedstock : https://github.com/conda-forge/popt-feedstock
-    git_tag : a3000586b90c7a4edc20269358341dba35a6c391
   - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v78.1.1           #[ppc64le]
     git_tag : 46774634b8799e6c2f4d4a6f9b68b6844471a559                                  #[ppc64le]
     patches :                                                                           #[ppc64le]

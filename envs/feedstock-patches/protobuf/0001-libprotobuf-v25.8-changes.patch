@@ -1,14 +1,14 @@
-From b320aec742f7c474d406a6a0b9f740fac19d7574 Mon Sep 17 00:00:00 2001
+From 64b14281611329e7cd6ce6e4bb07995d5702ea8c Mon Sep 17 00:00:00 2001
 From: "Archana.Shinde1" <archana.shinde1@ibm.com>
-Date: Fri, 1 Aug 2025 07:33:14 +0000
-Subject: [PATCH] v25.8 changes
+Date: Thu, 7 Aug 2025 08:54:47 +0000
+Subject: [PATCH] use rsync package of Rhel instead conda
 
 ---
- recipe/meta.yaml | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ recipe/meta.yaml | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 90b6d91..82a2156 100644
+index 90b6d91..3f2c293 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -45,6 +45,15 @@ index 90b6d91..82a2156 100644
          - libabseil-tests
          - zlib
          - {{ pin_subpackage('libprotobuf', exact=True) }}
+@@ -159,7 +159,7 @@ outputs:
+     script: build-pyheaders.bat  # [win]
+     requirements:
+       build:
+-        - rsync  # [unix]
++#        - rsync  # [unix]
+       host:
+         - {{ pin_subpackage('libprotobuf', exact=True) }}
+       run_constrained:
 -- 
 2.40.1
 
