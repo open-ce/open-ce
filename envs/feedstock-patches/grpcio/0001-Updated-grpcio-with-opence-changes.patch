@@ -1,13 +1,13 @@
-From 7a0f4dca6f0598e3a732071134ac90519aba5d9c Mon Sep 17 00:00:00 2001
+From 88af41d660ff53f870c77cde8af5e9f50703f273 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Wed, 6 Mar 2024 10:40:38 +0000
-Subject: [PATCH] Updated-grpcio-with-opence-changes
+Date: Mon, 11 Aug 2025 11:08:50 +0000
+Subject: [PATCH] Fixed build
 
 ---
- recipe/0001-Fix-openssl-for-s390x.patch | 25 ++++++++++++++++++
- recipe/build.sh                         | 16 +++++++++---
- recipe/meta.yaml                        | 34 ++++++++++++-------------
- 3 files changed, 54 insertions(+), 21 deletions(-)
+ recipe/0001-Fix-openssl-for-s390x.patch | 25 +++++++++++++++++++++
+ recipe/build.sh                         | 16 +++++++++----
+ recipe/meta.yaml                        | 30 ++++++++++++-------------
+ 3 files changed, 52 insertions(+), 19 deletions(-)
  create mode 100644 recipe/0001-Fix-openssl-for-s390x.patch
 
 diff --git a/recipe/0001-Fix-openssl-for-s390x.patch b/recipe/0001-Fix-openssl-for-s390x.patch
@@ -78,7 +78,7 @@ index f797569..f97a11a 100644
  
  $PYTHON -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..bd34ead 100644
+index 19fa19a..9034dcd 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,17 +1,17 @@
@@ -123,10 +123,9 @@ index 19fa19a..bd34ead 100644
 +    - setuptools {{setuptools}}
      - cython
 -    - six >=1.6.0
--    - zlib
--    - openssl
 +    - six {{six}}
-+    - zlib {{zlib}}
+     - zlib
+-    - openssl
 +    - openssl 3.*
      - c-ares            # [unix]
      - pthread-stubs     # [linux]
@@ -134,16 +133,15 @@ index 19fa19a..bd34ead 100644
 -    - python
 -    - setuptools
 -    - six >=1.6.0
--    - zlib
--    - openssl
 +    - python {{python}}
 +    - setuptools {{setuptools}}
 +    - six {{six}}
-+    - zlib {{zlib}}
+     - zlib
+-    - openssl
 +    - openssl 3.*
      - {{ pin_compatible("c-ares") }}  # [unix]
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
  
 -- 
-2.34.1
+2.40.1
 
