@@ -1,12 +1,12 @@
-From c20b9a480a3fbc481143306f70116fc020df057f Mon Sep 17 00:00:00 2001
+From e43be015592d91a2fbc56bdb994acf0a1748a9e9 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Thu, 31 Jul 2025 11:20:05 +0000
+Date: Mon, 11 Aug 2025 05:14:22 +0000
 Subject: [PATCH] Fixed CVEs for zlib
 
 ---
  .../0001-Fixed-CVE-2023-45853-for-zlib.patch  | 34 +++++++++++++++++++
- recipe/meta.yaml                              |  3 +-
- 2 files changed, 36 insertions(+), 1 deletion(-)
+ recipe/meta.yaml                              |  5 +--
+ 2 files changed, 37 insertions(+), 2 deletions(-)
  create mode 100644 recipe/0001-Fixed-CVE-2023-45853-for-zlib.patch
 
 diff --git a/recipe/0001-Fixed-CVE-2023-45853-for-zlib.patch b/recipe/0001-Fixed-CVE-2023-45853-for-zlib.patch
@@ -50,11 +50,15 @@ index 0000000..4bd6f9e
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index a710097..aaf002e 100644
+index a710097..402418f 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -10,7 +10,8 @@ source:
-     - http://zlib.net/zlib-{{ version }}.tar.gz
+@@ -7,10 +7,11 @@ package:
+ 
+ source:
+   url:
+-    - http://zlib.net/zlib-{{ version }}.tar.gz
++    - http://zlib.net/fossils/zlib-{{ version }}.tar.gz
      - https://gnupg.org/ftp/gcrypt/zlib/zlib-{{ version }}.tar.gz
    sha256: b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30
 -

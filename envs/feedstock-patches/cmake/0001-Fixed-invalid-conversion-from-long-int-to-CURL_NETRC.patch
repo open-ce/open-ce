@@ -1,0 +1,59 @@
+From bc85719ab8fe74d100378a61a506dd0d81c96ef9 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 8 Aug 2025 08:37:30 +0000
+Subject: [PATCH] Fixed invalid conversion from 'long int' to
+ 'CURL_NETRC_OPTION'
+
+---
+ ...on-from-long-int-to-CURL_NETRC_OPTIO.patch | 25 +++++++++++++++++++
+ recipe/meta.yaml                              |  2 ++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
+
+diff --git a/recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch b/recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
+new file mode 100644
+index 0000000..09a6d58
+--- /dev/null
++++ b/recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
+@@ -0,0 +1,25 @@
++From 7852a6223a3f4e4fedbc77bc771f1f64f78ee309 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Fri, 8 Aug 2025 08:19:45 +0000
++Subject: [PATCH] Fix for  conversion from 'long int' to 'CURL_NETRC_OPTION'
++
++---
++ Source/cmCurl.cxx | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Source/cmCurl.cxx b/Source/cmCurl.cxx
++index fd6aee1f38..a8929e5457 100644
++--- a/Source/cmCurl.cxx
+++++ b/Source/cmCurl.cxx
++@@ -81,7 +81,7 @@ std::string cmCurlSetNETRCOption(::CURL* curl, const std::string& netrc_level,
++                                  const std::string& netrc_file)
++ {
++   std::string e;
++-  CURL_NETRC_OPTION curl_netrc_level = CURL_NETRC_LAST;
+++  long curl_netrc_level = CURL_NETRC_LAST;
++   ::CURLcode res;
++ 
++   if (!netrc_level.empty()) {
++-- 
++2.40.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 2791fb9..4917f13 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -7,6 +7,8 @@ package:
+ source:
+   url: https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}.tar.gz
+   sha256: 313b6880c291bd4fe31c0aa51d6e62659282a521e695f30d5cc0d25abbd5c208
++  patches:
++    - 0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
+   # Not until Python 3.8 on Windows: https://github.com/WorksApplications/SudachiPy/issues/107#issuecomment-564510365
+   # path: 'C:/opt/Shared.local/src/cmake'
+   # path_via_symlink: True
+-- 
+2.40.1
+
