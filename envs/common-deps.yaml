@@ -3,8 +3,8 @@ builder_version: ">=13.0.0"
 packages:
   - feedstock : https://github.com/conda-forge/protobuf-feedstock.git
     git_tag : a6af8c023ae88134ed3938bbeb90e05bc7fc0e09   #v25.8
-#    patches :
-#      - feedstock-patches/protobuf/0001-protobuf-v25.8-changes.patch
+    patches :
+      - feedstock-patches/protobuf/0001-protobuf-v25.8-changes.patch
 #      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
 #      - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch
   - feedstock : https://github.com/conda-forge/libprotobuf-feedstock.git
@@ -50,4 +50,8 @@ packages:
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/pyopenssl-feedstock               #[ppc64le]
     git_tag : 8a545b01a8a9641b901bba19e5e130e93ca08cca                           #[ppc64le]
+  - feedstock : https://github.com/conda-forge/zlib-feedstock
+    git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
+    patches:
+      - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
 git_tag_for_env: open-ce-v1.11.6
