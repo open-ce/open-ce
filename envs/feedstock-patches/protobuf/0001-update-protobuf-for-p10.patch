@@ -1,27 +1,49 @@
-From 9e55683483d3a60b6be0296b41070661c76a7d93 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Fri, 21 Apr 2023 13:26:01 +0000
-Subject: [PATCH] update for p10
+From 45478e0341fac61980464dbe0aa832bcb70f4726 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde <archana.shinde1@ibm.com>
+Date: Mon, 11 Aug 2025 10:56:32 +0000
+Subject: [PATCH] update protobuf for p10
 
 ---
- recipe/meta.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 94953e6..85c8c71 100644
+index 773a344..bcf2229 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -29,8 +29,8 @@ requirements:
+@@ -1,5 +1,5 @@
+ # keep this without major version to let the bot pick it up
+-{% set version = "25.3" %}
++{% set version = "25.8" %}
+ # protobuf doesn't add the major version in the tag, it's defined per language in
+ # https://github.com/protocolbuffers/protobuf/blob/main/version.json
+ {% set major = "4" %}
+@@ -12,7 +12,7 @@ package:
+ 
+ source:
+   url: https://github.com/protocolbuffers/protobuf/archive/refs/tags/v{{ version }}.tar.gz
+-  sha256: d19643d265b978383352b3143f04c0641eea75a75235c111cc01a1350173180e
++  sha256: 5a5d91be7a47b15cecebdc24188e5cfd0a2fc0af03ae93fa239e842c4a5128d0
+   patches:
+     - patches/0001-do-not-link-msvc-runtime-statically.patch
+     - patches/0002-fix-paths-for-include-lib-directories.patch
+@@ -35,13 +35,13 @@ requirements:
      - python                                 # [build_platform != target_platform]
      - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-     - libprotobuf {{ lib_major + "." + version }}  # [build_platform != target_platform]
+     - libprotobuf {{ lib_major ~ "." ~ version }}  # [build_platform != target_platform]
 -    - {{ compiler('c') }}
 -    - {{ compiler('cxx') }}
-+    - {{ compiler('c') }}       #[ppc_arch != "p10"]
-+    - {{ compiler('cxx') }}     #[ppc_arch != "p10"]
++    - {{ compiler('c') }}         #[ppc_arch != "p10"]
++    - {{ compiler('cxx') }}       #[ppc_arch != "p10"]
    host:
      - python
-     - pip 23.*
+     - pip
+     - setuptools
+-    - libabseil
++    - libabseil {{ abseil_cpp }}
+     - libprotobuf {{ lib_major ~ "." ~ version }}
+   run:
+     - python
 -- 
-2.34.1
+2.40.1
 
