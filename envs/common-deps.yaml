@@ -4,15 +4,15 @@ packages:
   - feedstock : https://github.com/conda-forge/protobuf-feedstock.git
     git_tag : a6af8c023ae88134ed3938bbeb90e05bc7fc0e09   #v25.8
     patches :
-      - feedstock-patches/protobuf/0001-protobuf-v25.8-changes.patch
+      - feedstock-patches/protobuf/0001-protobuf-v25.8-changes.patch       #[not ppc_arch == 'p10']
 #      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
-      - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch
+      - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch      #[ppc_arch == 'p10']
   - feedstock : https://github.com/conda-forge/libprotobuf-feedstock.git
     git_tag : aded716541e2cf1cd86d6bc606b95fd51945bc52    #v25.8
     patches :
-       - feedstock-patches/protobuf/0001-libprotobuf-v25.8-changes.patch
+      - feedstock-patches/protobuf/0001-libprotobuf-v25.8-changes.patch    #[not ppc_arch == 'p10']
 #      - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
-      - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
+      - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch   #[ppc_arch == 'p10']
 #      - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch #[not s390x]
   - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock
     git_tag : 944d5c2af53b5885f882a1d02fc645db4ccdb75c      #v20240116.2
