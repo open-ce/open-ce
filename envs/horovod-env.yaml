@@ -8,5 +8,6 @@ packages:
 {% if not s390x %}
     - feedstock : horovod
     - feedstock : openmpi #[mpi_type == 'openmpi']
+      git_tag : main
 {% endif %}
 git_tag_for_env: open-ce-v1.11.6

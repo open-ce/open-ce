@@ -30,6 +30,7 @@ packages:
     patches :                                               #[ppc_arch == 'p10']
       - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
   - feedstock : grpc-cpp
+    git_tag : main
   - feedstock: https://github.com/conda-forge/bazel-toolchain-feedstock
     git_tag : 8da0f5daa593b72ffee327c8df149bab04b903bb
     runtime_package : False
@@ -46,4 +47,5 @@ packages:
       - feedstock-patches/flatbuffers/0001-fix-build-for-UBI8.patch
   - feedstock : jax
   - feedstock : jaxlib
+    git_tag : main
 git_tag_for_env: open-ce-v1.11.6

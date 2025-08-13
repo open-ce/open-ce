@@ -4,6 +4,7 @@ packages:
   - feedstock : https://github.com/conda-forge/cli11-feedstock
     git_tag : a8e959fcae876db93c92918e57914f632feac574
   - feedstock : mamba
+    git_tag : main
   - feedstock : https://github.com/conda-forge/zlib-feedstock
     git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
     patches:

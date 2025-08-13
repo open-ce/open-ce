@@ -6,6 +6,7 @@ imported_envs:
 
 packages:
   - feedstock : pytorch
+    git_tag : main
   - feedstock : numactl
   - feedstock : sentencepiece
   - feedstock : torchtext

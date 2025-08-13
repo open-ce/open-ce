@@ -11,6 +11,7 @@ packages:
 {% if not s390x %}
   - feedstock : safeint
   - feedstock : gtest
+    git_tag : main
   - feedstock : libdate
   - feedstock : optional-lite
   - feedstock : boost_mp11
