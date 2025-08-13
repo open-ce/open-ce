@@ -28,11 +28,15 @@ packages:
   - feedstock : https://github.com/conda-forge/transformers-feedstock
     git_tag : 053ca66df0d4963ad295b5e2f9f0d0a2f42c51b1
     patches :
-      - feedstock-patches/transformers/0001-Fixed-CVEs.patch
+      - feedstock-patches/transformers/0001-Fixed-CVEs-for-transformers.patch
   - feedstock : https://github.com/conda-forge/huggingface_hub-feedstock
     git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
     patches :                                                                  #[ppc64le]
       - feedstock-patches/huggingface-hub/0001-Pinned-typing-extensions.patch  #[ppc64le]
   - feedstock : https://github.com/conda-forge/typing_extensions-feedstock.git #[ppc64le]
     git_tag : f853e30236c9c866bdc7cc8e4d1fbe766b182f37                         #[ppc64le]
+  - feedstock : https://github.com/conda-forge/zlib-feedstock
+    git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
+    patches:
+      - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
 git_tag_for_env: open-ce-v1.11.6

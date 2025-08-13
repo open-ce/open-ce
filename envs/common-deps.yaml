@@ -2,20 +2,26 @@ builder_version: ">=13.0.0"
 
 packages:
   - feedstock : https://github.com/conda-forge/protobuf-feedstock.git
-    git_tag : bd7dc1e77a9284e8aad26c6f02753797499a764f
+    git_tag : a6af8c023ae88134ed3938bbeb90e05bc7fc0e09   #v25.8
     patches :
-      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
-      - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch
+      - feedstock-patches/protobuf/0001-protobuf-v25.8-changes.patch       #[not ppc_arch == 'p10']
+#      - feedstock-patches/protobuf/0001-Fixed-protobuf-build.patch
+      - feedstock-patches/protobuf/0001-update-protobuf-for-p10.patch      #[ppc_arch == 'p10']
   - feedstock : https://github.com/conda-forge/libprotobuf-feedstock.git
-    git_tag : a2b38e3077de05fe7b71e8d58a73935ecd0891ea
+    git_tag : aded716541e2cf1cd86d6bc606b95fd51945bc52    #v25.8
     patches :
-      - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
-      - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch
-      - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch #[not s390x]
-  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v72.1.0           #[ppc64le]
-    git_tag : 1d5a7bec76c7f4887f832afbb99a9111294e2c52                                  #[ppc64le]
-    patches :                                                                           #[ppc64le]
-      - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]
+      - feedstock-patches/protobuf/0001-libprotobuf-v25.8-changes.patch    #[not ppc_arch == 'p10']
+#      - feedstock-patches/protobuf/0001-Fixed-libprotobuf-Build.patch
+      - feedstock-patches/protobuf/0001-update-libprotobuf-for-p10.patch   #[ppc_arch == 'p10']
+#      - feedstock-patches/protobuf/0001-Use-LIMIT_BUILD_RESOURCES-flag-libprotobuf.patch #[not s390x]
+  - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock
+    git_tag : 944d5c2af53b5885f882a1d02fc645db4ccdb75c      #v20240116.2
+    patches :
+      - feedstock-patches/abseil-cpp/0001-v20240116.2-changes-and-fix-to-find-Gtest.patch
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v78.1.1           #[ppc64le or s390x]
+    git_tag : 46774634b8799e6c2f4d4a6f9b68b6844471a559                                  #[ppc64le or s390x]
+    patches :                                                                           #[ppc64le or s390x]
+      - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le or s390x]
   # Build scikit-learn as scikit-learn Anaconda requires numpy<1.25
   - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   # [py==311]
     git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          # [py==311]
@@ -44,4 +50,9 @@ packages:
       - feedstock-patches/rust-activation/0001-Fixed-build.patch
   - feedstock : https://github.com/conda-forge/pyopenssl-feedstock               #[ppc64le]
     git_tag : 8a545b01a8a9641b901bba19e5e130e93ca08cca                           #[ppc64le]
+  - feedstock : https://github.com/conda-forge/zlib-feedstock
+    git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
+    patches:
+      - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
+  - feedstock : gtest
 git_tag_for_env: open-ce-v1.11.6

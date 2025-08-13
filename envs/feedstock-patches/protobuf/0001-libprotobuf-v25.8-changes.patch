@@ -1,14 +1,14 @@
-From b3bf3c76e9ce929d0cef7d9c10ed67c5eec0abde Mon Sep 17 00:00:00 2001
-From: Archana-Shinde <archana.shinde1@ibm.com>
-Date: Mon, 11 Aug 2025 10:50:43 +0000
-Subject: [PATCH] update libprotobuf for p10
+From 64b14281611329e7cd6ce6e4bb07995d5702ea8c Mon Sep 17 00:00:00 2001
+From: "Archana.Shinde1" <archana.shinde1@ibm.com>
+Date: Thu, 7 Aug 2025 08:54:47 +0000
+Subject: [PATCH] use rsync package of Rhel instead conda
 
 ---
- recipe/meta.yaml | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ recipe/meta.yaml | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 90b6d91..9b9bf36 100644
+index 90b6d91..3f2c293 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -27,16 +27,7 @@ index 90b6d91..9b9bf36 100644
      patches:
        - patches/0001-use-consistent-cmake-location.patch
        - patches/0002-set-static-lib-extension-on-windows.patch
-@@ -49,14 +49,14 @@ outputs:
-         - jsoncpp
-     requirements:
-       build:
--        - {{ compiler('c') }}
--        - {{ compiler('cxx') }}
-+        - {{ compiler('c') }}        #[ppc_arch != "p10"]
-+        - {{ compiler('cxx') }}      #[ppc_arch != "p10"]
-         - cmake
-         - ninja
+@@ -56,7 +56,7 @@ outputs:
        host:
          - gtest
          - jsoncpp
@@ -45,16 +36,7 @@ index 90b6d91..9b9bf36 100644
          # requires abseil test targets to build with tests enabled
          - libabseil-tests
          - zlib
-@@ -118,14 +118,14 @@ outputs:
-         - jsoncpp
-     requirements:
-       build:
--        - {{ compiler('c') }}
--        - {{ compiler('cxx') }}
-+        - {{ compiler('c') }}         #[ppc_arch != "p10"]
-+        - {{ compiler('cxx') }}       #[ppc_arch != "p10"]
-         - cmake
-         - ninja
+@@ -125,7 +125,7 @@ outputs:
        host:
          - gtest
          - jsoncpp

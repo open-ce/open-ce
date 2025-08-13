@@ -1,14 +1,14 @@
-From b606fd9c560ff464ffdf28f36c60f73e29307089 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Fri, 22 Nov 2024 11:06:49 +0000
-Subject: [PATCH] Fixed failuer,change of sha256
+From 37de9122d9cf5ad710cbf581eb51e025a717ad55 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Mon, 11 Aug 2025 08:05:06 +0000
+Subject: [PATCH] Unpinned zlib
 
 ---
- recipe/meta.yaml | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ recipe/meta.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 78510b7..7e162c3 100644
+index 78510b7..90cca06 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -2,8 +2,7 @@
@@ -21,15 +21,6 @@ index 78510b7..7e162c3 100644
  package:
    name: {{ name }}
    version: {{ version }}
-@@ -35,7 +34,7 @@ requirements:
-   host:
-     - libcurl  # [not win]
-     - bzip2  # [not win]
--    - zlib  # [not win]
-+    - zlib {{ zlib }} # [not win]
- 
- test:
-   commands:
 -- 
 2.40.1
 

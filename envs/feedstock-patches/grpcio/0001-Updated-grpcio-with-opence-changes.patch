@@ -1,13 +1,14 @@
-From 7a0f4dca6f0598e3a732071134ac90519aba5d9c Mon Sep 17 00:00:00 2001
+From 91828cdab96650e8e1f36f4d3dc8b0e67ad6e961 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Wed, 6 Mar 2024 10:40:38 +0000
-Subject: [PATCH] Updated-grpcio-with-opence-changes
+Date: Tue, 12 Aug 2025 07:13:39 +0000
+Subject: [PATCH] Fixed build
 
 ---
- recipe/0001-Fix-openssl-for-s390x.patch | 25 ++++++++++++++++++
- recipe/build.sh                         | 16 +++++++++---
- recipe/meta.yaml                        | 34 ++++++++++++-------------
- 3 files changed, 54 insertions(+), 21 deletions(-)
+ recipe/0001-Fix-openssl-for-s390x.patch       | 25 +++++++++++
+ ...tutils.ccompiler.spawn-to-elide-std-.patch | 45 ++++++++++---------
+ recipe/build.sh                               | 16 +++++--
+ recipe/meta.yaml                              | 30 ++++++-------
+ 4 files changed, 77 insertions(+), 39 deletions(-)
  create mode 100644 recipe/0001-Fix-openssl-for-s390x.patch
 
 diff --git a/recipe/0001-Fix-openssl-for-s390x.patch b/recipe/0001-Fix-openssl-for-s390x.patch
@@ -41,6 +42,84 @@ index 0000000..c19e123
 +-- 
 +2.34.1
 +
+diff --git a/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch b/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
+index ead471f..9327537 100644
+--- a/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
++++ b/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
+@@ -1,26 +1,33 @@
+-From a9b4f1c020242e6ac1b0a4b06404527d75e43790 Mon Sep 17 00:00:00 2001
+-From: Ray Donnelly <mingw.android@gmail.com>
+-Date: Fri, 16 Nov 2018 23:04:09 +0000
+-Subject: [PATCH 1/2] Monkey-patch distutils.ccompiler.spawn to elide
+- -std=c++11 from non-C++ code
++From adf67e44243f6f3b77236c868702da6254f6e5b7 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 12 Aug 2025 06:59:44 +0000
++Subject: [PATCH] Fixed-monkeypatch_spawn_using_cxx11_for_cxx_only
+ 
+ ---
+- setup.py | 22 ++++++++++++++++++++++
+- 1 file changed, 22 insertions(+)
++ setup.py | 21 +++++++++++++++++++++
++ 1 file changed, 21 insertions(+)
+ 
+ diff --git a/setup.py b/setup.py
+-index e950057..1565a39 100644
++index b93758f943..406e359763 100644
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -153,6 +153,26 @@ def check_linker_need_libatomic():
+-   cc_test.communicate(input=code_test)
+-   return cc_test.returncode != 0
++@@ -27,6 +27,7 @@ del UnixCCompiler
++ from distutils import cygwinccompiler
++ from distutils import extension as _extension
++ from distutils import util
+++from distutils import spawn
++ import os
++ import os.path
++ import pathlib
++@@ -223,6 +224,24 @@ def check_linker_need_libatomic():
++     cpp_test.communicate(input=code_test)
++     return cpp_test.returncode == 0
+  
+ +# Patch ccompiler not to pass -std=c++11 for C code.
+ +# This is neccessary on macOS to avoid:
+ +# error: invalid argument '-std=c++11' not allowed with 'C/ObjC'
+ +def monkeypatch_spawn_using_cxx11_for_cxx_only():
+-+  from distutils import ccompiler
+++  from distutils import spawn
+ +  def spawn_using_cxx11_for_cxx_only(old_spawn):
+ +    def spawn(cmd, search_path=1, verbose=0, dry_run=0):
+ +      is_cxx = any((arg.endswith('.cc') or arg.endswith('.cpp'))
+@@ -33,21 +40,19 @@ index e950057..1565a39 100644
+ +          cmd2.append(arg)
+ +      return old_spawn(cmd2, search_path, verbose, dry_run)
+ +    return spawn
+-+  ccompiler.spawn = spawn_using_cxx11_for_cxx_only(ccompiler.spawn)
+-+
+-+
+++  spawn.spawn = spawn_using_cxx11_for_cxx_only(spawn.spawn)
++ 
+  # There are some situations (like on Windows) where CC, CFLAGS, and LDFLAGS are
+  # entirely ignored/dropped/forgotten by distutils and its Cygwin/MinGW support.
+- # We use these environment variables to thus get around that without locking
+-@@ -381,6 +401,8 @@ PACKAGE_DATA = {
++@@ -534,6 +553,8 @@ PACKAGE_DATA = {
+  }
+  PACKAGES = setuptools.find_packages(PYTHON_STEM)
+  
+ +monkeypatch_spawn_using_cxx11_for_cxx_only()
+ +
+  setuptools.setup(
+-   name='grpcio',
+-   version=grpc_version.VERSION,
++     name='grpcio',
++     version=grpc_version.VERSION,
+ -- 
+-2.20.1
++2.40.1
+ 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index f797569..f97a11a 100644
 --- a/recipe/build.sh
@@ -78,7 +157,7 @@ index f797569..f97a11a 100644
  
  $PYTHON -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..bd34ead 100644
+index 19fa19a..9034dcd 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,17 +1,17 @@
@@ -123,10 +202,9 @@ index 19fa19a..bd34ead 100644
 +    - setuptools {{setuptools}}
      - cython
 -    - six >=1.6.0
--    - zlib
--    - openssl
 +    - six {{six}}
-+    - zlib {{zlib}}
+     - zlib
+-    - openssl
 +    - openssl 3.*
      - c-ares            # [unix]
      - pthread-stubs     # [linux]
@@ -134,16 +212,15 @@ index 19fa19a..bd34ead 100644
 -    - python
 -    - setuptools
 -    - six >=1.6.0
--    - zlib
--    - openssl
 +    - python {{python}}
 +    - setuptools {{setuptools}}
 +    - six {{six}}
-+    - zlib {{zlib}}
+     - zlib
+-    - openssl
 +    - openssl 3.*
      - {{ pin_compatible("c-ares") }}  # [unix]
      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
  
 -- 
-2.34.1
+2.40.1
 

@@ -1,0 +1,702 @@
+From 5925519b69e8052e75e92ddc13fc23a98769bcd3 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Mon, 11 Aug 2025 05:32:38 +0000
+Subject: [PATCH] Fixed CVEs for transformers
+
+---
+ .gitattributes                                |   4 +-
+ config/build-config.yaml                      |   6 +
+ ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++++
+ .../0001-Fix-for-CVE-2024-12720.patch         |  25 ++++
+ ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++++++
+ transformers-4.37.2/meta.yaml                 |  69 +++++++++
+ ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++++
+ .../0001-Fix-for-CVE-2024-12720.patch         |  25 ++++
+ ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++++++
+ {recipe => transformers-4.38.0}/meta.yaml     |  10 +-
+ 10 files changed, 588 insertions(+), 5 deletions(-)
+ create mode 100644 config/build-config.yaml
+ create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+ create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
+ create mode 100644 transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+ create mode 100644 transformers-4.37.2/meta.yaml
+ create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+ create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
+ create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+ rename {recipe => transformers-4.38.0}/meta.yaml (78%)
+
+diff --git a/.gitattributes b/.gitattributes
+index 7f32763..77e737f 100644
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -1,7 +1,7 @@
+ * text=auto
+ 
+-*.patch binary
+-*.diff binary
++#*.patch binary
++#*.diff binary
+ meta.yaml text eol=lf
+ build.sh text eol=lf
+ bld.bat text eol=crlf
+diff --git a/config/build-config.yaml b/config/build-config.yaml
+new file mode 100644
+index 0000000..c77c211
+--- /dev/null
++++ b/config/build-config.yaml
+@@ -0,0 +1,6 @@
++recipes:
++  - name : transformers-4.37.2
++    path : transformers-4.37.2
++
++  - name : transformers-4.38.0
++    path : transformers-4.38.0
+diff --git a/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch b/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+new file mode 100644
+index 0000000..b32d912
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+@@ -0,0 +1,90 @@
++From 2f46db656fc7cca1a859c59641f0a5ea5487086e Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:25:02 +0000
++Subject: [PATCH] Fix for CVE-2024-11392/11393/11394
++
++---
++ setup.py         |  2 +-
++ utils/release.py | 19 +++++++++++++++++--
++ 2 files changed, 18 insertions(+), 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 91eabe25fb..35c30c29a1 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -20,7 +20,7 @@ To create the package for pypi.
++ 1. Create the release branch named: v<RELEASE>-release, for example v4.19-release. For a patch release checkout the
++    current release branch.
++
++-   If releasing on a special branch, copy the updated README.md on the main branch for your the commit you will make
+++   If releasing on a special branch, copy the updated README.md on the main branch for the commit you will make
++    for the post-release and run `make fix-copies` on the main branch as well.
++
++ 2. Run `make pre-release` (or `make pre-patch` for a patch release) and commit these changes with the message:
++diff --git a/utils/release.py b/utils/release.py
++index 8ba0ead7c6..e75f002471 100644
++--- a/utils/release.py
+++++ b/utils/release.py
++@@ -44,12 +44,14 @@ or use `make post-release`.
++ import argparse
++ import os
++ import re
+++from pathlib import Path
++
++ import packaging.version
++
++
++ # All paths are defined with the intent that this script should be run from the root of the repo.
++ PATH_TO_EXAMPLES = "examples/"
+++PATH_TO_MODELS = "src/transformers/models"
++ # This maps a type of file to the pattern to look for when searching where the version is defined, as well as the
++ # template to follow when replacing it with the new version.
++ REPLACE_PATTERNS = {
++@@ -115,6 +117,17 @@ def global_version_update(version: str, patch: bool = False):
++         # We don't update the version in the examples for patch releases.
++         update_version_in_examples(version)
++
+++def remove_conversion_scripts():
+++    """
+++    Delete the scripts that convert models from older, unsupported formats. We don't want to include these
+++    in release wheels because they often have to open insecure file types (pickle, Torch .bin models). This results in
+++    vulnerability scanners flagging us and can cause compliance issues for users with strict security policies.
+++    """
+++    model_dir = Path(PATH_TO_MODELS)
+++    for conversion_script in list(model_dir.glob("**/convert*.py")):
+++        conversion_script.unlink()
+++
+++
++
++ def clean_main_ref_in_model_list():
++     """
++@@ -160,7 +173,7 @@ def pre_release_work(patch: bool = False):
++     """
++     Do all the necessary pre-release steps:
++     - figure out the next minor release version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++
++     Args:
++@@ -184,6 +197,8 @@ def pre_release_work(patch: bool = False):
++
++     print(f"Updating version to {version}.")
++     global_version_update(version, patch=patch)
+++    print("Deleting conversion scripts.")
+++    remove_conversion_scripts()
++     if not patch:
++         print("Cleaning main README, don't forget to run `make fix-copies`.")
++         clean_main_ref_in_model_list()
++@@ -193,7 +208,7 @@ def post_release_work():
++     """
++     Do all the necesarry post-release steps:
++     - figure out the next dev version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++     """
++     # First let's get the current version
++--
++2.40.1
++
+diff --git a/transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch b/transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
+new file mode 100644
+index 0000000..2f67d56
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
+@@ -0,0 +1,25 @@
++From 6e2d70f6bb26f1029c2c277f18eb6e7a1798ee89 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:27:27 +0000
++Subject: [PATCH] Fix for CVE-2024-12720
++
++---
++ src/transformers/models/nougat/tokenization_nougat_fast.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..0e96509e39 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -522,7 +522,7 @@ class NougatTokenizerFast(PreTrainedTokenizerFast):
++         generation = generation.replace("\n* [leftmargin=*]\n", "\n")
++         # Remove lines with markdown headings starting with #, with numerals,
++         # and possibly roman numerals with trailing spaces and newlines
++-        generation = re.sub(r"^#+ (?:\.?(?:\d|[ixv])+)*\s*(?:$|\n\s*)", "", generation, flags=re.M)
+++        generation = re.sub(r"^#+ (?:[\d+\.]+|[ixv\.]+)?\s*(?:$|\n\s*)", "", generation, flags=re.M)
++         # most likely hallucinated titles
++         lines = generation.split("\n")
++         if lines[-1].startswith("#") and lines[-1].lstrip("#").startswith(" ") and len(lines) > 1:
++--
++2.40.1
++
+diff --git a/transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch b/transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+new file mode 100644
+index 0000000..efec3f2
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+@@ -0,0 +1,137 @@
++From ec544d451409a788ad8a6bc82873159a49f945a7 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 11 Aug 2025 05:28:37 +0000
++Subject: [PATCH] Fixed CVE-2025-3933 and  CVE-2025-3264
++
++---
++ src/transformers/configuration_utils.py       |  8 +---
++ src/transformers/dynamic_module_utils.py      | 45 ++++++++++++++-----
++ .../models/donut/processing_donut.py          | 12 +++--
++ 3 files changed, 43 insertions(+), 22 deletions(-)
++
++diff --git a/src/transformers/configuration_utils.py b/src/transformers/configuration_utils.py
++index 819fe5fcf2..764a56e165 100755
++--- a/src/transformers/configuration_utils.py
+++++ b/src/transformers/configuration_utils.py
++@@ -19,7 +19,6 @@
++ import copy
++ import json
++ import os
++-import re
++ import warnings
++ from typing import Any, Dict, List, Optional, Tuple, Union
++ 
++@@ -43,8 +42,6 @@ from .utils import (
++ 
++ logger = logging.get_logger(__name__)
++ 
++-_re_configuration_file = re.compile(r"config\.(.*)\.json")
++-
++ 
++ class PretrainedConfig(PushToHubMixin):
++     # no-format
++@@ -1091,9 +1088,8 @@ def get_configuration_file(configuration_files: List[str]) -> str:
++     """
++     configuration_files_map = {}
++     for file_name in configuration_files:
++-        search = _re_configuration_file.search(file_name)
++-        if search is not None:
++-            v = search.groups()[0]
+++        if file_name.startswith("config.") and file_name.endswith(".json") and file_name != "config.json":
+++            v = file_name.removeprefix("config.").removesuffix(".json")
++             configuration_files_map[v] = file_name
++     available_versions = sorted(configuration_files_map.keys())
++ 
++diff --git a/src/transformers/dynamic_module_utils.py b/src/transformers/dynamic_module_utils.py
++index 2236b30f77..21af5142a8 100644
++--- a/src/transformers/dynamic_module_utils.py
+++++ b/src/transformers/dynamic_module_utils.py
++@@ -13,6 +13,7 @@
++ # See the License for the specific language governing permissions and
++ # limitations under the License.
++ """Utilities to dynamically load objects from the Hub."""
+++import ast
++ import filecmp
++ import importlib
++ import os
++@@ -144,18 +145,38 @@ def get_imports(filename: Union[str, os.PathLike]) -> List[str]:
++     """
++     with open(filename, "r", encoding="utf-8") as f:
++         content = f.read()
++-
++-    # filter out try/except block so in custom code we can have try/except imports
++-    content = re.sub(r"\s*try\s*:\s*.*?\s*except\s*.*?:", "", content, flags=re.MULTILINE | re.DOTALL)
++-
++-    # Imports of the form `import xxx`
++-    imports = re.findall(r"^\s*import\s+(\S+)\s*$", content, flags=re.MULTILINE)
++-    # Imports of the form `from xxx import yyy`
++-    imports += re.findall(r"^\s*from\s+(\S+)\s+import", content, flags=re.MULTILINE)
++-    # Only keep the top-level module
++-    imports = [imp.split(".")[0] for imp in imports if not imp.startswith(".")]
++-    return list(set(imports))
++-
+++    imported_modules = set()
+++
+++    def recursive_look_for_imports(node):
+++        if isinstance(node, ast.Try):
+++            return  #  Don't recurse into Try blocks and ignore imports in them
+++        elif isinstance(node, ast.If):
+++            test = node.test
+++            for condition_node in ast.walk(test):
+++                if isinstance(condition_node, ast.Call) and condition_node.func.id.startswith("is_flash_attn"):
+++                    # Don't recurse into "if flash_attn_available()" blocks and ignore imports in them
+++                    return
+++        elif isinstance(node, ast.Import):
+++            # Handle 'import x' statements
+++            for alias in node.names:
+++                top_module = alias.name.split(".")[0]
+++                if top_module:
+++                    imported_modules.add(top_module)
+++        elif isinstance(node, ast.ImportFrom):
+++            # Handle 'from x import y' statements, ignoring relative imports
+++            if node.level == 0 and node.module:
+++                top_module = node.module.split(".")[0]
+++                if top_module:
+++                    imported_modules.add(top_module)
+++
+++        # Recursively visit all children
+++        for child in ast.iter_child_nodes(node):
+++            recursive_look_for_imports(child)
+++
+++    tree = ast.parse(content)
+++    recursive_look_for_imports(tree)
+++
+++    return sorted(imported_modules)
++ 
++ def check_imports(filename: Union[str, os.PathLike]) -> List[str]:
++     """
++diff --git a/src/transformers/models/donut/processing_donut.py b/src/transformers/models/donut/processing_donut.py
++index 5636ecb943..05b8d4c648 100644
++--- a/src/transformers/models/donut/processing_donut.py
+++++ b/src/transformers/models/donut/processing_donut.py
++@@ -135,14 +135,18 @@ class DonutProcessor(ProcessorMixin):
++         output = {}
++ 
++         while tokens:
++-            start_token = re.search(r"<s_(.*?)>", tokens, re.IGNORECASE)
++-            if start_token is None:
+++            # We want r"<s_(.*?)>" but without ReDOS risk, so do it manually in two parts
+++            potential_start = re.search(r"<s_", tokens, re.IGNORECASE)
+++            if potential_start is None:
++                 break
++-            key = start_token.group(1)
+++            start_token = tokens[potential_start.start() :]
+++            if ">" not in start_token:
+++                break
+++            start_token = start_token[: start_token.index(">") + 1]
+++            key = start_token[len("<s_") : -len(">")]
++             key_escaped = re.escape(key)
++ 
++             end_token = re.search(rf"</s_{key_escaped}>", tokens, re.IGNORECASE)
++-            start_token = start_token.group()
++             if end_token is None:
++                 tokens = tokens.replace(start_token, "")
++             else:
++-- 
++2.40.1
++
+diff --git a/transformers-4.37.2/meta.yaml b/transformers-4.37.2/meta.yaml
+new file mode 100644
+index 0000000..4ac1adb
+--- /dev/null
++++ b/transformers-4.37.2/meta.yaml
+@@ -0,0 +1,69 @@
++{% set name = "transformers" %}
++{% set version = "4.37.2" %}
++
++package:
++  name: {{ name|lower }}
++  version: {{ version }}
++
++source:
++  url: https://github.com/huggingface/transformers/archive/refs/tags/v4.37.2.tar.gz
++  sha256: 792c01be033403eafd699555e7948e17a8f8ee3d860f221ff79e760f36342767
++  patches:
++    - 0001-Fix-for-CVE-2024-11392-11393-11394.patch
++    - 0001-Fix-for-CVE-2024-12720.patch
++    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
++
++build:
++  noarch: python
++  number: 0
++  script: {{ PYTHON }} -m pip install . -vv
++
++requirements:
++  host:
++    - pip
++    - python >=3.8
++  run:
++    - python >=3.8
++    - datasets !=2.5.0  # Required for transformers-cli.
++    - filelock
++    - huggingface_hub >=0.19.3,<1.0
++    - numpy {{ numpy }}
++    - regex !=2019.12.17
++    - requests
++    - safetensors >=0.4.1
++    - packaging >=20.0
++    - pyyaml >=5.1
++    - tqdm >=4.27
++    - tokenizers >=0.15,<0.19
++
++test:
++  imports:
++    - transformers
++    - transformers.benchmark
++    - transformers.commands
++    - transformers.data
++    - transformers.kernels
++    - transformers.models
++    - transformers.pipelines
++    - transformers.tools
++    - transformers.utils
++
++  commands:
++    - transformers-cli --help
++
++about:
++  home: https://github.com/huggingface/transformers
++  license: Apache-2.0
++  license_family: APACHE
++  license_file: LICENSE
++  summary: State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch
++  doc_url: https://huggingface.co/transformers/
++
++extra:
++  recipe-maintainers:
++    - mxr-conda
++    - roccqqck
++    - oblute
++    - rluria14
++    - ndmaxar
++    - setu4993
+diff --git a/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch b/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+new file mode 100644
+index 0000000..b32d912
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
+@@ -0,0 +1,90 @@
++From 2f46db656fc7cca1a859c59641f0a5ea5487086e Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:25:02 +0000
++Subject: [PATCH] Fix for CVE-2024-11392/11393/11394
++
++---
++ setup.py         |  2 +-
++ utils/release.py | 19 +++++++++++++++++--
++ 2 files changed, 18 insertions(+), 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 91eabe25fb..35c30c29a1 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -20,7 +20,7 @@ To create the package for pypi.
++ 1. Create the release branch named: v<RELEASE>-release, for example v4.19-release. For a patch release checkout the
++    current release branch.
++
++-   If releasing on a special branch, copy the updated README.md on the main branch for your the commit you will make
+++   If releasing on a special branch, copy the updated README.md on the main branch for the commit you will make
++    for the post-release and run `make fix-copies` on the main branch as well.
++
++ 2. Run `make pre-release` (or `make pre-patch` for a patch release) and commit these changes with the message:
++diff --git a/utils/release.py b/utils/release.py
++index 8ba0ead7c6..e75f002471 100644
++--- a/utils/release.py
+++++ b/utils/release.py
++@@ -44,12 +44,14 @@ or use `make post-release`.
++ import argparse
++ import os
++ import re
+++from pathlib import Path
++
++ import packaging.version
++
++
++ # All paths are defined with the intent that this script should be run from the root of the repo.
++ PATH_TO_EXAMPLES = "examples/"
+++PATH_TO_MODELS = "src/transformers/models"
++ # This maps a type of file to the pattern to look for when searching where the version is defined, as well as the
++ # template to follow when replacing it with the new version.
++ REPLACE_PATTERNS = {
++@@ -115,6 +117,17 @@ def global_version_update(version: str, patch: bool = False):
++         # We don't update the version in the examples for patch releases.
++         update_version_in_examples(version)
++
+++def remove_conversion_scripts():
+++    """
+++    Delete the scripts that convert models from older, unsupported formats. We don't want to include these
+++    in release wheels because they often have to open insecure file types (pickle, Torch .bin models). This results in
+++    vulnerability scanners flagging us and can cause compliance issues for users with strict security policies.
+++    """
+++    model_dir = Path(PATH_TO_MODELS)
+++    for conversion_script in list(model_dir.glob("**/convert*.py")):
+++        conversion_script.unlink()
+++
+++
++
++ def clean_main_ref_in_model_list():
++     """
++@@ -160,7 +173,7 @@ def pre_release_work(patch: bool = False):
++     """
++     Do all the necessary pre-release steps:
++     - figure out the next minor release version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++
++     Args:
++@@ -184,6 +197,8 @@ def pre_release_work(patch: bool = False):
++
++     print(f"Updating version to {version}.")
++     global_version_update(version, patch=patch)
+++    print("Deleting conversion scripts.")
+++    remove_conversion_scripts()
++     if not patch:
++         print("Cleaning main README, don't forget to run `make fix-copies`.")
++         clean_main_ref_in_model_list()
++@@ -193,7 +208,7 @@ def post_release_work():
++     """
++     Do all the necesarry post-release steps:
++     - figure out the next dev version and ask confirmation
++-    - update the version eveywhere
+++    - update the version everywhere
++     - clean-up the model list in the main README
++     """
++     # First let's get the current version
++--
++2.40.1
++
+diff --git a/transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch b/transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
+new file mode 100644
+index 0000000..2f67d56
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
+@@ -0,0 +1,25 @@
++From 6e2d70f6bb26f1029c2c277f18eb6e7a1798ee89 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 8 Apr 2025 08:27:27 +0000
++Subject: [PATCH] Fix for CVE-2024-12720
++
++---
++ src/transformers/models/nougat/tokenization_nougat_fast.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..0e96509e39 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -522,7 +522,7 @@ class NougatTokenizerFast(PreTrainedTokenizerFast):
++         generation = generation.replace("\n* [leftmargin=*]\n", "\n")
++         # Remove lines with markdown headings starting with #, with numerals,
++         # and possibly roman numerals with trailing spaces and newlines
++-        generation = re.sub(r"^#+ (?:\.?(?:\d|[ixv])+)*\s*(?:$|\n\s*)", "", generation, flags=re.M)
+++        generation = re.sub(r"^#+ (?:[\d+\.]+|[ixv\.]+)?\s*(?:$|\n\s*)", "", generation, flags=re.M)
++         # most likely hallucinated titles
++         lines = generation.split("\n")
++         if lines[-1].startswith("#") and lines[-1].lstrip("#").startswith(" ") and len(lines) > 1:
++--
++2.40.1
++
+diff --git a/transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch b/transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+new file mode 100644
+index 0000000..efec3f2
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+@@ -0,0 +1,137 @@
++From ec544d451409a788ad8a6bc82873159a49f945a7 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 11 Aug 2025 05:28:37 +0000
++Subject: [PATCH] Fixed CVE-2025-3933 and  CVE-2025-3264
++
++---
++ src/transformers/configuration_utils.py       |  8 +---
++ src/transformers/dynamic_module_utils.py      | 45 ++++++++++++++-----
++ .../models/donut/processing_donut.py          | 12 +++--
++ 3 files changed, 43 insertions(+), 22 deletions(-)
++
++diff --git a/src/transformers/configuration_utils.py b/src/transformers/configuration_utils.py
++index 819fe5fcf2..764a56e165 100755
++--- a/src/transformers/configuration_utils.py
+++++ b/src/transformers/configuration_utils.py
++@@ -19,7 +19,6 @@
++ import copy
++ import json
++ import os
++-import re
++ import warnings
++ from typing import Any, Dict, List, Optional, Tuple, Union
++ 
++@@ -43,8 +42,6 @@ from .utils import (
++ 
++ logger = logging.get_logger(__name__)
++ 
++-_re_configuration_file = re.compile(r"config\.(.*)\.json")
++-
++ 
++ class PretrainedConfig(PushToHubMixin):
++     # no-format
++@@ -1091,9 +1088,8 @@ def get_configuration_file(configuration_files: List[str]) -> str:
++     """
++     configuration_files_map = {}
++     for file_name in configuration_files:
++-        search = _re_configuration_file.search(file_name)
++-        if search is not None:
++-            v = search.groups()[0]
+++        if file_name.startswith("config.") and file_name.endswith(".json") and file_name != "config.json":
+++            v = file_name.removeprefix("config.").removesuffix(".json")
++             configuration_files_map[v] = file_name
++     available_versions = sorted(configuration_files_map.keys())
++ 
++diff --git a/src/transformers/dynamic_module_utils.py b/src/transformers/dynamic_module_utils.py
++index 2236b30f77..21af5142a8 100644
++--- a/src/transformers/dynamic_module_utils.py
+++++ b/src/transformers/dynamic_module_utils.py
++@@ -13,6 +13,7 @@
++ # See the License for the specific language governing permissions and
++ # limitations under the License.
++ """Utilities to dynamically load objects from the Hub."""
+++import ast
++ import filecmp
++ import importlib
++ import os
++@@ -144,18 +145,38 @@ def get_imports(filename: Union[str, os.PathLike]) -> List[str]:
++     """
++     with open(filename, "r", encoding="utf-8") as f:
++         content = f.read()
++-
++-    # filter out try/except block so in custom code we can have try/except imports
++-    content = re.sub(r"\s*try\s*:\s*.*?\s*except\s*.*?:", "", content, flags=re.MULTILINE | re.DOTALL)
++-
++-    # Imports of the form `import xxx`
++-    imports = re.findall(r"^\s*import\s+(\S+)\s*$", content, flags=re.MULTILINE)
++-    # Imports of the form `from xxx import yyy`
++-    imports += re.findall(r"^\s*from\s+(\S+)\s+import", content, flags=re.MULTILINE)
++-    # Only keep the top-level module
++-    imports = [imp.split(".")[0] for imp in imports if not imp.startswith(".")]
++-    return list(set(imports))
++-
+++    imported_modules = set()
+++
+++    def recursive_look_for_imports(node):
+++        if isinstance(node, ast.Try):
+++            return  #  Don't recurse into Try blocks and ignore imports in them
+++        elif isinstance(node, ast.If):
+++            test = node.test
+++            for condition_node in ast.walk(test):
+++                if isinstance(condition_node, ast.Call) and condition_node.func.id.startswith("is_flash_attn"):
+++                    # Don't recurse into "if flash_attn_available()" blocks and ignore imports in them
+++                    return
+++        elif isinstance(node, ast.Import):
+++            # Handle 'import x' statements
+++            for alias in node.names:
+++                top_module = alias.name.split(".")[0]
+++                if top_module:
+++                    imported_modules.add(top_module)
+++        elif isinstance(node, ast.ImportFrom):
+++            # Handle 'from x import y' statements, ignoring relative imports
+++            if node.level == 0 and node.module:
+++                top_module = node.module.split(".")[0]
+++                if top_module:
+++                    imported_modules.add(top_module)
+++
+++        # Recursively visit all children
+++        for child in ast.iter_child_nodes(node):
+++            recursive_look_for_imports(child)
+++
+++    tree = ast.parse(content)
+++    recursive_look_for_imports(tree)
+++
+++    return sorted(imported_modules)
++ 
++ def check_imports(filename: Union[str, os.PathLike]) -> List[str]:
++     """
++diff --git a/src/transformers/models/donut/processing_donut.py b/src/transformers/models/donut/processing_donut.py
++index 5636ecb943..05b8d4c648 100644
++--- a/src/transformers/models/donut/processing_donut.py
+++++ b/src/transformers/models/donut/processing_donut.py
++@@ -135,14 +135,18 @@ class DonutProcessor(ProcessorMixin):
++         output = {}
++ 
++         while tokens:
++-            start_token = re.search(r"<s_(.*?)>", tokens, re.IGNORECASE)
++-            if start_token is None:
+++            # We want r"<s_(.*?)>" but without ReDOS risk, so do it manually in two parts
+++            potential_start = re.search(r"<s_", tokens, re.IGNORECASE)
+++            if potential_start is None:
++                 break
++-            key = start_token.group(1)
+++            start_token = tokens[potential_start.start() :]
+++            if ">" not in start_token:
+++                break
+++            start_token = start_token[: start_token.index(">") + 1]
+++            key = start_token[len("<s_") : -len(">")]
++             key_escaped = re.escape(key)
++ 
++             end_token = re.search(rf"</s_{key_escaped}>", tokens, re.IGNORECASE)
++-            start_token = start_token.group()
++             if end_token is None:
++                 tokens = tokens.replace(start_token, "")
++             else:
++-- 
++2.40.1
++
+diff --git a/recipe/meta.yaml b/transformers-4.38.0/meta.yaml
+similarity index 78%
+rename from recipe/meta.yaml
+rename to transformers-4.38.0/meta.yaml
+index 80688b6..7d53fed 100644
+--- a/recipe/meta.yaml
++++ b/transformers-4.38.0/meta.yaml
+@@ -6,8 +6,12 @@ package:
+   version: {{ version }}
+ 
+ source:
+-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+-  sha256: aa98177980467cb0c73f34b19d70d0577ec021c7c00706fbaca46ac358fd083c
++  url: https://github.com/huggingface/transformers/archive/refs/tags/v4.38.0.tar.gz
++  sha256: ee13db4eb3262bd0d87c348680c211fd68a3a85b3863c56de1920e705a767a4d
++  patches:
++    - 0001-Fix-for-CVE-2024-11392-11393-11394.patch
++    - 0001-Fix-for-CVE-2024-12720.patch
++    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+ 
+ build:
+   noarch: python
+@@ -23,7 +27,7 @@ requirements:
+     - datasets !=2.5.0  # Required for transformers-cli.
+     - filelock
+     - huggingface_hub >=0.19.3,<1.0
+-    - numpy >=1.17
++    - numpy {{ numpy }}
+     - regex !=2019.12.17
+     - requests
+     - safetensors >=0.4.1
+-- 
+2.40.1
+

@@ -1,11 +1,12 @@
-From 084f4346f96532dd33ce7738ac81396c297eabec Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <Archana.Shinde1@ibm.com>
-Date: Tue, 6 Aug 2024 13:39:46 +0000
+From 4eeb0325aed414e3a936763b0b4d774ed35f4099 Mon Sep 17 00:00:00 2001
+From: "Archana.Shinde1" <archana.shinde1@ibm.com>
+Date: Mon, 14 Jul 2025 08:34:23 +0000
 Subject: [PATCH] fix build failure
 
 ---
- recipe/build.sh | 1 +
- 1 file changed, 1 insertion(+)
+ recipe/build.sh  | 1 +
+ recipe/meta.yaml | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 6bd3a0a..fa35f13 100644
@@ -18,6 +19,22 @@ index 6bd3a0a..fa35f13 100644
  export SETUPTOOLS_DISABLE_VERSIONED_EASY_INSTALL_SCRIPT=1
  export DISTRIBUTE_DISABLE_VERSIONED_EASY_INSTALL_SCRIPT=1
  
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 233ae34..d95135e 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -18,9 +18,9 @@ build:
+ 
+ requirements:
+   host:
+-    - python {{ python_min }}
++    - python
+   run:
+-    - python >={{ python_min }}
++    - python
+ 
+ test:
+   requires:
 -- 
 2.40.1
 

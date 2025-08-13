@@ -7,5 +7,9 @@ packages:
     patches :
       - feedstock-patches/clang/0001-Fix-clang-build-with-GCC-11.patch
       - feedstock-patches/clang/0002-Fix-clang-build-for-s390x.patch                          # [s390x]
+  - feedstock : https://github.com/conda-forge/zlib-feedstock
+    git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
+    patches:
+      - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
 {% endif %}
 git_tag_for_env: open-ce-v1.11.6

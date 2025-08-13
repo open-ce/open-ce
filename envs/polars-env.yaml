@@ -21,4 +21,8 @@ packages:
     git_tag : 1d5a7bec76c7f4887f832afbb99a9111294e2c52                                  #[ppc64le]
     patches :                                                                           #[ppc64le]
       - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le]
+  - feedstock : https://github.com/conda-forge/zlib-feedstock
+    git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
+    patches:
+      - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
 git_tag_for_env: open-ce-v1.11.6

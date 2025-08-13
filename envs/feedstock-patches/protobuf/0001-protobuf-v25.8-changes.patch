@@ -1,14 +1,14 @@
-From 45478e0341fac61980464dbe0aa832bcb70f4726 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde <archana.shinde1@ibm.com>
-Date: Mon, 11 Aug 2025 10:56:32 +0000
-Subject: [PATCH] update protobuf for p10
+From a7c8d64f81b2cc7e86a3ffbee0843681cb99797d Mon Sep 17 00:00:00 2001
+From: "Archana.Shinde1" <archana.shinde1@ibm.com>
+Date: Fri, 1 Aug 2025 07:34:35 +0000
+Subject: [PATCH] v25.8 changes
 
 ---
- recipe/meta.yaml | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ recipe/meta.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 773a344..bcf2229 100644
+index 773a344..0175937 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -27,15 +27,7 @@ index 773a344..bcf2229 100644
    patches:
      - patches/0001-do-not-link-msvc-runtime-statically.patch
      - patches/0002-fix-paths-for-include-lib-directories.patch
-@@ -35,13 +35,13 @@ requirements:
-     - python                                 # [build_platform != target_platform]
-     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-     - libprotobuf {{ lib_major ~ "." ~ version }}  # [build_platform != target_platform]
--    - {{ compiler('c') }}
--    - {{ compiler('cxx') }}
-+    - {{ compiler('c') }}         #[ppc_arch != "p10"]
-+    - {{ compiler('cxx') }}       #[ppc_arch != "p10"]
-   host:
+@@ -41,7 +41,7 @@ requirements:
      - python
      - pip
      - setuptools

@@ -1,13 +1,13 @@
-From eb859850ddb7201cb783cef5701a7ff07406aaed Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Thu, 22 Sep 2022 10:46:46 +0000
+From 192f957f5ccd1930a81469769d0c54feeb0419ae Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Mon, 11 Aug 2025 08:53:44 +0000
 Subject: [PATCH] Fixed build
 
 ---
  recipe/build.sh                  |  3 +++
  recipe/install_clang_symlinks.sh |  2 +-
- recipe/meta.yaml                 | 24 ++++++++++++------------
- 3 files changed, 16 insertions(+), 13 deletions(-)
+ recipe/meta.yaml                 | 10 +++++-----
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
 index 1267479..35938f8 100644
@@ -36,7 +36,7 @@ index 59a613f..62e594d 100644
  ln -s "${PREFIX}/bin/clang-${maj_version}" "${PREFIX}/bin/clang-cl"
  ln -s "${PREFIX}/bin/clang-${maj_version}" "${PREFIX}/bin/clang-cpp"
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 7561bc7..2073816 100644
+index 7561bc7..87ecb45 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -55,7 +55,7 @@ requirements:
@@ -44,7 +44,7 @@ index 7561bc7..2073816 100644
      - libcxx {{ cxx_compiler_version }}  # [osx]
      - llvmdev =={{ version }}
 -    - zlib                               # [linux]
-+    - zlib {{ zlib }}                    # [linux]
++    - zlib                    # [linux]
  
  test:
    requires:
@@ -53,79 +53,16 @@ index 7561bc7..2073816 100644
          - libcxx {{ cxx_compiler_version }}  # [osx]
          - llvmdev =={{ version }}
 -        - zlib                               # [linux]
-+        - zlib {{ zlib }}                    # [linux]
++        - zlib                    # [linux]
        run:
          - {{ pin_subpackage("clang", exact=True) }}
          - {{ pin_subpackage("clangxx", exact=True) }}
-@@ -135,7 +135,7 @@ outputs:
-         - libcxx {{ cxx_compiler_version }}  # [osx]
-         - llvmdev =={{ version }}
-         - llvm =={{ version }}
--        - zlib   # [linux]
-+        - zlib {{ zlib }}   # [linux]
-       run:
-         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
-     test:
-@@ -165,7 +165,7 @@ outputs:
-         - libcxx {{ cxx_compiler_version }}  # [osx]
-         - llvmdev =={{ version }}
-         - llvm =={{ version }}
--        - zlib   # [linux]
-+        - zlib {{ zlib }}   # [linux]
-         - {{ pin_subpackage("libclang-cpp" + minor_aware_ext, exact=True) }}  # [unix]
-       run:
-         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
-@@ -198,7 +198,7 @@ outputs:
-         - libcxx {{ cxx_compiler_version }}             # [osx]
-         - llvmdev =={{ version }}
-         - llvm =={{ version }}
--        - zlib                                          # [linux or win]
-+        - zlib {{ zlib }}                                          # [linux or win]
-         - {{ pin_subpackage("clang", exact=True) }}
-       run:
-         - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
-@@ -244,7 +244,7 @@ outputs:
-         - libcxx {{ cxx_compiler_version }}                           # [osx]
-         - llvmdev =={{ version }}
-         - llvm =={{ version }}
--        - zlib                                                        # [linux or win]
-+        - zlib {{ zlib }}                                                        # [linux or win]
-         - {{ pin_subpackage("clang", exact=True) }}
-         - {{ pin_subpackage("libclang" + libclang_soversion, exact=True) }}
-       run:
-@@ -275,7 +275,7 @@ outputs:
-         - libcxx {{ cxx_compiler_version }}  # [osx]
-         - llvmdev =={{ version }}
-         - llvm =={{ version }}
--        - zlib                               # [linux or win]
-+        - zlib {{ zlib }}                               # [linux or win]
-         - {{ pin_subpackage("libclang-cpp" + minor_aware_ext, exact=True) }}  # [unix]
-       run:
-         - {{ pin_compatible("libcxx", max_pin=None) }}                        # [osx]
-@@ -306,7 +306,7 @@ outputs:
-     script: install_clang_symlinks.bat  # [win]
-     requirements:
-       host:
--        - zlib                            # [win]
-+        - zlib {{ zlib }}                            # [win]
-         - gcc_impl_{{ target_platform }}  # [linux]
-         - {{ pin_subpackage("clang-" ~ major_version, exact=True) }}
-       run:
-@@ -327,7 +327,7 @@ outputs:
-       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
-     requirements:
-       host:
--        - zlib  # [win]
-+        - zlib {{ zlib }}  # [win]
-         - {{ pin_subpackage("clang", exact=True) }}
-       run:
-         - {{ pin_subpackage("clang", exact=True) }}
 @@ -366,7 +366,7 @@ outputs:
          - libcxx {{ cxx_compiler_version }}  # [osx]
          - llvmdev =={{ version }}
          - llvm =={{ version }}
 -        - zlib                            # [linux or win]
-+        - zlib {{ zlib }}                 # [linux or win]
++        - zlib                 # [linux or win]
          - libxml2                         # [win]
        run:
          - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
@@ -134,7 +71,7 @@ index 7561bc7..2073816 100644
          - llvmdev =={{ version }}
          - llvm =={{ version }}
 -        - zlib                               # [linux or win]
-+        - zlib {{ zlib }}                            # [linux or win]
++        - zlib                            # [linux or win]
        run:
          - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
          - {{ pin_subpackage("libclang-cpp" + minor_aware_ext, max_pin="x.x") }}   # [unix]
@@ -143,10 +80,10 @@ index 7561bc7..2073816 100644
          - llvmdev =={{ version }}
          - llvm =={{ version }}
 -        - zlib                               # [linux or win]
-+        - zlib {{ zlib }}                           # [linux or win]
++        - zlib                           # [linux or win]
        run:
          - ucrt                                          # [win]
          - {{ pin_compatible("libcxx", max_pin=None) }}  # [osx]
 -- 
-2.34.1
+2.40.1
 

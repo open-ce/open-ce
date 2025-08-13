@@ -1,5 +1,5 @@
 abseil_cpp:
-  - 20230125.0
+  - 20240116.2
 absl_py:
   - 2.0.*
 array_record:
@@ -19,7 +19,7 @@ automake:
 av:
   - 10.*
 bazel:
-  - 6.1.*
+  - 6.5.*
 black:
   - 24.8.0
 bsddb3:
@@ -159,7 +159,7 @@ libopus:
 libpng:
   - 1.6
 libprotobuf:
-  - 3.21.12
+  - 4.25.8
 libtar:
   - 1.2.*
 libtiff:
@@ -226,7 +226,7 @@ pkgconfig:
 preshed:
   - 3.0.*
 protobuf:
-  - 4.21.12
+  - 4.25.8
 psutil:
   - 5
 pybind11:
@@ -273,7 +273,7 @@ scikit_learn:
 sentencepiece:
   - 0.1.99
 setuptools:
-  - 72.*
+  - 78.*
 setuptools_rust:
   - 1.5.*
 six:

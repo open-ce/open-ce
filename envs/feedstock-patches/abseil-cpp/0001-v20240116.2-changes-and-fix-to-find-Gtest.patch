@@ -1,0 +1,92 @@
+From ca09359ac350d52d7c83f58f4daf25403a134c6e Mon Sep 17 00:00:00 2001
+From: Archana-Shinde <archana.shinde1@ibm.com>
+Date: Mon, 11 Aug 2025 11:59:54 +0000
+Subject: [PATCH] Fixed build failure to find gmocl binaries
+
+---
+ recipe/meta.yaml                              | 10 ++++----
+ .../patches/0001-cmake-use-gtest-config.patch | 25 +++++++++++++++++++
+ 2 files changed, 30 insertions(+), 5 deletions(-)
+ create mode 100644 recipe/patches/0001-cmake-use-gtest-config.patch
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index ab7ad48..ac85483 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -39,6 +39,7 @@ source:
+     - patches/0003-unconditionally-export-Mutex-Destructor.patch
+     # backport https://github.com/abseil/abseil-cpp/commit/779a3565ac6c5b69dd1ab9183e500a27633117d5
+     - patches/0004-Avoid-export-of-testonly-target-absl-test_allocator-.patch
++    - patches/0001-cmake-use-gtest-config.patch
+ 
+ build:
+   number: 1
+@@ -60,7 +61,6 @@ outputs:
+       build:
+         - {{ compiler('c') }}
+         - {{ compiler('cxx') }}
+-        - {{ stdlib('c') }}
+         - cmake
+         - ninja
+       run_constrained:
+@@ -71,7 +71,6 @@ outputs:
+     test:
+       requires:
+         - {{ compiler('cxx') }}
+-        - {{ stdlib('c') }}
+         - cmake
+         - ninja
+         - pkg-config
+@@ -139,14 +138,15 @@ outputs:
+       build:
+         - {{ compiler('c') }}
+         - {{ compiler('cxx') }}
+-        - {{ stdlib('c') }}
+         - cmake
+         - ninja
+       host:
+-        - gtest
++        - gtest 1.17.0
++        - gmock 1.17.0
+         - {{ pin_subpackage("libabseil", exact=True) }}
+       run:
+-        - gtest
++        - gtest 1.17.0
++        - gmock 1.17.0
+         - {{ pin_subpackage("libabseil", exact=True) }}
+ 
+     test:
+diff --git a/recipe/patches/0001-cmake-use-gtest-config.patch b/recipe/patches/0001-cmake-use-gtest-config.patch
+new file mode 100644
+index 0000000..247b337
+--- /dev/null
++++ b/recipe/patches/0001-cmake-use-gtest-config.patch
+@@ -0,0 +1,25 @@
++From e70e8878d9e83e5c322f2c6cb6f08cc08cddd0b7 Mon Sep 17 00:00:00 2001
++From: "Archana.Shinde1" <archana.shinde1@ibm.com>
++Date: Fri, 1 Aug 2025 07:07:49 +0000
++Subject: [PATCH] cmake use gtest config
++
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 194f8708..58cc737f 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -152,7 +152,7 @@ set(ABSL_LOCAL_GOOGLETEST_DIR "/usr/src/googletest" CACHE PATH
++ if((BUILD_TESTING AND ABSL_BUILD_TESTING) OR ABSL_BUILD_TEST_HELPERS)
++   if (ABSL_USE_EXTERNAL_GOOGLETEST)
++     if (ABSL_FIND_GOOGLETEST)
++-      find_package(GTest REQUIRED)
+++      find_package(GTest CONFIG REQUIRED)
++     elseif(NOT TARGET GTest::gtest)
++       if(TARGET gtest)
++         # When Google Test is included directly rather than through find_package, the aliases are missing.
++-- 
++2.40.1
++
+-- 
+2.40.1
+

@@ -20,8 +20,9 @@ packages:
       - feedstock-patches/fire/0001-Opence-changes.patch
   - feedstock : https://github.com/conda-forge/cmake-feedstock
     git_tag : 70e07324f0ab7f075c5c325a55e31ddc9b68d985
-    patches :                                                  #[ppc_arch == 'p10']
+    patches :
       - feedstock-patches/cmake/0001-P10-changes.patch         #[ppc_arch == 'p10']
+      - feedstock-patches/cmake/0001-Fixed-invalid-conversion-from-long-int-to-CURL_NETRC.patch
   {% if build_type == 'cuda' %}
   - feedstock : cudatoolkit
   - feedstock : cudnn
