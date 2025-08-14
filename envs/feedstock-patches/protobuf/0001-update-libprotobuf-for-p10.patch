@@ -1,14 +1,32 @@
-From b3bf3c76e9ce929d0cef7d9c10ed67c5eec0abde Mon Sep 17 00:00:00 2001
-From: Archana-Shinde <archana.shinde1@ibm.com>
-Date: Mon, 11 Aug 2025 10:50:43 +0000
-Subject: [PATCH] update libprotobuf for p10
+From 6a26f11630c3d35e749790631e95a12308580fc6 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Thu, 14 Aug 2025 12:08:01 +0000
+Subject: [PATCH] Fixed p10 build failure
 
 ---
- recipe/meta.yaml | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ recipe/build-lib.sh |  4 ++++
+ recipe/meta.yaml    | 26 +++++++++++++++-----------
+ 2 files changed, 19 insertions(+), 11 deletions(-)
 
+diff --git a/recipe/build-lib.sh b/recipe/build-lib.sh
+index 044c3c2..cee02f8 100644
+--- a/recipe/build-lib.sh
++++ b/recipe/build-lib.sh
+@@ -49,8 +49,12 @@ cmake -G "Ninja" \
+     -Dprotobuf_JSONCPP_PROVIDER="package" \
+     -Dprotobuf_USE_EXTERNAL_GTEST=ON \
+     -Dprotobuf_WITH_ZLIB=ON \
++    -DCMAKE_INSTALL_PREFIX=${PREFIX} \
++    -DCMAKE_INSTALL_LIBDIR=lib \
+     ..
+ 
++export LD_LIBRARY_PATH="${PREFIX}/lib:${BUILD_PREFIX}/lib:${LD_LIBRARY_PATH}"
++
+ cmake --build .
+ 
+ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != 1 ]]; then
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 90b6d91..9b9bf36 100644
+index 90b6d91..c7a44cc 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -45,7 +63,16 @@ index 90b6d91..9b9bf36 100644
          # requires abseil test targets to build with tests enabled
          - libabseil-tests
          - zlib
-@@ -118,14 +118,14 @@ outputs:
+@@ -70,7 +70,7 @@ outputs:
+       requires:
+         # cmake needs compiler to be able to run package detection, see
+         # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}      #[ppc_arch != "p10"]
+         - cmake
+         - ninja
+         - pkg-config
+@@ -118,27 +118,31 @@ outputs:
          - jsoncpp
      requirements:
        build:
@@ -63,7 +90,25 @@ index 90b6d91..9b9bf36 100644
          - libabseil-tests
          - zlib
          - {{ pin_subpackage('libprotobuf', exact=True) }}
-@@ -159,7 +159,7 @@ outputs:
+       run:
+         - {{ pin_subpackage('libprotobuf', exact=True) }}
++        - libabseil {{ abseil_cpp }}
++        - libabseil-tests
++        - zlib
+     test:
+       requires:
+         # cmake needs compiler to be able to run package detection, see
+         # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}       #[ppc_arch != "p10"]
+         - cmake
+         - ninja
+         - zlib
++        - xz
+       files:
+         - cmake_test/
+       commands:
+@@ -159,7 +163,7 @@ outputs:
      script: build-pyheaders.bat  # [win]
      requirements:
        build:
