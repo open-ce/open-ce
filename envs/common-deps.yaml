@@ -55,4 +55,5 @@ packages:
     patches:
       - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
   - feedstock : gtest
+    git_tag : main
 git_tag_for_env: open-ce-v1.11.6
