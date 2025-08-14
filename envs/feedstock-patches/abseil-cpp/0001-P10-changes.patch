@@ -1,18 +1,18 @@
-From 9778ebda76b192a23cac2883c54ea27d582f9670 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 3 May 2023 12:57:23 +0000
-Subject: [PATCH] Fixed abseil-cpp for P10
+From 163c83b236cb8301e2599f847b84693c0f35ae23 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Thu, 14 Aug 2025 11:54:49 +0000
+Subject: [PATCH] P10 changes
 
 ---
  recipe/build-abseil.sh | 19 +++++++++++++++++++
- recipe/meta.yaml       | 11 ++++++++---
- 2 files changed, 27 insertions(+), 3 deletions(-)
+ recipe/meta.yaml       | 31 ++++++++++++++++++++-----------
+ 2 files changed, 39 insertions(+), 11 deletions(-)
 
 diff --git a/recipe/build-abseil.sh b/recipe/build-abseil.sh
-index 041a9c2..e4bc6b5 100644
+index f67edf4..4f79f7a 100644
 --- a/recipe/build-abseil.sh
 +++ b/recipe/build-abseil.sh
-@@ -5,10 +5,29 @@ set -exuo pipefail
+@@ -5,6 +5,24 @@ set -exuo pipefail
  mkdir -p build
  cd build
  
@@ -34,7 +34,10 @@ index 041a9c2..e4bc6b5 100644
 +    fi
 +fi
 +
- cmake ${CMAKE_ARGS} \
+ if [[ "${target_platform}" == osx-* ]]; then
+     # See https://conda-forge.org/docs/maintainer/knowledge_base.html#newer-c-features-with-old-sdk
+     CXXFLAGS="${CXXFLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+@@ -20,6 +38,7 @@ cmake -G Ninja \
      -DCMAKE_BUILD_TYPE=Release \
      -DCMAKE_CXX_STANDARD=17 \
      -DCMAKE_INSTALL_LIBDIR=lib \
@@ -43,46 +46,94 @@ index 041a9c2..e4bc6b5 100644
      -DBUILD_SHARED_LIBS=ON \
      -DABSL_PROPAGATE_CXX_STD=ON \
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 9ae57dc..ad07589 100644
+index ab7ad48..74b6a56 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -41,6 +41,9 @@ source:
+@@ -39,9 +39,14 @@ source:
+     - patches/0003-unconditionally-export-Mutex-Destructor.patch
+     # backport https://github.com/abseil/abseil-cpp/commit/779a3565ac6c5b69dd1ab9183e500a27633117d5
+     - patches/0004-Avoid-export-of-testonly-target-absl-test_allocator-.patch
++    - patches/0001-cmake-use-gtest-config.patch
  
  build:
    number: 1
 +  script_env:
 +    - CMAKE_ARGS
 +    - GCC_HOME
++
  
  outputs:
    # default behaviour is shared; however note that upstream does not support
-@@ -50,13 +53,15 @@ outputs:
+@@ -51,6 +56,8 @@ outputs:
      script: build-abseil.bat  # [win]
      build:
        string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 +      script_env:
 +        - GCC_HOME             #[ppc_arch == 'p10']
        run_exports:
-         - libabseil ={{ version }}=cxx{{ cxx_standard }}*
+         - {{ pin_subpackage("libabseil", max_pin="x") }}
+         # also pin on ABI variant
+@@ -58,9 +65,8 @@ outputs:
  
      requirements:
        build:
 -        - {{ compiler('c') }}
 -        - {{ compiler('cxx') }}
-+        - {{ compiler('c') }}       #[ppc_arch != "p10"]
-+        - {{ compiler('cxx') }}     #[ppc_arch != "p10"]
+-        - {{ stdlib('c') }}
++        - {{ compiler('c') }}          #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}        #[ppc_arch != "p10"]
          - cmake
          - ninja
        run_constrained:
-@@ -66,7 +71,7 @@ outputs:
+@@ -70,8 +76,7 @@ outputs:
  
      test:
        requires:
 -        - {{ compiler('cxx') }}
-+        - {{ compiler('cxx') }}    #[ppc_arch != "p10"]
+-        - {{ stdlib('c') }}
++        - {{ compiler('cxx') }}         #[ppc_arch != "p10"]
+         - cmake
+         - ninja
+         - pkg-config
+@@ -130,6 +135,8 @@ outputs:
+     script: build-abseil.bat  # [win]
+     build:
+       string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
++      script_env:
++        - GCC_HOME             #[ppc_arch == 'p10']
+       always_include_files:
+         # Must overwrite cmake metadata from libabseil
+         - lib/cmake/absl/          # [unix]
+@@ -137,21 +144,23 @@ outputs:
+ 
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
+-        - {{ stdlib('c') }}
++        - {{ compiler('c') }}             #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}            #[ppc_arch != "p10"]
+         - cmake
+         - ninja
+       host:
+-        - gtest
++        - gtest 1.17.0
++        - gmock 1.17.0
++        - ninja
+         - {{ pin_subpackage("libabseil", exact=True) }}
+       run:
+-        - gtest
++        - gtest 1.17.0
++        - gmock 1.17.0
+         - {{ pin_subpackage("libabseil", exact=True) }}
+ 
+     test:
+       requires:
+-        - {{ compiler('cxx') }}
++        - {{ compiler('cxx') }}            #[ppc_arch != "p10"]
          - cmake
          - ninja
          - pkg-config
 -- 
-2.34.1
+2.40.1
 
