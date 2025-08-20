@@ -1,0 +1,405 @@
+From a29b060fd8c2feee98e8af4a787d20977b7b2a2c Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Wed, 20 Aug 2025 12:03:10 +0000
+Subject: [PATCH] Fixed CVEs for libprotobuf
+
+---
+ recipe/build-lib.sh                           |   7 +-
+ recipe/build-shared.sh                        |  27 +-
+ recipe/meta.yaml                              |  12 +-
+ ...ackported-CVE-2025-4565-for-protobuf.patch | 272 ++++++++++++++++++
+ 4 files changed, 306 insertions(+), 12 deletions(-)
+ create mode 100644 recipe/patches/0001-Backported-CVE-2025-4565-for-protobuf.patch
+
+diff --git a/recipe/build-lib.sh b/recipe/build-lib.sh
+index 6071cec..496df37 100644
+--- a/recipe/build-lib.sh
++++ b/recipe/build-lib.sh
+@@ -5,11 +5,12 @@ if [ "$(uname)" == "Linux" ];
+ then
+     # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
+     # unit test can fail if optmization above 0 are used.
+-    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
+-    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
++#    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
++#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
+     export PROTOBUF_OPT_FLAG="-O2"
+     # to improve performance, disable checks intended for debugging
+-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
++    CXXFLAGS="$CXXFLAGS -DNDEBUG -fplt"
++    CFLAGS="$CFLAGS -fplt"
+ elif [ "$(uname)" == "Darwin" ];
+ then
+     # remove pie from LDFLAGS
+diff --git a/recipe/build-shared.sh b/recipe/build-shared.sh
+index ca7bc09..a19db9c 100644
+--- a/recipe/build-shared.sh
++++ b/recipe/build-shared.sh
+@@ -2,15 +2,32 @@
+ 
+ set -ex
+ 
++ARCH=$(uname -m)
++NO_OF_MAKE_THREADS=128
++if [[ $ARCH == "ppc64le" ]]; then
++    if [ -z ${LIMIT_BUILD_RESOURCES+x} ];
++    then
++        echo "ERROR: LIMIT_BUILD_RESOURCES is unset. Please set it to 1 if the build system is low in resources, else set it to 0"
++        exit 1
++    else
++        echo "LIMIT_BUILD_RESOURCES is set to $LIMIT_BUILD_RESOURCES"
++        if [[ ${LIMIT_BUILD_RESOURCES} == true || ${LIMIT_BUILD_RESOURCES} == 1 ]];
++        then
++            NO_OF_MAKE_THREADS=8
++        fi
++    fi
++fi
++
+ if [ "$(uname)" == "Linux" ];
+ then
+     # protobuf uses PROTOBUF_OPT_FLAG to set the optimization level
+     # unit test can fail if optmization above 0 are used.
+-    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
+-    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
++#    CPPFLAGS="${CPPFLAGS//-O[0-9]/}"
++#    CXXFLAGS="${CXXFLAGS//-O[0-9]/}"
+     export PROTOBUF_OPT_FLAG="-O2"
+     # to improve performance, disable checks intended for debugging
+-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
++    CXXFLAGS="$CXXFLAGS -DNDEBUG -fplt"
++    CFLAGS="$CFLAGS -fplt"
+ elif [ "$(uname)" == "Darwin" ];
+ then
+     # remove pie from LDFLAGS
+@@ -43,9 +60,9 @@ if [ "${HOST}" == "powerpc64le-conda_cos7-linux-gnu" ]; then
+     make -j 2
+     make check -j 2 || (cat src/test-suite.log; exit 1)
+ else
+-    make -j ${CPU_COUNT}
++    make -j $NO_OF_MAKE_THREADS
+     if [[ "$CONDA_BUILD_CROSS_COMPILATION" != 1 ]]; then
+-        make check -j ${CPU_COUNT} || (cat src/test-suite.log; exit 1)
++        make check -j $NO_OF_MAKE_THREADS || (cat src/test-suite.log; exit 1)
+     fi
+ fi
+ make install
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index a640fd7..f0911ff 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,6 +16,7 @@ source:
+       - patches/0001-remove-Werror-from-test-flags.patch  # [ppc64le or aarch64]
+       - patches/0002-use-consistent-cmake-location.patch
+       - patches/0003-set-static-lib-extension-on-windows.patch
++      - patches/0001-Backported-CVE-2025-4565-for-protobuf.patch
+       # This issue gets fixed and then reintroduced often
+       # https://github.com/protocolbuffers/protobuf/issues/7567
+       # - patches/issue-7567.patch
+@@ -44,10 +45,13 @@ outputs:
+         # https://abi-laboratory.pro/tracker/timeline/protobuf/
+         # One exception was that 3.6.1 was incompatible with 3.6.0
+         - {{ pin_subpackage('libprotobuf', max_pin='x.x') }}
++      script_env:
++        - LIMIT_BUILD_RESOURCES
++
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}            #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}          #[ppc_arch != "p10"]
+         - cmake       # [win]
+         - ninja       # [win]
+         - autoconf    # [not win]
+@@ -106,8 +110,8 @@ outputs:
+     script: build-lib.bat  # [win]
+     requirements:
+       build:
+-        - {{ compiler('c') }}
+-        - {{ compiler('cxx') }}
++        - {{ compiler('c') }}            #[ppc_arch != "p10"]
++        - {{ compiler('cxx') }}          #[ppc_arch != "p10"]
+         - cmake  # [win]
+         - ninja  # [win]
+       host:
+diff --git a/recipe/patches/0001-Backported-CVE-2025-4565-for-protobuf.patch b/recipe/patches/0001-Backported-CVE-2025-4565-for-protobuf.patch
+new file mode 100644
+index 0000000..859eae9
+--- /dev/null
++++ b/recipe/patches/0001-Backported-CVE-2025-4565-for-protobuf.patch
+@@ -0,0 +1,272 @@
++From f4e8dcb96537a67e1a8e70769e61e19dcece61ed Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Tue, 19 Aug 2025 06:56:43 +0000
++Subject: [PATCH] Backported CVE-2025-4565 for protobuf
++
++---
++ python/google/protobuf/internal/decoder.py    | 31 ++++++++++
++ .../google/protobuf/internal/decoder_test.py  | 28 +++++++++
++ .../google/protobuf/internal/message_test.py  | 60 +++++++++++++++++--
++ .../protobuf/internal/self_recursive.proto    | 24 ++++++++
++ 4 files changed, 138 insertions(+), 5 deletions(-)
++ create mode 100644 python/google/protobuf/internal/decoder_test.py
++ create mode 100644 python/google/protobuf/internal/self_recursive.proto
++
++diff --git a/python/google/protobuf/internal/decoder.py b/python/google/protobuf/internal/decoder.py
++index a91627631..190c7a959 100644
++--- a/python/google/protobuf/internal/decoder.py
+++++ b/python/google/protobuf/internal/decoder.py
++@@ -655,7 +655,13 @@ def GroupDecoder(field_number, is_repeated, is_packed, key, new_default):
++         if value is None:
++           value = field_dict.setdefault(key, new_default(message))
++         # Read sub-message.
+++        current_depth += 1
+++        if current_depth > _recursion_limit:
+++          raise _DecodeError(
+++              'Error parsing message: too many levels of nesting.'
+++          )
++         pos = value.add()._InternalParse(buffer, pos, end)
+++        current_depth -= 1
++         # Read end tag.
++         new_pos = pos+end_tag_len
++         if buffer[pos:new_pos] != end_tag_bytes or new_pos > end:
++@@ -672,8 +678,12 @@ def GroupDecoder(field_number, is_repeated, is_packed, key, new_default):
++       if value is None:
++         value = field_dict.setdefault(key, new_default(message))
++       # Read sub-message.
+++      current_depth += 1
+++      if current_depth > _recursion_limit:
+++        raise _DecodeError('Error parsing message: too many levels of nesting.')
++       pos = value._InternalParse(buffer, pos, end)
++       # Read end tag.
+++      current_depth -= 1
++       new_pos = pos+end_tag_len
++       if buffer[pos:new_pos] != end_tag_bytes or new_pos > end:
++         raise _DecodeError('Missing group end tag.')
++@@ -702,10 +712,16 @@ def MessageDecoder(field_number, is_repeated, is_packed, key, new_default):
++         if new_pos > end:
++           raise _DecodeError('Truncated message.')
++         # Read sub-message.
+++        current_depth += 1
+++        if current_depth > _recursion_limit:
+++          raise _DecodeError(
+++              'Error parsing message: too many levels of nesting.'
+++          )
++         if value.add()._InternalParse(buffer, pos, new_pos) != new_pos:
++           # The only reason _InternalParse would return early is if it
++           # encountered an end-group tag.
++           raise _DecodeError('Unexpected end-group tag.')
+++        current_depth -= 1
++         # Predict that the next tag is another copy of the same repeated field.
++         pos = new_pos + tag_len
++         if buffer[new_pos:pos] != tag_bytes or new_pos == end:
++@@ -723,10 +739,14 @@ def MessageDecoder(field_number, is_repeated, is_packed, key, new_default):
++       if new_pos > end:
++         raise _DecodeError('Truncated message.')
++       # Read sub-message.
+++      current_depth += 1
+++      if current_depth > _recursion_limit:
+++        raise _DecodeError('Error parsing message: too many levels of nesting.')
++       if value._InternalParse(buffer, pos, new_pos) != new_pos:
++         # The only reason _InternalParse would return early is if it encountered
++         # an end-group tag.
++         raise _DecodeError('Unexpected end-group tag.')
+++      current_depth -= 1
++       return new_pos
++     return DecodeField
++
++@@ -997,7 +1017,11 @@ def _DecodeUnknownField(buffer, pos, wire_type):
++     data = buffer[pos:pos+size].tobytes()
++     pos += size
++   elif wire_type == wire_format.WIRETYPE_START_GROUP:
+++    current_depth += 1
+++    if current_depth >= _recursion_limit:
+++      raise _DecodeError('Error parsing message: too many levels of nesting.')
++     (data, pos) = _DecodeUnknownFieldSet(buffer, pos)
+++    current_depth -= 1
++   elif wire_type == wire_format.WIRETYPE_END_GROUP:
++     return (0, -1)
++   else:
++@@ -1026,6 +1050,13 @@ def _DecodeFixed32(buffer, pos):
++
++   new_pos = pos + 4
++   return (struct.unpack('<I', buffer[pos:new_pos])[0], new_pos)
+++DEFAULT_RECURSION_LIMIT = 100
+++_recursion_limit = DEFAULT_RECURSION_LIMIT
+++
+++
+++def SetRecursionLimit(new_limit):
+++  global _recursion_limit
+++  _recursion_limit = new_limit
++
++
++ def _RaiseInvalidWireType(buffer, pos, end):
++diff --git a/python/google/protobuf/internal/decoder_test.py b/python/google/protobuf/internal/decoder_test.py
++new file mode 100644
++index 000000000..e5fbba2a5
++--- /dev/null
+++++ b/python/google/protobuf/internal/decoder_test.py
++@@ -0,0 +1,28 @@
+++import io
+++import unittest
+++
+++from google.protobuf import message
+++from google.protobuf.internal import decoder
+++from google.protobuf.internal import testing_refleaks
+++from google.protobuf.internal import wire_format
+++
+++from absl.testing import parameterized
+++
+++@testing_refleaks.TestCase
+++class DecoderTest(parameterized.TestCase):
+++
+++  def test_decode_unknown_group_field_too_many_levels(self):
+++    data = memoryview(b'\023' * 5_000_000)
+++    self.assertRaisesRegex(
+++        message.DecodeError,
+++        'Error parsing message',
+++        decoder._DecodeUnknownField,
+++        data,
+++        1,
+++        len(data),
+++        1,
+++        wire_format.WIRETYPE_START_GROUP,
+++    )
+++
+++if __name__ == '__main__':
+++  unittest.main()
++diff --git a/python/google/protobuf/internal/message_test.py b/python/google/protobuf/internal/message_test.py
++index 40abfe4a2..99a4fbff5 100644
++--- a/python/google/protobuf/internal/message_test.py
+++++ b/python/google/protobuf/internal/message_test.py
++@@ -61,8 +61,10 @@ from google.protobuf import unittest_proto3_arena_pb2
++ from google.protobuf import descriptor
++ from google.protobuf.internal import api_implementation
++ from google.protobuf.internal import encoder
+++from google.protobuf.internal import decoder
++ from google.protobuf.internal import more_extensions_pb2
++ from google.protobuf.internal import packed_field_test_pb2
+++from google.protobuf.internal import self_recursive_pb2
++ from google.protobuf.internal import test_util
++ from google.protobuf.internal import test_proto3_optional_pb2
++ from google.protobuf.internal import testing_refleaks
++@@ -1255,6 +1257,50 @@ class MessageTest(unittest.TestCase):
++     self.assertEqual(bool, type(m.repeated_bool[0]))
++     self.assertEqual(True, m.repeated_bool[0])
++
+++@testing_refleaks.TestCase
+++class TestRecursiveGroup(unittest.TestCase):
+++
+++  def _MakeRecursiveGroupMessage(self, n):
+++    msg = self_recursive_pb2.SelfRecursive()
+++    sub = msg
+++    for _ in range(n):
+++      sub = sub.sub_group
+++    sub.i = 1
+++    return msg.SerializeToString()
+++
+++  def testRecursiveGroups(self):
+++    recurse_msg = self_recursive_pb2.SelfRecursive()
+++    data = self._MakeRecursiveGroupMessage(100)
+++    recurse_msg.ParseFromString(data)
+++    self.assertTrue(recurse_msg.HasField('sub_group'))
+++
+++  def testRecursiveGroupsException(self):
+++    if api_implementation.Type() != 'python':
+++      api_implementation._c_module.SetAllowOversizeProtos(False)
+++    recurse_msg = self_recursive_pb2.SelfRecursive()
+++    data = self._MakeRecursiveGroupMessage(300)
+++    with self.assertRaises(message.DecodeError) as context:
+++      recurse_msg.ParseFromString(data)
+++    self.assertIn('Error parsing message', str(context.exception))
+++    if api_implementation.Type() == 'python':
+++      self.assertIn('too many levels of nesting', str(context.exception))
+++
+++  def testRecursiveGroupsUnknownFields(self):
+++    if api_implementation.Type() != 'python':
+++      api_implementation._c_module.SetAllowOversizeProtos(False)
+++    test_msg = unittest_pb2.TestAllTypes()
+++    data = self._MakeRecursiveGroupMessage(300)  # unknown to test_msg
+++    with self.assertRaises(message.DecodeError) as context:
+++      test_msg.ParseFromString(data)
+++    self.assertIn(
+++        'Error parsing message',
+++        str(context.exception),
+++    )
+++    if api_implementation.Type() == 'python':
+++      self.assertIn('too many levels of nesting', str(context.exception))
+++      decoder.SetRecursionLimit(310)
+++      test_msg.ParseFromString(data)
+++      decoder.SetRecursionLimit(decoder.DEFAULT_RECURSION_LIMIT)
++
++ # Class to test proto2-only features (required, extensions, etc.)
++ @testing_refleaks.TestCase
++@@ -2538,8 +2584,6 @@ class PackedFieldTest(unittest.TestCase):
++     self.assertEqual(golden_data, message.SerializeToString())
++
++
++-@unittest.skipIf(api_implementation.Type() == 'python',
++-                 'explicit tests of the C++ implementation')
++ @testing_refleaks.TestCase
++ class OversizeProtosTest(unittest.TestCase):
++
++@@ -2556,17 +2600,23 @@ class OversizeProtosTest(unittest.TestCase):
++     msg.ParseFromString(self.GenerateNestedProto(100))
++
++   def testAssertOversizeProto(self):
++-    api_implementation._c_module.SetAllowOversizeProtos(False)
+++    if api_implementation.Type() != 'python':
+++      api_implementation._c_module.SetAllowOversizeProtos(False)
++     msg = unittest_pb2.TestRecursiveMessage()
++     with self.assertRaises(message.DecodeError) as context:
++       msg.ParseFromString(self.GenerateNestedProto(101))
++     self.assertIn('Error parsing message', str(context.exception))
++
++   def testSucceedOversizeProto(self):
++-    api_implementation._c_module.SetAllowOversizeProtos(True)
+++
+++    if api_implementation.Type() == 'python':
+++      decoder.SetRecursionLimit(310)
+++    else:
+++      api_implementation._c_module.SetAllowOversizeProtos(True)
+++
++     msg = unittest_pb2.TestRecursiveMessage()
++     msg.ParseFromString(self.GenerateNestedProto(101))
++-
+++    decoder.SetRecursionLimit(decoder.DEFAULT_RECURSION_LIMIT)
++
++ if __name__ == '__main__':
++   unittest.main()
++diff --git a/python/google/protobuf/internal/self_recursive.proto b/python/google/protobuf/internal/self_recursive.proto
++new file mode 100644
++index 000000000..d2a7f004b
++--- /dev/null
+++++ b/python/google/protobuf/internal/self_recursive.proto
++@@ -0,0 +1,24 @@
+++// Protocol Buffers - Google's data interchange format
+++// Copyright 2024 Google Inc.  All rights reserved.
+++//
+++// Use of this source code is governed by a BSD-style
+++// license that can be found in the LICENSE file or at
+++// https://developers.google.com/open-source/licenses/bsd
+++
+++edition = "2023";
+++
+++package google.protobuf.python.internal;
+++
+++message SelfRecursive {
+++  SelfRecursive sub = 1;
+++  int32 i = 2;
+++  SelfRecursive sub_group = 3 [features.message_encoding = DELIMITED];
+++}
+++
+++message IndirectRecursive {
+++  IntermediateRecursive intermediate = 1;
+++}
+++
+++message IntermediateRecursive {
+++  IndirectRecursive indirect = 1;
+++}
++--
++2.40.1
++
+-- 
+2.40.1
+
