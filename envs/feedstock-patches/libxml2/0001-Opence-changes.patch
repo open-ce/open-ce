@@ -1,0 +1,25 @@
+From b0f19576e2250efff2e3bd9cfbbb29da14b833fb Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 21 Aug 2025 17:52:22 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 03b3c8d..c7e7743 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,7 +29,7 @@ requirements:
+   host:
+     - icu {{icu}}     # [not win]
+     - libiconv 1.16   # [not linux]
+-    - xz {{xz}}       # [not win]
++    - xz       # [not win]
+     - zlib {{zlib}}
+   run:
+     - libiconv  # [not linux]
+-- 
+2.40.1
+
