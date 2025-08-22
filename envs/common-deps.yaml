@@ -9,15 +9,10 @@ packages:
     git_tag : a2b38e3077de05fe7b71e8d58a73935ecd0891ea #21.12
     patches :
       - feedstock-patches/protobuf/0001-Fixed-CVEs-for-libprotobuf.patch
-  - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock
-    git_tag : 944d5c2af53b5885f882a1d02fc645db4ccdb75c      #v20240116.2
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v76.1.0
+    git_tag : 66dcc5d189336642efd1840d848ed91c570a8db2
     patches :
-      - feedstock-patches/abseil-cpp/0001-v20240116.2-changes-and-fix-to-find-Gtest.patch
-      - feedstock-patches/abseil-cpp/0001-P10-changes.patch                #[ppc_arch == 'p10']
-  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v78.1.1           #[ppc64le or s390x]
-    git_tag : 46774634b8799e6c2f4d4a6f9b68b6844471a559                                  #[ppc64le or s390x]
-    patches :                                                                           #[ppc64le or s390x]
-      - feedstock-patches/setuptools/0001-fix-build-failure.patch                       #[ppc64le or s390x]
+      - feedstock-patches/setuptools/0001-Fix-backporting-CVE-2025-47273.patch
   # Build scikit-learn as scikit-learn Anaconda requires numpy<1.25
   - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   # [py==311]
     git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          # [py==311]
@@ -50,5 +45,4 @@ packages:
     git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
     patches:
       - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
-  - feedstock : gtest
 git_tag_for_env: open-ce-v1.11.6

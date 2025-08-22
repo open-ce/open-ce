@@ -1,5 +1,5 @@
 abseil_cpp:
-  - 20240116.2
+  - 20230125.0
 absl_py:
   - 2.0.*
 array_record:
@@ -273,7 +273,7 @@ scikit_learn:
 sentencepiece:
   - 0.1.99
 setuptools:
-  - 78.*
+  - 76.*
 setuptools_rust:
   - 1.5.*
 six:
