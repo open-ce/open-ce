@@ -1,5 +1,5 @@
 abseil_cpp:
-  - 20240116.2
+  - 20230125.0
 absl_py:
   - 2.0.*
 array_record:
@@ -159,7 +159,7 @@ libopus:
 libpng:
   - 1.6
 libprotobuf:
-  - 4.25.8
+  - 3.21.12
 libtar:
   - 1.2.*
 libtiff:
@@ -226,7 +226,7 @@ pkgconfig:
 preshed:
   - 3.0.*
 protobuf:
-  - 4.25.8
+  - 4.21.12
 psutil:
   - 5
 pybind11:
@@ -273,7 +273,7 @@ scikit_learn:
 sentencepiece:
   - 0.1.99
 setuptools:
-  - 78.*
+  - 76.*
 setuptools_rust:
   - 1.5.*
 six:
