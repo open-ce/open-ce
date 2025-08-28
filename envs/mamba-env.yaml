@@ -8,12 +8,12 @@ packages:
     git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
     patches:
       - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
-  - feedstock : https://github.com/AnacondaRecipes/libarchive-feedstock #[ppc64le]
-    git_tag : f700e747b17f4b2a649a9157110e8acd9f72c443                  #[ppc64le]
-    patches:                                                            #[ppc64le]
-      - feedstock-patches/libarchive/0001-Opence-changes.patch          #[ppc64le]
-  - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[ppc64le]
-    git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[ppc64le]
-    patches:                                                            #[ppc64le]
-      - feedstock-patches/libxml2/0001-Opence-changes.patch             #[ppc64le]
+  - feedstock : https://github.com/AnacondaRecipes/libarchive-feedstock #[not x86_64]
+    git_tag : f700e747b17f4b2a649a9157110e8acd9f72c443                  #[not x86_64]
+    patches:                                                            #[not x86_64]
+      - feedstock-patches/libarchive/0001-Opence-changes.patch          #[not x86_64]
+  - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
+    git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
+    patches:                                                            #[not x86_64]
+      - feedstock-patches/libxml2/0001-Opence-changes.patch             #[not x86_64]
 git_tag_for_env: open-ce-v1.11.6
