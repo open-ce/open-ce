@@ -1,0 +1,54 @@
+From f320cfee68e3312c92fe0a36cbcec61c41588f66 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 21 Aug 2025 18:20:18 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 0ed1e0e..9979cbc 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -21,15 +21,15 @@ build:
+ 
+ requirements:
+   build:
+-    - {{ stdlib('c') }}
++#    - {{ stdlib('c') }}
+     - {{ compiler('c') }}
+     - cmake
+     - ninja-base
+   host:
+-    - bzip2 {{ bzip2 }}
++    - bzip2
+     - libiconv {{ libiconv }}  # [not linux]
+-    - lz4-c {{ lz4_c }}
+-    - xz {{ xz }}
++    - lz4-c
++    - xz
+     # This is GPL-v2+, the libarchive authors explicitly ask that
+     # people do not link to this (and if we do, this would need to
+     # also be released as GPL-v2+, and that is against their wishes
+@@ -39,8 +39,8 @@ requirements:
+     #  Please don't distribute binary packages of libarchive linked
+     #  against liblzo."
+     # - lzo
+-    - openssl {{ openssl }} # [not osx]
+-    - libxml2 {{ libxml2 }}
++    - openssl
++    - libxml2
+     - zlib {{ zlib }}
+     - zstd {{ zstd }}
+   run:
+@@ -95,4 +95,4 @@ extra:
+   recipe-maintainers:
+     - jakirkham
+     - mingwandroid
+-    - ocefpaf
+\ No newline at end of file
++    - ocefpaf
+-- 
+2.40.1
+
