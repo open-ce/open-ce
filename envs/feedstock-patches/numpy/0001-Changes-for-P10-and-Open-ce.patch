@@ -1,13 +1,13 @@
-From ec762c9a3af6f4794750858aa80386a92a28f850 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Mon, 27 May 2024 09:20:39 +0000
-Subject: [PATCH] update to build with GCC12
+From c8e2caf9eedcfe8c7ffa6f6128a72feed8ae787c Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Tue, 2 Sep 2025 12:10:37 +0000
+Subject: [PATCH] Fixed distutils failure
 
 ---
  recipe/conda_build_config.yaml |  2 ++
  recipe/install_base.sh         | 19 ++++++++++++++++++-
- recipe/meta.yaml               | 21 +++++++++++++--------
- 3 files changed, 33 insertions(+), 9 deletions(-)
+ recipe/meta.yaml               | 24 +++++++++++++++---------
+ 3 files changed, 35 insertions(+), 10 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
 index d53d8ac..4426880 100644
@@ -53,13 +53,15 @@ index 6661929..2c4320b 100644
      *)
          EXTRA_OPTS=""
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 82345d0..1130963 100644
+index 82345d0..fdc39c3 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -13,6 +13,8 @@ source:
+@@ -12,7 +12,9 @@ source:
+     - patches/0003-intel_init_mkl.patch                 # [blas_impl == "mkl"]
  
  build:
-   number: 0
+-  number: 0
++  number: 1
 +  script_env:      #[ppc_arch == 'p10']
 +    - GCC_HOME     #[ppc_arch == 'p10']
    # numpy 1.26 no longer supports Python 3.8: https://numpy.org/devdocs/release/1.26.0-notes.html
@@ -104,10 +106,18 @@ index 82345d0..1130963 100644
 +        - {{ compiler('fortran') }} #[ppc_arch != "p10"]
          - nomkl  # [x86 and blas_impl != 'mkl']
 -        - typing-extensions >=4.2.0
-+        - typing-extensions {{ typing_extensions }}       
++        - typing-extensions {{ typing_extensions }}
          - mypy >=1.5.1
          - cffi  # [py<310]
          - charset-normalizer
+@@ -128,6 +133,7 @@ outputs:
+         - f2py -h
+         - python -c "import numpy; numpy.show_config()"
+         - export OPENBLAS_NUM_THREADS=1  # [unix]
++        - export SETUPTOOLS_USE_DISTUTILS=1 #[ppc_arch == "p10"]
+         - set OPENBLAS_NUM_THREADS=1  # [win]
+         - export CPU_COUNT=4  # [linux and ppc64le]
+         - pytest -vvv --pyargs numpy -k "not ({{ tests_to_skip }})" --durations=0
 -- 
 2.40.1
 
