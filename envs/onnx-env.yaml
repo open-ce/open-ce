@@ -28,10 +28,6 @@ packages:
   - feedstock : cudnn
   - feedstock : nccl
   {% endif %}
-  - feedstock : https://github.com/conda-forge/abseil-cpp-feedstock.git
-    git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
-    patches :                                                       #[ppc_arch == 'p10']
-      - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
   - feedstock : onnxruntime
   - feedstock : onnxconverter-common
   - feedstock : skl2onnx
