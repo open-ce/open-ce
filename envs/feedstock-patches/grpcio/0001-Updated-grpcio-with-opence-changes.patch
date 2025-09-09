@@ -1,125 +1,60 @@
-From 91828cdab96650e8e1f36f4d3dc8b0e67ad6e961 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Tue, 12 Aug 2025 07:13:39 +0000
-Subject: [PATCH] Fixed build
+From c675897bbbbde0219b7ed853ddef7d4829c10fda Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Tue, 9 Sep 2025 15:50:52 +0000
+Subject: [PATCH] Removed setuptools from runtime dependencies
 
 ---
- recipe/0001-Fix-openssl-for-s390x.patch       | 25 +++++++++++
- ...tutils.ccompiler.spawn-to-elide-std-.patch | 45 ++++++++++---------
- recipe/build.sh                               | 16 +++++--
- recipe/meta.yaml                              | 30 ++++++-------
- 4 files changed, 77 insertions(+), 39 deletions(-)
+ recipe/0001-Fix-openssl-for-s390x.patch       | Bin 0 -> 776 bytes
+ ...tutils.ccompiler.spawn-to-elide-std-.patch | Bin 1847 -> 1954 bytes
+ recipe/build.sh                               |  16 +++++++---
+ recipe/meta.yaml                              |  28 +++++++++---------
+ 4 files changed, 26 insertions(+), 18 deletions(-)
  create mode 100644 recipe/0001-Fix-openssl-for-s390x.patch
 
 diff --git a/recipe/0001-Fix-openssl-for-s390x.patch b/recipe/0001-Fix-openssl-for-s390x.patch
 new file mode 100644
-index 0000000..c19e123
---- /dev/null
-+++ b/recipe/0001-Fix-openssl-for-s390x.patch
-@@ -0,0 +1,25 @@
-+From a193a4b60e67a4716baf6e56c1e6190bb440e3bc Mon Sep 17 00:00:00 2001
-+From: Aman Surkar <Aman.Surkar@ibm.com>
-+Date: Mon, 4 Mar 2024 05:18:45 +0000
-+Subject: [PATCH] Fix openssl for s390x
-+
-+---
-+ src/include/openssl/base.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/include/openssl/base.h b/src/include/openssl/base.h
-+index a1a4309a4..8db692ea3 100644
-+--- a/src/include/openssl/base.h
-++++ b/src/include/openssl/base.h
-+@@ -121,7 +121,7 @@ extern "C" {
-+ // little-endian architectures. Functions will not produce the correct answer
-+ // on other systems. Run the crypto_test binary, notably
-+ // crypto/compiler_test.cc, before adding a new architecture.
-+-#error "Unknown target CPU"
-++#define OPENSSL_64_BIT
-+ #endif
-+ 
-+ #if defined(__APPLE__)
-+-- 
-+2.34.1
-+
+index 0000000000000000000000000000000000000000..c19e123035910c9e5c9a1e7d174977e945e606ed
+GIT binary patch
+literal 776
+zcmaJ<(Qexy6n*C_j?$M_j&1Bvr-`PiUDv3S+AUhzr)jbPUni^%jxbgdZ680J?qx4Q
+zNN~7^!@c*gaP1Z{n@yxp1*c*v#WX9FtP8p>bVfxs<4Os^X`(cqTZ<L#kWIn){4|ks
+zp0P!cnd5FNL%ery(&57Zl6P=x)Hc!W_9Oc&J<SK1F$A6iE$6uazn*6|b8(G`hrw38
+z`bFB$@nd=Sa{u@f3v)obBinTi>eiu~%=m$^IF1=Qr&D8f(^r)K<D^P<lx*+^Iif(x
+zP@9IJH`1=D8V77_N6wqpUPe~~uBf3CjIS80OkE?6*TzGpXXMqHATze2LujlN6F!q7
+zNp31t%yN<wWSkd54B4O6XHgX4>>IbYh_gH!PZ7N@;eZaFoW<yVgx?HlipF@~P)xQm
+z!5r!I#`w_O-cgre(OW&#-C=K<2DbIsxwh&x!EZvxTIT{6(sp}tC%Nze+7JpJ96L|j
+zpz*!8?__t}`L^`bc_?G0JB|lIshZ>Irar~f@C|ms4R<0YT92V9cuJ5}W$YRfmiGVU
+znXveRoD05>UhSK0_u)P1*5q-&d>ygqqN3VZ!nfta*VXE&EJXR~%L~KBP;<=?cBT#%
+a52Wg{Ebo@fr-!n<3J!qf$wVX>V}Ah?Ve_&8
+
+literal 0
+HcmV?d00001
+
 diff --git a/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch b/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
-index ead471f..9327537 100644
---- a/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
-+++ b/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
-@@ -1,26 +1,33 @@
--From a9b4f1c020242e6ac1b0a4b06404527d75e43790 Mon Sep 17 00:00:00 2001
--From: Ray Donnelly <mingw.android@gmail.com>
--Date: Fri, 16 Nov 2018 23:04:09 +0000
--Subject: [PATCH 1/2] Monkey-patch distutils.ccompiler.spawn to elide
-- -std=c++11 from non-C++ code
-+From adf67e44243f6f3b77236c868702da6254f6e5b7 Mon Sep 17 00:00:00 2001
-+From: Aman Surkar <Aman.Surkar@ibm.com>
-+Date: Tue, 12 Aug 2025 06:59:44 +0000
-+Subject: [PATCH] Fixed-monkeypatch_spawn_using_cxx11_for_cxx_only
- 
- ---
-- setup.py | 22 ++++++++++++++++++++++
-- 1 file changed, 22 insertions(+)
-+ setup.py | 21 +++++++++++++++++++++
-+ 1 file changed, 21 insertions(+)
- 
- diff --git a/setup.py b/setup.py
--index e950057..1565a39 100644
-+index b93758f943..406e359763 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -153,6 +153,26 @@ def check_linker_need_libatomic():
--   cc_test.communicate(input=code_test)
--   return cc_test.returncode != 0
-+@@ -27,6 +27,7 @@ del UnixCCompiler
-+ from distutils import cygwinccompiler
-+ from distutils import extension as _extension
-+ from distutils import util
-++from distutils import spawn
-+ import os
-+ import os.path
-+ import pathlib
-+@@ -223,6 +224,24 @@ def check_linker_need_libatomic():
-+     cpp_test.communicate(input=code_test)
-+     return cpp_test.returncode == 0
-  
- +# Patch ccompiler not to pass -std=c++11 for C code.
- +# This is neccessary on macOS to avoid:
- +# error: invalid argument '-std=c++11' not allowed with 'C/ObjC'
- +def monkeypatch_spawn_using_cxx11_for_cxx_only():
--+  from distutils import ccompiler
-++  from distutils import spawn
- +  def spawn_using_cxx11_for_cxx_only(old_spawn):
- +    def spawn(cmd, search_path=1, verbose=0, dry_run=0):
- +      is_cxx = any((arg.endswith('.cc') or arg.endswith('.cpp'))
-@@ -33,21 +40,19 @@ index e950057..1565a39 100644
- +          cmd2.append(arg)
- +      return old_spawn(cmd2, search_path, verbose, dry_run)
- +    return spawn
--+  ccompiler.spawn = spawn_using_cxx11_for_cxx_only(ccompiler.spawn)
--+
--+
-++  spawn.spawn = spawn_using_cxx11_for_cxx_only(spawn.spawn)
-+ 
-  # There are some situations (like on Windows) where CC, CFLAGS, and LDFLAGS are
-  # entirely ignored/dropped/forgotten by distutils and its Cygwin/MinGW support.
-- # We use these environment variables to thus get around that without locking
--@@ -381,6 +401,8 @@ PACKAGE_DATA = {
-+@@ -534,6 +553,8 @@ PACKAGE_DATA = {
-  }
-  PACKAGES = setuptools.find_packages(PYTHON_STEM)
-  
- +monkeypatch_spawn_using_cxx11_for_cxx_only()
- +
-  setuptools.setup(
--   name='grpcio',
--   version=grpc_version.VERSION,
-+     name='grpcio',
-+     version=grpc_version.VERSION,
- -- 
--2.20.1
-+2.40.1
- 
+index ead471f7144fc2a3c0b37d304224480625a3ee8b..9327537e11f69833b9970ad0f6e2bd03edb1cff0 100644
+GIT binary patch
+delta 622
+zcmaKo&x#X45XPC6L})MyE9*_`w9(DXFzN2;PU5a4L>9dXyPibCOixeJo6H|(de|&1
+zEcgb}K7l@hpfBMQc<|;E_yW!(xGIQsDC$=fRo_>iJMV8h$3>Pv5XFp3N--rdi%G~i
+zCQJ<2fO|L!81`w*q#yFP4$LM=kitn-EQ10L8*sNUR$=0bEO~;S23n5bw30UTF-)pC
+zU=RD?v5`L<Q3^e;4s=q5XHw`9ym~P?oj!XF$7(Gj$9!rZ+(pQ790aA*Rqo~&a0$3?
+z?pS-KYwcQn^Vs5h;gE2D5DzJFUFtDO{2^z=ys-|hFt-`>>daw0hDfg9WvbTGX_n+_
+zB?|;`<2h2LuC!W}pprZ*G>D7&xk^QC;lE>Ytz}xOEQO$i*){#%diD3(<_7Bh`(&91
+z=PCLnAS?eU-8|5XYi?krLR9;4FeV#+nA(_b9mXIQQY>dHl`f_EV%=*2h&(snt^NA|
+zMg7JiZ5lHzOYLr1WRZj;v%mA>)>cLj>R-iRzU@5t`25CKtF>txyY;ZMsoYI|gupCX
+pA3BW^pU_5$?-Mg`zuN^!gG3&6=S415*0m9UK{vZ?>bZS{egb)G!mI!Q
+
+delta 495
+zcmZ9J&uSDw5XRXFY_P#Ugy2PjC5mV!J$Co}%Pd9~413dq7cYwR_H=fe%ybVuJ-b=R
+zGYCuj0xCX%2j9YX@F*UA0cTKh@KVLE3cmV2>eJ0{H}K4w8h9~J&Zr=au!PBs3pyt}
+znUgFbNy_pvPh}G41=(Vlz2X}<HCoH6+Q8FV>BTzYy0k`>(?!iy6$w*6L#N!y3CyfI
+z0-C`~vjRrwF|c?-k_joc?{6!hPuN>{Vf4A&;D$S~gi^JxbE;}1(W^A7k~V4^zSiIj
+z$V!zG0d8G+BEpbTI2+7sqw(`F1Y!Cu!WbiHrR$og*}x?*2I2PCqY?A_qx_aEQbN)^
+zifEdpJT5#R9bTtte3U^rG?w{Qa2N>TzXT8O*j~nJ5aOMat&9HRa0c%ApTX~IS02Cq
+z*ck<TSNPBJ3HXmYclZArKSm)6{lWP28@LazC3LL>x0HRAdZnz<wbTw)+$uh=WIF_R
+z%dUlmbil3YblEd^uvTtqItP^z=lv7VbP6~=rbCj1Q2%}W!I!&x{$lsRn30Gg^ar>#
+Bo9zGq
+
 diff --git a/recipe/build.sh b/recipe/build.sh
 index f797569..f97a11a 100644
 --- a/recipe/build.sh
@@ -157,7 +92,7 @@ index f797569..f97a11a 100644
  
  $PYTHON -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 19fa19a..9034dcd 100644
+index 19fa19a..5ec55b9 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,17 +1,17 @@
@@ -210,10 +145,9 @@ index 19fa19a..9034dcd 100644
      - pthread-stubs     # [linux]
    run:
 -    - python
--    - setuptools
--    - six >=1.6.0
 +    - python {{python}}
-+    - setuptools {{setuptools}}
+     - setuptools
+-    - six >=1.6.0
 +    - six {{six}}
      - zlib
 -    - openssl
