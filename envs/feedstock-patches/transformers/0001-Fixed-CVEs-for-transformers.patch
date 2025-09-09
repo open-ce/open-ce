@@ -1,44 +1,33 @@
-From 5925519b69e8052e75e92ddc13fc23a98769bcd3 Mon Sep 17 00:00:00 2001
+From 6ece977e8bf932e7493d438a1e45cd86ae30dda1 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Mon, 11 Aug 2025 05:32:38 +0000
+Date: Fri, 5 Sep 2025 11:37:24 +0000
 Subject: [PATCH] Fixed CVEs for transformers
 
 ---
- .gitattributes                                |   4 +-
  config/build-config.yaml                      |   6 +
+ .../0001-Backported-CVE-2025-5197.patch       |  26 ++++
  ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++++
  .../0001-Fix-for-CVE-2024-12720.patch         |  25 ++++
  ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++++++
- transformers-4.37.2/meta.yaml                 |  69 +++++++++
+ transformers-4.37.2/meta.yaml                 |  70 +++++++++
+ .../0001-Backported-CVE-2025-5197.patch       |  26 ++++
  ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++++
  .../0001-Fix-for-CVE-2024-12720.patch         |  25 ++++
  ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++++++
- {recipe => transformers-4.38.0}/meta.yaml     |  10 +-
- 10 files changed, 588 insertions(+), 5 deletions(-)
+ {recipe => transformers-4.38.0}/meta.yaml     |  11 +-
+ 11 files changed, 640 insertions(+), 3 deletions(-)
  create mode 100644 config/build-config.yaml
+ create mode 100644 transformers-4.37.2/0001-Backported-CVE-2025-5197.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
  create mode 100644 transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
  create mode 100644 transformers-4.37.2/meta.yaml
+ create mode 100644 transformers-4.38.0/0001-Backported-CVE-2025-5197.patch
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
  create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
- rename {recipe => transformers-4.38.0}/meta.yaml (78%)
+ rename {recipe => transformers-4.38.0}/meta.yaml (76%)
 
-diff --git a/.gitattributes b/.gitattributes
-index 7f32763..77e737f 100644
---- a/.gitattributes
-+++ b/.gitattributes
-@@ -1,7 +1,7 @@
- * text=auto
- 
--*.patch binary
--*.diff binary
-+#*.patch binary
-+#*.diff binary
- meta.yaml text eol=lf
- build.sh text eol=lf
- bld.bat text eol=crlf
 diff --git a/config/build-config.yaml b/config/build-config.yaml
 new file mode 100644
 index 0000000..c77c211
@@ -51,6 +40,38 @@ index 0000000..c77c211
 +
 +  - name : transformers-4.38.0
 +    path : transformers-4.38.0
+diff --git a/transformers-4.37.2/0001-Backported-CVE-2025-5197.patch b/transformers-4.37.2/0001-Backported-CVE-2025-5197.patch
+new file mode 100644
+index 0000000..f8bf09f
+--- /dev/null
++++ b/transformers-4.37.2/0001-Backported-CVE-2025-5197.patch
+@@ -0,0 +1,26 @@
++From b89f6b1149c508459553303f167764660a2c13c8 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Fri, 5 Sep 2025 09:13:34 +0000
++Subject: [PATCH] Backported CVE-2025-5197
++
++---
++ src/transformers/modeling_tf_pytorch_utils.py | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/transformers/modeling_tf_pytorch_utils.py b/src/transformers/modeling_tf_pytorch_utils.py
++index 99fa106674..2b9de781b3 100644
++--- a/src/transformers/modeling_tf_pytorch_utils.py
+++++ b/src/transformers/modeling_tf_pytorch_utils.py
++@@ -65,6 +65,9 @@ def convert_tf_weight_name_to_pt_weight_name(
++         tf_name = tf_name[len(name_scope) :]
++         tf_name = tf_name.lstrip("/")
++     tf_name = tf_name.replace(":0", "")  # device ids
+++    if (len(tf_name) > 2048 and "___" in tf_name) or tf_name.count("___") > 10:
+++        # ReDOS check
+++        raise ValueError("TF variable name is too long or contains too many ___ separators: " + tf_name)
++     tf_name = re.sub(
++         r"/[^/]*___([^/]*)/", r"/\1/", tf_name
++     )  # '$1___$2' is replaced by $2 (can be used to duplicate or remove layers in TF2.0 vs PyTorch)
++-- 
++2.40.1
++
 diff --git a/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch b/transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
 new file mode 100644
 index 0000000..b32d912
@@ -323,10 +344,10 @@ index 0000000..efec3f2
 +
 diff --git a/transformers-4.37.2/meta.yaml b/transformers-4.37.2/meta.yaml
 new file mode 100644
-index 0000000..4ac1adb
+index 0000000..a5aa78b
 --- /dev/null
 +++ b/transformers-4.37.2/meta.yaml
-@@ -0,0 +1,69 @@
+@@ -0,0 +1,70 @@
 +{% set name = "transformers" %}
 +{% set version = "4.37.2" %}
 +
@@ -341,6 +362,7 @@ index 0000000..4ac1adb
 +    - 0001-Fix-for-CVE-2024-11392-11393-11394.patch
 +    - 0001-Fix-for-CVE-2024-12720.patch
 +    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
++    - 0001-Backported-CVE-2025-5197.patch
 +
 +build:
 +  noarch: python
@@ -396,6 +418,38 @@ index 0000000..4ac1adb
 +    - rluria14
 +    - ndmaxar
 +    - setu4993
+diff --git a/transformers-4.38.0/0001-Backported-CVE-2025-5197.patch b/transformers-4.38.0/0001-Backported-CVE-2025-5197.patch
+new file mode 100644
+index 0000000..f8bf09f
+--- /dev/null
++++ b/transformers-4.38.0/0001-Backported-CVE-2025-5197.patch
+@@ -0,0 +1,26 @@
++From b89f6b1149c508459553303f167764660a2c13c8 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Fri, 5 Sep 2025 09:13:34 +0000
++Subject: [PATCH] Backported CVE-2025-5197
++
++---
++ src/transformers/modeling_tf_pytorch_utils.py | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/transformers/modeling_tf_pytorch_utils.py b/src/transformers/modeling_tf_pytorch_utils.py
++index 99fa106674..2b9de781b3 100644
++--- a/src/transformers/modeling_tf_pytorch_utils.py
+++++ b/src/transformers/modeling_tf_pytorch_utils.py
++@@ -65,6 +65,9 @@ def convert_tf_weight_name_to_pt_weight_name(
++         tf_name = tf_name[len(name_scope) :]
++         tf_name = tf_name.lstrip("/")
++     tf_name = tf_name.replace(":0", "")  # device ids
+++    if (len(tf_name) > 2048 and "___" in tf_name) or tf_name.count("___") > 10:
+++        # ReDOS check
+++        raise ValueError("TF variable name is too long or contains too many ___ separators: " + tf_name)
++     tf_name = re.sub(
++         r"/[^/]*___([^/]*)/", r"/\1/", tf_name
++     )  # '$1___$2' is replaced by $2 (can be used to duplicate or remove layers in TF2.0 vs PyTorch)
++-- 
++2.40.1
++
 diff --git a/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch b/transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
 new file mode 100644
 index 0000000..b32d912
@@ -667,13 +721,13 @@ index 0000000..efec3f2
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/transformers-4.38.0/meta.yaml
-similarity index 78%
+similarity index 76%
 rename from recipe/meta.yaml
 rename to transformers-4.38.0/meta.yaml
-index 80688b6..7d53fed 100644
+index 80688b6..56f117b 100644
 --- a/recipe/meta.yaml
 +++ b/transformers-4.38.0/meta.yaml
-@@ -6,8 +6,12 @@ package:
+@@ -6,8 +6,13 @@ package:
    version: {{ version }}
  
  source:
@@ -685,10 +739,11 @@ index 80688b6..7d53fed 100644
 +    - 0001-Fix-for-CVE-2024-11392-11393-11394.patch
 +    - 0001-Fix-for-CVE-2024-12720.patch
 +    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
++    - 0001-Backported-CVE-2025-5197.patch
  
  build:
    noarch: python
-@@ -23,7 +27,7 @@ requirements:
+@@ -23,7 +28,7 @@ requirements:
      - datasets !=2.5.0  # Required for transformers-cli.
      - filelock
      - huggingface_hub >=0.19.3,<1.0
