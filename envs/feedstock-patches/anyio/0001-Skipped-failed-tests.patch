@@ -1,12 +1,12 @@
-From 5242637acfa2e83f5d7e48303ea91073c418db20 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 8 Oct 2024 11:16:58 +0000
-Subject: [PATCH] fixed failure with pin of aiohttp in test section
+From 7abafc2dd286c0ffdd779f4c3f2a16e1e57fa744 Mon Sep 17 00:00:00 2001
+From: ArchanaShinde1 <archana.shinde1@ibm.com>
+Date: Tue, 9 Sep 2025 07:21:55 +0000
+Subject: [PATCH] ignored CoverageWarning during tests
 
 ---
  recipe/meta.yaml   | 1 +
- recipe/run_test.py | 2 ++
- 2 files changed, 3 insertions(+)
+ recipe/run_test.py | 3 +++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
 index 9f93689..7c31331 100644
@@ -21,10 +21,10 @@ index 9f93689..7c31331 100644
      - trio
      - hypothesis >=4.0
 diff --git a/recipe/run_test.py b/recipe/run_test.py
-index 546930f..cc524a3 100644
+index 546930f..dc0ebc1 100644
 --- a/recipe/run_test.py
 +++ b/recipe/run_test.py
-@@ -23,6 +23,8 @@ SKIPS = [
+@@ -23,10 +23,13 @@ SKIPS = [
      "happy_eyeballs",
      "ipv6",
      "block_device",
@@ -33,6 +33,11 @@ index 546930f..cc524a3 100644
  ]
  
  PYTEST_ARGS = [
+     "-vv",
++    "-W", "ignore::coverage.exceptions.CoverageWarning",
+     "--cov", os.environ["PKG_NAME"],
+     "--cov-fail-under", COV_THRESHOLD,
+     "--cov-report", "term-missing:skip-covered",
 -- 
-2.40.1
+2.49.0
 
