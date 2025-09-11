@@ -39,7 +39,7 @@ cffi:
 clang:
   - 14.0.*
 click:
-  - 8.*
+  - 8.1.*
 cli11:
   - 2.1.2
 cloudpickle:
