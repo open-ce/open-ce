@@ -1,14 +1,14 @@
-From 82ead497eafe138fe2991a22ae8552acdccd0efc Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <Archana.Shinde1@ibm.com>
-Date: Wed, 27 Nov 2024 09:00:22 +0000
-Subject: [PATCH] Opence changes
+From 24e5d085163888b1d638d66437fcf0ded10511b8 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Tue, 9 Sep 2025 15:54:00 +0000
+Subject: [PATCH] Remove setuptools from runtime dependencies
 
 ---
  recipe/meta.yaml | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 95bf56d..f235920 100644
+index 95bf56d..3445d18 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -17,14 +17,16 @@ build:
@@ -26,7 +26,7 @@ index 95bf56d..f235920 100644
  
  test:
 +  requires:
-+    - setuptools {{setuptools}}
++    - setuptools
    imports:
      - fire
  
