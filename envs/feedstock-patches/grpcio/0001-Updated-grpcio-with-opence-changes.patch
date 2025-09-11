@@ -1,14 +1,46 @@
-From dfb5313cb4adc290c23e5b2cb16ae1805c74bfa5 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <archana.shinde1@ibm.com>
-Date: Wed, 10 Sep 2025 09:23:58 +0000
-Subject: [PATCH] Remove setuptools from runtime dependencies
+From d60dc94949911220f6dc86d4c6d3d87144365ada Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 11 Sep 2025 11:30:12 +0000
+Subject: [PATCH] Updated patch
 
 ---
+ recipe/0001-Fix-openssl-for-s390x.patch       | 24 ++++++++++
  ...tutils.ccompiler.spawn-to-elide-std-.patch | 45 ++++++++++---------
  recipe/build.sh                               | 16 +++++--
  recipe/meta.yaml                              | 28 ++++++------
- 3 files changed, 51 insertions(+), 38 deletions(-)
+ 4 files changed, 75 insertions(+), 38 deletions(-)
+ create mode 100644 recipe/0001-Fix-openssl-for-s390x.patch
 
+diff --git a/recipe/0001-Fix-openssl-for-s390x.patch b/recipe/0001-Fix-openssl-for-s390x.patch
+new file mode 100644
+index 0000000..47080db
+--- /dev/null
++++ b/recipe/0001-Fix-openssl-for-s390x.patch
+@@ -0,0 +1,24 @@
++From a193a4b60e67a4716baf6e56c1e6190bb440e3bc Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 4 Mar 2024 05:18:45 +0000
++Subject: [PATCH] Fix openssl for s390x
++
++---
++ src/include/openssl/base.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/include/openssl/base.h b/src/include/openssl/base.h
++index a1a4309a4..8db692ea3 100644
++--- a/src/include/openssl/base.h
+++++ b/src/include/openssl/base.h
++@@ -121,7 +121,7 @@ extern "C" {
++ // little-endian architectures. Functions will not produce the correct answer
++ // on other systems. Run the crypto_test binary, notably
++ // crypto/compiler_test.cc, before adding a new architecture.
++-#error "Unknown target CPU"
+++#define OPENSSL_64_BIT
++ #endif
++
++ #if defined(__APPLE__)
++--
++2.34.1
 diff --git a/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch b/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
 index ead471f..9327537 100644
 --- a/recipe/0001-Monkey-patch-distutils.ccompiler.spawn-to-elide-std-.patch
