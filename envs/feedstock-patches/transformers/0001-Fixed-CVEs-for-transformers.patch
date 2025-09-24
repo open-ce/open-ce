@@ -1,32 +1,36 @@
-From 6ece977e8bf932e7493d438a1e45cd86ae30dda1 Mon Sep 17 00:00:00 2001
+From b61469ce365e45461468073e002f8e7386fa7736 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Fri, 5 Sep 2025 11:37:24 +0000
+Date: Wed, 24 Sep 2025 09:01:26 +0000
 Subject: [PATCH] Fixed CVEs for transformers
 
 ---
  config/build-config.yaml                      |   6 +
- .../0001-Backported-CVE-2025-5197.patch       |  26 ++++
- ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++++
- .../0001-Fix-for-CVE-2024-12720.patch         |  25 ++++
- ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++++++
- transformers-4.37.2/meta.yaml                 |  70 +++++++++
- .../0001-Backported-CVE-2025-5197.patch       |  26 ++++
- ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++++
- .../0001-Fix-for-CVE-2024-12720.patch         |  25 ++++
- ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++++++
- {recipe => transformers-4.38.0}/meta.yaml     |  11 +-
- 11 files changed, 640 insertions(+), 3 deletions(-)
+ .../0001-Backported-CVE-2025-5197.patch       |  26 +++
+ ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++
+ .../0001-Fix-for-CVE-2024-12720.patch         |  25 +++
+ ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | 170 ++++++++++++++++++
+ ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++
+ transformers-4.37.2/meta.yaml                 |  71 ++++++++
+ .../0001-Backported-CVE-2025-5197.patch       |  26 +++
+ ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++
+ .../0001-Fix-for-CVE-2024-12720.patch         |  25 +++
+ ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | 170 ++++++++++++++++++
+ ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++
+ {recipe => transformers-4.38.0}/meta.yaml     |  12 +-
+ 13 files changed, 982 insertions(+), 3 deletions(-)
  create mode 100644 config/build-config.yaml
  create mode 100644 transformers-4.37.2/0001-Backported-CVE-2025-5197.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
+ create mode 100644 transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
  create mode 100644 transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
  create mode 100644 transformers-4.37.2/meta.yaml
  create mode 100644 transformers-4.38.0/0001-Backported-CVE-2025-5197.patch
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
+ create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
  create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
- rename {recipe => transformers-4.38.0}/meta.yaml (76%)
+ rename {recipe => transformers-4.38.0}/meta.yaml (73%)
 
 diff --git a/config/build-config.yaml b/config/build-config.yaml
 new file mode 100644
@@ -199,6 +203,182 @@ index 0000000..2f67d56
 +--
 +2.40.1
 +
+diff --git a/transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch b/transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
+new file mode 100644
+index 0000000..2e28bb2
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
+@@ -0,0 +1,170 @@
++From fb72789a310e19273c228851de8f954c7fcaf26f Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 23 Jun 2025 09:30:23 +0000
++Subject: [PATCH] Fixed CVE-2025-1194 and CVE-2025-2099
++
++---
++ .../tokenization_gpt_neox_japanese.py         | 21 ++++++++--
++ .../tokenization_gptsan_japanese.py           | 21 ++++++++--
++ .../models/nougat/tokenization_nougat_fast.py | 40 +++++++------------
++ src/transformers/testing_utils.py             |  4 +-
++ 4 files changed, 53 insertions(+), 33 deletions(-)
++
++diff --git a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++index fae50aa8ff..797c1e503a 100644
++--- a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
+++++ b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import Optional, Tuple
++
++ import numpy as np
++@@ -262,9 +263,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this using
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++index df3f94dc1e..c64ce9a282 100644
++--- a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
+++++ b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import List, Optional, Tuple, Union
++
++ import numpy as np
++@@ -445,9 +446,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this usingMore actions
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..bdb5338d0a 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -119,27 +119,17 @@ def normalize_list_like_lines(generation):
++         normalization adjusts the bullet point style and nesting levels based on the captured patterns.
++     """
++
++-    # This matches lines starting with - or *, not followed by - or * (lists)
++-    # that are then numbered by digits \d or roman numerals (one or more)
++-    # and then, optional additional numbering of this line is captured
++-    # this is then fed to re.finditer.
++-    pattern = r"(?:^)(-|\*)?(?!-|\*) ?((?:\d|[ixv])+ )?.+? (-|\*) (((?:\d|[ixv])+)\.(\d|[ixv]) )?.*(?:$)"
++-
++-    for match in reversed(list(re.finditer(pattern, generation, flags=re.I | re.M))):
++-        start, stop = match.span()
++-        delim = match.group(3) + " "
++-        splits = match.group(0).split(delim)
+++    lines = generation.split("\n")More actions
+++    output_lines = []
+++    for line_no, line in enumerate(lines):
+++        match = re.search(r". ([-*]) ", line)
+++        if not match or line[0] not in ("-", "*"):
+++            output_lines.append(line)
+++            continue  # Doesn't fit the pattern we want, no changes
+++        delim = match.group(1) + " "
+++        splits = line.split(delim)[1:]
++         replacement = ""
++-
++-        if match.group(1) is not None:
++-            splits = splits[1:]
++-            delim1 = match.group(1) + " "
++-        else:
++-            delim1 = ""
++-            continue  # Skip false positives
++-
++-        pre, post = generation[:start], generation[stop:]
++-
+++        delim1 = line[0] + " "
++         for i, item in enumerate(splits):
++             level = 0
++             potential_numeral, _, rest = item.strip().partition(" ")
++@@ -150,15 +140,15 @@ def normalize_list_like_lines(generation):
++                 level = potential_numeral.count(".")
++
++             replacement += (
++-                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or start == 0 else delim1) + item.strip()
+++                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or line_no == 0 else delim1) + item.strip()
++             )
++
++-        if post == "":
++-            post = "\n"
+++        if line_no == len(lines) - 1:  # If this is the last line in the generationMore actions
+++            replacement += "\n"  # Add an empty line to the end of the generation
++
++-        generation = pre + replacement + post
+++        output_lines.append(replacement)
++
++-    return generation
+++    return "\n".join(output_lines)
++
++
++ def find_next_punctuation(text: str, start_idx=0):
++diff --git a/src/transformers/testing_utils.py b/src/transformers/testing_utils.py
++index ca4b0db8b8..04570fafa1 100644
++--- a/src/transformers/testing_utils.py
+++++ b/src/transformers/testing_utils.py
++@@ -2161,8 +2161,8 @@ def preprocess_string(string, skip_cuda_tests):
++     cuda stuff is detective (with a heuristic), this method will return an empty string so no doctest will be run for
++     `string`.
++     """
++-    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )((?:.*?\n)*?.*?```)"
++-    codeblocks = re.split(re.compile(codeblock_pattern, flags=re.MULTILINE | re.DOTALL), string)
+++    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )(.*?```)"
+++    codeblocks = re.split(codeblock_pattern, string, flags=re.DOTALL)
++     is_cuda_found = False
++     for i, codeblock in enumerate(codeblocks):
++         if "load_dataset(" in codeblock and "# doctest: +IGNORE_RESULT" not in codeblock:
++--
++2.40.1
 diff --git a/transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch b/transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
 new file mode 100644
 index 0000000..efec3f2
@@ -344,10 +524,10 @@ index 0000000..efec3f2
 +
 diff --git a/transformers-4.37.2/meta.yaml b/transformers-4.37.2/meta.yaml
 new file mode 100644
-index 0000000..a5aa78b
+index 0000000..42e8a33
 --- /dev/null
 +++ b/transformers-4.37.2/meta.yaml
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,71 @@
 +{% set name = "transformers" %}
 +{% set version = "4.37.2" %}
 +
@@ -363,6 +543,7 @@ index 0000000..a5aa78b
 +    - 0001-Fix-for-CVE-2024-12720.patch
 +    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
 +    - 0001-Backported-CVE-2025-5197.patch
++    - 0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
 +
 +build:
 +  noarch: python
@@ -577,6 +758,182 @@ index 0000000..2f67d56
 +--
 +2.40.1
 +
+diff --git a/transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch b/transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
+new file mode 100644
+index 0000000..2e28bb2
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
+@@ -0,0 +1,170 @@
++From fb72789a310e19273c228851de8f954c7fcaf26f Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Mon, 23 Jun 2025 09:30:23 +0000
++Subject: [PATCH] Fixed CVE-2025-1194 and CVE-2025-2099
++
++---
++ .../tokenization_gpt_neox_japanese.py         | 21 ++++++++--
++ .../tokenization_gptsan_japanese.py           | 21 ++++++++--
++ .../models/nougat/tokenization_nougat_fast.py | 40 +++++++------------
++ src/transformers/testing_utils.py             |  4 +-
++ 4 files changed, 53 insertions(+), 33 deletions(-)
++
++diff --git a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++index fae50aa8ff..797c1e503a 100644
++--- a/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
+++++ b/src/transformers/models/gpt_neox_japanese/tokenization_gpt_neox_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import Optional, Tuple
++
++ import numpy as np
++@@ -262,9 +263,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this using
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++index df3f94dc1e..c64ce9a282 100644
++--- a/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
+++++ b/src/transformers/models/gptsan_japanese/tokenization_gptsan_japanese.py
++@@ -17,6 +17,7 @@ import collections
++ import json
++ import os
++ import re
+++import sys
++ from typing import List, Optional, Tuple, Union
++
++ import numpy as np
++@@ -445,9 +446,23 @@ class SubWordJapaneseTokenizer(object):
++         self.content_repatter5 = re.compile(
++             r"(明治|大正|昭和|平成|令和|㍾|㍽|㍼|㍻|\u32ff)\d{1,2}年(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日(\d{1,2}|:|\d{1,2}時|\d{1,2}分|\(日\)|\(月\)|\(火\)|\(水\)|\(木\)|\(金\)|\(土\)|㈰|㈪|㈫|㈬|㈭|㈮|㈯)*"
++         )
++-        self.content_repatter6 = re.compile(
++-            r"((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*億)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*万)*((0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*千)*(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)*(千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+(\(税込\)|\(税抜\)|\+tax)*"
++-        )
+++        # The original version of this regex displays catastrophic backtracking behaviour. We avoid this usingMore actions
+++        # possessive quantifiers in Py >= 3.11. In versions below this, we avoid the vulnerability using a slightly
+++        # different regex that should generally have the same behaviour in most non-pathological cases.
+++        if sys.version_info >= (3, 11):
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億])*+"
+++                r"(?:\d,\d{3}|[\d万])*+"
+++                r"(?:\d,\d{3}|[\d千])*+"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
+++        else:
+++            self.content_repatter6 = re.compile(
+++                r"(?:\d,\d{3}|[\d億万千])*"
+++                r"(?:千円|万円|千万円|円|千ドル|万ドル|千万ドル|ドル|千ユーロ|万ユーロ|千万ユーロ|ユーロ)+"
+++                r"(?:\(税込\)|\(税抜\)|\+tax)*"
+++            )
++         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
++         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
++         self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
++diff --git a/src/transformers/models/nougat/tokenization_nougat_fast.py b/src/transformers/models/nougat/tokenization_nougat_fast.py
++index d02aec7575..bdb5338d0a 100644
++--- a/src/transformers/models/nougat/tokenization_nougat_fast.py
+++++ b/src/transformers/models/nougat/tokenization_nougat_fast.py
++@@ -119,27 +119,17 @@ def normalize_list_like_lines(generation):
++         normalization adjusts the bullet point style and nesting levels based on the captured patterns.
++     """
++
++-    # This matches lines starting with - or *, not followed by - or * (lists)
++-    # that are then numbered by digits \d or roman numerals (one or more)
++-    # and then, optional additional numbering of this line is captured
++-    # this is then fed to re.finditer.
++-    pattern = r"(?:^)(-|\*)?(?!-|\*) ?((?:\d|[ixv])+ )?.+? (-|\*) (((?:\d|[ixv])+)\.(\d|[ixv]) )?.*(?:$)"
++-
++-    for match in reversed(list(re.finditer(pattern, generation, flags=re.I | re.M))):
++-        start, stop = match.span()
++-        delim = match.group(3) + " "
++-        splits = match.group(0).split(delim)
+++    lines = generation.split("\n")More actions
+++    output_lines = []
+++    for line_no, line in enumerate(lines):
+++        match = re.search(r". ([-*]) ", line)
+++        if not match or line[0] not in ("-", "*"):
+++            output_lines.append(line)
+++            continue  # Doesn't fit the pattern we want, no changes
+++        delim = match.group(1) + " "
+++        splits = line.split(delim)[1:]
++         replacement = ""
++-
++-        if match.group(1) is not None:
++-            splits = splits[1:]
++-            delim1 = match.group(1) + " "
++-        else:
++-            delim1 = ""
++-            continue  # Skip false positives
++-
++-        pre, post = generation[:start], generation[stop:]
++-
+++        delim1 = line[0] + " "
++         for i, item in enumerate(splits):
++             level = 0
++             potential_numeral, _, rest = item.strip().partition(" ")
++@@ -150,15 +140,15 @@ def normalize_list_like_lines(generation):
++                 level = potential_numeral.count(".")
++
++             replacement += (
++-                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or start == 0 else delim1) + item.strip()
+++                ("\n" if i > 0 else "") + ("\t" * level) + (delim if i > 0 or line_no == 0 else delim1) + item.strip()
++             )
++
++-        if post == "":
++-            post = "\n"
+++        if line_no == len(lines) - 1:  # If this is the last line in the generationMore actions
+++            replacement += "\n"  # Add an empty line to the end of the generation
++
++-        generation = pre + replacement + post
+++        output_lines.append(replacement)
++
++-    return generation
+++    return "\n".join(output_lines)
++
++
++ def find_next_punctuation(text: str, start_idx=0):
++diff --git a/src/transformers/testing_utils.py b/src/transformers/testing_utils.py
++index ca4b0db8b8..04570fafa1 100644
++--- a/src/transformers/testing_utils.py
+++++ b/src/transformers/testing_utils.py
++@@ -2161,8 +2161,8 @@ def preprocess_string(string, skip_cuda_tests):
++     cuda stuff is detective (with a heuristic), this method will return an empty string so no doctest will be run for
++     `string`.
++     """
++-    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )((?:.*?\n)*?.*?```)"
++-    codeblocks = re.split(re.compile(codeblock_pattern, flags=re.MULTILINE | re.DOTALL), string)
+++    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )(.*?```)"
+++    codeblocks = re.split(codeblock_pattern, string, flags=re.DOTALL)
++     is_cuda_found = False
++     for i, codeblock in enumerate(codeblocks):
++         if "load_dataset(" in codeblock and "# doctest: +IGNORE_RESULT" not in codeblock:
++--
++2.40.1
 diff --git a/transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch b/transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
 new file mode 100644
 index 0000000..efec3f2
@@ -721,13 +1078,13 @@ index 0000000..efec3f2
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/transformers-4.38.0/meta.yaml
-similarity index 76%
+similarity index 73%
 rename from recipe/meta.yaml
 rename to transformers-4.38.0/meta.yaml
-index 80688b6..56f117b 100644
+index 80688b6..b15460e 100644
 --- a/recipe/meta.yaml
 +++ b/transformers-4.38.0/meta.yaml
-@@ -6,8 +6,13 @@ package:
+@@ -6,8 +6,14 @@ package:
    version: {{ version }}
  
  source:
@@ -740,10 +1097,11 @@ index 80688b6..56f117b 100644
 +    - 0001-Fix-for-CVE-2024-12720.patch
 +    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
 +    - 0001-Backported-CVE-2025-5197.patch
++    - 0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch    
  
  build:
    noarch: python
-@@ -23,7 +28,7 @@ requirements:
+@@ -23,7 +29,7 @@ requirements:
      - datasets !=2.5.0  # Required for transformers-cli.
      - filelock
      - huggingface_hub >=0.19.3,<1.0
