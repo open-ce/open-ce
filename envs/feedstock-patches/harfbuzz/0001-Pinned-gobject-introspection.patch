@@ -1,0 +1,32 @@
+From ad64f1ae449247590a9b968c4164ce0deda4dd19 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 26 Sep 2025 05:02:06 +0000
+Subject: [PATCH] Pinned gobject-introspection
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index c283493..ba0d36c 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -32,13 +32,13 @@ requirements:
+     - {{ cdt('libxrender-devel') }}      # [linux]
+     - {{ cdt('xorg-x11-proto-devel') }}  # [linux and (s390x or ppc64le or x86_64)]; needed for cairo support
+     - pkg-config
+-    - gobject-introspection
++    - gobject-introspection<1.72.0
+     - meson
+     - ninja-base
+     - pthread-stubs
+     - m2-patch  # [win]
+   host:
+-    - gobject-introspection 1.72.0
++    - gobject-introspection<1.72.0
+     - cairo 1.16
+     - freetype 2.10
+     - glib 2
+-- 
+2.40.1
+

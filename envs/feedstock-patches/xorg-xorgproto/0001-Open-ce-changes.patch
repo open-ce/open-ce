@@ -1,0 +1,28 @@
+From 002d6890f7563a7925c3125645dd803adb69a71c Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 25 Sep 2025 09:50:00 +0000
+Subject: [PATCH] Open-ce changes
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index aaa2781..76971a2 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -31,9 +31,9 @@ requirements:
+     - m2-make  # [win]
+     - gnuconfig  # [unix]
+     - {{ compiler('c') }}        # [unix]
+-    - {{ stdlib("c") }}          # [unix]
++#    - {{ stdlib("c") }}          # [unix]
+     - {{ compiler('m2w64_c') }}  # [win]
+-    - {{ stdlib("m2w64_c") }}    # [win]
++#    - {{ stdlib("m2w64_c") }}    # [win]
+   host:
+     - xorg-util-macros
+ 
+-- 
+2.40.1
+

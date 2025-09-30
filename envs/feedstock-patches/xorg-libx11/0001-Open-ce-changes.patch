@@ -1,0 +1,64 @@
+From d384dd6218f74c76bb32d907f536c2fa003b36f4 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 26 Sep 2025 06:10:01 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/build.sh  |  1 +
+ recipe/meta.yaml | 17 ++++++++++++++---
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index 98a7c56..c3835b2 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -3,6 +3,7 @@
+ set -e
+ set -x
+ 
++autoreconf -fi
+ # Adopt a Unix-friendly path if we're on Windows (see bld.bat).
+ [ -n "$PATH_OVERRIDE" ] && export PATH="$PATH_OVERRIDE"
+ 
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 79efbe8..a0cceeb 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -48,20 +48,31 @@ requirements:
+     - make                          # [unix]
+     - m2-make                       # [win]
+     - {{ compiler('c') }}           # [unix]
+-    - {{ stdlib('c') }}             # [unix]
++#    - {{ stdlib('c') }}             # [unix]
+     - {{ compiler('m2w64_c') }}     # [win]
+-    - {{ stdlib('m2w64_c') }}       # [win]
+-    - autoconf                      # [unix]
++#    - {{ stdlib('m2w64_c') }}       # [win]
++    - autoconf>2.70                      # [unix]
+     - automake                      # [unix]
+     - gettext                       # [unix]
+     - libtool                       # [unix]
+     - sed                           # [unix]
++    - libxcb
++    - xorg-libxau
++    - xorg-util-macros >=1.15
++    - xorg-xtrans
+   host:
+     - xorg-xorgproto
+     - libxcb
+     - pthread-stubs
+     - xorg-util-macros
+     - xorg-xtrans
++    - libxcb
++    - xorg-libxau
++    - xorg-util-macros >=1.15
++    - xorg-xtrans
++  run:
++    - libxcb
++    - xorg-libxau
+ 
+ test:
+   commands:
+-- 
+2.40.1
+

@@ -1,0 +1,25 @@
+From 78e85620f3f78c749e0c5db1aa4e7d9d26bf8dff Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 19 Sep 2025 14:28:49 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8de6226..b1b266b 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -40,7 +40,7 @@ requirements:
+     - ninja   # [win]
+   host:
+     - freetype
+-    - libxml2 {{ libxml2 }}
++    - libxml2
+     - coreutils  # [osx]
+     # Required for MT-safe global config test
+     - unzip      # [not win]
+-- 
+2.40.1
+

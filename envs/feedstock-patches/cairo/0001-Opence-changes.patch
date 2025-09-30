@@ -1,0 +1,50 @@
+From ebf08c13549b81e408763c615aa917b9fae7f0a3 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 26 Sep 2025 05:06:05 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 236995e..4f46f5e 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -39,14 +39,15 @@ requirements:
+     - pthread-stubs         # [linux]
+     - xcb-proto             # [linux]
+     - {{ compiler('c') }}
+-    - {{ cdt('libx11-devel') }}          # [linux]
+-    - {{ cdt('libxau-devel') }}          # [linux]
+-    - {{ cdt('libxext-devel') }}         # [linux]
+-    - {{ cdt('libxrender-devel') }}      # [linux]
++    - xorg-libx11
++    - xorg-libxau
++    - xorg-libxext
++    - xorg-libxrender
+     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
+     - patch     # [osx]
+     - m2-patch  # [win]
+-
++    - xorg-xproto
++    - libxcb
+   host:
+     - freetype 2.10
+     - fontconfig 2.14
+@@ -55,7 +56,11 @@ requirements:
+     - libxcb 1.15               # [linux]
+     - pixman 0.40
+     - zlib 1.2.*
+-
++    - libxcb
++    - xorg-libx11
++    - xorg-xproto
++    - xorg-libxau
++    - xorg-libxext
+   run:
+     - freetype
+     - fontconfig
+-- 
+2.40.1
+

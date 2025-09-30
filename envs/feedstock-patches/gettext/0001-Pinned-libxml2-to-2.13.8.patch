@@ -1,0 +1,66 @@
+From 3059a6e1d775e0a575b2a0366655bfac7cb54cae Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Mon, 29 Sep 2025 04:54:54 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 29 +++--------------------------
+ 1 file changed, 3 insertions(+), 26 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 14e6fcd..1612f14 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -13,24 +13,8 @@ package:
+   version: {{ version }}
+ 
+ source:
+-{% if from_git == 'yes' %}
+-  # caching the gnulib submodule stands a chance of working via
+-  # this URL:
+-  - git_url: git://git.sv.gnu.org/gettext.git
+-  # .. rather than this one:
+-  # - git_url: https://git.savannah.gnu.org/git/gettext.git
+-    git_ref: v{{ version }}
+-{% if source_gnulib == 'no' %}
+-    git_depth: 0
+-{% endif %}
+-  # Just so we get a configure to diff against.
+-  - url: https://ftp.gnu.org/pub/gnu/gettext/gettext-{{ pversion }}.tar.xz
+-    sha256: {{ sha256 }}
+-    folder: release-tarball-src
+-{% else %}
+-  - url: https://ftp.gnu.org/pub/gnu/gettext/gettext-{{ pversion }}.tar.xz
+-    sha256: {{ sha256 }}
+-{% endif %}
++  - url: https://ftp.gnu.org/gnu/gettext/gettext-{{ pversion }}.tar.xz
++    sha256: {{ sha256 }}
+     patches:
+       # See https://savannah.gnu.org/bugs/?59929: AC_INIT with proper package and version
+       - use-acinit-for-libtextstyle.patch
+@@ -44,13 +28,6 @@ source:
+       # - 0007-Work-around-Unixisms-in-libgettextpo.patch                  # [win]
+       # - 0008-Add-missing-extern-C-protectors.patch                       # [win]
+       # - 0009-Use-the-C-hack-in-a-few-more-files.patch                    # [win]
+-{% if from_git == 'no' %}
+-{% if source_gnulib == 'yes' %}
+-  - git_url: git://git.sv.gnu.org/gnulib.git
+-    git_ref: 7397561e64f9b96a4a1638117ce18d06133a60f1
+-    folder: gnulib
+-{% endif %}
+-{% endif %}
+ 
+ build:
+   number: 2
+@@ -88,7 +65,7 @@ requirements:
+   host:
+     - ncurses                            # [not win]
+     - libiconv                           # [osx]
+-    - libxml2 {{ libxml2 }}
++    - libxml2 >=2.13.8
+     - llvm-openmp                        # [osx]
+   run:
+     - libstdcxx-ng                       # [linux]
+-- 
+2.40.1
+
