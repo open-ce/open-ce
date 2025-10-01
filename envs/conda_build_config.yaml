@@ -115,7 +115,7 @@ hypothesis:
 h5py:
   - 3.7.*
 icu:
-  - 58.*  # [(x86_64 or (ppc_arch == "p10")) and not (s390x)]
+  - 58.*  # [(x86_64 or (ppc_arch == "p10")) and not s390x]
   - 73.*  # [(s390x or (ppc_arch != "p10")) and not x86_64]
 importlib_resources:
   - 5.*
