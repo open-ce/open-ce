@@ -33,7 +33,7 @@ index 14e6fcd..1612f14 100644
 -  - url: https://ftp.gnu.org/pub/gnu/gettext/gettext-{{ pversion }}.tar.xz
 -    sha256: {{ sha256 }}
 -{% endif %}
-+  - url: https://ftp.osuosl.org/gnu/gettext/gettext-{{ pversion }}.tar.xz
++  - url: https://ftp.osuosl.org/pub/gnu/gettext/gettext-{{ pversion }}.tar.xz
 +    sha256: {{ sha256 }}
      patches:
        # See https://savannah.gnu.org/bugs/?59929: AC_INIT with proper package and version
