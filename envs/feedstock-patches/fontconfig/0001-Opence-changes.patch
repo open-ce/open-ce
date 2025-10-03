@@ -1,17 +1,48 @@
-From 78e85620f3f78c749e0c5db1aa4e7d9d26bf8dff Mon Sep 17 00:00:00 2001
+From d5393db126c839351bb8412f89f18fc700b1b982 Mon Sep 17 00:00:00 2001
 From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Fri, 19 Sep 2025 14:28:49 +0000
+Date: Fri, 3 Oct 2025 06:41:42 +0000
 Subject: [PATCH] Opence changes
 
 ---
- recipe/meta.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ recipe/build.sh  | 2 +-
+ recipe/meta.yaml | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/recipe/build.sh b/recipe/build.sh
+index ff62066..84a9c00 100755
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -43,7 +43,7 @@ export CFLAGS="${CFLAGS} -fno-merge-constants"
+             "${FONT_DIRS}"
+ 
+ 
+-make -j${CPU_COUNT} ${VERBOSE_AT}
++make -j ${VERBOSE_AT}
+ make install
+ 
+ # alias for macOSX to allow "Keep mtime of the font directory" test to pass in run-test.sh
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 8de6226..b1b266b 100644
+index 6f22c11..a3235f1 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -40,7 +40,7 @@ requirements:
+@@ -24,7 +24,7 @@ build:
+ 
+ requirements:
+   build:
+-    - {{ stdlib('c') }}
++#    - {{ stdlib('c') }}
+     - {{ compiler('c') }}
+     - make   # [not win]
+     - pkg-config
+@@ -34,21 +34,21 @@ requirements:
+     - gettext   # [not win]
+     - libtool   # [not win]
+     - automake  # [not win]
+-    - autoconf  # [not win]
++    - autoconf>=2.71  # [not win]
+     - patch     # [not win]
+     - python  # [win]
+     - meson   # [win]
      - ninja   # [win]
    host:
      - freetype
@@ -20,6 +51,14 @@ index 8de6226..b1b266b 100644
      - coreutils  # [osx]
      # Required for MT-safe global config test
      - unzip      # [not win]
+     - expat
+     - libiconv   # [win]
+     - libuuid    # [linux]
+-    - zlib {{ zlib }}
++    - zlib
+ 
+ test:
+   requires:
 -- 
 2.40.1
 
