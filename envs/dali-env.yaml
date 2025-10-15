@@ -4,6 +4,7 @@ imported_envs:
 {% if build_type == 'cuda' %}
   - tensorflow-env.yaml
   - openblas-env.yaml
+  - opencv-env.yaml
 {% endif %}
 
 packages:
@@ -15,60 +16,6 @@ packages:
     - feedstock : jpeg-turbo
     - feedstock : libflac
     - feedstock : libsndfile
-    - feedstock : https://github.com/AnacondaRecipes/xorg-libxau-feedstock
-      git_tag : 2abcd0007b52cf8f5e9a2d4a34075cd7d187e3c4
-    - feedstock : https://github.com/conda-forge/xorg-xtrans-feedstock
-      git_tag : 1aca0a965eb4531ee0ad3786781e42f8ced65f39
-      patches:
-        - feedstock-patches/xorg-xtrans/0001-Opence-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-xorgproto-feedstock
-      git_tag : a104c6884965f65066867a2b18c16259d4fcf229
-      patches:
-        - feedstock-patches/xorg-xorgproto/0001-Open-ce-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-libx11-feedstock
-      git_tag : 5099473b2c9fbae832ec420d2f636099141d3636
-      patches:
-        - feedstock-patches/xorg-libx11/0001-Open-ce-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-kbproto-feedstock
-      git_tag : f53fffc67041c249bd2a0bfa9e6060da61f22fa4
-      patches:
-        - feedstock-patches/xorg-kbproto/0001-Open-ce-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-inputproto-feedstock
-      git_tag : 5e8ebd0048144f0bba0d18808b58afc5e8bcc32b
-      patches:
-        - feedstock-patches/xorg-inputproto/0001-Open-ce-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-xextproto-feedstock
-      git_tag : 612f20b539e190a3423ee73efed218b3fdfbac31
-      patches:
-        - feedstock-patches/xorg-xextproto/0001-Opence-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-xproto-feedstock
-      git_tag : abfee133e64c11a63e0b4858384fb136cc6dc0a9
-      patches:
-        - feedstock-patches/xorg-xproto/0001-Opence-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-libxext-feedstock
-      git_tag : 39472e3fff9bd7586ee94da5e6293046a38f2c8a
-      patches:
-        - feedstock-patches/xorg-libxext/0001-Opence-changes.patch
-    - feedstock : https://github.com/conda-forge/xorg-libxrender-feedstock
-      git_tag : e7aad4906da72d662d293586db50aa72b1d14026
-      patches:
-        - feedstock-patches/xorg-libxrender/0001-Opence-changes.patch
-    - feedstock : https://github.com/AnacondaRecipes/gettext-feedstock.git
-      git_tag : 45586482550e35d7c8ebfcc1183c3600f7b8c625
-      patches :
-        - feedstock-patches/gettext/0001-Pinned-libxml2-to-2.13.8.patch
-    - feedstock : https://github.com/AnacondaRecipes/fontconfig-feedstock
-      git_tag : 2fda677fa607df1255b8f998631e101f30629995
-      patches :
-        - feedstock-patches/fontconfig/0001-Opence-changes.patch
-    - feedstock : https://github.com/AnacondaRecipes/cairo-feedstock
-      git_tag : ca6b16edb78dffa39c380ed26330eb0c8865db19
-      patches :
-        - feedstock-patches/cairo/0001-Opence-changes.patch
-    - feedstock : https://github.com/AnacondaRecipes/harfbuzz-feedstock
-      git_tag : 86852b0cf16d61655f5ffc9450605d33332e47b9
-      patches :
-        - feedstock-patches/harfbuzz/0001-Pinned-gobject-introspection.patch
     - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
       git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
       patches:                                                            #[not x86_64]

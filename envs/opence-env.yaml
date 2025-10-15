@@ -17,7 +17,7 @@ imported_envs:
   - jax-env.yaml     # [build_type == 'cpu' or x86_64]
   - opencv-env.yaml
   - ray-env.yaml
-  - apache-beam-env.yaml
+  - apache-beam-env.yaml  #[not ppc64le]
   - prophet-env.yaml
   - orbit-ml-env.yaml
   - deepspeed-env.yaml

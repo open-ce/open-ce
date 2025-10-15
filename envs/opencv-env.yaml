@@ -6,6 +6,7 @@ imported_envs:
 
 packages:
   - feedstock : opencv
+{% if ppc64le and ppc_arch != 'p10' %}
   - feedstock : https://github.com/AnacondaRecipes/xorg-libxau-feedstock
     git_tag : 2abcd0007b52cf8f5e9a2d4a34075cd7d187e3c4
   - feedstock : https://github.com/conda-forge/xorg-xtrans-feedstock
@@ -60,6 +61,7 @@ packages:
     git_tag : 86852b0cf16d61655f5ffc9450605d33332e47b9
     patches :
       - feedstock-patches/harfbuzz/0001-Pinned-gobject-introspection.patch
+{% endif %}
   - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
     git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
     patches:                                                            #[not x86_64]
