@@ -45,4 +45,4 @@ packages:
     git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
     patches:
       - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
-git_tag_for_env: open-ce-v1.11.7
+git_tag_for_env: open-ce-v1.11.7-p9
