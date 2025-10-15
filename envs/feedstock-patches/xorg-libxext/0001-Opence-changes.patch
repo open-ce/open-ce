@@ -1,0 +1,47 @@
+From 1f3e9c1d5dfe4128f51190f6a03f3aa3a78da655 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Fri, 26 Sep 2025 06:39:05 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/build.sh  | 1 +
+ recipe/meta.yaml | 7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/recipe/build.sh b/recipe/build.sh
+index bcd400b..33a71d6 100644
+--- a/recipe/build.sh
++++ b/recipe/build.sh
+@@ -1,6 +1,7 @@
+ #! /bin/bash
+ 
+ set -xe
++autoreconf -fi
+ 
+ # Adopt a Unix-friendly path if we're on Windows (see bld.bat).
+ [ -n "$PATH_OVERRIDE" ] && export PATH="$PATH_OVERRIDE"
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 92393c7..445b931 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -30,13 +30,14 @@ requirements:
+     - make                         # [unix]
+     - m2-make                      # [win]
+     - {{ compiler("c") }}          # [unix]
+-    - {{ stdlib("c") }}            # [unix]
++#    - {{ stdlib("c") }}            # [unix]
+     - {{ compiler("m2w64_c") }}    # [win]
+-    - {{ stdlib("m2w64_c") }}      # [win]
+-    - autoconf                     # [unix]
++#    - {{ stdlib("m2w64_c") }}      # [win]
++    - autoconf>2.70                     # [unix]
+     - automake                     # [unix]
+     - gettext                      # [unix]
+     - libtool                      # [unix]
++    - xorg-util-macros >=1.15
+   host:
+     - pthread-stubs
+     - xorg-xorgproto
+-- 
+2.40.1
+

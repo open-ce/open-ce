@@ -4,6 +4,7 @@ imported_envs:
 {% if build_type == 'cuda' %}
   - tensorflow-env.yaml
   - openblas-env.yaml
+  - opencv-env.yaml
 {% endif %}
 
 packages:
@@ -15,6 +16,10 @@ packages:
     - feedstock : jpeg-turbo
     - feedstock : libflac
     - feedstock : libsndfile
+    - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
+      git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
+      patches:                                                            #[not x86_64]
+        - feedstock-patches/libxml2/0001-Opence-changes.patch             #[not x86_64]
     - feedstock : https://github.com/conda-forge/eigen-feedstock.git
       git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
     - feedstock : https://github.com/conda-forge/libtar-feedstock

@@ -1,0 +1,54 @@
+From f6571fee6a6ba5a034c56f785ae8c4127a5ff831 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 25 Sep 2025 10:47:30 +0000
+Subject: [PATCH] open-ce changes
+
+---
+ recipe/meta.yaml | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 2a4cb86..30fe027 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -29,19 +29,19 @@ requirements:
+     - meson
+     - xz  # [unix]
+     - m2w64-xz  # [win]
+-    - {{ stdlib('c') }}
++#    - {{ stdlib('c') }}
+     - {{ compiler('c') }}
+   host:
+-    - fontconfig {{ fontconfig }}
+-    - freetype {{ freetype }}
+-    - glib {{ glib }}
+-    - libpng {{ libpng }}
+-    - pixman {{ pixman }}
+-    - libxcb {{ libxcb }}                    # [linux]
+-    - xorg-libx11 {{ xorg_libx11 }}          # [linux]
+-    - xorg-libxext {{ xorg_libxext }}        # [linux]
+-    - xorg-libxrender {{ xorg_libxrender }}  # [linux]
+-    - zlib {{ zlib }}
++    - fontconfig
++    - freetype
++    - glib
++    - libpng
++    - pixman
++    - libxcb
++    - xorg-libx11
++    - xorg-libxext
++    - xorg-libxrender
++    - zlib
+   run:
+     - fontconfig
+     - freetype
+@@ -115,4 +115,4 @@ extra:
+     - ocefpaf
+     - pkgw
+   skip-lints:
+-    - patch_unnecessary
+\ No newline at end of file
++    - patch_unnecessary
+-- 
+2.40.1
+

@@ -1,0 +1,28 @@
+From 258d8ee03a7c166a30e6e6d356848ca61f648534 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 25 Sep 2025 10:18:16 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 8b8abd1..9f6ebaf 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -31,9 +31,9 @@ requirements:
+     - make                         # [unix]
+     - m2-make                      # [win]
+     - {{ compiler('c') }}          # [unix]
+-    - {{ stdlib('c') }}            # [unix]
++#    - {{ stdlib('c') }}            # [unix]
+     - {{ compiler('m2w64_c') }}    # [win]
+-    - {{ stdlib('m2w64_c') }}      # [win]
++#    - {{ stdlib('m2w64_c') }}      # [win]
+     - autoconf                     # [unix]
+     - automake                     # [unix]
+     - gettext                      # [unix]
+-- 
+2.40.1
+
