@@ -19,9 +19,6 @@ imported_envs:
   - tensorflow-serving-env.yaml
   - jax-env.yaml
   - llama-env.yaml
+  - opencv-env.yaml
 
-packages:
-  - feedstock : opencv
-  - feedstock : https://github.com/conda-forge/eigen-feedstock.git
-    git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
 git_tag_for_env: open-ce-v1.11.7
