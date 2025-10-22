@@ -1,0 +1,25 @@
+From d734146bb3d8e554e622b02aa3401722de5ff77a Mon Sep 17 00:00:00 2001
+From: User for Building <Srighakollapu.Sai.Srivatsa@ibm.com>
+Date: Wed, 22 Oct 2025 07:50:02 +0000
+Subject: [PATCH] py310-scipy-conflicts-fix
+
+---
+ recipe/meta.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index fdf70a1..a560090 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -31,8 +31,7 @@ requirements:
+     - numpy {{ numpy }}
+     - llvm-openmp 14.0.6  # [osx]
+     - pip
+-    - scipy 1.9.3   # [py<311]
+-    - scipy 1.10.0  # [py==311]
++    - scipy 1.10.0
+     - scipy 1.11  # [py==312]
+     - setuptools {{ setuptools }}
+     - wheel
+--
+2.40.1
