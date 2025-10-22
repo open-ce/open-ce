@@ -14,10 +14,11 @@ packages:
     patches :
       - feedstock-patches/setuptools/0001-Fix-backporting-CVE-2025-47273.patch
   # Build scikit-learn as scikit-learn Anaconda requires numpy<1.25
-  - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   # [py==311]
-    git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          # [py==311]
-    patches :                                                                   # [py==311]
-      - feedstock-patches/scikit-learn/0001-Fix-CVE-2024-5206-and-opence-changes.patch    # [py==311]
+  - feedstock : https://github.com/AnacondaRecipes/scikit-learn-feedstock.git   
+    git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                          
+    patches :                                                                   
+      - feedstock-patches/scikit-learn/0001-Fix-CVE-2024-5206-and-opence-changes.patch    
+      - feedstock-patches/scikit-learn/py310-scikit-learn-conflicts-with-scipy-fix.patch
   - feedstock : https://github.com/conda-forge/filesystem-spec-feedstock
     git_tag : be754febf038a93d01e6f7de85d5489ced355f88
   - feedstock : https://github.com/AnacondaRecipes/werkzeug-feedstock.git    #[ppc64le]
