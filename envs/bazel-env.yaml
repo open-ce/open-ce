@@ -1,7 +1,7 @@
 builder_version: ">=13.0.0"
 
 packages:
-  - feedstock : cdts               #[not x86_64]
-    runtime_package : False        #[not x86_64]
+#  - feedstock : cdts               #[not x86_64]
+#    runtime_package : False        #[not x86_64]
   - feedstock : bazel
     runtime_package : False
