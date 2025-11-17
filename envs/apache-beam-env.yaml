@@ -9,6 +9,8 @@ imported_envs:
 packages:
 {% if not s390x %}
 {% if ppc64le and ppc_arch != 'p10' %}
+  - feedstock : https://github.com/conda-forge/pydot-feedstock
+    git_tag : 88d741c85b3f7032b15738ec0c3d10d73cc37fce
   - feedstock : https://github.com/AnacondaRecipes/xorg-libxau-feedstock
     git_tag : 2abcd0007b52cf8f5e9a2d4a34075cd7d187e3c4
   - feedstock : https://github.com/conda-forge/xorg-xtrans-feedstock
