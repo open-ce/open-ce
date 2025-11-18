@@ -72,9 +72,9 @@ packages:
     git_tag : 6f2f6845447045d69253841b67fed6ddc9c0218f   #v0.3.8
     patches :
       - feedstock-patches/llama-python/0001-Update-to-v0.3.8.patch
-  - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.0.7
-    git_tag : ac3f03bf718b99e92676ee0cc17c04d1f4301c24
+  - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.20.0
+    git_tag : 362ac68fdd560ddad0b9b5f7e77c002e17021299
     patches:
-      - feedstock-patches/python-multipart/0001-Changed-source-for-python-multipart.patch
+      - feedstock-patches/python-multipart/0001-Changed-source-and-version-for-python-multipart-to-fix-CVE-2024-53981.patch
 {% endif %}
 git_tag_for_env: open-ce-v1.11.7-p9
