@@ -24,6 +24,8 @@ packages:
       - feedstock-patches/fastapi/0001-Open-ce-changes.patch  #v0.109.1
   - feedstock : https://github.com/conda-forge/starlette-feedstock
     git_tag : a4aef1199674dbb30842bf7c7816e8cfa1cffefd  #0.40.0
+    patches: 
+      - feedstock-patches/starlette/0001-CVE-fix-for-starlette-CVE-2025-54121.patch
   - feedstock : https://github.com/conda-forge/python-multipart-feedstock  #0.20.0
     git_tag : 362ac68fdd560ddad0b9b5f7e77c002e17021299
     patches:
