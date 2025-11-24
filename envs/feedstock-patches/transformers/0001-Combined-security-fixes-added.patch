@@ -1,7 +1,7 @@
-From b61469ce365e45461468073e002f8e7386fa7736 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Wed, 24 Sep 2025 09:01:26 +0000
-Subject: [PATCH] Fixed CVEs for transformers
+From 5dce0862cd568d18ec2c3691e2cde3d299aad91f Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Mon, 24 Nov 2025 10:16:02 +0000
+Subject: [PATCH] Combined security fixex added
 
 ---
  config/build-config.yaml                      |   6 +
@@ -10,27 +10,35 @@ Subject: [PATCH] Fixed CVEs for transformers
  .../0001-Fix-for-CVE-2024-12720.patch         |  25 +++
  ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | 170 ++++++++++++++++++
  ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++
- transformers-4.37.2/meta.yaml                 |  71 ++++++++
+ ...25-6921-CVE-2025-6638-by-backporting.patch |  75 ++++++++
+ ...fixed-CVE-2025-6051-with-backporting.patch |  52 ++++++
+ transformers-4.37.2/meta.yaml                 |  73 ++++++++
  .../0001-Backported-CVE-2025-5197.patch       |  26 +++
  ...1-Fix-for-CVE-2024-11392-11393-11394.patch |  90 ++++++++++
  .../0001-Fix-for-CVE-2024-12720.patch         |  25 +++
  ...ixed-CVE-2025-1194-and-CVE-2025-2099.patch | 170 ++++++++++++++++++
  ...ixed-CVE-2025-3933-and-CVE-2025-3264.patch | 137 ++++++++++++++
- {recipe => transformers-4.38.0}/meta.yaml     |  12 +-
- 13 files changed, 982 insertions(+), 3 deletions(-)
+ ...25-6921-CVE-2025-6638-by-backporting.patch |  75 ++++++++
+ ...fixed-CVE-2025-6051-with-backporting.patch |  52 ++++++
+ {recipe => transformers-4.38.0}/meta.yaml     |  14 +-
+ 17 files changed, 1240 insertions(+), 3 deletions(-)
  create mode 100644 config/build-config.yaml
  create mode 100644 transformers-4.37.2/0001-Backported-CVE-2025-5197.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.37.2/0001-Fix-for-CVE-2024-12720.patch
  create mode 100644 transformers-4.37.2/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
  create mode 100644 transformers-4.37.2/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
+ create mode 100644 transformers-4.37.2/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
+ create mode 100644 transformers-4.37.2/0001-fixed-CVE-2025-6051-with-backporting.patch
  create mode 100644 transformers-4.37.2/meta.yaml
  create mode 100644 transformers-4.38.0/0001-Backported-CVE-2025-5197.patch
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-11392-11393-11394.patch
  create mode 100644 transformers-4.38.0/0001-Fix-for-CVE-2024-12720.patch
  create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
  create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
- rename {recipe => transformers-4.38.0}/meta.yaml (73%)
+ create mode 100644 transformers-4.38.0/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
+ create mode 100644 transformers-4.38.0/0001-fixed-CVE-2025-6051-with-backporting.patch
+ rename {recipe => transformers-4.38.0}/meta.yaml (68%)
 
 diff --git a/config/build-config.yaml b/config/build-config.yaml
 new file mode 100644
@@ -522,12 +530,151 @@ index 0000000..efec3f2
 +-- 
 +2.40.1
 +
+diff --git a/transformers-4.37.2/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch b/transformers-4.37.2/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
+new file mode 100644
+index 0000000..b6fbba3
+--- /dev/null
++++ b/transformers-4.37.2/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
+@@ -0,0 +1,75 @@
++From d7bd8b42d2da3822eacbe06e6c8c65473b64d1f3 Mon Sep 17 00:00:00 2001
++From: Archana-Shinde1 <archana.shinde1@ibm.com>
++Date: Mon, 24 Nov 2025 04:58:07 +0000
++Subject: [PATCH] Fixed CVE-2025-6921 CVE-2025-6638 by backporting
++
++---
++ src/transformers/models/marian/tokenization_marian.py | 10 +++++-----
++ src/transformers/optimization_tf.py                   |  5 ++---
++ 2 files changed, 7 insertions(+), 8 deletions(-)
++
++diff --git a/src/transformers/models/marian/tokenization_marian.py b/src/transformers/models/marian/tokenization_marian.py
++index ead3ddd70e..b8220522be 100644
++--- a/src/transformers/models/marian/tokenization_marian.py
+++++ b/src/transformers/models/marian/tokenization_marian.py
++@@ -13,7 +13,6 @@
++ # limitations under the License.
++ import json
++ import os
++-import re
++ import warnings
++ from pathlib import Path
++ from shutil import copyfile
++@@ -124,7 +123,6 @@ class MarianTokenizer(PreTrainedTokenizer):
++     pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
++     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
++     model_input_names = ["input_ids", "attention_mask"]
++-    language_code_re = re.compile(">>.+<<")  # type: re.Pattern
++ 
++     def __init__(
++         self,
++@@ -206,9 +204,11 @@ class MarianTokenizer(PreTrainedTokenizer):
++ 
++     def remove_language_code(self, text: str):
++         """Remove language codes like >>fr<< before sentencepiece"""
++-        match = self.language_code_re.match(text)
++-        code: list = [match.group(0)] if match else []
++-        return code, self.language_code_re.sub("", text)
+++        code = []
+++        if text.startswith(">>") and (end_loc := text.find("<<")) != -1:
+++            code.append(text[: end_loc + 2])
+++            text = text[end_loc + 2 :]
+++        return code, text
++ 
++     def _tokenize(self, text: str) -> List[str]:
++         code, text = self.remove_language_code(text)
++diff --git a/src/transformers/optimization_tf.py b/src/transformers/optimization_tf.py
++index 25023430ed..874547567d 100644
++--- a/src/transformers/optimization_tf.py
+++++ b/src/transformers/optimization_tf.py
++@@ -15,7 +15,6 @@
++ """Functions and classes related to optimization (weight updates)."""
++ 
++ 
++-import re
++ from typing import Callable, List, Optional, Union
++ 
++ import tensorflow as tf
++@@ -297,12 +296,12 @@ class AdamWeightDecay(Adam):
++ 
++         if self._include_in_weight_decay:
++             for r in self._include_in_weight_decay:
++-                if re.search(r, param_name) is not None:
+++                if r in param_name:
++                     return True
++ 
++         if self._exclude_from_weight_decay:
++             for r in self._exclude_from_weight_decay:
++-                if re.search(r, param_name) is not None:
+++                if r in param_name:
++                     return False
++         return True
++ 
++-- 
++2.40.1
++
+diff --git a/transformers-4.37.2/0001-fixed-CVE-2025-6051-with-backporting.patch b/transformers-4.37.2/0001-fixed-CVE-2025-6051-with-backporting.patch
+new file mode 100644
+index 0000000..4f943ae
+--- /dev/null
++++ b/transformers-4.37.2/0001-fixed-CVE-2025-6051-with-backporting.patch
+@@ -0,0 +1,52 @@
++From d9268a4c221604fa1769212f1051e9ef2958139e Mon Sep 17 00:00:00 2001
++From: Archana-Shinde1 <archana.shinde1@ibm.com>
++Date: Mon, 24 Nov 2025 04:44:55 +0000
++Subject: [PATCH] fixed CVE-2025-6051 with backporting
++
++---
++ .../models/clvp/number_normalizer.py          | 20 ++++++++++++-------
++ 1 file changed, 13 insertions(+), 7 deletions(-)
++
++diff --git a/src/transformers/models/clvp/number_normalizer.py b/src/transformers/models/clvp/number_normalizer.py
++index 86aa087e81..e525d1dc6c 100644
++--- a/src/transformers/models/clvp/number_normalizer.py
+++++ b/src/transformers/models/clvp/number_normalizer.py
++@@ -16,9 +16,15 @@
++ """English Normalizer class for CLVP."""
++ 
++ 
++-import re
+++import sys
++ 
++ 
+++if sys.version_info >= (3, 11):
+++    # Atomic grouping support was only added to the core RE in Python 3.11
+++    import re
+++else:
+++    import regex as re
+++
++ class EnglishNormalizer:
++     def __init__(self):
++         # List of (regular expression, replacement) pairs for abbreviations:
++@@ -200,12 +206,12 @@ class EnglishNormalizer:
++         This method is used to normalize numbers within a text such as converting the numbers to words, removing
++         commas, etc.
++         """
++-        text = re.sub(re.compile(r"([0-9][0-9\,]+[0-9])"), self._remove_commas, text)
++-        text = re.sub(re.compile(r"£([0-9\,]*[0-9]+)"), r"\1 pounds", text)
++-        text = re.sub(re.compile(r"\$([0-9\.\,]*[0-9]+)"), self._expand_dollars, text)
++-        text = re.sub(re.compile(r"([0-9]+\.[0-9]+)"), self._expand_decimal_point, text)
++-        text = re.sub(re.compile(r"[0-9]+(st|nd|rd|th)"), self._expand_ordinal, text)
++-        text = re.sub(re.compile(r"[0-9]+"), self._expand_number, text)
+++        text = re.sub(r"([0-9][0-9,]+[0-9])", self._remove_commas, text)
+++        text = re.sub(r"£([0-9,]*[0-9])", r"\1 pounds", text)
+++        text = re.sub(r"\$([0-9.,]*[0-9])", self._expand_dollars, text)
+++        text = re.sub(r"([0-9]++\.[0-9]+)", self._expand_decimal_point, text)
+++        text = re.sub(r"[0-9]++(st|nd|rd|th)", self._expand_ordinal, text)
+++        text = re.sub(r"[0-9]+", self._expand_number, text)
++         return text
++ 
++     def expand_abbreviations(self, text: str) -> str:
++-- 
++2.40.1
++
 diff --git a/transformers-4.37.2/meta.yaml b/transformers-4.37.2/meta.yaml
 new file mode 100644
-index 0000000..42e8a33
+index 0000000..2fa44df
 --- /dev/null
 +++ b/transformers-4.37.2/meta.yaml
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,73 @@
 +{% set name = "transformers" %}
 +{% set version = "4.37.2" %}
 +
@@ -544,6 +691,8 @@ index 0000000..42e8a33
 +    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
 +    - 0001-Backported-CVE-2025-5197.patch
 +    - 0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch
++    - 0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
++    - 0001-fixed-CVE-2025-6051-with-backporting.patch
 +
 +build:
 +  noarch: python
@@ -1077,14 +1226,153 @@ index 0000000..efec3f2
 +-- 
 +2.40.1
 +
+diff --git a/transformers-4.38.0/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch b/transformers-4.38.0/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
+new file mode 100644
+index 0000000..b6fbba3
+--- /dev/null
++++ b/transformers-4.38.0/0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
+@@ -0,0 +1,75 @@
++From d7bd8b42d2da3822eacbe06e6c8c65473b64d1f3 Mon Sep 17 00:00:00 2001
++From: Archana-Shinde1 <archana.shinde1@ibm.com>
++Date: Mon, 24 Nov 2025 04:58:07 +0000
++Subject: [PATCH] Fixed CVE-2025-6921 CVE-2025-6638 by backporting
++
++---
++ src/transformers/models/marian/tokenization_marian.py | 10 +++++-----
++ src/transformers/optimization_tf.py                   |  5 ++---
++ 2 files changed, 7 insertions(+), 8 deletions(-)
++
++diff --git a/src/transformers/models/marian/tokenization_marian.py b/src/transformers/models/marian/tokenization_marian.py
++index ead3ddd70e..b8220522be 100644
++--- a/src/transformers/models/marian/tokenization_marian.py
+++++ b/src/transformers/models/marian/tokenization_marian.py
++@@ -13,7 +13,6 @@
++ # limitations under the License.
++ import json
++ import os
++-import re
++ import warnings
++ from pathlib import Path
++ from shutil import copyfile
++@@ -124,7 +123,6 @@ class MarianTokenizer(PreTrainedTokenizer):
++     pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
++     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
++     model_input_names = ["input_ids", "attention_mask"]
++-    language_code_re = re.compile(">>.+<<")  # type: re.Pattern
++ 
++     def __init__(
++         self,
++@@ -206,9 +204,11 @@ class MarianTokenizer(PreTrainedTokenizer):
++ 
++     def remove_language_code(self, text: str):
++         """Remove language codes like >>fr<< before sentencepiece"""
++-        match = self.language_code_re.match(text)
++-        code: list = [match.group(0)] if match else []
++-        return code, self.language_code_re.sub("", text)
+++        code = []
+++        if text.startswith(">>") and (end_loc := text.find("<<")) != -1:
+++            code.append(text[: end_loc + 2])
+++            text = text[end_loc + 2 :]
+++        return code, text
++ 
++     def _tokenize(self, text: str) -> List[str]:
++         code, text = self.remove_language_code(text)
++diff --git a/src/transformers/optimization_tf.py b/src/transformers/optimization_tf.py
++index 25023430ed..874547567d 100644
++--- a/src/transformers/optimization_tf.py
+++++ b/src/transformers/optimization_tf.py
++@@ -15,7 +15,6 @@
++ """Functions and classes related to optimization (weight updates)."""
++ 
++ 
++-import re
++ from typing import Callable, List, Optional, Union
++ 
++ import tensorflow as tf
++@@ -297,12 +296,12 @@ class AdamWeightDecay(Adam):
++ 
++         if self._include_in_weight_decay:
++             for r in self._include_in_weight_decay:
++-                if re.search(r, param_name) is not None:
+++                if r in param_name:
++                     return True
++ 
++         if self._exclude_from_weight_decay:
++             for r in self._exclude_from_weight_decay:
++-                if re.search(r, param_name) is not None:
+++                if r in param_name:
++                     return False
++         return True
++ 
++-- 
++2.40.1
++
+diff --git a/transformers-4.38.0/0001-fixed-CVE-2025-6051-with-backporting.patch b/transformers-4.38.0/0001-fixed-CVE-2025-6051-with-backporting.patch
+new file mode 100644
+index 0000000..4f943ae
+--- /dev/null
++++ b/transformers-4.38.0/0001-fixed-CVE-2025-6051-with-backporting.patch
+@@ -0,0 +1,52 @@
++From d9268a4c221604fa1769212f1051e9ef2958139e Mon Sep 17 00:00:00 2001
++From: Archana-Shinde1 <archana.shinde1@ibm.com>
++Date: Mon, 24 Nov 2025 04:44:55 +0000
++Subject: [PATCH] fixed CVE-2025-6051 with backporting
++
++---
++ .../models/clvp/number_normalizer.py          | 20 ++++++++++++-------
++ 1 file changed, 13 insertions(+), 7 deletions(-)
++
++diff --git a/src/transformers/models/clvp/number_normalizer.py b/src/transformers/models/clvp/number_normalizer.py
++index 86aa087e81..e525d1dc6c 100644
++--- a/src/transformers/models/clvp/number_normalizer.py
+++++ b/src/transformers/models/clvp/number_normalizer.py
++@@ -16,9 +16,15 @@
++ """English Normalizer class for CLVP."""
++ 
++ 
++-import re
+++import sys
++ 
++ 
+++if sys.version_info >= (3, 11):
+++    # Atomic grouping support was only added to the core RE in Python 3.11
+++    import re
+++else:
+++    import regex as re
+++
++ class EnglishNormalizer:
++     def __init__(self):
++         # List of (regular expression, replacement) pairs for abbreviations:
++@@ -200,12 +206,12 @@ class EnglishNormalizer:
++         This method is used to normalize numbers within a text such as converting the numbers to words, removing
++         commas, etc.
++         """
++-        text = re.sub(re.compile(r"([0-9][0-9\,]+[0-9])"), self._remove_commas, text)
++-        text = re.sub(re.compile(r"£([0-9\,]*[0-9]+)"), r"\1 pounds", text)
++-        text = re.sub(re.compile(r"\$([0-9\.\,]*[0-9]+)"), self._expand_dollars, text)
++-        text = re.sub(re.compile(r"([0-9]+\.[0-9]+)"), self._expand_decimal_point, text)
++-        text = re.sub(re.compile(r"[0-9]+(st|nd|rd|th)"), self._expand_ordinal, text)
++-        text = re.sub(re.compile(r"[0-9]+"), self._expand_number, text)
+++        text = re.sub(r"([0-9][0-9,]+[0-9])", self._remove_commas, text)
+++        text = re.sub(r"£([0-9,]*[0-9])", r"\1 pounds", text)
+++        text = re.sub(r"\$([0-9.,]*[0-9])", self._expand_dollars, text)
+++        text = re.sub(r"([0-9]++\.[0-9]+)", self._expand_decimal_point, text)
+++        text = re.sub(r"[0-9]++(st|nd|rd|th)", self._expand_ordinal, text)
+++        text = re.sub(r"[0-9]+", self._expand_number, text)
++         return text
++ 
++     def expand_abbreviations(self, text: str) -> str:
++-- 
++2.40.1
++
 diff --git a/recipe/meta.yaml b/transformers-4.38.0/meta.yaml
-similarity index 73%
+similarity index 68%
 rename from recipe/meta.yaml
 rename to transformers-4.38.0/meta.yaml
-index 80688b6..b15460e 100644
+index 80688b6..88ae64f 100644
 --- a/recipe/meta.yaml
 +++ b/transformers-4.38.0/meta.yaml
-@@ -6,8 +6,14 @@ package:
+@@ -6,8 +6,16 @@ package:
    version: {{ version }}
  
  source:
@@ -1098,10 +1386,12 @@ index 80688b6..b15460e 100644
 +    - 0001-Fixed-CVE-2025-3933-and-CVE-2025-3264.patch
 +    - 0001-Backported-CVE-2025-5197.patch
 +    - 0001-Fixed-CVE-2025-1194-and-CVE-2025-2099.patch    
++    - 0001-fixed-CVE-2025-6051-with-backporting.patch
++    - 0001-Fixed-CVE-2025-6921-CVE-2025-6638-by-backporting.patch
  
  build:
    noarch: python
-@@ -23,7 +29,7 @@ requirements:
+@@ -23,7 +31,7 @@ requirements:
      - datasets !=2.5.0  # Required for transformers-cli.
      - filelock
      - huggingface_hub >=0.19.3,<1.0
