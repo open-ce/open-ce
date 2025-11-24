@@ -3,6 +3,5 @@ builder_version: ">=13.0.0"
 packages:
 #  - feedstock : cdts               #[not x86_64]
 #    runtime_package : False        #[not x86_64]
-  - feedstock : https://github.com/Archana-Shinde1/bazel-feedstock
-    git_tag : rhel-jdk
+  - feedstock : bazel
     runtime_package : False
