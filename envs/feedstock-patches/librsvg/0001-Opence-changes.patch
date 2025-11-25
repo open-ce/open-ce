@@ -1,0 +1,54 @@
+From f1e08a5e34ead9dbf104ff9de766edd0a4c287cd Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 9 Oct 2025 12:14:54 +0000
+Subject: [PATCH] Opence changes
+
+---
+ recipe/meta.yaml | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index f060f7c..1075e13 100755
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -53,21 +53,24 @@ requirements:
+     - pthread-stubs                # [linux]
+   host:
+     # X11/XCB dependencies go with cairo.
+-    - cairo {{ cairo }}
+-    - fontconfig {{ fontconfig }}  # [not win]
+-    - freetype {{ freetype }}      # [not win]
+-    - gdk-pixbuf {{ gdk_pixbuf }}
+-    - gettext {{ gettext }}        # [osx]
+-    - glib {{ glib }}
+-    - gobject-introspection 1.*
+-    - harfbuzz {{ harfbuzz }}      # [not win]
+-    - libiconv {{ libiconv }}      # [osx]
+-    - libpng {{ libpng }}          # [not win]
+-    - libxml2 {{ libxml2 }}
++    - cairo
++    - fontconfig
++    - freetype
++    - gdk-pixbuf
++    - gettext
++    - glib
++    - gobject-introspection
++    - harfbuzz
++    - libiconv
++    - libpng
++    - libxml2
+     - libzip 1.8.0
+-    - pango {{ pango }}
++    - pango
+     # lib/libz.1.dylib required by bin/rsvg-convert on osx
+-    - zlib {{ zlib }}              # [osx]
++    - zlib
++    - xorg-xproto
++    - xorg-kbproto
++    - xorg-xextproto
+   run:
+     - harfbuzz    # [not win]
+     - fontconfig  # [not win]
+-- 
+2.40.1
+

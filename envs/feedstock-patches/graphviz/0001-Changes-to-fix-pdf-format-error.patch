@@ -1,0 +1,53 @@
+From 91e4aab212930e6f22c0028fb5ae517db6b6c5b2 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 13 Nov 2025 11:17:59 +0000
+Subject: [PATCH] Changes to fix pdf format error
+
+---
+ recipe/meta.yaml | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 6642056..81c5bf1 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -40,6 +40,19 @@ requirements:
+     - m2-flex                                             # [win]
+     - m2-bison                                            # [win]
+     - perl                                                # [win]
++    - glib
++    - libglib
++    - pango
++    - xorg-inputproto
++    - xorg-kbproto
++    - xorg-libx11
++    - xorg-libxau
++    - xorg-libxext
++    - xorg-libxrender
++    - xorg-xextproto
++    - xorg-xorgproto
++    - xorg-xproto
++    - xorg-xtrans
+   host:
+     # --with-pangocairo=yes
+     - cairo
+@@ -66,6 +79,16 @@ requirements:
+     - zlib                                                # [unix]
+     # Windows only deps
+     - getopt-win32                                        # [win]
++    - xorg-inputproto
++    - xorg-kbproto
++    - xorg-libx11
++    - xorg-libxau
++    - xorg-libxext
++    - xorg-libxrender
++    - xorg-xextproto
++    - xorg-xorgproto
++    - xorg-xproto
++    - xorg-xtrans
+   run:
+     # gtk2 has no run_exports
+     - gtk2                                                # [unix]
+-- 
+2.40.1
+
