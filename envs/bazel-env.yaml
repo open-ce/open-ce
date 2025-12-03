@@ -1,8 +1,8 @@
 builder_version: ">=13.0.0"
 
 packages:
-  - feedstock : cdts               #[not x86_64]
-    runtime_package : False        #[not x86_64]
+  - feedstock : cdts               #[ s390x ]
+    runtime_package : False        #[ s390x ]
   - feedstock : bazel
     runtime_package : False
 git_tag_for_env: open-ce-v1.11.7-p9
