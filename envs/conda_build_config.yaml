@@ -29,6 +29,8 @@ boost:
   - 1.82.*  # [s390x]
 boost_mp11:
   - 1.76.*
+brotli:
+  - 1.2.0
 c_compiler_version:
   - 11.2.*
 catalogue:
