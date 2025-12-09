@@ -12,8 +12,7 @@ packages:
     patches :                                                       #[ppc_arch == 'p10']
       - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
   - feedstock : grpc-cpp
-  - feedstock : https://github.com/smartvibs8876/pyarrow-feedstock
-    git_tag : build-with-brotli-120
+  - feedstock : pyarrow
   - feedstock : orc
   - feedstock : https://github.com/conda-forge/brotli-feedstock.git
     git_tag : 61563a5a99db058833a6397855bcafd36ff97905
