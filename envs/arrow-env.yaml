@@ -11,6 +11,10 @@ packages:
     git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
     patches :                                                       #[ppc_arch == 'p10']
       - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
+  - feedstock : https://github.com/conda-forge/setuptools_scm-feedstock.git
+    git_tag : 47061889d5cf3295bd28d0cb391160a630a301b5
+    patches :
+      - feedstock-patches/setuptools_scm/setuptools_scm_fix.patch
   - feedstock : grpc-cpp
   - feedstock : pyarrow
   - feedstock : orc

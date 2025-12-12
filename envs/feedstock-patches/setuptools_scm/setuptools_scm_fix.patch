@@ -1,0 +1,33 @@
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 4c942ad..2a49628 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -19,15 +19,15 @@ outputs:
+       noarch: python
+     requirements:
+       host:
+-        - python {{ python_min }}
++        - python
+         - pip
+         - packaging >=20
+-        - setuptools >=61
++        - setuptools {{ setuptools }}
+         - tomli
+       run:
+-        - python >={{ python_min }}
++        - python
+         - packaging >=20.0
+-        - setuptools >=45
++        - setuptools {{ setuptools }}
+         - tomli >=1.0.0
+         - typing-extensions
+         - importlib-metadata
+@@ -37,7 +37,7 @@ outputs:
+       commands:
+         - pip check
+       requires:
+-        - python {{ python_min }}
++        - python
+         - pip
+
+   - name: setuptools_scm
