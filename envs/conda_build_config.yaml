@@ -7,7 +7,7 @@ array_record:
 arviz:
   - 0.14.0
 arrow:
-  - 15.0.1
+  - 17.0.0
 astunparse:
   - 1.6
 attrs:
