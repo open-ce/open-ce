@@ -18,4 +18,8 @@ packages:
   - feedstock : grpc-cpp
   - feedstock : pyarrow
   - feedstock : orc
+  - feedstock : https://github.com/conda-forge/brotli-feedstock.git
+    git_tag : 61563a5a99db058833a6397855bcafd36ff97905
+    patches :
+      - feedstock-patches/brotli/0001-Removed-stdlibc.patch
 git_tag_for_env: open-ce-v1.11.7-p9

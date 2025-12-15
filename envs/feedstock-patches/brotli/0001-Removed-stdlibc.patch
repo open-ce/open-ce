@@ -1,0 +1,79 @@
+From 88c687b212b836d33298c10503972b4015010861 Mon Sep 17 00:00:00 2001
+From: Vibhav Dhaimode <Vibhav.Dhaimode2@ibm.com>
+Date: Thu, 4 Dec 2025 05:06:12 +0000
+Subject: [PATCH] Removed stdlib c as we have not set in conda build config
+
+---
+ recipe/meta.yaml | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 9360eee..9bcd1e4 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -21,7 +21,7 @@ requirements:
+   build:
+     - cmake
+     - {{ compiler('c') }}
+-    - {{ stdlib("c") }}
++    #- {{ stdlib("c") }}
+     - {{ compiler('cxx') }}
+     - ninja
+   host:
+@@ -38,7 +38,7 @@ outputs:
+       build:
+         - cmake
+         - {{ compiler('c') }}
+-        - {{ stdlib("c") }}
++        #- {{ stdlib("c") }}
+         - ninja
+     test:
+       commands:
+@@ -58,7 +58,7 @@ outputs:
+       build:
+         - cmake
+         - {{ compiler('c') }}
+-        - {{ stdlib("c") }}
++        #- {{ stdlib("c") }}
+         - ninja
+       host:
+         - {{ pin_subpackage("libbrotlicommon", exact=True) }}
+@@ -82,7 +82,7 @@ outputs:
+       build:
+         - cmake
+         - {{ compiler('c') }}
+-        - {{ stdlib("c") }}
++        #- {{ stdlib("c") }}
+         - ninja
+       host:
+         - {{ pin_subpackage("libbrotlicommon", exact=True) }}
+@@ -103,7 +103,7 @@ outputs:
+       build:
+         - cmake
+         - {{ compiler('c') }}
+-        - {{ stdlib("c") }}
++        #- {{ stdlib("c") }}
+         - ninja
+       host:
+         - {{ pin_subpackage("libbrotlienc", exact=True) }}
+@@ -126,7 +126,7 @@ outputs:
+       build:
+         - cmake
+         - {{ compiler('c') }}
+-        - {{ stdlib("c") }}
++        #- {{ stdlib("c") }}
+         - ninja
+       host:
+         - {{ pin_subpackage("libbrotlienc", exact=True) }}
+@@ -170,7 +170,7 @@ outputs:
+       build:
+         - cmake
+         - {{ compiler('c') }}
+-        - {{ stdlib("c") }}
++        #- {{ stdlib("c") }}
+         - {{ compiler('cxx') }}
+         - python                                 # [build_platform != target_platform]
+         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+--
+2.40.1
+
