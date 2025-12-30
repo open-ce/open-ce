@@ -1,12 +1,12 @@
-From 038208fcfb119628199dcb24967f3ce2588d2381 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Thu, 6 Jul 2023 11:13:07 +0000
-Subject: [PATCH] fix build for python 3.11
+From 5377cbf7028f80cb7f8723b65e43ae55d8e76d62 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Tue, 30 Dec 2025 12:06:13 +0000
+Subject: [PATCH] Fix test failure
 
 ---
  ...duplicate-class-error-for-python3.11.patch | 31 +++++++++++++++++++
- recipe/meta.yaml                              |  2 ++
- 2 files changed, 33 insertions(+)
+ recipe/meta.yaml                              |  3 ++
+ 2 files changed, 34 insertions(+)
  create mode 100644 recipe/0001-fix-duplicate-class-error-for-python3.11.patch
 
 diff --git a/recipe/0001-fix-duplicate-class-error-for-python3.11.patch b/recipe/0001-fix-duplicate-class-error-for-python3.11.patch
@@ -47,7 +47,7 @@ index 0000000..00f03f1
 +2.34.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 451f045..722f753 100644
+index 451f045..0e27b57 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -8,6 +8,8 @@ package:
@@ -59,6 +59,14 @@ index 451f045..722f753 100644
  
  build:
    number: 0
+@@ -28,6 +30,7 @@ test:
+     - aioredis
+   requires:
+     - pip
++    - setuptools
+   commands:
+     - pip check
+ 
 -- 
-2.34.1
+2.40.1
 

@@ -1,14 +1,14 @@
-From c9f9491af6250d955c62045df0180e58357d4fa1 Mon Sep 17 00:00:00 2001
-From: ArchanaShinde1 <archana.shinde2504@gmail.com>
-Date: Thu, 14 Dec 2023 04:49:02 +0000
-Subject: [PATCH] Upadtes with open-ce
+From 668ac615e3c8e49a521945a42fcfae75e6b60a22 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Tue, 30 Dec 2025 12:25:17 +0000
+Subject: [PATCH] Fix test failure
 
 ---
- recipe/meta.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ recipe/meta.yaml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index af8e81a..c3c0d23 100644
+index af8e81a..bbffde0 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -19,13 +19,13 @@ build:
@@ -27,6 +27,14 @@ index af8e81a..c3c0d23 100644
  
  test:
    source_files:
+@@ -46,6 +46,7 @@ test:
+     - python-build
+     - pip
+     - pytest
++    - wheel
+ 
+ about:
+   home: https://github.com/hynek/hatch-fancy-pypi-readme
 -- 
 2.40.1
 
