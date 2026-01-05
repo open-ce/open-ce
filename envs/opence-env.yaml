@@ -39,6 +39,10 @@ packages:
     git_tag : 7ef40d11fe9b1d2af78b66ea04ea293b1cb21ab2
     patches :                                                                  #[ppc64le]
       - feedstock-patches/huggingface-hub/0001-Pinned-typing-extensions.patch  #[ppc64le]
+  - feedstock : https://github.com/conda-forge/requests-feedstock      #[ppc64le]
+    git_tag : e0a54a5fc07dac61e3447e2fe4be41e85d2666d3                 #[ppc64le]
+    patches :                                                          #[ppc64le]
+      - feedstock-patches/requests/requests.patch                      #[ppc64le]
   - feedstock : https://github.com/conda-forge/datasets-feedstock.git
     git_tag : 2526f9639ccb6c0e9626e2f7c20849f78fa099c0
     patches:
