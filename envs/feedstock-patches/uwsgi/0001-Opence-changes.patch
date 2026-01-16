@@ -1,14 +1,15 @@
-From db06e0afb7f84e8c6372eebc0803d682ffcffb76 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Mon, 11 Aug 2025 11:10:29 +0000
-Subject: [PATCH] Fixed build
+From e9b5a1b0bf3e0882b31ef387f78f05c7a0d81f86 Mon Sep 17 00:00:00 2001
+From: Aman-Sukar <Aman.Surkar1@ibm.com>
+Date: Fri, 16 Jan 2026 10:36:26 +0000
+Subject: [PATCH] Fixed test failures for uwsgi
 
 ---
- recipe/meta.yaml | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ recipe/meta.yaml   |  19 ++++---
+ recipe/run_test.sh | 124 ++++++++++++++++++++++++++++++---------------
+ 2 files changed, 94 insertions(+), 49 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 31f6612..e21fa9b 100644
+index 31f6612..cc5d8ef 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -27,7 +28,7 @@ index 31f6612..e21fa9b 100644
  
  build:
    number: 0
-@@ -18,22 +18,22 @@ requirements:
+@@ -18,28 +18,31 @@ requirements:
    build:
      - {{ compiler('c') }}
      - {{ compiler('cxx') }}
@@ -37,6 +38,7 @@ index 31f6612..e21fa9b 100644
    host:
 -    - icu
 +    - icu 73
++    - libxcrypt
      - jansson
      - libpython-static
      - libxml2  # [not win]
@@ -55,6 +57,162 @@ index 31f6612..e21fa9b 100644
  
  test:
    source_files:
+     - tests
++  recipe:
++    - run_test.sh
+   commands:
+-    - uwsgi --plugin-list
++    - ./run_test.sh
+     - uwsgi --version
+ 
+ about:
+diff --git a/recipe/run_test.sh b/recipe/run_test.sh
+index 6d8e0c9..a4e9234 100644
+--- a/recipe/run_test.sh
++++ b/recipe/run_test.sh
+@@ -17,15 +17,22 @@ fi
+ ERROR=0
+ SUCCESS=0
+ 
++ARCH="$(arch)"
++if [ ${ARCH} = "x86_64" ]; then
++    pidof() {
++        pgrep -f '[u]wsgi' | tr '\n' ' '
++    }
++else
++    pidof() {
++        local pids=$(ps axc | awk "{if (\$5==\"$1\") print \$1}" | tr '\n' ' ')
++        if [[ -n $pids ]]; then
++           echo "$pids"
++        else
++           return 1;
++        fi
++    }
++fi
+ 
+-pidof() {
+-    local pids=$(ps axc | awk "{if (\$5==\"$1\") print \$1}" | tr '\n' ' ')
+-    if [[ -n $pids ]]; then
+-        echo "$pids"
+-    else
+-        return 1;
+-    fi
+-}
+ 
+ die() {
+     date > reload.txt
+@@ -42,43 +49,78 @@ die() {
+     fi
+ }
+ 
+-
+-http_test() {
+-    URL=$1
+-    UPID=`pidof uwsgi`
+-    if [ "$UPID" != "" ]; then
+-        echo -e "${bldgre}>>> Spawned PID $UPID, running tests${txtrst}"
+-        sleep 5
+-        curl -fI $URL
+-        RET=$?
+-        if [ $RET != 0 ]; then
+-            die "${bldred}>>> Error during curl run${txtrst}"
+-            ERROR=$((ERROR+1))
++if [ ${ARCH} = "x86_64" ]; then
++    http_test() {
++        URL=$1
++        UPID=`pidof uwsgi`
++        if [ "$UPID" != "" ]; then
++            echo -e "${bldgre}>>> Spawned PID $UPID, running tests${txtrst}"
++            sleep 5
++            curl -fI --noproxy '*' $URL
++            RET=$?
++            if [ $RET != 0 ]; then
++                ERROR=$((ERROR+1))
++                die "${bldred}>>> Error during curl run${txtrst}"
++            else
++                SUCCESS=$((SUCCESS+1))
++                echo -e "${bldyel}>>> SUCCESS: Done${txtrst}"
++                return 0
++            fi
+         else
+-            SUCCESS=$((SUCCESS+1))
++            ERROR=$((ERROR+1))
++            die "${bldred}>>> ERROR: uWSGI did not start${txtrst}"
+         fi
+-        die "${bldyel}>>> SUCCESS: Done${txtrst}"
+-    else
+-        die "${bldred}>>> ERROR: uWSGI did not start${txtrst}"
+-        ERROR=$((ERROR+1))
+-    fi
+-}
++    }
+ 
++    test_python() {
++        date > reload.txt
++        rm -f uwsgi.log
++        echo -e "${bldyel}================== TESTING $1 =====================${txtrst}"
++        echo -e "${bldyel}>>> Spawning uWSGI python app${txtrst}"
++        echo -en "${bldred}"
++        pushd tests
++        $PREFIX/bin/uwsgi --master --http :18080 --exit-on-reload --touch-reload reload.txt --wsgi-file staticfile.py --daemonize uwsgi.log
++        echo -en "${txtrst}"
++        http_test "http://localhost:18080/"
++        popd
++        echo -e "${bldyel}===================== DONE $1 =====================${txtrst}\n\n"
++    }
++else
++    http_test() {
++      URL=$1
++      UPID=`pidof uwsgi`
++      if [ "$UPID" != "" ]; then
++          echo -e "${bldgre}>>> Spawned PID $UPID, running tests${txtrst}"
++          sleep 5
++          curl -fI $URL
++          RET=$?
++          if [ $RET != 0 ]; then
++              die "${bldred}>>> Error during curl run${txtrst}"
++              ERROR=$((ERROR+1))
++          else
++              SUCCESS=$((SUCCESS+1))
++          fi
++          die "${bldyel}>>> SUCCESS: Done${txtrst}"
++      else
++          die "${bldred}>>> ERROR: uWSGI did not start${txtrst}"
++          ERROR=$((ERROR+1))
++      fi
++    }
+ 
+-test_python() {
+-    date > reload.txt
+-    rm -f uwsgi.log
+-    echo -e "${bldyel}================== TESTING $1 =====================${txtrst}"
+-    echo -e "${bldyel}>>> Spawning uWSGI python app${txtrst}"
+-    echo -en "${bldred}"
+-    pushd tests
+-    $PREFIX/bin/uwsgi --master --http :8080 --exit-on-reload --touch-reload reload.txt --wsgi-file staticfile.py --daemonize uwsgi.log
+-    echo -en "${txtrst}"
+-    http_test "http://localhost:8080/"
+-    popd
+-    echo -e "${bldyel}===================== DONE $1 =====================${txtrst}\n\n"
+-}
+-
++    test_python() {
++        date > reload.txt
++        rm -f uwsgi.log
++        echo -e "${bldyel}================== TESTING $1 =====================${txtrst}"
++        echo -e "${bldyel}>>> Spawning uWSGI python app${txtrst}"
++        echo -en "${bldred}"
++        pushd tests
++        $PREFIX/bin/uwsgi --master --http :8080 --exit-on-reload --touch-reload reload.txt --wsgi-file staticfile.py --daemonize uwsgi.log
++        echo -en "${txtrst}"
++        http_test "http://localhost:8080/"
++        popd
++        echo -e "${bldyel}===================== DONE $1 =====================${txtrst}\n\n"
++    }
++fi
+ 
+ test_python $CONDA_PY
+ 
 -- 
 2.40.1
 
