@@ -16,7 +16,7 @@ imported_envs:
   - mamba-env.yaml
   - jax-env.yaml     # [build_type == 'cpu' or x86_64]
   - opencv-env.yaml
-  - ray-env.yaml
+#  - ray-env.yaml
   - apache-beam-env.yaml
   - prophet-env.yaml
   - orbit-ml-env.yaml
