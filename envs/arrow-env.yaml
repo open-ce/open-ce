@@ -22,4 +22,4 @@ packages:
     git_tag : 61563a5a99db058833a6397855bcafd36ff97905
     patches :
       - feedstock-patches/brotli/0001-Removed-stdlibc.patch
-git_tag_for_env: open-ce-v1.11.7-p9
+git_tag_for_env: open-ce-v1.11.8
