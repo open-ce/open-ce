@@ -12,4 +12,4 @@ packages:
     patches:
       - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
 {% endif %}
-git_tag_for_env: open-ce-v1.11.7-p9
+git_tag_for_env: open-ce-v1.11.8
