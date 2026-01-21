@@ -25,6 +25,8 @@ packages:
       - feedstock-patches/tokenizers/0001-opence-changes-for-x86-and-s390x.patch  #[not ppc64le]
   - feedstock : https://github.com/conda-forge/safetensors-feedstock     #[not x86_64]
     git_tag : 1e5227b14f1c93caa9819f429e15b859cee36236                   #[not x86_64]
+    patches :                                                                       #[not x86_64]
+      - feedstock-patches/safetensors/0001-Fixed-edition2024-error-for-cargo.patch  #[not x86_64]
   - feedstock : https://github.com/conda-forge/transformers-feedstock
     git_tag : 053ca66df0d4963ad295b5e2f9f0d0a2f42c51b1
     patches :
