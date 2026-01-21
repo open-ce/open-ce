@@ -1,0 +1,61 @@
+From 5f78daf8e9a43df78ef396bf6c1a8b5639a516bb Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <Aman.Surkar1@ibm.com>
+Date: Wed, 21 Jan 2026 19:37:47 +0000
+Subject: [PATCH] Fixed edition2024 error for cargo
+
+---
+ ...n-to-prevent-edition2024-Cargo-rust-.patch | 28 +++++++++++++++++++
+ recipe/meta.yaml                              |  2 ++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 recipe/0001-Removed-criterion-to-prevent-edition2024-Cargo-rust-.patch
+
+diff --git a/recipe/0001-Removed-criterion-to-prevent-edition2024-Cargo-rust-.patch b/recipe/0001-Removed-criterion-to-prevent-edition2024-Cargo-rust-.patch
+new file mode 100644
+index 0000000..5bb89d7
+--- /dev/null
++++ b/recipe/0001-Removed-criterion-to-prevent-edition2024-Cargo-rust-.patch
+@@ -0,0 +1,28 @@
++From 16ae00459678dea62de89152931b8e7f75433d11 Mon Sep 17 00:00:00 2001
++From: Aman-Surkar <Aman.Surkar1@ibm.com>
++Date: Wed, 21 Jan 2026 19:34:12 +0000
++Subject: [PATCH] Removed criterion to prevent edition2024 Cargo-rust error
++
++---
++ safetensors/Cargo.toml | 8 --------
++ 1 file changed, 8 deletions(-)
++
++diff --git a/safetensors/Cargo.toml b/safetensors/Cargo.toml
++index 7016042..127b896 100644
++--- a/safetensors/Cargo.toml
+++++ b/safetensors/Cargo.toml
++@@ -24,11 +24,3 @@ exclude = [ "rust-toolchain", "target/*", "Cargo.lock"]
++ serde = {version = "1.0", features = ["derive"]}
++ serde_json = "1.0"
++ 
++-[dev-dependencies]
++-criterion = "0.4"
++-memmap2 = "0.5"
++-proptest = "1.1"
++-
++-[[bench]]
++-name = "benchmark"
++-harness = false
++-- 
++2.40.1
++
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 30da525..94f13ad 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -8,6 +8,8 @@ package:
+ source:
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/safetensors-{{ version }}.tar.gz
+   sha256: 2304658e6ada81a5223225b4efe84748e760c46079bffedf7e321763cafb36c9
++  patches:
++    - 0001-Removed-criterion-to-prevent-edition2024-Cargo-rust-.patch
+ 
+ build:
+   number: 0
+-- 
+2.40.1
+
