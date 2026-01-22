@@ -1,12 +1,12 @@
-From e68401fa250910cd04c75113d31490436a0cd9b9 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <archana.shinde1@ibm.com>
-Date: Thu, 24 Apr 2025 14:03:41 +0000
-Subject: [PATCH] set env path to use gcc-13
+From 19fb6dd769744c557df6ff8b60cc7d2d730ddec3 Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <Aman.Surkar1@ibm.com>
+Date: Thu, 22 Jan 2026 08:54:00 +0000
+Subject: [PATCH] Fixed GLIBC error for P
 
 ---
  recipe/conda_build_config.yaml |  3 ++
- recipe/meta.yaml               | 56 ++++++++++++++++------------------
- 2 files changed, 29 insertions(+), 30 deletions(-)
+ recipe/meta.yaml               | 66 +++++++++++++++++-----------------
+ 2 files changed, 35 insertions(+), 34 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
 index 7071b8b..0923543 100644
@@ -20,7 +20,7 @@ index 7071b8b..0923543 100644
 +cuda_compiler:
 +  - nvcc
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..cec3c56 100644
+index b1428da..c6d9cc8 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -30,7 +30,7 @@ index b1428da..cec3c56 100644
  
  package:
    name: {{ name|lower }}
-@@ -7,17 +7,15 @@ package:
+@@ -7,17 +7,16 @@ package:
  
  source:
    url: https://github.com/ggerganov/llama.cpp/archive/b{{ version.split(".")[-1] }}.tar.gz
@@ -48,29 +48,44 @@ index b1428da..cec3c56 100644
 +  string: cpu_py{{ python | replace(".", "") }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  #[build_type == 'cpu']
  
    script:
++    - ARCH=`uname -p`
 +    - export PATH=$GCC_13_HOME/bin:$PATH                #[ppc_arch == 'p10']
      - LLAMA_ARGS="-DLLAMA_BUILD_TESTS=OFF"              # [unix]
      - set LLAMA_ARGS=-DLLAMA_BUILD_TESTS=OFF            # [win]
      {% macro llama_args(value) -%}
-@@ -40,11 +38,13 @@ build:
+@@ -32,27 +31,33 @@ build:
+     {{ cmake_args("BUILD_SHARED_LIBS=ON") }}
+ 
+     {{ llama_args("NATIVE=OFF") }}      # [(osx and arm64) or win]
+-    {{ llama_args("AVX=OFF") }}         # [osx and arm64]
+-    {{ llama_args("AVX2=OFF") }}        # [osx and arm64]
++
+     {{ llama_args("FMA=OFF") }}         # [osx and arm64]
+     {{ llama_args("F16C=OFF") }}        # [osx and arm64]
+     {{ llama_args("METAL=ON") }}        # [osx and arm64]
      {{ llama_args("METAL=OFF") }}       # [osx and x86_64]
      {{ llama_args("ACCELERATE=ON") }}   # [osx]
  
 -    {{ llama_args("CUDA=ON") }}                       # [cuda_compiler_version != "None"]
 -    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  # [cuda_compiler_version != "None"]
+-
+-    {{ llama_args("BLAS=ON") }}                     # [not osx and cuda_compiler_version == "None"]
+-    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 +    - LDFLAGS="$LDFLAGS -Wl,-rpath-link,${CUDA_HOME}/compat/"  #[build_type == 'cuda']
 +    {{ llama_args("CUDA=ON") }}                       #[build_type == 'cuda']
 +    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  #[build_type == 'cuda']
 +    {{ cmake_args("CMAKE_INSTALL_PREFIX=$PREFIX") }}  # [ ppc_arch == "p10"]
  
--    {{ llama_args("BLAS=ON") }}                     # [not osx and cuda_compiler_version == "None"]
--    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 +    {{ llama_args("BLAS=ON") }}                     #[build_type == 'cpu']
 +    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  #[build_type == 'cpu']
- 
++    {{ cmake_args("GGML_NATIVE=OFF") }}             # [ppc64le and ppc_arch != "p10"]
++    {{ cmake_args("GGML_CPU_ALL_VARIANTS=ON") }}    # [ppc64le and ppc_arch != "p10"]
++    {{ cmake_args("GGML_BACKEND_DL=ON") }}          # [ppc64le and ppc_arch != "p10"]
      - echo $LLAMA_ARGS  # [unix]
      - set LLAMA_ARGS    # [win]
-@@ -53,6 +53,9 @@ build:
+ 
+-    - cmake -S . -B build -G Ninja %CMAKE_ARGS% %LLAMA_ARGS%    # [win]
++   - cmake -S . -B build -G Ninja %CMAKE_ARGS% %LLAMA_ARGS%    # [win]
      - cmake -S . -B build -G Ninja ${CMAKE_ARGS} ${LLAMA_ARGS}  # [unix]
      - cmake --build build
      - cmake --install build 
@@ -80,7 +95,7 @@ index b1428da..cec3c56 100644
    
    missing_dso_whitelist:
      - "*/nvcuda.dll"    # [win]
-@@ -60,35 +63,28 @@ build:
+@@ -60,35 +65,28 @@ build:
  
  requirements:
    build:
