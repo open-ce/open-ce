@@ -1,12 +1,12 @@
-From 19fb6dd769744c557df6ff8b60cc7d2d730ddec3 Mon Sep 17 00:00:00 2001
+From d01defd17a850c8ed061512211485363cadac419 Mon Sep 17 00:00:00 2001
 From: Aman-Surkar <Aman.Surkar1@ibm.com>
-Date: Thu, 22 Jan 2026 08:54:00 +0000
-Subject: [PATCH] Fixed GLIBC error for P
+Date: Thu, 22 Jan 2026 09:17:54 +0000
+Subject: [PATCH] Fixed llama.cpp error on P
 
 ---
  recipe/conda_build_config.yaml |  3 ++
- recipe/meta.yaml               | 66 +++++++++++++++++-----------------
- 2 files changed, 35 insertions(+), 34 deletions(-)
+ recipe/meta.yaml               | 64 ++++++++++++++++------------------
+ 2 files changed, 34 insertions(+), 33 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
 index 7071b8b..0923543 100644
@@ -20,7 +20,7 @@ index 7071b8b..0923543 100644
 +cuda_compiler:
 +  - nvcc
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..c6d9cc8 100644
+index b1428da..50b10cc 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -53,7 +53,7 @@ index b1428da..c6d9cc8 100644
      - LLAMA_ARGS="-DLLAMA_BUILD_TESTS=OFF"              # [unix]
      - set LLAMA_ARGS=-DLLAMA_BUILD_TESTS=OFF            # [win]
      {% macro llama_args(value) -%}
-@@ -32,27 +31,33 @@ build:
+@@ -32,20 +31,23 @@ build:
      {{ cmake_args("BUILD_SHARED_LIBS=ON") }}
  
      {{ llama_args("NATIVE=OFF") }}      # [(osx and arm64) or win]
@@ -84,8 +84,7 @@ index b1428da..c6d9cc8 100644
      - echo $LLAMA_ARGS  # [unix]
      - set LLAMA_ARGS    # [win]
  
--    - cmake -S . -B build -G Ninja %CMAKE_ARGS% %LLAMA_ARGS%    # [win]
-+   - cmake -S . -B build -G Ninja %CMAKE_ARGS% %LLAMA_ARGS%    # [win]
+@@ -53,6 +55,9 @@ build:
      - cmake -S . -B build -G Ninja ${CMAKE_ARGS} ${LLAMA_ARGS}  # [unix]
      - cmake --build build
      - cmake --install build 
