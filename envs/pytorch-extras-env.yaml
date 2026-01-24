@@ -14,6 +14,14 @@ packages:
     git_tag : 0bbeb5afb679ceedeb7e9625d4c1e6022dfdb9fe
     patches:
       - feedstock-patches/backoff/0001-Opence-changes.patch
+  - feedstock : https://github.com/AnacondaRecipes/gettext-feedstock.git
+    git_tag : 45586482550e35d7c8ebfcc1183c3600f7b8c625
+    patches :
+      - feedstock-patches/gettext/0001-Pinned-libxml2-to-2.13.8.patch
+  - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
+    git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
+    patches:                                                            #[not x86_64]
+      - feedstock-patches/libxml2/0001-Opence-changes.patch             #[not x86_64]
   - feedstock : https://github.com/conda-forge/fire-feedstock
     git_tag : a691d408ec35d71fdf9aecbed6efb408affb2b80
     patches :
