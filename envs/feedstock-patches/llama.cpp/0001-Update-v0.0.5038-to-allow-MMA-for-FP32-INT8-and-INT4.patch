@@ -1,7 +1,7 @@
-From d01defd17a850c8ed061512211485363cadac419 Mon Sep 17 00:00:00 2001
-From: Aman-Surkar <Aman.Surkar1@ibm.com>
-Date: Thu, 22 Jan 2026 09:17:54 +0000
-Subject: [PATCH] Fixed llama.cpp error on P
+From 42c37e1e90176355bce96c98fe2f23ea4b4eedc2 Mon Sep 17 00:00:00 2001
+From: Aman-Surkar1 <Aman.Surkar1@ibm.com>
+Date: Sat, 24 Jan 2026 16:50:59 +0000
+Subject: [PATCH] Removed ppc filter
 
 ---
  recipe/conda_build_config.yaml |  3 ++
@@ -20,7 +20,7 @@ index 7071b8b..0923543 100644
 +cuda_compiler:
 +  - nvcc
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..50b10cc 100644
+index b1428da..074459a 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -78,9 +78,9 @@ index b1428da..50b10cc 100644
  
 +    {{ llama_args("BLAS=ON") }}                     #[build_type == 'cpu']
 +    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  #[build_type == 'cpu']
-+    {{ cmake_args("GGML_NATIVE=OFF") }}             # [ppc64le and ppc_arch != "p10"]
-+    {{ cmake_args("GGML_CPU_ALL_VARIANTS=ON") }}    # [ppc64le and ppc_arch != "p10"]
-+    {{ cmake_args("GGML_BACKEND_DL=ON") }}          # [ppc64le and ppc_arch != "p10"]
++    {{ cmake_args("GGML_NATIVE=OFF") }}             # [ppc_arch != "p10"]
++    {{ cmake_args("GGML_CPU_ALL_VARIANTS=ON") }}    # [ppc_arch != "p10"]
++    {{ cmake_args("GGML_BACKEND_DL=ON") }}          # [ppc_arch != "p10"]
      - echo $LLAMA_ARGS  # [unix]
      - set LLAMA_ARGS    # [win]
  
