@@ -1,14 +1,47 @@
-From add1bd70aeff678c91c8fc8e61b7ea7ade613c02 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde1 <archana.shinde1@ibm.com>
-Date: Tue, 30 Dec 2025 12:20:46 +0000
-Subject: [PATCH] Fix CMake build failure by pinning libcurl <8
+From 0d6a73b3c62f535ce69741b69902d77b0431db89 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde2 <archana.shinde2@ibm.com>
+Date: Sun, 25 Jan 2026 11:29:26 +0000
+Subject: [PATCH] Fixed conflicts by relax pin of libcurl
 
 ---
+ recipe/0001-Add-fix-for-X.patch               | 25 +++++++++++++++++++
  ...on-from-long-int-to-CURL_NETRC_OPTIO.patch | 25 +++++++++++++++++++
- recipe/meta.yaml                              |  6 +++--
- 2 files changed, 29 insertions(+), 2 deletions(-)
+ recipe/meta.yaml                              |  5 +++-
+ 3 files changed, 54 insertions(+), 1 deletion(-)
+ create mode 100644 recipe/0001-Add-fix-for-X.patch
  create mode 100644 recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
 
+diff --git a/recipe/0001-Add-fix-for-X.patch b/recipe/0001-Add-fix-for-X.patch
+new file mode 100644
+index 0000000..81959be
+--- /dev/null
++++ b/recipe/0001-Add-fix-for-X.patch
+@@ -0,0 +1,25 @@
++From 4f098692a689fe2e7b049fcd3652975525ef5d19 Mon Sep 17 00:00:00 2001
++From: Archana-Shinde2 <archana.shinde2@ibm.com>
++Date: Sun, 25 Jan 2026 10:56:03 +0000
++Subject: [PATCH] Add fix for X
++
++---
++ Source/CTest/cmCTestCurl.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Source/CTest/cmCTestCurl.h b/Source/CTest/cmCTestCurl.h
++index d9aa916807..a189c5dc4a 100644
++--- a/Source/CTest/cmCTestCurl.h
+++++ b/Source/CTest/cmCTestCurl.h
++@@ -44,7 +44,7 @@ private:
++   std::vector<std::string> HttpHeaders;
++   std::string HTTPProxyAuth;
++   std::string HTTPProxy;
++-  curl_proxytype HTTPProxyType;
+++  long HTTPProxyType;
++   bool VerifyHostOff;
++   bool VerifyPeerOff;
++   bool UseHttp10;
++-- 
++2.40.1
++
 diff --git a/recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch b/recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
 new file mode 100644
 index 0000000..09a6d58
@@ -41,33 +74,25 @@ index 0000000..09a6d58
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 2791fb9..d9798a9 100644
+index 2791fb9..62ff90a 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -7,6 +7,8 @@ package:
+@@ -7,6 +7,9 @@ package:
  source:
    url: https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}.tar.gz
    sha256: 313b6880c291bd4fe31c0aa51d6e62659282a521e695f30d5cc0d25abbd5c208
 +  patches:
 +    - 0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
++    - 0001-Add-fix-for-X.patch
    # Not until Python 3.8 on Windows: https://github.com/WorksApplications/SudachiPy/issues/107#issuecomment-564510365
    # path: 'C:/opt/Shared.local/src/cmake'
    # path_via_symlink: True
-@@ -33,7 +35,7 @@ requirements:
+@@ -33,7 +36,7 @@ requirements:
  
    host:
      - bzip2           # [unix]
 -    - libcurl         # [unix]
-+    - libcurl <8        # [unix]
-     - expat           # [unix]
-     - ncurses         # [unix]
-     - xz              # [unix]
-@@ -44,7 +46,7 @@ requirements:
- 
-   run:
-     - bzip2           # [unix]
--    - libcurl         # [unix]
-+    - libcurl <8        # [unix]
++    - libcurl       # [unix]
      - expat           # [unix]
      - ncurses         # [unix]
      - xz              # [unix]
