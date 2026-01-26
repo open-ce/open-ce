@@ -45,10 +45,6 @@ packages:
     git_tag : e7aad4906da72d662d293586db50aa72b1d14026
     patches:
       - feedstock-patches/xorg-libxrender/0001-Opence-changes.patch
-  - feedstock : https://github.com/AnacondaRecipes/gettext-feedstock.git
-    git_tag : 45586482550e35d7c8ebfcc1183c3600f7b8c625
-    patches :
-      - feedstock-patches/gettext/0001-Pinned-libxml2-to-2.13.8.patch
   - feedstock : https://github.com/AnacondaRecipes/fontconfig-feedstock
     git_tag : 2fda677fa607df1255b8f998631e101f30629995
     patches :
@@ -62,6 +58,10 @@ packages:
     patches :
       - feedstock-patches/harfbuzz/0001-Pinned-gobject-introspection.patch
 {% endif %}
+  - feedstock : https://github.com/AnacondaRecipes/gettext-feedstock.git
+    git_tag : 45586482550e35d7c8ebfcc1183c3600f7b8c625
+    patches :
+      - feedstock-patches/gettext/0001-Pinned-libxml2-to-2.13.8.patch
   - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
     git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
     patches:                                                            #[not x86_64]
