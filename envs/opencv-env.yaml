@@ -6,7 +6,7 @@ imported_envs:
 
 packages:
   - feedstock : opencv
-{% if ppc64le and ppc_arch != 'p10' %}
+{% if ppc64le  %}
   - feedstock : https://github.com/AnacondaRecipes/xorg-libxau-feedstock
     git_tag : 2abcd0007b52cf8f5e9a2d4a34075cd7d187e3c4
   - feedstock : https://github.com/conda-forge/xorg-xtrans-feedstock
