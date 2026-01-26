@@ -1,12 +1,12 @@
-From 42c37e1e90176355bce96c98fe2f23ea4b4eedc2 Mon Sep 17 00:00:00 2001
-From: Aman-Surkar1 <Aman.Surkar1@ibm.com>
-Date: Sat, 24 Jan 2026 16:50:59 +0000
-Subject: [PATCH] Removed ppc filter
+From 18835ada41825e2323984045d3b92722f0fa75ee Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <Aman.Surkar1@ibm.com>
+Date: Sun, 25 Jan 2026 20:09:55 +0000
+Subject: [PATCH] Fixed Cuda failures on X
 
 ---
  recipe/conda_build_config.yaml |  3 ++
- recipe/meta.yaml               | 64 ++++++++++++++++------------------
- 2 files changed, 34 insertions(+), 33 deletions(-)
+ recipe/meta.yaml               | 71 +++++++++++++++++-----------------
+ 2 files changed, 39 insertions(+), 35 deletions(-)
 
 diff --git a/recipe/conda_build_config.yaml b/recipe/conda_build_config.yaml
 index 7071b8b..0923543 100644
@@ -20,7 +20,7 @@ index 7071b8b..0923543 100644
 +cuda_compiler:
 +  - nvcc
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index b1428da..074459a 100644
+index b1428da..d2702c4 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -1,5 +1,5 @@
@@ -53,7 +53,7 @@ index b1428da..074459a 100644
      - LLAMA_ARGS="-DLLAMA_BUILD_TESTS=OFF"              # [unix]
      - set LLAMA_ARGS=-DLLAMA_BUILD_TESTS=OFF            # [win]
      {% macro llama_args(value) -%}
-@@ -32,20 +31,23 @@ build:
+@@ -32,27 +31,35 @@ build:
      {{ cmake_args("BUILD_SHARED_LIBS=ON") }}
  
      {{ llama_args("NATIVE=OFF") }}      # [(osx and arm64) or win]
@@ -68,25 +68,28 @@ index b1428da..074459a 100644
  
 -    {{ llama_args("CUDA=ON") }}                       # [cuda_compiler_version != "None"]
 -    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  # [cuda_compiler_version != "None"]
--
--    {{ llama_args("BLAS=ON") }}                     # [not osx and cuda_compiler_version == "None"]
--    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
-+    - LDFLAGS="$LDFLAGS -Wl,-rpath-link,${CUDA_HOME}/compat/"  #[build_type == 'cuda']
++    - export LDFLAGS="$LDFLAGS -Wl,-rpath-link,${CUDA_HOME}/compat/,--allow-shlib-undefined"  #[build_type == 'cuda']
 +    {{ llama_args("CUDA=ON") }}                       #[build_type == 'cuda']
 +    {{ cmake_args("CMAKE_CUDA_ARCHITECTURES=all") }}  #[build_type == 'cuda']
 +    {{ cmake_args("CMAKE_INSTALL_PREFIX=$PREFIX") }}  # [ ppc_arch == "p10"]
  
+-    {{ llama_args("BLAS=ON") }}                     # [not osx and cuda_compiler_version == "None"]
+-    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 +    {{ llama_args("BLAS=ON") }}                     #[build_type == 'cpu']
 +    {{ llama_args("BLAS_VENDOR=Intel10_64_dyn") }}  #[build_type == 'cpu']
 +    {{ cmake_args("GGML_NATIVE=OFF") }}             # [ppc_arch != "p10"]
 +    {{ cmake_args("GGML_CPU_ALL_VARIANTS=ON") }}    # [ppc_arch != "p10"]
 +    {{ cmake_args("GGML_BACKEND_DL=ON") }}          # [ppc_arch != "p10"]
++    {{ llama_args("GGML_CUDA=ON") }}                #[build_type == 'cuda']
+ 
      - echo $LLAMA_ARGS  # [unix]
      - set LLAMA_ARGS    # [win]
  
-@@ -53,6 +55,9 @@ build:
-     - cmake -S . -B build -G Ninja ${CMAKE_ARGS} ${LLAMA_ARGS}  # [unix]
-     - cmake --build build
+     - cmake -S . -B build -G Ninja %CMAKE_ARGS% %LLAMA_ARGS%    # [win]
+-    - cmake -S . -B build -G Ninja ${CMAKE_ARGS} ${LLAMA_ARGS}  # [unix]
+-    - cmake --build build
++    - cmake -S . -B build -G Ninja ${CMAKE_ARGS} ${LLAMA_ARGS} -DCMAKE_EXE_LINKER_FLAGS="$LDFLAGS"  # [unix]
++    - cmake --build build --config Release -j$(nproc)
      - cmake --install build 
 +  script_env:
 +    - CUDA_HOME            #[build_type == 'cuda']
@@ -94,7 +97,7 @@ index b1428da..074459a 100644
    
    missing_dso_whitelist:
      - "*/nvcuda.dll"    # [win]
-@@ -60,35 +65,28 @@ build:
+@@ -60,35 +67,29 @@ build:
  
  requirements:
    build:
@@ -116,10 +119,12 @@ index b1428da..074459a 100644
 -    - cuda-version     {{ cuda_compiler_version }}  # [cuda_compiler_version != "None"]
 -    - cuda-cudart-dev  {{ cuda_compiler_version }}  # [(cuda_compiler_version or "").startswith("12")]
 -    - libcublas-dev    {{ cuda_compiler_version }}  # [(cuda_compiler_version or "").startswith("12")]
-+    - cudatoolkit {{ cudatoolkit }}           #[build_type == 'cuda']
- 
+-
 -    - blas-devel * *{{ blas_impl }}                 # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
 -    - mkl-devel {{ mkl }}                           # [not osx and cuda_compiler_version == "None" and blas_impl == "mkl"]
++    - cudatoolkit {{ cudatoolkit }}           #[build_type == 'cuda']
++    - libgcc-ng                               #[x86_64]
++    - libstdcxx-ng                            #[x86_64]
 +    - openblas {{ openblas }}                  #[build_type == 'cpu']
    run:
 -    - cuda-version {{ cuda_compiler_version }}      # [cuda_compiler_version != "None"]
