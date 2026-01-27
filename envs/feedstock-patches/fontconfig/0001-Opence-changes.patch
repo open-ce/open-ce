@@ -1,13 +1,46 @@
-From d5393db126c839351bb8412f89f18fc700b1b982 Mon Sep 17 00:00:00 2001
-From: Aman Surkar <Aman.Surkar@ibm.com>
-Date: Fri, 3 Oct 2025 06:41:42 +0000
-Subject: [PATCH] Opence changes
+From 55376cc6c7a5ef00ebbf4302eef879b9bb91fddd Mon Sep 17 00:00:00 2001
+From: Archana-Shinde2 <archana.shinde2@ibm.com>
+Date: Tue, 27 Jan 2026 09:29:53 +0000
+Subject: [PATCH] Fixed test failure due to Noto-hinted.zip
 
 ---
- recipe/build.sh  | 2 +-
- recipe/meta.yaml | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...1-Use-mirror-url-for-Noto-hinted.zip.patch | 25 +++++++++++++++++++
+ recipe/build.sh                               |  2 +-
+ recipe/meta.yaml                              |  9 ++++---
+ 3 files changed, 31 insertions(+), 5 deletions(-)
+ create mode 100644 recipe/0001-Use-mirror-url-for-Noto-hinted.zip.patch
 
+diff --git a/recipe/0001-Use-mirror-url-for-Noto-hinted.zip.patch b/recipe/0001-Use-mirror-url-for-Noto-hinted.zip.patch
+new file mode 100644
+index 0000000..d051cbd
+--- /dev/null
++++ b/recipe/0001-Use-mirror-url-for-Noto-hinted.zip.patch
+@@ -0,0 +1,25 @@
++From 775e837460b8c4f687105f602e6d01ef1ff5fa8e Mon Sep 17 00:00:00 2001
++From: Archana-Shinde2 <archana.shinde2@ibm.com>
++Date: Tue, 27 Jan 2026 09:25:45 +0000
++Subject: [PATCH] Use mirror url for Noto-hinted.zip
++
++---
++ test/run-test.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/test/run-test.sh b/test/run-test.sh
++index c3da72ae..a3418290 100644
++--- a/test/run-test.sh
+++++ b/test/run-test.sh
++@@ -432,7 +432,7 @@ fi # if [ "x$EXEEXT" = "x" ]
++ if [ -x "$BUILDTESTDIR"/test-crbug1004254 ]; then
++     dotest "MT-safe global config"
++     prep
++-    curl -s -o "$FONTDIR"/noto.zip https://noto-website-2.storage.googleapis.com/pkgs/NotoSans-hinted.zip
+++    curl -s -o "$FONTDIR"/noto.zip https://ftpmirror.your.org/pub/pkgsrc/distfiles/noto-ttf-20230927/Noto-hinted.zip
++     (cd "$FONTDIR"; unzip noto.zip)
++     if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
++ 	touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
++-- 
++2.40.1
++
 diff --git a/recipe/build.sh b/recipe/build.sh
 index ff62066..84a9c00 100755
 --- a/recipe/build.sh
@@ -22,10 +55,18 @@ index ff62066..84a9c00 100755
  
  # alias for macOSX to allow "Keep mtime of the font directory" test to pass in run-test.sh
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 6f22c11..a3235f1 100644
+index 6f22c11..860fe6e 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -24,7 +24,7 @@ build:
+@@ -11,6 +11,7 @@ source:
+   patches:                  # [linux or win]
+     - fcf.patch             # [linux]
+     - windows-compat.patch  # [win]
++    - 0001-Use-mirror-url-for-Noto-hinted.zip.patch
+ 
+ build:
+   number: 0
+@@ -24,7 +25,7 @@ build:
  
  requirements:
    build:
@@ -34,7 +75,7 @@ index 6f22c11..a3235f1 100644
      - {{ compiler('c') }}
      - make   # [not win]
      - pkg-config
-@@ -34,21 +34,21 @@ requirements:
+@@ -34,21 +35,21 @@ requirements:
      - gettext   # [not win]
      - libtool   # [not win]
      - automake  # [not win]
