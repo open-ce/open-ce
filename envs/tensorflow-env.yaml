@@ -80,6 +80,10 @@ packages:
     git_tag : 0aed6724708917d98af1719085b666f085030e4b
     patches :
       - feedstock-patches/backports.tarfile/0001-Opence-changes.patch
+# Added for tirpc header discovery
+  - feedstock : https://github.com/conda-forge/libtirpc-feedstock    # [x86_64]
+    git_tag : 74536a7b8fc4703c29aa43c02506682cc1467549               # [x86_64]
+    patches : feedstock-patches/libtirpc/0001-Open-ce-changes.patch  # [x86_64]
   - feedstock : keras
   - feedstock : tensorflow
   - feedstock : dm-tree

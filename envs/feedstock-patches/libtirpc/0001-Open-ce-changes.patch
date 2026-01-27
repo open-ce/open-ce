@@ -1,0 +1,25 @@
+From b329783b37f64ae1a39ebe6d7dd24d7d7c78b42b Mon Sep 17 00:00:00 2001
+From: Archana-Shinde2 <archana.shinde2@ibm.com>
+Date: Tue, 27 Jan 2026 07:09:47 +0000
+Subject: [PATCH] Open-ce changes
+
+---
+ recipe/meta.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 1226805..162e8a0 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -16,7 +16,7 @@ build:
+ requirements:
+   build:
+     - {{ compiler('c') }}
+-    - {{ stdlib("c") }}
++#    - {{ stdlib("c") }}
+     - make
+ 
+ test:
+-- 
+2.40.1
+
