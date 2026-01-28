@@ -1,13 +1,13 @@
-From e0293e04b17d4d36f64caaa6649f87721fca7562 Mon Sep 17 00:00:00 2001
-From: Archana-Shinde2 <archana.shinde2@ibm.com>
-Date: Mon, 26 Jan 2026 16:08:38 +0000
-Subject: [PATCH] Update build to fix conflicts
+From 38e393d8f6539c80293fb495a69de185758e8390 Mon Sep 17 00:00:00 2001
+From: Aman-Surkar1 <Aman.Surkar1@ibm.com>
+Date: Wed, 28 Jan 2026 07:50:41 +0000
+Subject: [PATCH] Relaxed libcurl pin
 
 ---
  recipe/0001-Add-fix-for-X.patch               | 25 +++++++++++++++++++
  ...on-from-long-int-to-CURL_NETRC_OPTIO.patch | 25 +++++++++++++++++++
- recipe/meta.yaml                              |  9 ++++---
- 3 files changed, 56 insertions(+), 3 deletions(-)
+ recipe/meta.yaml                              |  5 +++-
+ 3 files changed, 54 insertions(+), 1 deletion(-)
  create mode 100644 recipe/0001-Add-fix-for-X.patch
  create mode 100644 recipe/0001-Fix-for-conversion-from-long-int-to-CURL_NETRC_OPTIO.patch
 
@@ -74,7 +74,7 @@ index 0000000..09a6d58
 +2.40.1
 +
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 2791fb9..da9457c 100644
+index 2791fb9..b16fa2b 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
 @@ -7,6 +7,9 @@ package:
@@ -96,24 +96,6 @@ index 2791fb9..da9457c 100644
    ignore_run_exports:
      - vc
  
-@@ -33,7 +36,7 @@ requirements:
- 
-   host:
-     - bzip2           # [unix]
--    - libcurl         # [unix]
-+    - libcurl 8.4.0       # [unix]
-     - expat           # [unix]
-     - ncurses         # [unix]
-     - xz              # [unix]
-@@ -44,7 +47,7 @@ requirements:
- 
-   run:
-     - bzip2           # [unix]
--    - libcurl         # [unix]
-+    - libcurl 8.4.0        # [unix]
-     - expat           # [unix]
-     - ncurses         # [unix]
-     - xz              # [unix]
 -- 
 2.40.1
 
