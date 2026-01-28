@@ -1,17 +1,17 @@
-From 125925a66e0f90eb9225289bffdc42bb624a56c7 Mon Sep 17 00:00:00 2001
+From f8afd7826750b98bb0dbee8d3dd43e4b2838c242 Mon Sep 17 00:00:00 2001
 From: Aman-Surkar1 <Aman.Surkar1@ibm.com>
-Date: Wed, 28 Jan 2026 08:43:29 +0000
-Subject: [PATCH] Relaxed runtime pin for setuptools
+Date: Wed, 28 Jan 2026 09:22:40 +0000
+Subject: [PATCH] Relaxed setuptools pin in runtime
 
 ---
- recipe/meta.yaml | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ recipe/meta.yaml | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/recipe/meta.yaml b/recipe/meta.yaml
-index 4c942ad..dff1b42 100644
+index 4c942ad..0a9c38f 100644
 --- a/recipe/meta.yaml
 +++ b/recipe/meta.yaml
-@@ -19,15 +19,16 @@ outputs:
+@@ -19,15 +19,15 @@ outputs:
        noarch: python
      requirements:
        host:
@@ -27,12 +27,11 @@ index 4c942ad..dff1b42 100644
 +        - python
          - packaging >=20.0
 -        - setuptools >=45
-+        - setuptools >=78.1.1 #[x86_64]
-+        - setuptools          #[not x86_64]
++        - setuptools
          - tomli >=1.0.0
          - typing-extensions
          - importlib-metadata
-@@ -37,7 +38,7 @@ outputs:
+@@ -37,7 +37,7 @@ outputs:
        commands:
          - pip check
        requires:
