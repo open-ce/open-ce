@@ -6,7 +6,7 @@ imported_envs:
 
 packages:
   - feedstock : opencv
-{% if ppc64le  %}
+{% if ppc64le and ppc_arch != 'p10' %}
   - feedstock : https://github.com/AnacondaRecipes/xorg-libxau-feedstock
     git_tag : 2abcd0007b52cf8f5e9a2d4a34075cd7d187e3c4
   - feedstock : https://github.com/conda-forge/xorg-xtrans-feedstock
@@ -57,15 +57,15 @@ packages:
     git_tag : 86852b0cf16d61655f5ffc9450605d33332e47b9
     patches :
       - feedstock-patches/harfbuzz/0001-Pinned-gobject-introspection.patch
+  - feedstock : https://github.com/AnacondaRecipes/gettext-feedstock.git
+    git_tag : 45586482550e35d7c8ebfcc1183c3600f7b8c625
+    patches :
+      - feedstock-patches/gettext/0001-Pinned-libxml2-to-2.13.8.patch
+  - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock
+    git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce
+    patches:
+      - feedstock-patches/libxml2/0001-Opence-changes.patch
 {% endif %}
-  - feedstock : https://github.com/AnacondaRecipes/gettext-feedstock.git #[not x86_64]
-    git_tag : 45586482550e35d7c8ebfcc1183c3600f7b8c625                   #[not x86_64]
-    patches :                                                            #[not x86_64]
-      - feedstock-patches/gettext/0001-Pinned-libxml2-to-2.13.8.patch    #[not x86_64]
-  - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
-    git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
-    patches:                                                            #[not x86_64]
-      - feedstock-patches/libxml2/0001-Opence-changes.patch             #[not x86_64]
   - feedstock : https://github.com/conda-forge/eigen-feedstock.git
     git_tag : cf27c74f2a22569ffde4cc53f58b381905c667eb
 
