@@ -11,10 +11,10 @@ packages:
     git_tag : 275edb5b1227da2b17dddad3bd1457eb84e4701f                                    # [py==311]
     patches :                                                                             # [py==311]
       - feedstock-patches/scikit-learn/0001-Fix-CVE-2024-5206-and-opence-changes.patch    # [py==311]
-  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v76.1.0   #[ppc64le]
-    git_tag : 66dcc5d189336642efd1840d848ed91c570a8db2                          #[ppc64le]
-    patches :                                                                   #[ppc64le]
-      - feedstock-patches/setuptools/0001-Fix-backporting-CVE-2025-47273.patch  #[ppc64le]
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v76.1.0   # [s390x or ppc64le]
+    git_tag : 66dcc5d189336642efd1840d848ed91c570a8db2                          #[s390x or ppc64le]
+    patches :                                                                   #[s390x or ppc64le]
+      - feedstock-patches/setuptools/0001-Fix-backporting-CVE-2025-47273.patch  #[s390x or ppc64le]
   - feedstock : openmpi          #[mpi_type == 'openmpi']
   - feedstock : https://github.com/conda-forge/zlib-feedstock
     git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca

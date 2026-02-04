@@ -17,10 +17,10 @@ packages:
     git_tag : 8f30ac9261677703bb3dc2d6bb31528946d42e93
     patches :
         - feedstock-patches/maturin/0001-opence-changes.patch
-  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v76.1.0   #[ppc64le]
-    git_tag : 66dcc5d189336642efd1840d848ed91c570a8db2                          #[ppc64le]
-    patches :                                                                   #[ppc64le]
-      - feedstock-patches/setuptools/0001-Fix-backporting-CVE-2025-47273.patch  #[ppc64le]
+  - feedstock : https://github.com/conda-forge/setuptools-feedstock  #v76.1.0   #[ppc64le or s390x]
+    git_tag : 66dcc5d189336642efd1840d848ed91c570a8db2                          #[ppc64le or s390x]
+    patches :                                                                   #[ppc64le or s390x]
+      - feedstock-patches/setuptools/0001-Fix-backporting-CVE-2025-47273.patch  #[ppc64le or s390x]
   - feedstock : https://github.com/conda-forge/zlib-feedstock
     git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
     patches:
