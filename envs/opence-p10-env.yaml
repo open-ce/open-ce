@@ -21,4 +21,4 @@ imported_envs:
   - llama-env.yaml
   - opencv-env.yaml
 
-git_tag_for_env: open-ce-v1.11.8-ffmpeg-fix
+git_tag_for_env: open-ce-v1.11.8
