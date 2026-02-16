@@ -1,15 +1,15 @@
-From 88faa1fffce1275483a08a28f70cd3cb060da869 Mon Sep 17 00:00:00 2001
-From: Deepali Chourasia <deepch23@in.ibm.com>
-Date: Tue, 23 May 2023 12:02:10 +0000
-Subject: [PATCH] disable codecs for opence
+From c2b99cc21b6ca9888e4d7314b3b48a8a691a9468 Mon Sep 17 00:00:00 2001
+From: Aman-Surkar1 <Aman.Surkar1@ibm.com>
+Date: Fri, 30 Jan 2026 04:47:18 +0000
+Subject: [PATCH] Disable codecs
 
 ---
- recipe/build.sh  | 27 ++++++++++++++++++++++-----
+ recipe/build.sh  | 31 ++++++++++++++++++++++++++-----
  recipe/meta.yaml | 14 ++++----------
- 2 files changed, 26 insertions(+), 15 deletions(-)
+ 2 files changed, 30 insertions(+), 15 deletions(-)
 
 diff --git a/recipe/build.sh b/recipe/build.sh
-index 8528472..d7ef169 100755
+index 8528472..5a52529 100755
 --- a/recipe/build.sh
 +++ b/recipe/build.sh
 @@ -1,4 +1,5 @@
@@ -39,7 +39,7 @@ index 8528472..d7ef169 100755
  fi
  
  ./configure \
-@@ -50,6 +51,22 @@ fi
+@@ -50,6 +51,26 @@ fi
          --enable-version3 \
          --enable-zlib \
        	--enable-libmp3lame \
@@ -59,6 +59,10 @@ index 8528472..d7ef169 100755
 +        --disable-decoder=aac_fixed \
 +        --disable-encoder=aac_latm \
 +        --disable-decoder=aac_latm \
++        --disable-encoder=h264_v4l2m2m \
++        --disable-decoder=h264_v4l2m2m \
++        --disable-encoder=hevc_v4l2m2m \
++        --disable-decoder=hevc_v4l2m2m \
          "${_CONFIG_OPTS[@]}"
  
  make -j${CPU_COUNT} ${VERBOSE_AT}
@@ -121,5 +125,5 @@ index 23ad810..ba26a99 100644
          "swresample",
          "avcodec",
 -- 
-2.34.1
+2.40.1
 
