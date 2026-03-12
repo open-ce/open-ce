@@ -8,7 +8,7 @@ packages:
 {% if not s390x %}
   - feedstock : pytorch-lightning
   - feedstock : pytorch-lightning-bolts
-  - feedstock : libflac
+  - feedstock : libflac                      #[not x86_64]
   - feedstock : libsndfile
   - feedstock : https://github.com/conda-forge/backoff-feedstock
     git_tag : 0bbeb5afb679ceedeb7e9625d4c1e6022dfdb9fe

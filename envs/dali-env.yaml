@@ -14,7 +14,7 @@ packages:
     - feedstock : opencv
     - feedstock : DALI
     - feedstock : jpeg-turbo
-    - feedstock : libflac
+    - feedstock : libflac      #[not x86_64]
     - feedstock : libsndfile
     - feedstock : https://github.com/AnacondaRecipes/libxml2-feedstock    #[not x86_64]
       git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
