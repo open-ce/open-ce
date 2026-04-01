@@ -36,8 +36,7 @@ c_compiler_version:
 catalogue:
   - 2.*
 cffi:
-  - 1.15.*  # [not s390x]
-  - 1.15.*  # [s390x]
+  - 2.0.*
 clang:
   - 14.0.*
 click:

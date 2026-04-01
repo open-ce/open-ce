@@ -46,4 +46,8 @@ packages:
     git_tag : e2c3753d98b05d93dfb4561a4da2b65fc531a3ca
     patches:
       - feedstock-patches/zlib/0001-Fixed-CVEs-for-zlib.patch
+  - feedstock : https://github.com/conda-forge/cffi-feedstock                   #[ppc64le]
+    git_tag : 57418167e36dfe384a62efb0fe9ee8fba003a4f8                          #[ppc64le]
+    patches :                                                                   #[ppc64le]
+      - feedstock-patches/cffi/0001-Fixed-build-failure-and-Open-CE-changes.patch #[ppc64le]
 git_tag_for_env: open-ce-v1.11.8-ffmpeg-fix
