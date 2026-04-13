@@ -11,15 +11,16 @@ packages:
     git_tag : 48ac432e7dcf12dcdc64248da912dbe5637fdfdd
     patches :                                                       #[ppc_arch == 'p10']
       - feedstock-patches/abseil-cpp/0001-P10-changes.patch         #[ppc_arch == 'p10']
-  - feedstock : https://github.com/conda-forge/setuptools_scm-feedstock.git
-    git_tag : 47061889d5cf3295bd28d0cb391160a630a301b5
-    patches :
-      - feedstock-patches/setuptools_scm/setuptools_scm_fix.patch
+  - feedstock : https://github.com/conda-forge/setuptools_scm-feedstock.git   #[ppc64le]
+    git_tag : 47061889d5cf3295bd28d0cb391160a630a301b5                        #[ppc64le]
+    patches :                                                                 #[ppc64le]
+      - feedstock-patches/setuptools_scm/setuptools_scm_fix.patch             #[ppc64le]
   - feedstock : grpc-cpp
-  - feedstock : pyarrow
+  - feedstock : https://github.com/Archana-Shinde1/pyarrow-feedstock
+    git_tag : conflict-fix
   - feedstock : orc
-  - feedstock : https://github.com/conda-forge/brotli-feedstock.git
-    git_tag : 61563a5a99db058833a6397855bcafd36ff97905
-    patches :
-      - feedstock-patches/brotli/0001-Removed-stdlibc.patch
+  - feedstock : https://github.com/conda-forge/brotli-feedstock.git           #[ppc64le]
+    git_tag : 61563a5a99db058833a6397855bcafd36ff97905                        #[ppc64le]
+    patches :                                                                 #[ppc64le]
+      - feedstock-patches/brotli/0001-Removed-stdlibc.patch                   #[ppc64le]
 git_tag_for_env: open-ce-v1.11.8-ffmpeg-fix
