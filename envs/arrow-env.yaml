@@ -16,8 +16,7 @@ packages:
     patches :                                                                 #[ppc64le]
       - feedstock-patches/setuptools_scm/setuptools_scm_fix.patch             #[ppc64le]
   - feedstock : grpc-cpp
-  - feedstock : https://github.com/Archana-Shinde1/pyarrow-feedstock
-    git_tag : conflict-fix
+  - feedstock : pyarrow
   - feedstock : orc
   - feedstock : https://github.com/conda-forge/brotli-feedstock.git           #[ppc64le]
     git_tag : 61563a5a99db058833a6397855bcafd36ff97905                        #[ppc64le]

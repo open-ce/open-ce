@@ -6,8 +6,7 @@ imported_envs:
 
 packages:
 {% if not s390x %}
-  - feedstock : https://github.com/Archana-Shinde1/pytorch-lightning-feedstock
-    git_tag : import-fix
+  - feedstock : pytorch-lightning
   - feedstock : pytorch-lightning-bolts
   - feedstock : libflac                      #[not x86_64]
   - feedstock : libsndfile
