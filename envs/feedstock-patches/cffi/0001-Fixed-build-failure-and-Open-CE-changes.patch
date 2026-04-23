@@ -1,0 +1,60 @@
+From 320f0c6b62f1286fd3665b342dfeaa1e730aa763 Mon Sep 17 00:00:00 2001
+From: Archana-Shinde1 <archana.shinde1@ibm.com>
+Date: Thu, 26 Mar 2026 07:17:41 +0000
+Subject: [PATCH] Fixed build failure and Open-CE changes
+
+---
+ recipe/meta.yaml               |  5 +++--
+ recipe/patches/pyproject.patch | 11 +++++++++++
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+ create mode 100644 recipe/patches/pyproject.patch
+
+diff --git a/recipe/meta.yaml b/recipe/meta.yaml
+index 07693e4..dd00a2f 100644
+--- a/recipe/meta.yaml
++++ b/recipe/meta.yaml
+@@ -11,6 +11,7 @@ source:
+     - patches/0001-Link-to-dl-library.patch
+     - patches/0002-setup-linux.patch
+     - patches/0003-apple-api.patch  # [osx]
++    - patches/pyproject.patch
+ 
+ build:
+   number: 1
+@@ -21,14 +22,14 @@ requirements:
+     - python                                 # [build_platform != target_platform]
+     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+     - {{ compiler('c') }}
+-    - {{ stdlib("c") }}
++#    - {{ stdlib("c") }}
+     - patch     # [not win]
+     - m2-patch  # [win]
+   host:
+     - python
+     - pip
+     - wheel
+-    - setuptools >=66.1
++    - setuptools {{ setuptools }}
+     - libffi  # [not win]
+     - pycparser
+   run:
+diff --git a/recipe/patches/pyproject.patch b/recipe/patches/pyproject.patch
+new file mode 100644
+index 0000000..3643904
+--- /dev/null
++++ b/recipe/patches/pyproject.patch
+@@ -0,0 +1,11 @@
++--- pyproject.toml.orig	2026-03-17 10:26:59.076938250 +0000
+++++ pyproject.toml	2026-03-17 10:27:34.295749537 +0000
++@@ -16,7 +16,7 @@
++ 
++ description = "Foreign Function Interface for Python calling C code."
++ readme = {file = "README.md", content-type = "text/markdown"}
++-license = "MIT"
+++license = {text = "MIT"}
++ classifiers = [
++     "Programming Language :: Python",
++     "Programming Language :: Python :: 3",
+-- 
+2.40.1
+
