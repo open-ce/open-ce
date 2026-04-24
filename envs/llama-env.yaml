@@ -79,4 +79,4 @@ packages:
     patches:
       - feedstock-patches/python-multipart/0001-Changed-source-and-version-for-python-multipart-to-fix-CVE-2024-53981.patch
 {% endif %}
-git_tag_for_env: open-ce-v1.11.8-update-cffi
+git_tag_for_env: open-ce-v1.11.8-ffmpeg-fix
