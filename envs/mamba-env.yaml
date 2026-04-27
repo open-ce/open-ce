@@ -16,4 +16,4 @@ packages:
     git_tag : e535e8edb4811bd9825e5749065c13458d6f7dce                  #[not x86_64]
     patches:                                                            #[not x86_64]
       - feedstock-patches/libxml2/0001-Opence-changes.patch             #[not x86_64]
-git_tag_for_env: open-ce-v1.11.8-ffmpeg-fix
+git_tag_for_env: open-ce-v1.11.8-update-cffi
