@@ -22,4 +22,4 @@ packages:
     git_tag : 61563a5a99db058833a6397855bcafd36ff97905                        #[ppc64le]
     patches :                                                                 #[ppc64le]
       - feedstock-patches/brotli/0001-Removed-stdlibc.patch                   #[ppc64le]
-git_tag_for_env: open-ce-v1.11.8-update-cffi
+git_tag_for_env: open-ce-v1.11.8-ffmpeg-fix
