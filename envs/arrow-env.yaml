@@ -18,8 +18,8 @@ packages:
   - feedstock : grpc-cpp
   - feedstock : pyarrow
   - feedstock : orc
-  - feedstock : https://github.com/conda-forge/brotli-feedstock.git           #[ppc64le]
-    git_tag : 61563a5a99db058833a6397855bcafd36ff97905                        #[ppc64le]
-    patches :                                                                 #[ppc64le]
-      - feedstock-patches/brotli/0001-Removed-stdlibc.patch                   #[ppc64le]
+  - feedstock : https://github.com/conda-forge/brotli-feedstock.git           #[ppc64le or s390x]
+    git_tag : 61563a5a99db058833a6397855bcafd36ff97905                        #[ppc64le or s390x]
+    patches :                                                                 #[ppc64le or s390x]
+      - feedstock-patches/brotli/0001-Removed-stdlibc.patch                   #[ppc64le or s390x]
 git_tag_for_env: open-ce-v1.11.8-update-cffi
